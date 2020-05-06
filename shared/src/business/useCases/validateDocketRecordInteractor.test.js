@@ -22,7 +22,7 @@ describe('validateDocketRecordInteractor', () => {
       docketRecord: {
         description: 'Test Description',
         eventCode: 'O',
-        filingDate: '2020-01-01',
+        filingDate: '2020-01-01T02:04:06.007Z',
         index: '1',
       },
     });

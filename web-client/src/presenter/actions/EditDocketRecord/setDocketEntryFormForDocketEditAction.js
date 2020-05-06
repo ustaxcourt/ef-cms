@@ -11,6 +11,7 @@ import { state } from 'cerebral';
  * @returns {void} sets state for docket entry edit
  */
 export const setDocketEntryFormForDocketEditAction = ({
+  applicationContext,
   get,
   props,
   store,
@@ -33,6 +34,16 @@ export const setDocketEntryFormForDocketEditAction = ({
     if (parsedJson.caseId) {
       docketEntryFormData = JSON.parse(docketRecordEntry.editState);
     }
+  }
+
+  if (docketEntryFormData.date) {
+    const deconstructedDate = applicationContext
+      .getUtilities()
+      .deconstructDate(docketEntryFormData.date);
+    docketEntryFormData = {
+      ...docketEntryFormData,
+      ...deconstructedDate,
+    };
   }
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;

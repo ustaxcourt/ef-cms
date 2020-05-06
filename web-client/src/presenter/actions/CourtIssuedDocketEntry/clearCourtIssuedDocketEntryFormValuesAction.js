@@ -15,6 +15,7 @@ export const clearCourtIssuedDocketEntryFormValuesAction = ({
     store.unset(state.form.freeText);
     store.unset(state.form.judge);
     store.unset(state.form.docketNumbers);
+    store.unset(state.form.trialLocation);
     store.unset(state.form.month);
     store.unset(state.form.day);
     store.unset(state.form.year);

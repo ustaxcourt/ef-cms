@@ -8,9 +8,11 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 const { flatten } = require('lodash');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Order } = require('./orders/Order');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
+const joiStrictTimestamp = getTimestampSchema();
 
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
@@ -115,7 +117,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.previousDocument = rawDocument.previousDocument;
     this.processingStatus = rawDocument.processingStatus || 'pending';
     this.qcAt = rawDocument.qcAt;
-    this.qcByUser = rawDocument.qcByUser;
     this.qcByUserId = rawDocument.qcByUserId;
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
@@ -137,6 +138,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
+  this.docketNumbers = rawDocument.docketNumbers;
   this.documentId = rawDocument.documentId;
   this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
@@ -153,10 +155,9 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
   this.ordinalValue = rawDocument.ordinalValue;
-  this.partyPrimary = rawDocument.partyPrimary; // TODO: add info about purpose
+  this.partyPrimary = rawDocument.partyPrimary;
   this.partyIrsPractitioner = rawDocument.partyIrsPractitioner;
-  this.partySecondary = rawDocument.partySecondary; // TODO: add info about purpose
-  this.privatePractitioners = rawDocument.privatePractitioners; // TODO: look into this
+  this.partySecondary = rawDocument.partySecondary;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -167,9 +168,21 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
+  this.trialLocation = rawDocument.trialLocation;
 
+  // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
     this.userId = rawDocument.userId;
+  }
+
+  // only use the privatePractitioner name
+  if (Array.isArray(rawDocument.privatePractitioners)) {
+    this.privatePractitioners = rawDocument.privatePractitioners.map(item => {
+      return {
+        name: item.name,
+        partyPrivatePractitioner: item.partyPrivatePractitioner,
+      };
+    });
   }
 
   this.generateFiledBy(rawDocument);
@@ -370,11 +383,9 @@ joiValidationDecorator(
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
       otherwise: joi.optional(),
-      then: joi.date().iso().required(),
+      then: joiStrictTimestamp.required(),
     }),
-    createdAt: joi
-      .date()
-      .iso()
+    createdAt: joiStrictTimestamp
       .required()
       .description('When the Document was added to the system.'),
     date: joi
@@ -390,6 +401,12 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    docketNumbers: joi
+      .string()
+      .optional()
+      .description(
+        'Optional Docket Number text used when generating a fully concatenated document title.',
+      ),
     documentContentsId: joi
       .string()
       .uuid({
@@ -417,10 +434,8 @@ joiValidationDecorator(
     entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(),
     filedBy: joi.string().allow('').optional(),
-    filingDate: joi
-      .date()
+    filingDate: joiStrictTimestamp
       .max('now')
-      .iso()
       .required()
       .description('Date that this Document was filed.'),
     freeText: joi.string().optional(),
@@ -443,16 +458,27 @@ joiValidationDecorator(
     objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
-    partyPrimary: joi.boolean().optional(),
-    partySecondary: joi.boolean().optional(),
+    partyPrimary: joi
+      .boolean()
+      .optional()
+      .description('Use the primary contact to compose the filedBy text.'),
+    partySecondary: joi
+      .boolean()
+      .optional()
+      .description('Use the secondary contact to compose the filedBy text.'),
     pending: joi.boolean().optional(),
     previousDocument: joi.object().optional(),
-    privatePractitioners: joi.array().optional(),
+    privatePractitioners: joi
+      .array()
+      .items({ name: joi.string().required() })
+      .optional()
+      .description(
+        'Practitioner names to be used to compose the filedBy text.',
+      ),
     processingStatus: joi.string().optional(),
-    qcAt: joi.date().iso().optional(),
-    qcByUser: joi.object().optional(),
+    qcAt: joiStrictTimestamp.optional(),
     qcByUserId: joi.string().optional().allow(null),
-    receivedAt: joi.date().iso().optional(),
+    receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
       .valid(...Document.RELATIONSHIPS)
@@ -461,22 +487,35 @@ joiValidationDecorator(
       .string()
       .valid(...Document.SCENARIOS)
       .optional(),
-    secondaryDate: joi
-      .date()
-      .iso()
+    secondaryDate: joiStrictTimestamp
       .optional()
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    // TODO: What's the difference between servedAt and serviceDate? (certificate of service date)
-    servedAt: joi.date().iso().optional(),
-    servedParties: joi.array().optional(),
-    serviceDate: joi.date().iso().max('now').optional().allow(null),
+    servedAt: joiStrictTimestamp
+      .optional()
+      .description('When the document is served on the parties.'),
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().required() })
+      .optional(),
+    serviceDate: joiStrictTimestamp
+      .max('now')
+      .optional()
+      .allow(null)
+      .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    signedAt: joi.date().iso().optional().allow(null),
+    signedAt: joiStrictTimestamp.optional().allow(null),
     signedByUserId: joi.string().optional().allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
+    trialLocation: joi
+      .string()
+      .optional()
+      .allow(null)
+      .description(
+        'An optional trial location used when generating a fully concatenated document title.',
+      ),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
@@ -499,7 +538,6 @@ Document.prototype.archive = function () {
 };
 
 Document.prototype.setAsServed = function (servedParties = null) {
-  this.status = 'served';
   this.servedAt = createISODateString();
   this.draftState = null;
 

@@ -1,5 +1,15 @@
-const { Case } = require('../../entities/cases/Case');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+
+const React = require('react');
+const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+
+require('regenerator-runtime');
+require('@babel/register')({
+  presets: ['@babel/preset-react', '@babel/preset-env'],
+});
+const DocketRecord = require('../pdfGenerator/documentTemplates/DocketRecord.jsx')
+  .default;
 
 /**
  * HTML template generator for printable docket record PDF views
@@ -11,59 +21,40 @@ const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
  */
 const generatePrintableDocketRecordTemplate = async ({
   applicationContext,
-  content,
+  data,
 }) => {
-  const { caption, docketNumberWithSuffix, docketRecord, partyInfo } = content;
-
-  const styles = `
-    .party-info {
-      border: 1px solid #ccc;
-      margin: 15px 0 30px 0;
-    }
-
-    .party-info-header {
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-      background: #f0f0f0;
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .party-info-content {
-      display: flex;
-      flex-flow: row wrap;
-      align-items: flex-start;
-      padding: 0 10px 10px 10px;
-    }
-
-    .party-details {
-      width: 25%;
-    }
-
-    .docket-record-table {
-      margin-top: 30px;
-    }
-  `;
-
-  const templateContent = {
-    caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
+  const {
+    caseCaptionExtension,
+    caseDetail,
+    caseTitle,
     docketNumberWithSuffix,
-    main: `
-    ${partyInfo}
-    <div class="docket-record">${docketRecord}</div>
-  `,
-  };
-  const options = {
-    h2: 'Docket Record',
-    styles,
-    title: 'Docket Record',
-  };
+    entries,
+  } = data;
 
-  return await generateHTMLTemplateForPDF({
+  const reactDocketRecordTemplate = ReactDOM.renderToString(
+    React.createElement(DocketRecord, {
+      caseDetail,
+      countryTypes: ContactFactory.COUNTRY_TYPES,
+      entries,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+    }),
+  );
+
+  const htmlTemplate = generateHTMLTemplateForPDF({
     applicationContext,
-    content: templateContent,
-    options,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactDocketRecordTemplate },
+    options: {
+      overwriteMain: true,
+      title: `Docket Record for Case ${docketNumberWithSuffix}`,
+    },
   });
+
+  return htmlTemplate;
 };
 
 module.exports = { generatePrintableDocketRecordTemplate };

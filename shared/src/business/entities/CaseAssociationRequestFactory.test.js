@@ -1,4 +1,7 @@
-const moment = require('moment');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../utilities/DateHandler');
 const {
   CaseAssociationRequestFactory,
 } = require('./CaseAssociationRequestFactory');
@@ -70,12 +73,16 @@ describe('CaseAssociationRequestFactory', () => {
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
         );
-        rawEntity.certificateOfServiceDate = moment().format();
+        rawEntity.certificateOfServiceDate = createISODateString();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
       });
 
       it('should not allow certificate of service date to be in the future', () => {
-        rawEntity.certificateOfServiceDate = moment().add(1, 'days').format();
+        rawEntity.certificateOfServiceDate = calculateISODate({
+          dateString: createISODateString(),
+          howMuch: 1,
+          unit: 'days',
+        });
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
@@ -158,7 +165,7 @@ describe('CaseAssociationRequestFactory', () => {
           expect(
             errors().supportingDocuments[0].certificateOfServiceDate,
           ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-          rawEntity.supportingDocuments[0].certificateOfServiceDate = moment().format();
+          rawEntity.supportingDocuments[0].certificateOfServiceDate = createISODateString();
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
