@@ -36,12 +36,10 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
       },
     );
 
-    const userId = applicationContext.getUniqueId();
-
     userEntity = new Practitioner({
       ...user,
       barNumber,
-      userId,
+      userId:  applicationContext.getUniqueId();,
     })
       .validate()
       .toRawObject();
