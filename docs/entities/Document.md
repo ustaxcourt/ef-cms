@@ -483,6 +483,11 @@ Date that this Document was filed.
 
 > `date` | required
 
+##### Maximum date
+
+
+`now`
+
 ### freeText
 
 > `string` | optional
@@ -652,6 +657,11 @@ An array of objects.
 Certificate of service date.
 
 > `date` | optional
+
+##### Maximum date
+
+
+`now`
 
 ##### Can be null.
 
