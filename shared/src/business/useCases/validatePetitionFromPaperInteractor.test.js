@@ -20,7 +20,6 @@ describe('validate petition from paper', () => {
       'petitionPaymentStatus',
       'procedureType',
       'receivedAt',
-      'stinFile',
       'chooseAtLeastOneValue',
     ]);
   });
@@ -39,8 +38,6 @@ describe('validate petition from paper', () => {
         petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'testing',
         receivedAt: new Date().toISOString(),
-        stinFile: {},
-        stinFileSize: 100,
       },
     });
 
