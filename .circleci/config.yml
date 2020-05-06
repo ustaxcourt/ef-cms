@@ -178,7 +178,7 @@ jobs:
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
 
-  e2e-pa11y-1:
+  e2e-pa11y:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -199,7 +199,7 @@ jobs:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
-          name: Pa11y - Web Client 1
+          name: Pa11y
           command: |
             npm run build:all
             SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
@@ -207,50 +207,8 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 15
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-
-  e2e-pa11y-2:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-      - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
-      - image: elastic/elasticsearch:7.5.2
-        environment:
-          discovery.type: single-node
-    environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
-    resource_class: xlarge
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Create Pa11y Artifacts Directory
-          command: mkdir /tmp/pa11y
-      - run:
-          name: Pa11y - Web Client 2
-          command: |
-            SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 15
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-      - run:
-          name: Pa11y - Web Client 3
-          command: |
-            SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-3.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 15
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-      - run:
-          name: Pa11y - Public Site
-          command: |
-            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public:ci start:api:ci > /tmp/pa11y/pa11y-server-public.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 15
             npm run test:pa11y:public --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /tmp/pa11y
@@ -574,10 +532,7 @@ workflows:
       - build-client-integration:
           requires:
             - bundle
-      - e2e-pa11y-1:
-          requires:
-            - bundle
-      - e2e-pa11y-2:
+      - e2e-pa11y:
           requires:
             - bundle
       - e2e-cypress:
@@ -589,8 +544,7 @@ workflows:
             - build-api
             - build-client-unit
             - build-client-integration
-            - e2e-pa11y-1
-            - e2e-pa11y-2
+            - e2e-pa11y
             - e2e-cypress
       - pre-deploy:
           requires:
@@ -650,14 +604,7 @@ workflows:
             branches:
               ignore:
                 - develop
-      - e2e-pa11y-1:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - e2e-pa11y-2:
+      - e2e-pa11y:
           requires:
             - bundle
           filters:
@@ -677,8 +624,7 @@ workflows:
             - build-api
             - build-client-unit
             - build-client-integration
-            - e2e-pa11y-1
-            - e2e-pa11y-2
+            - e2e-pa11y
             - e2e-cypress
           filters:
             branches:
