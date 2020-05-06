@@ -138,6 +138,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.date = rawDocument.date;
   this.docketNumber = rawDocument.docketNumber;
+  this.docketNumbers = rawDocument.docketNumbers;
   this.documentId = rawDocument.documentId;
   this.documentContentsId = rawDocument.documentContentsId;
   this.documentTitle = rawDocument.documentTitle;
@@ -167,6 +168,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
+  this.trialLocation = rawDocument.trialLocation;
 
   // only share the userId with an external user if it is the logged in user
   if (applicationContext.getCurrentUser().userId === rawDocument.userId) {
@@ -365,8 +367,8 @@ joiValidationDecorator(
   Document,
   joi.object().keys({
     addToCoversheet: joi.boolean().optional(),
-    additionalInfo: joi.string().max(250).optional(),
-    additionalInfo2: joi.string().max(250).optional(),
+    additionalInfo: joi.string().optional(),
+    additionalInfo2: joi.string().optional(),
     archived: joi
       .boolean()
       .optional()
@@ -375,9 +377,6 @@ joiValidationDecorator(
       ),
     caseId: joi
       .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
       .optional()
       .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
@@ -402,6 +401,12 @@ joiValidationDecorator(
       .regex(DOCKET_NUMBER_MATCHER)
       .optional()
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
+    docketNumbers: joi
+      .string()
+      .optional()
+      .description(
+        'Optional Docket Number text used when generating a fully concatenated document title.',
+      ),
     documentContentsId: joi
       .string()
       .uuid({
@@ -418,7 +423,6 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     documentTitle: joi
       .string()
-      .max(250)
       .optional()
       .description('The title of this document.'),
     documentType: joi
@@ -428,20 +432,19 @@ joiValidationDecorator(
       .description('The type of this document.'),
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(), // TODO: add enum
-    filedBy: joi.string().max(250).allow('').optional(),
+    eventCode: joi.string().optional(),
+    filedBy: joi.string().allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
       .description('Date that this Document was filed.'),
-    freeText: joi.string().max(250).optional(),
-    freeText2: joi.string().max(250).optional(),
+    freeText: joi.string().optional(),
+    freeText2: joi.string().optional(),
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     judge: joi
       .string()
-      .max(50)
       .allow(null)
       .optional()
       .description('The judge associated with the document.'),
@@ -452,8 +455,8 @@ joiValidationDecorator(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     numberOfPages: joi.number().optional().allow(null),
-    objections: joi.string().max(50).optional(),
-    ordinalValue: joi.string().max(50).optional(),
+    objections: joi.string().optional(),
+    ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
       .boolean()
@@ -467,14 +470,14 @@ joiValidationDecorator(
     previousDocument: joi.object().optional(),
     privatePractitioners: joi
       .array()
-      .items({ name: joi.string().max(250).required() })
+      .items({ name: joi.string().required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
       ),
-    processingStatus: joi.string().max(50).optional(),
+    processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUserId: joi.string().max(50).optional().allow(null),
+    qcByUserId: joi.string().optional().allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
@@ -494,19 +497,26 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().max(250).required() })
+      .items({ name: joi.string().required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')
       .optional()
       .allow(null)
       .description('Certificate of service date.'),
-    serviceStamp: joi.string().max(50).optional(),
+    serviceStamp: joi.string().optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi.string().max(50).optional().allow(null),
-    signedJudgeName: joi.string().max(50).optional().allow(null),
+    signedByUserId: joi.string().optional().allow(null),
+    signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
-    userId: joi.string().max(50).required(),
+    trialLocation: joi
+      .string()
+      .optional()
+      .allow(null)
+      .description(
+        'An optional trial location used when generating a fully concatenated document title.',
+      ),
+    userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
 );
