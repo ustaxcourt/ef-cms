@@ -98,7 +98,7 @@ export const StartCaseInternal = connect(
                     reviewPetitionFromPaperSequence();
                   }}
                 >
-                  Review Petition
+                  Create Case
                 </Button>
                 <Button
                   link
