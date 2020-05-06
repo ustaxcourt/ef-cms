@@ -72,6 +72,7 @@ const {
 const {
   changeOfAddress,
   docketRecord,
+  standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
@@ -939,6 +940,7 @@ module.exports = (appContextUser = {}) => {
     getDocumentGenerators: () => ({
       changeOfAddress,
       docketRecord,
+      standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;

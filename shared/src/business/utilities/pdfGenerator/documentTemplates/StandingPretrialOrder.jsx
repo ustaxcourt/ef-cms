@@ -39,10 +39,10 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       </p>
 
       <p>
-        <strong className="text-underline">Continuances.</strong>
-        Continuances (i.e., postponement softrial) will be granted only in
-        exceptional circumstances. See Rule 133, Tax Court Rules of Practice and
-        Procedure. (The Court&apos;s Rules are available at{' '}
+        <strong className="text-underline">Continuances.</strong> Continuances
+        (i.e., postponement softrial) will be granted only in exceptional
+        circumstances. See Rule 133, Tax Court Rules of Practice and Procedure.
+        (The Court&apos;s Rules are available at{' '}
         <a href="www.ustaxcourt.gov" target="_blank">
           www.ustaxcourt.gov
         </a>
@@ -50,15 +50,15 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       </p>
 
       <p>
-        <strong className="text-underline">Sanctions.</strong>
-        The Court may impose appropriate sanctions, including dismissal, for any
-        unexcused failure to comply with this Order. See Rule 131(b). Such
-        failure may also be considered in relation to sanctions against and
-        disciplinary proceedings involving counsel. See Rule 202(a).
+        <strong className="text-underline">Sanctions.</strong> The Court may
+        impose appropriate sanctions, including dismissal, for any unexcused
+        failure to comply with this Order. See Rule 131(b). Such failure may
+        also be considered in relation to sanctions against and disciplinary
+        proceedings involving counsel. See Rule 202(a).
       </p>
 
       <p>
-        <strong className="text-underline">Electronic Filing (eFiling)</strong>
+        <strong className="text-underline">Electronic Filing (eFiling)</strong>{' '}
         eFiling is required for most documents (except the petition) filed by
         parties represented by counsel in cases in which the petition is filed
         on or after July 1, 2010. Petitioners not represented by counsel may,
