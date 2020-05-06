@@ -74,6 +74,20 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     documentsByType[INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
 
+  console.log({
+    hasIrsNoticeFormatted,
+    hasOrders,
+    irsNoticeDateFormatted,
+    ownershipDisclosureFile,
+    petitionFile,
+    petitionPaymentStatusFormatted,
+    preferredTrialCityFormatted,
+    receivedAtFormatted,
+    requestForPlaceOfTrialFile,
+    shouldShowIrsNoticeDate,
+    stinFile,
+  });
+
   return {
     hasIrsNoticeFormatted,
     hasOrders,
