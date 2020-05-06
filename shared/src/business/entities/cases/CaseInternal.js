@@ -163,7 +163,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    stinFile: joi.object().required(),
+    stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),

@@ -1,7 +1,7 @@
 body {
   margin: 35px 50px;
   font-family: 'nimbus_roman', serif;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 h1 {
@@ -27,8 +27,8 @@ p.heading-address {
 }
 
 h3 {
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-bottom: 20px;
   font-family: 'nimbus_roman', serif;
   font-size: 14px;
   text-align: center;
@@ -52,11 +52,12 @@ table {
 
 th,
 td {
-  padding: 12px 8px;
+  padding: 8px;
   border-bottom: 1px solid #ccc;
   text-align: left;
   vertical-align: top;
-  font-size: 10px;
+  font-family: 'nimbus_roman', serif;
+  font-size: 14px;
 }
 
 th {
@@ -102,16 +103,13 @@ th {
   line-height: 18px;
   border-right: 1px dashed;
 
-  #caption-extension {
-    padding-left: 50%;
+  #caption-extension, #caption-v, #caption-respondent {
+    padding-left: 25%;
+    margin-top: 8px;
   }
 
-  #caption-v {
-    padding-left: 50%;
-  }
-
-  #caption-respondent {
-    padding-left: 50%;
+  #caption-commissioner {
+    margin-top: 8px;
   }
 }
 
@@ -120,13 +118,14 @@ th {
 }
 
 .case-information #docket-number {
-  width: 50%;
+  width: 48%;
   float: right;
   text-indent: 5px;
   font-size: 14px;
+  margin-top: 50px;
 
-  .condensed {
-    font-size: 12px;
+  &.condensed {
+    margin-top: 16px;
   }
 }
 
@@ -144,7 +143,7 @@ th {
 }
 
 .info-box-header {
-  padding: 10px;
+  padding: 14px;
   border-bottom: 1px solid #ccc;
   background: #f0f0f0;
   font-weight: bold;
@@ -187,11 +186,12 @@ th {
 }
 
 .court-address {
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
 }
 
 @page {
+  margin-top:100px;
   margin-bottom: 55px;
 }
 
@@ -233,7 +233,7 @@ th {
 
 .please-change {
   margin-bottom: 20px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -244,13 +244,44 @@ th {
 #reports-header {
   font-family: 'nimbus_roman', serif;
   text-align: centeer;
-  
+
   h1 {
     font-size: 20px;
   }
 
   h2 {
     font-size: 14px;
+  }
+}
+
+#document-docket-record {
+  // TODO: These are basically cards, and could be refactored for more reusability
+  .party-info {
+    border: 1px solid #ccc;
+    margin: 12px 0 12px 0;
+  }
+
+  .party-info-header {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background: #f0f0f0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .party-info-content {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    padding: 0 10px 10px 10px;
+  }
+
+  .party-details {
+    width: 25%;
+  }
+
+  .docket-record-table {
+    margin-top: 30px;
   }
 }
 

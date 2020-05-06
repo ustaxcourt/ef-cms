@@ -223,6 +223,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const getDocumentGeneratorsReturnMock = {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+    docketRecord: jest.fn().mockImplementation(getFakeFile),
   };
 
   const getTemplateGeneratorsReturnMock = {
@@ -411,6 +412,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       time: () => jest.fn().mockReturnValue(null),
       timeEnd: () => jest.fn().mockReturnValue(null),
     },
+    notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
