@@ -74,7 +74,7 @@ describe('reprocessFailedRecordsInteractor', () => {
           },
         },
       });
-    applicationContext.initHoneybadger.mockReturnValue({ notify: notifySpy });
+    applicationContext.notifyHoneybadger.mockImplementation(notifySpy);
   });
 
   it('checks the current mapping count and notifies if it is at 50% of the limit', async () => {
