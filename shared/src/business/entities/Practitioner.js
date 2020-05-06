@@ -8,8 +8,8 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-const { omit } = require('lodash');
-
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 const ADMISSIONS_STATUS_OPTIONS = [
@@ -92,9 +92,7 @@ const validationRules = {
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
-  admissionsDate: joi
-    .date()
-    .iso()
+  admissionsDate: joiStrictTimestamp
     .max('now')
     .required()
     .description(

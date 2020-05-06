@@ -30,7 +30,7 @@ describe('validateDocketEntryInteractor', () => {
       applicationContext,
       entryMetadata: {
         category: 'Answer',
-        dateReceived: '1212-12-12',
+        dateReceived: '1987-08-06T07:53:09.001Z',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Amendment to Answer',
         eventCode: 'ATAN',

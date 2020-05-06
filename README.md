@@ -61,7 +61,7 @@ The backlog is stored [in GitHub Issues in Flexion’s repository](https://githu
 
 To exercise the CI/CD pipeline locally, run the following:
 
-`./test-all.sh`
+`./docker-test-all.sh`
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 

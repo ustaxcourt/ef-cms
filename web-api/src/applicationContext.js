@@ -71,6 +71,7 @@ const {
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   changeOfAddress,
+  docketRecord,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
@@ -857,6 +858,20 @@ const environment = {
 
 let user;
 
+const initHoneybadger = () => {
+  if (process.env.NODE_ENV === 'production') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+    if (apiKey) {
+      const config = {
+        apiKey,
+        environment: 'api',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
 const getCurrentUser = () => {
   return user;
 };
@@ -937,6 +952,7 @@ module.exports = (appContextUser = {}) => {
     },
     getDocumentGenerators: () => ({
       changeOfAddress,
+      docketRecord,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -1318,20 +1334,7 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger: () => {
-      if (process.env.NODE_ENV === 'production') {
-        const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-        if (apiKey) {
-          const config = {
-            apiKey,
-            environment: 'api',
-          };
-          Honeybadger.configure(config);
-          return Honeybadger;
-        }
-      }
-    },
+    initHoneybadger,
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
@@ -1352,6 +1355,19 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    notifyHoneybadger: async message => {
+      const honeybadger = initHoneybadger();
+
+      const notifyAsync = message => {
+        return new Promise(resolve => {
+          honeybadger.notify(message, null, null, resolve);
+        });
+      };
+
+      if (honeybadger) {
+        await notifyAsync(message);
+      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(

@@ -125,7 +125,6 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase.documents[3].status).toEqual('served');
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 

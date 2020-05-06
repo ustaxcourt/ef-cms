@@ -3,6 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * Case Deadline entity
@@ -53,14 +55,10 @@ CaseDeadline.schema = joi.object().keys({
     })
     .required()
     .description('Unique Case ID only used by the system.'),
-  createdAt: joi
-    .date()
-    .iso()
+  createdAt: joiStrictTimestamp
     .required()
     .description('When the Case Deadline was added to the system.'),
-  deadlineDate: joi
-    .date()
-    .iso()
+  deadlineDate: joiStrictTimestamp
     .required()
     .description('When the Case Deadline expires.'),
   description: joi
