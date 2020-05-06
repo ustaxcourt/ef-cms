@@ -322,8 +322,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         document.documentId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
 
-    expect(updatedDocument.status).toEqual('served');
-    expect(updatedDocument.servedAt).toBeTruthy();
+    expect(updatedDocument.servedAt).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -377,8 +376,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       document => document.documentId === mockDocumentId,
     );
 
-    expect(updatedDocument.status).toEqual('served');
-    expect(updatedDocument.servedAt).toBeTruthy();
+    expect(updatedDocument.servedAt).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
