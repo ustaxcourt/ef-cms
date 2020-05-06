@@ -38,33 +38,29 @@ const roleMap = {
   Private: User.ROLES.privatePractitioner,
 };
 
-const practitionerDecorator = (obj, rawObj) => {
-  obj.entityName = 'Practitioner';
-  obj.name = Practitioner.getFullName(rawObj);
-  obj.firstName = rawObj.firstName;
-  obj.lastName = rawObj.lastName;
-  obj.middleName = rawObj.middleName;
-  obj.additionalPhone = rawObj.additionalPhone;
-  obj.admissionsDate = rawObj.admissionsDate;
-  obj.admissionsStatus = rawObj.admissionsStatus;
-  obj.alternateEmail = rawObj.alternateEmail;
-  obj.birthYear = rawObj.birthYear;
-  obj.employer = rawObj.employer;
-  obj.firmName = rawObj.firmName;
-  obj.originalBarState = rawObj.originalBarState;
-  obj.practitionerType = rawObj.practitionerType;
-  if (obj.admissionsStatus === 'Active') {
-    obj.role = roleMap[obj.employer];
-  } else {
-    obj.role = User.ROLES.inactivePractitioner;
-  }
-  obj.suffix = rawObj.suffix;
-  obj.section = obj.role;
-};
-
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
-  practitionerDecorator(this, rawUser);
+  this.entityName = 'Practitioner';
+  this.name = Practitioner.getFullName(rawUser);
+  this.firstName = rawUser.firstName;
+  this.lastName = rawUser.lastName;
+  this.middleName = rawUser.middleName;
+  this.additionalPhone = rawUser.additionalPhone;
+  this.admissionsDate = rawUser.admissionsDate;
+  this.admissionsStatus = rawUser.admissionsStatus;
+  this.alternateEmail = rawUser.alternateEmail;
+  this.birthYear = rawUser.birthYear;
+  this.employer = rawUser.employer;
+  this.firmName = rawUser.firmName;
+  this.originalBarState = rawUser.originalBarState;
+  this.practitionerType = rawUser.practitionerType;
+  if (this.admissionsStatus === 'Active') {
+    this.role = roleMap[this.employer];
+  } else {
+    this.role = User.ROLES.inactivePractitioner;
+  }
+  this.suffix = rawUser.suffix;
+  this.section = this.role;
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -212,6 +208,5 @@ Practitioner.getFullName = function (practitionerData) {
 
 module.exports = {
   Practitioner,
-  practitionerDecorator,
   practitionerValidation,
 };

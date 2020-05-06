@@ -2,10 +2,6 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const {
-  practitionerDecorator,
-  practitionerValidation,
-} = require('./Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
 const { User, userDecorator, userValidation } = require('./User');
 
@@ -17,7 +13,6 @@ const { User, userDecorator, userValidation } = require('./User');
  */
 function PrivatePractitioner(rawUser) {
   userDecorator(this, rawUser);
-  practitionerDecorator(this, rawUser);
   this.entityName = 'PrivatePractitioner';
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
@@ -30,7 +25,6 @@ joiValidationDecorator(
   PrivatePractitioner,
   joi.object().keys({
     ...userValidation,
-    ...practitionerValidation,
     entityName: joi.string().valid('PrivatePractitioner').required(),
     representingPrimary: joi.boolean().optional(),
     representingSecondary: joi.boolean().optional(),
