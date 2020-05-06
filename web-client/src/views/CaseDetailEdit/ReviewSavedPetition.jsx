@@ -78,7 +78,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="parties-card">
                       Parties
                       <Button
                         link
@@ -143,7 +143,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="case-information-card">
                       Case Information
                       <Button
                         link
@@ -240,7 +240,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="irs-notice-card">
                       IRS Notice
                       <Button
                         link
@@ -299,7 +299,9 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Attachments</h3>
+                    <h3 className="underlined" id="attachments-card">
+                      Attachments
+                    </h3>
                     <div>
                       {reviewSavedPetitionHelper.petitionFile && (
                         <div className="margin-top-3 margin-bottom-2">
