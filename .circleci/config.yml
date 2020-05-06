@@ -35,9 +35,6 @@ jobs:
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
           paths:
             - 'node_modules'
-      - run:
-          name: Build Assets
-          command: npm run build:all
       - persist_to_workspace:
           root: ~/
           paths:
@@ -120,7 +117,7 @@ jobs:
           at: ~/
       - run:
           name: Web Client - Unit Test
-          command: CI=false npm run test:client:unit
+          command: npm run build:assets && CI=false npm run test:client:unit
       - persist_to_workspace:
           root: ~/
           paths:
@@ -136,7 +133,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts: 'single-node'
+          discovery.seed_hosts:
     resource_class: xlarge
     parallelism: 2
     steps:
@@ -203,7 +200,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts: 'single-node'
+          discovery.seed_hosts:
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
@@ -216,6 +213,7 @@ jobs:
       - run:
           name: Pa11y - Web Client 1
           command: |
+            npm run build:all
             SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -258,7 +256,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts: 'single-node'
+          discovery.seed_hosts:
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
@@ -271,6 +269,7 @@ jobs:
       - run:
           name: Cypress
           command: |
+            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
