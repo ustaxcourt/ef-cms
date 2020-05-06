@@ -1,4 +1,4 @@
-### [Content Strategy & Style Guide](./Content-Strategy-&-Style-Guide)
+### [Content Strategy & Style Guide](./Content-Strategy-&-Style-Guide.md)
 
 ### [Glossary](https://github.com/flexion/ef-cms/wiki/Glossary) 
 
