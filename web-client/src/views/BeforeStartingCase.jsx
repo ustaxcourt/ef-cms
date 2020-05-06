@@ -40,7 +40,7 @@ export const BeforeStartingCase = () => (
               <p>
                 You may have received a notice in the mail from the Internal
                 Revenue Service (IRS). The IRS notice may show the last date to
-                file or the number of days you have to file a Petition. 
+                file or the number of days you have to file a Petition.
                 <strong>
                   The Court must receive your electronically filed Petition no
                   later than 11:59 pm Eastern Time on the last date to file.
@@ -87,7 +87,7 @@ export const BeforeStartingCase = () => (
                 <span className="usa-hint">
                   *This is the only document that should contain your Social
                   Security Number (SSN), Taxpayer Identification Number (TIN),
-                  or Employer Identification  Number (EIN).{' '}
+                  or Employer Identification Number (EIN).{' '}
                   <strong>Do not include</strong> your SSN, TIN, or EIN on any
                   other document you file with the Court.
                 </span>
@@ -108,8 +108,8 @@ export const BeforeStartingCase = () => (
                 This is the document that explains why you’re challenging the
                 IRS’s determination. You can complete the Court’s standard
                 Petition form or you can upload your own Petition that complies
-                with the requirements of the Tax Court Rules of Practice and
-                Procedure. 
+                with the requirements of the Tax Court Rules of Practice and
+                Procedure.
               </p>
               <p className="label">
                 If you didn’t already fill out the form, you can download it
@@ -130,9 +130,9 @@ export const BeforeStartingCase = () => (
                 </Button>
                 <br />
                 <span className="usa-hint">
-                  *<strong>Do not include</strong> personal information (such as
+                  *<strong>Do not include</strong> personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
-                  Employer Identification Numbers,  birthdates, names of minor
+                  Employer Identification Numbers, birthdates, names of minor
                   children, or financial account information) in your Petition
                   or any other filing with the Court.
                 </span>
@@ -158,7 +158,7 @@ export const BeforeStartingCase = () => (
                 </Button>
                 <br />
                 <span className="usa-hint">
-                  *<strong>Do not include</strong> any additional documents with
+                  *<strong>Do not include</strong> any additional documents with
                   your Petition, except for the IRS notice. Documents that might
                   be evidence can be submitted at a later time.
                 </span>
