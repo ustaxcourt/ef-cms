@@ -39,7 +39,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     userEntity = new Practitioner({
       ...user,
       barNumber,
-      userId:  applicationContext.getUniqueId();,
+      userId: applicationContext.getUniqueId(),
     })
       .validate()
       .toRawObject();
