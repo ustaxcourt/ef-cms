@@ -17,7 +17,7 @@ describe('reactTemplateGenerator', () => {
       data: { foo: 'bar' },
     });
 
-    expect(React.createElement).toHaveBeenCalledWith();
+    expect(React.createElement).toHaveBeenCalled();
     expect(ReactDOM.renderToString).toHaveBeenCalled();
   });
 });
