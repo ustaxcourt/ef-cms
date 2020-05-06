@@ -43,7 +43,7 @@ const docketRecord = async ({ applicationContext, data }) => {
     data,
   });
 
-  const { docketNumber } = data;
+  const docketNumber = data.caseDetail.docketNumberWithSuffix;
 
   const headerHtml = reactTemplateGenerator({
     componentName: 'PageMetaHeaderDocket',
