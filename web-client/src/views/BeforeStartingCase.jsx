@@ -37,7 +37,7 @@ export const BeforeStartingCase = () => (
               displayIcon="true"
               iconClassName="bullet-icon"
               iconSize="lg"
-              iconTypes={['far', 'user']}
+              iconTypes={['far', 'clock']}
               key="Check the Deadline for Filing"
               title="Check the Deadline for Filing"
             >
@@ -56,6 +56,10 @@ export const BeforeStartingCase = () => (
           </Accordion>
           <Accordion headingLevel="3">
             <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['fa', 'fingerprint']}
               key="Confirm Your Identity"
               title="Confirm Your Identity"
             >
@@ -96,6 +100,10 @@ export const BeforeStartingCase = () => (
           </Accordion>
           <Accordion headingLevel="3">
             <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'edit']}
               key="Prepare the Petition"
               title="Prepare the Petition"
             >
@@ -150,9 +158,8 @@ export const BeforeStartingCase = () => (
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Learn more about how to merge files into one PDF.
+                  Learn more about how to merge files into one PDF.)
                 </Button>
-                )
                 <br />
                 <span className="usa-hint">
                   *<strong>Do not include</strong> any additional documents with
@@ -164,6 +171,10 @@ export const BeforeStartingCase = () => (
           </Accordion>
           <Accordion headingLevel="3">
             <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'user']}
               key="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business..."
               title="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business..."
             >
