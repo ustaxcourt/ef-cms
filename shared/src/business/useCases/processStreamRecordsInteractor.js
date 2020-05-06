@@ -147,7 +147,6 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
-  const honeybadger = applicationContext.initHoneybadger();
 
   const filteredRecords = await filterRecords({
     applicationContext,
@@ -185,7 +184,7 @@ exports.processStreamRecordsInteractor = async ({
               });
 
             applicationContext.logger.info('Error', e);
-            honeybadger && honeybadger.notify(e);
+            await applicationContext.notifyHoneybadger(e);
           }
         }
       }
@@ -220,7 +219,7 @@ exports.processStreamRecordsInteractor = async ({
             });
 
           applicationContext.logger.info('Error', e);
-          honeybadger && honeybadger.notify(e);
+          await applicationContext.notifyHoneybadger(e);
         }
       }
     }
