@@ -129,7 +129,7 @@ exports.addCoverToPdf = async ({
 
   pdfDoc.insertPage(0, coverPageDocumentPages[0]);
 
-  return pdfDoc.save();
+  return await pdfDoc.save();
 };
 
 /**

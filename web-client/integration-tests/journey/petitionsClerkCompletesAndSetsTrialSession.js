@@ -11,8 +11,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('openSetCalendarModalSequence');
 
     expect(test.getState('alertWarning')).toEqual({
-      message:
-        'Provide an address and a judge to set this trial session.',
+      message: 'Provide an address and a judge to set this trial session.',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -53,10 +52,9 @@ export default (test, overrides = {}) => {
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(test.getState('currentPage')).toEqual('SimplePdfPreviewPage');
+      expect(test.getState('currentPage')).toEqual('PrintPaperService');
       expect(test.getState('alertWarning')).toEqual({
-        message:
-          'Print and mail all paper service documents now.',
+        message: 'Print and mail all paper service documents now.',
       });
     } else {
       expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
