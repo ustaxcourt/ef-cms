@@ -404,7 +404,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
-    notifyHoneybadger: jest.fn(),
     isAuthorizedForWorkItems: jest.fn().mockReturnValue(() => true),
     logger: {
       error: jest.fn(),
@@ -412,6 +411,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       time: () => jest.fn().mockReturnValue(null),
       timeEnd: () => jest.fn().mockReturnValue(null),
     },
+    notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };

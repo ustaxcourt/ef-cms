@@ -1333,19 +1333,6 @@ module.exports = (appContextUser = {}) => {
       };
     },
     initHoneybadger,
-    notifyHoneybadger: async message => {
-      const honeybadger = initHoneybadger();
-
-      const notifyAsync = message => {
-        return new Promise(resolve => {
-          honeybadger.notify(message, null, null, resolve);
-        });
-      };
-
-      if (honeybadger) {
-        await notifyAsync(message);
-      }
-    },
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
@@ -1366,6 +1353,19 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    notifyHoneybadger: async message => {
+      const honeybadger = initHoneybadger();
+
+      const notifyAsync = message => {
+        return new Promise(resolve => {
+          honeybadger.notify(message, null, null, resolve);
+        });
+      };
+
+      if (honeybadger) {
+        await notifyAsync(message);
+      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(
