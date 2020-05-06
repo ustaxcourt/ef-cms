@@ -1,7 +1,7 @@
-## Case Header 
-**Docket number** 
+## Case Header
+**Docket number**
 * Do not display leading zeros in docket number or URL
-* Searching docket number does not require leading zeros 
+* Searching docket number does not require leading zeros
 
 **Case Caption**
 * When case is created, the case caption is automatically generated based on party type and party contact information
@@ -18,27 +18,27 @@
 * The assigned judge and the trial session judge do not have to be same (although they normally will be)
 * Chief Judge role is not tied to a user login - a judge acting in the Chief Judge capacity can have cases assigned to them as their judge user login and have cases assigned to the Chief Judge role
 
-## Docket Record 
-* [Docket Record](https://github.com/flexion/ef-cms/wiki/Docket-Record) is the official record for the case, and is visible to all users, including the public (with limited permissions) 
+## Docket Record
+* [Docket Record](https://github.com/flexion/ef-cms/wiki/Docket-Record) is the official record for the case, and is visible to all users, including the public (with limited permissions)
 
-## Deadlines 
-* Displays all current deadlines on the case 
+## Deadlines
+* Displays all current deadlines on the case
 
-## In Progress 
-#### Draft Documents 
+## In Progress
+#### Draft Documents
 
-#### Pending Messages 
+#### Pending Messages
 
-#### Pending Report 
+#### Pending Report
 
 ## Case Information
-* Updates to case metadata are immediately visible on the Case Detail page when information is saved 
+* Updates to case metadata are immediately visible on the Case Detail page when information is saved
 
-## Notes 
+## Notes
 
 
 
-# Sealed Cases 
-* Docket clerk / clerk of court roles only have access to seal a case 
-* Sealed case is not visible in public search by name 
-* Sealed case is visible by public docket number search - with only docket number displayed 
+# Sealed Cases
+* Docket clerk / clerk of court roles only have access to seal a case
+* Sealed case is not visible in public search by name
+* Sealed case is visible by public docket number search - with only docket number displayed
