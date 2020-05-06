@@ -46,12 +46,36 @@ exports.updateDocketEntryInteractor = async ({
     documentId: primaryDocumentFileId,
   });
 
+  const editableFields = {
+    addToCoversheet: documentMetadata.addToCoversheet,
+    additionalInfo: documentMetadata.additionalInfo,
+    additionalInfo2: documentMetadata.additionalInfo2,
+    attachments: documentMetadata.attachments,
+    certificateOfService: documentMetadata.certificateOfService,
+    certificateOfServiceDate: documentMetadata.certificateOfServiceDate,
+    documentTitle: documentMetadata.documentTitle,
+    documentType: documentMetadata.documentType,
+    eventCode: documentMetadata.eventCode,
+    // filedBy: documentMetadata.filedBy,
+    // filingDate: documentMetadata.filingDate,
+    freeText: documentMetadata.freeText,
+    freeText2: documentMetadata.freeText2,
+    isFileAttached: documentMetadata.isFileAttached,
+    lodged: documentMetadata.lodged,
+    mailingDate: documentMetadata.mailingDate,
+    objections: documentMetadata.objections,
+    ordinalValue: documentMetadata.ordinalValue,
+    partyPrimary: documentMetadata.partyPrimary,
+    partySecondary: documentMetadata.partySecondary,
+    // receivedAt: documentMetadata.receivedAt,
+    scenario: documentMetadata.scenario,
+  };
+
   const documentEntity = new Document(
     {
       ...currentDocument,
-      ...documentMetadata,
+      ...editableFields,
       documentId: primaryDocumentFileId,
-      documentType: documentMetadata.documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -69,9 +93,9 @@ exports.updateDocketEntryInteractor = async ({
   const docketRecordEntry = new DocketRecord(
     {
       ...existingDocketRecordEntry,
-      description: documentMetadata.documentTitle,
+      description: editableFields.documentTitle,
       documentId: documentEntity.documentId,
-      editState: JSON.stringify(documentMetadata),
+      editState: JSON.stringify(editableFields),
       eventCode: documentEntity.eventCode,
       filingDate: documentEntity.receivedAt,
     },
@@ -81,7 +105,7 @@ exports.updateDocketEntryInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
 
-  if (documentMetadata.isFileAttached) {
+  if (editableFields.isFileAttached) {
     const workItemToDelete = currentDocument.workItems.find(
       workItem => !workItem.document.isFileAttached,
     );
