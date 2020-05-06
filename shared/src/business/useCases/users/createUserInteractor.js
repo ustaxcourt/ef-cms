@@ -24,7 +24,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
 
   if (
     user.role === User.ROLES.privatePractitioner ||
-    user.role === User.ROLES.irsPractitione ||
+    user.role === User.ROLES.irsPractitioner ||
     user.role === User.ROLES.inactivePractitioner
   ) {
     const barNumber =
