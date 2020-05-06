@@ -7,13 +7,21 @@ const ChangeOfAddress = require('../pdfGenerator/documentTemplates/ChangeOfAddre
   .default;
 const DocketRecord = require('../pdfGenerator/documentTemplates/DocketRecord.jsx')
   .default;
+const StandingPretrialOrder = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx')
+  .default;
+
 const PageMetaHeaderDocket = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx')
   .default;
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');
 
-const components = { ChangeOfAddress, DocketRecord, PageMetaHeaderDocket };
+const components = {
+  ChangeOfAddress,
+  DocketRecord,
+  PageMetaHeaderDocket,
+  StandingPretrialOrder,
+};
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {
   const componentTemplate = ReactDOM.renderToString(

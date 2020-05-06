@@ -3,7 +3,7 @@ const React = require('react');
 const DocketHeader = require('../components/DocketHeader.jsx').default;
 const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
 
-const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
+const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
   return (
     <>
       <PrimaryHeader />
@@ -103,6 +103,7 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
 
       <h3
         className="text-center text-bold"
+        id="served-stamp"
         style={{ pageBreakAfter: 'always' }}
       >
         Served {footerDate}
@@ -110,15 +111,15 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
 
       <div style={{ marginLeft: '20px' }}>
         <p>
-          <strong className="text-underline">3. Pretrial Memoranda.</strong>
-          It is ORDERED that, unless a basis of settlement (resolution of the
+          <strong className="text-underline">3. Pretrial Memoranda.</strong> It
+          is ORDERED that, unless a basis of settlement (resolution of the
           issues) has been reached, each party shall prepare a Pretrial
           Memorandum containing the information in the attached form. Each party
           shall serve on the other party and file the Pretrial Memorandum not
           less than 14 days before the first day of the trial session.
         </p>
         <p>
-          <strong className="text-underline">4. Final Status Reports.</strong>
+          <strong className="text-underline">4. Final Status Reports.</strong>{' '}
           It is ORDERED that, if the status of the case changes from that
           reported in a party&apos;s Pretrial Memorandum, the party shall submit
           to the undersigned and to the other party a Final Status Report
@@ -135,15 +136,15 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
           the opposing party is present.
         </p>
         <p>
-          <strong className="text-underline">5.Witnesses.</strong>
-          It is ORDERED that witnessess hall be identified in the Pretrial
-          Memorandum with a brief summary of their anticipated testimony.
-          Witnesses who are not identified will not be permitted to testify at
-          the trial with out a showing of good cause.
+          <strong className="text-underline">5.Witnesses.</strong> It is ORDERED
+          that witnessess hall be identified in the Pretrial Memorandum with a
+          brief summary of their anticipated testimony. Witnesses who are not
+          identified will not be permitted to testify at the trial with out a
+          showing of good cause.
         </p>
         <p>
-          <strong className="text-underline">6. Expert Witnesses.</strong>
-          It is ORDERED that unless otherwise permitted by the Court, expert
+          <strong className="text-underline">6. Expert Witnesses.</strong> It is
+          ORDERED that unless otherwise permitted by the Court, expert
           witnessess hall prepare a written report which shall be submitted
           directly to the undersigned and served upon each other party at least
           30 days before the first day of the trial session. An expert
@@ -151,8 +152,8 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
           this Order and Rule 143(g).
         </p>
         <p>
-          <strong className="text-underline">7. Settlements.</strong>
-          It is ORDERED that if the parties have reached a basis of settlement,
+          <strong className="text-underline">7. Settlements.</strong> It is
+          ORDERED that if the parties have reached a basis of settlement,
           astipulated decision shall be submitted to the Court prior to or at
           the call of the calendar on the first day of the trial session.
           Additional time for submitting astipulated decision will be granted
@@ -163,13 +164,13 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
           will be due.
         </p>
         <p>
-          <strong className="text-underline">8. Time of Trial.</strong>
-          It is ORDERED that all parties shall be prepared for trial at anytime
-          during the trial session unless a specific date has been previously
-          set by the Court. Your case may or may not be tried on the same date
-          as the calendar call, and you may need to return to Court on a later
-          date during the trial session. Thus, it may be beneficial to contact
-          the Court in advance. Within 2 weeks before the start of the trial
+          <strong className="text-underline">8. Time of Trial.</strong> It is
+          ORDERED that all parties shall be prepared for trial at anytime during
+          the trial session unless a specific date has been previously set by
+          the Court. Your case may or may not be tried on the same date as the
+          calendar call, and you may need to return to Court on a later date
+          during the trial session. Thus, it may be beneficial to contact the
+          Court in advance. Within 2 weeks before the start of the trial
           session, the parties may jointly contact the Judge&apos;s chamber
           store quest a time and date certain for the trial. If practicable, the
           Court will attempt to accommodate the request, keeping in mind other
@@ -178,7 +179,7 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
           expect trial to require 3 days or more.
         </p>
         <p>
-          <strong className="text-underline">9. Service of Documents.</strong>
+          <strong className="text-underline">9. Service of Documents.</strong>{' '}
           It is ORDERED that every pleading, motion, letter, or other document
           (with the exception of the petition and the post trial briefs, see
           Rule 151(c)) submitted to the Court shall contain a certificate of
@@ -353,4 +354,4 @@ const standingPretrialOrder = ({ footerDate, options, trialInfo }) => {
   );
 };
 
-export default standingPretrialOrder;
+export default StandingPretrialOrder;
