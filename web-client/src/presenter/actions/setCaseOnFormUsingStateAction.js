@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets props.caseDetail on state.form
+ * sets state.caseDetail on state.form
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
