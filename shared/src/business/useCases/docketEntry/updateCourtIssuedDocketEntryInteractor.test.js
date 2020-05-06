@@ -39,13 +39,13 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       documents: [
         {
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
           userId: 'irsPractitioner',
         },
         {
           docketNumber: '45678-18',
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
           userId: 'irsPractitioner',
         },
@@ -211,5 +211,31 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toMatchObject({
       secondaryDate: '2019-03-01T21:40:46.415Z',
     });
+  });
+
+  it('should not update non-editable fields on the document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Olivia Jade',
+      role: User.ROLES.docketClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    await updateCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      documentMeta: {
+        caseId: caseRecord.caseId,
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        documentType: 'Order',
+        objections: 'No',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[3].objections,
+    ).toBeUndefined();
   });
 });
