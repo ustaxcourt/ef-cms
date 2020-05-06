@@ -51,7 +51,6 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeFormContactChangeSequence } from './sequences/countryTypeFormContactChangeSequence';
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
-import { createCaseFromPaperAndServeToIrsSequence } from './sequences/createCaseFromPaperAndServeToIrsSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
@@ -116,7 +115,6 @@ import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDock
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
-import { gotoReviewPetitionFromPaperSequence } from './sequences/gotoReviewPetitionFromPaperSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
@@ -207,7 +205,6 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
-import { reviewPetitionFromPaperSequence } from './sequences/reviewPetitionFromPaperSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCaseAndServeToIrsSequence } from './sequences/saveCaseAndServeToIrsSequence';
@@ -279,6 +276,7 @@ import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequen
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
+import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
@@ -441,7 +439,6 @@ export const presenter = {
     countryTypeFormContactChangeSequence,
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
-    createCaseFromPaperAndServeToIrsSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
@@ -506,7 +503,6 @@ export const presenter = {
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
     gotoRequestAccessSequence,
-    gotoReviewPetitionFromPaperSequence,
     gotoReviewSavedPetitionSequence,
     gotoSecondaryContactEditSequence,
     gotoSelectDocumentTypeSequence,
@@ -597,7 +593,6 @@ export const presenter = {
     resetCaseMenuSequence,
     resetHeaderAccordionsSequence,
     reviewExternalDocumentInformationSequence,
-    reviewPetitionFromPaperSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
     saveCaseAndServeToIrsSequence,
@@ -667,6 +662,7 @@ export const presenter = {
     submitForwardSequence,
     submitLoginSequence,
     submitOrderAdvancedSearchSequence,
+    submitPetitionFromPaperSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
     submitRemoveConsolidatedCasesSequence,

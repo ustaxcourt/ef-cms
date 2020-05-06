@@ -16,7 +16,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
       value: false,
     });
 
-    await test.runSequence('reviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       chooseAtLeastOneValue:
