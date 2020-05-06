@@ -4,7 +4,6 @@ const {
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-
 const { createUserInteractor } = require('./createUserInteractor');
 const { User } = require('../../entities/User');
 
@@ -57,20 +56,17 @@ describe('create user', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('adds a barNumber and userId if the user is a practitioner', async () => {
-    const mockUser = {
-      barNumber: 'CS20001',
-      name: 'Test PrivatePractitioner',
-      role: User.ROLES.privatePractitioner,
-      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
-    };
+  it('adds a barNumber and userId when the user role is privatePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'admin',
       userId: 'admin',
     });
-    applicationContext
-      .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
+      barNumber: 'CS20001',
+      name: 'Test PrivatePractitioner',
+      role: User.ROLES.privatePractitioner,
+      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+    });
 
     const userToCreate = {
       admissionsDate: new Date(),
@@ -91,5 +87,81 @@ describe('create user', () => {
     expect(user).not.toBeUndefined();
     expect(user.barNumber).toBe('CS20001');
     expect(user.userId).toBe('745b7d39-8fae-4c2f-893c-3c829598bc71');
+  });
+
+  it('should generate barNumber and userId when the user role is irsPractitioner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'admin',
+      userId: 'admin',
+    });
+    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
+      barNumber: 'CS20001',
+      name: 'Test PrivatePractitioner',
+      role: User.ROLES.irsPractitioner,
+      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+    });
+    const mockAdmissionsDate = new Date('1876/02/19');
+
+    await createUserInteractor({
+      applicationContext,
+      user: {
+        admissionsDate: mockAdmissionsDate,
+        admissionsStatus: 'Active',
+        birthYear: '1993',
+        employer: 'DOJ',
+        firstName: 'Test',
+        lastName: 'IRSPractitioner',
+        originalBarState: 'CA',
+        practitionerType: 'Attorney',
+        role: User.ROLES.irsPractitioner,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
+        .user.barNumber,
+    ).not.toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
+        .user.userId,
+    ).not.toBeUndefined();
+  });
+
+  it('should generate barNumber and userId when the user role is inactivePractitioner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'admin',
+      userId: 'admin',
+    });
+    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
+      barNumber: 'CS20001',
+      name: 'Test InactivePractitioner',
+      role: User.ROLES.inactivePractitioner,
+      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+    });
+    const mockAdmissionsDate = new Date('1876/02/19');
+
+    await createUserInteractor({
+      applicationContext,
+      user: {
+        admissionsDate: mockAdmissionsDate,
+        admissionsStatus: 'Active',
+        birthYear: '1993',
+        employer: 'DOJ',
+        firstName: 'Test',
+        lastName: 'IRSPractitioner',
+        originalBarState: 'CA',
+        practitionerType: 'Attorney',
+        role: User.ROLES.inactivePractitioner,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
+        .user.barNumber,
+    ).not.toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
+        .user.userId,
+    ).not.toBeUndefined();
   });
 });
