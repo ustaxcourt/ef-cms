@@ -20,21 +20,9 @@ jobs:
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
-      - restore_cache:
-          name: npm_modules - Restoring Cache
-          keys:
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - deps-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: npm i && npm rebuild node-sass
-      - save_cache:
-          name: npm_modules - Save Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-          paths:
-            - 'node_modules'
+          command: npm ci && npm rebuild node-sass
       - persist_to_workspace:
           root: ~/
           paths:
@@ -133,7 +121,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts:
+          discovery.type: single-node
     resource_class: xlarge
     parallelism: 2
     steps:
@@ -200,7 +188,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts:
+          discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
@@ -256,7 +244,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.seed_hosts:
+          discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
