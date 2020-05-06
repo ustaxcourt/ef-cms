@@ -35,6 +35,12 @@ function CaseInternal(rawCase) {
     this.orderDesignatingPlaceOfTrial = undefined;
   }
   this.orderForOds = rawCase.orderForOds;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition;
+  this.orderForAmendedPetitionAndFilingFee =
+    rawCase.orderForAmendedPetitionAndFilingFee;
+  this.orderForFilingFee = rawCase.orderForFilingFee;
+  this.orderForRatification = rawCase.orderForRatification;
+  this.orderToShowCause = rawCase.orderToShowCause;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -106,6 +112,13 @@ const paperRequirements = joi
     mailingDate: joi.string().max(25).required(),
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      Case.validationRules.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: Case.validationRules.orderForFilingFee,
+    orderForOds: Case.validationRules.orderForOds,
+    orderForRatification: Case.validationRules.orderForRatification,
+    orderToShowCause: Case.validationRules.orderToShowCause,
     ownershipDisclosureFile: joi.when('partyType', {
       is: joi
         .exist()

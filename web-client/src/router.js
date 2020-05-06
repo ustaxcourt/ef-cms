@@ -797,14 +797,6 @@ const router = {
     );
 
     registerRoute(
-      'file-a-petition/review-petition',
-      ifHasAccess(() => {
-        setPageTitle('Review Petition');
-        return app.getSequence('gotoReviewPetitionFromPaperSequence')();
-      }),
-    );
-
-    registerRoute(
       '/file-a-petition-pa11y/step-*',
       ifHasAccess(step => {
         setPageTitle('File a petition');
