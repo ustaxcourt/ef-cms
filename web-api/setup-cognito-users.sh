@@ -42,6 +42,7 @@ generate_post_data() {
   "birthYear": "1950",
   "employer": "$employer",
   "firmName": "Some Firm",
+  "originalBarState": "WA",
   "practitionerType": "Attorney",
   "contact": {
     "address1": "234 Main St",
