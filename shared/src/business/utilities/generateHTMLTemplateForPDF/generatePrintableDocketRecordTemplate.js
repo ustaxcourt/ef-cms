@@ -1,15 +1,6 @@
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
-
-const React = require('react');
-const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-
-require('regenerator-runtime');
-require('@babel/register')({
-  presets: ['@babel/preset-react', '@babel/preset-env'],
-});
-const DocketRecord = require('../pdfGenerator/documentTemplates/DocketRecord.jsx')
-  .default;
+const { reactTemplateGenerator } = require('./reactTemplateGenerator');
 
 /**
  * HTML template generator for printable docket record PDF views
@@ -31,8 +22,9 @@ const generatePrintableDocketRecordTemplate = async ({
     entries,
   } = data;
 
-  const reactDocketRecordTemplate = ReactDOM.renderToString(
-    React.createElement(DocketRecord, {
+  const reactDocketRecordTemplate = reactTemplateGenerator({
+    componentName: 'DocketRecord',
+    data: {
       caseDetail,
       countryTypes: ContactFactory.COUNTRY_TYPES,
       entries,
@@ -41,8 +33,8 @@ const generatePrintableDocketRecordTemplate = async ({
         caseTitle,
         docketNumberWithSuffix,
       },
-    }),
-  );
+    },
+  });
 
   const htmlTemplate = generateHTMLTemplateForPDF({
     applicationContext,

@@ -1,13 +1,5 @@
-const React = require('react');
-const ReactDOM = require('react-dom/server');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-
-require('regenerator-runtime');
-require('@babel/register')({
-  presets: ['@babel/preset-react', '@babel/preset-env'],
-});
-const ChangeOfAddress = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx')
-  .default;
+const { reactTemplateGenerator } = require('./reactTemplateGenerator');
 
 /**
  * HTML template generator for printable change of address/telephone PDF views
@@ -31,8 +23,9 @@ const generateChangeOfAddressTemplate = async ({
     oldData,
   } = content;
 
-  const reactNoticeHTMLTemplate = ReactDOM.renderToString(
-    React.createElement(ChangeOfAddress, {
+  const reactNoticeHTMLTemplate = reactTemplateGenerator({
+    componentName: 'ChangeOfAddress',
+    data: {
       name,
       newData,
       oldData,
@@ -46,8 +39,8 @@ const generateChangeOfAddressTemplate = async ({
         showOnlyPhoneChange:
           documentTitle === 'Notice of Change of Telephone Number',
       },
-    }),
-  );
+    },
+  });
 
   const htmlTemplate = generateHTMLTemplateForPDF({
     applicationContext,

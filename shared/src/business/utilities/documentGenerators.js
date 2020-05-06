@@ -4,6 +4,9 @@ const {
 const {
   generatePrintableDocketRecordTemplate,
 } = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
+const {
+  reactTemplateGenerator,
+} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
 
 const changeOfAddress = async ({ applicationContext, content }) => {
   const pdfContentHtml = await generateChangeOfAddressTemplate({
@@ -11,14 +14,24 @@ const changeOfAddress = async ({ applicationContext, content }) => {
     content,
   });
 
+  const { docketNumber } = content;
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber,
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
-      docketNumber: content.docketNumber,
-      headerHtml: null,
+      displayHeaderFooter: true,
+      docketNumber,
+      headerHtml,
+      overwriteHeader: true,
     });
 
   return pdf;
@@ -30,14 +43,24 @@ const docketRecord = async ({ applicationContext, data }) => {
     data,
   });
 
+  const docketNumber = data.caseDetail.docketNumberWithSuffix;
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber,
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
-      docketNumber: data.docketNumber,
-      headerHtml: null,
+      displayHeaderFooter: true,
+      docketNumber,
+      headerHtml,
+      overwriteHeader: true,
     });
 
   return pdf;
