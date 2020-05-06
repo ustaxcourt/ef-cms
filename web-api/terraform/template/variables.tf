@@ -17,3 +17,7 @@ variable "ses_dmarc_rua" {
 variable "es_instance_count" {
   type = "string"
 }
+
+variable "honeybadger_key" {
+  type = "string"
+}
