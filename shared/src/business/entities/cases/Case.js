@@ -364,6 +364,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 Case.validationRules = {
   associatedJudge: joi
     .string()
+    .max(50)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Judge assigned to this case. Defaults to Chief Judge.'),
@@ -405,6 +406,7 @@ Case.validationRules = {
       otherwise: joi.optional().allow(null),
       then: joi
         .string()
+        .max(250)
         .required()
         .description(
           'Open text field for describing reason for blocking this case from trial.',
@@ -413,6 +415,7 @@ Case.validationRules = {
     .meta({ tags: ['Restricted'] }),
   caseCaption: joi
     .string()
+    .max(500)
     .required()
     .description(
       'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
@@ -426,6 +429,7 @@ Case.validationRules = {
     .description('Unique case ID only used by the system.'),
   caseNote: joi
     .string()
+    .max(500)
     .optional()
     .meta({ tags: ['Restricted'] }),
   caseType: joi
@@ -483,16 +487,18 @@ Case.validationRules = {
     .when('highPriority', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
+      then: joi.string().max(250).required(),
     })
     .meta({ tags: ['Restricted'] }),
   initialCaption: joi
     .string()
+    .max(500)
     .allow(null)
     .optional()
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
+    .max(2) // TODO: add enum
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -590,7 +596,7 @@ Case.validationRules = {
     .when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
-      then: joi.string().required(),
+      then: joi.string().max(50).required(),
     })
     .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
@@ -675,11 +681,12 @@ Case.validationRules = {
     ),
   trialTime: joi
     .string()
-    .pattern(/^[0-9]+:([0-5][0-9])$/)
+    .pattern(/^[0-9]{1,2}:([0-5][0-9])$/)
     .optional()
     .description('Time of day when this case goes to trial.'),
   userId: joi
     .string()
+    .max(50)
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('The unique ID of the User who added the case to the system.'),
