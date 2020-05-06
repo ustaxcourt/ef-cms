@@ -415,7 +415,7 @@ Case.validationRules = {
     .meta({ tags: ['Restricted'] }),
   caseCaption: joi
     .string()
-    .max(250)
+    .max(500)
     .required()
     .description(
       'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
@@ -492,7 +492,7 @@ Case.validationRules = {
     .meta({ tags: ['Restricted'] }),
   initialCaption: joi
     .string()
-    .max(250)
+    .max(500)
     .allow(null)
     .optional()
     .description('Case caption before modification.'),

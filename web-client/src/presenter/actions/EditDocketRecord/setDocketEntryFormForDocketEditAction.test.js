@@ -9,6 +9,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
   it("sets the given document's edit state on form.state", async () => {
     const editState = {
       caseId: '123',
+      date: '2020-01-01T05:00:00.000Z',
       documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
@@ -16,6 +17,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     };
 
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
+      modules: { presenter },
       props: {
         documentId: '123-abc-123-abc',
       },
@@ -43,10 +45,14 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
     const expectedResult = {
       caseId: '123',
+      date: '2020-01-01T05:00:00.000Z',
+      day: '1',
       documentId: '123-abc-123-abc',
       eventCode: 'OPP',
       lodged: true,
+      month: '1',
       testKey: 'testValue',
+      year: '2020',
     };
 
     expect(result.state.form).toEqual(expectedResult);
@@ -62,6 +68,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     };
 
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
+      modules: { presenter },
       props: {
         documentId: '123-abc-123-abc',
       },
@@ -99,6 +106,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
   it('sets an empty object on form.state if no document matches the given documentId', async () => {
     const result = await runAction(setDocketEntryFormForDocketEditAction, {
+      modules: { presenter },
       props: {
         documentId: '111-aaa-111-aaa',
       },
