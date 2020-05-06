@@ -49,18 +49,8 @@ const checkSearchClientMappings = async ({ applicationContext, index }) => {
     totalTypes += typeMatches;
   }
 
-  const sendToHoneybadger = msg => {
-    const honeybadger = applicationContext.initHoneybadger();
-
-    if (honeybadger) {
-      honeybadger.notify(msg);
-    } else {
-      console.log(msg);
-    }
-  };
-
   if (fieldText !== '') {
-    sendToHoneybadger(
+    await applicationContext.notifyHoneybadger(
       `Warning: Search Client creating greater than 50 indexes for ${index} on the following fields: ${fieldText.substring(
         0,
         fieldText.length - 2,
@@ -70,11 +60,11 @@ const checkSearchClientMappings = async ({ applicationContext, index }) => {
 
   const currentPercent = (totalTypes / mappingLimit) * 100;
   if (currentPercent >= 75) {
-    sendToHoneybadger(
+    await applicationContext.notifyHoneybadger(
       `Warning: Search Client Mappings have reached the 75% threshold for ${index} - currently ${currentPercent}%`,
     );
   } else if (currentPercent >= 50) {
-    sendToHoneybadger(
+    await applicationContext.notifyHoneybadger(
       `Warning: Search Client Mappings have reached the 50% threshold for ${index} - currently ${currentPercent}%`,
     );
   }
@@ -87,7 +77,6 @@ const checkSearchClientMappings = async ({ applicationContext, index }) => {
  */
 exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
   applicationContext.logger.info('Time', createISODateString());
-  const honeybadger = applicationContext.initHoneybadger();
 
   // Check mapping counts
   const elasticsearchIndexes = applicationContext.getElasticsearchIndexes();
@@ -151,7 +140,7 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
           });
       } catch (e) {
         applicationContext.logger.info('Error', e);
-        honeybadger && honeybadger.notify(e);
+        await applicationContext.notifyHoneybadger(e);
       }
     }
 
