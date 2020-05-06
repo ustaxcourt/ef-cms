@@ -1,6 +1,7 @@
 version: 2
 jobs:
-  build-api:
+  bundle:
+    resource_class: large
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -34,6 +35,23 @@ jobs:
           key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
           paths:
             - 'node_modules'
+      - run:
+          name: Build Assets
+          command: npm run build:all
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project
+
+  build-api:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - attach_workspace:
+          at: ~/
       - run:
           name: Lint
           command: |
@@ -69,33 +87,8 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: npm_modules - Restoring Cache
-          keys:
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - deps-{{ .Environment.CACHE_VERSION }}-
-      - run:
-          name: NPM - Install
-          command: npm i && npm rebuild node-sass
-      - save_cache:
-          name: npm_modules - Save Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-          paths:
-            - 'node_modules'
+      - attach_workspace:
+          at: ~/
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -123,36 +116,11 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: npm_modules - Restoring Cache
-          keys:
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - deps-{{ .Environment.CACHE_VERSION }}-
-      - run:
-          name: NPM - Install
-          command: npm i && npm rebuild node-sass
-      - save_cache:
-          name: npm_modules - Save Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-          paths:
-            - 'node_modules'
+      - attach_workspace:
+          at: ~/
       - run:
           name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit
+          command: CI=false npm run test:client:unit
       - persist_to_workspace:
           root: ~/
           paths:
@@ -168,37 +136,12 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.type: 'single-node'
+          discovery.seed_hosts: 'single-node'
     resource_class: xlarge
     parallelism: 2
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: npm_modules - Restoring Cache
-          keys:
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - deps-{{ .Environment.CACHE_VERSION }}-
-      - run:
-          name: NPM - Install
-          command: npm i && npm rebuild node-sass
-      - save_cache:
-          name: npm_modules - Save Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-          paths:
-            - 'node_modules'
+      - attach_workspace:
+          at: ~/
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -260,7 +203,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.type: 'single-node'
+          discovery.seed_hosts: 'single-node'
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
@@ -273,7 +216,6 @@ jobs:
       - run:
           name: Pa11y - Web Client 1
           command: |
-            npm run build:all
             SKIP_CACHE_INVALIDATION=true SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -316,7 +258,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
       - image: elastic/elasticsearch:7.5.2
         environment:
-          discovery.type: 'single-node'
+          discovery.seed_hosts: 'single-node'
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
@@ -329,7 +271,6 @@ jobs:
       - run:
           name: Cypress
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -612,12 +553,25 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - build-shared
-      - build-api
-      - build-client-unit
-      - build-client-integration
-      - e2e-pa11y
-      - e2e-cypress
+      - bundle
+      - build-shared:
+          requires:
+            - bundle
+      - build-api:
+          requires:
+            - bundle
+      - build-client-unit:
+          requires:
+            - bundle
+      - build-client-integration:
+          requires:
+            - bundle
+      - e2e-pa11y:
+          requires:
+            - bundle
+      - e2e-cypress:
+          requires:
+            - bundle
       - build-client-coverage:
           requires:
             - build-shared
@@ -651,32 +605,49 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
+      - bundle:
+          filters:
+            branches:
+              ignore:
+                - develop
       - build-shared:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-api:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-unit:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-integration:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-pa11y:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-cypress:
+          requires:
+            - bundle
           filters:
             branches:
               ignore:
