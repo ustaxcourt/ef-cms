@@ -1,6 +1,7 @@
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { PetitionQcDocumentPreview } from './PetitionQcDocumentPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import React from 'react';
@@ -19,7 +20,31 @@ export const PetitionQc = connect({}, function PetitionQc() {
               <CaseDetailEdit />
             </div>
             <div className="grid-col-7">
-              {/* TODO <DocumentDisplayIframe /> */}
+              <PetitionQcDocumentPreview
+                documentTabs={[
+                  {
+                    documentType: 'petitionFile',
+                    title: 'Petition',
+                  },
+                  {
+                    documentType: 'stinFile',
+                    title: 'STIN',
+                  },
+                  {
+                    documentType: 'requestForPlaceOfTrialFile',
+                    title: 'RQT',
+                  },
+                  {
+                    documentType: 'ownershipDisclosureFile',
+                    title: 'ODS',
+                  },
+                  {
+                    documentType: 'applicationForWaiverOfFilingFeeFile',
+                    title: 'APW',
+                  },
+                ]}
+                title="Add Document(s)"
+              />
             </div>
           </div>
         </div>
