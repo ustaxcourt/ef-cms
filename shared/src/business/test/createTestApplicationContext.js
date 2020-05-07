@@ -238,7 +238,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
