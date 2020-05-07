@@ -2,11 +2,13 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
-import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
+import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseInProgressAction } from '../actions/StartCaseInternal/setCaseInProgressAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
@@ -20,5 +22,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
   assignPetitionToAuthenticatedUserAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  navigateToDocumentQCAction,
+  setPetitionIdAction,
+  setDocumentIdAction,
+  navigateToReviewSavedPetitionAction,
 ]);
