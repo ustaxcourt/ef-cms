@@ -123,7 +123,7 @@ jobs:
         environment:
           discovery.type: single-node
     resource_class: xlarge
-    parallelism: 2
+    parallelism: 4
     steps:
       - attach_workspace:
           at: ~/
@@ -160,6 +160,7 @@ jobs:
             ./web-client/coverage-integration-0/coverage-final.json \
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-integration-2/coverage-final.json \
+            ./web-client/coverage-integration-3/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
           name: Check Coverage
