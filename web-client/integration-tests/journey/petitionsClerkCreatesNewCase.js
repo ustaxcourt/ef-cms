@@ -31,15 +31,15 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     ).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     });
 
