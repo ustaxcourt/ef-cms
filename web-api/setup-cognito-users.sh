@@ -24,7 +24,7 @@ generate_post_data() {
   firstName=$7
   middleName=$8
   lastName=$9
-  suffix=$10
+  suffix=${10}
   cat <<EOF
 {
   "email": "$email",
@@ -96,8 +96,8 @@ createAccount() {
   employer=$7
   firstName=$8
   middleName=$9
-  lastName=$10
-  suffix=$11
+  lastName=${10}
+  suffix=${11}
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
