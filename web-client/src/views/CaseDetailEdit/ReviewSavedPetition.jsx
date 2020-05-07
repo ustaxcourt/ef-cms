@@ -41,7 +41,7 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     constants,
-    // documentId,
+    documentId,
     form,
     formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence,
@@ -51,8 +51,6 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) {
-    // const { caseId } = form;
-
     return (
       <>
         <CaseDetailHeader />
@@ -81,15 +79,8 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
+                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
                         icon="edit"
-                        onClick={() => {
-                          // TODO in next story
-                          // navigateToEditSavedPetitionSequence({
-                          //   caseId,
-                          //   documentId,
-                          //   tab: 'partyInfo',
-                          // });
-                        }}
                       >
                         Edit
                       </Button>
@@ -147,15 +138,8 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
+                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
                         icon="edit"
-                        onClick={() => {
-                          // TODO in next story
-                          // navigateToEditSavedPetitionSequence({
-                          //   caseId,
-                          //   documentId,
-                          //   tab: 'caseInfo',
-                          // });
-                        }}
                       >
                         Edit
                       </Button>
@@ -245,15 +229,8 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
+                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
                         icon="edit"
-                        onClick={() => {
-                          // TODO in next story
-                          // navigateToEditSavedPetitionSequence({
-                          //   caseId,
-                          //   documentId,
-                          //   tab: 'irsNotice',
-                          // });
-                        }}
                       >
                         Edit
                       </Button>
