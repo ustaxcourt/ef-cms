@@ -59,6 +59,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     petitionPaymentStatus: caseToUpdate.petitionPaymentStatus,
     petitionPaymentWaivedDate: caseToUpdate.petitionPaymentWaivedDate,
     procedureType: caseToUpdate.procedureType,
+    receivedAt: caseToUpdate.receivedAt,
   };
 
   const theCase = await applicationContext
