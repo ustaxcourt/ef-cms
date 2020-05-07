@@ -97,9 +97,9 @@ export const PartyInformation = connect(
           caseDetailEditHelper.showSecondaryContact) && (
           <div className="subsection contacts">
             <Contacts
-              bind="caseDetail"
+              bind="form"
               contactsHelper="caseDetailEditContactsHelper"
-              emailBind="caseDetail.contactPrimary"
+              emailBind="form.contactPrimary"
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
