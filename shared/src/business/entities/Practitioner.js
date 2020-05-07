@@ -170,7 +170,7 @@ const practitionerValidation = {
   suffix: joi
     .string()
     .optional()
-    .allow(null)
+    .allow('')
     .description('The name suffix of the practitioner.'),
 };
 
