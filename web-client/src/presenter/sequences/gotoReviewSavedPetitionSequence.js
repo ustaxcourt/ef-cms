@@ -1,23 +1,19 @@
-import { canNavigateToReviewSavedPetitionScreenAction } from '../actions/caseDetailEdit/canNavigateToReviewSavedPetitionScreenAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseOnFormUsingStateAction } from '../actions/setCaseOnFormUsingStateAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { shouldLoadCaseAction } from '../actions/shouldLoadCaseAction';
 
 export const gotoReviewSavedPetitionSequence = [
-  canNavigateToReviewSavedPetitionScreenAction,
+  shouldLoadCaseAction,
   {
-    no: [navigateToDocumentDetailAction],
-    yes: [
-      shouldLoadCaseAction,
-      {
-        ignore: [setCaseOnFormUsingStateAction],
-        load: [getCaseAction, setCaseAction, setCaseOnFormAction],
-      },
-      setCurrentPageAction('ReviewSavedPetition'),
-    ],
+    ignore: [setCaseOnFormUsingStateAction],
+    load: [getCaseAction, setCaseAction, setCaseOnFormAction],
   },
+  setPetitionIdAction,
+  setDocumentIdAction,
+  setCurrentPageAction('ReviewSavedPetition'),
 ];

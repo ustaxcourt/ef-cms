@@ -16,7 +16,7 @@ export default test => {
     );
 
     expect(caseDetailFormatted.formattedDocketEntries).toMatchObject([
-      { description: 'Petition', editLink: '' },
+      { description: 'Petition', editLink: '/review' },
       {
         description: 'Request for Place of Trial at Seattle, Washington',
         editLink: '',
