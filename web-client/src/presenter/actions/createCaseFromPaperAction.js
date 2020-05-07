@@ -81,10 +81,10 @@ export const createCaseFromPaperAction = async ({
   } = get(state.form);
 
   const receivedAt = // AAAA-BB-CC
-    (props.computedDateReceived &&
+    (props.receivedAt &&
       applicationContext
         .getUtilities()
-        .prepareDateFromString(props.computedDateReceived)
+        .prepareDateFromString(props.receivedAt)
         .toISOString()) ||
     null;
 

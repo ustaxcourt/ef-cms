@@ -25,5 +25,5 @@ export const computeReceivedAtDateAction = ({ get, store }) => {
 
   store.set(state.form.receivedAt, formDate);
 
-  return { computedReceivedAt: formDate };
+  return { receivedAt: formDate };
 };
