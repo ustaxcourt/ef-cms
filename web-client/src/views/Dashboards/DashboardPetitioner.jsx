@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListPetitioner } from '../CaseListPetitioner';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -65,33 +66,58 @@ export const DashboardPetitioner = connect(
                 </div>
               </div>
               <div className="card">
-                <div className="content-wrapper gray">
-                  <h3>Other Filing Options</h3>
-                  <hr />
-                  <p>
-                    <strong>To file by mail:</strong>
-                    <br />
-                    Send required forms and filing fee to:
-                    <br />
-                    United States Tax Court
-                    <br />
-                    400 Second Street, NW
-                    <br />
-                    Washington, DC 20217
-                  </p>
+                {dashboardExternalHelper.showWhatToExpect && (
+                  <div className="content-wrapper gray">
+                    <h3>Other Filing Options</h3>
+                    <hr />
+                    <p>
+                      <strong>To file by mail:</strong>
+                      <br />
+                      Send required forms and filing fee to:
+                      <br />
+                      United States Tax Court
+                      <br />
+                      400 Second Street, NW
+                      <br />
+                      Washington, DC 20217
+                    </p>
 
-                  <p>
-                    <strong>To file in person:</strong>
-                    <br />
-                    Please bring your forms and filing fee to:
-                    <br />
-                    United States Tax Court
-                    <br />
-                    400 Second Street, NW
-                    <br />
-                    Washington, DC 20217
-                  </p>
-                </div>
+                    <p>
+                      <strong>To file in person:</strong>
+                      <br />
+                      Please bring your forms and filing fee to:
+                      <br />
+                      United States Tax Court
+                      <br />
+                      400 Second Street, NW
+                      <br />
+                      Washington, DC 20217
+                    </p>
+                  </div>
+                )}
+
+                {dashboardExternalHelper.showCaseList && (
+                  <div className="content-wrapper gray">
+                    <h3>Filing Fee Options</h3>
+                    <hr />
+                    <p>
+                      <strong>Pay by debit/credit card</strong>
+                      <br />
+                      Copy your docket number(s) and pay online.
+                      <br />
+                      <Button className="margin-bottom-3 margin-top-3">
+                        Pay now
+                      </Button>
+                      <hr />
+                      <p>
+                        Other options
+                        <span className="other-options-icon">
+                          <FontAwesomeIcon icon={['fas', 'plus']} />
+                        </span>
+                      </p>
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
