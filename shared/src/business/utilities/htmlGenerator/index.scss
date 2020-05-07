@@ -70,6 +70,30 @@ th {
   font-weight: 600;
 }
 
+.width-third {
+  width: 33%;
+}
+
+.width-half {
+  width: 50%;
+}
+
+.margin-top-80 {
+  margin-top: 80px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
 .panel {
   border: 1px solid #ccc;
   margin: 15px 0 5px 0;
@@ -153,7 +177,7 @@ th {
   display: flex;
   flex-flow: row wrap;
   align-items: flex-start;
-  padding: 0 10px 10px 10px;
+  padding: 10px;
 }
 
 // TODO: Refactor these in favor of "cards"

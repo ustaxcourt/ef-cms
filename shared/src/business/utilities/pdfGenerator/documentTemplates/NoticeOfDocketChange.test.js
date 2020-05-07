@@ -35,8 +35,9 @@ describe('NoticeOfDocketChange', () => {
       />,
     );
 
-    expect(wrapper.find('.case-information').text()).toContain(
-      `${options.caseTitle}, ${options.caseCaptionExtension}`,
+    expect(wrapper.find('#caption-title').text()).toEqual(options.caseTitle);
+    expect(wrapper.find('#caption-extension').text()).toEqual(
+      options.caseCaptionExtension,
     );
     expect(wrapper.find('#docket-number').text()).toEqual(
       `Docket Number ${options.docketNumberWithSuffix}`,

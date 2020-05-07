@@ -1,8 +1,6 @@
 const React = require('react');
 
-const {
-  CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.jsx');
+const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const NoticeOfDocketChange = ({
@@ -12,13 +10,15 @@ export const NoticeOfDocketChange = ({
   options,
 }) => {
   const showFilingsAndProceedingsChange =
+    filingsAndProceedings &&
     filingsAndProceedings.before !== filingsAndProceedings.after;
-  const showPartiesChange = filingParties.before !== filingParties.after;
+  const showPartiesChange =
+    filingParties && filingParties.before !== filingParties.after;
 
   return (
     <>
       <PrimaryHeader />
-      <CompressedDocketHeader
+      <DocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
@@ -29,26 +29,29 @@ export const NoticeOfDocketChange = ({
         <div className="card-header">
           Docket Entry No. {docketEntryIndex} has been changed
         </div>
-        {showFilingsAndProceedingsChange && (
-          <p id="changed-filings-and-proceedings">
-            &quot;{filingsAndProceedings.before}&quot; has been changed to
-            &quot;
-            {filingsAndProceedings.after}&quot;.
-          </p>
-        )}
-        {showPartiesChange && (
-          <p id="changed-filing-parties">
-            &quot;{filingParties.before}&quot; has been changed to &quot;
-            {filingParties.after}
-            &quot;.
-          </p>
-        )}
-        <p className="float-right width-third">
-          Stephanie A. Servoss
-          <br />
-          Clerk of the Court
-        </p>
+        <div className="card-content">
+          {showFilingsAndProceedingsChange && (
+            <span id="changed-filings-and-proceedings">
+              &quot;{filingsAndProceedings.before}&quot; has been changed to
+              &quot;
+              {filingsAndProceedings.after}&quot;.
+            </span>
+          )}
+          {showPartiesChange && (
+            <span id="changed-filing-parties">
+              &quot;{filingParties.before}&quot; has been changed to &quot;
+              {filingParties.after}
+              &quot;.
+            </span>
+          )}
+        </div>
       </div>
+
+      <p className="float-right width-third">
+        Stephanie A. Servoss
+        <br />
+        Clerk of the Court
+      </p>
     </>
   );
 };
