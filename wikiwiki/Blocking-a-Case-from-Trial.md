@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Manually Blocking a Case from Trial
 * Users can manually block a case from trial from the Case Detail > Case Information > Overview screen
 * When blocking, user must enter a reason for the block (which displays on the Case Detail screen and also the Blocked Report)
@@ -14,7 +16,7 @@
 * Users can add and remove manual blocks independent of any system blocks
 
 #### System block on "High Priority" case
-* If a case has been set as High Priority for a trial session, and then receives a system block, once the system block is removed, the case should return to [High Priority](https://github.com/flexion/ef-cms/wiki/Setting-a-Case-for-Trial) status 
+* If a case has been set as High Priority for a trial session, and then receives a system block, once the system block is removed, the case should return to [High Priority](https://github.com/flexion/ef-cms/wiki/Setting-a-Case-for-Trial) status
 
 ## Viewing Blocked Cases
 * "Blocked" indicator (red label) displays in docket header
