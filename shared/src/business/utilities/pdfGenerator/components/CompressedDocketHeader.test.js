@@ -1,5 +1,5 @@
-const CompressedDocketHeader = require('./CompressedDocketHeader.jsx').default;
 const React = require('react');
+const { CompressedDocketHeader } = require('./CompressedDocketHeader.jsx');
 const { shallow } = require('enzyme');
 
 describe('CompressedDocketHeader', () => {

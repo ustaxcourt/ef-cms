@@ -1,6 +1,6 @@
-const DocketRecord = require('./DocketRecord.jsx').default;
 const React = require('react');
 const { ContactFactory } = require('../../../entities/contacts/ContactFactory');
+const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
 
 describe('DocketRecord', () => {

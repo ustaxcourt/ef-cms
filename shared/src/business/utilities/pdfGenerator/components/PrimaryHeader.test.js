@@ -1,5 +1,5 @@
-const PrimaryHeader = require('./PrimaryHeader.jsx').default;
 const React = require('react');
+const { PrimaryHeader } = require('./PrimaryHeader.jsx');
 const { shallow } = require('enzyme');
 
 describe('PrimaryHeader', () => {
