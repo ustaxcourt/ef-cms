@@ -102,6 +102,7 @@ describe('updateUserContactInformationInteractor', () => {
         irsPractitioners: [
           {
             contact: {},
+            role: User.ROLES.irsPractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
@@ -137,6 +138,7 @@ describe('updateUserContactInformationInteractor', () => {
       irsPractitioners: [
         {
           contact: contactInfo,
+          role: User.ROLES.irsPractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -160,6 +162,7 @@ describe('updateUserContactInformationInteractor', () => {
         privatePractitioners: [
           {
             contact: {},
+            role: User.ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
@@ -170,6 +173,7 @@ describe('updateUserContactInformationInteractor', () => {
         privatePractitioners: [
           {
             contact: {},
+            role: User.ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
@@ -181,6 +185,7 @@ describe('updateUserContactInformationInteractor', () => {
         privatePractitioners: [
           {
             contact: {},
+            role: User.ROLES.privatePractitioner,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
@@ -217,6 +222,7 @@ describe('updateUserContactInformationInteractor', () => {
       privatePractitioners: [
         {
           contact: contactInfo,
+          role: User.ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -228,6 +234,7 @@ describe('updateUserContactInformationInteractor', () => {
       privatePractitioners: [
         {
           contact: contactInfo,
+          role: User.ROLES.privatePractitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
