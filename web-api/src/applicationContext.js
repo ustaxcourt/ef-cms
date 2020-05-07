@@ -296,9 +296,6 @@ const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
 const {
-  generateStandingPretrialOrderTemplate,
-} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
-const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
@@ -1161,7 +1158,6 @@ module.exports = (appContextUser = {}) => {
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
-        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
