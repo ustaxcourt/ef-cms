@@ -131,21 +131,14 @@ jobs:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
       - run:
-          name: Install JUnit coverage reporter
-          command: yarn add --dev jest-junit
-      - run:
           name: Web Client - Integration Test
           command: |
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
-            CI=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --reporters=default --reporters=jest-junit --config web-client/jest-integration.config.js ${TESTFILES}
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+            CI=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
-      - store_test_results:
-          path: ./reports/junit
       - persist_to_workspace:
           root: ~/
           paths:
