@@ -1,8 +1,10 @@
 const {
+  createPractitionerUser,
+} = require('../../utilities/createPractitionerUser');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -27,22 +29,7 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     user.role === User.ROLES.irsPractitioner ||
     user.role === User.ROLES.inactivePractitioner
   ) {
-    const barNumber =
-      user.barNumber ||
-      (await applicationContext.barNumberGenerator.createBarNumber({
-        applicationContext,
-        initials:
-          user.lastName.charAt(0).toUpperCase() +
-          user.firstName.charAt(0).toUpperCase(),
-      }));
-
-    userEntity = new Practitioner({
-      ...user,
-      barNumber,
-      userId: applicationContext.getUniqueId(),
-    })
-      .validate()
-      .toRawObject();
+    userEntity = await createPractitionerUser({ applicationContext, user });
   }
 
   const createdUser = await applicationContext

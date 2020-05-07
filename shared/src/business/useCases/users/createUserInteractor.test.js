@@ -2,10 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  createPractitionerUser,
+} = require('../../utilities/createPractitionerUser');
+const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
 const { createUserInteractor } = require('./createUserInteractor');
 const { User } = require('../../entities/User');
+jest.mock('../../utilities/createPractitionerUser', () => ({
+  createPractitionerUser: jest.fn(),
+}));
 
 describe('create user', () => {
   it('creates the user', async () => {
@@ -89,7 +95,7 @@ describe('create user', () => {
     expect(user.userId).toBe('745b7d39-8fae-4c2f-893c-3c829598bc71');
   });
 
-  it('should generate barNumber and userId when the user role is irsPractitioner', async () => {
+  it('should create a practitioner user when the user role is irsPractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'admin',
       userId: 'admin',
@@ -117,17 +123,10 @@ describe('create user', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
-        .user.barNumber,
-    ).not.toBeUndefined();
-    expect(
-      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
-        .user.userId,
-    ).not.toBeUndefined();
+    expect(createPractitionerUser).toHaveBeenCalled();
   });
 
-  it('should generate barNumber and userId when the user role is inactivePractitioner', async () => {
+  it('should create a practitioner user when the user role is inactivePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'admin',
       userId: 'admin',
@@ -155,13 +154,6 @@ describe('create user', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
-        .user.barNumber,
-    ).not.toBeUndefined();
-    expect(
-      applicationContext.getPersistenceGateway().createUser.mock.calls[0][0]
-        .user.userId,
-    ).not.toBeUndefined();
+    expect(createPractitionerUser).toHaveBeenCalled();
   });
 });
