@@ -10,8 +10,8 @@ export const BeforeStartingCase = () => (
         <div className="grid-row">
           <div className="tablet:grid-col-6">
             <h1 className="captioned" tabIndex="-1">
-              <NonMobile>Create a Case</NonMobile>
-              <Mobile>How to Create a Case</Mobile>
+              <NonMobile>Create a case</NonMobile>
+              <Mobile>How to Create a case</Mobile>
             </h1>
           </div>
         </div>
@@ -21,21 +21,21 @@ export const BeforeStartingCase = () => (
       <h2 className="captioned margin-bottom-2" tabIndex="-1">
         Instructions For Creating a Case
       </h2>
-      <p>
+      <p className="margin-bottom-5">
         Before starting the filing process please review the helpful tips
         provided below. This will help instruct you in what is needed and how to
         go about proceeding with filing your Petition.
       </p>
       <div className="grid-container padding-x-0 margin-bottom-5" role="list">
-        <div className="grid-row grid-gap">
+        <div className="grid-row grid-gap grid-col-9">
           <Accordion headingLevel="3">
             <AccordionItem
               displayIcon="true"
               iconClassName="bullet-icon"
               iconSize="lg"
               iconTypes={['far', 'clock']}
-              key="Check the Deadline for Filing"
-              title="Check the Deadline for Filing"
+              key="Check the deadline for filing"
+              title="Check the deadline for filing"
             >
               <p>
                 You may have received a notice in the mail from the Internal
@@ -56,8 +56,8 @@ export const BeforeStartingCase = () => (
               iconClassName="bullet-icon"
               iconSize="lg"
               iconTypes={['fa', 'fingerprint']}
-              key="Confirm Your Identity"
-              title="Confirm Your Identity"
+              key="Confirm your identity"
+              title="Confirm your identity"
             >
               <p>
                 You’ll be asked to upload your Statement of Taypayer
@@ -100,8 +100,8 @@ export const BeforeStartingCase = () => (
               iconClassName="bullet-icon"
               iconSize="lg"
               iconTypes={['far', 'edit']}
-              key="Prepare the Petition"
-              title="Prepare the Petition"
+              key="Prepare the petition"
+              title="Prepare the petition"
             >
               <p className="label">1. Complete Your Petition</p>
               <p>
@@ -171,8 +171,8 @@ export const BeforeStartingCase = () => (
               iconClassName="bullet-icon"
               iconSize="lg"
               iconTypes={['far', 'user']}
-              key="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
-              title="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
+              key="If you’re filing jointly with a spouse, for someone else or for a business …"
+              title="If you’re filing jointly with a spouse, for someone else or for a business …"
             >
               <p className="label">Joint Petition With A Spouse</p>
               <p>
@@ -216,6 +216,7 @@ export const BeforeStartingCase = () => (
             </AccordionItem>
           </Accordion>
           <p>
+            <hr />
             Next you’ll continue to follow the steps to upload your documents
             and fill in the requested information that will create your case.
           </p>
