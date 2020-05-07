@@ -84,7 +84,7 @@ export const StartCaseStep2 = connect(
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    Download T.C. Form 2
+                    Download Petition form (T.C. Form 2)
                   </Button>
                   if you haven‘t already done so
                 </p>
