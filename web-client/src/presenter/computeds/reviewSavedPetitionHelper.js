@@ -10,6 +10,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     petitionPaymentDate,
     petitionPaymentMethod,
     petitionPaymentStatus,
+    petitionPaymentWaivedDate,
     preferredTrialCity,
     receivedAt,
     ...caseDetail
@@ -28,15 +29,24 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
-  const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID
-      ? `Paid ${applicationContext
-          .getUtilities()
-          .formatDateString(
-            petitionPaymentDate,
-            'MMDDYYYY',
-          )} ${petitionPaymentMethod}`
-      : 'Not paid';
+  let petitionPaymentStatusFormatted;
+  switch (petitionPaymentStatus) {
+    case PAYMENT_STATUS.PAID:
+      petitionPaymentStatusFormatted = `Paid ${applicationContext
+        .getUtilities()
+        .formatDateString(
+          petitionPaymentDate,
+          'MMDDYYYY',
+        )} ${petitionPaymentMethod}`;
+      break;
+    case PAYMENT_STATUS.WAIVED:
+      petitionPaymentStatusFormatted = `Waived ${applicationContext
+        .getUtilities()
+        .formatDateString(petitionPaymentWaivedDate, 'MMDDYYYY')}`;
+      break;
+    default:
+      petitionPaymentStatusFormatted = 'Not paid';
+  }
 
   const preferredTrialCityFormatted = preferredTrialCity
     ? preferredTrialCity
@@ -60,8 +70,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     'orderForFilingFee',
     'orderForOds',
     'orderForRatification',
-    // TODO: see OrdersNeededSummary.jsx
-    // 'orderDesignatingPlaceOfTrial',
+    'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
   ].some(key => Boolean(caseDetail[key]));
