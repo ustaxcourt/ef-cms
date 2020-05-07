@@ -95,7 +95,7 @@ export const createCaseFromPaperAction = async ({
       petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
       receivedAt,
     },
-    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
+    ['receivedAtYear', 'receivedAtMonth', 'receivedAtDay'],
   );
 
   const progressFunctions = setupPercentDone(
