@@ -7,7 +7,11 @@ const {
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
-const { changeOfAddress, docketRecord } = require('./documentGenerators');
+const {
+  changeOfAddress,
+  docketRecord,
+  standingPretrialOrder,
+} = require('./documentGenerators');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -169,6 +173,40 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Docket_Record', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('standingPretrialOrder', () => {
+    it('generates a Standing Pre-trial Order document', async () => {
+      const pdf = await standingPretrialOrder({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          footerDate: '02/02/20',
+          trialInfo: {
+            city: 'Some City',
+            fullStartDate: 'Friday May 8, 2020',
+            judge: {
+              name: 'Test Judge',
+            },
+            state: 'TEST STATE',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Standing_Pretrial_Order', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
