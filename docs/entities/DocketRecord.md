@@ -414,6 +414,11 @@ Date that this Docket Record item was filed.
 
 > `date` | required
 
+##### Maximum date
+
+
+`now`
+
 ### index
 
 
