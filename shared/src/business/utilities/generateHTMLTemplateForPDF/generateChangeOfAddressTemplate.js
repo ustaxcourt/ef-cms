@@ -1,5 +1,7 @@
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-const { reactTemplateGenerator } = require('./reactTemplateGenerator');
+// const { reactTemplateGenerator } = require('./reactTemplateGenerator');
+
+const reactTemplateGenerator = () => '<div>hi</div>';
 
 /**
  * HTML template generator for printable change of address/telephone PDF views
