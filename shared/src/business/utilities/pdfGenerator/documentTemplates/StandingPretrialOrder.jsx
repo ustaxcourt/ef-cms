@@ -25,7 +25,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       <p>
         <strong className="text-underline">
           Communication Between the Parties.
-        </strong>
+        </strong>{' '}
         The parties shall begin discussing settlement and/or preparation of a
         stipulation of facts as soon as practicable. Valuation cases and
         reasonable compensation cases are generally susceptible of settlement,
@@ -202,14 +202,13 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       <p style={{ marginBottom: '74px', marginLeft: '393px' }}>
         Trial Calendar: {trialInfo.city}, {trialInfo.state}
         <br />
-        <span style={{ marginLeft: '50px' }}>
+        <span style={{ marginLeft: '55px' }}>
           Date: {trialInfo.fullStartDate}
         </span>
       </p>
 
       <p className="text-center" style={{ marginBottom: '56px' }}>
-        <strong>PRETRIAL MEMORANDUM FOR</strong>
-        (Petitioner/Respondent)
+        <strong>PRETRIAL MEMORANDUM FOR</strong> (Petitioner/Respondent)
         <br />
         Please type or print legibly
         <br />
@@ -217,16 +216,16 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       </p>
       <div style={{ marginBottom: '29px' }}>
         <p style={{ float: 'left', width: '60%' }}>
-          <strong className="text-underline">NAME OF CASE:</strong>
+          <strong className="text-underline">NAME OF CASE</strong>:
         </p>
         <p style={{ float: 'left', width: '39%' }}>
-          <strong className="text-underline">DOCKET NO(S).:</strong>
+          <strong className="text-underline">DOCKET NO(S).</strong>:
         </p>
         <div className="clear"></div>
       </div>
 
       <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">ATTORNEYS:</strong>
+        <strong className="text-underline">ATTORNEYS</strong>:
       </p>
       <div style={{ marginBottom: '33px' }}>
         <p
@@ -246,10 +245,10 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       </div>
 
       <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">AMOUNTS IN DISPUTE:</strong>
+        <strong className="text-underline">AMOUNTS IN DISPUTE</strong>:
       </p>
       <p className="margin-top-0" style={{ marginBottom: '52px' }}>
-        <strong className="text-underline">Year(s)/Period(s)</strong>|
+        <strong className="text-underline">Year(s)/Period(s)</strong>
         <strong className="text-underline" style={{ marginLeft: '95px' }}>
           Deficiencies/Liabilities
         </strong>
@@ -258,7 +257,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
         </strong>
       </p>
       <p>
-        <strong className="text-underline">STATUS OF CASE:</strong>
+        <strong className="text-underline">STATUS OF CASE</strong>:
       </p>
       <p style={{ marginBottom: '40px' }}>
         <span>Probable Settlement________</span>
@@ -272,7 +271,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
         __________________________________________
       </p>
       <p style={{ marginBottom: '63px' }}>
-        <strong className="text-underline">MOTIONS YOUR EXPECT TO MAKE:</strong>
+        <strong className="text-underline">MOTIONS YOUR EXPECT TO MAKE</strong>:
         <br />
         (Title and brief description)
       </p>
@@ -287,7 +286,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
         <span style={{ marginLeft: '15px' }}>In Process________</span>
       </p>
       <p>
-        <strong className="text-underline">ISSUES:</strong>
+        <strong className="text-underline">ISSUES</strong>:
       </p>
 
       <br />
@@ -301,7 +300,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
         (Name and brief summary of expected testimony)
       </p>
       <p style={{ marginBottom: '97px' }}>
-        <strong className="text-underline">SUMMARY OF FACTS:</strong>
+        <strong className="text-underline">SUMMARY OF FACTS</strong>:
         <br />
         (Attach separate pages, if necessary, to inform the Court of facts in
         chronological narrative form)
@@ -333,7 +332,7 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
       </div>
 
       <div>
-        <p style={{ float: 'left', width: '15%' }}>| Trial Judge:</p>
+        <p style={{ float: 'left', width: '15%' }}>Trial Judge:</p>
 
         <p style={{ float: 'left', width: '70%' }}>
           <strong>
