@@ -84,6 +84,7 @@ describe('DocketRecord', () => {
     entries = [
       {
         document: {
+          additionalInfo2: 'Addl Info',
           filedBy: 'Test Filer',
           isNotServedCourtIssuedDocument: false,
           isStatusServed: true,
@@ -371,7 +372,75 @@ describe('DocketRecord', () => {
     expect(rowEl.text()).toContain(entries[0].document.servedPartiesCode);
   });
 
+  it('displays the record description, filingsAndProceedings, and additionalInfo2', () => {
+    const wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={ContactFactory.COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
+      `${entries[0].record.description} ${entries[0].record.filingsAndProceedings} ${entries[0].document.additionalInfo2}`,
+    );
+  });
+
+  it('displays only the record description if no filingsAndProceedings or additionalInfo2', () => {
+    entries[0].document.additionalInfo2 = null;
+    entries[0].record.filingsAndProceedings = null;
+
+    const wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={ContactFactory.COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
+      entries[0].record.description,
+    );
+  });
+
+  it('displays the record description and filingsAndProceedings if no additionalInfo2', () => {
+    entries[0].document.additionalInfo2 = null;
+
+    const wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={ContactFactory.COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
+      `${entries[0].record.description} ${entries[0].record.filingsAndProceedings}`,
+    );
+  });
+
+  it('displays the record description and additionalInfo2 if no filingsAndProceedings', () => {
+    entries[0].record.filingsAndProceedings = null;
+
+    const wrapper = mount(
+      <DocketRecord
+        caseDetail={caseDetail}
+        countryTypes={ContactFactory.COUNTRY_TYPES}
+        entries={entries}
+        options={options}
+      />,
+    );
+
+    expect(wrapper.find('.filings-and-proceedings').at(0).text()).toEqual(
+      `${entries[0].record.description} ${entries[0].document.additionalInfo2}`,
+    );
+  });
+
   it('displays `Not Served` in the served column if the document is an unserved court-issued document', () => {
+    entries[0].document.isStatusServed = false;
     entries[0].document.isNotServedCourtIssuedDocument = true;
 
     const wrapper = mount(
@@ -385,7 +454,7 @@ describe('DocketRecord', () => {
 
     const documentRow = wrapper.find('#documents tbody tr').at(0);
 
-    expect(documentRow.text()).toContain('Not Served');
+    expect(documentRow.text()).toContain('Not served');
 
     expect(documentRow.text()).not.toContain(
       entries[0].document.servedAtFormatted,
