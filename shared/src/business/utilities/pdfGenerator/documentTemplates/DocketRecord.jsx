@@ -1,8 +1,9 @@
 const React = require('react');
 
-const CompressedDocketHeader = require('../components/CompressedDocketHeader.jsx')
-  .default;
-const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
+const {
+  CompressedDocketHeader,
+} = require('../components/CompressedDocketHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const RenderAddress = ({ contact, countryTypes }) => {
   const isInternational = contact.countryType === countryTypes.INTERNATIONAL;
@@ -112,7 +113,12 @@ const ServedDate = ({ document }) => {
   }
 };
 
-const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
+export const DocketRecord = ({
+  caseDetail,
+  countryTypes,
+  entries,
+  options,
+}) => {
   return (
     <div id="document-docket-record">
       <PrimaryHeader />
@@ -217,5 +223,3 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
     </div>
   );
 };
-
-export default DocketRecord;
