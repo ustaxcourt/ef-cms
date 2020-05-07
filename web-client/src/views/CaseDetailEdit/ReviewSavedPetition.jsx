@@ -31,8 +31,6 @@ export const ReviewSavedPetition = connect(
     documentId: state.documentId,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateToEditSavedPetitionSequence:
-      sequences.navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
@@ -43,10 +41,9 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     constants,
-    documentId,
+    // documentId,
     form,
     formCancelToggleCancelSequence,
-    navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence,
@@ -54,7 +51,7 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) {
-    const { caseId } = form;
+    // const { caseId } = form;
 
     return (
       <>
@@ -86,11 +83,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'partyInfo',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'partyInfo',
+                          // });
                         }}
                       >
                         Edit
@@ -151,11 +149,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'caseInfo',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'caseInfo',
+                          // });
                         }}
                       >
                         Edit
@@ -248,11 +247,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'irsNotice',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'irsNotice',
+                          // });
                         }}
                       >
                         Edit
