@@ -71,6 +71,8 @@ const {
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   changeOfAddress,
+  docketRecord,
+  standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
@@ -293,9 +295,6 @@ const {
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
-const {
-  generateStandingPretrialOrderTemplate,
-} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -857,6 +856,20 @@ const environment = {
 
 let user;
 
+const initHoneybadger = () => {
+  if (process.env.NODE_ENV === 'production') {
+    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
+    if (apiKey) {
+      const config = {
+        apiKey,
+        environment: 'api',
+      };
+      Honeybadger.configure(config);
+      return Honeybadger;
+    }
+  }
+};
+
 const getCurrentUser = () => {
   return user;
 };
@@ -937,6 +950,8 @@ module.exports = (appContextUser = {}) => {
     },
     getDocumentGenerators: () => ({
       changeOfAddress,
+      docketRecord,
+      standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -1143,7 +1158,6 @@ module.exports = (appContextUser = {}) => {
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
-        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
@@ -1318,20 +1332,7 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger: () => {
-      if (process.env.NODE_ENV === 'production') {
-        const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-        if (apiKey) {
-          const config = {
-            apiKey,
-            environment: 'api',
-          };
-          Honeybadger.configure(config);
-          return Honeybadger;
-        }
-      }
-    },
+    initHoneybadger,
     isAuthorized,
     isAuthorizedForWorkItems: () =>
       isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
@@ -1352,6 +1353,19 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    notifyHoneybadger: async message => {
+      const honeybadger = initHoneybadger();
+
+      const notifyAsync = message => {
+        return new Promise(resolve => {
+          honeybadger.notify(message, null, null, resolve);
+        });
+      };
+
+      if (honeybadger) {
+        await notifyAsync(message);
+      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(

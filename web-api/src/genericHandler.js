@@ -45,7 +45,6 @@ exports.genericHandler = (event, cb, options = {}) => {
     const user = options.user || getUserFromAuthHeader(event);
     const applicationContext =
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
-    const honeybadger = applicationContext.initHoneybadger();
 
     const {
       isPublicUser,
@@ -88,7 +87,7 @@ exports.genericHandler = (event, cb, options = {}) => {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);
-        honeybadger && honeybadger.notify(e);
+        await applicationContext.notifyHoneybadger(e);
       }
       throw e;
     }
