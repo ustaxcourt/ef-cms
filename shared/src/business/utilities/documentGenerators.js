@@ -1,8 +1,7 @@
-// const {
-//   reactTemplateGenerator,
-// } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
+const {
+  reactTemplateGenerator,
+} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-const reactTemplateGenerator = () => '<div>hi</div>';
 
 const {
   generateChangeOfAddressTemplate,

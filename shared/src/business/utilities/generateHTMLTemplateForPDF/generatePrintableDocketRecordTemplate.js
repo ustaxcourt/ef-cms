@@ -1,7 +1,6 @@
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-// const { reactTemplateGenerator } = require('./reactTemplateGenerator');
-const reactTemplateGenerator = () => '<div>hi</div>';
+const { reactTemplateGenerator } = require('./reactTemplateGenerator');
 
 /**
  * HTML template generator for printable docket record PDF views
