@@ -224,6 +224,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const getDocumentGeneratorsReturnMock = {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
   };
 
   const getTemplateGeneratorsReturnMock = {

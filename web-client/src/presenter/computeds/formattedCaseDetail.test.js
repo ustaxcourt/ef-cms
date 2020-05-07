@@ -506,7 +506,7 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editLink: '/edit-saved',
+        editLink: '',
         showDocumentEditLink: true,
       },
       {
