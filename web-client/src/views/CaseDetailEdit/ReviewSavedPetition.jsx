@@ -146,7 +146,7 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
-                        <div className="margin-top-3 margin-bottom-2">
+                        <div className="margin-bottom-2">
                           <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
@@ -178,7 +178,7 @@ export const ReviewSavedPetition = connect(
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {form.mailingDate && (
-                          <div className="margin-top-3 margin-bottom-2">
+                          <div className="margin-bottom-2">
                             <span
                               className="usa-label usa-label-display"
                               htmlFor="mailing-date"
