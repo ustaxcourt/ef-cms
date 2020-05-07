@@ -105,7 +105,10 @@ export const DashboardPetitioner = connect(
                       <br />
                       Copy your docket number(s) and pay online.
                       <br />
-                      <Button className="margin-bottom-3 margin-top-3">
+                      <Button
+                        className="margin-bottom-3 margin-top-3"
+                        id="pay_filing_fee"
+                      >
                         Pay now
                       </Button>
                       <hr />
