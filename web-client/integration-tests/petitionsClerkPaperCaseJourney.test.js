@@ -1,6 +1,6 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkCreatesNewCaseAndSavesForLater } from './journey/petitionsClerkCreatesNewCaseAndSavesForLater';
-import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
+import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+// import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
 import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petitionsClerkVerifiesPetitionPaymentFeeOptions';
@@ -13,7 +13,7 @@ describe('Petitions clerk paper case flow', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkCreatesNewCaseAndSavesForLater(test, fakeFile);
+  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
 
   loginAs(test, 'petitioner');
   it('Create case', async () => {
@@ -25,7 +25,7 @@ describe('Petitions clerk paper case flow', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkEditsAnExistingCaseAndServesCase(test);
+  // petitionsClerkEditsAnExistingCaseAndServesCase(test);
 
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);

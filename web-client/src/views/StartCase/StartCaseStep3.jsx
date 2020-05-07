@@ -395,7 +395,7 @@ export const StartCaseStep3 = connect(
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Download ODS Form 6
+                  Download Ownership Disclosure Statement (T.C. Form 6)
                 </Button>
                 if you haven‘t already done so
               </p>

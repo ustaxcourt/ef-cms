@@ -48,7 +48,6 @@ import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCas
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
-import { ReviewPetitionFromPaper } from './StartCaseInternal/ReviewPetitionFromPaper';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -116,7 +115,6 @@ const pages = {
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
-  ReviewPetitionFromPaper,
   ReviewSavedPetition,
   SecondaryContactEdit,
   SelectDocumentType,
