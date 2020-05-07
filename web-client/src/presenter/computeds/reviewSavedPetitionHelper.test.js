@@ -146,6 +146,7 @@ describe('reviewSavedPetitionHelper', () => {
     'orderForRatification',
     'orderToShowCause',
     'noticeOfAttachments',
+    'orderDesignatingPlaceOfTrial',
   ].forEach(order => {
     it(`verify hasOrders is true if ${order} is set`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
