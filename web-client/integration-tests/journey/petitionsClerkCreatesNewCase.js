@@ -8,7 +8,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('gotoStartCaseWizardSequence');
     expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
 
-    await test.runSequence('reviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -31,15 +31,15 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     ).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     });
 
@@ -59,7 +59,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: trialLocation,
     });
 
-    await test.runSequence('reviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -105,7 +105,7 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
-    await test.runSequence('reviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(
       test.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -186,11 +186,11 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('reviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await test.runSequence('createCaseFromPaperAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
 
     await test.runSequence('gotoCaseDetailSequence');
 

@@ -28,6 +28,7 @@ function CaseInternal(rawCase) {
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
   this.mailingDate = rawCase.mailingDate;
+  this.noticeOfAttachments = rawCase.noticeOfAttachments;
   this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
   // this is so the validation that is checking for existence of 3 different fields
   // will work correctly
@@ -35,6 +36,12 @@ function CaseInternal(rawCase) {
     this.orderDesignatingPlaceOfTrial = undefined;
   }
   this.orderForOds = rawCase.orderForOds;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition;
+  this.orderForAmendedPetitionAndFilingFee =
+    rawCase.orderForAmendedPetitionAndFilingFee;
+  this.orderForFilingFee = rawCase.orderForFilingFee;
+  this.orderForRatification = rawCase.orderForRatification;
+  this.orderToShowCause = rawCase.orderToShowCause;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -104,8 +111,16 @@ const paperRequirements = joi
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
     mailingDate: joi.string().max(25).required(),
+    noticeOfAttachments: Case.validationRules.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      Case.validationRules.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: Case.validationRules.orderForFilingFee,
+    orderForOds: Case.validationRules.orderForOds,
+    orderForRatification: Case.validationRules.orderForRatification,
+    orderToShowCause: Case.validationRules.orderToShowCause,
     ownershipDisclosureFile: joi.when('partyType', {
       is: joi
         .exist()
@@ -163,7 +178,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    stinFile: joi.object().required(),
+    stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),

@@ -1,4 +1,7 @@
 const {
+  createPractitionerUser,
+} = require('../../utilities/createPractitionerUser');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -23,26 +26,16 @@ exports.createPractitionerUserInteractor = async ({
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
 
-  const barNumber = await applicationContext.barNumberGenerator.createBarNumber(
-    {
-      applicationContext,
-      initials:
-        user.lastName.charAt(0).toUpperCase() +
-        user.firstName.charAt(0).toUpperCase(),
-    },
-  );
-
-  const practitioner = new Practitioner({
-    ...user,
-    barNumber,
-    userId: applicationContext.getUniqueId(),
-  }).validate();
+  const practitioner = await createPractitionerUser({
+    applicationContext,
+    user,
+  });
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createPractitionerUser({
       applicationContext,
-      user: practitioner.toRawObject(),
+      user: practitioner,
     });
 
   return new Practitioner(createdUser, { applicationContext })

@@ -1,4 +1,4 @@
-import { forEach, isEmpty, set } from 'lodash';
+import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -126,6 +126,16 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/petition-qc',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
@@ -135,32 +145,6 @@ const router = {
           docketNumber,
           documentId,
         });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/edit-saved..',
-      ifHasAccess((docketNumber, documentId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(
-            docketNumber,
-          )} Edit saved document details`,
-        );
-
-        if (!isEmpty(app.getState('form'))) {
-          const { tab } = route.query();
-
-          return app.getSequence('gotoEditSavedPetitionSequence')({
-            docketNumber,
-            documentId,
-            tab,
-          });
-        } else {
-          return app.getSequence('gotoDocumentDetailSequence')({
-            docketNumber,
-            documentId,
-          });
-        }
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
@@ -793,14 +777,6 @@ const router = {
             }
           }
         }
-      }),
-    );
-
-    registerRoute(
-      'file-a-petition/review-petition',
-      ifHasAccess(() => {
-        setPageTitle('Review Petition');
-        return app.getSequence('gotoReviewPetitionFromPaperSequence')();
       }),
     );
 

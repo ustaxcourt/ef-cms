@@ -549,7 +549,7 @@ select[disabled] {
     width: 75px;
     height: 75px;
     padding: 20px;
-    background-color: color($theme-color-primary-dark);
+    background-color: color($theme-color-primary);
     border-radius: 55px;
 
     svg,
@@ -594,13 +594,13 @@ select[disabled] {
   }
 
   .caseItem__icon {
-    position: absolute;
     top: 0;
     display: inline-block;
-    width: 75px;
-    height: 75px;
-    padding: 20px;
-    background-color: color($theme-color-primary-dark);
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    margin-right: 10px;
+    background-color: color($theme-color-primary);
     border-radius: 55px;
 
     svg,
@@ -613,6 +613,7 @@ select[disabled] {
         margin-top: -3px;
         margin-left: 5px;
       }
+
     }
 
     .svg-wrapper img.svg {
@@ -621,9 +622,10 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 75px;
-      height: 75px;
-      padding: 20px;
+      width: 40px;
+      height: 40px;
+      padding: 8px;
+      margin-right: 10px;
     }
   }
 

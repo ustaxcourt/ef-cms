@@ -165,10 +165,14 @@ describe('Get case', () => {
             createdAt: new Date().toISOString(),
             docketNumber: '00101-18',
             documents,
-            irsPractitioners: [{ userId: 'irsPractitioner' }],
+            irsPractitioners: [
+              { role: User.ROLES.irsPractitioner, userId: 'irsPractitioner' },
+            ],
             petitioners: [{ name: 'Test Petitioner' }],
             preferredTrialCity: 'Washington, District of Columbia',
-            privatePractitioners: [{ userId: 'practitioner' }],
+            privatePractitioners: [
+              { role: User.ROLES.privatePractitioner, userId: 'practitioner' },
+            ],
             procedureType: 'Regular',
             sealedDate: new Date().toISOString(),
           }),

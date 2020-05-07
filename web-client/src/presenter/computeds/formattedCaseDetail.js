@@ -112,7 +112,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ) {
           editLink = '/edit';
         } else if (document.isPetition && !document.servedAt) {
-          editLink = '/edit-saved';
+          editLink = '/review';
         }
       }
 

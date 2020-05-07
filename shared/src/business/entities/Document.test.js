@@ -998,7 +998,6 @@ describe('Document entity', () => {
       );
       document.setAsServed();
 
-      expect(document.status).toEqual('served');
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
     });
@@ -1020,7 +1019,6 @@ describe('Document entity', () => {
         },
       ]);
 
-      expect(document.status).toEqual('served');
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);

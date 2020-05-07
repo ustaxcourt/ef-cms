@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
+import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
@@ -11,7 +11,7 @@ export const validatePetitionFromPaperSequence = [
   {
     ignore: [],
     validate: [
-      computeDateReceivedAction,
+      computeReceivedAtDateAction,
       computeIrsNoticeDateAction,
       computePetitionFeeDatesAction,
       validatePetitionFromPaperAction,

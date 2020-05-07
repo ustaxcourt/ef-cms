@@ -58,7 +58,7 @@ describe('genericHandler', () => {
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.initHoneybadger().notify).toHaveBeenCalled();
+    expect(applicationContext.notifyHoneybadger).toHaveBeenCalled();
   });
 
   it('defaults the options param to an empty object if not provided', async () => {
@@ -83,7 +83,7 @@ describe('genericHandler', () => {
     expect(response.statusCode).toEqual('400');
     expect(JSON.parse(response.body)).toEqual('Test Error');
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
-    expect(applicationContext.initHoneybadger().notify).not.toHaveBeenCalled();
+    expect(applicationContext.notifyHoneybadger).not.toHaveBeenCalled();
   });
 
   it('can take a user override in the options param', async () => {

@@ -275,6 +275,9 @@ jobs:
           name: Setup ES Instance Count
           command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Honeybadger Keys
+          command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web API - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
