@@ -159,6 +159,7 @@ jobs:
             npx istanbul-combine -d combined-coverage -p both -r lcov \
             ./web-client/coverage-integration-0/coverage-final.json \
             ./web-client/coverage-integration-1/coverage-final.json \
+            ./web-client/coverage-integration-2/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
           name: Check Coverage
