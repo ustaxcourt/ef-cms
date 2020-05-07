@@ -23,7 +23,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(receivedAt, 'MMDDYYYY');
+    .formatDateString(receivedAt, 'MMDDYY');
 
   const hasIrsNoticeFormatted = hasVerifiedIrsNotice ? 'Yes' : 'No';
 
@@ -36,13 +36,13 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
         .getUtilities()
         .formatDateString(
           petitionPaymentDate,
-          'MMDDYYYY',
+          'MMDDYY',
         )} ${petitionPaymentMethod}`;
       break;
     case PAYMENT_STATUS.WAIVED:
       petitionPaymentStatusFormatted = `Waived ${applicationContext
         .getUtilities()
-        .formatDateString(petitionPaymentWaivedDate, 'MMDDYYYY')}`;
+        .formatDateString(petitionPaymentWaivedDate, 'MMDDYY')}`;
       break;
     default:
       petitionPaymentStatusFormatted = 'Not paid';
@@ -55,7 +55,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(irsNoticeDate, 'MMDDYYYY');
+      .formatDateString(irsNoticeDate, 'MMDDYY');
   }
 
   const documentsByType = (documents || []).reduce((acc, document) => {
@@ -82,8 +82,13 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const ownershipDisclosureFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
+  const applicationForWaiverOfFilingFeeFile =
+    documentsByType[
+      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
+    ];
 
   return {
+    applicationForWaiverOfFilingFeeFile,
     hasIrsNoticeFormatted,
     hasOrders,
     irsNoticeDateFormatted,
