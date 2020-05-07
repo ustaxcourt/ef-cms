@@ -10,6 +10,9 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
+  NoticeOfDocketChange,
+} = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
+const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
 
@@ -23,6 +26,7 @@ const ReactDOM = require('react-dom/server');
 const components = {
   ChangeOfAddress,
   DocketRecord,
+  NoticeOfDocketChange,
   PageMetaHeaderDocket,
   StandingPretrialOrder,
 };
