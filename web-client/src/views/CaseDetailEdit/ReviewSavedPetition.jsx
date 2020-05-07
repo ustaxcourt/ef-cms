@@ -100,7 +100,7 @@ export const ReviewSavedPetition = connect(
                           className="usa-label usa-label-display"
                           htmlFor="filing-contact-primary"
                         >
-                          Petitioner’s contact information
+                          Petitioner’s information
                         </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
@@ -119,7 +119,7 @@ export const ReviewSavedPetition = connect(
                               className="usa-label usa-label-display"
                               htmlFor="filing-contact-secondary"
                             >
-                              Spouse’s contact information
+                              Spouse’s information
                             </span>
                             {AddressDisplay(form.contactSecondary, constants)}
                           </>
