@@ -55,10 +55,9 @@
   * Blocked from Trial - case has either a manual block, a system-generated block or both and cannot be set for trial or set as high priority
 
 ## Notes
+**Case Notes**
+* Case notes can be added/edited/deleted/viewed by all internal users
+* These are procedural notes related to the case
 
-
-
-# Sealed Cases
-* Docket clerk / clerk of court roles only have access to seal a case
-* Sealed case is not visible in public search by name
-* Sealed case is visible by public docket number search - with only docket number displayed
+**Judge's Notes**
+* Judge's notes are visible only to the Judge who created the notes and their chambers
