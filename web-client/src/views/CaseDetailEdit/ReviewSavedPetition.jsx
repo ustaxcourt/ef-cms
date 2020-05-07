@@ -357,6 +357,20 @@ export const ReviewSavedPetition = connect(
                           </div>
                         </div>
                       )}
+                      {reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile && (
+                        <div className="margin-top-3 margin-bottom-3">
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <PDFPreviewButton
+                                file={
+                                  reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile
+                                }
+                                title="Application for Waiver of Filing Fee"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
