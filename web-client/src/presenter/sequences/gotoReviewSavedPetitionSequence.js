@@ -3,8 +3,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseOnFormUsingStateAction } from '../actions/setCaseOnFormUsingStateAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { shouldLoadCaseAction } from '../actions/shouldLoadCaseAction';
 
 export const gotoReviewSavedPetitionSequence = [
@@ -13,7 +11,5 @@ export const gotoReviewSavedPetitionSequence = [
     ignore: [setCaseOnFormUsingStateAction],
     load: [getCaseAction, setCaseAction, setCaseOnFormAction],
   },
-  setPetitionIdAction,
-  setDocumentIdAction,
   setCurrentPageAction('ReviewSavedPetition'),
 ];
