@@ -111,6 +111,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
           permissions.DOCKET_ENTRY
         ) {
           editLink = '/edit';
+        } else if (document.isPetition && !document.servedAt) {
+          editLink = '/review';
         }
       }
 
