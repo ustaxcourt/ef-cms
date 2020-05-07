@@ -208,5 +208,4 @@ Practitioner.getFullName = function (practitionerData) {
 
 module.exports = {
   Practitioner,
-  practitionerValidation,
 };
