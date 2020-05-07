@@ -1,9 +1,11 @@
-# Edit Docket Entries - (Docket Clerk Only)
+[Return to Directory](./README.md)
+
+## Edit Docket Entries - (Docket Clerk Only)
 * A docket clerk has the ability to update the docket record with/without adding a change of docket entry addition
 * After QC is complete for an entry, an edit link displays at the far right of the docket record table
 * When the Docket clerk clicks on the edit link on a document the Edit Docket Entry screen displays
 
-## Edit Docket Entry screen
+### Edit Docket Entry screen
 * Includes 3 tabs: Document Info, Service, Actions
 
 #### Document Info
@@ -14,5 +16,5 @@
 * Allows Docket Clerk to update the parties served
 
 #### Actions
-* Allows Docket Clerk to add free text to the "Action" column on the Docket Record 
+* Allows Docket Clerk to add free text to the "Action" column on the Docket Record
 * The Action column is used to display the resulting action on a document (Granted, Denied, etc.) and the associated document communicating that action (ORD MM/DD/YY)
