@@ -86,7 +86,7 @@ describe('create user', () => {
       role: User.ROLES.privatePractitioner,
     };
 
-    const user = await createUserInteractor({
+    await createUserInteractor({
       applicationContext,
       user: userToCreate,
     });

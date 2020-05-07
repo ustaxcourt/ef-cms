@@ -9,7 +9,6 @@ const {
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
-const { omit } = require('lodash');
 const joiStrictTimestamp = getTimestampSchema();
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
