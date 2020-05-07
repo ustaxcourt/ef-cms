@@ -25,9 +25,11 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
   let userEntity = user;
 
   if (
-    user.role === User.ROLES.privatePractitioner ||
-    user.role === User.ROLES.irsPractitioner ||
-    user.role === User.ROLES.inactivePractitioner
+    [
+      User.ROLES.privatePractitioner,
+      User.ROLES.irsPractitioner,
+      User.ROLES.inactivePractitioner,
+    ].includes(user.role)
   ) {
     userEntity = await createPractitionerUser({ applicationContext, user });
   }

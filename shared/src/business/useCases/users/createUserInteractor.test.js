@@ -62,7 +62,7 @@ describe('create user', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('adds a barNumber and userId when the user role is privatePractitioner', async () => {
+  it('should create a practitioner user when the user role is privatePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'admin',
       userId: 'admin',
@@ -90,9 +90,8 @@ describe('create user', () => {
       applicationContext,
       user: userToCreate,
     });
-    expect(user).not.toBeUndefined();
-    expect(user.barNumber).toBe('CS20001');
-    expect(user.userId).toBe('745b7d39-8fae-4c2f-893c-3c829598bc71');
+
+    expect(createPractitionerUser).toHaveBeenCalled();
   });
 
   it('should create a practitioner user when the user role is irsPractitioner', async () => {

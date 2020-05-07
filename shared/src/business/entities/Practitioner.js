@@ -162,9 +162,7 @@ const practitionerValidation = {
     otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
     then: joi
       .string()
-      .valid(
-        ...Object.values(omit(User.ROLES, User.ROLES.inactivePractitioner)),
-      )
+      .valid(...[User.ROLES.irsPractitioner, User.ROLES.privatePractitioner])
       .required(),
   }),
   suffix: joi

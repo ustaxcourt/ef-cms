@@ -16,7 +16,6 @@ function PrivatePractitioner(rawUser) {
   this.entityName = 'PrivatePractitioner';
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
-  this.role = User.ROLES.privatePractitioner;
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
