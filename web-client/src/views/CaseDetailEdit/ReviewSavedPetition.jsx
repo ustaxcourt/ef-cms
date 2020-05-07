@@ -28,7 +28,6 @@ const ConfirmServeToIrsModal = () => (
 export const ReviewSavedPetition = connect(
   {
     constants: state.constants,
-    documentId: state.documentId,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence:
@@ -41,7 +40,6 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     constants,
-    documentId,
     form,
     formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence,
@@ -79,7 +77,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc`}
                         icon="edit"
                       >
                         Edit
@@ -138,7 +136,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc`}
                         icon="edit"
                       >
                         Edit
@@ -229,7 +227,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc`}
                         icon="edit"
                       >
                         Edit
