@@ -34,6 +34,10 @@ h3 {
   text-align: center;
   font-family: serif;
   text-decoration: underline;
+
+  &#served-stamp {
+    text-decoration: none;
+  }
 }
 
 p {
@@ -125,7 +129,7 @@ th {
   margin-top: 50px;
 
   &.condensed {
-    margin-top: 16px;
+    margin-top: 0px;
   }
 }
 
