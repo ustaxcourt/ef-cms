@@ -7,6 +7,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -84,7 +85,7 @@ const goToDashboard = [
 export const gotoDashboardSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: goToDashboard,
+    isLoggedIn: [goToDashboard, navigateToDashboardAction],
     unauthorized: [redirectToCognitoAction],
   },
 ];

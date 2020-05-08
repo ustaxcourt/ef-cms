@@ -37,6 +37,22 @@ describe('File a petition', function () {
   });
 });
 
+describe('before filing a petition', () => {
+  before(() => {
+    cy.login('petitioner', 'before-filing-a-petition');
+  });
+
+  it('should navigate to dashboard when cancel is clicked', () => {
+    cy.get('button#cancel').should('exist');
+    cy.get('button#cancel').click();
+
+    cy.get('button.modal-button-confirm').should('exist');
+    cy.get('button.modal-button-confirm').click();
+
+    cy.url().should('not.include', 'before-filing-a-petition');
+  });
+});
+
 describe('creation form', () => {
   before(() => {
     cy.login('petitioner', 'file-a-petition/step-1');

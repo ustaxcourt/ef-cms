@@ -11,6 +11,10 @@ option:first-child {
   font-weight: initial;
 }
 
+.before-starting-case p {
+  max-width: unset;
+}
+
 .usa-hint {
   display: inline-block;
   margin-bottom: 15px;
