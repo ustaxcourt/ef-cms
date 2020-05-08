@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# if [ ! -e "$CIRCLECI" ]; then
+if [[ -z "$CIRCLECI" ]]; then
   echo "killing dynamo if already running"
   pkill -f DynamoDBLocal
 
@@ -16,7 +16,7 @@
   ./web-api/start-elasticsearch.sh &
   ESEARCH_PID=$!
   ./wait-until.sh http://localhost:9200/ 200
-# fi
+fi
 
 npm run build:assets
 
