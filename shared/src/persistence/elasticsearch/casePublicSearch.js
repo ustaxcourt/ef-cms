@@ -1,6 +1,7 @@
 const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
+const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
 
 /**
@@ -30,8 +31,34 @@ exports.casePublicSearch = async ({
     yearFiledMin,
   });
 
-  let foundCases = (
-    await search({
+  let results;
+
+  ({ results } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        _source: [
+          'caseCaption',
+          'contactPrimary',
+          'contactSecondary',
+          'docketNumber',
+          'docketNumberSuffix',
+          'receivedAt',
+          'sealedDate',
+        ],
+        query: {
+          bool: {
+            must: [...exactMatchesQuery, ...commonQuery],
+          },
+        },
+        size: 5000,
+      },
+      index: 'efcms-case',
+    },
+  }));
+
+  if (isEmpty(results)) {
+    ({ results } = await search({
       applicationContext,
       searchParameters: {
         body: {
@@ -42,45 +69,17 @@ exports.casePublicSearch = async ({
             'docketNumber',
             'docketNumberSuffix',
             'receivedAt',
-            'sealedDate',
           ],
           query: {
             bool: {
-              must: [...exactMatchesQuery, ...commonQuery],
+              must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
-          size: 5000,
         },
         index: 'efcms-case',
       },
-    })
-  ).results;
-
-  if (!foundCases.length) {
-    foundCases = (
-      await search({
-        applicationContext,
-        searchParameters: {
-          body: {
-            _source: [
-              'caseCaption',
-              'contactPrimary',
-              'contactSecondary',
-              'docketNumber',
-              'docketNumberSuffix',
-              'receivedAt',
-            ],
-            query: {
-              bool: {
-                must: [...nonExactMatchesQuery, ...commonQuery],
-              },
-            },
-          },
-          index: 'efcms-case',
-        },
-      })
-    ).results;
+    }));
   }
 
-  return foundCases;
+  return results;
 };
