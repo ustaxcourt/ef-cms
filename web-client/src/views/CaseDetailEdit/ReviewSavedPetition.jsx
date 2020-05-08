@@ -63,9 +63,9 @@ export const ReviewSavedPetition = connect(
           id="ustc-start-a-case-form"
         >
           <Focus>
-            <h2 id="file-a-document-header" tabIndex="-1">
-              Review the Petition
-            </h2>
+            <h1 id="file-a-document-header" tabIndex="-1">
+              Review and Serve Petition
+            </h1>
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
