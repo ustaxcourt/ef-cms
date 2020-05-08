@@ -249,6 +249,23 @@ p {
   line-height: 24px;
 }
 
+.payment-options {
+  background-color: color($theme-color-base-lightest) !important;
+  .usa-accordion__button {
+    padding: 3px;
+    font-family: inherit;
+    font-family: $font-source-sans;
+    font-size: 17px;
+    font-weight: normal;
+  }
+  button:not([disabled]):focus {
+    outline: none;
+  }
+  .usa-accordion__button:hover {
+    background-color: inherit;
+  }
+}
+
 .usa-alert__text:only-child {
   padding-top: 0;
 }

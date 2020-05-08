@@ -1,3 +1,4 @@
+import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListPetitioner } from '../CaseListPetitioner';
@@ -104,21 +105,47 @@ export const DashboardPetitioner = connect(
                       <strong>Pay by debit/credit card</strong>
                       <br />
                       Copy your docket number(s) and pay online.
-                      <br />
                       <Button
-                        className="margin-bottom-3 margin-top-3"
+                        className="margin-bottom-3 margin-top-2"
                         id="pay_filing_fee"
                       >
                         Pay now
                       </Button>
-                      <hr />
-                      <p>
-                        Other options
-                        <span className="other-options-icon">
-                          <FontAwesomeIcon icon={['fas', 'plus']} />
-                        </span>
-                      </p>
                     </p>
+                    <hr />
+
+                    <Accordion gray headingLevel="3">
+                      <AccordionItem
+                        customClassName="payment-options"
+                        key={'other-options accordion-icon'}
+                        title={'Other options'}
+                      >
+                        <hr />
+                        <strong>Mail-in payment</strong>
+                        <br />
+                        Make checks/money orders payable to:
+                        <br />
+                        Clerk, United States Tax Court
+                        <br />
+                        400 Second Street, NW
+                        <br />
+                        Washington, DC 20217
+                        <br />
+                        <br />
+                        <p>
+                          <strong>
+                            Can&apos;t afford to pay the filing fee?
+                          </strong>
+                          <Button link>
+                            <FontAwesomeIcon
+                              className={'fa-icon-blue'}
+                              icon={['fa', 'file-pdf']}
+                            />
+                            Download Application For Waiver of Filing Fee
+                          </Button>
+                        </p>
+                      </AccordionItem>
+                    </Accordion>
                   </div>
                 )}
               </div>
