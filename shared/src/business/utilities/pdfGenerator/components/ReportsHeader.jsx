@@ -4,8 +4,10 @@ export const ReportsHeader = ({ subtitle, title }) => {
   return (
     <>
       <div id="reports-header">
-        <h1>{title}</h1>
-        <h2>{subtitle}</h2>
+        <div className="us-tax-court-seal"></div>
+        <h1>United States Tax Court</h1>
+        <h2>{title}</h2>
+        <h3>{subtitle}</h3>
       </div>
     </>
   );

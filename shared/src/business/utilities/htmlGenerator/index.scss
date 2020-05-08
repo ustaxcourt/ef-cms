@@ -21,7 +21,7 @@ h2 {
 }
 
 p.heading-address {
-  width:100%;
+  width: 100%;
   text-align: center;
   font-size: 12px;
 }
@@ -121,7 +121,8 @@ th {
   font-family: serif;
 }
 
-.case-information #caption,#case-caption {
+.case-information #caption,
+#case-caption {
   width: 49%;
   float: left;
 }
@@ -131,7 +132,9 @@ th {
   line-height: 18px;
   border-right: 1px dashed;
 
-  #caption-extension, #caption-v, #caption-respondent {
+  #caption-extension,
+  #caption-v,
+  #caption-respondent {
     padding-left: 25%;
     margin-top: 8px;
   }
@@ -239,7 +242,7 @@ th {
 }
 
 @page {
-  margin-top:100px;
+  margin-top: 100px;
   margin-bottom: 55px;
 }
 
@@ -260,19 +263,19 @@ th {
 }
 
 .text-bold {
-  font-weight:bold;
+  font-weight: bold;
 }
 
 .text-underline {
-  text-decoration:underline;
+  text-decoration: underline;
 }
 
 .text-center {
-  text-align:center;
+  text-align: center;
 }
 
 .text-normal {
-  font-weight:normal;
+  font-weight: normal;
 }
 
 .notice-notes li {
@@ -291,14 +294,30 @@ th {
 
 #reports-header {
   font-family: 'nimbus_roman', serif;
-  text-align: centeer;
+  text-align: center;
+  margin-bottom: 50px;
+
+  .us-tax-court-seal {
+    width: 100px;
+    height: 100px;
+  }
 
   h1 {
-    font-size: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
   h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  h3 {
     font-size: 14px;
+    text-decoration: none;
+    font-weight: normal;
+    margin-top: 0px;
   }
 }
 
