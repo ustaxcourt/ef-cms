@@ -20,6 +20,7 @@ const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { omit } = require('lodash');
 const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -115,8 +116,12 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocument.filedBy !== currentDocument.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
 
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
   const docketChangeInfo = {
+    caseCaptionExtension,
     caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
+    caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
       caseToUpdate.docketNumberSuffix || ''

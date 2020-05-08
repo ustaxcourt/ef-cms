@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Document QC Inbox and Assignment
 * All new external filings after the Petition is served to IRS appear in the Docket Section Document QC as unassigned
 * Document gets assigned to clerk, shows up in clerk’s Inbox and in Section Inbox as assigned to clerk
@@ -18,7 +20,7 @@
 **Additional Info Line 1**
 * If clerk adds to this field and checks "Add to Cover sheet", a new cover sheet will be generated with updated information
 * If added, a Notice of Docket Change is added to the Docket Record
-* text entered in this field is added to the docket entry for this document 
+* text entered in this field is added to the docket entry for this document
 
 **Additional Info Line 2**
 * text entered in this field is added to the docket entry for this document only, and will never be added to the cover sheet

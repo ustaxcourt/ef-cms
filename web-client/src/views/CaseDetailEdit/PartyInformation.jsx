@@ -1,23 +1,19 @@
 import { Contacts } from '../StartCase/Contacts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PartyInformation = connect(
   {
-    baseUrl: state.baseUrl,
     caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
-    token: state.token,
     updateCasePartyTypeSequence: sequences.updateCasePartyTypeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function PartyInformation({
-    baseUrl,
     caseDetailEditHelper,
     form,
-    token,
     updateCasePartyTypeSequence,
     updateFormValueSequence,
   }) {
@@ -54,21 +50,7 @@ export const PartyInformation = connect(
         </div>
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
-            <div className="usa-form-group">
-              <span className="usa-label">Ownership Disclosure Statement</span>
-              {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
-                <a
-                  aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/case-documents/${form.caseId}/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <FontAwesomeIcon className="fa-icon-blue" icon="file-pdf" />
-                  Ownership Disclosure Statement
-                </a>
-              )}
-              {!caseDetailEditHelper.ownershipDisclosureStatementDocumentId &&
-                'No file uploaded'}
+            <FormGroup>
               <div className="order-checkbox">
                 <input
                   checked={form.orderForOds}
@@ -90,19 +72,20 @@ export const PartyInformation = connect(
                   Order for Ownership Disclosure Statement
                 </label>
               </div>
-            </div>
+            </FormGroup>
           </div>
         )}
         {(caseDetailEditHelper.showPrimaryContact ||
           caseDetailEditHelper.showSecondaryContact) && (
           <div className="subsection contacts">
             <Contacts
-              bind="caseDetail"
+              bind="form"
               contactsHelper="caseDetailEditContactsHelper"
-              emailBind="caseDetail.contactPrimary"
+              emailBind="form.contactPrimary"
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
+              useSameAsPrimary={true}
               onBlur="validateCaseDetailSequence"
               onChange="updateFormValueAndCaseCaptionSequence"
             />
