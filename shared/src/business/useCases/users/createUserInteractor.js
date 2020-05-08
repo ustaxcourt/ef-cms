@@ -1,4 +1,7 @@
 const {
+  createPractitionerUser,
+} = require('../../utilities/createPractitionerUser');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -19,11 +22,23 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  let userEntity = user;
+
+  if (
+    [
+      User.ROLES.privatePractitioner,
+      User.ROLES.irsPractitioner,
+      User.ROLES.inactivePractitioner,
+    ].includes(user.role)
+  ) {
+    userEntity = await createPractitionerUser({ applicationContext, user });
+  }
+
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createUser({
       applicationContext,
-      user,
+      user: userEntity,
     });
 
   return new User(createdUser, { applicationContext }).validate().toRawObject();

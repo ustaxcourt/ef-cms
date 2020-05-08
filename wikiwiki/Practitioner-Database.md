@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Adding Practitioners to Database
 
 * Can be done by a bulk import or by manually adding a single practitioner
@@ -20,7 +22,7 @@
 
 **Firm name**
 * If "Private" is selected for employer= firm name field is displayed and optional
-* If "IRS" or "DOJ" is selected for employer= firm name field is hidden 
+* If "IRS" or "DOJ" is selected for employer= firm name field is hidden
 
 **Contact fields**
 * use standard address, contact, and phone fields and functionality

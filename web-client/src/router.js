@@ -126,6 +126,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/petition-qc..',
+      ifHasAccess(docketNumber => {
+        const { tab } = route.query();
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+          tab,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(

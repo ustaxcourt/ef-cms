@@ -28,7 +28,6 @@ const ConfirmServeToIrsModal = () => (
 export const ReviewSavedPetition = connect(
   {
     constants: state.constants,
-    documentId: state.documentId,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence:
@@ -41,7 +40,6 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     constants,
-    documentId,
     form,
     formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence,
@@ -59,9 +57,9 @@ export const ReviewSavedPetition = connect(
           id="ustc-start-a-case-form"
         >
           <Focus>
-            <h2 id="file-a-document-header" tabIndex="-1">
-              Review the Petition
-            </h2>
+            <h1 id="file-a-document-header" tabIndex="-1">
+              Review and Serve Petition
+            </h1>
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
@@ -79,7 +77,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=partyInfo`}
                         icon="edit"
                       >
                         Edit
@@ -100,7 +98,7 @@ export const ReviewSavedPetition = connect(
                           className="usa-label usa-label-display"
                           htmlFor="filing-contact-primary"
                         >
-                          Petitioner’s contact information
+                          Petitioner’s information
                         </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
@@ -119,7 +117,7 @@ export const ReviewSavedPetition = connect(
                               className="usa-label usa-label-display"
                               htmlFor="filing-contact-secondary"
                             >
-                              Spouse’s contact information
+                              Spouse’s information
                             </span>
                             {AddressDisplay(form.contactSecondary, constants)}
                           </>
@@ -138,7 +136,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=caseInfo`}
                         icon="edit"
                       >
                         Edit
@@ -146,7 +144,7 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
-                        <div className="margin-top-3 margin-bottom-2">
+                        <div className="margin-bottom-2">
                           <span
                             className="usa-label usa-label-display"
                             htmlFor="filing-type"
@@ -178,7 +176,7 @@ export const ReviewSavedPetition = connect(
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {form.mailingDate && (
-                          <div className="margin-top-3 margin-bottom-2">
+                          <div className="margin-bottom-2">
                             <span
                               className="usa-label usa-label-display"
                               htmlFor="mailing-date"
@@ -229,7 +227,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/documents/${documentId}`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=irsNotice`}
                         icon="edit"
                       >
                         Edit
