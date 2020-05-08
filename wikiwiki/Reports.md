@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Blocked Cases Report
 * Displays all cases that are blocked from being set for trial by requested trial location
 * Report is sorted by docket number (oldest to newest)
@@ -14,7 +16,7 @@
 * Results table is sorted by docket number (oldest to newest)
 * Can filter by judge, case status, or both
 * Can filter by more than 1 case status at a time
-* Only shows cases in any case status 
+* Only shows cases in any case status
 
 ## Pending Report
 * The pending Report is a table of items pending action. There are 2 separate reports for pending report. The main pending report lies under the reports dropdown menu and lists all cases and pending items. the 2nd report is a cases Pending report and is found in the cases Case detail>In Progress>Pending Report tab.

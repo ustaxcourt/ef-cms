@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 # Initial onsite user research
 
 We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
