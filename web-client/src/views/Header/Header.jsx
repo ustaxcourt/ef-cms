@@ -1,5 +1,5 @@
 import { AccountMenu } from './AccountMenu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcons } from '@fortawesome/react-fontawesome';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
