@@ -2,15 +2,14 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
+import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseInProgressAction } from '../actions/StartCaseInternal/setCaseInProgressAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -28,7 +27,7 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeDateReceivedAction,
+      computeReceivedAtDateAction,
       computeIrsNoticeDateAction,
       computePetitionFeeDatesAction,
       validatePetitionFromPaperAction,
@@ -40,7 +39,6 @@ export const submitPetitionFromPaperSequence = [
         ],
         success: [
           stopShowValidationAction,
-          setCaseInProgressAction,
           showProgressSequenceDecorator([
             createCaseFromPaperAction,
             {

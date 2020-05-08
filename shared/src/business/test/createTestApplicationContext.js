@@ -224,6 +224,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const getDocumentGeneratorsReturnMock = {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
   };
 
@@ -238,7 +239,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
