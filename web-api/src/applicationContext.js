@@ -254,7 +254,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
@@ -1160,7 +1159,6 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
-        generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
