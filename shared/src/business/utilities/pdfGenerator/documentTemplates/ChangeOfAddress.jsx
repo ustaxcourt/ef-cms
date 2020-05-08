@@ -1,7 +1,7 @@
 const React = require('react');
 
-const DocketHeader = require('../components/DocketHeader.jsx').default;
-const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
+const { DocketHeader } = require('../components/DocketHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const renderTable = ({ data, label, options }) => {
   return (
@@ -36,7 +36,7 @@ const renderTable = ({ data, label, options }) => {
   );
 };
 
-const ChangeOfAddress = ({ name, newData, oldData, options }) => {
+export const ChangeOfAddress = ({ name, newData, oldData, options }) => {
   return (
     <>
       <PrimaryHeader />
@@ -59,5 +59,3 @@ const ChangeOfAddress = ({ name, newData, oldData, options }) => {
     </>
   );
 };
-
-export default ChangeOfAddress;

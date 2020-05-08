@@ -1,5 +1,5 @@
 const React = require('react');
-const ReportsHeader = require('./ReportsHeader.jsx').default;
+const { ReportsHeader } = require('./ReportsHeader.jsx');
 const { shallow } = require('enzyme');
 
 describe('ReportsHeader', () => {

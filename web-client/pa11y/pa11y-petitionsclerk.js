@@ -386,4 +386,14 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
+  {
+    actions: [
+      'wait for #submit-case to be visible',
+      'click element #submit-case',
+      'wait for .usa-alert--warning to be visible',
+    ],
+    notes: 'checks the review paper case screen',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b',
+  },
 ];

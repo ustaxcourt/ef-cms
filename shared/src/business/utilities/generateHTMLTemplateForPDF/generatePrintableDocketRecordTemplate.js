@@ -36,7 +36,7 @@ const generatePrintableDocketRecordTemplate = async ({
     },
   });
 
-  const htmlTemplate = generateHTMLTemplateForPDF({
+  const htmlTemplate = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
     content: { main: reactDocketRecordTemplate },

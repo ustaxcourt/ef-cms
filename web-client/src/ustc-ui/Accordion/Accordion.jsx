@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
@@ -50,7 +51,15 @@ export const Accordion = connect(
     setTab = decorateWithPostCallback(setTab, onSelect);
 
     const renderTab = (child, index) => {
-      const { children, id, title } = child.props;
+      const {
+        children,
+        displayIcon = false,
+        iconClassName,
+        iconSize,
+        iconTypes,
+        id,
+        title,
+      } = child.props;
       let { itemName } = child.props;
 
       itemName = itemName || `item-${index}`;
@@ -77,6 +86,15 @@ export const Accordion = connect(
               type="button"
               onClick={() => setTab(itemName)}
             >
+              {displayIcon && (
+                <span className="caseItem__icon">
+                  <FontAwesomeIcon
+                    className={iconClassName}
+                    icon={iconTypes}
+                    size={iconSize}
+                  />
+                </span>
+              )}
               {title}
             </button>
           </HeadingElement>

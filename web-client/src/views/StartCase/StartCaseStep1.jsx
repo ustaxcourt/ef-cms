@@ -77,7 +77,8 @@ export const StartCaseStep1 = connect(
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Download T.C. Form 4
+                Download Statement of Taxpayer Identification Number (T.C. Form
+                4)
               </Button>
               if you haven‘t already done so
             </p>

@@ -10,6 +10,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     petitionPaymentDate,
     petitionPaymentMethod,
     petitionPaymentStatus,
+    petitionPaymentWaivedDate,
     preferredTrialCity,
     receivedAt,
     ...caseDetail
@@ -22,21 +23,30 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(receivedAt, 'MMDDYYYY');
+    .formatDateString(receivedAt, 'MMDDYY');
 
   const hasIrsNoticeFormatted = hasVerifiedIrsNotice ? 'Yes' : 'No';
 
   const shouldShowIrsNoticeDate = hasVerifiedIrsNotice === true;
 
-  const petitionPaymentStatusFormatted =
-    petitionPaymentStatus === PAYMENT_STATUS.PAID
-      ? `Paid ${applicationContext
-          .getUtilities()
-          .formatDateString(
-            petitionPaymentDate,
-            'MMDDYYYY',
-          )} ${petitionPaymentMethod}`
-      : 'Not paid';
+  let petitionPaymentStatusFormatted;
+  switch (petitionPaymentStatus) {
+    case PAYMENT_STATUS.PAID:
+      petitionPaymentStatusFormatted = `Paid ${applicationContext
+        .getUtilities()
+        .formatDateString(
+          petitionPaymentDate,
+          'MMDDYY',
+        )} ${petitionPaymentMethod}`;
+      break;
+    case PAYMENT_STATUS.WAIVED:
+      petitionPaymentStatusFormatted = `Waived ${applicationContext
+        .getUtilities()
+        .formatDateString(petitionPaymentWaivedDate, 'MMDDYY')}`;
+      break;
+    default:
+      petitionPaymentStatusFormatted = 'Not paid';
+  }
 
   const preferredTrialCityFormatted = preferredTrialCity
     ? preferredTrialCity
@@ -45,7 +55,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(irsNoticeDate, 'MMDDYYYY');
+      .formatDateString(irsNoticeDate, 'MMDDYY');
   }
 
   const documentsByType = (documents || []).reduce((acc, document) => {
@@ -60,8 +70,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     'orderForFilingFee',
     'orderForOds',
     'orderForRatification',
-    // TODO: see OrdersNeededSummary.jsx
-    // 'orderDesignatingPlaceOfTrial',
+    'orderDesignatingPlaceOfTrial',
     'orderToShowCause',
     'noticeOfAttachments',
   ].some(key => Boolean(caseDetail[key]));
@@ -73,8 +82,13 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
   const ownershipDisclosureFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType];
   const stinFile = documentsByType[INITIAL_DOCUMENT_TYPES.stin.documentType];
+  const applicationForWaiverOfFilingFeeFile =
+    documentsByType[
+      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
+    ];
 
   return {
+    applicationForWaiverOfFilingFeeFile,
     hasIrsNoticeFormatted,
     hasOrders,
     irsNoticeDateFormatted,
