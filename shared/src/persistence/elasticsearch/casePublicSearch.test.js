@@ -1,15 +1,15 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { caseAdvancedSearch } = require('./caseAdvancedSearch');
+const { casePublicSearch } = require('./casePublicSearch');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
-describe('caseAdvancedSearch', () => {
+describe('casePublicSearch', () => {
   it('returns results from an exact-matches query', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
-    const results = await caseAdvancedSearch({
+    const results = await casePublicSearch({
       applicationContext,
       searchTerms: 'search for this',
     });
@@ -29,7 +29,7 @@ describe('caseAdvancedSearch', () => {
         return { results: [], total: 0 };
       });
 
-    const results = await caseAdvancedSearch({
+    const results = await casePublicSearch({
       applicationContext,
       searchTerms: 'search for this',
     });
