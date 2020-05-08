@@ -73,6 +73,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
@@ -953,6 +954,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      receiptOfFiling,
       standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
