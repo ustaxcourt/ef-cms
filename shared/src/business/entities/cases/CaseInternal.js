@@ -28,6 +28,7 @@ function CaseInternal(rawCase) {
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
   this.mailingDate = rawCase.mailingDate;
+  this.noticeOfAttachments = rawCase.noticeOfAttachments;
   this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
   // this is so the validation that is checking for existence of 3 different fields
   // will work correctly
@@ -110,6 +111,7 @@ const paperRequirements = joi
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
     mailingDate: joi.string().max(25).required(),
+    noticeOfAttachments: Case.validationRules.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,
     orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
