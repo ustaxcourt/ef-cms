@@ -1,8 +1,15 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const petitionsClerkCreatesNewCaseAndSavesForLater = (
+const reviewSavedPetitionHelper = withAppContextDecorator(
+  reviewSavedPetitionHelperComputed,
+);
+
+export const petitionsClerkCreatesNewCaseFromPaper = (
   test,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
@@ -14,15 +21,15 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
 
   const formValues = [
     {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     },
     {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     },
     {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     },
     {
@@ -35,14 +42,6 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
     },
     {
       key: 'petitionFileSize',
-      value: 1,
-    },
-    {
-      key: 'stinFile',
-      value: fakeFile,
-    },
-    {
-      key: 'stinFileSize',
       value: 1,
     },
     {
@@ -146,6 +145,10 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       key: 'paymentDateWaivedYear',
       value: '2005',
     },
+    {
+      key: 'orderForRatification',
+      value: true,
+    },
   ];
 
   it('should default to parties tab when creating a new case', async () => {
@@ -214,6 +217,8 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
     );
   });
 
+  const updatedCaseCaption = 'Ada Lovelace is awesome';
+
   it('should regenerate case caption when primary contact name is changed', async () => {
     await test.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
@@ -224,7 +229,6 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
       'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse, Petitioners',
     );
 
-    const updatedCaseCaption = 'Ada Lovelace is awesome';
     await test.runSequence('updateFormValueSequence', {
       key: 'caseCaption',
       value: updatedCaseCaption,
@@ -233,29 +237,28 @@ export const petitionsClerkCreatesNewCaseAndSavesForLater = (
     expect(test.getState('form.caseCaption')).toBe(updatedCaseCaption);
   });
 
-  it('should validate when all required information has been provided', async () => {
-    await test.runSequence('updateFormValueSequence', {
-      key: 'petitionFile',
-      value: fakeFile,
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
-    });
-
+  it('should create case and navigate to review screen when case information has been validated', async () => {
+    await test.runSequence('submitPetitionFromPaperSequence');
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
-  });
-
-  it('should navigate to review screen when case information has been validated', async () => {
-    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    const helper = runCompute(reviewSavedPetitionHelper, {
+      state: test.getState(),
+    });
+
+    expect(helper).toMatchObject({
+      hasIrsNoticeFormatted: 'No',
+      hasOrders: true,
+      petitionPaymentStatusFormatted: 'Waived 05/05/05',
+      receivedAtFormatted: '01/01/01',
+      shouldShowIrsNoticeDate: false,
+    });
+
+    expect(test.getState('caseDetail')).toMatchObject({
+      caseCaption: updatedCaseCaption,
+      isPaper: true,
+    });
   });
-
-  // it('should navigate to Document QC inbox page when saving an in progress case for later', async () => {
-  //   await test.runSequence('saveInternalCaseForLaterSequence');
-
-  //   expect(test.getState('currentPage')).toEqual('Messages');
-  // });
 };

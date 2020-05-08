@@ -1,10 +1,7 @@
+import { Accordion, AccordionItem } from '../ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import React from 'react';
-import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
-import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export const BeforeStartingCase = () => (
   <>
@@ -22,182 +19,206 @@ export const BeforeStartingCase = () => (
     </div>
     <section className="usa-section before-starting-case grid-container">
       <h2 className="captioned margin-bottom-2" tabIndex="-1">
-        Tips for Preparing Documents Before You File
+        Instructions For Creating a Case
       </h2>
+      <p>
+        Before starting the filing process please review the helpful tips
+        provided below. This will help instruct you in what is needed and how to
+        go about proceeding with filing your Petition.
+      </p>
       <div className="grid-container padding-x-0 margin-bottom-5" role="list">
         <div className="grid-row grid-gap">
-          <div className="tablet:grid-col-6">
-            <div className="caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <FontAwesomeIcon icon="user-check" />
-              </div>
-              <h3 className="caseItem__heading">
-                1. Are you authorized to file on behalf of this taxpayer?
-              </h3>
-              <div className="caseItem__content">
-                <p>
-                  To file a case on behalf of another taxpayer, you must be
-                  authorized to litigate in this Court as provided by the Tax
-                  Court Rules of Practice and Procedure (Rule 60). Enrolled
-                  agents, certified public accountants, and powers of attorney
-                  who are not admitted to practice before the Court are not
-                  eligible to represent taxpayers.
-                </p>
-              </div>
-            </div>
-            <div className="caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <FontAwesomeIcon icon={['far', 'copy']} />
-              </div>
-              <h3 className="caseItem__heading">
-                2. Have the IRS Notice(s) Youʼve Received Available to Submit
-              </h3>
-              <div className="caseItem__content">
-                <p>
-                  If you’ve received an IRS notice, such as a Notice of
-                  Deficiency or Notice of Determination, you’ll need to include
-                  a copy with your Petition. The U.S. Tax Court must receive all
-                  Petitions in a timely manner. The IRS notice shows the last
-                  date to file or the number of days you have to file a
-                  Petition.{' '}
-                  <strong>
-                    The Court must receive your electronically filed Petition no
-                    later than 11:59 pm Eastern Time on the last date to file.
-                  </strong>
-                </p>
-              </div>
-            </div>
-            <div className="margin-bottom-0 caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <FontAwesomeIcon icon={['far', 'edit']} />
-              </div>
-              <h3 className="caseItem__heading">
-                3. Fill Out The Required Forms
-              </h3>
-              <div className="caseItem__content">
-                <p className="label">Petition Form</p>
-                <p>
-                  Complete the Petition form,{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    USTC Form 2
-                  </a>
-                  , or you can upload your own Petition that complies with the
-                  requirements of the{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/rules.htm"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Tax Court Rules of Practice and Procedure
-                  </a>
-                  . <strong>Do not</strong> include personal information (such
-                  as Social Security Numbers, Taxpayer Identification Numbers,
-                  or Employer Identification Numbers, birthdates, names of minor
-                  children, or financial account information) in your Petition.
-                </p>
-                <p className="label">Statement of Taxpayer Identification</p>
-                <p>
-                  Complete the Statement of Taxpayer Identification form,{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    USTC Form 4
-                  </a>
-                  . This is the only document that should contain your Social
+          <Accordion headingLevel="3">
+            <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'clock']}
+              key="Check the Deadline for Filing"
+              title="Check the Deadline for Filing"
+            >
+              <p>
+                You may have received a notice in the mail from the Internal
+                Revenue Service (IRS). The IRS notice may show the last date to
+                file or the number of days you have to file a Petition.
+                <strong>
+                  The Court must receive your electronically filed Petition no
+                  later than 11:59 pm Eastern Time on the last date to file.
+                </strong>{' '}
+                Petitions received after this date are untimely and your case
+                may be dismissed for lack of jurisdiction.
+              </p>
+            </AccordionItem>
+          </Accordion>
+          <Accordion headingLevel="3">
+            <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['fa', 'fingerprint']}
+              key="Confirm Your Identity"
+              title="Confirm Your Identity"
+            >
+              <p>
+                You’ll be asked to upload your Statement of Taypayer
+                Identification Number (STIN)* form in Step 1 of creating a case.
+                This document is sent to the IRS to help them identify you, but
+                it’s never stored as public record.
+              </p>
+              <p className="label">
+                If you didn’t already fill out the form, you can download it
+                now.
+              </p>
+              <p className="margin-top-0">
+                <Button
+                  link
+                  className="usa-link--external"
+                  href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+                  icon="file-pdf"
+                  iconColor="blue"
+                  overrideMargin="margin-right-1"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Download Statement of Taxpayer Identification Number (T.C.
+                  Form 4)
+                </Button>
+                <br />
+                <span className="usa-hint">
+                  *This is the only document that should contain your Social
                   Security Number (SSN), Taxpayer Identification Number (TIN),
-                  or Employer Identification Number (EIN). This document is sent
-                  to the IRS to help identify you, but it’s never viewed by the
-                  Court or stored as part of the public record.
-                </p>
-                <p className="label">Ownership Disclosure Statement</p>
-                <p>
-                  If you’re filing for a business, you’ll need to complete and
-                  submit the Ownership Disclosure Statement,{' '}
-                  <a
-                    href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    USTC Form 6
-                  </a>
-                  .
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="tablet:grid-col-6">
-            <div className="caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <FontAwesomeIcon icon={['fa', 'shield-alt']} />
-              </div>
-              <h3 className="caseItem__heading">
-                4. Remove Personal Information From Your Petition and IRS
-                Notice(s)
-              </h3>
-              <div className="caseItem__content">
-                <p>
-                  If the IRS notice includes personal information (such as
+                  or Employer Identification Number (EIN).{' '}
+                  <strong>Do not include</strong> your SSN, TIN, or EIN on any
+                  other document you file with the Court.
+                </span>
+              </p>
+            </AccordionItem>
+          </Accordion>
+          <Accordion headingLevel="3">
+            <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'edit']}
+              key="Prepare the Petition"
+              title="Prepare the Petition"
+            >
+              <p className="label">1. Complete Your Petition</p>
+              <p>
+                This is the document that explains why you’re challenging the
+                IRS’s determination. You can complete the Court’s standard
+                Petition form or you can upload your own Petition that complies
+                with the requirements of the Tax Court Rules of Practice and
+                Procedure.
+              </p>
+              <p className="label">
+                If you didn’t already fill out the form, you can download it
+                now.
+              </p>
+              <p className="margin-top-0">
+                <Button
+                  link
+                  className="usa-link--external"
+                  href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                  icon="file-pdf"
+                  iconColor="blue"
+                  overrideMargin="margin-right-1"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Download Petition form (T.C. Form 2)
+                </Button>
+                <br />
+                <span className="usa-hint">
+                  *<strong>Do not include</strong> personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
-                  Employer Identification Numbers), remove or redact that
-                  information before including it with your Petition. You can
-                  remove this information by deleting it, marking through it so
-                  itʼs illegible, or any other method that will prevent it from
-                  being seen.
-                </p>
-              </div>
-            </div>
-
-            <div className="caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <FontAwesomeIcon icon={['far', 'file-pdf']} />
-              </div>
-              <h3 className="caseItem__heading">
-                5. Combine Your Petition and IRS Notice(s) Into a Single PDF
-              </h3>
-              <div className="caseItem__content">
-                <p>
-                  Scan your Petition and IRS notice into one Petition PDF or
-                  combine them digitally. This is what youʼll upload to the
-                  Court to start your case. Uploads are limited to{' '}
-                  {MAX_FILE_SIZE_MB}MB.{' '}
-                  <a
-                    href={howToMergePDFs}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Learn more about how to merge files into one PDF.
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="caseItem" role="listitem">
-              <div className="caseItem__icon" role="display">
-                <div className="svg-wrapper">
-                  <img
-                    aria-hidden="true"
-                    className="svg"
-                    src={paperclipSlashIcon}
-                  />
-                </div>
-              </div>
-              <h3 className="caseItem__heading">
-                6. Donʼt Submit Extra Documents With Your Petition
-              </h3>
-              <div className="caseItem__content">
-                <p>
-                  <strong>Do not</strong> include any additional documents with
+                  Employer Identification Numbers, birthdates, names of minor
+                  children, or financial account information) in your Petition
+                  or any other filing with the Court.
+                </span>
+              </p>
+              <p className="label">
+                2. Create a PDF of your Petition and IRS notice (if you received
+                one)
+              </p>
+              <p className="margin-top-0">
+                Scan your Petition and IRS notice into one Petition PDF (max
+                file size of 250MB) or combine them digitally.
+                <Button
+                  link
+                  className="usa-link--external"
+                  href="https://ui-dev.ustc-case-mgmt.flexion.us/how-to-merge-pdfs.8733e415.pdf"
+                  icon="file-pdf"
+                  iconColor="blue"
+                  overrideMargin="margin-right-1 margin-left-1"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Learn more about how to merge files into one PDF.
+                </Button>
+                <br />
+                <span className="usa-hint">
+                  *<strong>Do not include</strong> any additional documents with
                   your Petition, except for the IRS notice. Documents that might
                   be evidence can be submitted at a later time.
-                </p>
-              </div>
-            </div>
-          </div>
+                </span>
+              </p>
+            </AccordionItem>
+          </Accordion>
+          <Accordion headingLevel="3">
+            <AccordionItem
+              displayIcon="true"
+              iconClassName="bullet-icon"
+              iconSize="lg"
+              iconTypes={['far', 'user']}
+              key="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
+              title="If You’re Filing Jointly with a Spouse, for Someone Else or for a Business …"
+            >
+              <p className="label">Joint Petition With A Spouse</p>
+              <p>
+                To file a joint Petition with your spouse, you must have their
+                consent. Both you and your spouse must sign the Petition form.
+                If you do not have their consent, select “Myself” as the person
+                who is filing.
+              </p>
+              <p className="label">Someone Else</p>
+              <p>
+                To file a case on behalf of another taxpayer, you must be
+                authorized in this Court as provided by the Tax Court Rules of
+                Practice and Procedure (Rule 60). Enrolled agents, certified
+                public accountants, and powers of attorney who are not admitted
+                to practice before the Court are not eligible to represent
+                taxpayers.
+              </p>
+              <p className="label">A Business</p>
+              <p>
+                If you’re filing for a business, you’ll need to complete and
+                submit the Ownership Disclosure Statement.
+              </p>
+              <p className="label">
+                If you didn’t already fill out the form, you can download it
+                now.
+              </p>
+              <p className="margin-top-0">
+                <Button
+                  link
+                  className="usa-link--external"
+                  href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                  icon="file-pdf"
+                  iconColor="blue"
+                  overrideMargin="margin-right-1"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Download Ownership Disclosure Statement (T.C. Form 6)
+                </Button>
+              </p>
+            </AccordionItem>
+          </Accordion>
+          <p>
+            Next you’ll continue to follow the steps to upload your documents
+            and fill in the requested information that will create your case.
+          </p>
         </div>
       </div>
       <Button href="/file-a-petition/step-1">Got It, Letʼs Start a Case</Button>

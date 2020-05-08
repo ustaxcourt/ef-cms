@@ -72,6 +72,8 @@ const {
 const {
   changeOfAddress,
   docketRecord,
+  noticeOfDocketChange,
+  standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
@@ -294,9 +296,6 @@ const {
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
-const {
-  generateStandingPretrialOrderTemplate,
-} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -953,6 +952,8 @@ module.exports = (appContextUser = {}) => {
     getDocumentGenerators: () => ({
       changeOfAddress,
       docketRecord,
+      noticeOfDocketChange,
+      standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -1159,7 +1160,6 @@ module.exports = (appContextUser = {}) => {
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
-        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };

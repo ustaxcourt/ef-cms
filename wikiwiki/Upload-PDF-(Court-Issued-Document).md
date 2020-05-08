@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ##Upload a PDF
 * Any Court user can upload a PDF document from the Actions menu
 * Once on the Upload PDF page Users will enter a description of the document being uploaded and Upload the document itself

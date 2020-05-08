@@ -1,5 +1,5 @@
-const PageMetaHeaderDocket = require('./PageMetaHeaderDocket.jsx').default;
 const React = require('react');
+const { PageMetaHeaderDocket } = require('./PageMetaHeaderDocket.jsx');
 const { shallow } = require('enzyme');
 
 describe('PageMetaHeaderDocket', () => {

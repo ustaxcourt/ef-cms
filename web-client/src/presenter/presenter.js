@@ -106,6 +106,7 @@ import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
+import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
@@ -137,7 +138,6 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
-import { navigateToEditSavedPetitionSequence } from './sequences/navigateToEditSavedPetitionSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
@@ -494,6 +494,7 @@ export const presenter = {
     gotoMessagesSequence,
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
+    gotoPetitionQcSequence,
     gotoPractitionerDetailSequence,
     gotoPrimaryContactEditSequence,
     gotoPrintPaperServiceSequence,
@@ -525,7 +526,6 @@ export const presenter = {
     navigateToCaseDetailFromPaperServiceSequence,
     navigateToCaseDetailSequence,
     navigateToEditOrderSequence,
-    navigateToEditSavedPetitionSequence,
     navigateToPathSequence,
     navigateToPrintPaperServiceSequence,
     navigateToPrintableCaseConfirmationSequence,
