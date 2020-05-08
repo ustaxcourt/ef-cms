@@ -5,6 +5,9 @@ require('@babel/register')({
 });
 
 const {
+  CaseInventoryReport,
+} = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
+const {
   ChangeOfAddress,
 } = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx');
 const {
@@ -25,6 +28,7 @@ const React = require('react');
 const ReactDOM = require('react-dom/server');
 
 const components = {
+  CaseInventoryReport,
   ChangeOfAddress,
   DocketRecord,
   NoticeOfDocketChange,

@@ -167,7 +167,47 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const caseInventoryReport = async ({ applicationContext, data }) => {
+  const {
+    formattedCases,
+    reportTitle,
+    showJudgeColumn,
+    showStatusColumn,
+  } = data;
+
+  const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
+    componentName: 'CaseInventoryReport',
+    data: {
+      formattedCases,
+      reportTitle,
+      showJudgeColumn,
+      showStatusColumn,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactStandingPretrialOrderTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Case Inventory Report',
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+    });
+
+  return pdf;
+};
+
 module.exports = {
+  caseInventoryReport,
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
