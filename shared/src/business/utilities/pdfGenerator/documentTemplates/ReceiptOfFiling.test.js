@@ -4,9 +4,12 @@ const { ReceiptOfFiling } = require('./ReceiptOfFiling.jsx');
 
 describe('ReceiptOfFiling', () => {
   let options;
-  let documents;
+  let document;
   let filedAt;
   let filedBy;
+  let supportingDocuments;
+  let secondaryDocument;
+  let secondarySupportingDocuments;
 
   beforeEach(() => {
     options = {
@@ -15,9 +18,29 @@ describe('ReceiptOfFiling', () => {
       docketNumberWithSuffix: '123-45S',
     };
 
-    documents = [
+    document = {
+      documentTitle: 'Motion for a New Trial',
+    };
+
+    supportingDocuments = [
       {
-        documentTitle: 'Motion for a New Trial',
+        documentTitle: 'Supporting Document One Title',
+      },
+      {
+        documentTitle: 'Supporting Document Two Title',
+      },
+    ];
+
+    secondaryDocument = {
+      documentTitle: 'Secondary Document Title',
+    };
+
+    secondarySupportingDocuments = [
+      {
+        documentTitle: 'Secondary Supporting Document One Title',
+      },
+      {
+        documentTitle: 'Secondary Supporting Document Two Title',
       },
     ];
 
@@ -26,7 +49,9 @@ describe('ReceiptOfFiling', () => {
   });
 
   it('renders a document header with case information', () => {
-    const wrapper = mount(<ReceiptOfFiling options={options} />);
+    const wrapper = mount(
+      <ReceiptOfFiling document={document} options={options} />,
+    );
 
     expect(wrapper.find('#caption').text()).toContain(
       `${options.caseTitle}, ${options.caseCaptionExtension}`,
@@ -41,7 +66,12 @@ describe('ReceiptOfFiling', () => {
 
   it('displays who made the filing', () => {
     const wrapper = shallow(
-      <ReceiptOfFiling filedAt={filedAt} filedBy={filedBy} options={options} />,
+      <ReceiptOfFiling
+        document={document}
+        filedAt={filedAt}
+        filedBy={filedBy}
+        options={options}
+      />,
     );
 
     expect(wrapper.find('#receipt-filed-by').text()).toEqual(
@@ -52,10 +82,10 @@ describe('ReceiptOfFiling', () => {
     );
   });
 
-  it('displays a list of documents filed', () => {
-    const wrapper = shallow(
+  it('displays the document filed', () => {
+    const wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -64,21 +94,106 @@ describe('ReceiptOfFiling', () => {
 
     const documentEls = wrapper.find('.receipt-filed-document');
 
-    expect(wrapper.find('.card .card-header').text()).toEqual(
+    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
       'Documents Filed',
     );
-    expect(documentEls.length).toEqual(documents.length);
+    expect(documentEls.length).toEqual(1);
     expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
-      documents[0].documentTitle,
+      document.documentTitle,
+    );
+  });
+
+  it('displays the supporting documents filed if present', () => {
+    const wrapper = mount(
+      <ReceiptOfFiling
+        document={document}
+        filedAt={filedAt}
+        filedBy={filedBy}
+        options={options}
+        supportingDocuments={supportingDocuments}
+      />,
+    );
+
+    const documentEls = wrapper.find('.receipt-filed-document');
+
+    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
+      'Documents Filed',
+    );
+    expect(documentEls.length).toEqual(1 + supportingDocuments.length);
+    expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
+      document.documentTitle,
+    );
+    expect(documentEls.at(1).find('.receipt-document-title').text()).toEqual(
+      supportingDocuments[0].documentTitle,
+    );
+    expect(documentEls.at(2).find('.receipt-document-title').text()).toEqual(
+      supportingDocuments[1].documentTitle,
+    );
+  });
+
+  it('displays the secondary document filed if present', () => {
+    const wrapper = mount(
+      <ReceiptOfFiling
+        document={document}
+        filedAt={filedAt}
+        filedBy={filedBy}
+        options={options}
+        secondaryDocument={secondaryDocument}
+      />,
+    );
+
+    const documentEls = wrapper.find('.receipt-filed-document');
+
+    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
+      'Documents Filed',
+    );
+    expect(documentEls.length).toEqual(2);
+    expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
+      document.documentTitle,
+    );
+    expect(documentEls.at(1).find('.receipt-document-title').text()).toEqual(
+      secondaryDocument.documentTitle,
+    );
+  });
+
+  it('displays the secondary supporting documents filed if present', () => {
+    const wrapper = mount(
+      <ReceiptOfFiling
+        document={document}
+        filedAt={filedAt}
+        filedBy={filedBy}
+        options={options}
+        secondaryDocument={secondaryDocument}
+        secondarySupportingDocuments={secondarySupportingDocuments}
+      />,
+    );
+
+    const documentEls = wrapper.find('.receipt-filed-document');
+
+    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
+      'Documents Filed',
+    );
+    expect(documentEls.length).toEqual(2 + secondarySupportingDocuments.length);
+    expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
+      document.documentTitle,
+    );
+    expect(documentEls.at(1).find('.receipt-document-title').text()).toEqual(
+      secondaryDocument.documentTitle,
+    );
+    expect(documentEls.at(2).find('.receipt-document-title').text()).toEqual(
+      secondarySupportingDocuments[0].documentTitle,
+    );
+    expect(documentEls.at(3).find('.receipt-document-title').text()).toEqual(
+      secondarySupportingDocuments[1].documentTitle,
     );
   });
 
   it('displays the attachments label if the document has attachments', () => {
-    documents[0].attachments = true;
+    document.attachments = true;
 
-    const wrapper = shallow(
+    const wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -87,19 +202,19 @@ describe('ReceiptOfFiling', () => {
 
     wrapper.find('.receipt-filed-document').at(0);
 
-    expect(wrapper.find('h4.document-includes-header').text()).toEqual(
+    expect(wrapper.find('.document-includes-header').text()).toEqual(
       'Document Includes',
     );
     expect(wrapper.find('p.included').text()).toEqual('Attachment(s)');
   });
 
   it('displays the certificate of service date if the document has a certificate of service', () => {
-    documents[0].certificateOfService = true;
-    documents[0].certificateOfServiceDate = '02/02/20';
+    document.certificateOfService = true;
+    document.certificateOfServiceDate = '02/02/20';
 
-    const wrapper = shallow(
+    const wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -108,19 +223,19 @@ describe('ReceiptOfFiling', () => {
 
     wrapper.find('.receipt-filed-document').at(0);
 
-    expect(wrapper.find('h4.document-includes-header').text()).toEqual(
+    expect(wrapper.find('.document-includes-header').text()).toEqual(
       'Document Includes',
     );
     expect(wrapper.find('p.included').text()).toEqual(
-      `Certificate of Service ${documents[0].certificateOfServiceDate}`,
+      `Certificate of Service ${document.certificateOfServiceDate}`,
     );
   });
 
   it('displays objections for the document if present', () => {
     // No objections value set
-    let wrapper = shallow(
+    let wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -131,11 +246,11 @@ describe('ReceiptOfFiling', () => {
 
     expect(documentEl.find('.receipt-objections').length).toEqual(0);
 
-    documents[0].objections = 'Some';
+    document.objections = 'Some';
 
-    wrapper = shallow(
+    wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -150,11 +265,11 @@ describe('ReceiptOfFiling', () => {
   });
 
   it('displays the value of objections if it is either No or Unknown', () => {
-    documents[0].objections = 'No';
+    document.objections = 'No';
 
-    const wrapper = shallow(
+    const wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
@@ -164,18 +279,16 @@ describe('ReceiptOfFiling', () => {
     const documentEl = wrapper.find('.receipt-filed-document').at(0);
     const objectionsEl = documentEl.find('p.receipt-objections');
 
-    expect(objectionsEl.text()).toEqual(
-      `${documents[0].objections} Objections`,
-    );
+    expect(objectionsEl.text()).toEqual(`${document.objections} Objections`);
   });
 
   it('adds some vertical space above objections content if attachments or certificate of service are present', () => {
-    documents[0].attachments = true;
-    documents[0].objections = 'No';
+    document.attachments = true;
+    document.objections = 'No';
 
-    let wrapper = shallow(
+    let wrapper = mount(
       <ReceiptOfFiling
-        documents={documents}
+        document={document}
         filedAt={filedAt}
         filedBy={filedBy}
         options={options}
