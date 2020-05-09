@@ -43,17 +43,19 @@ export const StateDrivenFileInput = connect(
             const { name } = e.target;
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
               const file = e.target.files[0];
-              cloneFile(file).then(clonedFile => {
-                updateFormValueSequence({
-                  key: name,
-                  value: clonedFile,
-                });
-                updateFormValueSequence({
-                  key: `${name}Size`,
-                  value: clonedFile.size,
-                });
-                validationSequence();
-              });
+              cloneFile(file)
+                .then(clonedFile => {
+                  updateFormValueSequence({
+                    key: name,
+                    value: clonedFile,
+                  });
+                  updateFormValueSequence({
+                    key: `${name}Size`,
+                    value: clonedFile.size,
+                  });
+                  return validationSequence();
+                })
+                .catch(e => throw e);
             });
           }}
           onClick={e => {
