@@ -55,7 +55,9 @@ export const SignOrder = connect(
           };
           return page.render(renderContext);
         })
-        .catch(e => throw e);
+        .catch(() => {
+          /* no-op*/
+        });
     };
 
     const moveSig = (sig, x, y) => {
