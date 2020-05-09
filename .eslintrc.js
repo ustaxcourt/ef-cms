@@ -9,7 +9,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:jest/all',
+    'plugin:jest/recommended',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
@@ -42,8 +42,10 @@ module.exports = {
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 50 }], // module default is 20!
+    complexity: ['warn', { max: 40 }], // module default is 20!
     'import/named': 1,
+    'jest/no-identical-title': 'warn',
+    'jest/no-test-callback': 'warn',
     'jsdoc/check-param-names': 1,
     'jsdoc/check-types': 1,
     'jsdoc/newline-after-description': 1,
@@ -77,6 +79,7 @@ module.exports = {
     'no-irregular-whitespace': [2, { skipStrings: false }],
     'no-prototype-builtins': 0,
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-var': 'error',
     'no-warning-comments': [
       'error',
       { location: 'anywhere', terms: ['fixme', 'xxx'] },
