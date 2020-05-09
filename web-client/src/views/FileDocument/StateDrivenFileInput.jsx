@@ -55,7 +55,9 @@ export const StateDrivenFileInput = connect(
                   });
                   return validationSequence();
                 })
-                .catch(e => throw e);
+                .catch(() => {
+                  /* no-op */
+                });
             });
           }}
           onClick={e => {
