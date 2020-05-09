@@ -148,9 +148,6 @@
   },
   "lint-staged": {
     "*.{js,jsx}": [ "eslint" ],
-    "shared/*.test.js": [ "jest --config shared/jest.config.js" ],
-    "web-api/*.test.js": [ "jest --config web-api/jest.config.js" ],
-    "web-client/src/*.test.js": [ "jest --config web-client/jest.config.js" ],
     "*.{css,scss}": [ "stylelint" ],
     "swagger.json": ["swagger-cli validate"]
   },
