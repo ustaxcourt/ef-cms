@@ -37,6 +37,28 @@ describe('File a petition', function () {
   });
 });
 
+describe('before filing a petition', () => {
+  beforeEach(() => {
+    cy.login('petitioner', 'before-filing-a-petition');
+  });
+
+  it('should navigate to dashboard when cancel is clicked', () => {
+    cy.get('button#cancel').click();
+
+    cy.get('button.modal-button-confirm').click();
+
+    cy.url().should('not.include', 'before-filing-a-petition');
+  });
+
+  it('should navigate to dashboard when close is clicked', () => {
+    cy.get('button#cancel').click();
+
+    cy.get('button.text-no-underline').click();
+
+    cy.url().should('not.include', 'before-filing-a-petition');
+  });
+});
+
 describe('creation form', () => {
   before(() => {
     cy.login('petitioner', 'file-a-petition/step-1');
@@ -142,7 +164,7 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('submits forms and shows a success message', () => {
+  it('submits forms and shows a success message dialog', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
     cy.get('button#submit-case').scrollIntoView().click();
@@ -151,9 +173,9 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
-    cy.get('.usa-alert--success', { timeout: 300000 }).should(
+    cy.get('div.modal-success', { timeout: 300000 }).should(
       'contain',
-      'Petition filed',
+      'Your case has been successfully submitted.',
     );
   });
   it('case list table reflects newly-added record', () => {
