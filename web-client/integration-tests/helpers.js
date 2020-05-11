@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-export */
 import { CerebralTest } from 'cerebral/test';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
@@ -570,10 +571,10 @@ export const refreshElasticsearchIndex = async () => {
 };
 
 export const base64ToUInt8Array = b64 => {
-  var binaryStr = Buffer.from(b64, 'base64').toString('binary');
-  var len = binaryStr.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
+  const binaryStr = Buffer.from(b64, 'base64').toString('binary');
+  const len = binaryStr.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
     bytes[i] = binaryStr.charCodeAt(i);
   }
   return bytes;

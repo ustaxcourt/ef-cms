@@ -10,9 +10,9 @@ exports.getScannerInterface = () => {
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
 
   const getSources = () => {
-    var count = DWObject.SourceCount;
+    const count = DWObject.SourceCount;
     const sources = [];
-    for (var i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       sources.push(DWObject.GetSourceNameItems(i));
     }
     return sources;
@@ -138,16 +138,13 @@ exports.getScannerInterface = () => {
 
         return Promise.all(promises)
           .then(async blobs => {
-            const blobBuffers = [];
+            const blobBuffers = await Promise.all(
+              blobs.map(applicationContext.convertBlobToUInt8Array),
+            );
 
-            for (let blob of blobs) {
-              blobBuffers.push(
-                await applicationContext.convertBlobToUInt8Array(blob),
-              );
-            }
             response.scannedBuffer = blobBuffers;
             DWObject.RemoveAllImages();
-            resolve(response);
+            return resolve(response);
           })
           .catch(err => {
             response.error = err;
