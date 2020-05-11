@@ -76,7 +76,7 @@ export const CaseInfo = connect(
           </>
         )}
 
-        <FormGroup>
+        <FormGroup errorText={validationErrors.caseCaption}>
           <label className="usa-label" htmlFor="case-caption">
             Case caption
           </label>
