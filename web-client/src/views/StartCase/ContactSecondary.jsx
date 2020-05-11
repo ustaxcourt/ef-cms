@@ -95,6 +95,7 @@ export const ContactSecondary = connect(
               <label
                 className="usa-checkbox__label"
                 htmlFor="use-same-address-above"
+                id="use-same-address-above-label"
               >
                 Use same address &amp; phone number as above
               </label>

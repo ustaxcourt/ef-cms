@@ -107,7 +107,9 @@ export const ConfirmModal = connect(
         {(!noConfirm || !noCancel) && (
           <div className="margin-top-5">
             {!noConfirm && (
-              <Button onClick={runConfirmSequence}>{confirmLabel}</Button>
+              <Button id="confirm" onClick={runConfirmSequence}>
+                {confirmLabel}
+              </Button>
             )}
             {!noCancel && (
               <Button secondary onClick={runCancelSequence}>
