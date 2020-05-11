@@ -21,7 +21,7 @@ const DocumentRow = ({ document }) => {
           <>
             {hasAttachments && <p className="included">Attachment(s)</p>}
             {hasCertificateOfService && (
-              <p className="included ">
+              <p className="included">
                 Certificate of Service {document.certificateOfServiceDate}
               </p>
             )}
@@ -90,21 +90,14 @@ export const ReceiptOfFiling = ({
         </tbody>
 
         <tbody className="receipt-secondary-docs">
-          {hasSecondaryDocument && (
-            <div className="receipt-secondary-docs">
-              <DocumentRow document={secondaryDocument} />
-            </div>
-          )}
+          {hasSecondaryDocument && <DocumentRow document={secondaryDocument} />}
         </tbody>
 
         <tbody className="receipt-secondary-supporting-documents">
-          {hasSecondarySupportingDocuments && (
-            <div className="receipt-secondary-supporting-documents">
-              {secondarySupportingDocuments.map((document, idx) => {
-                return <DocumentRow document={document} key={idx} />;
-              })}
-            </div>
-          )}
+          {hasSecondarySupportingDocuments &&
+            secondarySupportingDocuments.map((document, idx) => {
+              return <DocumentRow document={document} key={idx} />;
+            })}
         </tbody>
       </table>
     </>

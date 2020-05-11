@@ -82,7 +82,7 @@ describe('ReceiptOfFiling', () => {
     );
   });
 
-  it('displays the document filed', () => {
+  it('displays a table with the documents that were filed', () => {
     const wrapper = mount(
       <ReceiptOfFiling
         document={document}
@@ -94,9 +94,13 @@ describe('ReceiptOfFiling', () => {
 
     const documentEls = wrapper.find('.receipt-filed-document');
 
-    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
+    expect(wrapper.find('table thead tr th').at(0).text()).toEqual(
       'Documents Filed',
     );
+    expect(wrapper.find('table thead tr th').at(1).text()).toEqual(
+      'Document Includes',
+    );
+
     expect(documentEls.length).toEqual(1);
     expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
       document.documentTitle,
@@ -116,9 +120,6 @@ describe('ReceiptOfFiling', () => {
 
     const documentEls = wrapper.find('.receipt-filed-document');
 
-    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
-      'Documents Filed',
-    );
     expect(documentEls.length).toEqual(1 + supportingDocuments.length);
     expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
       document.documentTitle,
@@ -144,9 +145,6 @@ describe('ReceiptOfFiling', () => {
 
     const documentEls = wrapper.find('.receipt-filed-document');
 
-    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
-      'Documents Filed',
-    );
     expect(documentEls.length).toEqual(2);
     expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
       document.documentTitle,
@@ -170,9 +168,6 @@ describe('ReceiptOfFiling', () => {
 
     const documentEls = wrapper.find('.receipt-filed-document');
 
-    expect(wrapper.find('.info-box .info-box-header').text()).toEqual(
-      'Documents Filed',
-    );
     expect(documentEls.length).toEqual(2 + secondarySupportingDocuments.length);
     expect(documentEls.at(0).find('.receipt-document-title').text()).toEqual(
       document.documentTitle,
@@ -201,10 +196,6 @@ describe('ReceiptOfFiling', () => {
     );
 
     wrapper.find('.receipt-filed-document').at(0);
-
-    expect(wrapper.find('.document-includes-header').text()).toEqual(
-      'Document Includes',
-    );
     expect(wrapper.find('p.included').text()).toEqual('Attachment(s)');
   });
 
@@ -223,9 +214,6 @@ describe('ReceiptOfFiling', () => {
 
     wrapper.find('.receipt-filed-document').at(0);
 
-    expect(wrapper.find('.document-includes-header').text()).toEqual(
-      'Document Includes',
-    );
     expect(wrapper.find('p.included').text()).toEqual(
       `Certificate of Service ${document.certificateOfServiceDate}`,
     );
