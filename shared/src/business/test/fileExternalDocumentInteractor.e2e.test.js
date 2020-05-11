@@ -396,7 +396,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
       ],
       filingType: 'Myself',
-      hasIrsNotice: false,
       initialCaption: 'Test Petitioner, Petitioner',
       initialDocketNumberSuffix: 'S',
       isPaper: false,
