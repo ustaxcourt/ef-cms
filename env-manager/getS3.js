@@ -1,7 +1,7 @@
-const { DynamoDB } = require('aws-sdk');
+const { S3 } = require('aws-sdk');
 
-exports.getDynamoDB = ({ environment }) => {
-  const dynamoDB = new DynamoDB({
+exports.getS3 = ({ environment }) => {
+  const s3 = new S3({
     accessKeyId: environment.accessKeyId,
     apiVersion: 'latest',
     credentials: environment.credentials,
@@ -9,5 +9,5 @@ exports.getDynamoDB = ({ environment }) => {
     secretAccessKey: environment.secretAccessKey,
   });
 
-  return dynamoDB;
+  return s3;
 };
