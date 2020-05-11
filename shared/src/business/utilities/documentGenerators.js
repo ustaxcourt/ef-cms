@@ -68,6 +68,52 @@ const docketRecord = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const noticeOfDocketChange = async ({ applicationContext, data }) => {
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketEntryIndex,
+    docketNumberWithSuffix,
+    filingParties,
+    filingsAndProceedings,
+  } = data;
+
+  const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
+    componentName: 'NoticeOfDocketChange',
+    data: {
+      docketEntryIndex,
+      filingParties,
+      filingsAndProceedings,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactStandingPretrialOrderTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Notice of Docket Change',
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      docketNumber: docketNumberWithSuffix,
+    });
+
+  return pdf;
+};
+
 const standingPretrialOrder = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -124,5 +170,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 module.exports = {
   changeOfAddress,
   docketRecord,
+  noticeOfDocketChange,
   standingPretrialOrder,
 };

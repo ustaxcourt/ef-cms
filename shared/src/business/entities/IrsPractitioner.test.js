@@ -20,14 +20,16 @@ describe('IrsPractitioner', () => {
       role: User.ROLES.irsPractitioner,
       userId: 'petitioner',
     });
+
     expect(user.isValid()).toBeTruthy();
     expect(user.entityName).toEqual('IrsPractitioner');
   });
 
   it('Creates an invalid', () => {
     const user = new IrsPractitioner({
-      role: User.ROLES.irsPractitioner,
+      role: User.ROLES.inactivePractitioner,
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 });

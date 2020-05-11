@@ -1,5 +1,5 @@
-const ChangeOfAddress = require('./ChangeOfAddress.jsx').default;
 const React = require('react');
+const { ChangeOfAddress } = require('./ChangeOfAddress.jsx');
 const { shallow } = require('enzyme');
 
 describe('ChangeOfAddress', () => {

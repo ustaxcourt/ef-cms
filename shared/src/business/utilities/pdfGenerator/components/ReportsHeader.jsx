@@ -1,6 +1,6 @@
 const React = require('react');
 
-const ReportsHeader = ({ subtitle, title }) => {
+export const ReportsHeader = ({ subtitle, title }) => {
   return (
     <>
       <div id="reports-header">
@@ -10,5 +10,3 @@ const ReportsHeader = ({ subtitle, title }) => {
     </>
   );
 };
-
-export default ReportsHeader;
