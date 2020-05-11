@@ -72,7 +72,6 @@ const goToDashboard = [
     petitioner: [
       getConsolidatedCasesByUserAction,
       setCasesAction,
-      navigateToDashboardAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
