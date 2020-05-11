@@ -138,14 +138,12 @@ export const DashboardPetitioner = connect(
                         <br />
                         <br />
                         <p>
-                          <strong>
-                            Can&apos;t afford to pay the filing fee?
-                          </strong>
-                          <Button link>
-                            <FontAwesomeIcon
-                              className={'fa-icon-blue'}
-                              icon={['fa', 'file-pdf']}
-                            />
+                          <strong>Can’t afford to pay the filing fee?</strong>
+                          <Button
+                            link
+                            icon={['fa', 'file-pdf']}
+                            iconColor="blue"
+                          >
                             Download Application For Waiver of Filing Fee
                           </Button>
                         </p>
