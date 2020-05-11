@@ -281,22 +281,4 @@ describe('ReceiptOfFiling', () => {
 
     expect(objectionsEl.text()).toEqual(`${document.objections} Objections`);
   });
-
-  it('adds some vertical space above objections content if attachments or certificate of service are present', () => {
-    document.attachments = true;
-    document.objections = 'No';
-
-    let wrapper = mount(
-      <ReceiptOfFiling
-        document={document}
-        filedAt={filedAt}
-        filedBy={filedBy}
-        options={options}
-      />,
-    );
-
-    const documentEl = wrapper.find('.receipt-filed-document').at(0);
-
-    expect(documentEl.find('.receipt-objections br').length).toEqual(1);
-  });
 });
