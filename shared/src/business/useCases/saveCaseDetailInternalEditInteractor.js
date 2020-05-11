@@ -44,6 +44,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     filingType: caseToUpdate.filingType,
     hasVerifiedIrsNotice: caseToUpdate.hasVerifiedIrsNotice,
     irsNoticeDate: caseToUpdate.irsNoticeDate,
+    mailingDate: caseToUpdate.mailingDate,
     noticeOfAttachments: caseToUpdate.noticeOfAttachments,
     orderForAmendedPetition: caseToUpdate.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:

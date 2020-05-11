@@ -60,6 +60,7 @@ function CaseInternal(rawCase) {
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -188,6 +189,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
+    useSameAsPrimary: Case.validationRules.useSameAsPrimary,
   })
   .or(
     'preferredTrialCity',

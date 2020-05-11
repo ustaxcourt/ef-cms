@@ -283,6 +283,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   if (applicationContext.getCurrentUser().userId === rawCase.userId) {
     this.userId = rawCase.userId;
@@ -689,6 +690,12 @@ Case.validationRules = {
     .pattern(/^[0-9]{1,2}:([0-5][0-9])$/)
     .optional()
     .description('Time of day when this case goes to trial.'),
+  useSameAsPrimary: joi
+    .boolean()
+    .optional()
+    .description(
+      'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
+    ),
   userId: joi
     .string()
     .max(50)
