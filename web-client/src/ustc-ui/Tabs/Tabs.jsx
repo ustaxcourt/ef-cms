@@ -64,7 +64,7 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
 
-    var liClass = classNames('ustc-ui-tabs', {
+    const liClass = classNames('ustc-ui-tabs', {
       active: isActiveTab,
       'grid-col': boxed,
     });

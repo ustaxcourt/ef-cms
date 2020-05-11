@@ -41,18 +41,23 @@ export const SignOrder = connect(
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
 
-      pdfObj.getPage(pageNumber).then(page => {
-        const scale = 1;
-        const viewport = page.getViewport({ scale });
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+      pdfObj
+        .getPage(pageNumber)
+        .then(page => {
+          const scale = 1;
+          const viewport = page.getViewport({ scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
 
-        var renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
-        page.render(renderContext);
-      });
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          return page.render(renderContext);
+        })
+        .catch(() => {
+          /* no-op*/
+        });
     };
 
     const moveSig = (sig, x, y) => {
