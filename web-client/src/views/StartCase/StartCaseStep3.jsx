@@ -356,6 +356,7 @@ export const StartCaseStep3 = connect(
           parentView="StartCase"
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
+          useSameAsPrimary={true}
           onBlur="validateStartCaseWizardSequence"
           onChange="updateFormValueSequence"
         />
