@@ -44,7 +44,6 @@ exports.MOCK_CASE = {
   ],
   documents: MOCK_DOCUMENTS,
   filingType: 'Myself',
-  hasIrsNotice: true,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: 'Petitioner',
   preferredTrialCity: 'Washington, District of Columbia',
@@ -97,7 +96,6 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   ],
   documents: MOCK_DOCUMENTS.slice(0, 3), // exclude proposed stipulated decision
   filingType: 'Myself',
-  hasIrsNotice: true,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: 'Petitioner',
   preferredTrialCity: 'Washington, District of Columbia',

@@ -42,7 +42,6 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     docketNumber: caseToUpdate.docketNumber,
     docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     filingType: caseToUpdate.filingType,
-    hasIrsNotice: caseToUpdate.hasIrsNotice,
     hasVerifiedIrsNotice: caseToUpdate.hasVerifiedIrsNotice,
     irsNoticeDate: caseToUpdate.irsNoticeDate,
     noticeOfAttachments: caseToUpdate.noticeOfAttachments,

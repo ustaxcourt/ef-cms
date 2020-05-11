@@ -27,6 +27,8 @@ function CaseInternal(rawCase) {
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice || false;
   this.mailingDate = rawCase.mailingDate;
   this.noticeOfAttachments = rawCase.noticeOfAttachments;
   this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
@@ -110,6 +112,8 @@ const paperRequirements = joi
     ),
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
+    hasVerifiedIrsNotice: joi.boolean().required(),
+    irsNoticeDate: Case.validationRules.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
     noticeOfAttachments: Case.validationRules.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
