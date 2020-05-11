@@ -28,7 +28,7 @@ export const OpinionSearchResults = connect(
               ({advancedOpinionSearchHelper.searchResultsCount}) Results
             </h1>
 
-            <table className="usa-table search-results responsive-table row-bOpinion-only">
+            <table className="usa-table search-results responsive-table row-border-only">
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
