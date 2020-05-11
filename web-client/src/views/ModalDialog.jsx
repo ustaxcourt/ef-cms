@@ -20,6 +20,7 @@ export const ModalDialog = ({
   preventCancelOnBlur,
   preventScrolling,
   title,
+  useRunConfirmSequence = false,
 }) => {
   preventCancelOnBlur = !!preventCancelOnBlur;
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
@@ -113,7 +114,11 @@ export const ModalDialog = ({
                   <Button
                     link
                     className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
-                    onClick={runCancelSequence}
+                    onClick={
+                      useRunConfirmSequence
+                        ? runConfirmSequence
+                        : runCancelSequence
+                    }
                   >
                     Close
                     <FontAwesomeIcon
