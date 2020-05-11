@@ -160,6 +160,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
+  hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
@@ -259,7 +260,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
@@ -477,8 +477,13 @@ Case.validationRules = {
       ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
     )
     .optional(),
-  hasIrsNotice: joi.boolean().optional(),
-  hasVerifiedIrsNotice: joi.boolean().optional().allow(null),
+  hasVerifiedIrsNotice: joi
+    .boolean()
+    .optional()
+    .allow(null)
+    .description(
+      'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+    ),
   highPriority: joi
     .boolean()
     .optional()
