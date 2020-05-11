@@ -14,11 +14,16 @@ export const BaseModal = connect(
   function BaseModal({
     children,
     className,
+    displaySuccessBanner = false,
     extraClassNames,
     onBlur,
     preventCancelOnBlur,
   }) {
     extraClassNames = extraClassNames || null;
+
+    const modalDialogClass = displaySuccessBanner
+      ? 'modal-success modal-dialog'
+      : 'modal-dialog';
 
     const elRef = React.useRef(null);
 
@@ -92,7 +97,8 @@ export const BaseModal = connect(
               aria-live="assertive"
               aria-modal="true"
               className={classNames(
-                'modal-dialog padding-205',
+                'padding-205',
+                modalDialogClass,
                 extraClassNames,
               )}
               role="status"

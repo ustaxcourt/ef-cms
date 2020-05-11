@@ -3,6 +3,7 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListPetitioner } from '../CaseListPetitioner';
 import { ErrorNotification } from '../ErrorNotification';
+import { FilePetitionSuccessModal } from '../StartCase/FilePetitionSuccessModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { WhatToExpect } from '../WhatToExpect';
@@ -12,8 +13,12 @@ import React from 'react';
 import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.pdf';
 
 export const DashboardPetitioner = connect(
-  { dashboardExternalHelper: state.dashboardExternalHelper, user: state.user },
-  function DashboardPetitioner({ dashboardExternalHelper, user }) {
+  {
+    dashboardExternalHelper: state.dashboardExternalHelper,
+    showModal: state.modal.showModal,
+    user: state.user,
+  },
+  function DashboardPetitioner({ dashboardExternalHelper, showModal, user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />
@@ -152,6 +157,10 @@ export const DashboardPetitioner = connect(
             </div>
           </div>
         </section>
+
+        {showModal === 'FilePetitionSuccessModal' && (
+          <FilePetitionSuccessModal />
+        )}
       </React.Fragment>
     );
   },
