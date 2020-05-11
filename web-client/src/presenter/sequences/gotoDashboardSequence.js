@@ -72,6 +72,7 @@ const goToDashboard = [
     petitioner: [
       getConsolidatedCasesByUserAction,
       setCasesAction,
+      navigateToDashboardAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
@@ -85,7 +86,7 @@ const goToDashboard = [
 export const gotoDashboardSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [goToDashboard, navigateToDashboardAction],
+    isLoggedIn: [goToDashboard],
     unauthorized: [redirectToCognitoAction],
   },
 ];
