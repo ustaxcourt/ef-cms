@@ -4,6 +4,7 @@ import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import {
+  advancedOpinionSearchHelper,
   advancedOrderSearchHelper,
   advancedSearchHelper,
 } from './computeds/advancedSearchHelper';
@@ -83,6 +84,7 @@ const helpers = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
+  advancedOpinionSearchHelper,
   advancedOrderSearchHelper,
   advancedSearchHelper,
   alertHelper,

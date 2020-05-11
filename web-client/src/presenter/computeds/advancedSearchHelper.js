@@ -120,6 +120,30 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
   };
 };
 
+export const advancedOpinionSearchHelper = (get, applicationContext) => {
+  let paginatedResults = {};
+  const searchResults = get(state.searchResults);
+  const isPublic = get(state.isPublic);
+
+  if (searchResults) {
+    paginatedResults = paginationHelper(
+      searchResults,
+      get(state.advancedSearchForm.currentPage),
+      applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+    );
+
+    paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
+      searchResult =>
+        formatOrderSearchResultRecord(searchResult, { applicationContext }),
+    );
+  }
+
+  return {
+    ...paginatedResults,
+    isPublic,
+  };
+};
+
 const paginationHelper = (searchResults, currentPage, pageSize) => {
   if (!searchResults) {
     return {};
