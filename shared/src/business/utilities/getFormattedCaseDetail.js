@@ -303,11 +303,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.datePetitionSentToIrsMessage = result.irsDateFormatted;
 
-  result.shouldShowIrsNoticeDate =
-    result.hasVerifiedIrsNotice ||
-    ((result.hasVerifiedIrsNotice === null ||
-      result.hasVerifiedIrsNotice === undefined) &&
-      result.hasIrsNotice);
+  result.shouldShowIrsNoticeDate = result.hasVerifiedIrsNotice;
 
   result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
