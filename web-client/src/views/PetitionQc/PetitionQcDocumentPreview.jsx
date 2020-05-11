@@ -18,7 +18,7 @@ export const PetitionQcDocumentPreview = connect(
       return (
         <>
           <div className="padding-top-4">
-            <PdfPreview />
+            <PdfPreview noDocumentText="No document added" />
           </div>
         </>
       );
