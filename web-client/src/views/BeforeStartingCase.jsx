@@ -252,7 +252,10 @@ export const BeforeStartingCase = connect(
           </Button>
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog
+            useRunConfirmSequence={true}
+            onCancelSequence="closeModalAndReturnToDashboardSequence"
+          />
         )}
       </>
     );
