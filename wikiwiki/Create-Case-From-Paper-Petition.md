@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Entering Paper petitions
 
 * Petition can also be sent in via paper, Petitions clerk enters the data sent by petitioner
