@@ -237,7 +237,6 @@ describe('Get case', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         caseType: 'Other',
         createdAt: new Date().toISOString(),
-        hasIrsNotice: false,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'Test Petitioner' }],
         preferredTrialCity: 'Washington, District of Columbia',
