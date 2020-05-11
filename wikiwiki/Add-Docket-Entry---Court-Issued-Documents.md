@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Add Docket Entry (Court-Issued Documents)
 **On click of "Add Docket Entry" button**
 
