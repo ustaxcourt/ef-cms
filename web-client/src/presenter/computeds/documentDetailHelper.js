@@ -36,7 +36,6 @@ export const documentDetailHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
-    STATUS_TYPES,
   } = applicationContext.getConstants();
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderType => orderType.documentType,
@@ -136,11 +135,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
-  const showCaseDetailsEdit = caseDetail.status === STATUS_TYPES.new;
-
-  const showDocumentInfoTab =
-    formattedDocument.isPetition && showCaseDetailsEdit;
-
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
@@ -157,10 +151,8 @@ export const documentDetailHelper = (get, applicationContext) => {
       return actions[workItemId] === action;
     },
     showAddCourtIssuedDocketEntryButton,
-    showCaseDetailsEdit,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
-    showDocumentInfoTab,
     showEditCourtIssuedDocketEntry:
       isNotServed &&
       !isDraftDocument &&
