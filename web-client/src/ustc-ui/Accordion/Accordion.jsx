@@ -103,9 +103,7 @@ export const Accordion = connect(
           </HeadingElement>
           {isActiveItem && (
             <div
-              className={
-                customClassName ? customClassName : 'usa-accordion__content'
-              }
+              className={customClassName || 'usa-accordion__heading'}
               id={itemContentId}
             >
               {children}

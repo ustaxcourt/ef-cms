@@ -80,11 +80,11 @@ export const ContactSecondary = connect(
           {useSameAsPrimary && (
             <FormGroup>
               <input
+                checked={data.useSameAsPrimary || false}
                 className="usa-checkbox__input"
                 id="use-same-address-above"
                 name="useSameAsPrimary"
                 type="checkbox"
-                value={true}
                 onChange={e => {
                   updateFormValueAndSecondaryContactInfoSequence({
                     key: e.target.name,
