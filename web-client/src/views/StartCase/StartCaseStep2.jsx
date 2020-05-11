@@ -56,8 +56,9 @@ export const StartCaseStep2 = connect(
             <div className="mobile-lg:grid-col-6">
               <FormGroup
                 className={classNames(
-                  validationErrors.petitionFile && 'usa-form-group--error',
-                  validationErrors.petitionFileSize && 'usa-form-group--error',
+                  (validationErrors.petitionFile ||
+                    validationErrors.petitionFileSize) &&
+                    'usa-form-group--error',
                 )}
               >
                 <label

@@ -79,9 +79,7 @@ export const Accordion = connect(
       return (
         <>
           <HeadingElement
-            className={
-              customClassName ? customClassName : 'usa-accordion__heading'
-            }
+            className={customClassName || 'usa-accordion__heading'}
           >
             <button
               aria-controls={itemContentId}

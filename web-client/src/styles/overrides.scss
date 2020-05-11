@@ -12,7 +12,7 @@ option:first-child {
 }
 
 .create-case-steps p {
-  max-width: unset;
+  max-width: 90%;
 }
 
 .usa-hint {
@@ -259,7 +259,6 @@ p {
 }
 
 .payment-options {
-  background-color: color($theme-color-base-lightest) !important;
   .usa-accordion__button {
     padding: 3px;
     font-family: inherit;
@@ -278,11 +277,8 @@ p {
 .usa-alert__text:only-child {
   padding-top: 0;
 }
+
 .usa-accordion {
-  font-family: Source Sans Pro Web, Source Sans Pro, Helvetica, Arial,
-    sans-serif;
-  font-feature-settings: 'kern' 1;
-  font-kerning: normal;
   font-size: 100%;
 }
 button,

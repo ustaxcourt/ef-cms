@@ -43,20 +43,20 @@ describe('before filing a petition', () => {
   });
 
   it('should navigate to dashboard when cancel is clicked', () => {
-    cy.get('button#cancel').should('exist');
+    cy.get('button#cancel');
     cy.get('button#cancel').click();
 
-    cy.get('button.modal-button-confirm').should('exist');
+    cy.get('button.modal-button-confirm');
     cy.get('button.modal-button-confirm').click();
 
     cy.url().should('not.include', 'before-filing-a-petition');
   });
 
   it('should navigate to dashboard when close is clicked', () => {
-    cy.get('button#cancel').should('exist');
+    cy.get('button#cancel');
     cy.get('button#cancel').click();
 
-    cy.get('button.text-no-underline').should('exist');
+    cy.get('button.text-no-underline');
     cy.get('button.text-no-underline').click();
 
     cy.url().should('not.include', 'before-filing-a-petition');

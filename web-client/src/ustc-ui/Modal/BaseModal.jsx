@@ -21,10 +21,6 @@ export const BaseModal = connect(
   }) {
     extraClassNames = extraClassNames || null;
 
-    const modalDialogClass = displaySuccessBanner
-      ? 'modal-success modal-dialog'
-      : 'modal-dialog';
-
     const elRef = React.useRef(null);
 
     const getEl = () => {
@@ -97,8 +93,8 @@ export const BaseModal = connect(
               aria-live="assertive"
               aria-modal="true"
               className={classNames(
-                'padding-205',
-                modalDialogClass,
+                'modal-dialog padding-205',
+                displaySuccessBanner && 'modal-success',
                 extraClassNames,
               )}
               role="status"
