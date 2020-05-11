@@ -33,16 +33,16 @@ export const getFormDocumentUrlForPreviewAction = ({
 
   const { caseId, documents } = get(state.form);
 
-  const document = get(documents).find(
+  const selectedDocument = get(documents).find(
     document => document.documentType === documentTypeSelectedForPreview,
   );
 
   let pdfUrl;
-  if (document) {
+  if (selectedDocument) {
     const baseUrl = get(state.baseUrl);
     const token = get(state.token);
 
-    pdfUrl = `${baseUrl}/case-documents/${caseId}/${document.documentId}/document-download-url?token=${token}`;
+    pdfUrl = `${baseUrl}/case-documents/${caseId}/${selectedDocument.documentId}/document-download-url?token=${token}`;
   }
 
   return { pdfUrl };
