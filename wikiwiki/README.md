@@ -1,6 +1,6 @@
 ### [Content Strategy & Style Guide](./Content-Strategy-&-Style-Guide.md)
 
-### [Glossary](./Glossary.md) 
+### [Glossary](./Glossary.md)
 
 ### [Testing Logins](./Testing-Logins.md)
 
@@ -10,9 +10,10 @@
 * [Site Access](./Site-Access.md)
 * [Messages](./Messages.md)
 * [Petitions](./Petitions.md)
-   * Create and QC paper case
+   * [Create Case from Paper Petition](./Create-Case-From-Paper-Petition.md)
+   * [Review and Serve Petition](./Review0and-Serve-Petition.md)
    * Electronic QC
-   * Sent to IRS
+
 * [Docket (General)](./Docket-(General).md)
    * [Docket Document QC Process](./Docket-Document-QC-Process.md)
    * [Edit Docket Entry](./Edit-Docket-Record.md)
@@ -33,9 +34,6 @@
 
 * [Case Detail](./Case-Detail.md)
   * [Docket Record](./Docket-Record.md)
-  * Case Notes
-  * Editing Case Caption and Case Status
-  * Assigned Judge
 
 * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)
