@@ -39,6 +39,7 @@ describe('validateStartCaseWizardInteractor', () => {
           postalCode: '12345',
           state: 'CA',
         },
+        hasIrsNotice: true,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
