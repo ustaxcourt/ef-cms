@@ -138,7 +138,6 @@
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": false,
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
     "orderToChangeDesignatedPlaceOfTrial": false,
