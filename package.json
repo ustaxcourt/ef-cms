@@ -62,6 +62,7 @@
     "http-aws-es": "^6.0.0",
     "http-proxy": "^1.18.0",
     "http-proxy-middleware": "^1.0.3",
+    "husky": "^4.2.5",
     "i": "^0.3.6",
     "imagemin": "^7.0.1",
     "imagemin-pngquant": "^8.0.0",
@@ -74,6 +75,7 @@
     "json2md": "^1.7.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3",
+    "lint-staged": "^10.2.2",
     "lodash": "^4.17.15",
     "madge": "^3.7.0",
     "moment": "2.24.0",
@@ -137,6 +139,16 @@
     "webpack": "^4.42.1",
     "websocket": "^1.0.31",
     "wicg-inert": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [ "eslint" ],
+    "*.{css,scss}": [ "stylelint" ],
+    "swagger.json": ["swagger-cli validate"]
   },
   "scripts": {
     "build:_api": "parcel build --no-minify --no-source-maps --bundle-node-modules --target node",
