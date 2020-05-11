@@ -276,6 +276,7 @@ import { submitExternalDocumentSequence } from './sequences/submitExternalDocume
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
@@ -663,6 +664,7 @@ export const presenter = {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
+    submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPetitionFromPaperSequence,
     submitPractitionerBarNumberSearchSequence,
