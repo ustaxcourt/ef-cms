@@ -300,21 +300,6 @@ describe('case detail edit computed', () => {
     expect(result.showRQTDocumentLink).toBeFalsy();
   });
 
-  it('sets showNoTrialLocationSelected true if isPaper is true and a request for place of trial document does not exist', () => {
-    const result = runCompute(caseDetailEditHelper, {
-      state: {
-        form: {
-          documents: [],
-          isPaper: true,
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-      },
-    });
-    expect(result.showNoTrialLocationSelected).toBeTruthy();
-    expect(result.showReadOnlyTrialLocation).toBeFalsy();
-    expect(result.showRQTDocumentLink).toBeFalsy();
-  });
-
   it('sets showRQTDocumentLink true if isPaper is true and a request for place of trial document exists', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
