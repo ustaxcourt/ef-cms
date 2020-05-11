@@ -36,7 +36,7 @@ export const BeforeStartingCase = connect(
             how to go about proceeding with filing your Petition.
           </p>
           <div
-            className="grid-container padding-x-0 margin-bottom-5"
+            className="grid-container padding-x-0 margin-bottom-5 create-case-steps"
             role="list"
           >
             <div className="grid-row grid-gap grid-col-10">
@@ -252,7 +252,10 @@ export const BeforeStartingCase = connect(
           </Button>
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog
+            useRunConfirmSequence={true}
+            onCancelSequence="closeModalAndReturnToDashboardSequence"
+          />
         )}
       </>
     );
