@@ -5,7 +5,7 @@ const {
 } = require('../components/CompressedDocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-const DocumentContent = ({ document }) => {
+const DocumentRow = ({ document }) => {
   const hasAttachments = !!document.attachments;
   const hasCertificateOfService = !!document.certificateOfService;
   const hasObjections = !!document.objections;
@@ -14,34 +14,24 @@ const DocumentContent = ({ document }) => {
     : 'Objections';
 
   return (
-    <div className="receipt-filed-document">
-      <h4 className="receipt-document-title">{document.documentTitle}</h4>
-      {(hasAttachments || hasCertificateOfService) && (
-        <>
-          <div className="document-includes-header margin-bottom-5">
-            <strong>Document Includes</strong>
-          </div>
-
-          {hasAttachments && (
-            <p className="included margin-top-0 margin-bottom-0">
-              Attachment(s)
-            </p>
-          )}
-          {hasCertificateOfService && (
-            <p className="included margin-top-0 margin-bottom-0">
-              Certificate of Service {document.certificateOfServiceDate}
-              {/* TODO: MMDDYY FORMAT */}
-            </p>
-          )}
-        </>
-      )}
-      {hasObjections && (
-        <p className="receipt-objections">
-          {(hasAttachments || hasCertificateOfService) && <br />}
-          {objectionsText}
-        </p>
-      )}
-    </div>
+    <tr className="receipt-filed-document">
+      <td className="receipt-document-title">{document.documentTitle}</td>
+      <td>
+        {(hasAttachments || hasCertificateOfService) && (
+          <>
+            {hasAttachments && <p className="included">Attachment(s)</p>}
+            {hasCertificateOfService && (
+              <p className="included ">
+                Certificate of Service {document.certificateOfServiceDate}
+              </p>
+            )}
+          </>
+        )}
+        {hasObjections && (
+          <p className="receipt-objections included">{objectionsText}</p>
+        )}
+      </td>
+    </tr>
   );
 };
 
@@ -82,37 +72,41 @@ export const ReceiptOfFiling = ({
         <div className="clear"></div>
       </div>
 
-      <div className="info-box">
-        <div className="info-box-header">Documents Filed</div>
-        <div className="info-box-content">
-          <DocumentContent document={document} />
+      <table className="margin-top-5">
+        <thead>
+          <tr>
+            <th>Documents Filed</th>
+            <th>Document Includes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <DocumentRow document={document} />
+        </tbody>
+        <tbody className="receipt-supporting-docs">
+          {hasSupportingDocuments &&
+            supportingDocuments.map((document, idx) => {
+              return <DocumentRow document={document} key={idx} />;
+            })}
+        </tbody>
 
-          {hasSupportingDocuments && (
-            <div className="receipt-supporting-docs">
-              <hr />
-
-              {supportingDocuments.map((document, idx) => {
-                return <DocumentContent document={document} key={idx} />;
-              })}
-            </div>
-          )}
-
+        <tbody className="receipt-secondary-docs">
           {hasSecondaryDocument && (
             <div className="receipt-secondary-docs">
-              <hr />
-              <DocumentContent document={secondaryDocument} />
+              <DocumentRow document={secondaryDocument} />
             </div>
           )}
+        </tbody>
 
+        <tbody className="receipt-secondary-supporting-documents">
           {hasSecondarySupportingDocuments && (
             <div className="receipt-secondary-supporting-documents">
               {secondarySupportingDocuments.map((document, idx) => {
-                return <DocumentContent document={document} key={idx} />;
+                return <DocumentRow document={document} key={idx} />;
               })}
             </div>
           )}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </>
   );
 };

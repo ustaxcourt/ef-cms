@@ -6,14 +6,14 @@ body {
 
 h1 {
   padding-top: 10px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   font-size: 14px;
   text-align: center;
   font-family: serif;
 }
 
 h2 {
-  margin-top: 0px;
+  margin-top: 0;
   font-size: 20px;
   font-weight: normal;
   text-align: center;
@@ -47,9 +47,9 @@ p {
 table {
   width: 100%;
   border: 1px solid #ccc;
-  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-horizontal-spacing: 0;
   border-spacing: 0;
-  -webkit-border-vertical-spacing: 0px;
+  -webkit-border-vertical-spacing: 0;
   font-family: 'nimbus_sans_l', sans-serif;
   font-size: 12px;
 }
@@ -80,6 +80,10 @@ th {
 
 .margin-top-80 {
   margin-top: 80px;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
 }
 
 .margin-bottom-5 {
@@ -157,7 +161,7 @@ th {
   margin-top: 50px;
 
   &.condensed {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 
@@ -338,6 +342,14 @@ th {
 
   .docket-record-table {
     margin-top: 30px;
+  }
+}
+
+.included {
+  margin: 2px 0;
+
+  &:first-child {
+    margin-top: 0;
   }
 }
 
