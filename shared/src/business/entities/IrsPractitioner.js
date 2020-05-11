@@ -3,13 +3,12 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  ROLES,
+  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
-const { User } = require('./User');
 
 /**
  * constructor
@@ -20,7 +19,6 @@ const { User } = require('./User');
 function IrsPractitioner(rawUser) {
   userDecorator(this, rawUser);
   this.entityName = 'IrsPractitioner';
-  this.role = User.ROLES.irsPractitioner;
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }

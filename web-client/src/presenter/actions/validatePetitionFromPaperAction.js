@@ -16,11 +16,7 @@ export const validatePetitionFromPaperAction = ({
   path,
   props,
 }) => {
-  const {
-    computedDateReceived: receivedAt,
-    petitionPaymentDate,
-    petitionPaymentWaivedDate,
-  } = props;
+  const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
 
   const form = get(state.form);
 

@@ -1,13 +1,29 @@
+// re-format this file with `npx eslint --ignore-pattern '!.eslintrc.js' .eslintrc.js --fix`
 module.exports = {
+  env: {
+    browser: true,
+    'cypress/globals': true,
+    es6: true,
+    'jest/globals': true,
+    node: true,
+  },
   extends: [
     'eslint:recommended',
+    'plugin:jest/recommended',
     'plugin:prettier/recommended',
+    'plugin:promise/recommended',
     'plugin:react/recommended',
     'plugin:security/recommended',
     'prettier/react',
     'prettier/standard',
     'plugin:import/errors',
   ],
+  parser: 'babel-eslint',
+  parserOptions: {
+    ecmaVersion: 9,
+    jsx: true,
+    sourceType: 'module',
+  },
   plugins: [
     'cypress',
     'eslint-plugin-sort-imports-es6-autofix',
@@ -16,6 +32,7 @@ module.exports = {
     'jsdoc',
     'jsx-a11y',
     'prettier',
+    'promise',
     'react',
     'security',
     'sort-destructure-keys',
@@ -24,44 +41,25 @@ module.exports = {
     'spellcheck',
   ],
   rules: {
-    'import/named': 1,
-    'no-prototype-builtins': 0,
-    'react/prop-types': 0,
-    'require-atomic-updates': 0,
-    'security/detect-child-process': 0,
-    'security/detect-non-literal-fs-filename': 0,
-    'security/detect-object-injection': 0,
-    'react/jsx-sort-props': [
-      'error',
-      {
-        callbacksLast: true,
-        shorthandFirst: true,
-        shorthandLast: false,
-        ignoreCase: false,
-        noSortAlphabetically: false,
-      },
-    ],
     'arrow-parens': ['error', 'as-needed'],
+    complexity: ['warn', { max: 40 }], // module default is 20!
+    'import/named': 1,
+    'jest/no-identical-title': 'warn',
+    'jest/no-test-callback': 'warn',
+    'jest/no-export': 0,
     'jsdoc/check-param-names': 1,
     'jsdoc/check-types': 1,
     'jsdoc/newline-after-description': 1,
     'jsdoc/require-jsdoc': 1,
+    'jsdoc/require-param': 1,
     'jsdoc/require-param-description': 1,
     'jsdoc/require-param-name': 1,
     'jsdoc/require-param-type': 1,
-    'jsdoc/require-param': 1,
+    'jsdoc/require-returns': 1,
     'jsdoc/require-returns-check': 1,
     'jsdoc/require-returns-description': 1,
     'jsdoc/require-returns-type': 1,
-    'jsdoc/require-returns': 1,
     'jsdoc/valid-types': 1,
-    'no-underscore-dangle': ['error', { allowAfterThis: true }],
-    'no-warning-comments': [
-      'error',
-      { terms: ['fixme', 'xxx'], location: 'anywhere' },
-    ],
-    'prettier/prettier': 'error',
-    quotes: ['error', 'single', { avoidEscape: true }],
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
@@ -72,14 +70,70 @@ module.exports = {
     'jsx-a11y/label-has-for': [
       2,
       {
+        allowChildren: false,
         components: ['Label'],
         required: {
           every: ['id'],
         },
-        allowChildren: false,
       },
     ],
     'no-irregular-whitespace': [2, { skipStrings: false }],
+    'no-prototype-builtins': 0,
+    'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-var': 'error',
+    'no-warning-comments': [
+      'error',
+      { location: 'anywhere', terms: ['fixme', 'xxx'] },
+    ],
+    'prefer-destructuring': [
+      'error',
+      {
+        AssignmentExpression: {
+          array: false,
+          object: true,
+        },
+        VariableDeclarator: {
+          array: false,
+          object: true,
+        },
+      },
+      {
+        enforceForRenamedProperties: false,
+      },
+    ],
+    'prettier/prettier': 'error',
+    'promise/always-return': 'warn',
+    'promise/avoid-new': 'off',
+    'promise/catch-or-return': 'warn',
+    'promise/no-callback-in-promise': 'warn',
+    'promise/no-native': 'off',
+    'promise/no-nesting': 'warn',
+    'promise/no-new-statics': 'error',
+    'promise/no-promise-in-callback': 'warn',
+    'promise/no-return-in-finally': 'warn',
+    'promise/no-return-wrap': 'error',
+    'promise/param-names': 'error',
+    'promise/valid-params': 'warn',
+    quotes: ['error', 'single', { avoidEscape: true }],
+    'react/jsx-sort-props': [
+      'error',
+      {
+        callbacksLast: true,
+        ignoreCase: false,
+        noSortAlphabetically: false,
+        shorthandFirst: true,
+        shorthandLast: false,
+      },
+    ],
+    'react/prop-types': 0,
+    'require-atomic-updates': 0,
+    'security/detect-child-process': 0,
+    'security/detect-non-literal-fs-filename': 0,
+    'security/detect-object-injection': 0,
+    'sort-destructure-keys/sort-destructure-keys': [
+      2,
+      { caseSensitive: false },
+    ],
     'sort-imports-es6-autofix/sort-imports-es6': [
       2,
       {
@@ -93,35 +147,15 @@ module.exports = {
       'asc',
       { caseSensitive: true, natural: true },
     ],
-    'sort-destructure-keys/sort-destructure-keys': [
-      2,
-      { caseSensitive: false },
-    ],
-    'prefer-destructuring': [
-      'error',
-      {
-        VariableDeclarator: {
-          array: false,
-          object: true,
-        },
-        AssignmentExpression: {
-          array: false,
-          object: true,
-        },
-      },
-      {
-        enforceForRenamedProperties: false,
-      },
-    ],
     'sort-requires/sort-requires': 2,
     'spellcheck/spell-checker': [
       1,
       {
         comments: true,
-        strings: false,
         identifiers: false,
-        templates: false,
         lang: 'en_US',
+        minLength: 4,
+        skipIfMatch: ['^https?://[^\\s]*$', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
           'args',
@@ -304,32 +338,19 @@ module.exports = {
           'workitems',
           'xpos',
         ],
-        skipIfMatch: ['^https?://[^\\s]*$', '^[^\\s]{35,}$'],
-        minLength: 4,
+        strings: false,
+        templates: false,
       },
     ],
   },
   settings: {
-    react: {
-      version: '16.12.0',
-    },
     'import/resolver': {
       node: {
         extensions: ['.js', '.jsx'],
       },
     },
+    react: {
+      version: '16.12.0',
+    },
   },
-  env: {
-    'cypress/globals': true,
-    'jest/globals': true,
-    browser: true,
-    es6: true,
-    node: true,
-  },
-  parserOptions: {
-    ecmaVersion: 9,
-    jsx: true,
-    sourceType: 'module',
-  },
-  parser: 'babel-eslint',
 };

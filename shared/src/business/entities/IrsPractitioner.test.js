@@ -20,7 +20,7 @@ describe('IrsPractitioner', () => {
       role: User.ROLES.irsPractitioner,
       userId: 'petitioner',
     });
-    console.log(user.getFormattedValidationErrors());
+
     expect(user.isValid()).toBeTruthy();
     expect(user.entityName).toEqual('IrsPractitioner');
   });
@@ -29,6 +29,7 @@ describe('IrsPractitioner', () => {
     const user = new IrsPractitioner({
       role: User.ROLES.inactivePractitioner,
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 });

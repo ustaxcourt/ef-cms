@@ -30,7 +30,6 @@ exports.generateStandingPretrialOrderInteractor = async ({
     });
 
   const { startDate } = trialSession;
-  const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   const fullStartDate = formatDateString(startDate, 'dddd, MMMM D, YYYY');
@@ -43,7 +42,9 @@ exports.generateStandingPretrialOrderInteractor = async ({
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix,
+        docketNumberWithSuffix: `${caseDetail.docketNumber}${
+          caseDetail.docketNumberSuffix || ''
+        }`,
         footerDate,
         trialInfo: {
           ...trialSession,

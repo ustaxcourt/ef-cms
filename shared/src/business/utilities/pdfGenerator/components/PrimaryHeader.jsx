@@ -1,6 +1,6 @@
 const React = require('react');
 
-const PrimaryHeader = ({ h2 }) => {
+export const PrimaryHeader = ({ h2 }) => {
   return (
     <>
       <div className="court-header">
@@ -13,5 +13,3 @@ const PrimaryHeader = ({ h2 }) => {
     </>
   );
 };
-
-export default PrimaryHeader;

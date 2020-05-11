@@ -85,7 +85,6 @@ describe('formattedCaseDetail', () => {
           filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -119,7 +118,6 @@ describe('formattedCaseDetail', () => {
           status: 'served',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -258,7 +256,6 @@ describe('formattedCaseDetail', () => {
           scenario: 'Nonstandard C',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner' }],
@@ -506,7 +503,7 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editLink: '',
+        editLink: '/review',
         showDocumentEditLink: true,
       },
       {
@@ -583,7 +580,6 @@ describe('formattedCaseDetail', () => {
             status: 'served',
           },
         ],
-        hasIrsNotice: false,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };
@@ -982,7 +978,6 @@ describe('formattedCaseDetail', () => {
             documentType: 'Stipulated Decision',
           },
         ],
-        hasIrsNotice: false,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };

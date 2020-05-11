@@ -41,6 +41,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
+import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPaperService } from './PrintPaperService';
@@ -108,6 +109,7 @@ const pages = {
   LogIn,
   Messages,
   PendingReport,
+  PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
   PrintPaperService,

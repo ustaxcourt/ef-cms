@@ -20,6 +20,7 @@ describe('PrivatePractitioner', () => {
       role: User.ROLES.privatePractitioner,
       userId: 'petitioner',
     });
+
     expect(user.isValid()).toBeTruthy();
     expect(user.entityName).toEqual('PrivatePractitioner');
   });

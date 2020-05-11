@@ -17,6 +17,7 @@ export const ConfirmModal = connect(
     children,
     className,
     confirmLabel,
+    displaySuccessBanner,
     hasErrorState,
     headerIcon,
     headerIconClassName,
@@ -65,6 +66,7 @@ export const ConfirmModal = connect(
     return (
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
+        displaySuccessBanner={displaySuccessBanner}
         preventCancelOnBlur={preventCancelOnBlur}
         onBlurSequence={onCancelSequence}
       >
