@@ -20,7 +20,7 @@
    * [Add Docket Entry - Externally Filed Documents](./Add-Docket-Entry---Externally-Filed-Documents.md)
 * [Court Issued Documents](./Court-Issued-Documents.md)
    * [Creating, Signing, and Saving Orders and Notices](./Creating,-Signing,-and-Saving-Orders-and-Notices.md)   
-   * [Upload PDF (Court-Issued Document)](./Upload-PDF-(Court-Issued-Document.md)
+   * [Upload PDF - Court-Issued Document](Upload-PDF-Court-Issued-Document.md)
    * [Add Docket Entry - Court-Issued Documents](./Add-Docket-Entry---Court-Issued-Documents.md)
 * [System-generated Notices](./System-Generated-Notices.md)
 * [Service](./Service.md)
