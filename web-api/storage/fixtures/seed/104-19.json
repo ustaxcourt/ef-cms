@@ -28,7 +28,6 @@
     "filingType": "A business",
     "orderForOds": true,
     "orderForRatification": true,
-    "hasIrsNotice": false,
     "petitioners": [
       {
         "role": "petitioner",
