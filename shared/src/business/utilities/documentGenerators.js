@@ -114,6 +114,67 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const receiptOfFiling = async ({ applicationContext, data }) => {
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    document,
+    filedAt,
+    filedBy,
+    secondaryDocument,
+    secondarySupportingDocuments,
+    supportingDocuments,
+  } = data;
+
+  const reactReceiptOfFilingTemplate = reactTemplateGenerator({
+    componentName: 'ReceiptOfFiling',
+    data: {
+      document,
+      filedAt,
+      filedBy,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      secondaryDocument,
+      secondarySupportingDocuments,
+      supportingDocuments,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactReceiptOfFilingTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Standing Pre-trial Order',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: docketNumberWithSuffix,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const standingPretrialOrder = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -171,5 +232,6 @@ module.exports = {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  receiptOfFiling,
   standingPretrialOrder,
 };
