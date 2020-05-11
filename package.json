@@ -157,7 +157,6 @@
       "swagger-cli validate"
     ]
   },
-
   "scripts": {
     "build:_api": "parcel build --no-minify --no-source-maps --bundle-node-modules --target node",
     "build:all": "npm run clean && npm run build:assets && npm run build:_api -- web-api/src/*Handlers.js && mkdir -p web-api/dist && cp web-api/src/*Handlers.js web-api/dist/ && npm run build:client",

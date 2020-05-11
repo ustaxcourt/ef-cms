@@ -46,6 +46,7 @@ module.exports = {
     'import/named': 1,
     'jest/no-identical-title': 'warn',
     'jest/no-test-callback': 'warn',
+    'jest/no-export': 0,
     'jsdoc/check-param-names': 1,
     'jsdoc/check-types': 1,
     'jsdoc/newline-after-description': 1,
