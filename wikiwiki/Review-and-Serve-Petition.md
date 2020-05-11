@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Review and Serve Petition
 * Edits can be made to Petition metadata anytime before it is served
 
