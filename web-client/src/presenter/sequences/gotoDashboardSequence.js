@@ -7,7 +7,6 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
