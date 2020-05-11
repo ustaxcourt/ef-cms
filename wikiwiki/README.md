@@ -1,6 +1,6 @@
 ### [Content Strategy & Style Guide](./Content-Strategy-&-Style-Guide.md)
 
-### [Glossary](./Glossary.md) 
+### [Glossary](./Glossary.md)
 
 ### [Testing Logins](./Testing-Logins.md)
 
@@ -10,16 +10,17 @@
 * [Site Access](./Site-Access.md)
 * [Messages](./Messages.md)
 * [Petitions](./Petitions.md)
-   * Create and QC paper case
+   * [Create Case from Paper Petition](./Create-Case-From-Paper-Petition.md)
+   * [Review and Serve Petition](./Review-and-Serve-Petition.md)
    * Electronic QC
-   * Sent to IRS
+
 * [Docket (General)](./Docket-(General).md)
    * [Docket Document QC Process](./Docket-Document-QC-Process.md)
    * [Edit Docket Entry](./Edit-Docket-Record.md)
    * [Add Docket Entry - Externally Filed Documents](./Add-Docket-Entry---Externally-Filed-Documents.md)
 * [Court Issued Documents](./Court-Issued-Documents.md)
    * [Creating, Signing, and Saving Orders and Notices](./Creating,-Signing,-and-Saving-Orders-and-Notices.md)   
-   * [Upload PDF (Court-Issued Document)](./Upload-PDF-(Court-Issued-Document).md)
+   * [Upload PDF - Court-Issued Document](Upload-PDF-Court-Issued-Document.md)
    * [Add Docket Entry - Court-Issued Documents](./Add-Docket-Entry---Court-Issued-Documents.md)
 * [System-generated Notices](./System-Generated-Notices.md)
 * [Service](./Service.md)
@@ -33,9 +34,6 @@
 
 * [Case Detail](./Case-Detail.md)
   * [Docket Record](./Docket-Record.md)
-  * Case Notes
-  * Editing Case Caption and Case Status
-  * Assigned Judge
 
 * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)

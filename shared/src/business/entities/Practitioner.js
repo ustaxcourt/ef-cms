@@ -85,7 +85,7 @@ const VALIDATION_ERROR_MESSAGES = {
   practitionerType: 'Select a practitioner type',
 };
 
-const validationRules = {
+const practitionerValidation = {
   ...userValidation,
   additionalPhone: joi
     .string()
@@ -159,19 +159,22 @@ const validationRules = {
   role: joi.alternatives().conditional('admissionsStatus', {
     is: joi.valid('Active'),
     otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
-    then: joi.string().valid(omit(User.ROLES, User.ROLES.inactivePractitioner)),
+    then: joi
+      .string()
+      .valid(...[User.ROLES.irsPractitioner, User.ROLES.privatePractitioner])
+      .required(),
   }),
   suffix: joi
     .string()
     .optional()
-    .allow(null)
+    .allow('')
     .description('The name suffix of the practitioner.'),
 };
 
 joiValidationDecorator(
   Practitioner,
   joi.object().keys({
-    ...validationRules,
+    ...practitionerValidation,
   }),
   VALIDATION_ERROR_MESSAGES,
 );
@@ -180,7 +183,7 @@ Practitioner.validationName = 'Practitioner';
 
 Practitioner.PRACTITIONER_TYPE_OPTIONS = PRACTITIONER_TYPE_OPTIONS;
 Practitioner.EMPLOYER_OPTIONS = EMPLOYER_OPTIONS;
-Practitioner.validationRules = validationRules;
+Practitioner.validationRules = practitionerValidation;
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
 Practitioner.ADMISSIONS_STATUS_OPTIONS = ADMISSIONS_STATUS_OPTIONS;
 
@@ -200,4 +203,6 @@ Practitioner.getFullName = function (practitionerData) {
   return `${firstName}${middleName} ${lastName}${suffix}`;
 };
 
-module.exports = { Practitioner };
+module.exports = {
+  Practitioner,
+};

@@ -1,12 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.workQueue based on the props.workItems passed in.
+ * returns the yes path with file prop for the current document selected for scan, or the no path, otherwise
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext used for the getUniqueId method
- * @param {object} providers.store the cerebral store used for setting state.workQueue
- * @param {object} providers.props the cerebral props object used for getting the props.workItems
+ * @param {object} providers.get the cerebral get method
+ * @param {object} providers.path the next object in the path
  * @returns {undefined}
  */
 export const shouldShowPreviewAction = ({ get, path }) => {

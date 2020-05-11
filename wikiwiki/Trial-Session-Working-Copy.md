@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Judge's Working Copy
 * Judge's assigned to an Open trial session have a Working Copy of the trial session list of cases, which includes all cases added to the trial session
 * Judge's Working Copy is visible only to the assigned judge and their chambers

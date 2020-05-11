@@ -747,9 +747,8 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('alertSuccess')).toEqual({
-      message:
-        'Petition filed. Your receipt will be available once your petition is processed.',
-    });
+    expect(test.getState('modal.showModal')).toEqual(
+      'FilePetitionSuccessModal',
+    );
   });
 };
