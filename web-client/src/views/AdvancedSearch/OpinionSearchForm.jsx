@@ -2,19 +2,16 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpinionSearchByKeyword } from './OpinionSearchByKeyword';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const OpinionSearchForm = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-
-    validationErrors: state.validationErrors,
   },
   function OpinionSearchForm({
     clearAdvancedSearchFormSequence,
     submitAdvancedSearchSequence,
-    validationErrors,
   }) {
     return (
       <>
@@ -30,7 +27,7 @@ export const OpinionSearchForm = connect(
             }}
           >
             <div className="grid-col" id="order-basic">
-              <OpinionSearchByKeyword validationErrors={validationErrors} />
+              <OpinionSearchByKeyword />
 
               <NonMobile>
                 <div className="grid-row margin-top-1">

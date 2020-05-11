@@ -6,14 +6,14 @@ import React from 'react';
 export const OpinionSearchByKeyword = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    updateAdvancedOpinionSearchFormValueSequence:
-      sequences.updateAdvancedOpinionSearchFormValueSequence,
+    updateAdvancedSearchFormValueSequence:
+      sequences.updateAdvancedSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
+    validationErrors: state.validationErrors,
   },
   function OpinionSearchByKeyword({
     advancedSearchForm,
-    updateAdvancedOpinionSearchFormValueSequence,
-    validateOpinionSearchSequence,
+    updateAdvancedSearchFormValueSequence,
     validationErrors,
   }) {
     return (
@@ -31,9 +31,10 @@ export const OpinionSearchByKeyword = connect(
                 name="opinionKeyword"
                 type="text"
                 value={advancedSearchForm.opinionSearch.opinionKeyword || ''}
-                onBlur={() => validateOpinionSearchSequence()}
+                onBlur={() => console.log('validateOpinionSearchSequence()')}
                 onChange={e => {
-                  updateAdvancedOpinionSearchFormValueSequence({
+                  updateAdvancedSearchFormValueSequence({
+                    formType: 'opinionSearch',
                     key: e.target.name,
                     value: e.target.value,
                   });
