@@ -16,7 +16,7 @@ describe('setDefaultFormDocumentForPreviewAction', () => {
     );
   });
 
-  it('does change value for the screen meta documentSelectedForPreview key if it is already set', async () => {
+  it('does not change value for the screen meta documentSelectedForPreview key if it is already set', async () => {
     const { state } = await runAction(setDefaultFormDocumentForPreviewAction, {
       state: {
         currentViewMetadata: {
