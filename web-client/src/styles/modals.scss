@@ -76,6 +76,15 @@
   }
 }
 
+.modal-success {
+  border-top: 10px solid $color-green;
+
+  .success-icon {
+    margin-right: 5px;
+    color: $color-green;
+  }
+}
+
 .app-timeout-modal {
   > .modal-header,
   .usa-button--outline {

@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { decorateWithPostCallback } from '../utils/useCerebralState';
+import {
+  decorateWithPostCallback,
+  useCerebralStateFactory,
+} from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-import { useCerebralStateFactory } from '../utils/useCerebralState';
+
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -53,6 +56,7 @@ export const Accordion = connect(
     const renderTab = (child, index) => {
       const {
         children,
+        customClassName,
         displayIcon = false,
         iconClassName,
         iconSize,
@@ -77,7 +81,9 @@ export const Accordion = connect(
 
       return (
         <>
-          <HeadingElement className="usa-accordion__heading">
+          <HeadingElement
+            className={customClassName || 'usa-accordion__heading'}
+          >
             <button
               aria-controls={itemContentId}
               aria-expanded={expandedText}
@@ -99,7 +105,10 @@ export const Accordion = connect(
             </button>
           </HeadingElement>
           {isActiveItem && (
-            <div className="usa-accordion__content" id={itemContentId}>
+            <div
+              className={customClassName || 'usa-accordion__heading'}
+              id={itemContentId}
+            >
               {children}
             </div>
           )}

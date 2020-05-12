@@ -33,7 +33,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
   return result;
 };
 
-export const formatOrderSearchResultRecord = (
+export const formatDocumentSearchResultRecord = (
   result,
   { applicationContext },
 ) => {
@@ -110,7 +110,31 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatOrderSearchResultRecord(searchResult, { applicationContext }),
+        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
+    );
+  }
+
+  return {
+    ...paginatedResults,
+    isPublic,
+  };
+};
+
+export const advancedOpinionSearchHelper = (get, applicationContext) => {
+  let paginatedResults = {};
+  const searchResults = get(state.searchResults);
+  const isPublic = get(state.isPublic);
+
+  if (searchResults) {
+    paginatedResults = paginationHelper(
+      searchResults,
+      get(state.advancedSearchForm.currentPage),
+      applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+    );
+
+    paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
+      searchResult =>
+        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
     );
   }
 
