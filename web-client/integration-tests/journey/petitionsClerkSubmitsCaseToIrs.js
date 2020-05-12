@@ -1,5 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -9,13 +8,8 @@ export default test => {
       docketNumber: test.docketNumber,
     });
 
-    const petitionDocument = getPetitionDocumentForCase(
-      test.getState('caseDetail'),
-    );
-
-    await test.runSequence('gotoDocumentDetailSequence', {
+    await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      documentId: petitionDocument.documentId,
     });
 
     await test.runSequence('updateFormValueSequence', {
