@@ -114,16 +114,11 @@ export const DashboardPetitioner = connect(
                       <br />
                       <Button
                         className="margin-bottom-3 margin-top-2"
+                        href="https://pay.gov"
                         id="pay_filing_fee"
+                        target="_blank"
                       >
-                        <a
-                          className="usa-link"
-                          href="https://pay.gov"
-                          rel="noopener noreferrer"
-                          target="_blank"
-                        >
-                          Pay now
-                        </a>
+                        Pay now
                       </Button>
                     </p>
                     <hr />
