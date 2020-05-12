@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
+import { OpinionSearchForm } from './OpinionSearchForm';
 import { OrderSearchForm } from './OrderSearchForm';
 import { OrderSearchResults } from './OrderSearchResults';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
@@ -70,6 +71,14 @@ export const AdvancedSearch = connect(
             <Tab id="tab-order" tabName="order" title="Order">
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
+              />
+              <OrderSearchResults />
+            </Tab>
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+              <OpinionSearchForm
+                submitAdvancedSearchSequence={() =>
+                  console.log('submitOpinionAdvancedSearchSequence')
+                }
               />
               <OrderSearchResults />
             </Tab>

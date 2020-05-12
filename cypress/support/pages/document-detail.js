@@ -10,10 +10,6 @@ exports.getInProgressTab = () => {
   return cy.get('button#tab-messages-in-progress');
 };
 
-exports.getCaseInfoTab = () => {
-  return cy.get('button#tab-case-info');
-};
-
 exports.getCreateMessageButton = () => {
   return cy.get('button#create-message-button');
 };
@@ -40,20 +36,4 @@ exports.getCardContaining = text => {
 
 exports.getModal = () => {
   return cy.get('.modal-dialog');
-};
-
-exports.getCaseTitleTextArea = () => {
-  return cy.get('textarea#case-caption');
-};
-
-exports.getCaseTitleContaining = text => {
-  return cy.contains('p#case-title', text);
-};
-
-exports.getReviewPetitionButton = () => {
-  return cy.contains('button', 'Review Petition');
-};
-
-exports.getSaveForLaterButton = () => {
-  return cy.contains('button', 'Save for Later');
 };

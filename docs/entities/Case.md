@@ -217,11 +217,10 @@ An array of [`Document`](./Document.md)s
  - `Individual petitioner`
  - `Petitioner and spouse`
 
-### hasIrsNotice
-
-> `boolean` | optional
-
 ### hasVerifiedIrsNotice
+
+
+Whether the petitioner received an IRS notice, verified by the petitions clerk.
 
 > `boolean` | optional
 
@@ -799,6 +798,13 @@ Time of day when this case goes to trial.
 
 
 `/^[0-9]{1,2}:([0-5][0-9])$/`
+
+### useSameAsPrimary
+
+
+Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).
+
+> `boolean` | optional
 
 ### userId
 

@@ -1,6 +1,5 @@
 import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumentModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
@@ -42,14 +41,6 @@ export const DocumentDetail = connect(
           bind="currentViewMetadata.tab"
           className="no-full-border-bottom tab-button-h2"
         >
-          {documentDetailHelper.showDocumentInfoTab && (
-            <Tab
-              id="tab-document-info"
-              tabName="Document Info"
-              title="Document Info"
-            />
-          )}
-
           <Tab id="tab-pending-messages" tabName="Messages" title="Messages" />
         </Tabs>
       );
@@ -60,16 +51,6 @@ export const DocumentDetail = connect(
           bind="currentViewMetadata.tab"
           className="no-full-border-bottom tab-button-h2"
         >
-          {documentDetailHelper.showDocumentInfoTab && (
-            <Tab id="tab-document-info" tabName="Document Info">
-              <div
-                aria-labelledby="tab-document-info"
-                id="tab-document-info-panel"
-              >
-                <CaseDetailEdit />
-              </div>
-            </Tab>
-          )}
           <Tab id="tab-pending-messages" tabName="Messages">
             <div
               aria-labelledby="tab-pending-messages"

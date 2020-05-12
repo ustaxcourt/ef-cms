@@ -35,4 +35,7 @@ export const defaultAdvancedSearchFormAction = ({
   if (!advancedSearchForm.orderSearch) {
     store.set(state.advancedSearchForm.orderSearch, {});
   }
+  if (!advancedSearchForm.opinionSearch) {
+    store.set(state.advancedSearchForm.opinionSearch, {});
+  }
 };

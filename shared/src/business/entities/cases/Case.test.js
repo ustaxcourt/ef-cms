@@ -95,8 +95,9 @@ describe('Case entity', () => {
 
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -109,8 +110,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -123,8 +125,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -137,8 +140,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -1637,7 +1641,11 @@ describe('Case entity', () => {
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
-      expect(myCase.documents[0].processingStatus).toEqual('success');
+      expect(
+        myCase.documents.find(
+          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+        ).processingStatus,
+      ).toEqual('success');
     });
   });
 
@@ -2674,6 +2682,9 @@ describe('Case entity', () => {
   describe('isAssociatedUser', () => {
     let caseEntity;
     beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -2685,10 +2696,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext: {
-            getCurrentUser: () =>
-              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          },
+          applicationContext,
         },
       );
     });
@@ -2767,36 +2775,38 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketRecord: [
-          {
-            description: 'first record',
-            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-            eventCode: 'P',
-            filingDate: '2018-03-01T00:01:00.000Z',
-            index: 1,
-          },
-          {
-            description: 'second record',
-            documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-            eventCode: 'STIN',
-            filingDate: '2018-03-01T00:02:00.000Z',
-            index: 1,
-          },
-        ],
-      },
-      {
-        applicationContext,
-      },
-    );
+    it('identifies duplicate values in docket record indices', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              description: 'first record',
+              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+              eventCode: 'P',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+            },
+            {
+              description: 'second record',
+              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+              eventCode: 'STIN',
+              filingDate: '2018-03-01T00:02:00.000Z',
+              index: 1,
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
 
-    expect(caseEntity.getFormattedValidationErrors()).toEqual({
-      'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      });
     });
   });
 

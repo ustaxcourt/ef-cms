@@ -68,6 +68,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
@@ -254,7 +255,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
@@ -955,6 +955,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      receiptOfFiling,
       standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
@@ -1160,7 +1161,6 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
-        generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,

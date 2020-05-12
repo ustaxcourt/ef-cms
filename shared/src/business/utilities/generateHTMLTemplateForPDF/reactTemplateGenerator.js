@@ -17,6 +17,9 @@ const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
 const {
+  ReceiptOfFiling,
+} = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
+const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
 
@@ -33,6 +36,7 @@ const components = {
   DocketRecord,
   NoticeOfDocketChange,
   PageMetaHeaderDocket,
+  ReceiptOfFiling,
   StandingPretrialOrder,
 };
 

@@ -57,9 +57,9 @@ export const ReviewSavedPetition = connect(
           id="ustc-start-a-case-form"
         >
           <Focus>
-            <h2 id="file-a-document-header" tabIndex="-1">
-              Review the Petition
-            </h2>
+            <h1 id="file-a-document-header" tabIndex="-1">
+              Review and Serve Petition
+            </h1>
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
@@ -77,7 +77,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=partyInfo`}
                         icon="edit"
                       >
                         Edit
@@ -136,7 +136,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=caseInfo`}
                         icon="edit"
                       >
                         Edit
@@ -227,7 +227,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=irsNotice`}
                         icon="edit"
                       >
                         Edit
