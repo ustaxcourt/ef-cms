@@ -8,9 +8,13 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   #warmup:
   #enabled: true
 
@@ -384,12 +388,23 @@ functions:
             identitySource: method.request.querystring.token
             type: request
 
-
   orderAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
     events:
       - http:
           path: /order-search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  opinionAdvancedSearch:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.opinionAdvancedSearchLambda
+    events:
+      - http:
+          path: /opinion-search
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

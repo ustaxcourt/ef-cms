@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 export const formattedCases = (get, applicationContext) => {
@@ -85,10 +86,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
+      const isPaperAndNotServed = result.isPaper && result.status === 'New';
+
       const showDocumentEditLink =
         document &&
         permissions.UPDATE_CASE &&
-        (!document.isInProgress ||
+        ((!isPaperAndNotServed && !document.isInProgress) ||
           ((permissions.DOCKET_ENTRY ||
             permissions.CREATE_ORDER_DOCKET_ENTRY) &&
             document.isInProgress));
@@ -112,7 +115,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ) {
           editLink = '/edit';
         } else if (document.isPetition && !document.servedAt) {
-          editLink = '/edit-saved';
+          editLink = '/review';
         }
       }
 
@@ -150,6 +153,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           (!userHasAccessToCase ||
             !userHasAccessToDocument ||
             !document ||
+            isPaperAndNotServed ||
             (document &&
               (document.isNotServedCourtIssuedDocument ||
                 document.isInProgress) &&

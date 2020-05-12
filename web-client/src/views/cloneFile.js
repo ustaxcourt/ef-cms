@@ -16,6 +16,6 @@ export const cloneFile = file =>
       );
     });
     reader.addEventListener('error', () => {
-      reject();
+      reject(new Error('failed to read file'));
     });
   });

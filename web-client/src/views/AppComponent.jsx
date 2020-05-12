@@ -41,14 +41,15 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
+import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
-import { ReviewPetitionFromPaper } from './StartCaseInternal/ReviewPetitionFromPaper';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -109,14 +110,15 @@ const pages = {
   LogIn,
   Messages,
   PendingReport,
+  PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
+  PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
-  ReviewPetitionFromPaper,
   ReviewSavedPetition,
   SecondaryContactEdit,
   SelectDocumentType,

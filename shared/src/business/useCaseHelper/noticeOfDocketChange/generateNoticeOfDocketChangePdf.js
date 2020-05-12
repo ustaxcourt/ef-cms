@@ -1,35 +1,8 @@
-const sassContent = require('../../assets/ustcPdf.scss_');
-const template = require('./noticeOfDocketChange.pug_');
-const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-/**
- * @param {Array} cases case entities
- * @returns {string} an html string resulting from rendering template with caseInfo
- */
-const generatePage = async ({ applicationContext, docketChangeInfo }) => {
-  const pug = applicationContext.getPug();
-  const sass = applicationContext.getNodeSass();
-
-  const { css } = await new Promise(resolve => {
-    sass.render({ data: sassContent }, (err, result) => {
-      return resolve(result);
-    });
-  });
-  const compiledFunction = pug.compile(template);
-  const html = compiledFunction({
-    css,
-    ...docketChangeInfo,
-    logo: ustcLogoBufferBase64,
-  });
-  return html;
-};
-
-exports.generatePage = generatePage;
 
 /**
  * Generate Notice of Docket Change PDF
@@ -49,32 +22,28 @@ exports.generateNoticeOfDocketChangePdf = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let browser = null;
-  let result = null;
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketEntryIndex,
+    docketNumber,
+    filingParties,
+    filingsAndProceedings,
+  } = docketChangeInfo;
 
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
-
-    const contentResult = await generatePage({
+  const noticePdf = await applicationContext
+    .getDocumentGenerators()
+    .noticeOfDocketChange({
       applicationContext,
-      docketChangeInfo,
+      data: {
+        caseCaptionExtension,
+        caseTitle,
+        docketEntryIndex,
+        docketNumberWithSuffix: docketNumber,
+        filingParties,
+        filingsAndProceedings,
+      },
     });
-
-    await page.setContent(contentResult);
-
-    result = await page.pdf({
-      displayHeaderFooter: false,
-      format: 'letter',
-    });
-  } catch (error) {
-    applicationContext.logger.error(error);
-    throw error;
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
-  }
 
   const documentId = applicationContext.getUniqueId();
 
@@ -83,7 +52,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
     const s3Client = applicationContext.getStorageClient();
 
     const params = {
-      Body: result,
+      Body: noticePdf,
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
       Key: documentId,

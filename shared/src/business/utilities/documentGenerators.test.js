@@ -7,7 +7,13 @@ const {
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
-const { changeOfAddress, docketRecord } = require('./documentGenerators');
+const {
+  changeOfAddress,
+  docketRecord,
+  noticeOfDocketChange,
+  receiptOfFiling,
+  standingPretrialOrder,
+} = require('./documentGenerators');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -169,6 +175,143 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Docket_Record', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('noticeOfDocketChange', () => {
+    it('generates a Standing Pre-trial Order document', async () => {
+      const pdf = await noticeOfDocketChange({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketEntryIndex: '1',
+          docketNumberWithSuffix: '123-45S',
+          filingsAndProceedings: {
+            after: 'Filing and Proceedings After',
+            before: 'Filing and Proceedings Before',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Of_Docket_Change', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('standingPretrialOrder', () => {
+    it('generates a Standing Pre-trial Order document', async () => {
+      const pdf = await standingPretrialOrder({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          footerDate: '02/02/20',
+          trialInfo: {
+            city: 'Some City',
+            fullStartDate: 'Friday May 8, 2020',
+            judge: {
+              name: 'Test Judge',
+            },
+            state: 'TEST STATE',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Standing_Pretrial_Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('receiptOfFiling', () => {
+    it('generates a Receipt of Filing document', async () => {
+      const pdf = await receiptOfFiling({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          document: {
+            attachments: true,
+            certificateOfService: true,
+            certificateOfServiceDate: '02/22/20',
+            documentTitle: 'Primary Document Title',
+            objections: 'No',
+          },
+          filedAt: '02/22/20 2:22am ET',
+          filedBy: 'Mike Wazowski',
+          secondaryDocument: {
+            attachments: false,
+            certificateOfService: true,
+            certificateOfServiceDate: '02/22/20',
+            documentTitle: 'Secondary Document Title',
+            objections: 'No',
+          },
+          secondarySupportingDocuments: [
+            {
+              attachments: true,
+              certificateOfService: false,
+              certificateOfServiceDate: null,
+              documentTitle: 'Secondary Supporting Document One Title',
+              objections: 'No',
+            },
+            {
+              attachments: false,
+              certificateOfService: false,
+              certificateOfServiceDate: null,
+              documentTitle: 'Secondary Supporting Document Two Title',
+              objections: 'Unknown',
+            },
+          ],
+          supportingDocuments: [
+            {
+              attachments: false,
+              certificateOfService: false,
+              certificateOfServiceDate: null,
+              documentTitle: 'Supporting Document One Title',
+              objections: null,
+            },
+            {
+              attachments: false,
+              certificateOfService: true,
+              certificateOfServiceDate: '02/02/20',
+              documentTitle: 'Supporting Document Two Title',
+              objections: 'No',
+            },
+          ],
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Receipt_of_Filing', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
