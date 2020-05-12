@@ -398,7 +398,7 @@ export const StartCaseStep3 = connect(
                 >
                   Download Ownership Disclosure Statement (T.C. Form 6)
                 </Button>
-                if you haven‘t already done so
+                <p className="margin-top-0">if you haven‘t already done so</p>
               </p>
               <StateDrivenFileInput
                 aria-describedby="ownership-disclosure-file-label"
