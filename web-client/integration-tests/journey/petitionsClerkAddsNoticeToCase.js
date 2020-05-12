@@ -1,11 +1,10 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
-import { wait } from '../helpers';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export default test => {
+export const petitionsClerkAddsNoticeToCase = test => {
   return it('Petitions clerk adds Notice to case', async () => {
     await test.runSequence('openCreateMessageModalSequence');
 
