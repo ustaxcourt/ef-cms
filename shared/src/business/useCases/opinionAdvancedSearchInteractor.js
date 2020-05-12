@@ -12,7 +12,9 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * opinionAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, opinionKeyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
+ * @param {object} providers providers object
+ * @param {object} providers.applicationContext api applicationContext
+ * @param {object} providers.opinionKeyword keyword used for searching opinions
  * @returns {object} the opinions data
  */
 exports.opinionAdvancedSearchInteractor = async ({
