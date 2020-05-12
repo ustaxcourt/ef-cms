@@ -61,7 +61,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
         documentMetadata.documentContents = parsedDocument.text;
       }
     } catch (e) {
-      applicationContext.logger.info('Failed to parse PDF');
+      applicationContext.logger.info('Failed to parse PDF', e);
       throw e;
     }
   }
@@ -77,6 +77,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
+    contentType: 'text/plain',
     document: Buffer.from(JSON.stringify(contentToStore)),
     documentId: documentContentsId,
     useTempBucket: true,
