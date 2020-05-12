@@ -58,6 +58,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     petitionPaymentMethod: caseToUpdate.petitionPaymentMethod,
     petitionPaymentStatus: caseToUpdate.petitionPaymentStatus,
     petitionPaymentWaivedDate: caseToUpdate.petitionPaymentWaivedDate,
+    preferredTrialCity: caseToUpdate.preferredTrialCity,
     procedureType: caseToUpdate.procedureType,
     receivedAt: caseToUpdate.receivedAt,
   };
