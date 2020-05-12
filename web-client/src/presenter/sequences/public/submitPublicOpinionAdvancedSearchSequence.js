@@ -7,26 +7,23 @@ import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
-import { submitPublicOrderAdvancedSearchAction } from '../../actions/Public/submitPublicOrderAdvancedSearchAction';
-import { validateOrderAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
+import { submitPublicOpinionAdvancedSearchAction } from '../../actions/Public/submitPublicOpinionAdvancedSearchAction';
+import { validateOpinionAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOpinionAdvancedSearchAction';
 
 export const submitPublicOpinionAdvancedSearchSequence = [
   clearSearchTermAction,
-  // validateOrderAdvancedSearchAction,
-  // {
-  //   error: [
-  //     setAlertErrorAction,
-  //     setValidationErrorsAction,
-  //     clearSearchResultsAction,
-  //     startShowValidationAction,
-  //   ],
-  //   success: showProgressSequenceDecorator([
-  //     clearAlertsAction,
-  //     submitPublicOrderAdvancedSearchAction,
-  //     set(state.searchResults, props.searchResults),
-  //   ]),
-  // },
-  clearAlertsAction,
-  submitPublicOpinionAdvancedSearchAction,
-  set(state.searchResults, props.searchResults),
+  validateOpinionAdvancedSearchAction,
+  {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      clearSearchResultsAction,
+      startShowValidationAction,
+    ],
+    success: showProgressSequenceDecorator([
+      clearAlertsAction,
+      submitPublicOpinionAdvancedSearchAction,
+      set(state.searchResults, props.searchResults),
+    ]),
+  },
 ];
