@@ -143,19 +143,17 @@ export const DashboardPetitioner = connect(
                         <br />
                         <strong>Can’t afford to pay the filing fee?</strong>
                         <p>
-                          <FontAwesomeIcon
-                            className="fa-icon-blue"
-                            icon="file-pdf"
-                            size="1x"
-                          />
-                          <a
-                            className="usa-link--external"
+                          <Button
+                            link
+                            className="usa-link--external text-left mobile-button-text-wrap"
                             href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                            icon="file-pdf"
+                            iconColor="blue"
                             rel="noopener noreferrer"
                             target="_blank"
                           >
                             Download Application For Waiver of Filing Fee
-                          </a>
+                          </Button>
                         </p>
                       </AccordionItem>
                     </Accordion>

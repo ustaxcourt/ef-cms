@@ -294,8 +294,7 @@ input[type='file']::-webkit-file-upload-button {
 }
 
 @media only screen and (max-width: $medium-screen) {
-  #download_stin_form {
-    text-align: left;
+  .mobile-button-text-wrap {
     white-space: normal;
   }
 }
