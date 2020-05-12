@@ -341,7 +341,6 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
-
   {
     actions: [
       'wait for element #case-list to be visible',
@@ -349,7 +348,17 @@ module.exports = [
       'click element .payment-options',
       'wait for element a.usa-link--external to be visible',
     ],
-    notes: ['View filing fee payment options with filed cases'],
+    notes: [
+      'Check accessibility of view filing fee payment options with filed cases',
+    ],
+    url: 'http://localhost:1234/mock-login?token=petitioner&path=',
+  },
+  {
+    actions: [
+      'wait for element #pay_filing_fee to be visible',
+      'click element #pay_filing_fee',
+    ],
+    notes: ['Check accessibility of Pay filing fee button'],
     url: 'http://localhost:1234/mock-login?token=petitioner&path=',
   },
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
