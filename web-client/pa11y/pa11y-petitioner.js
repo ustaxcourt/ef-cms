@@ -346,8 +346,10 @@ module.exports = [
     actions: [
       'wait for element #case-list to be visible',
       'wait for element #pay_filing_fee to be visible',
+      'click element .payment-options',
+      'wait for element a.usa-link--external to be visible',
     ],
-    notes: ['View filing fee options with filed cases'],
+    notes: ['View filing fee payment options with filed cases'],
     url: 'http://localhost:1234/mock-login?token=petitioner&path=',
   },
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
