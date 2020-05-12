@@ -2,8 +2,8 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export default test => {
-  return it('Petitions clerk submits case to IRS', async () => {
+export const petitionsClerkSubmitsPaperCaseToIrs = test => {
+  return it('Petitions clerk submits paper case to IRS', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -50,6 +50,8 @@ export default test => {
     await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({});
     await test.runSequence('serveCaseToIrsSequence');
+
+    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
 
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
