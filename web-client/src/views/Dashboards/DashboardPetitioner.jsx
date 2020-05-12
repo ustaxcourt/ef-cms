@@ -62,7 +62,7 @@ export const DashboardPetitioner = connect(
                   </p>
                   <p>
                     <a
-                      className="usa-link"
+                      className="usa-link--external"
                       href="https://www.ustaxcourt.gov/forms.htm"
                       rel="noopener noreferrer"
                       target="_blank"
