@@ -2,6 +2,10 @@ exports.navigateTo = (username, caseId) => {
   cy.login(username, `/case-detail/${caseId}/petition-qc`);
 };
 
+exports.navigateToCase = (username, caseId) => {
+  cy.login(username, `/case-detail/${caseId}`);
+};
+
 exports.getCaseInfoTab = () => {
   return cy.get('button#tab-case-info');
 };
