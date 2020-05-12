@@ -10,7 +10,7 @@ import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.pdf';
+import howToCreateACase from '../../pdfs/how-to-create-a-case.pdf';
 
 export const DashboardPetitioner = connect(
   {
@@ -42,7 +42,8 @@ export const DashboardPetitioner = connect(
                       size="1x"
                     />
                     <a
-                      href={howToPrepareYourDocuments}
+                      className="usa-link--external"
+                      href={howToCreateACase}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -61,7 +62,7 @@ export const DashboardPetitioner = connect(
                   </p>
                   <p>
                     <a
-                      className="usa-link--external"
+                      className="usa-link"
                       href="https://www.ustaxcourt.gov/forms.htm"
                       rel="noopener noreferrer"
                       target="_blank"
@@ -110,9 +111,12 @@ export const DashboardPetitioner = connect(
                       <strong>Pay by debit/credit card</strong>
                       <br />
                       Copy your docket number(s) and pay online.
+                      <br />
                       <Button
                         className="margin-bottom-3 margin-top-2"
+                        href="https://pay.gov"
                         id="pay_filing_fee"
+                        target="_blank"
                       >
                         Pay now
                       </Button>
@@ -137,12 +141,17 @@ export const DashboardPetitioner = connect(
                         Washington, DC 20217
                         <br />
                         <br />
+                        <strong>Can’t afford to pay the filing fee?</strong>
                         <p>
-                          <strong>Can’t afford to pay the filing fee?</strong>
                           <Button
                             link
-                            icon={['fa', 'file-pdf']}
+                            className="usa-link--external text-left"
+                            href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                            icon="file-pdf"
                             iconColor="blue"
+                            rel="noopener noreferrer"
+                            shouldWrapText={true}
+                            target="_blank"
                           >
                             Download Application For Waiver of Filing Fee
                           </Button>
