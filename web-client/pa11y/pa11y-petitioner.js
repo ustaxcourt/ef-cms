@@ -311,7 +311,6 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
   },
-
   {
     actions: [
       'wait for element #react-select-2-input to be visible',
@@ -341,6 +340,15 @@ module.exports = [
     notes: ['File a document, step 2'],
     url:
       'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+  },
+
+  {
+    actions: [
+      'wait for element #case-list to be visible',
+      'wait for element #pay_filing_fee to be visible',
+    ],
+    notes: ['View filing fee options with filed cases'],
+    url: 'http://localhost:1234/mock-login?token=petitioner&path=',
   },
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
