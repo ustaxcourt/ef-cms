@@ -4,6 +4,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -54,10 +55,11 @@ export const StartCaseStep2 = connect(
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-6">
               <FormGroup
-                errorText={[
-                  validationErrors.petitionFile,
-                  validationErrors.petitionFileSize,
-                ]}
+                className={classNames(
+                  (validationErrors.petitionFile ||
+                    validationErrors.petitionFileSize) &&
+                    'usa-form-group--error',
+                )}
               >
                 <label
                   className={classNames(
@@ -84,9 +86,9 @@ export const StartCaseStep2 = connect(
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    Download T.C. Form 2
+                    Download Petition form (T.C. Form 2)
                   </Button>
-                  if you haven‘t already done so
+                  <p className="margin-top-0">if you haven‘t already done so</p>
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"
@@ -95,6 +97,7 @@ export const StartCaseStep2 = connect(
                   updateFormValueSequence="updateStartCaseFormValueSequence"
                   validationSequence="validateStartCaseWizardSequence"
                 />
+                <ValidationText field="petitionFile" />
               </FormGroup>
             </div>
           </div>
@@ -103,7 +106,11 @@ export const StartCaseStep2 = connect(
         <h3 className="margin-top-4">Why Are You Filing This Petition?</h3>
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
-            <FormGroup errorText={validationErrors.hasIrsNotice}>
+            <FormGroup
+              className={classNames(
+                validationErrors.hasIrsNotice && 'usa-form-group--error',
+              )}
+            >
               <fieldset className="usa-fieldset" id="irs-notice-radios">
                 <legend className="usa-legend" id="notice-legend">
                   {startCaseHelper.noticeLegend}
@@ -138,8 +145,8 @@ export const StartCaseStep2 = connect(
                   ))}
                 </div>
               </fieldset>
+              <ValidationText field="hasIrsNotice" />
             </FormGroup>
-
             {startCaseHelper.showHasIrsNoticeOptions && (
               <CaseTypeSelect
                 allowDefaultOption={true}

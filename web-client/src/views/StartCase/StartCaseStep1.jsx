@@ -69,17 +69,19 @@ export const StartCaseStep1 = connect(
             <p className="margin-top-0">
               <Button
                 link
-                className="usa-link--external"
+                className="usa-link--external text-left"
                 href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                 icon="file-pdf"
                 iconColor="blue"
                 overrideMargin="margin-right-1"
                 rel="noopener noreferrer"
+                shouldWrapText={true}
                 target="_blank"
               >
-                Download T.C. Form 4
+                Download Statement of Taxpayer Identification Number (T.C. Form
+                4)
               </Button>
-              if you haven‘t already done so
+              <p className="margin-top-0">if you haven‘t already done so</p>
             </p>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"

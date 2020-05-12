@@ -1,5 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -9,13 +8,8 @@ export default test => {
       docketNumber: test.docketNumber,
     });
 
-    const petitionDocument = getPetitionDocumentForCase(
-      test.getState('caseDetail'),
-    );
-
-    await test.runSequence('gotoDocumentDetailSequence', {
+    await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      documentId: petitionDocument.documentId,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -43,7 +37,7 @@ export default test => {
       value: '24',
     });
 
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
@@ -53,9 +47,9 @@ export default test => {
       value: '2017',
     });
 
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({});
-    await test.runSequence('saveCaseAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
 
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
@@ -69,5 +63,10 @@ export default test => {
     expect(test.getState('caseDetail.status')).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
+    //check that documents were served
+    const documents = test.getState('caseDetail.documents');
+    for (const document of documents) {
+      expect(document.servedAt).toBeDefined();
+    }
   });
 };

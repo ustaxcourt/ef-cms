@@ -210,7 +210,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  * view options
  */
 export const caseDetailEditContactsHelper = (get, applicationContext) => {
-  const partyType = get(state.caseDetail.partyType);
+  const partyType = get(state.form.partyType);
   const { PARTY_TYPES } = applicationContext.getConstants();
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });

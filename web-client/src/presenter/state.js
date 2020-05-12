@@ -4,6 +4,7 @@ import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import {
+  advancedOpinionSearchHelper,
   advancedOrderSearchHelper,
   advancedSearchHelper,
 } from './computeds/advancedSearchHelper';
@@ -57,7 +58,6 @@ import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
-import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -84,6 +84,7 @@ const helpers = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
+  advancedOpinionSearchHelper,
   advancedOrderSearchHelper,
   advancedSearchHelper,
   alertHelper,
@@ -134,7 +135,6 @@ const helpers = {
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   requestAccessHelper,
-  reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,

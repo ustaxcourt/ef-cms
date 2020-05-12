@@ -356,6 +356,7 @@ export const StartCaseStep3 = connect(
           parentView="StartCase"
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
+          useSameAsPrimary={true}
           onBlur="validateStartCaseWizardSequence"
           onChange="updateFormValueSequence"
         />
@@ -395,9 +396,9 @@ export const StartCaseStep3 = connect(
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Download ODS Form 6
+                  Download Ownership Disclosure Statement (T.C. Form 6)
                 </Button>
-                if you haven‘t already done so
+                <p className="margin-top-0">if you haven‘t already done so</p>
               </p>
               <StateDrivenFileInput
                 aria-describedby="ownership-disclosure-file-label"

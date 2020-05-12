@@ -7,7 +7,7 @@ const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
-  return fs.readFileSync(testAssetsPath + 'sample.pdf');
+  return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
 };
 
 describe('addServedStampToDocument', () => {

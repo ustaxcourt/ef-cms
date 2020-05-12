@@ -1,4 +1,5 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
@@ -63,4 +64,5 @@ describe('Case from Paper Document Scan journey', () => {
   });
   petitionsClerkCreatesScannedPDF(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkSubmitsPaperCaseToIrs(test);
 });
