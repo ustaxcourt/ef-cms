@@ -14,6 +14,7 @@ const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const elasticsearchIndexes = require('../elasticsearch/elasticsearch-indexes');
+const pdfParse = require('pdf-parse');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -1002,6 +1003,7 @@ module.exports = (appContextUser = {}) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
+    getPdfParser: () => ({ parse: pdfParse }),
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,

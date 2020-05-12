@@ -43,30 +43,6 @@ exports.fileCourtIssuedOrderInteractor = async ({
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
 
-  if (documentMetadata.documentContents) {
-    const documentContentsId = applicationContext.getUniqueId();
-
-    const contentToStore = {
-      documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState.richText,
-    };
-
-    applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
-      useTempBucket: true,
-    });
-
-    delete documentMetadata.documentContents;
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
-    documentMetadata.documentContentsId = documentContentsId;
-  }
-
-  /* eslint-disable spellcheck/spell-checker */
-  /* POC for #4814 - leaving here for future work
   if (!documentMetadata.documentContents) {
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
@@ -77,16 +53,43 @@ exports.fileCourtIssuedOrderInteractor = async ({
       .promise();
 
     try {
-      const parsedDocument = await pdfParse(pdfData);
+      const parsedDocument = await applicationContext
+        .getPdfParser()
+        .parse(pdfData);
 
       if (parsedDocument.text) {
         documentMetadata.documentContents = parsedDocument.text;
       }
     } catch (e) {
       applicationContext.logger.info('Failed to parse PDF');
+      throw e;
     }
-  } */
-  /* eslint-enable spellcheck/spell-checker */
+  }
+
+  const documentContentsId = applicationContext.getUniqueId();
+
+  const contentToStore = {
+    documentContents: documentMetadata.documentContents,
+    richText: documentMetadata.draftState
+      ? documentMetadata.draftState.richText
+      : undefined,
+  };
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: Buffer.from(JSON.stringify(contentToStore)),
+    documentId: documentContentsId,
+    useTempBucket: true,
+  });
+
+  if (documentMetadata.draftState) {
+    delete documentMetadata.draftState.documentContents;
+    delete documentMetadata.draftState.richText;
+    delete documentMetadata.draftState.editorDelta;
+  }
+
+  delete documentMetadata.documentContents;
+  documentMetadata.documentContentsId = documentContentsId;
 
   const documentEntity = new Document(
     {
