@@ -1,9 +1,9 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
+import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
 import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
-import { OrderSearchResults } from '../AdvancedSearch/OrderSearchResults';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -69,7 +69,7 @@ export const PublicSearch = connect(
                   submitPublicOrderAdvancedSearchSequence
                 }
               />
-              <OrderSearchResults />
+              <DocumentSearchResults />
             </Tab>
             <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
@@ -77,7 +77,7 @@ export const PublicSearch = connect(
                   submitPublicOpinionAdvancedSearchSequence
                 }
               />
-              <OrderSearchResults />
+              <DocumentSearchResults />
             </Tab>
           </Tabs>
         </section>
