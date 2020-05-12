@@ -583,6 +583,9 @@ const {
   opinionKeywordSearch,
 } = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
 const {
+  opinionPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
+const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
@@ -1277,6 +1280,7 @@ module.exports = (appContextUser = {}) => {
         onConnectInteractor,
         onDisconnectInteractor,
         opinionAdvancedSearchInteractor,
+        opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
