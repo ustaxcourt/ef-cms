@@ -14,6 +14,7 @@ export const OpinionSearchByKeyword = connect(
   function OpinionSearchByKeyword({
     advancedSearchForm,
     updateAdvancedSearchFormValueSequence,
+    validateOpinionSearchSequence,
     validationErrors,
   }) {
     return (
@@ -31,7 +32,7 @@ export const OpinionSearchByKeyword = connect(
                 name="opinionKeyword"
                 type="text"
                 value={advancedSearchForm.opinionSearch.opinionKeyword || ''}
-                onBlur={() => console.log('validateOpinionSearchSequence()')}
+                onBlur={() => validateOpinionSearchSequence()}
                 onChange={e => {
                   updateAdvancedSearchFormValueSequence({
                     formType: 'opinionSearch',
