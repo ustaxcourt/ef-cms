@@ -224,7 +224,16 @@ Case.validationName = 'Case';
  * Case Entity
  * Represents a Case that has already been accepted into the system.
  *
+ * @param root0
  * @param {object} rawCase the raw case data
+ * @param root0.applicationContext
+ * @param root0.filtered
+ * @param root0.applicationContext
+ * @param root0.filtered
+ * @param root0.applicationContext
+ * @param root0.filtered
+ * @param rawCase.applicationContext
+ * @param rawCase.filtered
  * @constructor
  */
 function Case(rawCase, { applicationContext, filtered = false }) {
@@ -874,8 +883,11 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
 };
 
 /**
- *
+ * @param root0
  * @param {object} document the document to add to the case
+ * @param root0.applicationContext
+ * @param root0.applicationContext
+ * @param document.applicationContext
  */
 Case.prototype.addDocument = function (document, { applicationContext }) {
   document.caseId = this.caseId;
@@ -936,7 +948,8 @@ Case.prototype.markAsSentToIRS = function (sendDate) {
 };
 
 /**
- *
+ * @param root0
+ * @param root0.applicationContext
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateCaseCaptionDocketRecord = function ({
@@ -973,7 +986,8 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
 };
 
 /**
- *
+ * @param root0
+ * @param root0.applicationContext
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
@@ -1019,8 +1033,10 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 };
 
 /**
- *
+ * @param root0
  * @param {string} preferredTrialCity the preferred trial city
+ * @param root0.applicationContext
+ * @param root0.applicationContext
  * @returns {Case} the updated case entity
  */
 Case.prototype.setRequestForTrialDocketRecord = function (
@@ -1113,11 +1129,9 @@ Case.prototype.updateDocketRecord = function (
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function (updatedDocument) {
-  console.log('updatedDocument', updatedDocument);
   const foundDocument = this.documents.find(
     document => document.documentId === updatedDocument.documentId,
   );
-  console.log(foundDocument);
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
   return this;
 };
@@ -1306,6 +1320,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
  * @param {string} arguments.userId id of the user account
+ * @param arguments.user
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1378,6 +1393,7 @@ Case.prototype.unsetAsBlocked = function () {
  * update as automaticBlocked with an automaticBlockedReason based on
  * provided case deadlines and pending items
  *
+ * @param caseDeadlines.caseDeadlines
  * @param {object} caseDeadlines - the case deadlines
  * @returns {Case} the updated case entity
  */
@@ -1527,6 +1543,7 @@ Case.prototype.getCaseContacts = function (shape) {
 /**
  * get consolidation status between current case entity and another case entity
  *
+ * @param caseEntity.caseEntity
  * @param {object} caseEntity the pending case entity to check
  * @returns {object} object with canConsolidate flag and reason string
  */
