@@ -21,6 +21,8 @@ module.exports = {
     .fileExternalDocumentToConsolidatedCasesLambda,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .getDocumentDownloadUrlLambda,
+  opinionAdvancedSearchLambda: require('./documents/opinionAdvancedSearchLambda')
+    .opinionAdvancedSearchLambda,
   orderAdvancedSearchLambda: require('./documents/orderAdvancedSearchLambda')
     .orderAdvancedSearchLambda,
   saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
