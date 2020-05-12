@@ -18,6 +18,8 @@ export const PublicSearch = connect(
       sequences.submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
+    submitPublicOpinionAdvancedSearchSequence:
+      sequences.submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence:
       sequences.submitPublicOrderAdvancedSearchSequence,
   },
@@ -25,6 +27,7 @@ export const PublicSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence,
+    submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
   }) {
     return (
@@ -70,8 +73,8 @@ export const PublicSearch = connect(
             </Tab>
             <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
-                submitAdvancedSearchSequence={() =>
-                  console.log('submitOpinionAdvancedSearchSequence')
+                submitAdvancedSearchSequence={
+                  submitPublicOpinionAdvancedSearchSequence
                 }
               />
               <OrderSearchResults />
