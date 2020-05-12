@@ -73,6 +73,7 @@ export const StartCaseStep1 = connect(
                 href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                 icon="file-pdf"
                 iconColor="blue"
+                id="download_stin_form"
                 overrideMargin="margin-right-1"
                 rel="noopener noreferrer"
                 target="_blank"
