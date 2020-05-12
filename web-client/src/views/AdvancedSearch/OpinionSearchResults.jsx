@@ -77,7 +77,7 @@ export const OpinionSearchResults = connect(
                       </td>
                       <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.formattedSignedJudgeName}</td>
+                      <td>{result.formattedJudgeName}</td>
                     </tr>
                   ),
                 )}
