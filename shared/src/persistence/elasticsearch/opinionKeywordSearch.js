@@ -21,7 +21,7 @@ exports.opinionKeywordSearch = async ({
     'isSealed',
     'privatePractitioners',
     'sealedDate',
-    'signedJudgeName',
+    'judge',
   ];
 
   const queryParams = [
