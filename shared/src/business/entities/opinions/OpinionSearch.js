@@ -10,15 +10,14 @@ OpinionSearch.validationName = 'OpinionSearch';
 /**
  * Opinion Search entity
  *
- * @param {object} rawProps the raw order search data
+ * @param {object} rawProps the raw opinion search data
  * @constructor
  */
 function OpinionSearch(rawProps = {}) {
   this.opinionKeyword = rawProps.opinionKeyword;
 }
-
 OpinionSearch.VALIDATION_ERROR_MESSAGES = {
-  opinionKeyword: 'Enter a keyword or phrase',
+  opinionKeyword: 'Enter a keyword',
 };
 
 OpinionSearch.schema = joi.object().keys({

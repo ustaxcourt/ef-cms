@@ -24,7 +24,7 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
     });
 
     expect(errors).toMatchObject({
-      opinionKeyword: 'Enter a keyword or phrase',
+      opinionKeyword: 'Enter a keyword',
     });
   });
 });
