@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkAssignsWorkItemToOther = test => {
   return it('Petitions clerk assigns work item to other user', async () => {
     // find the work item that is part of an Petition upload
     await test.runSequence('chooseWorkQueueSequence', {
