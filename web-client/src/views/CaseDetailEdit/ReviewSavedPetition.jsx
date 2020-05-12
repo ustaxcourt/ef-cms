@@ -30,10 +30,11 @@ export const ReviewSavedPetition = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    leaveCaseForLaterServiceSequence:
+      sequences.leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
-    saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
     serveCaseToIrsSequence: sequences.serveCaseToIrsSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
@@ -42,9 +43,9 @@ export const ReviewSavedPetition = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
+    leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
-    saveSavedCaseForLaterSequence,
     serveCaseToIrsSequence,
     showModal,
     startCaseHelper,
@@ -362,7 +363,10 @@ export const ReviewSavedPetition = connect(
             >
               Serve to IRS
             </Button>
-            <Button secondary onClick={() => saveSavedCaseForLaterSequence()}>
+            <Button
+              secondary
+              onClick={() => leaveCaseForLaterServiceSequence()}
+            >
               Save for Later
             </Button>
             <Button
