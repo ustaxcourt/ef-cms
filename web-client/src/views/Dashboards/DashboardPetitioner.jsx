@@ -148,7 +148,7 @@ export const DashboardPetitioner = connect(
                           />
                           <a
                             className="usa-link--external"
-                            href="https://www.ustaxcourt.gov/forms.htm"
+                            href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                             rel="noopener noreferrer"
                             target="_blank"
                           >
