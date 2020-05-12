@@ -54,6 +54,24 @@ export const formatOrderSearchResultRecord = (
   return result;
 };
 
+export const formatOpinionSearchResultRecord = (result, applicationContext) => {
+  result.formattedFiledDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.filingDate, 'MMDDYY');
+
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
+  result.docketNumberWithSuffix = `${result.docketNumber}${
+    result.docketNumberSuffix ? result.docketNumberSuffix : ''
+  }`;
+
+  result.formattedJudgeName = applicationContext
+    .getUtilities()
+    .getJudgeLastName(result.judge);
+
+  return result;
+};
+
 export const advancedSearchHelper = (get, applicationContext) => {
   const permissions = get(state.permissions) || {};
   const countryType = get(
@@ -134,7 +152,7 @@ export const advancedOpinionSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatOrderSearchResultRecord(searchResult, { applicationContext }),
+        formatOpinionSearchResultRecord(searchResult, applicationContext),
     );
   }
 
