@@ -49,7 +49,7 @@ export default test => {
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({});
-    await test.runSequence('saveCaseAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
 
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
