@@ -1,4 +1,5 @@
 const React = require('react');
+import { PrimaryHeader } from '../components/PrimaryHeader';
 
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
 
@@ -10,6 +11,7 @@ export const CaseInventoryReport = ({
 }) => {
   return (
     <div className="page-container">
+      <PrimaryHeader />
       <ReportsHeader subtitle={reportTitle} title="Case Inventory Report" />
 
       <table>

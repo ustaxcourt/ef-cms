@@ -246,6 +246,20 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
     },
   });
 
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: `Case Inventory Report: ${reportTitle}`,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
@@ -261,7 +275,10 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
+      displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
+      overwriteHeader: true,
     });
 
   return pdf;
