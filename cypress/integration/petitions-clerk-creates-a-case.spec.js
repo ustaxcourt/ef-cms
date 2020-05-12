@@ -17,8 +17,7 @@ describe('Create case and submit to IRS', function () {
   });
 
   it('should display parties tab when user navigates to create a case', () => {
-    const partiesTabElement = cy.get('#tab-parties');
-    partiesTabElement.should('have.attr', 'aria-selected');
+    cy.get('#tab-parties').should('have.attr', 'aria-selected');
 
     fillInCreateCaseFromPaperForm();
 

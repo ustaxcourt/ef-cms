@@ -6,8 +6,8 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 const PetitionDetails = ({
