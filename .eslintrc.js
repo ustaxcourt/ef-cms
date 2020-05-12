@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 // re-format this file with `npx eslint --ignore-pattern '!.eslintrc.js' .eslintrc.js --fix`
 module.exports = {
   env: {
@@ -9,14 +10,29 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:cypress/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
     'plugin:jest/recommended',
+    'plugin:jsdoc/recommended',
+    // 'plugin:jsx-a11y/recommended', // todo
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
     'plugin:security/recommended',
     'prettier/react',
     'prettier/standard',
-    'plugin:import/errors',
+  ],
+  overrides: [
+    {
+      files: ['cypress/**/*.js', 'cypress-smoketests/**/*.js'],
+      rules: {
+        'jest/expect-expect': 'off',
+        'jest/valid-expect': 'off',
+        'promise/always-return': 'off',
+        'promise/catch-or-return': 'off',
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -26,7 +42,6 @@ module.exports = {
   },
   plugins: [
     'cypress',
-    'eslint-plugin-sort-imports-es6-autofix',
     'import',
     'jest',
     'jsdoc',
@@ -36,30 +51,36 @@ module.exports = {
     'react',
     'security',
     'sort-destructure-keys',
+    'sort-imports-es6-autofix',
     'sort-keys-fix',
     'sort-requires',
     'spellcheck',
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 40 }], // module default is 20!
-    'import/named': 1,
-    'jest/no-identical-title': 'warn',
+    complexity: ['warn', { max: 80 }], // todo: plugin default is 20, try to lower this
+    'import/named': 'warn',
+    'import/no-named-as-default': 'off',
+    'jest/expect-expect': 'warn',
+    'jest/no-export': 'off',
+    'jest/no-identical-title': 'off', // todo: warn
     'jest/no-test-callback': 'warn',
-    'jest/no-export': 0,
-    'jsdoc/check-param-names': 1,
-    'jsdoc/check-types': 1,
-    'jsdoc/newline-after-description': 1,
-    'jsdoc/require-jsdoc': 1,
-    'jsdoc/require-param': 1,
-    'jsdoc/require-param-description': 1,
-    'jsdoc/require-param-name': 1,
-    'jsdoc/require-param-type': 1,
-    'jsdoc/require-returns': 1,
-    'jsdoc/require-returns-check': 1,
-    'jsdoc/require-returns-description': 1,
-    'jsdoc/require-returns-type': 1,
-    'jsdoc/valid-types': 1,
+    'jsdoc/check-alignment': 'off', // todo: warn
+    'jsdoc/check-param-names': 'off', // todo: warn
+    'jsdoc/check-tag-names': 'off', // todo: warn
+    'jsdoc/check-types': 'off', // todo: warn
+    'jsdoc/newline-after-description': 'warn',
+    'jsdoc/no-undefined-types': 'off', // todo: warn
+    'jsdoc/require-jsdoc': 'warn',
+    'jsdoc/require-param': 'off', // todo: warn
+    'jsdoc/require-param-description': 'warn',
+    'jsdoc/require-param-name': 'warn',
+    'jsdoc/require-param-type': 'warn',
+    'jsdoc/require-returns': 'warn',
+    'jsdoc/require-returns-check': 'warn',
+    'jsdoc/require-returns-description': 'warn',
+    'jsdoc/require-returns-type': 'warn',
+    'jsdoc/valid-types': 'warn',
     'jsx-a11y/anchor-is-valid': [
       'error',
       {
@@ -68,7 +89,7 @@ module.exports = {
       },
     ],
     'jsx-a11y/label-has-for': [
-      2,
+      'error',
       {
         allowChildren: false,
         components: ['Label'],
@@ -77,8 +98,8 @@ module.exports = {
         },
       },
     ],
-    'no-irregular-whitespace': [2, { skipStrings: false }],
-    'no-prototype-builtins': 0,
+    'no-irregular-whitespace': ['error', { skipStrings: false }],
+    'no-prototype-builtins': 'off',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-var': 'error',
     'no-warning-comments': [
@@ -102,9 +123,9 @@ module.exports = {
       },
     ],
     'prettier/prettier': 'error',
-    'promise/always-return': 'warn',
-    'promise/avoid-new': 'off',
-    'promise/catch-or-return': 'warn',
+    'promise/always-return': 'off', // todo: warn
+    'promise/avoid-new': 'off', // todo: warn
+    'promise/catch-or-return': 'off', // todo: warn
     'promise/no-callback-in-promise': 'warn',
     'promise/no-native': 'off',
     'promise/no-nesting': 'warn',
@@ -125,17 +146,17 @@ module.exports = {
         shorthandLast: false,
       },
     ],
-    'react/prop-types': 0,
-    'require-atomic-updates': 0,
-    'security/detect-child-process': 0,
-    'security/detect-non-literal-fs-filename': 0,
-    'security/detect-object-injection': 0,
+    'react/prop-types': 'off',
+    'require-atomic-updates': 'off',
+    'security/detect-child-process': 'off',
+    'security/detect-non-literal-fs-filename': 'off',
+    'security/detect-object-injection': 'off',
     'sort-destructure-keys/sort-destructure-keys': [
-      2,
+      'error',
       { caseSensitive: false },
     ],
     'sort-imports-es6-autofix/sort-imports-es6': [
-      2,
+      'error',
       {
         ignoreCase: false,
         ignoreMemberSort: false,
@@ -147,15 +168,15 @@ module.exports = {
       'asc',
       { caseSensitive: true, natural: true },
     ],
-    'sort-requires/sort-requires': 2,
+    'sort-requires/sort-requires': 'error',
     'spellcheck/spell-checker': [
-      1,
+      'warn',
       {
         comments: true,
         identifiers: false,
         lang: 'en_US',
         minLength: 4,
-        skipIfMatch: ['^https?://[^\\s]*$', '^[^\\s]{35,}$'],
+        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
           'args',

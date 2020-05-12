@@ -577,6 +577,15 @@ const {
   onDisconnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
 const {
+  opinionAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
+const {
+  opinionKeywordSearch,
+} = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
+const {
+  opinionPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
+const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
@@ -1076,6 +1085,7 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
+        opinionKeywordSearch,
         orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
@@ -1269,6 +1279,8 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        opinionAdvancedSearchInteractor,
+        opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
