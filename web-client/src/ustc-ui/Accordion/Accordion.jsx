@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '../Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,
@@ -6,7 +7,6 @@ import {
 } from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -84,25 +84,55 @@ export const Accordion = connect(
           <HeadingElement
             className={customClassName || 'usa-accordion__heading'}
           >
-            <button
-              aria-controls={itemContentId}
-              aria-expanded={expandedText}
-              className="usa-accordion__button"
-              id={itemButtonId}
-              type="button"
-              onClick={() => setTab(itemName)}
-            >
-              {displayIcon && (
-                <span className="caseItem__icon">
-                  <FontAwesomeIcon
-                    className={iconClassName}
-                    icon={iconTypes}
-                    size={iconSize}
-                  />
-                </span>
-              )}
-              {title}
-            </button>
+            <Mobile>
+              <span className="grid-container">
+                <button
+                  aria-controls={itemContentId}
+                  aria-expanded={expandedText}
+                  className="usa-accordion__button"
+                  id={itemButtonId}
+                  type="button"
+                  onClick={() => setTab(itemName)}
+                >
+                  <span className="grid-row">
+                    {displayIcon && (
+                      <span className="grid-col-3">
+                        <span className="caseItem__icon">
+                          <FontAwesomeIcon
+                            className={iconClassName}
+                            icon={iconTypes}
+                            size={iconSize}
+                          />
+                        </span>
+                      </span>
+                    )}
+                    <span className="grid-col-7">{title}</span>
+                  </span>
+                </button>
+              </span>
+            </Mobile>
+
+            <NonMobile>
+              <button
+                aria-controls={itemContentId}
+                aria-expanded={expandedText}
+                className="usa-accordion__button"
+                id={itemButtonId}
+                type="button"
+                onClick={() => setTab(itemName)}
+              >
+                {displayIcon && (
+                  <span className="caseItem__icon">
+                    <FontAwesomeIcon
+                      className={iconClassName}
+                      icon={iconTypes}
+                      size={iconSize}
+                    />
+                  </span>
+                )}
+                {title}
+              </button>
+            </NonMobile>
           </HeadingElement>
           {isActiveItem && (
             <div
