@@ -292,9 +292,3 @@ input[type='file']::-webkit-file-upload-button {
   -webkit-appearance: initial;
   border-radius: 5px;
 }
-
-@media only screen and (max-width: $medium-screen) {
-  .mobile-button-text-wrap {
-    white-space: normal;
-  }
-}
