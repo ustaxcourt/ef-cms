@@ -9,7 +9,7 @@ import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './jou
 import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitionsClerk
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const test = setupTest({
   useCases: {
