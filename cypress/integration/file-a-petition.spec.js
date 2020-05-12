@@ -113,12 +113,18 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('selects on behalf of myself', () => {
-    cy.get('label[for="Myself"]').scrollIntoView().click();
+  it('selects on behalf of myself and my spouse', () => {
+    cy.get('label#filing-type-1').scrollIntoView().click();
+    cy.get('label#is-spouse-deceased-1').scrollIntoView().click();
+    cy.get('button#confirm').scrollIntoView().click();
   });
 
   it('fill in name', () => {
     cy.get('input#name').scrollIntoView().type('John');
+  });
+
+  it("fill in my spouse's name", () => {
+    cy.get('input#secondaryName').scrollIntoView().type('Sally');
   });
 
   it('fill in contactPrimary.address1', () => {
@@ -145,6 +151,14 @@ describe('creation form', () => {
 
   it('fills in phone', () => {
     cy.get('input#phone').scrollIntoView().type('1111111111');
+  });
+
+  it("should copy the primary contact's address to the secondary contact's address when the checkbox is selected", () => {
+    cy.get('label#use-same-address-above-label').scrollIntoView().click();
+    cy.get('input[name="contactPrimary.address1"]').should(
+      'have.value',
+      '111 South West St.',
+    );
   });
 
   it('continues to wizard step 4', () => {
