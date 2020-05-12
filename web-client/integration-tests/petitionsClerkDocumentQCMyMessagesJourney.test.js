@@ -1,6 +1,6 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
-import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
+import { petitionsClerkBulkAssignsCases } from './journey/petitionsClerkBulkAssignsCases';
+import { petitionsClerkCreatesMessage } from './journey/petitionsClerkCreatesMessage';
 import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
 import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
 import petitionsClerkGetsSectionDocumentQCInboxCount from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';

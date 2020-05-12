@@ -1,7 +1,7 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
-import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
+import { petitionsClerkAddsScannedBatch } from './journey/petitionsClerkAddsScannedBatch';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkCreatesScannedPDF } from './journey/petitionsClerkCreatesScannedPDF';
 import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
 import petitionsClerkRescansAddedBatch from './journey/petitionsClerkRescansAddedBatch';
