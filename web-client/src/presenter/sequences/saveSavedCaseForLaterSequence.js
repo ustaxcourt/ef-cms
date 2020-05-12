@@ -1,4 +1,3 @@
-import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/assignPetitionToAuthenticatedUserAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
@@ -29,7 +28,6 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       saveCaseDetailInternalEditAction,
       setCaseAction,
-      assignPetitionToAuthenticatedUserAction,
       setPetitionIdAction,
       setDocumentIdAction,
       navigateToReviewSavedPetitionAction,
