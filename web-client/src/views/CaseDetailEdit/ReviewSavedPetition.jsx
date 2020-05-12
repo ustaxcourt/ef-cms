@@ -21,7 +21,7 @@ const ConfirmServeToIrsModal = () => (
     preventCancelOnBlur={true}
     title="Are You Sure You Want to Serve This Petition to the IRS?"
     onCancelSequence="clearModalSequence"
-    onConfirmSequence="saveCaseAndServeToIrsSequence"
+    onConfirmSequence="serveCaseToIrsSequence"
   ></ConfirmModal>
 );
 
@@ -33,8 +33,8 @@ export const ReviewSavedPetition = connect(
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
-    saveCaseAndServeToIrsSequence: sequences.saveCaseAndServeToIrsSequence,
     saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
+    serveCaseToIrsSequence: sequences.serveCaseToIrsSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
@@ -44,8 +44,8 @@ export const ReviewSavedPetition = connect(
     formCancelToggleCancelSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
-    saveCaseAndServeToIrsSequence,
     saveSavedCaseForLaterSequence,
+    serveCaseToIrsSequence,
     showModal,
     startCaseHelper,
   }) {
@@ -380,9 +380,7 @@ export const ReviewSavedPetition = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={saveCaseAndServeToIrsSequence}
-          />
+          <FileUploadErrorModal confirmSequence={serveCaseToIrsSequence} />
         )}
         {showModal == 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
