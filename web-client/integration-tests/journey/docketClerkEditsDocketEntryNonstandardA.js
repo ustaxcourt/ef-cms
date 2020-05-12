@@ -1,12 +1,13 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getPetitionDocumentForCase } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryStandard = test => {
-  return it('docket clerk edits docket entry with Standard scenario', async () => {
+export const docketClerkEditsDocketEntryNonstandardA = test => {
+  return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
     let caseDetailFormatted;
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -20,7 +21,11 @@ export const docketClerkEditsDocketEntryStandard = test => {
     );
 
     const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
+    const petitionDocument = getPetitionDocumentForCase(
+      test.getState('caseDetail'),
+    );
     expect(documentId).toBeDefined();
+    expect(petitionDocument.documentId).toBeDefined();
 
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
@@ -33,9 +38,15 @@ export const docketClerkEditsDocketEntryStandard = test => {
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
     expect(test.getState('documentId')).toEqual(documentId);
 
+    expect(test.getState('form')).toMatchObject({
+      dateReceivedDay: '1',
+      dateReceivedMonth: '1',
+      dateReceivedYear: '2018',
+    });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'EA',
+      value: 'NNOB',
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -55,11 +66,26 @@ export const docketClerkEditsDocketEntryStandard = test => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
+      previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
-      value: '2018',
+      value: '2012',
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'previousDocument',
+      value: petitionDocument.documentId,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'partySecondary',
+      value: true,
+    });
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'partyIrsPractitioner',
+      value: true,
     });
 
     await test.runSequence('submitDocketEntrySequence');
@@ -80,19 +106,21 @@ export const docketClerkEditsDocketEntryStandard = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description: 'Entry of Appearance',
+      description: 'Notice of No Objection to Petition',
     });
 
     const updatedDocument = caseDetailFormatted.documents.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({
-      documentTitle: 'Entry of Appearance',
-      documentType: 'Entry of Appearance',
-      eventCode: 'EA',
-      filedBy: 'Petr. Mona Schultz',
+      documentTitle: 'Notice of No Objection to Petition',
+      documentType: 'Notice of No Objection',
+      eventCode: 'NNOB',
+      filedBy: 'Resp. & Petrs. Mona Schultz & Jimothy Schultz',
+      partyIrsPractitioner: true,
       partyPrimary: true,
-      receivedAt: '2018-01-01',
+      partySecondary: true,
+      receivedAt: '2012-01-01',
     });
   });
 };

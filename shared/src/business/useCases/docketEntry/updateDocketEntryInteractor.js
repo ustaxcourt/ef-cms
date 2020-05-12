@@ -56,8 +56,6 @@ exports.updateDocketEntryInteractor = async ({
     documentTitle: documentMetadata.documentTitle,
     documentType: documentMetadata.documentType,
     eventCode: documentMetadata.eventCode,
-    // filedBy: documentMetadata.filedBy,
-    // filingDate: documentMetadata.filingDate,
     freeText: documentMetadata.freeText,
     freeText2: documentMetadata.freeText2,
     isFileAttached: documentMetadata.isFileAttached,
@@ -65,9 +63,11 @@ exports.updateDocketEntryInteractor = async ({
     mailingDate: documentMetadata.mailingDate,
     objections: documentMetadata.objections,
     ordinalValue: documentMetadata.ordinalValue,
+    partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
     partyPrimary: documentMetadata.partyPrimary,
     partySecondary: documentMetadata.partySecondary,
-    // receivedAt: documentMetadata.receivedAt,
+    pending: documentMetadata.pending,
+    receivedAt: documentMetadata.receivedAt,
     scenario: documentMetadata.scenario,
   };
 
@@ -85,6 +85,7 @@ exports.updateDocketEntryInteractor = async ({
     },
     { applicationContext },
   );
+  documentEntity.generateFiledBy(caseToUpdate, true);
 
   const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
     documentEntity.documentId,
