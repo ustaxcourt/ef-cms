@@ -58,7 +58,7 @@ describe('opinionPublicSearchInteractor', () => {
     });
   });
 
-  it('should return search results based on teh supplied opinion keyword', async () => {
+  it('should return search results based on the supplied opinion keyword', async () => {
     const result = await opinionPublicSearchInteractor({
       applicationContext,
       opinionKeyword: 'memorandum',
