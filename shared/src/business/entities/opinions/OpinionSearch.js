@@ -8,7 +8,7 @@ OpinionSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 OpinionSearch.validationName = 'OpinionSearch';
 
 /**
- * Order Search entity
+ * Opinion Search entity
  *
  * @param {object} rawProps the raw order search data
  * @constructor
