@@ -20,9 +20,6 @@ const fakeData =
 let user;
 let mockCase;
 
-const fakeFile = Buffer.from(fakeData, 'base64');
-fakeFile.name = 'fakeFile.pdf';
-
 const contactInfo = {
   address1: '234 Main St',
   address2: 'Apartment 4',
@@ -64,7 +61,7 @@ describe('updateUserContactInformationInteractor', () => {
     );
     applicationContext
       .getUseCases()
-      .generatePdfFromHtmlInteractor.mockReturnValue(fakeFile);
+      .generatePdfFromHtmlInteractor.mockReturnValue(fakeData);
     applicationContext
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue({

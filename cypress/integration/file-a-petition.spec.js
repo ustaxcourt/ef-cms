@@ -37,6 +37,28 @@ describe('File a petition', function () {
   });
 });
 
+describe('before filing a petition', () => {
+  beforeEach(() => {
+    cy.login('petitioner', 'before-filing-a-petition');
+  });
+
+  it('should navigate to dashboard when cancel is clicked', () => {
+    cy.get('button#cancel').click();
+
+    cy.get('button.modal-button-confirm').click();
+
+    cy.url().should('not.include', 'before-filing-a-petition');
+  });
+
+  it('should navigate to dashboard when close is clicked', () => {
+    cy.get('button#cancel').click();
+
+    cy.get('button.text-no-underline').click();
+
+    cy.url().should('not.include', 'before-filing-a-petition');
+  });
+});
+
 describe('creation form', () => {
   before(() => {
     cy.login('petitioner', 'file-a-petition/step-1');
@@ -91,12 +113,18 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('selects on behalf of myself', () => {
-    cy.get('label[for="Myself"]').scrollIntoView().click();
+  it('selects on behalf of myself and my spouse', () => {
+    cy.get('label#filing-type-1').scrollIntoView().click();
+    cy.get('label#is-spouse-deceased-1').scrollIntoView().click();
+    cy.get('button#confirm').scrollIntoView().click();
   });
 
   it('fill in name', () => {
     cy.get('input#name').scrollIntoView().type('John');
+  });
+
+  it("fill in my spouse's name", () => {
+    cy.get('input#secondaryName').scrollIntoView().type('Sally');
   });
 
   it('fill in contactPrimary.address1', () => {
@@ -125,6 +153,14 @@ describe('creation form', () => {
     cy.get('input#phone').scrollIntoView().type('1111111111');
   });
 
+  it("should copy the primary contact's address to the secondary contact's address when the checkbox is selected", () => {
+    cy.get('label#use-same-address-above-label').scrollIntoView().click();
+    cy.get('input[name="contactPrimary.address1"]').should(
+      'have.value',
+      '111 South West St.',
+    );
+  });
+
   it('continues to wizard step 4', () => {
     cy.get('button#submit-case').click();
   });
@@ -142,7 +178,7 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('submits forms and shows a success message', () => {
+  it('submits forms and shows a success message dialog', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
     cy.get('button#submit-case').scrollIntoView().click();
@@ -151,9 +187,9 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
-    cy.get('.usa-alert--success', { timeout: 300000 }).should(
+    cy.get('div.modal-success', { timeout: 300000 }).should(
       'contain',
-      'Petition filed',
+      'Your case has been successfully submitted.',
     );
   });
   it('case list table reflects newly-added record', () => {

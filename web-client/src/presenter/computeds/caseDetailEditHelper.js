@@ -55,8 +55,6 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle,
     shouldShowIrsNoticeDate: caseDetail.hasVerifiedIrsNotice,
-    showNoTrialLocationSelected:
-      caseDetail.isPaper && !requestForPlaceOfTrialDocumentId,
     showOrderForFilingFee:
       caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,
