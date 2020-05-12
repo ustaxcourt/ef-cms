@@ -250,7 +250,7 @@ describe('publicCaseDetailHelper', () => {
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
-        showServed: false,
+        showServed: true,
         signatory: undefined,
       },
     ]);

@@ -8,17 +8,16 @@ OpinionSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 OpinionSearch.validationName = 'OpinionSearch';
 
 /**
- * Order Search entity
+ * Opinion Search entity
  *
- * @param {object} rawProps the raw order search data
+ * @param {object} rawProps the raw opinion search data
  * @constructor
  */
 function OpinionSearch(rawProps = {}) {
   this.opinionKeyword = rawProps.opinionKeyword;
 }
-
 OpinionSearch.VALIDATION_ERROR_MESSAGES = {
-  opinionKeyword: 'Enter a keyword or phrase',
+  opinionKeyword: 'Enter a keyword',
 };
 
 OpinionSearch.schema = joi.object().keys({

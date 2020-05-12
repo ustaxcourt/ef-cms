@@ -11,9 +11,9 @@ import {
   viewCaseDetail,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import petitionsClerkBlocksCase from './journey/petitionsClerkBlocksCase';
-import petitionsClerkCreatesACaseDeadline from './journey/petitionsClerkCreatesACaseDeadline';
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
+import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
 import petitionsClerkRemovesPendingItemFromCase from './journey/petitionsClerkRemovesPendingItemFromCase';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';

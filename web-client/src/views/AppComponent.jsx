@@ -44,6 +44,7 @@ import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -112,6 +113,7 @@ const pages = {
   PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
+  PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
