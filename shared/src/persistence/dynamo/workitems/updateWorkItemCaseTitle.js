@@ -17,8 +17,8 @@ exports.updateWorkItemCaseTitle = async ({
     applicationContext,
   });
 
-  const updateCaseTitle = workItem => {
-    return client.update({
+  const updateCaseTitle = async workItem => {
+    return await client.update({
       ExpressionAttributeNames: {
         '#caseTitle': 'caseTitle',
       },
