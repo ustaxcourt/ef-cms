@@ -249,6 +249,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
+  const mockGetPdfParser = appContextProxy({
+    parse: jest.fn().mockResolvedValue({ text: 'parsed-pdf-text' }),
+  });
+
+  const mockGetStorageClient = appContextProxy({
+    getObject: jest.fn().mockReturnValue({
+      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    }),
+  });
+
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
     createCase: jest.fn().mockImplementation(createCase),
@@ -384,6 +394,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
+    getPdfParser: mockGetPdfParser,
     getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
@@ -394,7 +405,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
-    getStorageClient: appContextProxy(),
+    getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
       .fn()
