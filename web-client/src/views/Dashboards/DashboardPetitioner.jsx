@@ -62,7 +62,7 @@ export const DashboardPetitioner = connect(
                   </p>
                   <p>
                     <a
-                      className="usa-link--external"
+                      className="usa-link"
                       href="https://www.ustaxcourt.gov/forms.htm"
                       rel="noopener noreferrer"
                       target="_blank"
@@ -116,7 +116,14 @@ export const DashboardPetitioner = connect(
                         className="margin-bottom-3 margin-top-2"
                         id="pay_filing_fee"
                       >
-                        Pay now
+                        <a
+                          className="usa-link"
+                          href="https://pay.gov"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          Pay now
+                        </a>
                       </Button>
                     </p>
                     <hr />
