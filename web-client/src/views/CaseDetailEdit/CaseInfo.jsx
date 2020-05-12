@@ -2,6 +2,7 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
+import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,7 +12,10 @@ export const CaseInfo = connect(
     caseDetailEditHelper: state.caseDetailEditHelper,
     constants: state.constants,
     form: state.form,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence:
+      sequences.updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionPaymentFormValueSequence:
       sequences.updatePetitionPaymentFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
@@ -21,7 +25,9 @@ export const CaseInfo = connect(
     caseDetailEditHelper,
     constants,
     form,
+    trialCitiesHelper,
     updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionPaymentFormValueSequence,
     validateCaseDetailSequence,
     validationErrors,
@@ -70,7 +76,7 @@ export const CaseInfo = connect(
           </>
         )}
 
-        <FormGroup>
+        <FormGroup errorText={validationErrors.caseCaption}>
           <label className="usa-label" htmlFor="case-caption">
             Case caption
           </label>
@@ -126,40 +132,45 @@ export const CaseInfo = connect(
           </div>
         </FormGroup>
 
+        <TrialCity
+          label="Trial location"
+          showDefaultOption={true}
+          showHint={false}
+          showRegularTrialCitiesHint={false}
+          showSmallTrialCitiesHint={false}
+          trialCitiesByState={
+            trialCitiesHelper(form.procedureType).trialCitiesByState
+          }
+          value={form.preferredTrialCity}
+          onChange={e => {
+            updateOrderForDesignatingPlaceOfTrialSequence({
+              key: e.target.name,
+              value: e.target.value || null,
+            });
+            validateCaseDetailSequence();
+          }}
+        />
         <FormGroup>
-          <label
-            className="usa-label margin-bottom-0"
-            htmlFor="preferred-trial-city"
-          >
-            Trial location
-          </label>
-          <div id="preferred-trial-city">
-            {caseDetailEditHelper.showNoTrialLocationSelected && (
-              <>
-                <p className="margin-top-0">No trial location selected</p>
-                <div className="order-checkbox">
-                  <input
-                    checked={form.orderDesignatingPlaceOfTrial}
-                    className="usa-checkbox__input"
-                    id="order-designating-place-of-trial"
-                    name="orderDesignatingPlaceOfTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="order-designating-place-of-trial"
-                  >
-                    Order Designating Place of Trial
-                  </label>
-                </div>
-              </>
-            )}
+          <div className="order-checkbox">
+            <input
+              checked={form.orderDesignatingPlaceOfTrial}
+              className="usa-checkbox__input"
+              id="order-designating-place-of-trial"
+              name="orderDesignatingPlaceOfTrial"
+              type="checkbox"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="order-designating-place-of-trial"
+            >
+              Order Designating Place of Trial
+            </label>
           </div>
         </FormGroup>
 

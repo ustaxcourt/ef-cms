@@ -50,7 +50,7 @@ describe('serveCaseToIrsInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
   const testPdfDocBytes = () => {
-    return fs.readFileSync(testAssetsPath + 'sample.pdf');
+    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
   };
 
   const testPdfDoc = testPdfDocBytes();

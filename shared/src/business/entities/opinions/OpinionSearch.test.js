@@ -2,7 +2,7 @@ const { OpinionSearch } = require('./OpinionSearch');
 
 const errorMessages = OpinionSearch.VALIDATION_ERROR_MESSAGES;
 
-describe('Order Search entity', () => {
+describe('Opinion Search entity', () => {
   it('needs only an order keyword to be valid', () => {
     const opinionSearch = new OpinionSearch({ opinionKeyword: 'Notice' });
     expect(opinionSearch).toMatchObject({

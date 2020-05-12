@@ -5,8 +5,8 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
-import { parallel } from 'cerebral/factories';
-import { set } from 'cerebral/factories';
+import { parallel, set } from 'cerebral/factories';
+
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentDetailPageTitleAction } from '../actions/setDocumentDetailPageTitleAction';
