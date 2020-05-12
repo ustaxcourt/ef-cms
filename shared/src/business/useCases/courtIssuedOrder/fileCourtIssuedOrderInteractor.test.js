@@ -201,4 +201,30 @@ describe('fileCourtIssuedOrderInteractor', () => {
       draftState: {},
     });
   });
+
+  it('should parse pdf contents', async () => {
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'TC Opinion',
+        documentType: 'TCOP - T.C. Opinion',
+        eventCode: 'TCOP',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(applicationContext.getPdfParser().parse.mock.calls[0][0]).toEqual(
+      's3-get-object-body',
+    );
+    expect(
+      JSON.parse(
+        Buffer(
+          applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+            .calls[0][0].document,
+        ).toString(),
+      ),
+    ).toMatchObject({ documentContents: 'parsed-pdf-text' });
+  });
 });
