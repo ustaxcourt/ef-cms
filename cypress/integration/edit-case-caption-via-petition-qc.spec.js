@@ -5,6 +5,7 @@ const {
   getReviewPetitionButton,
   getSaveForLaterButton,
   navigateTo: navigateToPetitionQc,
+  navigateToCase,
 } = require('../support/pages/petition-qc');
 
 describe('change the case caption via the petition qc page', () => {
@@ -22,6 +23,7 @@ describe('change the case caption via the petition qc page', () => {
   });
 
   it('updates the case title header', () => {
+    navigateToCase('petitionsclerk', '101-19');
     getCaseTitleContaining(
       'hello world v. Commissioner of Internal Revenue, Respondent',
     ).should('exist');

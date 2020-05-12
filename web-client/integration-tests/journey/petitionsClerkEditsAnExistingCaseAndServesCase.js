@@ -41,7 +41,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   });
 
   it('should redirect to case detail after successfully serving to irs', async () => {
-    await test.runSequence('saveCaseAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
     await wait(500);
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
