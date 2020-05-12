@@ -1,13 +1,9 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -35,7 +31,6 @@ export const ReviewSavedPetition = connect(
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
-    serveCaseToIrsSequence: sequences.serveCaseToIrsSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
@@ -46,7 +41,6 @@ export const ReviewSavedPetition = connect(
     leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
-    serveCaseToIrsSequence,
     showModal,
     startCaseHelper,
   }) {
@@ -379,16 +373,6 @@ export const ReviewSavedPetition = connect(
             </Button>
           </div>
         </section>
-        {showModal === 'CaseDifferenceModalOverlay' && (
-          <CaseDifferenceModalOverlay />
-        )}
-        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={serveCaseToIrsSequence} />
-        )}
-        {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-        )}
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
       </>
     );
