@@ -16,6 +16,7 @@ describe('Edit a trial session ', () => {
 
     getCancelButton().click();
 
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(3000);
     getCancelModalTitle().should('exist');
   });

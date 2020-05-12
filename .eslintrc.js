@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 // re-format this file with `npx eslint --ignore-pattern '!.eslintrc.js' .eslintrc.js --fix`
 module.exports = {
   env: {
@@ -9,6 +10,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:cypress/recommended',
     'plugin:jest/recommended',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
@@ -17,6 +19,17 @@ module.exports = {
     'prettier/react',
     'prettier/standard',
     'plugin:import/errors',
+  ],
+  overrides: [
+    {
+      files: ['cypress/**/*.js', 'cypress-smoketests/**/*.js'],
+      rules: {
+        'jest/expect-expect': 'off',
+        'jest/valid-expect': 'off',
+        'promise/always-return': 'off',
+        'promise/catch-or-return': 'off',
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -44,6 +57,7 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 40 }], // module default is 20!
     'import/named': 1,
+    'jest/expect-expect': 1,
     'jest/no-export': 0,
     'jest/no-identical-title': 'warn',
     'jest/no-test-callback': 'warn',
@@ -155,7 +169,7 @@ module.exports = {
         identifiers: false,
         lang: 'en_US',
         minLength: 4,
-        skipIfMatch: ['^https?://[^\\s]*$', '^[^\\s]{35,}$'],
+        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
           'args',

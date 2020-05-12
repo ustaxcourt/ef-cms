@@ -2,7 +2,7 @@ const {
   navigateTo: navigateToDashboard,
 } = require('../support/pages/dashboard');
 
-describe('Filing an Answer', function() {
+describe('Filing an Answer', function () {
   before(() => {
     cy.task('seed');
     cy.login('irsPractitioner', '/case-detail/102-19');
@@ -39,15 +39,11 @@ describe('Filing an Answer', function() {
   });
 
   it('docket record table reflects newly-added record', () => {
-    cy.get('table.docket-record')
-      .find('a')
-      .should('contain', 'Answer');
+    cy.get('table.docket-record').find('a').should('contain', 'Answer');
   });
 
   it('reflects changes to 102-19 by showing it in irsPractitioner case list', () => {
     navigateToDashboard('irsPractitioner');
-    cy.get('table#case-list')
-      .find('a')
-      .should('contain', '102-19');
+    cy.get('table#case-list').find('a').should('contain', '102-19');
   });
 });
