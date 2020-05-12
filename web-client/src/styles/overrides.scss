@@ -219,6 +219,14 @@ option:first-child {
   #file-a-petition {
     margin-bottom: 70px;
   }
+
+  .mobile-text-wrap {
+    white-space: normal;
+  }
+
+  #submit-case {
+    margin-bottom: 5px;
+  }
 }
 
 .margin-bottom-0 {
@@ -274,6 +282,10 @@ p {
   }
   .usa-accordion__button:hover {
     background-color: inherit;
+  }
+
+  a > * {
+    max-width: inherit;
   }
 }
 

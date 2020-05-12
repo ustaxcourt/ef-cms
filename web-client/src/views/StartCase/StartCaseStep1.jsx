@@ -69,13 +69,12 @@ export const StartCaseStep1 = connect(
             <p className="margin-top-0">
               <Button
                 link
-                className="usa-link--external text-left"
+                className="usa-link--external text-left mobile-text-wrap"
                 href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                 icon="file-pdf"
                 iconColor="blue"
                 overrideMargin="margin-right-1"
                 rel="noopener noreferrer"
-                shouldWrapText={true}
                 target="_blank"
               >
                 Download Statement of Taxpayer Identification Number (T.C. Form
