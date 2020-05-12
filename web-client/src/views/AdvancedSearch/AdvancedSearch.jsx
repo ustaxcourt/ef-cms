@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from './OpinionSearchForm';
+import { OpinionSearchResults } from './OpinionSearchResults';
 import { OrderSearchForm } from './OrderSearchForm';
 import { OrderSearchResults } from './OrderSearchResults';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
@@ -21,6 +22,8 @@ export const AdvancedSearch = connect(
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence:
+      sequences.submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence:
       sequences.submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence:
@@ -33,6 +36,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
@@ -76,11 +80,11 @@ export const AdvancedSearch = connect(
             </Tab>
             <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
-                submitAdvancedSearchSequence={() =>
-                  console.log('submitOpinionAdvancedSearchSequence')
+                submitAdvancedSearchSequence={
+                  submitOpinionAdvancedSearchSequence
                 }
               />
-              <OrderSearchResults />
+              <OpinionSearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab

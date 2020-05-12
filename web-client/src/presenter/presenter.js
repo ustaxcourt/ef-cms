@@ -210,7 +210,6 @@ import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessi
 import { saveCaseAndServeToIrsSequence } from './sequences/saveCaseAndServeToIrsSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
-import { saveInternalCaseForLaterSequence } from './sequences/saveInternalCaseForLaterSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
@@ -276,6 +275,7 @@ import { submitExternalDocumentSequence } from './sequences/submitExternalDocume
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
@@ -359,6 +359,7 @@ import { validateForwardMessageSequence } from './sequences/validateForwardMessa
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
+import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
@@ -599,7 +600,6 @@ export const presenter = {
     saveCaseAndServeToIrsSequence,
     saveDocumentSigningSequence,
     saveIntermediateDocketEntrySequence,
-    saveInternalCaseForLaterSequence,
     saveSavedCaseForLaterSequence,
     scannerShutdownSequence,
     scannerStartupSequence,
@@ -663,6 +663,7 @@ export const presenter = {
     submitFilePetitionSequence,
     submitForwardSequence,
     submitLoginSequence,
+    submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPetitionFromPaperSequence,
     submitPractitionerBarNumberSearchSequence,
@@ -746,6 +747,7 @@ export const presenter = {
     validateInitialWorkItemMessageInModalSequence,
     validateInitialWorkItemMessageSequence,
     validateNoteSequence,
+    validateOpinionSearchSequence,
     validateOrderSearchSequence,
     validateOrderWithoutBodySequence,
     validatePetitionDetailsSequence,
