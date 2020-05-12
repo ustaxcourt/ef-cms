@@ -138,6 +138,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
+import { navigateToDocumentQcFromPrintPaperPetitionReceiptSequence } from './sequences/navigateToDocumentQcFromPrintPaperPetitionReceiptSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
@@ -208,7 +209,6 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
-import { saveCaseAndServeToIrsSequence } from './sequences/saveCaseAndServeToIrsSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
@@ -529,6 +529,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCaseDetailFromPaperServiceSequence,
     navigateToCaseDetailSequence,
+    navigateToDocumentQcFromPrintPaperPetitionReceiptSequence,
     navigateToEditOrderSequence,
     navigateToPathSequence,
     navigateToPrintPaperServiceSequence,
@@ -599,7 +600,6 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
-    saveCaseAndServeToIrsSequence,
     saveDocumentSigningSequence,
     saveIntermediateDocketEntrySequence,
     saveSavedCaseForLaterSequence,
