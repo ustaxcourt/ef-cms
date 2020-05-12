@@ -40,7 +40,7 @@ const formatDocument = (applicationContext, document) => {
   }
 
   result.showServedAt = !!result.servedAt;
-  result.isStatusServed = result.status === 'served';
+  result.isStatusServed = !!result.servedAt;
   result.isPetition =
     result.documentType === 'Petition' || result.eventCode === 'P';
 
