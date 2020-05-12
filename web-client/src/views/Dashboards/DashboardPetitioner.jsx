@@ -10,7 +10,7 @@ import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.pdf';
+import howToCreateACase from '../../pdfs/how-to-create-a-case.pdf';
 
 export const DashboardPetitioner = connect(
   {
@@ -42,7 +42,8 @@ export const DashboardPetitioner = connect(
                       size="1x"
                     />
                     <a
-                      href={howToPrepareYourDocuments}
+                      className="usa-link--external"
+                      href={howToCreateACase}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -110,6 +111,7 @@ export const DashboardPetitioner = connect(
                       <strong>Pay by debit/credit card</strong>
                       <br />
                       Copy your docket number(s) and pay online.
+                      <br />
                       <Button
                         className="margin-bottom-3 margin-top-2"
                         id="pay_filing_fee"
@@ -137,15 +139,21 @@ export const DashboardPetitioner = connect(
                         Washington, DC 20217
                         <br />
                         <br />
+                        <strong>Can’t afford to pay the filing fee?</strong>
                         <p>
-                          <strong>Can’t afford to pay the filing fee?</strong>
-                          <Button
-                            link
-                            icon={['fa', 'file-pdf']}
-                            iconColor="blue"
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon="file-pdf"
+                            size="1x"
+                          />
+                          <a
+                            className="usa-link--external"
+                            href="https://www.ustaxcourt.gov/forms.htm"
+                            rel="noopener noreferrer"
+                            target="_blank"
                           >
                             Download Application For Waiver of Filing Fee
-                          </Button>
+                          </a>
                         </p>
                       </AccordionItem>
                     </Accordion>
