@@ -1,17 +1,29 @@
+import { AdvancedDocumentSearch } from './AdvancedDocumentSearch';
 import { Button } from '../../ustc-ui/Button/Button';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpinionSearchByKeyword } from './OpinionSearchByKeyword';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const OpinionSearchForm = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    judges: state.judges,
+    updateAdvancedOpinionSearchFormValueSequence:
+      sequences.updateAdvancedOpinionSearchFormValueSequence,
+    validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
+    validationErrors: state.validationErrors,
   },
   function OpinionSearchForm({
+    advancedSearchForm,
     clearAdvancedSearchFormSequence,
+    judges,
     submitAdvancedSearchSequence,
+    updateAdvancedOpinionSearchFormValueSequence,
+    validateOpinionSearchSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -30,7 +42,7 @@ export const OpinionSearchForm = connect(
               <OpinionSearchByKeyword />
 
               <NonMobile>
-                <div className="grid-row margin-top-1">
+                <div className="grid-row margin-top-10">
                   <div className="tablet:grid-col-12">
                     <Button
                       className="margin-bottom-0"
@@ -55,6 +67,15 @@ export const OpinionSearchForm = connect(
                 </div>
               </NonMobile>
             </div>
+
+            <AdvancedDocumentSearch
+              formName={advancedSearchForm.opinionSearch}
+              formType="opinionSearch"
+              judges={judges}
+              updateSequence={updateAdvancedOpinionSearchFormValueSequence}
+              validateSequence={validateOpinionSearchSequence}
+              validationErrors={validationErrors}
+            />
           </form>
         </div>
       </>
