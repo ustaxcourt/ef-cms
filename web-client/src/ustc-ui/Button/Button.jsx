@@ -15,6 +15,7 @@ export const Button = props => {
     marginDirection = 'right',
     overrideMargin = false,
     secondary,
+    shouldWrapText = false,
     ...remainingProps
   } = props;
 
@@ -25,7 +26,7 @@ export const Button = props => {
     'usa-button',
     !overrideMargin && `margin-${marginDirection}-205`,
     overrideMargin,
-    icon && 'no-wrap',
+    icon && !shouldWrapText && 'no-wrap',
     secondary && 'usa-button--outline',
     link && 'usa-button--unstyled ustc-button--unstyled',
   );
