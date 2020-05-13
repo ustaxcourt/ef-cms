@@ -111,6 +111,7 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_SERVED_PETITION_TEMPLATE: petition_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
