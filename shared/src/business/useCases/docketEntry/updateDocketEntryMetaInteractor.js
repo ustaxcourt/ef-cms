@@ -59,6 +59,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
     date: docketEntryMeta.date,
     description: docketEntryMeta.description,
+    docketNumbers: docketEntryMeta.docketNumbers,
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
@@ -76,6 +77,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     servedAt: docketEntryMeta.servedAt,
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
+    trialLocation: docketEntryMeta.trialLocation,
   };
 
   const documentEntityForFiledBy = new Document(
