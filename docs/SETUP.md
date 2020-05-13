@@ -59,6 +59,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full S3 path to the Dynamic Web TWAIN ZIP, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
+     - `IRS_SUPERUSER_EMAIL` (email address used to serve all new petitions to the IRS)
 8. Run a build in CircleCI.
 
 ## Setting up a new environment
