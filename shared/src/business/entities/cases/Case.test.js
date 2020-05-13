@@ -8,6 +8,7 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -548,8 +549,6 @@ describe('Case entity', () => {
       );
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       expect(caseRecord.irsSendDate).toBeDefined();
-      expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
-      expect(caseRecord.docketRecord[1].status).toBeUndefined();
     });
   });
 
@@ -1609,6 +1608,18 @@ describe('Case entity', () => {
         documentId: MOCK_DOCUMENTS[0].documentId,
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+    });
+  });
+
+  describe('getPetitionDocument', () => {
+    it('should get the petition document by documentType', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const result = myCase.getPetitionDocument();
+      expect(result.documentType).toEqual(
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      );
     });
   });
 
