@@ -8,7 +8,7 @@ import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumen
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
-import petitionsClerkCreatesMessageToChambers from './journey/petitionsClerkCreatesMessageToChambers';
+import { petitionsClerkCreatesMessageToChambers } from './journey/petitionsClerkCreatesMessageToChambers';
 
 const test = setupTest();
 

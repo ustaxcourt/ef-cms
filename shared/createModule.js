@@ -8,7 +8,6 @@ const targets = [
   'shared/src/business/useCaseHelper/courtIssuedDocument/paperServiceAddressPage.pug',
   'shared/src/business/useCaseHelper/standingPretrialNotice/standingPretrialNotice.pug',
   'shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
-  'shared/src/business/useCaseHelper/caseInventoryReport/caseInventoryReport.pug',
   'shared/src/business/utilities/htmlGenerator/index.pug',
   'shared/src/business/utilities/htmlGenerator/index.scss',
   'shared/src/business/utilities/generateHTMLTemplateForPDF/noticeOfTrialIssued.pug',

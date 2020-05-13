@@ -1641,7 +1641,11 @@ describe('Case entity', () => {
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
-      expect(myCase.documents[0].processingStatus).toEqual('success');
+      expect(
+        myCase.documents.find(
+          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+        ).processingStatus,
+      ).toEqual('success');
     });
   });
 
