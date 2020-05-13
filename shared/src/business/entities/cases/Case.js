@@ -921,16 +921,6 @@ Case.prototype.closeCase = function () {
 Case.prototype.markAsSentToIRS = function (sendDate) {
   this.irsSendDate = sendDate;
   this.status = Case.STATUS_TYPES.generalDocket;
-  this.documents.forEach(document => {
-    document.status = 'served';
-  });
-  const dateServed = prepareDateFromString(undefined, 'L LT');
-  const status = `R served on ${dateServed}`;
-  this.docketRecord.forEach(docketRecord => {
-    if (docketRecord.documentId) {
-      docketRecord.status = status;
-    }
-  });
 
   return this;
 };
@@ -1016,6 +1006,14 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
 Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return this.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
 };
 
 /**
