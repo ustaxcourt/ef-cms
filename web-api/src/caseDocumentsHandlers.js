@@ -25,8 +25,6 @@ module.exports = {
     .opinionAdvancedSearchLambda,
   orderAdvancedSearchLambda: require('./documents/orderAdvancedSearchLambda')
     .orderAdvancedSearchLambda,
-  saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
-    .saveIntermediateDocketEntryLambda,
   serveCourtIssuedDocumentLambda: require('./cases/serveCourtIssuedDocumentLambda')
     .serveCourtIssuedDocumentLambda,
   signDocumentLambda: require('./documents/signDocumentLambda')
