@@ -136,7 +136,7 @@ export const SignOrder = connect(
         start();
         hasStarted = true;
       }
-    }, []);
+    }, [currentPageNumber]);
 
     return (
       <>
