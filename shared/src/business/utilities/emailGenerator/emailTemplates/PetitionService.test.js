@@ -1,6 +1,6 @@
 const React = require('react');
+const { mount, shallow } = require('enzyme');
 const { PetitionService } = require('./PetitionService.jsx');
-const { shallow } = require('enzyme');
 
 describe('PetitionService', () => {
   const caseDetail = {
@@ -15,6 +15,7 @@ describe('PetitionService', () => {
     city: 'Somecity',
     name: 'Test Petitioner',
     postalCode: '12345',
+    serviceIndicator: 'Electronic',
     state: 'ST',
   };
 
@@ -24,6 +25,7 @@ describe('PetitionService', () => {
     city: 'Somecity',
     name: 'Secondary Petitioner',
     postalCode: '12345',
+    serviceIndicator: 'Paper',
     state: 'ST',
   };
 
@@ -68,7 +70,6 @@ describe('PetitionService', () => {
       <PetitionService
         caseDetail={caseDetail}
         contactPrimary={contactPrimary}
-        contactSecondary={contactSecondary}
         docketEntryNumber={docketEntryNumber}
         documentDetail={documentDetail}
         practitioners={practitioners}
@@ -80,5 +81,111 @@ describe('PetitionService', () => {
     expect(caseInfo.text()).toContain(caseDetail.docketNumber);
     expect(caseInfo.text()).toContain(caseDetail.caseTitle);
     expect(caseInfo.text()).toContain(caseDetail.trialLocation);
+  });
+
+  it('renders document information', () => {
+    const wrapper = shallow(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={practitioners}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const documentInfo = wrapper.find('#document-information');
+
+    expect(documentInfo.text()).toContain(documentDetail.eventCode);
+    expect(documentInfo.text()).toContain(documentDetail.documentTitle);
+    expect(documentInfo.text()).toContain(
+      `Docket Entry No. ${docketEntryNumber}`,
+    );
+    expect(documentInfo.text()).toContain(documentDetail.mailingDate);
+    expect(documentInfo.text()).toContain(documentDetail.servedAtFormatted);
+  });
+
+  it('renders petitioner information', () => {
+    const wrapper = mount(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={practitioners}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const petitionerInfo = wrapper.find('#petitioner-information');
+
+    expect(petitionerInfo.text()).toContain(contactPrimary.name);
+    expect(petitionerInfo.text()).toContain(contactPrimary.address1);
+    expect(petitionerInfo.text()).toContain(contactPrimary.address2);
+    expect(petitionerInfo.text()).toContain(contactPrimary.city);
+    expect(petitionerInfo.text()).toContain(contactPrimary.state);
+    expect(petitionerInfo.text()).toContain(contactPrimary.postalCode);
+    expect(petitionerInfo.text()).toContain(contactPrimary.serviceIndicator);
+
+    expect(petitionerInfo.text()).not.toContain(contactSecondary.name);
+  });
+
+  it('renders additional petitioner information if contactSecondary is provided', () => {
+    const wrapper = mount(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        contactSecondary={contactSecondary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={practitioners}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const petitionerInfo = wrapper.find('#petitioner-information');
+
+    expect(petitionerInfo.text()).toContain(contactSecondary.name);
+    expect(petitionerInfo.text()).toContain(contactSecondary.address1);
+    expect(petitionerInfo.text()).toContain(contactSecondary.address2);
+    expect(petitionerInfo.text()).toContain(contactSecondary.city);
+    expect(petitionerInfo.text()).toContain(contactSecondary.state);
+    expect(petitionerInfo.text()).toContain(contactSecondary.postalCode);
+    expect(petitionerInfo.text()).toContain(contactSecondary.serviceIndicator);
+  });
+
+  it('renders practitioner information', () => {
+    const wrapper = mount(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        contactSecondary={contactSecondary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={practitioners}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const practitionerInfo = wrapper.find('#practitioner-information');
+
+    expect(practitionerInfo.text()).toContain(practitioners[0].name);
+    expect(practitionerInfo.text()).toContain(practitioners[0].address1);
+    expect(practitionerInfo.text()).toContain(practitioners[0].city);
+    expect(practitionerInfo.text()).toContain(practitioners[0].state);
+    expect(practitionerInfo.text()).toContain(practitioners[0].postalCode);
+    expect(practitionerInfo.text()).toContain(practitioners[0].phoneNumber);
+    expect(practitionerInfo.text()).toContain(practitioners[0].email);
+    expect(practitionerInfo.text()).toContain(
+      `Representing ${practitioners[0].representing}`,
+    );
+
+    expect(practitionerInfo.text()).toContain(practitioners[1].name);
+    expect(practitionerInfo.text()).toContain(practitioners[1].address1);
+    expect(practitionerInfo.text()).toContain(practitioners[1].city);
+    expect(practitionerInfo.text()).toContain(practitioners[1].state);
+    expect(practitionerInfo.text()).toContain(practitioners[1].postalCode);
+    expect(practitionerInfo.text()).toContain(practitioners[1].phoneNumber);
+    expect(practitionerInfo.text()).toContain(practitioners[1].email);
+    expect(practitionerInfo.text()).toContain(
+      `Representing ${practitioners[1].representing}`,
+    );
   });
 });
