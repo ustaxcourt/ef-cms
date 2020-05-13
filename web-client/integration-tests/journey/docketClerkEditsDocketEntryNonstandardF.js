@@ -6,8 +6,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
-export const docketClerkEditsDocketEntryNonstandardC = test => {
-  return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario', async () => {
+export const docketClerkEditsDocketEntryNonstandardF = test => {
+  return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard F scenario', async () => {
     let caseDetailFormatted;
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -40,65 +40,23 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'DCL',
+      value: 'SUPM',
     });
 
     await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'Bob Barker',
+      key: 'ordinalValue',
+      value: 'First',
     });
-
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
       value: petitionDocument.documentId,
-    });
-
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'mailingDate',
-      value: 'yesterday',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'additionalInfo',
-      value: 'some additional info',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'additionalInfo2',
-      value: 'some additional info pt 2',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'addToCoversheet',
-      value: true,
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'attachments',
-      value: true,
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfService',
-      value: true,
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '1',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '1',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2011',
-    });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'pending',
-      value: true,
     });
 
     await test.runSequence('submitDocketEntrySequence');
@@ -119,26 +77,16 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
 
     const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
     expect(updatedDocketEntry).toMatchObject({
-      description:
-        'Declaration of Bob Barker in Support of Petition some additional info',
+      description: 'First Supplement to Petition some additional info',
     });
 
     const updatedDocument = caseDetailFormatted.documents.find(
       document => document.documentId === documentId,
     );
     expect(updatedDocument).toMatchObject({
-      addToCoversheet: true,
-      additionalInfo: 'some additional info',
-      additionalInfo2: 'some additional info pt 2',
-      attachments: true,
-      certificateOfService: true,
-      certificateOfServiceDate: '2011-01-01',
-      documentTitle: 'Declaration of Bob Barker in Support of Petition',
-      documentType: 'Declaration in Support',
-      eventCode: 'DCL',
-      lodged: true,
-      mailingDate: 'yesterday',
-      pending: true,
+      documentTitle: 'First Supplement to Petition',
+      documentType: 'Supplement',
+      eventCode: 'SUPM',
     });
   });
 };
