@@ -20,6 +20,7 @@
     "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "documentTitle": "Order that this case is sealed",
+    "documentContents": "We are sealing this case right meow.\n",
     "relationship": "primaryDocument",
     "workItems": [
       {
@@ -101,7 +102,8 @@
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-04-29T15:52:16.484Z",
-    "docketNumber": "105-20"
+    "docketNumber": "105-20",
+    "status": "served"
   },
 
   {
@@ -113,7 +115,7 @@
     "description": "Order that this case is sealed",
     "index": 3,
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
 
@@ -553,7 +555,7 @@
         "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-outbox|petitions",
+    "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "105-20",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk"
