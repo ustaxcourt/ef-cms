@@ -38,6 +38,10 @@ const {
   PetitionService,
 } = require('../emailGenerator/emailTemplates/PetitionService.jsx');
 
+const {
+  DocumentService,
+} = require('../emailGenerator/emailTemplates/DocumentService');
+
 const React = require('react');
 const ReactDOM = require('react-dom/server');
 
@@ -46,6 +50,7 @@ const components = {
   ChangeOfAddress,
   DatePrintedFooter,
   DocketRecord,
+  DocumentService,
   NoticeOfDocketChange,
   PageMetaHeaderDocket,
   PetitionService,
