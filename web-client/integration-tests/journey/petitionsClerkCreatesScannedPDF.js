@@ -1,6 +1,6 @@
 import { setBatchPages } from '../helpers';
 
-export default test => {
+export const petitionsClerkCreatesScannedPDF = test => {
   return it('Petitions clerk creates a PDF from added batches', async () => {
     const selectedDocumentType = test.getState(
       'currentViewMetadata.documentSelectedForScan',

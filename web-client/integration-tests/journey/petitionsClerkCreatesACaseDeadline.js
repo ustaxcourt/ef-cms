@@ -2,7 +2,7 @@ import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
-export default (test, overrides = {}) => {
+export const petitionsClerkCreatesACaseDeadline = (test, overrides = {}) => {
   return it('Petitions clerk creates a case deadline', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
