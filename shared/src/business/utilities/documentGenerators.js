@@ -236,7 +236,7 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
     showStatusColumn,
   } = data;
 
-  const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
+  const caseInventoryReportTemplate = reactTemplateGenerator({
     componentName: 'CaseInventoryReport',
     data: {
       formattedCases,
@@ -263,7 +263,7 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
-    content: { main: reactStandingPretrialOrderTemplate },
+    content: { main: caseInventoryReportTemplate },
     options: {
       overwriteMain: true,
       title: 'Case Inventory Report',

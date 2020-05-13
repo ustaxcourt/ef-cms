@@ -19,8 +19,8 @@ export const CaseInventoryReport = ({
           <tr>
             <th>Docket</th>
             <th>Case title</th>
-            {showStatusColumn && <th>Case Status</th>}
-            {showJudgeColumn && <th>Judge</th>}
+            {showStatusColumn && <th className="status-header">Case Status</th>}
+            {showJudgeColumn && <th className="judge-header">Judge</th>}
           </tr>
         </thead>
         <tbody>
@@ -31,8 +31,14 @@ export const CaseInventoryReport = ({
                 {formattedCase.docketNumberSuffix}
               </td>
               <td>{formattedCase.caseTitle}</td>
-              {showStatusColumn && <td>{formattedCase.status}</td>}
-              {showJudgeColumn && <td>{formattedCase.associatedJudge}</td>}
+              {showStatusColumn && (
+                <td className="status-column">{formattedCase.status}</td>
+              )}
+              {showJudgeColumn && (
+                <td className="judge-column">
+                  {formattedCase.associatedJudge}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
