@@ -1,6 +1,6 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
-import petitionsClerkViewsDocketRecordEditLinks from './journey/petitionsClerkViewsDocketRecordEditLinks';
+import { petitionsClerkViewsDocketRecordEditLinks } from './journey/petitionsClerkViewsDocketRecordEditLinks';
 
 const test = setupTest();
 
