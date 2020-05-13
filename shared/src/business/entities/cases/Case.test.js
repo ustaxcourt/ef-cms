@@ -548,8 +548,6 @@ describe('Case entity', () => {
       );
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       expect(caseRecord.irsSendDate).toBeDefined();
-      expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
-      expect(caseRecord.docketRecord[1].status).toBeUndefined();
     });
   });
 
