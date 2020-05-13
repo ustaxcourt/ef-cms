@@ -135,6 +135,20 @@ const pendingReport = async ({ applicationContext, data }) => {
     },
   });
 
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: `Pending Report: ${subtitle}`,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
@@ -142,8 +156,8 @@ const pendingReport = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
-      footerHtml: '',
-      headerHtml: '',
+      footerHtml,
+      headerHtml,
       overwriteHeader: true,
     });
 
