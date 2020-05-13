@@ -1008,6 +1008,14 @@ Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
 
+Case.prototype.getPetitionDocument = function () {
+  return this.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+};
+
 /**
  *
  * @param {string} preferredTrialCity the preferred trial city

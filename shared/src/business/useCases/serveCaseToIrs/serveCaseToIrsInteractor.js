@@ -95,16 +95,14 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
         },
       ]);
       caseEntity.updateDocument(initialDocument);
-
-      await applicationContext
-        .getUseCaseHelpers()
-        .sendIrsSuperuserPetitionEmail({
-          applicationContext,
-          caseEntity,
-          documentEntity: initialDocument,
-        });
     }
   }
+
+  await applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail({
+    applicationContext,
+    caseEntity,
+    documentEntity: caseEntity.getPetitionDocument(),
+  });
 
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
