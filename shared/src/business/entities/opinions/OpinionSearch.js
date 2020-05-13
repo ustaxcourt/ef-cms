@@ -17,7 +17,7 @@ function OpinionSearch(rawProps = {}) {
   this.opinionKeyword = rawProps.opinionKeyword;
 }
 OpinionSearch.VALIDATION_ERROR_MESSAGES = {
-  opinionKeyword: 'Enter a keyword',
+  opinionKeyword: 'Enter a keyword or phrase',
 };
 
 OpinionSearch.schema = joi.object().keys({
