@@ -1,5 +1,5 @@
 const { Document } = require('../../entities/Document');
-const { DocumentSearch } = require('../../entities/orders/DocumentSearch');
+const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 
 /**
  * orderPublicSearchInteractor

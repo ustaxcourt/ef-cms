@@ -1,4 +1,4 @@
-import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
+import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -97,7 +97,7 @@ describe('docket clerk order advanced search', () => {
     await test.runSequence('submitOrderAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      keyword: OrderSearch.VALIDATION_ERROR_MESSAGES.keyword,
+      keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });
 
