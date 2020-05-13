@@ -69,7 +69,9 @@ export const formatOpinionSearchResultRecord = (result, applicationContext) => {
     .getUtilities()
     .getJudgeLastName(result.judge);
 
-  result.formattedDocumentType = result.documentType.split('-').pop().trim();
+  if (result.documentType) {
+    result.formattedDocumentType = result.documentType.split('-').pop().trim();
+  }
 
   return result;
 };
