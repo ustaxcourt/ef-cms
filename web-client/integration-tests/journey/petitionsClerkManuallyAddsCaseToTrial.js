@@ -7,7 +7,7 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
 );
 
-export default test => {
+export const petitionsClerkManuallyAddsCaseToTrial = test => {
   return it('Petitions clerk manually adds a case to an uncalendared trial session', async () => {
     const caseToAdd =
       test.casesReadyForTrial[test.casesReadyForTrial.length - 1];
