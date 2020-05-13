@@ -37,9 +37,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
-  const shouldScrapePDFContents =
-    !documentMetadata.documentContents &&
-    !documentMetadata.draftState.documentContents;
+  const shouldScrapePDFContents = !documentMetadata.documentContents;
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -71,31 +69,32 @@ exports.fileCourtIssuedOrderInteractor = async ({
     }
   }
 
-  const documentContentsId = applicationContext.getUniqueId();
+  if (documentMetadata.documentContents) {
+    const documentContentsId = applicationContext.getUniqueId();
 
-  const contentToStore = {
-    documentContents: documentMetadata.documentContents,
-    richText: documentMetadata.draftState
-      ? documentMetadata.draftState.richText
-      : undefined,
-  };
+    const contentToStore = {
+      documentContents: documentMetadata.documentContents,
+      richText: documentMetadata.draftState
+        ? documentMetadata.draftState.richText
+        : undefined,
+    };
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    contentType: 'text/plain',
-    document: Buffer.from(JSON.stringify(contentToStore)),
-    documentId: documentContentsId,
-    useTempBucket: true,
-  });
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(JSON.stringify(contentToStore)),
+      documentId: documentContentsId,
+      useTempBucket: true,
+    });
 
-  if (documentMetadata.draftState) {
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
+    if (documentMetadata.draftState) {
+      delete documentMetadata.draftState.documentContents;
+      delete documentMetadata.draftState.richText;
+      delete documentMetadata.draftState.editorDelta;
+    }
+
+    delete documentMetadata.documentContents;
+    documentMetadata.documentContentsId = documentContentsId;
   }
-
-  delete documentMetadata.documentContents;
-  documentMetadata.documentContentsId = documentContentsId;
 
   const documentEntity = new Document(
     {
