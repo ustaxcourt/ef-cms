@@ -5,6 +5,9 @@ require('@babel/register')({
 });
 
 const {
+  CaseInventoryReport,
+} = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
+const {
   ChangeOfAddress,
 } = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx');
 const {
@@ -24,15 +27,25 @@ const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
 
+const {
+  DatePrintedFooter,
+} = require('../pdfGenerator/components/DatePrintedFooter.jsx');
+const {
+  ReportsMetaHeader,
+} = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
+
 const React = require('react');
 const ReactDOM = require('react-dom/server');
 
 const components = {
+  CaseInventoryReport,
   ChangeOfAddress,
+  DatePrintedFooter,
   DocketRecord,
   NoticeOfDocketChange,
   PageMetaHeaderDocket,
   ReceiptOfFiling,
+  ReportsMetaHeader,
   StandingPretrialOrder,
 };
 
