@@ -64,18 +64,19 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
-  casePublicSearch: casePublicSearchPersistence,
-} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
-const {
-  casePublicSearchInteractor,
-} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
-const {
+  caseInventoryReport,
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
+const {
+  casePublicSearch: casePublicSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
+const {
+  casePublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -959,6 +960,7 @@ module.exports = (appContextUser = {}) => {
       return dynamoClientCache[type];
     },
     getDocumentGenerators: () => ({
+      caseInventoryReport,
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
