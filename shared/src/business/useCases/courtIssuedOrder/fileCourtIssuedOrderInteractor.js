@@ -73,7 +73,10 @@ exports.fileCourtIssuedOrderInteractor = async ({
     }
   }
 
-  if (documentMetadata.documentContents) {
+  if (
+    documentMetadata.documentContents ||
+    documentMetadata.draftState.richText
+  ) {
     const documentContentsId = applicationContext.getUniqueId();
 
     const contentToStore = {
