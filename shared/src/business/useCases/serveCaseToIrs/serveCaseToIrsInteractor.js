@@ -10,7 +10,6 @@ const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { PDFDocument } = require('pdf-lib');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -195,7 +194,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
-  const results = await applicationContext
+  const pdfData = await applicationContext
     .getUseCaseHelpers()
     .generateCaseConfirmationPdf({
       applicationContext,
@@ -203,24 +202,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
 
   if (caseEntity.isPaper) {
-    const pdfData = results;
-    const noticeDoc = await PDFDocument.load(pdfData);
-    const newPdfDoc = await PDFDocument.create();
-
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+    const paperServicePdfBuffer = Buffer.from(pdfData);
 
     return paperServicePdfBuffer;
   }
