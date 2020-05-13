@@ -1,5 +1,5 @@
 const { Document } = require('../../entities/Document');
-const { OpinionSearch } = require('../../entities/opinions/OpinionSearch');
+const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 
 /**
  * opinionPublicSearchInteractor
@@ -12,7 +12,7 @@ exports.opinionPublicSearchInteractor = async ({
   applicationContext,
   opinionKeyword,
 }) => {
-  const opinionSearch = new OpinionSearch({
+  const opinionSearch = new DocumentSearch({
     opinionKeyword,
   });
 

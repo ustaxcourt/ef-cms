@@ -52,7 +52,7 @@ describe('orderAdvancedSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderAdvancedSearchInteractor({
       applicationContext,
-      orderKeyword: 'candy',
+      keyword: 'candy',
     });
 
     expect(result).toMatchObject([
@@ -81,11 +81,11 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('searches for documents that are of type orders', async () => {
-    const orderKeyword = 'keyword';
+    const keyword = 'keyword';
 
     await orderAdvancedSearchInteractor({
       applicationContext,
-      orderKeyword,
+      keyword,
     });
 
     expect(

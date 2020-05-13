@@ -1,10 +1,10 @@
 const {
+  DocumentSearch,
+} = require('../../business/entities/documents/DocumentSearch');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  OpinionSearch,
-} = require('../../business/entities/opinions/OpinionSearch');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { Document } = require('../../business/entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -27,7 +27,7 @@ exports.opinionAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const opinionSearch = new OpinionSearch({
+  const opinionSearch = new DocumentSearch({
     opinionKeyword,
   });
 

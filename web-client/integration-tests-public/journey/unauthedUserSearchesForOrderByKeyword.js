@@ -6,7 +6,7 @@ export default (test, testClient) => {
 
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'osteodontolignikeratic',
+        keyword: 'osteodontolignikeratic',
       },
     });
 
@@ -17,7 +17,7 @@ export default (test, testClient) => {
 
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'dismissed',
+        keyword: 'dismissed',
       },
     });
 
