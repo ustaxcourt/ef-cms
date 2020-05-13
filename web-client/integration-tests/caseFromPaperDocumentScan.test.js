@@ -1,7 +1,8 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
-import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
+import { petitionsClerkAddsScannedBatch } from './journey/petitionsClerkAddsScannedBatch';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkCreatesScannedPDF } from './journey/petitionsClerkCreatesScannedPDF';
+import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
 import petitionsClerkRescansAddedBatch from './journey/petitionsClerkRescansAddedBatch';
@@ -63,4 +64,5 @@ describe('Case from Paper Document Scan journey', () => {
   });
   petitionsClerkCreatesScannedPDF(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkSubmitsPaperCaseToIrs(test);
 });

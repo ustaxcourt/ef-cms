@@ -5,20 +5,6 @@ const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
 const { User } = require('../../entities/User');
-const PDF_MOCK_BUFFER = 'Hello World';
-
-const pageMock = {
-  addStyleTag: () => {},
-  pdf: () => {
-    return PDF_MOCK_BUFFER;
-  },
-  setContent: () => {},
-};
-
-const chromiumBrowserMock = {
-  close: jest.fn(),
-  newPage: () => pageMock,
-};
 
 const mockCases = [
   {
@@ -35,41 +21,17 @@ const mockCases = [
 
 describe('generateCaseInventoryReportPdf', () => {
   let user;
-  let generatePdfReportInteractorMock;
-  let generatedHtml;
 
   beforeEach(() => {
     user = { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
 
-    generatedHtml = '';
-    generatePdfReportInteractorMock = jest.fn(({ contentHtml }) => {
-      generatedHtml = contentHtml;
-    });
-
     applicationContext.getCurrentUser.mockReturnValue(user);
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      docketNumber: '101-19',
-    });
+
     applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue({
         url: 'https://www.example.com',
       });
-    applicationContext.getPug.mockReturnValue({
-      compile: () => ({ showJudgeColumn, showStatusColumn }) => {
-        const judgeColumn = showJudgeColumn ? '<th>Judge</th>' : '';
-        const statusColumn = showStatusColumn ? '<th>Case Status</th>' : '';
-        return `${judgeColumn} ${statusColumn}`;
-      },
-    });
-    applicationContext.getChromiumBrowser.mockReturnValue(chromiumBrowserMock);
-
-    applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback(),
-    });
-    applicationContext.getUseCases.mockReturnValue({
-      generatePdfReportInteractor: generatePdfReportInteractorMock,
-    });
   });
 
   it('throws an error if the user is unauthorized', async () => {
@@ -92,27 +54,25 @@ describe('generateCaseInventoryReportPdf', () => {
       filters: { associatedJudge: 'Chief Judge' },
     });
 
-    expect(generatePdfReportInteractorMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().caseInventoryReport,
+    ).toHaveBeenCalled();
   });
 
-  it('returns the pdf buffer produced by the generator', async () => {
+  it('returns the pre-signed url to the document', async () => {
     const result = await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
       filters: { associatedJudge: 'Chief Judge' },
     });
 
-    expect(result).toEqual('https://www.example.com');
+    expect(result).toEqual({ url: 'https://www.example.com' });
   });
 
   it('should catch, log, and rethrow an error thrown by the generator', async () => {
-    generatePdfReportInteractorMock = jest
-      .fn()
-      .mockRejectedValue(new Error('bad!'));
-
-    applicationContext.getUseCases.mockReturnValue({
-      generatePdfReportInteractor: generatePdfReportInteractorMock,
-    });
+    applicationContext
+      .getDocumentGenerators()
+      .caseInventoryReport.mockRejectedValue(new Error('bad!'));
 
     await expect(
       generateCaseInventoryReportPdf({
@@ -124,35 +84,59 @@ describe('generateCaseInventoryReportPdf', () => {
   });
 
   it('should hide the status column if the status filter is set', async () => {
+    applicationContext
+      .getDocumentGenerators()
+      .caseInventoryReport.mockReturnValue(null);
+
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
       filters: { status: 'New' },
     });
 
-    expect(generatedHtml.includes('<th>Judge</th>')).toBeTruthy();
-    expect(generatedHtml.includes('<th>Case Status</th>')).toBeFalsy();
+    const {
+      showJudgeColumn,
+      showStatusColumn,
+    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    expect(showStatusColumn).toBeFalsy();
+    expect(showJudgeColumn).toBeTruthy();
   });
 
   it('should hide the judge column if the judge filter is set', async () => {
+    applicationContext
+      .getDocumentGenerators()
+      .caseInventoryReport.mockReturnValue(null);
+
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
       filters: { associatedJudge: 'Chief Judge' },
     });
 
-    expect(generatedHtml.includes('<th>Case Status</th>')).toBeTruthy();
-    expect(generatedHtml.includes('<th>Judge</th>')).toBeFalsy();
+    const {
+      showJudgeColumn,
+      showStatusColumn,
+    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    expect(showStatusColumn).toBeTruthy();
+    expect(showJudgeColumn).toBeFalsy();
   });
 
   it('should hide the judge and status columns if the associatedJudge and status filters are set', async () => {
+    applicationContext
+      .getDocumentGenerators()
+      .caseInventoryReport.mockReturnValue(null);
+
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
       filters: { associatedJudge: 'Chief Judge', status: 'New' },
     });
 
-    expect(generatedHtml.includes('<th>Judge</th>')).toBeFalsy();
-    expect(generatedHtml.includes('<th>Case Status</th>')).toBeFalsy();
+    const {
+      showJudgeColumn,
+      showStatusColumn,
+    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    expect(showStatusColumn).toBeFalsy();
+    expect(showJudgeColumn).toBeFalsy();
   });
 });

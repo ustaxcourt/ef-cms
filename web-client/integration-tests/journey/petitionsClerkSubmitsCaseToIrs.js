@@ -63,5 +63,10 @@ export default test => {
     expect(test.getState('caseDetail.status')).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
+    //check that documents were served
+    const documents = test.getState('caseDetail.documents');
+    for (const document of documents) {
+      expect(document.servedAt).toBeDefined();
+    }
   });
 };
