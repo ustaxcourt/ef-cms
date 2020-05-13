@@ -11,6 +11,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('./documentGenerators');
@@ -239,6 +240,63 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Standing_Pretrial_Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('pendingReport', () => {
+    it('generates a Pending Report document', async () => {
+      const pdf = await pendingReport({
+        applicationContext,
+        data: {
+          pendingItems: [
+            {
+              caseTitle: 'Test Petitioner',
+              dateFiled: '02/02/20',
+              docketNumberWithSuffix: '123-45S',
+              filingsAndProceedings: 'Order',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Test Petitioner',
+              dateFiled: '02/22/20',
+              docketNumberWithSuffix: '123-45S',
+              filingsAndProceedings: 'Motion for a New Trial',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Other Petitioner',
+              dateFiled: '03/03/20',
+              docketNumberWithSuffix: '321-45S',
+              filingsAndProceedings: 'Order',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Other Petitioner',
+              dateFiled: '03/23/20',
+              docketNumberWithSuffix: '321-45S',
+              filingsAndProceedings: 'Order to Show Cause',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+          ],
+          subtitle: 'Chief Judge',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Pending_Report', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

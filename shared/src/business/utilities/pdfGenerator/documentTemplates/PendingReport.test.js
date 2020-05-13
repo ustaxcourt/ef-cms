@@ -19,9 +19,7 @@ describe('PendingReport', () => {
   });
 
   it('renders a document header with the document title and subtitle', () => {
-    const wrapper = mount(
-      <PendingReport subtitle="Test Subtitle" title="Pending Report" />,
-    );
+    const wrapper = mount(<PendingReport subtitle="Test Subtitle" />);
 
     expect(wrapper.find('#reports-header h1').text()).toEqual('Pending Report');
     expect(wrapper.find('#reports-header h2').text()).toEqual('Test Subtitle');
@@ -29,11 +27,7 @@ describe('PendingReport', () => {
 
   it('renders a table with pending item information', () => {
     const wrapper = shallow(
-      <PendingReport
-        pendingItems={pendingItems}
-        subtitle="Test Subtitle"
-        title="Pending Report"
-      />,
+      <PendingReport pendingItems={pendingItems} subtitle="Test Subtitle" />,
     );
 
     const tableData = wrapper.find('table tbody');
