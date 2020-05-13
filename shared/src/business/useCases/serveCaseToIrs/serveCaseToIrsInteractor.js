@@ -92,6 +92,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       initialDocument.setAsServed([
         {
           name: 'IRS',
+          role: 'irsSuperuser',
         },
       ]);
       caseEntity.updateDocument(initialDocument);
