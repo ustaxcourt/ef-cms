@@ -352,7 +352,6 @@ export const StartCaseStep3 = connect(
         <Contacts
           bind="form"
           contactsHelper="contactsHelper"
-          emailBind="user"
           parentView="StartCase"
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
