@@ -18,7 +18,7 @@ export const AdvancedDocumentSearch = props => {
 
   return (
     <>
-      <div className="grid-col" id="order-advanced">
+      <div className="grid-col" id="document-advanced">
         <h4>Narrow your search (optional)</h4>
         <FormGroup
           className="margin-bottom-0"
@@ -70,13 +70,13 @@ export const AdvancedDocumentSearch = props => {
         </FormGroup>
         <FormGroup>
           <div className="grid-row judge-search-row">
-            <label className="usa-label padding-top-105" htmlFor="order-judge">
+            <label className="usa-label padding-top-105" htmlFor="judge">
               Judge
             </label>
             <BindedSelect
               bind="formName.judge"
               className="usa-input"
-              id="order-judge"
+              id="judge"
               name="judge"
             >
               <option value="">- Select -</option>
