@@ -10,14 +10,14 @@ const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
 const joiStrictTimestamp = getTimestampSchema();
 
-DocumentSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
+DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-DocumentSearch.validationName = 'OrderSearch';
+DocumentSearch.validationName = 'DocumentSearch';
 
 /**
- * Order Search entity
+ * Document Search entity
  *
- * @param {object} rawProps the raw order search data
+ * @param {object} rawProps the raw document search data
  * @constructor
  */
 function DocumentSearch(rawProps = {}) {
@@ -145,4 +145,4 @@ DocumentSearch.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { OrderSearch: DocumentSearch };
+module.exports = { DocumentSearch };
