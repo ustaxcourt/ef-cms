@@ -1,19 +1,16 @@
+import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkEditsDocketEntryNonstandardA } from './journey/docketClerkEditsDocketEntryNonstandardA';
 import { docketClerkEditsDocketEntryNonstandardB } from './journey/docketClerkEditsDocketEntryNonstandardB';
 import { docketClerkEditsDocketEntryNonstandardC } from './journey/docketClerkEditsDocketEntryNonstandardC';
-// import { docketClerkEditsDocketEntryNonstandardD } from './journey/docketClerkEditsDocketEntryNonstandardD';
-// import { docketClerkEditsDocketEntryNonstandardE } from './journey/docketClerkEditsDocketEntryNonstandardE';
-// import { docketClerkEditsDocketEntryNonstandardF } from './journey/docketClerkEditsDocketEntryNonstandardF';
-// import { docketClerkEditsDocketEntryNonstandardG } from './journey/docketClerkEditsDocketEntryNonstandardG';
-// import { docketClerkEditsDocketEntryNonstandardH } from './journey/docketClerkEditsDocketEntryNonstandardH';
-// import { docketClerkEditsDocketEntryNonstandardI } from './journey/docketClerkEditsDocketEntryNonstandardI';
-// import { docketClerkEditsDocketEntryNonstandardJ } from './journey/docketClerkEditsDocketEntryNonstandardJ';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { docketClerkEditsDocketEntryNonstandardD } from './journey/docketClerkEditsDocketEntryNonstandardD';
+import { docketClerkEditsDocketEntryNonstandardE } from './journey/docketClerkEditsDocketEntryNonstandardE';
+import { docketClerkEditsDocketEntryNonstandardF } from './journey/docketClerkEditsDocketEntryNonstandardF';
+import { docketClerkEditsDocketEntryNonstandardG } from './journey/docketClerkEditsDocketEntryNonstandardG';
+import { docketClerkEditsDocketEntryNonstandardH } from './journey/docketClerkEditsDocketEntryNonstandardH';
 import { docketClerkEditsDocketEntryStandard } from './journey/docketClerkEditsDocketEntryStandard';
 import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -40,7 +37,6 @@ describe('docket clerk updates docket entries', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
-  petitionerFilesADocumentForCase(test, fakeFile);
 
   loginAs(test, 'docketclerk');
   docketClerkAddsDocketEntryWithoutFile(test);
@@ -49,11 +45,9 @@ describe('docket clerk updates docket entries', () => {
   docketClerkEditsDocketEntryNonstandardA(test);
   docketClerkEditsDocketEntryNonstandardB(test);
   docketClerkEditsDocketEntryNonstandardC(test);
-  // docketClerkEditsDocketEntryNonstandardD(test);
-  // docketClerkEditsDocketEntryNonstandardE(test);
-  // docketClerkEditsDocketEntryNonstandardF(test);
-  // docketClerkEditsDocketEntryNonstandardG(test);
-  // docketClerkEditsDocketEntryNonstandardH(test);
-  // docketClerkEditsDocketEntryNonstandardI(test);
-  // docketClerkEditsDocketEntryNonstandardJ(test);
+  docketClerkEditsDocketEntryNonstandardD(test);
+  docketClerkEditsDocketEntryNonstandardE(test);
+  docketClerkEditsDocketEntryNonstandardF(test);
+  docketClerkEditsDocketEntryNonstandardG(test);
+  docketClerkEditsDocketEntryNonstandardH(test);
 });

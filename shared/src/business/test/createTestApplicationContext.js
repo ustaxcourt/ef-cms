@@ -381,6 +381,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
+    getIrsSuperuserEmail: jest.fn(),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
