@@ -3,7 +3,11 @@ import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseIn
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+export const petitionsClerkCreatesNewCase = (
+  test,
+  fakeFile,
+  trialLocation = 'Birmingham, Alabama',
+) => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
