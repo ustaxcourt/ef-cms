@@ -1,26 +1,124 @@
 const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
-const filterRecords = records => {
+/**
+ * recursively deletes the key from the item
+ *
+ * @param {object} item the object from which to delete the key
+ * @param {string} key the key to delete recursively from the object
+ * @returns {object} the record with all instances of the key removed
+ */
+const recursivelyDeleteKey = (item, key) => {
+  Object.keys(item).some(function (k) {
+    if (k === key) {
+      delete item[k];
+    }
+    if (item[k] && typeof item[k] === 'object') {
+      const returnItem = recursivelyDeleteKey(item[k], key);
+      item[k] = returnItem;
+    }
+  });
+  return item;
+};
+
+/**
+ * deletes objects with dynamic keys and nested data to prevent hitting our ES mapping limit
+ *
+ * @param {object} record the object from which to delete unnecessary data
+ * @returns {object} the record with unnecessary data removed
+ */
+const deleteDynamicAndNestedFields = record => {
+  let data = record.dynamodb.NewImage;
+  //dynamic keys
+  if (data.qcCompleteForTrial) {
+    delete data.qcCompleteForTrial;
+  }
+  if (data.caseMetadata) {
+    delete data.caseMetadata;
+  }
+  //nested data
+  data = recursivelyDeleteKey(data, 'workItems');
+  data = recursivelyDeleteKey(data, 'draftState');
+
+  record.dynamodb.NewImage = data;
+  return record;
+};
+
+/**
+ * filters out records we do not want to index with elasticsearch
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array} providers.records the array of records to filter
+ * @returns {Array} the filtered records
+ */
+const filterRecords = async ({ applicationContext, records }) => {
   const filteredRecords = records.filter(
     record =>
       !record.dynamodb.Keys.pk.S.includes('work-item|') &&
       ['INSERT', 'MODIFY'].includes(record.eventName),
   );
 
-  return filteredRecords.map(record => {
-    if (
-      record.dynamodb.NewImage.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'Case'
-    ) {
-      //delete this object because its keys are dynamic and there is a limit to the amount of keys we can map in ES
-      delete record.dynamodb.NewImage.qcCompleteForTrial;
-    } else if (record.dynamodb.NewImage.workItems) {
-      //delete nested work items because they have nested documents that can cause us to hit our mapping limit
-      delete record.dynamodb.NewImage.workItems;
+  const caseRecords = filteredRecords.filter(record =>
+    record.dynamodb.Keys.pk.S.includes('case|'),
+  );
+
+  for (let caseRecord of caseRecords) {
+    const caseId = caseRecord.dynamodb.Keys.pk.S.split('|')[1];
+
+    const fullCase = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+
+    if (fullCase.caseId) {
+      filteredRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: caseRecord.dynamodb.Keys.pk.S,
+            },
+            sk: {
+              S: caseRecord.dynamodb.Keys.pk.S,
+            },
+          },
+          NewImage: AWS.DynamoDB.Converter.marshall(fullCase),
+        },
+        eventName: 'MODIFY',
+      });
     }
-    return record;
-  });
+
+    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
+      const documentWithCaseInfo = {
+        ...AWS.DynamoDB.Converter.marshall(fullCase),
+        ...caseRecord.dynamodb.NewImage,
+        docketRecord: undefined,
+        documents: undefined,
+        entityName: undefined,
+        irsPractitioners: undefined,
+        privatePractitioners: undefined,
+      };
+
+      filteredRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: caseRecord.dynamodb.Keys.pk.S,
+            },
+            sk: {
+              S: caseRecord.dynamodb.Keys.sk.S,
+            },
+          },
+          NewImage: documentWithCaseInfo,
+        },
+        eventName: 'MODIFY',
+      });
+    }
+  }
+
+  return filteredRecords.map(deleteDynamicAndNestedFields);
 };
 
 /**
@@ -35,99 +133,28 @@ exports.processStreamRecordsInteractor = async ({
 }) => {
   applicationContext.logger.info('Time', createISODateString());
   const searchClient = applicationContext.getSearchClient();
+  const honeybadger = applicationContext.initHoneybadger();
 
-  const filteredRecords = filterRecords(recordsToProcess).map(record => ({
-    ...record.dynamodb.NewImage,
-  }));
+  const filteredRecords = await filterRecords({
+    applicationContext,
+    records: recordsToProcess,
+  });
 
-  // fetch entire case persistence
-  const body = filteredRecords.flatMap(doc => [
-    { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: 'efcms' } },
-    doc,
-  ]);
-
-  if (body && body.length) {
+  if (filteredRecords.length) {
     try {
-      const response = await searchClient.bulk({
-        body,
-        refresh: true,
+      const {
+        failedRecords,
+      } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+        applicationContext,
+        records: filteredRecords,
       });
 
-      if (response.body.errors) {
-        for (let i = 0; i < response.body.items.length; i++) {
-          const action = response.body.items[i];
-          const operation = Object.keys(action)[0];
-          if (action[operation].error) {
-            let record = body[i * 2 + 1];
-            let caseId;
-
-            if (
-              record.pk.S.includes('case|') &&
-              record.sk.S.includes('case|')
-            ) {
-              caseId = record.pk.S.split('|')[1];
-
-              record = AWS.DynamoDB.Converter.marshall(
-                await applicationContext
-                  .getPersistenceGateway()
-                  .getCaseByCaseId({
-                    applicationContext,
-                    caseId,
-                  }),
-              );
-            }
-
-            try {
-              await searchClient.index({
-                body: { ...record },
-                id: `${record.pk.S}_${record.sk.S}`,
-                index: 'efcms',
-              });
-            } catch (e) {
-              await applicationContext
-                .getPersistenceGateway()
-                .createElasticsearchReindexRecord({
-                  applicationContext,
-                  recordPk: record.pk.S,
-                  recordSk: record.sk.S,
-                });
-
-              applicationContext.logger.info('Error', e);
-            }
-          }
-        }
-      }
-    } catch {
-      //if the bulk index fails, try each single index individually and
-      //add the failing ones to the reindex list
-      const recordsToReprocess = filterRecords(recordsToProcess);
-      for (const record of recordsToReprocess) {
-        if (['INSERT', 'MODIFY'].includes(record.eventName)) {
+      if (failedRecords.length) {
+        for (const failedRecord of failedRecords) {
           try {
-            let newImage = record.dynamodb.NewImage;
-            let caseId;
-
-            if (
-              record.dynamodb.Keys.pk.S.includes('case|') &&
-              record.dynamodb.Keys.sk.S.includes('case|')
-            ) {
-              caseId = record.dynamodb.Keys.pk.S.split('|')[1];
-
-              newImage = AWS.DynamoDB.Converter.marshall(
-                await applicationContext
-                  .getPersistenceGateway()
-                  .getCaseByCaseId({
-                    applicationContext,
-                    caseId,
-                  }),
-              );
-            }
-
             await searchClient.index({
-              body: {
-                ...newImage,
-              },
-              id: `${record.dynamodb.Keys.pk.S}_${record.dynamodb.Keys.sk.S}`,
+              body: { ...failedRecord },
+              id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
               index: 'efcms',
             });
           } catch (e) {
@@ -135,12 +162,47 @@ exports.processStreamRecordsInteractor = async ({
               .getPersistenceGateway()
               .createElasticsearchReindexRecord({
                 applicationContext,
-                recordPk: record.dynamodb.Keys.pk.S,
-                recordSk: record.dynamodb.Keys.sk.S,
+                recordPk: failedRecord.pk.S,
+                recordSk: failedRecord.sk.S,
               });
 
             applicationContext.logger.info('Error', e);
+            honeybadger && honeybadger.notify(e);
           }
+        }
+      }
+    } catch {
+      //if the bulk index fails, try each single index individually and
+      //add the failing ones to the reindex list
+      const recordsToReprocess = await filterRecords({
+        applicationContext,
+        records: recordsToProcess,
+      });
+
+      for (const record of recordsToReprocess) {
+        try {
+          let newImage = record.dynamodb.NewImage;
+
+          await applicationContext.getPersistenceGateway().indexRecord({
+            applicationContext,
+            fullRecord: newImage,
+            isAlreadyMarshalled: true,
+            record: {
+              recordPk: record.dynamodb.Keys.pk.S,
+              recordSk: record.dynamodb.Keys.sk.S,
+            },
+          });
+        } catch (e) {
+          await applicationContext
+            .getPersistenceGateway()
+            .createElasticsearchReindexRecord({
+              applicationContext,
+              recordPk: record.dynamodb.Keys.pk.S,
+              recordSk: record.dynamodb.Keys.sk.S,
+            });
+
+          applicationContext.logger.info('Error', e);
+          honeybadger && honeybadger.notify(e);
         }
       }
     }

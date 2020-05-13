@@ -27,7 +27,21 @@ describe('getPractitionerByBarNumber', () => {
     userId: '0105d1ab-18d0-43ec-bafb-654e83405416',
   };
 
-  const practitionerRecords = [privatePractitioner, irsPractitioner];
+  const inactivePractitioner = {
+    barNumber: 'PI9999',
+    name: 'Inactive Practitioner',
+    pk: 'user|be4274f0-c525-45bc-8378-9f30fd841571',
+    role: User.ROLES.inactivePractitioner,
+    section: 'inactivePractitioner',
+    sk: 'be4274f0-c525-45bc-8378-9f30fd841571',
+    userId: 'be4274f0-c525-45bc-8378-9f30fd841571',
+  };
+
+  const practitionerRecords = [
+    privatePractitioner,
+    irsPractitioner,
+    inactivePractitioner,
+  ];
 
   const mappingRecords = [
     {
@@ -37,6 +51,10 @@ describe('getPractitionerByBarNumber', () => {
     {
       pk: 'irsPractitioner|PI5678',
       sk: 'user|0105d1ab-18d0-43ec-bafb-654e83405416',
+    },
+    {
+      pk: 'inactivePractitioner|PI9999',
+      sk: 'user|be4274f0-c525-45bc-8378-9f30fd841571',
     },
   ];
 
@@ -63,6 +81,9 @@ describe('getPractitionerByBarNumber', () => {
     expect(
       client.query.mock.calls[1][0].ExpressionAttributeValues[':pk'],
     ).toEqual('privatePractitioner|PT1234');
+    expect(
+      client.query.mock.calls[2][0].ExpressionAttributeValues[':pk'],
+    ).toEqual('inactivePractitioner|PT1234');
   });
 
   it('should return privatePractitioner with matching bar number', async () => {
@@ -79,6 +100,14 @@ describe('getPractitionerByBarNumber', () => {
       barNumber: 'PI5678',
     });
     expect(result).toEqual(irsPractitioner);
+  });
+
+  it('should return inactivePractitioner with matching bar number', async () => {
+    const result = await getPractitionerByBarNumber({
+      applicationContext,
+      barNumber: 'PI9999',
+    });
+    expect(result).toEqual(inactivePractitioner);
   });
 
   it('should return undefined with no matching bar number', async () => {

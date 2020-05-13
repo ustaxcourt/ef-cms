@@ -34,13 +34,11 @@ export const addCaseToTrialSessionAction = async ({
   let alertSuccess;
   if (sessionIsCalendared) {
     alertSuccess = {
-      message: 'Trial details are visible under Trial Information.',
-      title: 'This case has been set for trial',
+      message: 'Case set for trial.',
     };
   } else {
     alertSuccess = {
-      message: 'This case will be set for trial when the calendar is set.',
-      title: 'This case has been scheduled for trial',
+      message: 'Case scheduled for trial.',
     };
   }
   return {

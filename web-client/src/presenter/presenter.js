@@ -145,7 +145,6 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPreviewSequence } from './sequences/navigateToPrintPreviewSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
-import { navigateToReviewPetitionFromPaperSequence } from './sequences/navigateToReviewPetitionFromPaperSequence';
 import { navigateToReviewSavedPetitionSequence } from './sequences/navigateToReviewSavedPetitionSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
@@ -209,6 +208,7 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
+import { reviewPetitionFromPaperSequence } from './sequences/reviewPetitionFromPaperSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveCaseAndServeToIrsSequence } from './sequences/saveCaseAndServeToIrsSequence';
@@ -326,6 +326,7 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
 import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
+import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
 import { updatePetitionerInformationFormSequence } from './sequences/updatePetitionerInformationFormSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
@@ -535,7 +536,6 @@ export const presenter = {
     navigateToPrintPreviewSequence,
     navigateToPrintableCaseConfirmationSequence,
     navigateToPrintableDocketRecordSequence,
-    navigateToReviewPetitionFromPaperSequence,
     navigateToReviewSavedPetitionSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
@@ -599,6 +599,7 @@ export const presenter = {
     resetCaseMenuSequence,
     resetHeaderAccordionsSequence,
     reviewExternalDocumentInformationSequence,
+    reviewPetitionFromPaperSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
     saveCaseAndServeToIrsSequence,
@@ -714,6 +715,7 @@ export const presenter = {
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionDetailsSequence,
+    updatePetitionPaymentFormValueSequence,
     updatePetitionerInformationFormSequence,
     updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,

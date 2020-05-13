@@ -60,7 +60,7 @@ export const SectionWorkQueueOutbox = connect(
                   </td>
                 )}
                 <td className="message-queue-row message-queue-case-title">
-                  {item.caseTitle}
+                  {item.caseCaptionNames}
                 </td>
                 <td className="message-queue-row">
                   <div className="message-document-title">
