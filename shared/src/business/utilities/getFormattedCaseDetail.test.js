@@ -9,6 +9,7 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from './getFormattedCaseDetail';
+import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -587,14 +588,23 @@ describe('formatDocument', () => {
     });
   });
 
-  it('should set the servedPartiesCode to `B` if status is served, servedAt date exists, and servedParties is an array', () => {
+  it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
     const results = formatDocument(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
-      status: 'served',
     });
     expect(results).toMatchObject({
       servedPartiesCode: 'B',
+    });
+  });
+
+  it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
+    const results = formatDocument(applicationContext, {
+      servedAt: '2019-03-27T21:53:00.297Z',
+      servedParties: [{ role: User.ROLES.irsSuperuser }],
+    });
+    expect(results).toMatchObject({
+      servedPartiesCode: 'R',
     });
   });
 });
