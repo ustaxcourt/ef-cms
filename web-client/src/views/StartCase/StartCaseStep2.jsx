@@ -75,10 +75,10 @@ export const StartCaseStep2 = connect(
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
-                <p className="margin-top-0">
+                <div className="margin-top-0">
                   <Button
                     link
-                    className="usa-link--external"
+                    className="usa-link--external text-left mobile-text-wrap"
                     href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
                     icon="file-pdf"
                     iconColor="blue"
@@ -88,8 +88,8 @@ export const StartCaseStep2 = connect(
                   >
                     Download Petition form (T.C. Form 2)
                   </Button>
-                  if you haven‘t already done so
-                </p>
+                  <p className="margin-top-0">if you haven‘t already done so</p>
+                </div>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"
                   id="petition-file"

@@ -10,7 +10,7 @@ import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumen
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
-import petitionsClerkCreatesMessageToJudge from './journey/petitionsClerkCreatesMessageToJudge';
+import { petitionsClerkCreatesMessageToJudge } from './journey/petitionsClerkCreatesMessageToJudge';
 
 const test = setupTest();
 

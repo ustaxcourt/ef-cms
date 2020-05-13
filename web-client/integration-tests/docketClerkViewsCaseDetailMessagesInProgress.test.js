@@ -6,9 +6,9 @@ import {
   viewDocumentDetailMessage,
 } from './helpers';
 import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
+import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import petitionsClerkCreateOrder from './journey/petitionsClerkCreateOrder';
 
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,

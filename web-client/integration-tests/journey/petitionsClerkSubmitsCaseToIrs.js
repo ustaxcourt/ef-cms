@@ -49,7 +49,7 @@ export default test => {
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({});
-    await test.runSequence('saveCaseAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
 
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
@@ -63,5 +63,10 @@ export default test => {
     expect(test.getState('caseDetail.status')).toEqual(
       Case.STATUS_TYPES.generalDocket,
     );
+    //check that documents were served
+    const documents = test.getState('caseDetail.documents');
+    for (const document of documents) {
+      expect(document.servedAt).toBeDefined();
+    }
   });
 };

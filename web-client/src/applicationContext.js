@@ -13,9 +13,12 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
+import {
+  formatJudgeName,
+  getJudgeLastName,
+} from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
-import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
@@ -82,7 +85,7 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
-import { formatJudgeName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
