@@ -87,26 +87,13 @@ resource "aws_route53_record" "txt_dmarc" {
   records = ["v=DMARC1; p=none; rua=mailto:${var.ses_dmarc_rua};"]
 }
 
+
 # Email Template
 resource "aws_ses_template" "case_served" {
   name    = "case_served_${var.environment}"
   subject = "eService Notification from US Tax Court on Case {{docketNumber}}"
   html    = <<EOF
-  <p>Dear {{name}},</p>
-  <p>A document has been served on your Tax Court case:</p>
-  <p>
-    Docket Number: {{docketNumber}}<br />
-    Case Name: {{caseCaption}}
-  </p>
-  <p>
-    Document: {{documentName}}<br />
-    Served: {{serviceDate}} at {{serviceTime}} ET
-  </p>
-  <p>To view this document, please <a href="{{loginUrl}}">log in to the US Tax Court online</a>.</p>
-  <p>Certain documents may require your action.</p>
-  <p>
-    Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.
-  </p>
+  {{emailContent}}
 EOF
 }
 
