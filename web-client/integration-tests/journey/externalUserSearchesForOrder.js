@@ -7,7 +7,7 @@ export const externalUserSearchesForOrder = (test, options) => {
   return it('external user searches for an order', async () => {
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'onomatopoeia',
+        keyword: 'onomatopoeia',
       },
     });
 

@@ -7,7 +7,7 @@ export default test => {
     await test.runSequence('submitPublicOrderAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      orderKeyword: OrderSearch.VALIDATION_ERROR_MESSAGES.orderKeyword,
+      keyword: OrderSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });
 };

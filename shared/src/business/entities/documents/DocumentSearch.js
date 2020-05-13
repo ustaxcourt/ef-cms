@@ -10,9 +10,9 @@ const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
 const joiStrictTimestamp = getTimestampSchema();
 
-OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
+DocumentSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
 
-OrderSearch.validationName = 'OrderSearch';
+DocumentSearch.validationName = 'OrderSearch';
 
 /**
  * Order Search entity
@@ -20,12 +20,12 @@ OrderSearch.validationName = 'OrderSearch';
  * @param {object} rawProps the raw order search data
  * @constructor
  */
-function OrderSearch(rawProps = {}) {
+function DocumentSearch(rawProps = {}) {
   if (!isEmpty(rawProps.judge)) {
     this.judge = rawProps.judge;
   }
 
-  this.orderKeyword = rawProps.orderKeyword;
+  this.keyword = rawProps.keyword;
 
   if (!isEmpty(rawProps.docketNumber)) {
     this.docketNumber = rawProps.docketNumber;
@@ -59,15 +59,15 @@ function OrderSearch(rawProps = {}) {
   }
 }
 
-OrderSearch.VALIDATION_ERROR_MESSAGES = {
+DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
     'Enter either a Docket number or a Case name/Petitioner name, not both',
   endDate: 'Enter a valid end date',
-  orderKeyword: 'Enter a keyword or phrase',
+  keyword: 'Enter a keyword or phrase',
   startDate: 'Enter a valid start date',
 };
 
-OrderSearch.schema = joi
+DocumentSearch.schema = joi
   .object()
   .keys({
     caseTitleOrPetitioner: joi
@@ -98,7 +98,7 @@ OrderSearch.schema = joi
       .string()
       .optional()
       .description('The name of the judge to filter the search results by'),
-    orderKeyword: joi
+    keyword: joi
       .string()
       .required()
       .description('The only required field to filter the search by'),
@@ -126,14 +126,15 @@ OrderSearch.schema = joi
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
 joiValidationDecorator(
-  OrderSearch,
-  OrderSearch.schema,
-  OrderSearch.VALIDATION_ERROR_MESSAGES,
+  DocumentSearch,
+  DocumentSearch.schema,
+  DocumentSearch.VALIDATION_ERROR_MESSAGES,
 );
 
-const originalGetValidationErrors = OrderSearch.prototype.getValidationErrors;
+const originalGetValidationErrors =
+  DocumentSearch.prototype.getValidationErrors;
 
-OrderSearch.prototype.getValidationErrors = function () {
+DocumentSearch.prototype.getValidationErrors = function () {
   const validationErrors = originalGetValidationErrors.call(this);
 
   if (validationErrors && validationErrors['object.oxor']) {
@@ -144,4 +145,4 @@ OrderSearch.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { OrderSearch };
+module.exports = { OrderSearch: DocumentSearch };
