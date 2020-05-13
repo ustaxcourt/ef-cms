@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const OrderSearchResults = connect(
+export const DocumentSearchResults = connect(
   {
     advancedOrderSearchHelper: state.advancedOrderSearchHelper,
     baseUrl: state.baseUrl,
@@ -13,7 +13,7 @@ export const OrderSearchResults = connect(
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     token: state.token,
   },
-  function OrderSearchResults({
+  function DocumentSearchResults({
     advancedOrderSearchHelper,
     baseUrl,
     pageSize,

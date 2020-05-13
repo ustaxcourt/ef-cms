@@ -145,9 +145,6 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -173,9 +170,6 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 

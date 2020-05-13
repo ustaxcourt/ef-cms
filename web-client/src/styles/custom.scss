@@ -613,7 +613,6 @@ select[disabled] {
         margin-top: -3px;
         margin-left: 5px;
       }
-
     }
 
     .svg-wrapper img.svg {
@@ -1496,4 +1495,8 @@ button.change-scanner-button {
 
 .upload-court-document-description-container {
   min-height: 471px;
+}
+
+.accordion-item-title {
+  align-self: center;
 }

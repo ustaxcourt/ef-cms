@@ -1,10 +1,10 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
+import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from './OpinionSearchForm';
 import { OpinionSearchResults } from './OpinionSearchResults';
 import { OrderSearchForm } from './OrderSearchForm';
-import { OrderSearchResults } from './OrderSearchResults';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
@@ -76,7 +76,7 @@ export const AdvancedSearch = connect(
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
-              <OrderSearchResults />
+              <DocumentSearchResults />
             </Tab>
             <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
