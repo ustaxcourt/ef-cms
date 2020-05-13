@@ -38,7 +38,8 @@ exports.fileCourtIssuedOrderInteractor = async ({
     });
 
   const shouldScrapePDFContents =
-    !documentMetadata.documentContents && !documentMetadata.richText;
+    !documentMetadata.documentContents &&
+    (!documentMetadata.richText || !documentMetadata.freeText);
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
