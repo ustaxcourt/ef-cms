@@ -72,7 +72,7 @@ export const OpinionSearchResults = connect(
                           rel="noopener noreferrer"
                           target="_blank"
                         >
-                          {result.documentTitle}
+                          {result.formattedDocumentType}
                         </a>
                       </td>
                       <td>{result.numberOfPages}</td>

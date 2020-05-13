@@ -16,6 +16,7 @@ exports.opinionKeywordSearch = async ({
     'numberOfPages',
     'documentId',
     'documentTitle',
+    'documentType',
     'filingDate',
     'irsPractitioners',
     'isSealed',
