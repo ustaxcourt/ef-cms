@@ -668,6 +668,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendIrsSuperuserPetitionEmail,
+} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
+const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
 const {
@@ -982,6 +985,7 @@ module.exports = (appContextUser = {}) => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
@@ -1188,6 +1192,7 @@ module.exports = (appContextUser = {}) => {
         generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
+        sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
