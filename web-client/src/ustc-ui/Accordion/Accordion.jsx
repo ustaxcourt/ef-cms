@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mobile, NonMobile } from '../Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,

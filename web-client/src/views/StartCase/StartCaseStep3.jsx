@@ -388,7 +388,7 @@ export const StartCaseStep3 = connect(
               <p className="margin-top-0">
                 <Button
                   link
-                  className="usa-link--external"
+                  className="usa-link--external text-left  mobile-text-wrap"
                   href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
                   icon="file-pdf"
                   iconColor="blue"
