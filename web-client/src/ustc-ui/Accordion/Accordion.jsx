@@ -6,7 +6,6 @@ import {
 } from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -87,21 +86,25 @@ export const Accordion = connect(
             <button
               aria-controls={itemContentId}
               aria-expanded={expandedText}
-              className="usa-accordion__button"
+              className="usa-accordion__button grid-container"
               id={itemButtonId}
               type="button"
               onClick={() => setTab(itemName)}
             >
-              {displayIcon && (
-                <span className="caseItem__icon">
-                  <FontAwesomeIcon
-                    className={iconClassName}
-                    icon={iconTypes}
-                    size={iconSize}
-                  />
-                </span>
-              )}
-              {title}
+              <div className="grid-row">
+                {displayIcon && (
+                  <span className="grid-col-auto">
+                    <span className="caseItem__icon">
+                      <FontAwesomeIcon
+                        className={iconClassName}
+                        icon={iconTypes}
+                        size={iconSize}
+                      />
+                    </span>
+                  </span>
+                )}
+                <div className="accordion-item-title grid-col-8">{title}</div>
+              </div>
             </button>
           </HeadingElement>
           {isActiveItem && (
