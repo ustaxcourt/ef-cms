@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RenderContactAddress = contact => {
+const RenderContactAddress = ({ contact }) => {
   return (
     <>
       {contact.address1 && <div>{contact.address1}</div>}
@@ -28,14 +28,15 @@ export const PetitionService = ({
     <>
       <p>A new Petition has been served:</p>
 
-      <p id="case-information">
+      <div id="case-information">
         <div>Case Information:</div>
         <div>{caseDetail.docketNumber}</div>
         <div>{caseDetail.caseTitle}</div>
         <div>Requested Place of Trial {caseDetail.trialLocation}</div>
-      </p>
+      </div>
+      <br />
 
-      <p>
+      <div id="document-information">
         <div>Document Information:</div>
         <div>
           {documentDetail.eventCode} {documentDetail.documentTitle}
@@ -43,9 +44,10 @@ export const PetitionService = ({
         <div>Docket Entry No. {docketEntryNumber}</div>
         <div>Postmarked {documentDetail.mailingDate}</div>
         <div>Served {documentDetail.servedAtFormatted}</div>
-      </p>
+      </div>
+      <br />
 
-      <p>
+      <div id="petitioner-information">
         <div>Petitioner Information:</div>
         <div>{contactPrimary.name}</div>
         <RenderContactAddress contact={contactPrimary} />
@@ -59,10 +61,11 @@ export const PetitionService = ({
             <div>{contactSecondary.serviceIndicator}</div>
           </>
         )}
-      </p>
+      </div>
 
       {practitioners && (
-        <p>
+        <div id="practitioner-information">
+          <br />
           <div>Counsel Information:</div>
           {practitioners.map(practitioner => {
             return (
@@ -78,7 +81,7 @@ export const PetitionService = ({
               </div>
             );
           })}
-        </p>
+        </div>
       )}
 
       <p>
@@ -88,13 +91,13 @@ export const PetitionService = ({
 
       <p>Certain documents may require your action.</p>
 
-      <p>
+      <div>
         <div>For IRS only:</div>
         <div>docketNumber: {caseDetail.docketNumber}</div>
         <div>docketEntryNo: {docketEntryNumber}</div>
         <div>documentId: {documentDetail.documentId}</div>
         <div>eventCode: {documentDetail.eventCode}</div>
-      </p>
+      </div>
 
       <p>
         <i>
