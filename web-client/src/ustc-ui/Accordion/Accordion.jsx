@@ -84,55 +84,29 @@ export const Accordion = connect(
           <HeadingElement
             className={customClassName || 'usa-accordion__heading'}
           >
-            <Mobile>
-              <span className="grid-container">
-                <button
-                  aria-controls={itemContentId}
-                  aria-expanded={expandedText}
-                  className="usa-accordion__button"
-                  id={itemButtonId}
-                  type="button"
-                  onClick={() => setTab(itemName)}
-                >
-                  <span className="grid-row">
-                    {displayIcon && (
-                      <span className="grid-col-3">
-                        <span className="caseItem__icon">
-                          <FontAwesomeIcon
-                            className={iconClassName}
-                            icon={iconTypes}
-                            size={iconSize}
-                          />
-                        </span>
-                      </span>
-                    )}
-                    <span className="grid-col-7">{title}</span>
-                  </span>
-                </button>
-              </span>
-            </Mobile>
-
-            <NonMobile>
-              <button
-                aria-controls={itemContentId}
-                aria-expanded={expandedText}
-                className="usa-accordion__button"
-                id={itemButtonId}
-                type="button"
-                onClick={() => setTab(itemName)}
-              >
+            <button
+              aria-controls={itemContentId}
+              aria-expanded={expandedText}
+              className="usa-accordion__button grid-container"
+              id={itemButtonId}
+              type="button"
+              onClick={() => setTab(itemName)}
+            >
+              <div className="grid-row">
                 {displayIcon && (
-                  <span className="caseItem__icon">
-                    <FontAwesomeIcon
-                      className={iconClassName}
-                      icon={iconTypes}
-                      size={iconSize}
-                    />
+                  <span className="grid-col-auto">
+                    <span className="caseItem__icon">
+                      <FontAwesomeIcon
+                        className={iconClassName}
+                        icon={iconTypes}
+                        size={iconSize}
+                      />
+                    </span>
                   </span>
                 )}
-                {title}
-              </button>
-            </NonMobile>
+                <div className="accordion-item-title grid-col-8">{title}</div>
+              </div>
+            </button>
           </HeadingElement>
           {isActiveItem && (
             <div
