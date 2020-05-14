@@ -118,6 +118,42 @@ describe('docket clerk performs an order advanced search', () => {
       expect(test.getState('searchResults')).toEqual([]);
     });
 
+    it('clears search fields', async () => {
+      test.setState('advancedSearchForm', {
+        orderSearch: {
+          caseTitleOrPetitioner: caseDetail.caseCaption,
+          docketNumber: caseDetail.docketNumber,
+          orderKeyword: 'dismissal',
+        },
+      });
+      await test.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'orderSearch',
+      });
+
+      expect(test.getState('advancedSearchForm.orderSearch')).toEqual({
+        orderKeyword: '',
+      });
+    });
+
+    it('clears validation errors when switching tabs', async () => {
+      test.setState('advancedSearchForm', {
+        orderSearch: {},
+      });
+
+      await test.runSequence('submitOrderAdvancedSearchSequence');
+
+      expect(test.getState('alertError')).toEqual({
+        messages: ['Enter a keyword or phrase'],
+        title: 'Please correct the following errors:',
+      });
+
+      await test.runSequence('advancedSearchTabChangeSequence');
+
+      expect(test.getState('alertError')).not.toBeDefined();
+    });
+  });
+
+  describe('search for things that should not be found', () => {
     it('search for a docket number that is not present in any served orders', async () => {
       const docketNumberNoOrders = '999-99';
       test.setState('advancedSearchForm', {
@@ -156,42 +192,6 @@ describe('docket clerk performs an order advanced search', () => {
       );
     });
 
-    it('clears search fields', async () => {
-      test.setState('advancedSearchForm', {
-        orderSearch: {
-          caseTitleOrPetitioner: caseDetail.caseCaption,
-          docketNumber: caseDetail.docketNumber,
-          orderKeyword: 'dismissal',
-        },
-      });
-      await test.runSequence('clearAdvancedSearchFormSequence', {
-        formType: 'orderSearch',
-      });
-
-      expect(test.getState('advancedSearchForm.orderSearch')).toEqual({
-        orderKeyword: '',
-      });
-    });
-
-    it('clears validation errors when switching tabs', async () => {
-      test.setState('advancedSearchForm', {
-        orderSearch: {},
-      });
-
-      await test.runSequence('submitOrderAdvancedSearchSequence');
-
-      expect(test.getState('alertError')).toEqual({
-        messages: ['Enter a keyword or phrase'],
-        title: 'Please correct the following errors:',
-      });
-
-      await test.runSequence('advancedSearchTabChangeSequence');
-
-      expect(test.getState('alertError')).not.toBeDefined();
-    });
-  });
-
-  describe('search for things that should not be found', () => {
     it('search for a case title that is not present in any served orders', async () => {
       const caseCaptionNoOrders = 'abcdefghijk';
 
