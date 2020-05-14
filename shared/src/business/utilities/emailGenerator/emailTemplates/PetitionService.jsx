@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { EmailHeader } from '../components/EmailHeader';
+import React from 'react';
 
 const RenderContactAddress = ({ contact }) => {
   return (
