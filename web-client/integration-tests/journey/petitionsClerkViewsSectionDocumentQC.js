@@ -4,7 +4,7 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
-export default (test, storeCount) => {
+export const petitionsClerkViewsSectionDocumentQC = (test, storeCount) => {
   return it('Petitions clerk views Section Document QC', async () => {
     await test.runSequence('navigateToPathSequence', {
       path: '/document-qc/section/inbox',

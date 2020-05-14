@@ -644,9 +644,6 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
-  saveIntermediateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -1302,7 +1299,6 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
-        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         serveCaseToIrsInteractor,

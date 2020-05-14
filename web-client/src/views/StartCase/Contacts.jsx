@@ -7,7 +7,6 @@ import React from 'react';
 export const Contacts = connect({}, function Contacts({
   bind,
   contactsHelper,
-  emailBind,
   onBlur,
   onChange,
   parentView,
@@ -26,7 +25,6 @@ export const Contacts = connect({}, function Contacts({
           <ContactPrimary
             bind={bind}
             contactsHelper={contactsHelper}
-            emailBind={emailBind}
             parentView={parentView}
             wrapperClassName={wrapperClassName}
             onBlur={onBlur}
