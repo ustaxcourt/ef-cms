@@ -266,12 +266,8 @@ describe('formatCase', () => {
 
     expect(result).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('receivedAtFormatted');
-    expect(result).toHaveProperty('irsDateFormatted');
     expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
-    expect(result.datePetitionSentToIrsMessage).toEqual(
-      result.irsDateFormatted,
-    );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseTitle).toEqual('Johnny Joe Jacobson');
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');

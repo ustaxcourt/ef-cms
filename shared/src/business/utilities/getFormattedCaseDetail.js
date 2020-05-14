@@ -292,9 +292,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.receivedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
-  result.irsDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.irsSendDate, 'DATE_TIME');
 
   result.docketNumberWithSuffix = formatDocketNumberWithSuffix(caseDetail);
 
@@ -303,8 +300,6 @@ const formatCase = (applicationContext, caseDetail) => {
         .getUtilities()
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
-
-  result.datePetitionSentToIrsMessage = result.irsDateFormatted;
 
   result.shouldShowIrsNoticeDate = result.hasVerifiedIrsNotice;
 

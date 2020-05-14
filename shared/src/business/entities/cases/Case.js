@@ -889,7 +889,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
         eventCode: document.eventCode,
         filedBy: document.filedBy,
         filingDate: document.receivedAt || document.createdAt,
-        status: document.status,
       },
       { applicationContext },
     ),
