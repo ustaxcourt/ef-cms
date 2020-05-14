@@ -19,8 +19,8 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
-import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
+import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDocketEntry';
+import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 //petitioner
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 

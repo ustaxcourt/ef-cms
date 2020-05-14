@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export const petitionsClerkViewsDocketRecordEditLinks = test => {
   return it('Petitions Clerk views the docket record edit links', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

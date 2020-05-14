@@ -6,8 +6,8 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 
 import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsClerkCompletesAndSetsTrialSession';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkViewsDocketRecordAfterSettingTrial from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
 const test = setupTest();
 
