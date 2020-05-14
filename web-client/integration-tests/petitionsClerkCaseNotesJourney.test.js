@@ -1,6 +1,6 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsCaseNote } from './journey/petitionsClerkAddsCaseNote';
-import petitionsClerkDeletesCaseNote from './journey/petitionsClerkDeletesCaseNote';
+import { petitionsClerkDeletesCaseNote } from './journey/petitionsClerkDeletesCaseNote';
 
 const test = setupTest();
 

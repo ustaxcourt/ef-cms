@@ -20,8 +20,6 @@ export const PrimaryDocumentForm = connect(
     caseDetail: state.caseDetail,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
-    saveIntermediateDocketEntrySequence:
-      sequences.saveIntermediateDocketEntrySequence,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -33,7 +31,6 @@ export const PrimaryDocumentForm = connect(
     caseDetail,
     form,
     internalTypesHelper,
-    saveIntermediateDocketEntrySequence,
     updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validateDocketEntrySequence,
@@ -59,7 +56,6 @@ export const PrimaryDocumentForm = connect(
                         key: e.target.name,
                         value: e.target.value === 'Lodge',
                       });
-                      saveIntermediateDocketEntrySequence();
                     }}
                   />
                   <label
@@ -88,7 +84,6 @@ export const PrimaryDocumentForm = connect(
                 month: form.dateReceivedMonth,
                 year: form.dateReceivedYear,
               }}
-              onBlur={saveIntermediateDocketEntrySequence}
               onChange={updateDocketEntryFormValueSequence}
             />
           )}
@@ -122,7 +117,7 @@ export const PrimaryDocumentForm = connect(
                   inputValue,
                   name,
                   updateSequence: updateDocketEntryFormValueSequence,
-                  validateSequence: saveIntermediateDocketEntrySequence,
+                  validateSequence: validateDocketEntrySequence,
                 });
                 return true;
               }}
@@ -178,7 +173,6 @@ export const PrimaryDocumentForm = connect(
                     updateSequence: updateDocketEntryFormValueSequence,
                     validateSequence: validateDocketEntrySequence,
                   });
-                  saveIntermediateDocketEntrySequence();
                   return true;
                 }}
                 onInputChange={(inputText, { action }) => {
@@ -197,7 +191,7 @@ export const PrimaryDocumentForm = connect(
               helper="addDocketEntryHelper"
               level="primary"
               updateSequence="updateDocketEntryFormValueSequence"
-              validateSequence="saveIntermediateDocketEntrySequence"
+              validateSequence="validateDocketEntrySequence"
               validationErrors="validationErrors"
             />
           )}
@@ -220,9 +214,6 @@ export const PrimaryDocumentForm = connect(
               name="additionalInfo"
               type="text"
               value={form.additionalInfo || ''}
-              onBlur={() => {
-                saveIntermediateDocketEntrySequence();
-              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -244,7 +235,6 @@ export const PrimaryDocumentForm = connect(
                     key: e.target.name,
                     value: e.target.checked,
                   });
-                  saveIntermediateDocketEntrySequence();
                 }}
               />
               <label
@@ -272,9 +262,6 @@ export const PrimaryDocumentForm = connect(
               name="additionalInfo2"
               type="text"
               value={form.additionalInfo2 || ''}
-              onBlur={() => {
-                saveIntermediateDocketEntrySequence();
-              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -308,7 +295,6 @@ export const PrimaryDocumentForm = connect(
                       key: e.target.name,
                       value: e.target.checked,
                     });
-                    saveIntermediateDocketEntrySequence();
                   }}
                 />
                 <label
@@ -331,7 +317,6 @@ export const PrimaryDocumentForm = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      saveIntermediateDocketEntrySequence();
                     }}
                   />
                   <label
@@ -354,7 +339,6 @@ export const PrimaryDocumentForm = connect(
                       key: e.target.name,
                       value: e.target.checked,
                     });
-                    saveIntermediateDocketEntrySequence();
                   }}
                 />
                 <label
@@ -387,7 +371,6 @@ export const PrimaryDocumentForm = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        saveIntermediateDocketEntrySequence();
                       }}
                     />
                     <label
@@ -419,7 +402,6 @@ export const PrimaryDocumentForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        saveIntermediateDocketEntrySequence();
                       }}
                     />
                     <label

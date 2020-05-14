@@ -7,7 +7,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 

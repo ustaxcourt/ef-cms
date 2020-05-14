@@ -13,33 +13,49 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     contactPrimary,
     contactSecondary,
     docketNumber,
+    docketNumberSuffix,
+    mailingDate,
     privatePractitioners,
     trialLocation,
   } = caseEntity;
 
-  const {
-    documentId,
-    documentTitle,
-    eventCode,
-    mailingDate,
-    servedAt,
-  } = documentEntity;
+  const { documentId, documentTitle, eventCode, servedAt } = documentEntity;
 
   const docketEntry = caseEntity.docketRecord.find(
     entry => entry.documentId === documentId,
   );
+
+  privatePractitioners.forEach(practitioner => {
+    const representing = [];
+    const { representingPrimary, representingSecondary } = practitioner;
+
+    if (representingPrimary) {
+      representing.push(contactPrimary.name);
+    }
+
+    if (representingSecondary && contactSecondary) {
+      representing.push(contactSecondary.name);
+    }
+
+    practitioner.representing = representing.join(', ');
+  });
+
+  const currentDate = applicationContext
+    .getUtilities()
+    .formatNow('MMMM D, YYYY');
 
   const templateHtml = reactTemplateGenerator({
     componentName: 'PetitionService',
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber,
+        docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
         trialLocation,
       },
       contactPrimary,
       contactSecondary,
-      docketEntryNumber: docketEntry.index,
+      currentDate,
+      docketEntryNumber: docketEntry && docketEntry.index,
       documentDetail: {
         documentTitle,
         eventCode,
@@ -63,7 +79,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     defaultTemplateData: {
-      emailContent: '',
+      emailContent: 'A petition has been served.',
     },
     destinations: [destination],
     templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,

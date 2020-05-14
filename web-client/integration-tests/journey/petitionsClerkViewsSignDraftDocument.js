@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkViewsSignDraftDocument = test => {
   return it('Petitions clerk views sign draft document', async () => {
     await test.runSequence('gotoSignPDFDocumentSequence', {
       docketNumber: test.docketNumber,
