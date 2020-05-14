@@ -1,6 +1,9 @@
 import { wait } from '../helpers';
 
-export default (test, overrides = {}) => {
+export const petitionsClerkCompletesAndSetsTrialSession = (
+  test,
+  overrides = {},
+) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
     await test.runSequence('gotoEditTrialSessionSequence', {
       trialSessionId: test.trialSessionId,

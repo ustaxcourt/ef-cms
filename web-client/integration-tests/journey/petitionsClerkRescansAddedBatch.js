@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkRescansAddedBatch = test => {
   return it('Petitions clerk rescans a pre-existing batch', async () => {
     const selectedDocumentType = test.getState(
       'currentViewMetadata.documentSelectedForScan',

@@ -6,7 +6,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default (test, count = 0) => {
+export const petitionsClerkViewsDraftDocumentsForNotice = (test, count = 0) => {
   return it('Petitions clerk views Draft Documents for a signed notice', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

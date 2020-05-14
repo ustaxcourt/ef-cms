@@ -292,7 +292,10 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [{ caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' }],
+          caseOrder: [
+            { caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' },
+            { caseId: '58c1f7a3-8062-42f0-a73e-8bd69b419878' },
+          ],
         },
         {
           applicationContext,
@@ -305,7 +308,7 @@ describe('TrialSession entity', () => {
         { caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' },
       ]);
     });
-    it('should remove the expected case from the order', () => {
+    it('should remove the expected case from the order when there is only one entry', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,

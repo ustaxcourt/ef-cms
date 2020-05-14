@@ -1,13 +1,9 @@
 import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CaseDifferenceModalOverlay } from '../StartCase/CaseDifferenceModalOverlay';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -21,7 +17,7 @@ const ConfirmServeToIrsModal = () => (
     preventCancelOnBlur={true}
     title="Are You Sure You Want to Serve This Petition to the IRS?"
     onCancelSequence="clearModalSequence"
-    onConfirmSequence="saveCaseAndServeToIrsSequence"
+    onConfirmSequence="serveCaseToIrsSequence"
   ></ConfirmModal>
 );
 
@@ -30,11 +26,11 @@ export const ReviewSavedPetition = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    leaveCaseForLaterServiceSequence:
+      sequences.leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
-    saveCaseAndServeToIrsSequence: sequences.saveCaseAndServeToIrsSequence,
-    saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
     showModal: state.modal.showModal,
     startCaseHelper: state.startCaseHelper,
   },
@@ -42,10 +38,9 @@ export const ReviewSavedPetition = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
+    leaveCaseForLaterServiceSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
-    saveCaseAndServeToIrsSequence,
-    saveSavedCaseForLaterSequence,
     showModal,
     startCaseHelper,
   }) {
@@ -57,9 +52,9 @@ export const ReviewSavedPetition = connect(
           id="ustc-start-a-case-form"
         >
           <Focus>
-            <h2 id="file-a-document-header" tabIndex="-1">
-              Review the Petition
-            </h2>
+            <h1 id="file-a-document-header" tabIndex="-1">
+              Review and Serve Petition
+            </h1>
           </Focus>
 
           {reviewSavedPetitionHelper.hasOrders && (
@@ -77,7 +72,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit parties"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=partyInfo`}
                         icon="edit"
                       >
                         Edit
@@ -136,7 +131,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit case information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=caseInfo`}
                         icon="edit"
                       >
                         Edit
@@ -227,7 +222,7 @@ export const ReviewSavedPetition = connect(
                         link
                         aria-label="edit IRS notice information"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
-                        href={`/case-detail/${form.caseId}/petition-qc`}
+                        href={`/case-detail/${form.caseId}/petition-qc?tab=irsNotice`}
                         icon="edit"
                       >
                         Edit
@@ -362,7 +357,10 @@ export const ReviewSavedPetition = connect(
             >
               Serve to IRS
             </Button>
-            <Button secondary onClick={() => saveSavedCaseForLaterSequence()}>
+            <Button
+              secondary
+              onClick={() => leaveCaseForLaterServiceSequence()}
+            >
               Save for Later
             </Button>
             <Button
@@ -375,18 +373,6 @@ export const ReviewSavedPetition = connect(
             </Button>
           </div>
         </section>
-        {showModal === 'CaseDifferenceModalOverlay' && (
-          <CaseDifferenceModalOverlay />
-        )}
-        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={saveCaseAndServeToIrsSequence}
-          />
-        )}
-        {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-        )}
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
       </>
     );

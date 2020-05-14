@@ -6,6 +6,7 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
+const { User } = require('../entities/User');
 
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
@@ -40,7 +41,7 @@ const formatDocument = (applicationContext, document) => {
   }
 
   result.showServedAt = !!result.servedAt;
-  result.isStatusServed = result.status === 'served';
+  result.isStatusServed = !!result.servedAt;
   result.isPetition =
     result.documentType === 'Petition' || result.eventCode === 'P';
 
@@ -69,13 +70,15 @@ const formatDocument = (applicationContext, document) => {
     }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
-  if (
-    result.isStatusServed &&
-    !!result.servedAt &&
-    result.servedParties &&
-    result.servedParties.length > 0
-  ) {
-    result.servedPartiesCode = 'B';
+  if (result.servedParties && result.servedParties.length > 0) {
+    if (
+      result.servedParties.length === 1 &&
+      result.servedParties[0].role === User.ROLES.irsSuperuser
+    ) {
+      result.servedPartiesCode = 'R';
+    } else {
+      result.servedPartiesCode = 'B';
+    }
   } else {
     // TODO: Address Respondent and Petitioner codes
     result.servedPartiesCode = '';
@@ -303,11 +306,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.datePetitionSentToIrsMessage = result.irsDateFormatted;
 
-  result.shouldShowIrsNoticeDate =
-    result.hasVerifiedIrsNotice ||
-    ((result.hasVerifiedIrsNotice === null ||
-      result.hasVerifiedIrsNotice === undefined) &&
-      result.hasIrsNotice);
+  result.shouldShowIrsNoticeDate = result.hasVerifiedIrsNotice;
 
   result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',

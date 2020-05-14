@@ -84,7 +84,6 @@ export const Parties = connect(
             <Contacts
               bind="form"
               contactsHelper="startCaseInternalContactsHelper"
-              emailBind="form.contactPrimary"
               parentView="StartCaseInternal"
               showPrimaryContact={startCaseInternalHelper.showPrimaryContact}
               showSecondaryContact={

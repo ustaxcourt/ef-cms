@@ -11,6 +11,10 @@ option:first-child {
   font-weight: initial;
 }
 
+.create-case-steps p {
+  max-width: 90%;
+}
+
 .usa-hint {
   display: inline-block;
   margin-bottom: 15px;
@@ -211,6 +215,18 @@ option:first-child {
   .hide-on-mobile {
     display: none;
   }
+
+  #file-a-petition {
+    margin-bottom: 70px;
+  }
+
+  .mobile-text-wrap {
+    white-space: normal;
+  }
+
+  #submit-case {
+    margin-bottom: 5px;
+  }
 }
 
 .margin-bottom-0 {
@@ -249,10 +265,33 @@ p {
   line-height: 24px;
 }
 
+.steps-after-filing {
+  padding-left: 15px;
+  margin-top: 10px;
+}
+
+.payment-options {
+  .usa-accordion__button {
+    padding: 3px;
+    font-family: $font-source-sans;
+    font-size: 17px;
+    font-weight: normal;
+  }
+  button:not([disabled]):focus {
+    outline: none;
+  }
+  .usa-accordion__button:hover {
+    background-color: inherit;
+  }
+}
+
 .usa-alert__text:only-child {
   padding-top: 0;
 }
 
+.usa-accordion {
+  font-size: 100%;
+}
 button,
 input,
 optgroup,

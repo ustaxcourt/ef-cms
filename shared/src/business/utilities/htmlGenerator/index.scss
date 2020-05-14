@@ -6,33 +6,33 @@ body {
 
 h1 {
   padding-top: 10px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
+  font-family: serif;
   font-size: 14px;
   text-align: center;
-  font-family: serif;
 }
 
 h2 {
-  margin-top: 0px;
+  margin-top: 0;
+  font-family: serif;
   font-size: 20px;
   font-weight: normal;
   text-align: center;
-  font-family: serif;
 }
 
 p.heading-address {
-  width:100%;
-  text-align: center;
+  width: 100%;
   font-size: 12px;
+  text-align: center;
 }
 
 h3 {
   margin-top: 30px;
   margin-bottom: 20px;
   font-family: 'nimbus_roman', serif;
+  font-family: serif;
   font-size: 14px;
   text-align: center;
-  font-family: serif;
   text-decoration: underline;
 
   &#served-stamp {
@@ -47,9 +47,9 @@ p {
 table {
   width: 100%;
   border: 1px solid #ccc;
-  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-horizontal-spacing: 0;
   border-spacing: 0;
-  -webkit-border-vertical-spacing: 0px;
+  -webkit-border-vertical-spacing: 0;
   font-family: 'nimbus_sans_l', sans-serif;
   font-size: 12px;
 }
@@ -58,16 +58,16 @@ th,
 td {
   padding: 8px;
   border-bottom: 1px solid #ccc;
-  text-align: left;
-  vertical-align: top;
   font-family: 'nimbus_roman', serif;
   font-size: 14px;
+  text-align: left;
+  vertical-align: top;
 }
 
 th {
   background-color: #f0f0f0;
-  white-space: nowrap;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .width-third {
@@ -80,6 +80,14 @@ th {
 
 .margin-top-80 {
   margin-top: 80px;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
+}
+
+.margin-bottom-5 {
+  margin-bottom: 5px;
 }
 
 .margin-bottom-20 {
@@ -121,17 +129,20 @@ th {
   font-family: serif;
 }
 
-.case-information #caption,#case-caption {
+.case-information #caption,
+#case-caption {
   width: 49%;
   float: left;
 }
 
 .case-information #caption {
+  border-right: 1px dashed;
   font-size: 14px;
   line-height: 18px;
-  border-right: 1px dashed;
 
-  #caption-extension, #caption-v, #caption-respondent {
+  #caption-extension,
+  #caption-v,
+  #caption-respondent {
     padding-left: 25%;
     margin-top: 8px;
   }
@@ -147,13 +158,13 @@ th {
 
 .case-information #docket-number {
   width: 48%;
-  float: right;
-  text-indent: 5px;
-  font-size: 14px;
   margin-top: 50px;
+  float: right;
+  font-size: 14px;
+  text-indent: 5px;
 
   &.condensed {
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 
@@ -206,15 +217,15 @@ th {
 
 .info-box-trial {
   width: 49%;
-  float: left;
-  margin-right: 1%;
   height: 160px;
+  margin-right: 1%;
+  float: left;
 }
 
 .info-box-judge {
   width: 49%;
-  float: right;
   height: 160px;
+  float: right;
 }
 
 .signature {
@@ -239,7 +250,7 @@ th {
 }
 
 @page {
-  margin-top:100px;
+  margin-top: 100px;
   margin-bottom: 55px;
 }
 
@@ -260,19 +271,23 @@ th {
 }
 
 .text-bold {
-  font-weight:bold;
+  font-weight: bold;
 }
 
 .text-underline {
-  text-decoration:underline;
+  text-decoration: underline;
 }
 
 .text-center {
-  text-align:center;
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .text-normal {
-  font-weight:normal;
+  font-weight: normal;
 }
 
 .notice-notes li {
@@ -290,15 +305,31 @@ th {
 }
 
 #reports-header {
+  margin-bottom: 50px;
   font-family: 'nimbus_roman', serif;
-  text-align: centeer;
+  text-align: center;
+
+  .us-tax-court-seal {
+    width: 100px;
+    height: 100px;
+  }
 
   h1 {
-    font-size: 20px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: bold;
   }
 
   h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  h3 {
+    margin-top: 0px;
     font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
   }
 }
 
@@ -330,6 +361,14 @@ th {
 
   .docket-record-table {
     margin-top: 30px;
+  }
+}
+
+.included {
+  margin: 2px 0;
+
+  &:first-child {
+    margin-top: 0;
   }
 }
 

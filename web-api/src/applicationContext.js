@@ -64,17 +64,19 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
+  caseInventoryReport,
+  changeOfAddress,
+  docketRecord,
+  noticeOfDocketChange,
+  receiptOfFiling,
+  standingPretrialOrder,
+} = require('../../shared/src/business/utilities/documentGenerators');
+const {
   casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
-const {
-  changeOfAddress,
-  docketRecord,
-  noticeOfDocketChange,
-  standingPretrialOrder,
-} = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -253,7 +255,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
@@ -577,6 +578,15 @@ const {
   onDisconnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
 const {
+  opinionAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
+const {
+  opinionKeywordSearch,
+} = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
+const {
+  opinionPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
+const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
 const {
@@ -631,9 +641,6 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
-  saveIntermediateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -657,6 +664,9 @@ const {
 const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
+  sendIrsSuperuserPetitionEmail,
+} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -950,9 +960,11 @@ module.exports = (appContextUser = {}) => {
       return dynamoClientCache[type];
     },
     getDocumentGenerators: () => ({
+      caseInventoryReport,
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      receiptOfFiling,
       standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
@@ -970,6 +982,7 @@ module.exports = (appContextUser = {}) => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
@@ -1075,6 +1088,7 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
+        opinionKeywordSearch,
         orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
@@ -1158,7 +1172,6 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
-        generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
@@ -1176,6 +1189,7 @@ module.exports = (appContextUser = {}) => {
         generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
+        sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1269,6 +1283,8 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        opinionAdvancedSearchInteractor,
+        opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
@@ -1280,7 +1296,6 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
-        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         serveCaseToIrsInteractor,

@@ -1,17 +1,11 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { getPetitionDocumentForCase } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export default test => {
+export const petitionsClerkUpdatesCaseDetail = test => {
   return it('Petitions clerk updates case detail', async () => {
-    const petitionDocument = getPetitionDocumentForCase(
-      test.getState('caseDetail'),
-    );
-
-    await test.runSequence('gotoDocumentDetailSequence', {
+    await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      documentId: petitionDocument.documentId,
     });
 
     expect(test.getState('validationErrors')).toEqual({});
@@ -104,9 +98,8 @@ export default test => {
 
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
-    await test.runSequence('gotoDocumentDetailSequence', {
+    await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
-      documentId: petitionDocument.documentId,
     });
 
     // irsNoticeDate - valid

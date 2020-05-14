@@ -27,6 +27,8 @@ function CaseInternal(rawCase) {
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice || false;
   this.mailingDate = rawCase.mailingDate;
   this.noticeOfAttachments = rawCase.noticeOfAttachments;
   this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
@@ -58,6 +60,7 @@ function CaseInternal(rawCase) {
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -110,6 +113,8 @@ const paperRequirements = joi
     ),
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
+    hasVerifiedIrsNotice: joi.boolean().required(),
+    irsNoticeDate: Case.validationRules.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
     noticeOfAttachments: Case.validationRules.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
@@ -184,6 +189,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
+    useSameAsPrimary: Case.validationRules.useSameAsPrimary,
   })
   .or(
     'preferredTrialCity',

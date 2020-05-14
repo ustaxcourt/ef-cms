@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 
 import React, { useEffect } from 'react';
 
@@ -27,12 +27,13 @@ const PdfPreviewComponent = connect(
 
 export const PdfPreview = connect(
   {
+    noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ pdfPreviewUrl }) {
+  function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
-      return '';
+      return noDocumentText ? noDocumentText : '';
     }
 
     return <PdfPreviewComponent />;
