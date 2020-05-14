@@ -29,6 +29,21 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     entry => entry.documentId === documentId,
   );
 
+  privatePractitioners.forEach(practitioner => {
+    const representing = [];
+    const { representingPrimary, representingSecondary } = practitioner;
+
+    if (representingPrimary) {
+      representing.push(contactPrimary.name);
+    }
+
+    if (representingSecondary && contactSecondary) {
+      representing.push(contactSecondary.name);
+    }
+
+    practitioner.representing = representing.join(', ');
+  });
+
   const templateHtml = reactTemplateGenerator({
     componentName: 'PetitionService',
     data: {
@@ -39,7 +54,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       },
       contactPrimary,
       contactSecondary,
-      docketEntryNumber: docketEntry.index,
+      docketEntryNumber: docketEntry && docketEntry.index,
       documentDetail: {
         documentTitle,
         eventCode,
@@ -63,7 +78,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     defaultTemplateData: {
-      emailContent: '',
+      emailContent: 'A petition has been served.',
     },
     destinations: [destination],
     templateName: process.env.EMAIL_SERVED_TEMPLATE,
