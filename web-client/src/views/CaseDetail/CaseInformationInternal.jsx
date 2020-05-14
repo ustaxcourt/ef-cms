@@ -372,7 +372,7 @@ export const CaseInformationInternal = connect(
                         Edit
                       </Button>
                     )}
-                    <If bind="caseDetail.irsSendDate">
+                    <If bind="formattedCaseDetail.irsSendDate">
                       <Button
                         link
                         className="margin-right-0 margin-top-1 padding-0 float-right"

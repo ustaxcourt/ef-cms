@@ -16,7 +16,6 @@ describe('PublicDocument', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
-      status: 'served',
     });
 
     expect(entity.toRawObject()).toEqual({
@@ -32,7 +31,6 @@ describe('PublicDocument', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
-      status: 'served',
     });
   });
 });
