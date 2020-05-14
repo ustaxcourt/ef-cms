@@ -1,3 +1,5 @@
+const { isEmpty } = require('lodash');
+
 /**
  * scrapes the text content out of a pdf
  *
@@ -13,27 +15,24 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
 
     for (let i = 1; i <= document.numPages; i++) {
       const page = await document.getPage(i);
-      const pageText = await page
-        .getTextContent({
-          disableCombineTextItems: false,
-          normalizeWhitespace: false,
-        })
-        .then(textContent => {
-          let lastY,
-            text = '';
-          for (let item of textContent.items) {
-            if (lastY == item.transform[5] || !lastY) {
-              text += item.str;
-            } else {
-              text += '\n' + item.str;
-            }
-            lastY = item.transform[5];
-          }
+      const pageTextContent = await page.getTextContent({
+        disableCombineTextItems: false,
+        normalizeWhitespace: false,
+      });
 
-          return text;
-        });
+      let lastY,
+        pageText = '';
 
-      if (pageText) {
+      for (let item of pageTextContent.items) {
+        if (lastY == item.transform[5] || !lastY) {
+          pageText += item.str;
+        } else {
+          pageText += '\n' + item.str;
+        }
+        lastY = item.transform[5];
+      }
+
+      if (!isEmpty(pageText)) {
         scrapedText = `${scrapedText}\n\n${pageText}`;
       }
     }
