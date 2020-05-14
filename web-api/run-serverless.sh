@@ -60,11 +60,15 @@ set -- \
   --userPoolIrsId "${USER_POOL_IRS_ID}" \
   --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
   --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
-  --verbose \
-  --circleHoneybadgerApiKey="${CIRCLE_HONEYBADGER_API_KEY}"
+  --circleHoneybadgerApiKey="${CIRCLE_HONEYBADGER_API_KEY}" \
+  --irsSuperuserEmail="${IRS_SUPERUSER_EMAIL}" \
+  --verbose
 
-./node_modules/.bin/sls create_domain "$@"
-echo "done running create_domain"
+if [ $config != 'serverless-streams.yml' ]
+  then
+  ./node_modules/.bin/sls create_domain "$@"
+  echo "done running create_domain"
+fi
 
 ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy --verbose "$@"
 echo "done running sls deploy"
