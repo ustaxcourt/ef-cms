@@ -46,6 +46,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
     test.docketNumber = caseDetail.docketNumber;
