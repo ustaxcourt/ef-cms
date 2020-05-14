@@ -285,7 +285,7 @@ module.exports = [
   {
     actions: [
       'wait for button.case-difference to be visible',
-      'wait for #case-difference-container not to be visible',
+      'wait for #case-difference-container to be hidden',
       'click element button.case-difference',
       'wait for #case-difference-container to be visible',
       'wait for label#procedure-type-0 to be visible',
