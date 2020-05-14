@@ -1,3 +1,6 @@
+const {
+  reactTemplateGenerator,
+} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { formatDateString } = require('../../utilities/DateHandler');
 
 exports.sendServedPartiesEmails = async ({
@@ -9,13 +12,20 @@ exports.sendServedPartiesEmails = async ({
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {
-      caseCaption: caseEntity.caseCaption,
-      docketNumber: caseEntity.docketNumber,
-      documentName: documentEntity.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+      emailContent: reactTemplateGenerator({
+        componentName: 'DocumentService',
+        data: {
+          caseCaption: caseEntity.caseCaption,
+          docketNumber: `${caseEntity.docketNumber}${
+            caseEntity.docketNumberSuffix || ''
+          }`,
+          documentName: documentEntity.documentTitle,
+          loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+          name: party.name,
+          serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
+          serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+        },
+      }),
     },
   }));
 
@@ -23,16 +33,13 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
+        docketNumber: `${caseEntity.docketNumber}${
+          caseEntity.docketNumberSuffix || ''
+        }`,
+        emailContent: '',
       },
       destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
+      templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,
     });
   }
 };

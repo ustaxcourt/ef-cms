@@ -35,6 +35,9 @@ const {
 
 // Emails
 const {
+  DocumentService,
+} = require('../emailGenerator/emailTemplates/DocumentService');
+const {
   PetitionService,
 } = require('../emailGenerator/emailTemplates/PetitionService.jsx');
 
@@ -46,6 +49,7 @@ const components = {
   ChangeOfAddress,
   DatePrintedFooter,
   DocketRecord,
+  DocumentService,
   NoticeOfDocketChange,
   PageMetaHeaderDocket,
   PetitionService,

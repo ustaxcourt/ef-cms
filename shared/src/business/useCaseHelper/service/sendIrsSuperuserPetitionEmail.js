@@ -82,6 +82,6 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       emailContent: 'A petition has been served.',
     },
     destinations: [destination],
-    templateName: process.env.EMAIL_SERVED_TEMPLATE,
+    templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,
   });
 };
