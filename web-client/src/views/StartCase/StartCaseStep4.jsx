@@ -96,6 +96,7 @@ export const StartCaseStep4 = connect(
           <div
             aria-hidden={!screenMetadata.showCaseDifference}
             className="usa-accordion__content"
+            hidden={!screenMetadata.showCaseDifference}
             id="case-difference-container"
           >
             <CaseDifferenceExplained />

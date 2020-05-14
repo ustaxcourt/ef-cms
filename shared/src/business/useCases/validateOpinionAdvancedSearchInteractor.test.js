@@ -4,7 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateOpinionAdvancedSearchInteractor', () => {
-  it('returns null when no errors exist in the orderSearch', () => {
+  it('returns null when no errors exist in the opinionSearch', () => {
     const errors = validateOpinionAdvancedSearchInteractor({
       applicationContext,
       opinionSearch: {

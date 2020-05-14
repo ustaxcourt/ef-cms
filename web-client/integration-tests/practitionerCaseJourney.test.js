@@ -1,6 +1,6 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { uploadPetition } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+
 import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
@@ -41,6 +41,7 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -70,6 +71,7 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
