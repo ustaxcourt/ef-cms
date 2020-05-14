@@ -1,4 +1,7 @@
 const { formatDateString } = require('../../utilities/DateHandler');
+const {
+  reactTemplateGenerator,
+} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,
@@ -9,14 +12,17 @@ exports.sendServedPartiesEmails = async ({
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {
-      emailContent: applicationContext.getEmailGenerators().documentService({
-        caseCaption: caseEntity.caseCaption,
-        docketNumber: caseEntity.docketNumber,
-        documentName: documentEntity.documentTitle,
-        loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-        name: party.name,
-        serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-        serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+      emailContent: reactTemplateGenerator({
+        componentName: 'DocumentService',
+        data: {
+          caseCaption: caseEntity.caseCaption,
+          docketNumber: caseEntity.docketNumber,
+          documentName: documentEntity.documentTitle,
+          loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+          name: party.name,
+          serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
+          serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+        },
       }),
     },
   }));
@@ -26,7 +32,7 @@ exports.sendServedPartiesEmails = async ({
       applicationContext,
       defaultTemplateData: {
         docketNumber: caseEntity.docketNumber,
-        emailContent: 'undefined',
+        emailContent: '',
       },
       destinations,
       templateName: process.env.EMAIL_SERVED_TEMPLATE,

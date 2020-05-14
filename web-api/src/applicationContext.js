@@ -985,9 +985,6 @@ module.exports = (appContextUser = {}) => {
       }
       return sesCache;
     },
-    getEmailGenerators: () => ({
-      documentService,
-    }),
     getEntityByName: name => {
       return entitiesByName[name];
     },
