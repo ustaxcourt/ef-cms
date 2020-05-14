@@ -35,12 +35,11 @@ const {
 
 // Emails
 const {
-  PetitionService,
-} = require('../emailGenerator/emailTemplates/PetitionService.jsx');
-
-const {
   DocumentService,
 } = require('../emailGenerator/emailTemplates/DocumentService');
+const {
+  PetitionService,
+} = require('../emailGenerator/emailTemplates/PetitionService.jsx');
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');
