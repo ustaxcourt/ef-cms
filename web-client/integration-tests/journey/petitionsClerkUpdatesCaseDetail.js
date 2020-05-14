@@ -2,7 +2,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export default test => {
+export const petitionsClerkUpdatesCaseDetail = test => {
   return it('Petitions clerk updates case detail', async () => {
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,

@@ -7,7 +7,7 @@ const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
-export default (test, overrides = {}) => {
+export const petitionsClerkEditsCaseDeadline = (test, overrides = {}) => {
   return it('Petitions clerk edits a case deadline', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

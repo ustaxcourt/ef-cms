@@ -4,8 +4,13 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { refreshElasticsearchIndex } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+  wait,
+} from './helpers';
 
 const test = setupTest({
   useCases: {
@@ -263,6 +268,8 @@ describe('docket clerk order advanced search', () => {
     });
 
     await test.runSequence('submitOrderAdvancedSearchSequence');
+
+    await wait(1000);
 
     expect(test.getState('searchResults')).toEqual(
       expect.arrayContaining([
