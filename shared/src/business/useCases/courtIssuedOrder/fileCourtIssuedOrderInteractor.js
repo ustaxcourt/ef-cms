@@ -37,11 +37,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
-  const shouldScrapePDFContents =
-    !documentMetadata.documentContents ||
-    (!documentMetadata.documentContents &&
-      documentMetadata.draftState &&
-      !documentMetadata.draftState.richText);
+  const shouldScrapePDFContents = !documentMetadata.documentContents;
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
@@ -50,7 +46,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   }
 
   if (shouldScrapePDFContents) {
-    const { Body: pdfData } = await applicationContext
+    const { Body: pdfBuffer } = await applicationContext
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
@@ -58,25 +54,28 @@ exports.fileCourtIssuedOrderInteractor = async ({
       })
       .promise();
 
+    const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < pdfBuffer.length; ++i) {
+      view[i] = pdfBuffer[i];
+    }
+
     // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
     try {
-      const parsedDocument = await applicationContext
-        .getPdfParser()
-        .parse(pdfData);
+      const contents = await applicationContext
+        .getUtilities()
+        .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
 
-      if (parsedDocument.text) {
-        documentMetadata.documentContents = parsedDocument.text;
+      if (contents) {
+        documentMetadata.documentContents = contents;
       }
     } catch (e) {
-      applicationContext.logger.info('Failed to parse PDF');
+      applicationContext.logger.info('Failed to parse PDF', e);
       throw e;
     }
   }
 
-  if (
-    documentMetadata.documentContents ||
-    documentMetadata.draftState.richText
-  ) {
+  if (documentMetadata.documentContents) {
     const documentContentsId = applicationContext.getUniqueId();
 
     const contentToStore = {
