@@ -2,13 +2,13 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsScannedBatch } from './journey/petitionsClerkAddsScannedBatch';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkCreatesScannedPDF } from './journey/petitionsClerkCreatesScannedPDF';
+import { petitionsClerkDeletesMultipleScannedBatches } from './journey/petitionsClerkDeletesMultipleScannedBatches';
+import { petitionsClerkDeletesScannedBatch } from './journey/petitionsClerkDeletesScannedBatch';
+import { petitionsClerkRescansAddedBatch } from './journey/petitionsClerkRescansAddedBatch';
+import { petitionsClerkSelectsScannerSource } from './journey/petitionsClerkSelectsScannerSource';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
-import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
-import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
-import petitionsClerkRescansAddedBatch from './journey/petitionsClerkRescansAddedBatch';
-import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
-import petitionsClerkViewsCreateNewCase from './journey/petitionsClerkViewsCreateNewCase';
-import petitionsClerkViewsScanView from './journey/petitionsClerkViewsScanView';
+import { petitionsClerkViewsCreateNewCase } from './journey/petitionsClerkViewsCreateNewCase';
+import { petitionsClerkViewsScanView } from './journey/petitionsClerkViewsScanView';
 
 const test = setupTest();
 

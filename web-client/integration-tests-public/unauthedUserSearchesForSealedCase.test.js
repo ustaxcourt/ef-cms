@@ -38,6 +38,7 @@ describe('Petitioner creates cases to search for', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });

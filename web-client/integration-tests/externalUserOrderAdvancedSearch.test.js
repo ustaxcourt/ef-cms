@@ -30,6 +30,7 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'petitioner');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
