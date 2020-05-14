@@ -1,4 +1,4 @@
-export default test => {
+export const respondentViewsCaseDetail = test => {
   return it('Respondent views case detail', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

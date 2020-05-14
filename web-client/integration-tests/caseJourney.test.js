@@ -35,10 +35,10 @@ import { petitionsClerkUpdatesCaseDetail } from './journey/petitionsClerkUpdates
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsMessages } from './journey/petitionsClerkViewsMessages';
 import { petitionsClerkViewsMessagesAfterReassign } from './journey/petitionsClerkViewsMessagesAfterReassign';
-import respondentAddsAnswer from './journey/respondentAddsAnswer';
-import respondentAddsMotion from './journey/respondentAddsMotion';
-import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
-import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import { respondentAddsAnswer } from './journey/respondentAddsAnswer';
+import { respondentAddsMotion } from './journey/respondentAddsMotion';
+import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
+import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
 const test = setupTest();
 
