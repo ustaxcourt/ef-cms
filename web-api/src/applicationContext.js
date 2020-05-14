@@ -219,9 +219,6 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
-  documentService,
-} = require('../../shared/src/business/utilities/emailGenerators');
-const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
