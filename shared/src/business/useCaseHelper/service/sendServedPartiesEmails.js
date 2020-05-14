@@ -16,7 +16,9 @@ exports.sendServedPartiesEmails = async ({
         componentName: 'DocumentService',
         data: {
           caseCaption: caseEntity.caseCaption,
-          docketNumber: caseEntity.docketNumber,
+          docketNumber: `${caseEntity.docketNumber}${
+            caseEntity.docketNumberSuffix || ''
+          }`,
           documentName: documentEntity.documentTitle,
           loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
           name: party.name,
@@ -31,7 +33,9 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        docketNumber: caseEntity.docketNumber,
+        docketNumber: `${caseEntity.docketNumber}${
+          caseEntity.docketNumberSuffix || ''
+        }`,
         emailContent: '',
       },
       destinations,
