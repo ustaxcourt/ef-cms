@@ -1,6 +1,10 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default (test, trialLocation, checkReport = true) => {
+export const petitionsClerkUnblocksCase = (
+  test,
+  trialLocation,
+  checkReport = true,
+) => {
   return it('Petitions clerk unblocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

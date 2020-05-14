@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkRemovesPractitionerFromCase = test => {
   return it('Petitions clerk removes a practitioner from a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
