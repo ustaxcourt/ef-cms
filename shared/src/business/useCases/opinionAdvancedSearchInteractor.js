@@ -14,12 +14,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers providers object
  * @param {object} providers.applicationContext api applicationContext
- * @param {object} providers.opinionKeyword keyword used for searching opinions
+ * @param {object} providers.keyword keyword used for searching opinions
  * @returns {object} the opinions data
  */
 exports.opinionAdvancedSearchInteractor = async ({
   applicationContext,
-  opinionKeyword,
+  keyword,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -28,7 +28,7 @@ exports.opinionAdvancedSearchInteractor = async ({
   }
 
   const opinionSearch = new DocumentSearch({
-    opinionKeyword,
+    keyword,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();

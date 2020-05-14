@@ -62,8 +62,8 @@ describe('opinionKeywordSearch', () => {
   it('does a keyword search for opinions', async () => {
     await opinionKeywordSearch({
       applicationContext,
+      keyword: 'Guy Fieri',
       opinionEventCodes,
-      opinionKeyword: 'Guy Fieri',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([

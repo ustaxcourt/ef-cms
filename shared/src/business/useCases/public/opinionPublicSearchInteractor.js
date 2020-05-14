@@ -10,10 +10,10 @@ const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
  */
 exports.opinionPublicSearchInteractor = async ({
   applicationContext,
-  opinionKeyword,
+  keyword,
 }) => {
   const opinionSearch = new DocumentSearch({
-    opinionKeyword,
+    keyword,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
