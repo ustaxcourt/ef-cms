@@ -53,6 +53,7 @@ describe('docket clerk order advanced search', () => {
   loginAs(test, 'petitioner');
   it('create case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

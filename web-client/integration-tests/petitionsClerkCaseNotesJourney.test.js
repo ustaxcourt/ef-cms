@@ -12,6 +12,7 @@ describe('petitions clerk case notes journey', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
