@@ -21,6 +21,7 @@ export const PetitionService = ({
   caseDetail,
   contactPrimary,
   contactSecondary,
+  currentDate,
   docketEntryNumber,
   documentDetail,
   practitioners,
@@ -28,7 +29,7 @@ export const PetitionService = ({
 }) => {
   return (
     <>
-      <EmailHeader />
+      <EmailHeader date={currentDate} />
       <br />
       <br />
 
@@ -44,10 +45,7 @@ export const PetitionService = ({
 
       <div id="document-information">
         <div>Document Information:</div>
-        <div>
-          Document Type: {documentDetail.eventCode}{' '}
-          {documentDetail.documentTitle}
-        </div>
+        <div>Document Name: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
         <div>Postmarked: {documentDetail.mailingDate}</div>
         <div>Served: {documentDetail.servedAtFormatted}</div>

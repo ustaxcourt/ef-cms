@@ -99,7 +99,7 @@ describe('PetitionService', () => {
     expect(documentInfo.text()).toContain(documentDetail.eventCode);
     expect(documentInfo.text()).toContain(documentDetail.documentTitle);
     expect(documentInfo.text()).toContain(
-      `Docket Entry No. ${docketEntryNumber}`,
+      `Docket Entry No.: ${docketEntryNumber}`,
     );
     expect(documentInfo.text()).toContain(documentDetail.mailingDate);
     expect(documentInfo.text()).toContain(documentDetail.servedAtFormatted);
@@ -174,7 +174,7 @@ describe('PetitionService', () => {
     expect(practitionerInfo.text()).toContain(practitioners[0].phoneNumber);
     expect(practitionerInfo.text()).toContain(practitioners[0].email);
     expect(practitionerInfo.text()).toContain(
-      `Representing ${practitioners[0].representing}`,
+      `Representing: ${practitioners[0].representing}`,
     );
 
     expect(practitionerInfo.text()).toContain(practitioners[1].name);
@@ -185,7 +185,7 @@ describe('PetitionService', () => {
     expect(practitionerInfo.text()).toContain(practitioners[1].phoneNumber);
     expect(practitionerInfo.text()).toContain(practitioners[1].email);
     expect(practitionerInfo.text()).toContain(
-      `Representing ${practitioners[1].representing}`,
+      `Representing: ${practitioners[1].representing}`,
     );
   });
 });

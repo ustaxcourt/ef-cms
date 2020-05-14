@@ -1,6 +1,6 @@
 const React = require('react');
 
-export const EmailHeader = () => {
+export const EmailHeader = ({ date }) => {
   return (
     <>
       <div style={{ textAlign: 'center' }}>
@@ -8,8 +8,8 @@ export const EmailHeader = () => {
           United States Tax Court
         </h1>
         <div style={{ fontSize: '16px' }}>
-          <div>400 Second Street, N.W.</div>
           <div>Washington, DC 21207</div>
+          {date && <div style={{ marginTop: '15px' }}>{date}</div>}
         </div>
       </div>
     </>
