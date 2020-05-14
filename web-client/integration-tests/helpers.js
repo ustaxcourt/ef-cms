@@ -370,6 +370,7 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
+  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -523,8 +524,8 @@ export const gotoRoute = (routes, routeToGoTo) => {
         '$',
     );
     if (routeToGoTo.match(regex)) {
-      let match = regex.exec(routeToGoTo);
-      while (match != null) {
+      const match = regex.exec(routeToGoTo);
+      if (match != null) {
         const args = match.splice(1);
         return route.cb.call(this, ...args);
       }
