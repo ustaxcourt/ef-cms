@@ -663,6 +663,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  scrapePdfContents,
+} = require('../../shared/src/business/utilities/scrapePdfContents');
+const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
@@ -1008,6 +1011,11 @@ module.exports = (appContextUser = {}) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
+    getPdfJs: () => {
+      const pdfjsLib = require('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      return pdfjsLib;
+    },
     getPdfParser: () => ({ parse: pdfParse }),
     getPersistenceGateway: () => {
       return {
@@ -1347,6 +1355,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,
+        scrapePdfContents,
         setServiceIndicatorsForCase,
       };
     },
