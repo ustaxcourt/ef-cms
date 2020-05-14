@@ -68,6 +68,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -964,6 +965,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      pendingReport,
       receiptOfFiling,
       standingPretrialOrder,
     }),
