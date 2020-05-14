@@ -16,5 +16,8 @@ export const clearAdvancedSearchFormAction = ({ props, store }) => {
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
     emptyForm.keyword = '';
   }
+  if (formType === 'opinionSearch') {
+    emptyForm.opinionKeyword = '';
+  }
   store.set(state.advancedSearchForm[formType], emptyForm);
 };

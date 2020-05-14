@@ -5,7 +5,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { caseSearchFilter } = require('../utilities/caseFilter');
 const { Document } = require('../../business/entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -41,7 +40,5 @@ exports.opinionAdvancedSearchInteractor = async ({
       ...rawSearch,
     });
 
-  const filteredResults = caseSearchFilter(results, authorizedUser);
-
-  return filteredResults;
+  return results;
 };
