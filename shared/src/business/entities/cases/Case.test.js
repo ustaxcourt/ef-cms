@@ -518,14 +518,7 @@ describe('Case entity', () => {
   });
 
   describe('markAsSentToIRS', () => {
-    it('sets irsSendDate', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
-    });
-    it('updates docket record status on petition documents', () => {
+    it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
@@ -547,8 +540,8 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
+      caseRecord.markAsSentToIRS();
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
   });
 
@@ -1620,6 +1613,54 @@ describe('Case entity', () => {
       expect(result.documentType).toEqual(
         Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
+    });
+  });
+
+  describe('getIrsSendDate', () => {
+    it('should get the IRS send date from the petition document', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toEqual('2019-03-01T21:40:46.415Z');
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not served', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [{ documentType: 'Petition' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not found', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Answer', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
     });
   });
 
