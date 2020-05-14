@@ -89,8 +89,8 @@ resource "aws_route53_record" "txt_dmarc" {
 
 
 # Email Template
-resource "aws_ses_template" "case_served" {
-  name    = "case_served_${var.environment}"
+resource "aws_ses_template" "document_served" {
+  name    = "document_served_${var.environment}"
   subject = "eService Notification from US Tax Court on Case {{docketNumber}}"
   html    = <<EOF
   {{emailContent}}
