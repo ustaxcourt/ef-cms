@@ -19,6 +19,7 @@ DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
   'YYYY/MM/D',
   'YYYY/M/DD',
   'YYYY/M/D',
+  'YYYY-MM-DDTHH:mm:ss.SSSZ',
 ];
 
 /**

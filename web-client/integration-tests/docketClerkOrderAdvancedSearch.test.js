@@ -104,9 +104,10 @@ describe('docket clerk order advanced search', () => {
         keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
       });
     });
+
     it('clears search fields', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
@@ -114,17 +115,17 @@ describe('docket clerk order advanced search', () => {
       });
 
       await test.runSequence('clearAdvancedSearchFormSequence', {
-        formType: 'DocumentSearch',
+        formType: 'orderSearch',
       });
 
-      expect(test.getState('advancedSearchForm.DocumentSearch')).toEqual({
+      expect(test.getState('advancedSearchForm.orderSearch')).toEqual({
         keyword: '',
       });
     });
 
     it('clears validation errors when switching tabs', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {},
+        orderSearch: {},
       });
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
@@ -143,7 +144,7 @@ describe('docket clerk order advanced search', () => {
   describe('search for things that should not be found', () => {
     it('search for a keyword that is not present in any served order', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           keyword: 'osteodontolignikeratic',
         },
       });
@@ -158,7 +159,7 @@ describe('docket clerk order advanced search', () => {
       const docketNumberNoOrders = '999-99';
 
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           docketNumber: docketNumberNoOrders,
           keyword: 'dismissal',
         },
@@ -173,7 +174,7 @@ describe('docket clerk order advanced search', () => {
       const caseCaptionNoOrders = 'abcdefghijk';
 
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           caseTitleOrPetitioner: caseCaptionNoOrders,
           keyword: 'dismissal',
         },
@@ -186,7 +187,7 @@ describe('docket clerk order advanced search', () => {
 
     it('search for a date range that does not contain served orders', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           endDateDay: '03',
           endDateMonth: '01',
           endDateYear: '2005',
@@ -206,7 +207,7 @@ describe('docket clerk order advanced search', () => {
       const invalidJudge = 'Judge Exotic';
 
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           judge: invalidJudge,
           keyword: 'dismissal',
         },
@@ -221,7 +222,7 @@ describe('docket clerk order advanced search', () => {
   describe('search for things that should be found', () => {
     it('search for a keyword that is present in served orders', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           keyword: 'dismissal',
         },
       });
@@ -246,7 +247,7 @@ describe('docket clerk order advanced search', () => {
     });
     it('search for a docket number that is present in served orders', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
         },
@@ -272,7 +273,7 @@ describe('docket clerk order advanced search', () => {
 
     it('search for a case title that is present in served orders', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           keyword: 'dismissal',
         },
@@ -303,7 +304,7 @@ describe('docket clerk order advanced search', () => {
       const orderCreationDate = currentDate.getDate();
 
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           endDateDay: orderCreationDate,
           endDateMonth: orderCreationMonth + 1,
           endDateYear: orderCreationYear,
@@ -336,7 +337,7 @@ describe('docket clerk order advanced search', () => {
 
     it('search for a judge that has signed served orders', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           judge: signedByJudge,
           keyword: 'dismissal',
         },
@@ -360,7 +361,7 @@ describe('docket clerk order advanced search', () => {
 
     it('includes the number of pages present in each document in the search results', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           keyword: 'Order of Dismissal Entered',
         },
       });
@@ -378,7 +379,7 @@ describe('docket clerk order advanced search', () => {
 
     it('includes the number of pages present in each document in the search results', async () => {
       test.setState('advancedSearchForm', {
-        DocumentSearch: {
+        orderSearch: {
           keyword: 'Order of Dismissal Entered',
         },
       });
