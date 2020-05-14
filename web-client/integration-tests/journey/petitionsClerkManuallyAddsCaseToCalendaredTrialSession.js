@@ -1,6 +1,6 @@
 import { wait } from '../helpers';
 
-export const petitionsClerkManualyAddsCaseToCalendaredTrialSession = (
+export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
   test,
   createdCasesIndex,
 ) => {
