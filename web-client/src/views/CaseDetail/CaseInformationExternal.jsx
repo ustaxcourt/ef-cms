@@ -89,7 +89,7 @@ export const CaseInformationExternal = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">
                       Petition Details
-                      <If bind="caseDetail.irsSendDate">
+                      <If bind="formattedCaseDetail.irsSendDate">
                         <Button
                           link
                           className="margin-right-0 margin-top-1 padding-0 float-right"
@@ -131,7 +131,7 @@ export const CaseInformationExternal = connect(
             <div className="margin-top-2">
               <div className="case-info-card padding-bottom-3">
                 <h3>Petition Details</h3>{' '}
-                <If bind="caseDetail.irsSendDate">
+                <If bind="formattedCaseDetail.irsSendDate">
                   <Button
                     link
                     onClick={() => {
