@@ -1,8 +1,10 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
+import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
+import { OpinionSearchForm } from './OpinionSearchForm';
+import { OpinionSearchResults } from './OpinionSearchResults';
 import { OrderSearchForm } from './OrderSearchForm';
-import { OrderSearchResults } from './OrderSearchResults';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
@@ -20,6 +22,8 @@ export const AdvancedSearch = connect(
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence:
+      sequences.submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence:
       sequences.submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence:
@@ -32,6 +36,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
@@ -71,7 +76,15 @@ export const AdvancedSearch = connect(
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
-              <OrderSearchResults />
+              <DocumentSearchResults />
+            </Tab>
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+              <OpinionSearchForm
+                submitAdvancedSearchSequence={
+                  submitOpinionAdvancedSearchSequence
+                }
+              />
+              <OpinionSearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab

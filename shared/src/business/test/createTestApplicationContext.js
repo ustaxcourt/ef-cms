@@ -222,9 +222,11 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const getDocumentGeneratorsReturnMock = {
+    caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
   };
 
@@ -235,9 +237,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generatePrintableFilingReceiptTemplate: jest
-      .fn()
-      .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
     generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
@@ -382,6 +381,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
+    getIrsSuperuserEmail: jest.fn(),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),

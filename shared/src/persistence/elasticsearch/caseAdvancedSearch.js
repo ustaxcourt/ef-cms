@@ -17,8 +17,36 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
     nonExactMatchesQuery,
   } = aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 
-  let foundCases = (
-    await search({
+  let results;
+
+  ({ results } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        _source: [
+          'caseCaption',
+          'contactPrimary',
+          'contactSecondary',
+          'docketNumber',
+          'docketNumberSuffix',
+          'irsPractitioners',
+          'privatePractitioners',
+          'receivedAt',
+          'sealedDate',
+        ],
+        query: {
+          bool: {
+            must: [...exactMatchesQuery, ...commonQuery],
+          },
+        },
+        size: 5000,
+      },
+      index: 'efcms-case',
+    },
+  }));
+
+  if (isEmpty(results)) {
+    ({ results } = await search({
       applicationContext,
       searchParameters: {
         body: {
@@ -28,49 +56,19 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
             'contactSecondary',
             'docketNumber',
             'docketNumberSuffix',
-            'irsPractitioners',
-            'privatePractitioners',
             'receivedAt',
             'sealedDate',
           ],
           query: {
             bool: {
-              must: [...exactMatchesQuery, ...commonQuery],
+              must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
-          size: 5000,
         },
         index: 'efcms-case',
       },
-    })
-  ).results;
-
-  if (isEmpty(foundCases)) {
-    foundCases = (
-      await search({
-        applicationContext,
-        searchParameters: {
-          body: {
-            _source: [
-              'caseCaption',
-              'contactPrimary',
-              'contactSecondary',
-              'docketNumber',
-              'docketNumberSuffix',
-              'receivedAt',
-              'sealedDate',
-            ],
-            query: {
-              bool: {
-                must: [...nonExactMatchesQuery, ...commonQuery],
-              },
-            },
-          },
-          index: 'efcms-case',
-        },
-      })
-    ).results;
+    }));
   }
 
-  return foundCases;
+  return results;
 };

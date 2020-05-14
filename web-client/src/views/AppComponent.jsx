@@ -41,9 +41,10 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
-import { PetitionQc } from './DocumentDetail/PetitionQc';
+import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -112,6 +113,7 @@ const pages = {
   PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
+  PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,

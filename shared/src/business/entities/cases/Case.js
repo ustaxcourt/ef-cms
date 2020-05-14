@@ -160,6 +160,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
+  hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
@@ -259,7 +260,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
@@ -283,6 +283,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   if (applicationContext.getCurrentUser().userId === rawCase.userId) {
     this.userId = rawCase.userId;
@@ -477,8 +478,13 @@ Case.validationRules = {
       ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
     )
     .optional(),
-  hasIrsNotice: joi.boolean().optional(),
-  hasVerifiedIrsNotice: joi.boolean().optional().allow(null),
+  hasVerifiedIrsNotice: joi
+    .boolean()
+    .optional()
+    .allow(null)
+    .description(
+      'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+    ),
   highPriority: joi
     .boolean()
     .optional()
@@ -498,7 +504,7 @@ Case.validationRules = {
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
-    .max(2) // TODO: add enum
+    .max(2) // TODO: add enumerator
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -684,6 +690,12 @@ Case.validationRules = {
     .pattern(/^[0-9]{1,2}:([0-5][0-9])$/)
     .optional()
     .description('Time of day when this case goes to trial.'),
+  useSameAsPrimary: joi
+    .boolean()
+    .optional()
+    .description(
+      'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
+    ),
   userId: joi
     .string()
     .max(50)
@@ -909,16 +921,6 @@ Case.prototype.closeCase = function () {
 Case.prototype.markAsSentToIRS = function (sendDate) {
   this.irsSendDate = sendDate;
   this.status = Case.STATUS_TYPES.generalDocket;
-  this.documents.forEach(document => {
-    document.status = 'served';
-  });
-  const dateServed = prepareDateFromString(undefined, 'L LT');
-  const status = `R served on ${dateServed}`;
-  this.docketRecord.forEach(docketRecord => {
-    if (docketRecord.documentId) {
-      docketRecord.status = status;
-    }
-  });
 
   return this;
 };
@@ -1004,6 +1006,14 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
 Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return this.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
 };
 
 /**

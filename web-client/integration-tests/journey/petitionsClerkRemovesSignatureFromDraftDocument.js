@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkRemovesSignatureFromDraftDocument = test => {
   return it('Petitions clerk removes saved signature from draft document', async () => {
     await test.runSequence('removeSignatureFromOrderSequence', {
       caseDetail: test.getState('caseDetail'),

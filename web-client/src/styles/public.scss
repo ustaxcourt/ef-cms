@@ -45,8 +45,7 @@
     .login-container {
       margin-top: 25px;
       margin-left: auto;
-      color: #005ea2;
-
+      color: color($theme-color-primary);
       .account-menu-icon {
         font-size: 25px;
       }

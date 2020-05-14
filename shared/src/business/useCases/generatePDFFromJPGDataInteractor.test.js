@@ -9,7 +9,7 @@ const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
 const testJpgBytes = () => {
-  return fs.readFileSync(testAssetsPath + 'sample.jpg');
+  return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.jpg'));
 };
 
 describe('generatePDFFromJPGDataInteractor', () => {

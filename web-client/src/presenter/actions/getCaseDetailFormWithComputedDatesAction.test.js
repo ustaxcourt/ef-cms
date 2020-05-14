@@ -1,6 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
-import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
+import {
+  castToISO,
+  getCaseDetailFormWithComputedDatesAction,
+} from './getCaseDetailFormWithComputedDatesAction';
+
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 

@@ -66,10 +66,10 @@ export const StartCaseStep1 = connect(
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
-            <p className="margin-top-0">
+            <div className="margin-top-0">
               <Button
                 link
-                className="usa-link--external"
+                className="usa-link--external text-left mobile-text-wrap"
                 href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                 icon="file-pdf"
                 iconColor="blue"
@@ -80,8 +80,8 @@ export const StartCaseStep1 = connect(
                 Download Statement of Taxpayer Identification Number (T.C. Form
                 4)
               </Button>
-              if you haven‘t already done so
-            </p>
+              <p className="margin-top-0">if you haven‘t already done so</p>
+            </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
               id="stin-file"
