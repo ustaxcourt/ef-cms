@@ -5,7 +5,6 @@ const { Document } = require('../../business/entities/Document');
 const { opinionKeywordSearch } = require('./opinionKeywordSearch');
 
 describe('opinionKeywordSearch', () => {
-  let searchStub;
   const opinionEventCodes = Document.OPINION_DOCUMENT_TYPES;
 
   const baseQueryParams = [
@@ -39,24 +38,16 @@ describe('opinionKeywordSearch', () => {
     },
   ];
 
-  beforeEach(() => {
-    searchStub = jest.fn();
-
-    applicationContext.getSearchClient.mockReturnValue({
-      search: searchStub,
-    });
-  });
-
   it('does a bare search for just eventCodes', async () => {
     await opinionKeywordSearch({
       applicationContext,
-
       opinionEventCodes,
     });
 
-    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      baseQueryParams,
-    );
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual(baseQueryParams);
   });
 
   it('does a keyword search for opinions', async () => {
@@ -66,7 +57,10 @@ describe('opinionKeywordSearch', () => {
       opinionEventCodes,
     });
 
-    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toEqual([
       ...baseQueryParams,
       {
         simple_query_string: {
