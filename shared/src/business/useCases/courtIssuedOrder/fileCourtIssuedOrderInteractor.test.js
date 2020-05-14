@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   fileCourtIssuedOrderInteractor,
@@ -203,6 +204,12 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should parse pdf contents', async () => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: Buffer.from(getFakeFile()),
+      }),
+    });
+
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
@@ -215,23 +222,27 @@ describe('fileCourtIssuedOrderInteractor', () => {
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(applicationContext.getPdfParser().parse.mock.calls[0][0]).toEqual(
-      's3-get-object-body',
-    );
     expect(
-      JSON.parse(
-        Buffer(
-          applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-            .calls[0][0].document,
-        ).toString(),
-      ),
-    ).toMatchObject({ documentContents: 'parsed-pdf-text' });
+      applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+        .pdfBuffer instanceof ArrayBuffer,
+    ).toEqual(true);
+
+    expect(
+      Buffer.from(
+        applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+          .pdfBuffer,
+      )
+        .toString()
+        .indexOf('%PDF'),
+    ).not.toEqual(-1);
   });
 
   it('should throw an error if fails to parse pdf', async () => {
-    applicationContext.getPdfParser().parse.mockImplementation(() => {
-      throw new Error('error parsing pdf');
-    });
+    applicationContext
+      .getUtilities()
+      .scrapePdfContents.mockImplementation(() => {
+        throw new Error('error parsing pdf');
+      });
 
     await expect(
       fileCourtIssuedOrderInteractor({
