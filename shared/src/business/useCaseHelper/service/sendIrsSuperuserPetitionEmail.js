@@ -15,11 +15,11 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     docketNumber,
     docketNumberSuffix,
     mailingDate,
+    preferredTrialCity,
     privatePractitioners,
-    trialLocation,
-  } = caseEntity;
+  } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
 
-  const { documentId, documentTitle, eventCode, servedAt } = documentEntity;
+  const { documentId, documentType, eventCode, servedAt } = documentEntity;
 
   const docketEntry = caseEntity.docketRecord.find(
     entry => entry.documentId === documentId,
@@ -50,14 +50,15 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
         docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
-        trialLocation,
+        trialLocation: preferredTrialCity,
       },
       contactPrimary,
       contactSecondary,
       currentDate,
       docketEntryNumber: docketEntry && docketEntry.index,
       documentDetail: {
-        documentTitle,
+        documentId,
+        documentTitle: documentType,
         eventCode,
         mailingDate,
         servedAtFormatted: applicationContext
