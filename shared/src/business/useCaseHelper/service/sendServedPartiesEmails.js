@@ -1,7 +1,7 @@
-const { formatDateString } = require('../../utilities/DateHandler');
 const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { formatDateString } = require('../../utilities/DateHandler');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,
