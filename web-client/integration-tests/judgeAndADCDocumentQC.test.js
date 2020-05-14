@@ -9,8 +9,8 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
-import petitionsClerkManuallyAddsCaseToCalendaredTrialSession from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 
