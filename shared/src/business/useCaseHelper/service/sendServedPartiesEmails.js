@@ -9,6 +9,7 @@ exports.sendServedPartiesEmails = async ({
   documentEntity,
   servedParties,
 }) => {
+  console.log('servedParties', servedParties);
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {

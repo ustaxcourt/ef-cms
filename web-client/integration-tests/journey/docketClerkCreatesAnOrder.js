@@ -66,5 +66,8 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
+    console.log(test.draftOrders);
+    console.log(test.draftOrders);
+    console.log(test.draftOrders);
   });
 };
