@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkViewsDocketRecordAfterServing = test => {
   return it('Petitions clerk views docket record after serving petition on the IRS', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

@@ -4,11 +4,11 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
+import { petitionsClerkEditsDraftOrder } from './journey/petitionsClerkEditsDraftOrder';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkEditsDraftOrder from './journey/petitionsClerkEditsDraftOrder';
-import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
-import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocumentDetail';
-import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
+import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
+import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
+import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import petitionsDeletesOrderFromCase from './journey/petitionsDeletesOrderFromCase';
 
 const test = setupTest({

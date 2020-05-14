@@ -8,7 +8,7 @@ import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/d
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 // petitionsClerk
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
+import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
