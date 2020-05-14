@@ -44,6 +44,10 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     practitioner.representing = representing.join(', ');
   });
 
+  const currentDate = applicationContext
+    .getUtilities()
+    .formatNow('MMMM D, YYYY');
+
   const templateHtml = reactTemplateGenerator({
     componentName: 'PetitionService',
     data: {
@@ -54,6 +58,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       },
       contactPrimary,
       contactSecondary,
+      currentDate,
       docketEntryNumber: docketEntry && docketEntry.index,
       documentDetail: {
         documentTitle,
