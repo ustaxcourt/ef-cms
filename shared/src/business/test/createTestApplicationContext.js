@@ -250,10 +250,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
-  const mockGetPdfParser = appContextProxy({
-    parse: jest.fn().mockResolvedValue({ text: 'parsed-pdf-text' }),
-  });
-
   const mockGetStorageClient = appContextProxy({
     getObject: jest.fn().mockReturnValue({
       promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
@@ -395,7 +391,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfParser: mockGetPdfParser,
     getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
@@ -451,4 +446,5 @@ module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
+  getFakeFile,
 };
