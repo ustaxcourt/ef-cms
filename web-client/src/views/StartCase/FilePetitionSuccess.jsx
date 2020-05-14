@@ -1,26 +1,19 @@
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const FilePetitionSuccessModal = connect(
+export const FilePetitionSuccess = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
   },
-  function FilePetitionSuccessModal({ docketNumber }) {
+  function FilePetitionSuccess({ docketNumber }) {
     return (
       <>
-        <ConfirmModal
-          noCancel
-          className="file-petition-success-modal"
-          confirmLabel="Ok"
-          displaySuccessBanner={true}
-          headerIcon="check-circle"
-          headerIconClassName="success-icon"
-          title="Your case has been successfully submitted."
-          onCancelSequence="clearModalSequence"
-          onConfirmSequence="clearModalSequence"
-        >
+        <CaseDetailHeader className="margin-bottom-0" />
+
+        <section className="usa-section grid-container">
           <p>Your case has been assigned Docket Number {docketNumber}.</p>
 
           <p>
@@ -40,7 +33,17 @@ export const FilePetitionSuccessModal = connect(
               As new info about the case becomes available you will be notified.
             </li>
           </ul>
-        </ConfirmModal>
+
+          <Button
+            secondary
+            className="tablet-full-width"
+            href={'/'}
+            icon="step-backward"
+            id="button-file-document"
+          >
+            Back to Dashboard
+          </Button>
+        </section>
       </>
     );
   },
