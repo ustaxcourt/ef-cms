@@ -33,7 +33,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
   return result;
 };
 
-export const formatDocumentSearchResultRecord = (
+export const formatOrderSearchResultRecord = (
   result,
   { applicationContext },
 ) => {
@@ -50,6 +50,26 @@ export const formatDocumentSearchResultRecord = (
   result.formattedSignedJudgeName = result.signedJudgeName
     ? applicationContext.getUtilities().getJudgeLastName(result.signedJudgeName)
     : '';
+
+  return result;
+};
+
+export const formatOpinionSearchResultRecord = (result, applicationContext) => {
+  result.formattedFiledDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.filingDate, 'MMDDYY');
+
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
+  result.docketNumberWithSuffix = `${result.docketNumber}${
+    result.docketNumberSuffix ? result.docketNumberSuffix : ''
+  }`;
+
+  result.formattedJudgeName = applicationContext
+    .getUtilities()
+    .getJudgeLastName(result.judge);
+
+  result.formattedDocumentType = result.documentType.split('-').pop().trim();
 
   return result;
 };
@@ -110,7 +130,7 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
+        formatOrderSearchResultRecord(searchResult, { applicationContext }),
     );
   }
 
@@ -134,7 +154,7 @@ export const advancedOpinionSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
+        formatOpinionSearchResultRecord(searchResult, applicationContext),
     );
   }
 

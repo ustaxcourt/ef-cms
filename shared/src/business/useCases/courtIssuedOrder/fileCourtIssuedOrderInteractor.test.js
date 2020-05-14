@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   fileCourtIssuedOrderInteractor,
@@ -200,5 +201,61 @@ describe('fileCourtIssuedOrderInteractor', () => {
       documentContentsId: expect.anything(),
       draftState: {},
     });
+  });
+
+  it('should parse pdf contents', async () => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: Buffer.from(getFakeFile()),
+      }),
+    });
+
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'TC Opinion',
+        documentType: 'TCOP - T.C. Opinion',
+        eventCode: 'TCOP',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+        .pdfBuffer instanceof ArrayBuffer,
+    ).toEqual(true);
+
+    expect(
+      Buffer.from(
+        applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+          .pdfBuffer,
+      )
+        .toString()
+        .indexOf('%PDF'),
+    ).not.toEqual(-1);
+  });
+
+  it('should throw an error if fails to parse pdf', async () => {
+    applicationContext
+      .getUtilities()
+      .scrapePdfContents.mockImplementation(() => {
+        throw new Error('error parsing pdf');
+      });
+
+    await expect(
+      fileCourtIssuedOrderInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          docketNumber: '45678-18',
+          documentTitle: 'TC Opinion',
+          documentType: 'TCOP - T.C. Opinion',
+          eventCode: 'TCOP',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('error parsing pdf');
   });
 });
