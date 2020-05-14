@@ -783,6 +783,14 @@ const router = {
     );
 
     registerRoute(
+      '/file-a-petition/success',
+      ifHasAccess(() => {
+        setPageTitle('Petition Filed Successfully');
+        return app.getSequence('gotoFilePetitionSuccessSequence')();
+      }),
+    );
+
+    registerRoute(
       '/file-a-petition-pa11y/step-*',
       ifHasAccess(step => {
         setPageTitle('File a petition');
