@@ -1,12 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export const CaseDifferenceExplained = () => {
-  useEffect(() => {
-    const element = document.querySelector('.which-procedure-header');
-    if (element) element.scrollIntoView();
-  });
-
   return (
     <div className="subsection case-difference">
       <h2 className="which-procedure-header">
