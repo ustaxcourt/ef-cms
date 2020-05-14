@@ -64,7 +64,8 @@ set -- \
   --irsSuperuserEmail="${IRS_SUPERUSER_EMAIL}" \
   --verbose
 
-if [[ config != 'serverless-streams.yml' ]] ; then
+if [ $config != 'serverless-streams.yml' ]
+  then
   ./node_modules/.bin/sls create_domain "$@"
   echo "done running create_domain"
 fi
