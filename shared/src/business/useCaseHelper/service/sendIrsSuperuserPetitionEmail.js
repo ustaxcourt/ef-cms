@@ -13,17 +13,13 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     contactPrimary,
     contactSecondary,
     docketNumber,
+    docketNumberSuffix,
+    mailingDate,
     privatePractitioners,
     trialLocation,
   } = caseEntity;
 
-  const {
-    documentId,
-    documentTitle,
-    eventCode,
-    mailingDate,
-    servedAt,
-  } = documentEntity;
+  const { documentId, documentTitle, eventCode, servedAt } = documentEntity;
 
   const docketEntry = caseEntity.docketRecord.find(
     entry => entry.documentId === documentId,
@@ -53,7 +49,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber,
+        docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
         trialLocation,
       },
       contactPrimary,
