@@ -47,6 +47,41 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     ).toMatchObject([{ email: 'irs@example.com' }]);
   });
 
+  it('should concatenate the docketNumber and docketNumberSuffix if a docketNumberSuffix is present', async () => {
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity: {
+        caseCaption: 'A Caption',
+        contactPrimary: {
+          name: 'Joe Exotic',
+        },
+        contactSecondary: {
+          name: 'Carol Baskin',
+        },
+        docketNumber: '123-20',
+        docketNumberSuffix: 'S',
+        docketRecord: [],
+        privatePractitioners: [
+          {
+            representingPrimary: true,
+          },
+          {
+            representingPrimary: true,
+            representingSecondary: true,
+          },
+        ],
+      },
+      documentEntity: {
+        documentId: 'test-document-id',
+        documentTitle: 'The Document',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      },
+    });
+
+    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+    expect(caseDetail.docketNumber).toEqual('123-20S');
+  });
+
   it('should add a `representing` field to practitioners with the names of parties they represent', async () => {
     await sendIrsSuperuserPetitionEmail({
       applicationContext,
