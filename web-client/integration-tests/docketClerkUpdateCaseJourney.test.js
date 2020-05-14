@@ -6,7 +6,7 @@ import { docketClerkViewsInactiveCasesForTrialSession } from './journey/docketCl
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 
@@ -30,6 +30,7 @@ describe('docket clerk update case journey', () => {
 
   it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });

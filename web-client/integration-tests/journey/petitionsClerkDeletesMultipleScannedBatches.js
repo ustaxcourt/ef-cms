@@ -1,4 +1,7 @@
-export default (test, { numBatches }) => {
+export const petitionsClerkDeletesMultipleScannedBatches = (
+  test,
+  { numBatches },
+) => {
   return it('Petitions clerk deletes multiple batches', async () => {
     const selectedDocumentType = test.getState(
       'currentViewMetadata.documentSelectedForScan',

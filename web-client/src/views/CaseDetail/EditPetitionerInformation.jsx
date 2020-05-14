@@ -79,7 +79,6 @@ export const EditPetitionerInformation = connect(
                 <Contacts
                   bind="form"
                   contactsHelper="startCaseInternalContactsHelper"
-                  emailBind="form.contactPrimary"
                   showPrimaryContact={
                     editPetitionerInformationHelper.showPrimaryContact
                   }

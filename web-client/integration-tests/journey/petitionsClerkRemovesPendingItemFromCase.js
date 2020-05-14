@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkRemovesPendingItemFromCase = test => {
   return it('Petitions Clerk removes a pending item from a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
