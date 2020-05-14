@@ -387,6 +387,7 @@ const formatCase = (applicationContext, caseDetail) => {
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadCaseId;
+  result.irsSendDate = caseEntity.getIrsSendDate();
 
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(

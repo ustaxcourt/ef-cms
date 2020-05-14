@@ -22,7 +22,6 @@ const mockCaseDetailBase = {
   createdAt: new Date(),
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
-  irsSendDate: new Date(),
   receivedAt: new Date(),
 };
 
