@@ -262,7 +262,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.filingType = rawCase.filingType;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
-  this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
   this.leadCaseId = rawCase.leadCaseId;
@@ -519,9 +518,6 @@ Case.validationRules = {
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
     ),
-  irsSendDate: joiStrictTimestamp
-    .optional()
-    .description('When the case was sent to the IRS by the court.'),
   isPaper: joi.boolean().optional(),
   leadCaseId: joi
     .string()
@@ -889,7 +885,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
         eventCode: document.eventCode,
         filedBy: document.filedBy,
         filingDate: document.receivedAt || document.createdAt,
-        status: document.status,
       },
       { applicationContext },
     ),
@@ -918,19 +913,8 @@ Case.prototype.closeCase = function () {
  * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
-Case.prototype.markAsSentToIRS = function (sendDate) {
-  this.irsSendDate = sendDate;
+Case.prototype.markAsSentToIRS = function () {
   this.status = Case.STATUS_TYPES.generalDocket;
-  this.documents.forEach(document => {
-    document.status = 'served';
-  });
-  const dateServed = prepareDateFromString(undefined, 'L LT');
-  const status = `R served on ${dateServed}`;
-  this.docketRecord.forEach(docketRecord => {
-    if (docketRecord.documentId) {
-      docketRecord.status = status;
-    }
-  });
 
   return this;
 };
@@ -1016,6 +1000,21 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
 Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return this.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+};
+
+Case.prototype.getIrsSendDate = function () {
+  const petitionDocument = this.getPetitionDocument();
+  if (petitionDocument) {
+    return petitionDocument.servedAt;
+  }
 };
 
 /**

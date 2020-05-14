@@ -295,13 +295,6 @@ List of IRS practitioners (also known as respondents) associated with the case.
 
 > `array` | optional
 
-### irsSendDate
-
-
-When the case was sent to the IRS by the court.
-
-> `date` | optional
-
 ### isPaper
 
 > `boolean` | optional

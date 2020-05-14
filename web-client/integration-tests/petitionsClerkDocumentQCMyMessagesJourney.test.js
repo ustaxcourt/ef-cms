@@ -1,15 +1,15 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkBulkAssignsCases } from './journey/petitionsClerkBulkAssignsCases';
 import { petitionsClerkCreatesMessage } from './journey/petitionsClerkCreatesMessage';
-import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
-import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
-import petitionsClerkGetsSectionDocumentQCInboxCount from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';
-import petitionsClerkVerifiesAssignedWorkItem from './journey/petitionsClerkVerifiesAssignedWorkItem';
-import petitionsClerkVerifiesUnreadMessage from './journey/petitionsClerkVerifiesUnreadMessage';
-import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
-import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
-import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
-import petitionsClerkViewsUnreadMessage from './journey/petitionsClerkViewsUnreadMessage';
+import { petitionsClerkGetsMyDocumentQCInboxCount } from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
+import { petitionsClerkGetsMyMessagesInboxCount } from './journey/petitionsClerkGetsMyMessagesInboxCount';
+import { petitionsClerkGetsSectionDocumentQCInboxCount } from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';
+import { petitionsClerkVerifiesAssignedWorkItem } from './journey/petitionsClerkVerifiesAssignedWorkItem';
+import { petitionsClerkVerifiesUnreadMessage } from './journey/petitionsClerkVerifiesUnreadMessage';
+import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
+import { petitionsClerkViewsMyMessagesInbox } from './journey/petitionsClerkViewsMyMessagesInbox';
+import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
+import { petitionsClerkViewsUnreadMessage } from './journey/petitionsClerkViewsUnreadMessage';
 
 const test = setupTest();
 
@@ -32,6 +32,7 @@ describe('Petitions Clerk Document QC Journey', () => {
   for (let i = 0; i < caseCreationCount; i++) {
     it(`create case ${i + 1}`, async () => {
       const caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       createdCases.push(caseDetail);
     });
   }

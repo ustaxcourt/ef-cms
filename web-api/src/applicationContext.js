@@ -64,18 +64,19 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
-  casePublicSearch: casePublicSearchPersistence,
-} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
-const {
-  casePublicSearchInteractor,
-} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
-const {
+  caseInventoryReport,
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
+const {
+  casePublicSearch: casePublicSearchPersistence,
+} = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
+const {
+  casePublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -640,9 +641,6 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
-  saveIntermediateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -666,6 +664,9 @@ const {
 const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
+  sendIrsSuperuserPetitionEmail,
+} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -959,6 +960,7 @@ module.exports = (appContextUser = {}) => {
       return dynamoClientCache[type];
     },
     getDocumentGenerators: () => ({
+      caseInventoryReport,
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
@@ -980,6 +982,7 @@ module.exports = (appContextUser = {}) => {
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
@@ -1186,6 +1189,7 @@ module.exports = (appContextUser = {}) => {
         generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
+        sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1292,7 +1296,6 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
-        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         serveCaseToIrsInteractor,

@@ -19,8 +19,8 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkViewsDocketEntry from './journey/petitionsClerkViewsDocketEntry';
-import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
+import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDocketEntry';
+import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 //petitioner
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 
@@ -39,7 +39,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   loginAs(test, 'petitioner');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test);
-
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

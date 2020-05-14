@@ -7,7 +7,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardC = test => {
-  return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario and uploads a document to complete the docket entry', async () => {
+  return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario', async () => {
     let caseDetailFormatted;
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

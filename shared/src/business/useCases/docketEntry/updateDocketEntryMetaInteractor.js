@@ -23,7 +23,6 @@ exports.updateDocketEntryMetaInteractor = async ({
   docketEntryMeta,
   docketRecordIndex,
 }) => {
-  let caseUpdated, newFiledBy;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -43,30 +42,43 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketRecordEntry = caseEntity.docketRecord.find(record => {
-    return record.index === docketRecordIndex;
+  const originalDocketEntry = caseEntity.docketRecord.find(
+    record => record.index === docketRecordIndex,
+  );
+  const originalDocument = caseEntity.getDocumentById({
+    documentId: originalDocketEntry.documentId,
   });
 
-  const {
-    action,
-    additionalInfo,
-    additionalInfo2,
-    attachments,
-    certificateOfService,
-    certificateOfServiceDate,
-    date,
-    description,
-    documentTitle,
-    documentType,
-    eventCode,
-    filingDate,
-    freeText,
-    judge,
-    lodged,
-    objections,
-    servedAt,
-    servedPartiesCode,
-  } = docketEntryMeta;
+  const editableFields = {
+    action: docketEntryMeta.action,
+    addToCoversheet: docketEntryMeta.addToCoversheet,
+    additionalInfo: docketEntryMeta.additionalInfo,
+    additionalInfo2: docketEntryMeta.additionalInfo2,
+    attachments: docketEntryMeta.attachments,
+    certificateOfService: docketEntryMeta.certificateOfService,
+    certificateOfServiceDate: docketEntryMeta.certificateOfServiceDate,
+    date: docketEntryMeta.date,
+    description: docketEntryMeta.description,
+    docketNumbers: docketEntryMeta.docketNumbers,
+    documentTitle: docketEntryMeta.documentTitle,
+    documentType: docketEntryMeta.documentType,
+    eventCode: docketEntryMeta.eventCode,
+    filingDate: docketEntryMeta.filingDate,
+    freeText: docketEntryMeta.freeText,
+    freeText2: docketEntryMeta.freeText2,
+    judge: docketEntryMeta.judge,
+    lodged: docketEntryMeta.lodged,
+    objections: docketEntryMeta.objections,
+    ordinalValue: docketEntryMeta.ordinalValue,
+    partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
+    partyPrimary: docketEntryMeta.partyPrimary,
+    partySecondary: docketEntryMeta.partySecondary,
+    scenario: docketEntryMeta.scenario,
+    servedAt: docketEntryMeta.servedAt,
+    servedPartiesCode: docketEntryMeta.servedPartiesCode,
+    serviceDate: docketEntryMeta.serviceDate,
+    trialLocation: docketEntryMeta.trialLocation,
+  };
 
   const documentEntityForFiledBy = new Document(
     {
@@ -75,122 +87,57 @@ exports.updateDocketEntryMetaInteractor = async ({
     { applicationContext },
   );
   documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
-  newFiledBy = documentEntityForFiledBy.filedBy;
+  const newFiledBy = documentEntityForFiledBy.filedBy;
 
   const docketRecordEntity = new DocketRecord(
     {
-      ...docketRecordEntry,
-      action: action || docketRecordEntry.action,
+      ...originalDocketEntry,
+      ...editableFields,
       description:
-        documentTitle || description || docketRecordEntry.description,
-      eventCode: eventCode || docketRecordEntry.eventCode,
-      filedBy: newFiledBy || docketRecordEntry.filedBy,
-      filingDate: filingDate || docketRecordEntry.filingDate,
-      servedPartiesCode:
-        servedPartiesCode || docketRecordEntry.servedPartiesCode,
+        editableFields.documentTitle ||
+        editableFields.description ||
+        originalDocketEntry.description,
+      filedBy: newFiledBy || originalDocketEntry.filedBy,
     },
     { applicationContext },
   );
 
-  if (
-    additionalInfo ||
-    additionalInfo2 ||
-    attachments ||
-    certificateOfServiceDate ||
-    certificateOfService ||
-    date ||
-    documentType ||
-    eventCode ||
-    newFiledBy ||
-    filingDate ||
-    freeText ||
-    documentTitle ||
-    judge ||
-    lodged ||
-    objections ||
-    servedAt
-  ) {
-    const documentDetail = caseEntity.getDocumentById({
-      documentId: docketRecordEntity.documentId,
-    });
+  caseEntity.updateDocketRecordEntry(docketRecordEntity);
 
-    let newCertificateOfServiceDate;
+  if (originalDocument) {
+    const servedAtUpdated =
+      editableFields.servedAt &&
+      editableFields.servedAt !== originalDocument.servedAt;
+    const filingDateUpdated =
+      editableFields.filingDate &&
+      editableFields.filingDate !== originalDocument.filingDate;
+    const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
 
-    if (certificateOfServiceDate !== null) {
-      newCertificateOfServiceDate = certificateOfServiceDate;
-    } else {
-      newCertificateOfServiceDate = undefined;
-    }
+    const documentEntity = new Document(
+      {
+        ...originalDocument,
+        ...editableFields,
+        filedBy: newFiledBy || originalDocketEntry.filedBy,
+      },
+      { applicationContext },
+    );
 
-    if (documentDetail) {
-      const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
-      const filingDateUpdated =
-        filingDate && filingDate !== documentDetail.filingDate;
-      const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
+    caseEntity.updateDocument(documentEntity);
 
-      if (
-        !newCertificateOfServiceDate &&
-        documentDetail.certificateOfServiceDate
-      ) {
-        newCertificateOfServiceDate = documentDetail.certificateOfServiceDate;
-      }
-
-      const documentEntity = new Document(
-        {
-          ...documentDetail,
-          additionalInfo: additionalInfo || documentDetail.additionalInfo,
-          additionalInfo2: additionalInfo2 || documentDetail.additionalInfo2,
-          attachments:
-            attachments !== null ? attachments : documentDetail.attachments,
-          certificateOfService:
-            certificateOfService !== null
-              ? certificateOfService
-              : documentDetail.certificateOfService,
-          certificateOfServiceDate: newCertificateOfServiceDate,
-          date: date || documentDetail.date,
-          documentTitle: documentTitle || documentDetail.documentTitle, // setting to null will regenerate it for the coversheet
-          documentType: documentType || documentDetail.documentType,
-          eventCode: eventCode || documentDetail.eventCode,
-          filedBy: newFiledBy || documentDetail.filedBy,
-          filingDate: filingDate || documentDetail.filingDate,
-          freeText: freeText || documentDetail.freeText,
-          judge: judge || documentDetail.judge,
-          lodged: lodged !== null ? lodged : documentDetail.lodged,
-          objections: objections || documentDetail.objections,
-          servedAt: servedAt || documentDetail.servedAt,
-        },
-        { applicationContext },
-      );
-
-      caseEntity.updateDocketRecordEntry(docketRecordEntity);
-      caseEntity.updateDocument(documentEntity);
-
-      await applicationContext.getPersistenceGateway().updateCase({
+    if (shouldGenerateCoversheet) {
+      // servedAt or filingDate has changed, generate a new coversheet
+      await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseId,
+        documentId: originalDocument.documentId,
       });
-
-      caseUpdated = true;
-
-      if (shouldGenerateCoversheet) {
-        // servedAt or filingDate has changed, generate a new coversheet
-        await applicationContext.getUseCases().addCoversheetInteractor({
-          applicationContext,
-          caseId,
-          documentId: documentDetail.documentId,
-        });
-      }
     }
   }
 
-  if (!caseUpdated) {
-    caseEntity.updateDocketRecordEntry(docketRecordEntity);
-
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-  }
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   return caseEntity.toRawObject();
 };

@@ -2,7 +2,7 @@ import { EditPrivatePractitionerFactory } from '../../../shared/src/business/ent
 
 const { VALIDATION_ERROR_MESSAGES } = EditPrivatePractitionerFactory;
 
-export default test => {
+export const petitionsClerkEditsPractitionerOnCase = test => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 

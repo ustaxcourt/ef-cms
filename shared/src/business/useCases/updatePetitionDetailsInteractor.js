@@ -26,27 +26,37 @@ exports.updatePetitionDetailsInteractor = async ({
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
-  const {
-    petitionPaymentDate,
-    petitionPaymentMethod,
-    petitionPaymentStatus,
-    petitionPaymentWaivedDate,
-  } = petitionDetails;
+  const editableFields = {
+    caseType: petitionDetails.caseType,
+    irsNoticeDate: petitionDetails.irsNoticeDate,
+    petitionPaymentDate: petitionDetails.petitionPaymentDate,
+    petitionPaymentMethod: petitionDetails.petitionPaymentMethod,
+    petitionPaymentStatus: petitionDetails.petitionPaymentStatus,
+    petitionPaymentWaivedDate: petitionDetails.petitionPaymentWaivedDate,
+    preferredTrialCity: petitionDetails.preferredTrialCity,
+    procedureType: petitionDetails.procedureType,
+  };
 
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const isPaid = petitionPaymentStatus === Case.PAYMENT_STATUS.PAID;
-  const isWaived = petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED;
+  const isPaid =
+    editableFields.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID;
+  const isWaived =
+    editableFields.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED;
 
   const newCase = new Case(
     {
       ...oldCase,
-      ...petitionDetails,
-      petitionPaymentDate: isPaid ? petitionPaymentDate : null,
-      petitionPaymentMethod: isPaid ? petitionPaymentMethod : null,
-      petitionPaymentWaivedDate: isWaived ? petitionPaymentWaivedDate : null,
+      ...editableFields,
+      petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
+      petitionPaymentMethod: isPaid
+        ? editableFields.petitionPaymentMethod
+        : null,
+      petitionPaymentWaivedDate: isWaived
+        ? editableFields.petitionPaymentWaivedDate
+        : null,
     },
     { applicationContext },
   );

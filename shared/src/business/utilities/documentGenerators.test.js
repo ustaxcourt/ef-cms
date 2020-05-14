@@ -8,6 +8,7 @@ const {
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 const {
+  caseInventoryReport,
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
@@ -239,6 +240,40 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Standing_Pretrial_Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('caseInventoryReport', () => {
+    it('generates a Case Inventory Report document', async () => {
+      const pdf = await caseInventoryReport({
+        applicationContext,
+        data: {
+          formattedCases: [
+            {
+              associatedJudge: 'Judge Armen',
+              caseTitle: 'rick james b',
+              docketNumber: '101-20',
+              docketNumberSuffix: 'L',
+              status: 'Closed',
+            },
+          ],
+          reportTitle: 'General Docket - Not at Issue',
+          showJudgeColumn: true,
+          showStatusColumn: true,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Case_Inventory_Report', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

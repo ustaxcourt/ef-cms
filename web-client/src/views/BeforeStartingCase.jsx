@@ -5,6 +5,7 @@ import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import howToMergePdfs from '../pdfs/how-to-merge-pdfs.pdf';
 
 export const BeforeStartingCase = connect(
   {
@@ -85,7 +86,7 @@ export const BeforeStartingCase = connect(
                   <p className="margin-top-0">
                     <Button
                       link
-                      className="usa-link--external"
+                      className="usa-link--external text-left mobile-text-wrap"
                       href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                       icon="file-pdf"
                       iconColor="blue"
@@ -131,7 +132,7 @@ export const BeforeStartingCase = connect(
                   <p className="margin-top-0">
                     <Button
                       link
-                      className="usa-link--external"
+                      className="usa-link--external text-left mobile-text-wrap"
                       href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
                       icon="file-pdf"
                       iconColor="blue"
@@ -159,8 +160,8 @@ export const BeforeStartingCase = connect(
                     file size of 250MB) or combine them digitally.
                     <Button
                       link
-                      className="usa-link--external"
-                      href="https://ui-dev.ustc-case-mgmt.flexion.us/how-to-merge-pdfs.8733e415.pdf"
+                      className="usa-link--external text-left mobile-text-wrap"
+                      href={howToMergePdfs}
                       icon="file-pdf"
                       iconColor="blue"
                       overrideMargin="margin-right-1 margin-left-1"
@@ -215,7 +216,7 @@ export const BeforeStartingCase = connect(
                   <p className="margin-top-0">
                     <Button
                       link
-                      className="usa-link--external"
+                      className="usa-link--external text-left mobile-text-wrap"
                       href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
                       icon="file-pdf"
                       iconColor="blue"
