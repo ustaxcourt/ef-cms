@@ -14,6 +14,13 @@ DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
 DocumentSearch.validationName = 'DocumentSearch';
 
+DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
+  'YYYY/MM/DD',
+  'YYYY/MM/D',
+  'YYYY/M/DD',
+  'YYYY/M/D',
+];
+
 /**
  * Document Search entity
  *
@@ -81,12 +88,14 @@ DocumentSearch.schema = joi
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .less(joi.ref('tomorrow'))
         .optional()
         .description(
           'The end date search filter is not required if there is no start date',
         ),
       then: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
         .optional()
@@ -105,12 +114,14 @@ DocumentSearch.schema = joi
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
       otherwise: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .max('now')
         .optional()
         .description(
           'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
         ),
       then: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .max('now')
         .required()
         .description(
