@@ -95,14 +95,33 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
         },
       ]);
       caseEntity.updateDocument(initialDocument);
+
+      if (
+        initialDocument.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType
+      ) {
+        await applicationContext
+          .getUseCaseHelpers()
+          .sendIrsSuperuserPetitionEmail({
+            applicationContext,
+            caseEntity,
+            documentEntity: initialDocument,
+          });
+      } else {
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          documentEntity: initialDocument,
+          servedParties: [
+            {
+              email: applicationContext.getIrsSuperuserEmail(),
+              name: 'IRS',
+            },
+          ],
+        });
+      }
     }
   }
-
-  await applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail({
-    applicationContext,
-    caseEntity,
-    documentEntity: caseEntity.getPetitionDocument(),
-  });
 
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
