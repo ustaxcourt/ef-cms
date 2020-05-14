@@ -39,6 +39,7 @@ describe('Schedule A Trial Session', () => {
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
+      expect(caseDetail.docketNumber).toBeDefined();
       createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
