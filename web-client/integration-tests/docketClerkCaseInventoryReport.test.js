@@ -7,7 +7,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 
@@ -95,6 +95,7 @@ describe('case inventory report journey', () => {
   for (let i = 0; i < 2; i++) {
     it(`create case ${i + 1}`, async () => {
       const caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }

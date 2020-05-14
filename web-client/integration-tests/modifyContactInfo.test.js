@@ -35,6 +35,7 @@ describe('Modify Petitioner Contact Information', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

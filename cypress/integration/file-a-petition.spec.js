@@ -184,6 +184,7 @@ describe('creation form', () => {
     cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase');
     cy.get('@postCase').should(xhr => {
+      // eslint-disable-next-line jest/valid-expect
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });

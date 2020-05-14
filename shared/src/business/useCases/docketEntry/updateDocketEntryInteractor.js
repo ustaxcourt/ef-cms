@@ -69,6 +69,7 @@ exports.updateDocketEntryInteractor = async ({
     pending: documentMetadata.pending,
     receivedAt: documentMetadata.receivedAt,
     scenario: documentMetadata.scenario,
+    serviceDate: documentMetadata.serviceDate,
   };
 
   const documentEntity = new Document(

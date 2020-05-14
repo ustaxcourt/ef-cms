@@ -145,9 +145,6 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -173,13 +170,10 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 
-  it('should serve all initial document types when served', async () => {
+  it('should serve all initial document types when served and send the IRS superuser email service', async () => {
     mockCase = {
       ...MOCK_CASE,
       documents: [
@@ -234,13 +228,9 @@ describe('serveCaseToIrsInteractor', () => {
           Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       );
     expect(result).toBeDefined();
-    expect(
-      applicationContext
-        .getPersistenceGateway()
-        .updateCase.mock.calls[0][0].caseToUpdate.documents.every(
-          document => document.status === 'served',
-        ),
-    ).toEqual(true);
     expect(documentWithServedParties.servedParties).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
+    ).toBeCalled();
   });
 });
