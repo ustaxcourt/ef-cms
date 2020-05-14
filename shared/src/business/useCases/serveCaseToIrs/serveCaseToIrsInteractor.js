@@ -112,12 +112,14 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
           applicationContext,
           caseEntity,
           documentEntity: initialDocument,
-          servedParties: [
-            {
-              email: applicationContext.getIrsSuperuserEmail(),
-              name: 'IRS',
-            },
-          ],
+          servedParties: {
+            electronic: [
+              {
+                email: applicationContext.getIrsSuperuserEmail(),
+                name: 'IRS',
+              },
+            ],
+          },
         });
       }
     }
