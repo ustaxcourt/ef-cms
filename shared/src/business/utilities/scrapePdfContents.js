@@ -40,7 +40,7 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
 
     return scrapedText;
   } catch (e) {
-    throw new Error('error scraping PDF', e);
+    throw new Error('error scraping PDF');
   }
 };
 
