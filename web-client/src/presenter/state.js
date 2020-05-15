@@ -65,6 +65,7 @@ import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
+import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -142,6 +143,7 @@ const helpers = {
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
+  statisticsFormHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
