@@ -1,4 +1,3 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -73,11 +72,16 @@ export const AdvancedDocumentSearch = props => {
             <label className="usa-label padding-top-105" htmlFor="order-judge">
               Judge
             </label>
-            <BindedSelect
-              bind="formName.judge"
-              className="usa-input"
+            <select
+              className="usa-input usa-select"
               id="order-judge"
               name="judge"
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
             >
               <option value="">- Select -</option>
               {judges.map((judge, idx) => (
@@ -85,7 +89,7 @@ export const AdvancedDocumentSearch = props => {
                   {judge.name}
                 </option>
               ))}
-            </BindedSelect>
+            </select>
           </div>
           <div className="grid-row date-search-row">
             <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">

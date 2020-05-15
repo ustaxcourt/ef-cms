@@ -18,9 +18,12 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  return await applicationContext.getPersistenceGateway().opinionKeywordSearch({
-    applicationContext,
-    opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
-    ...rawSearch,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      judgeType: 'judge',
+      ...rawSearch,
+    });
 };
