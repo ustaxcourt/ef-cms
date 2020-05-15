@@ -191,6 +191,10 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
 
     expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
 
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPractitioner');
+
     test.docketNumber = test.getState('cases.0.docketNumber');
   });
 };

@@ -120,6 +120,10 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
 
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
+
     test.docketNumber = test.getState('cases.0.docketNumber');
   });
 };

@@ -785,8 +785,10 @@ const router = {
     registerRoute(
       '/file-a-petition/success',
       ifHasAccess(() => {
-        setPageTitle('Petition Filed Successfully');
-        return app.getSequence('gotoFilePetitionSuccessSequence')();
+        if (app.getState('currentPage') === 'StartCaseWizard') {
+          setPageTitle('Petition Filed Successfully');
+          return app.getSequence('gotoFilePetitionSuccessSequence')();
+        }
       }),
     );
 
