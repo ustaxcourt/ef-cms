@@ -27,8 +27,13 @@ describe('Petition Service Email Sent on Serve', () => {
   it('should send the expected emails to irs super user', async () => {
     const emails = await getEmailsForAddress('irsSuperuserEmail@example.com');
     await deleteEmails(emails);
-    expect(emails.length).toEqual(1);
-    expect(emails[0].template.replace(/<!-- -->/g, '')).toContain(
+    emails.forEach(email => {
+      email.template = email.template.replace(/<!-- -->/g, '');
+    });
+    const orderEmail = emails.find(
+      email => email.template.indexOf('A new Petition has been served') !== -1,
+    );
+    expect(orderEmail.template.replace(/<!-- -->/g, '')).toContain(
       `docketNumber: ${test.docketNumber}`,
     );
   });
