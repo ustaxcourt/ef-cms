@@ -3,13 +3,17 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
-import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
-import { uploadPetition } from './helpers';
 
 const test = setupTest({
   useCases: {
@@ -26,6 +30,7 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'petitioner');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -50,25 +55,25 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'privatePractitioner1');
   unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner2');
   unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'docketclerk');
@@ -80,24 +85,24 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'privatePractitioner1');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner2');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 });

@@ -1,17 +1,17 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { uploadPetition } from './helpers';
-import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
-import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
-import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
-import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
-import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
-import practitionerSearchesForNonexistentCase from './journey/practitionerSearchesForNonexistentCase';
-import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
-import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
-import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
-import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
-import practitionerViewsDashboardBeforeAddingCase from './journey/practitionerViewsDashboardBeforeAddingCase';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+
+import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
+import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
+import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
+import { practitionerRequestsPendingAccessToCase } from './journey/practitionerRequestsPendingAccessToCase';
+import { practitionerSearchesForCase } from './journey/practitionerSearchesForCase';
+import { practitionerSearchesForNonexistentCase } from './journey/practitionerSearchesForNonexistentCase';
+import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
+import { practitionerViewsCaseDetailOfOwnedCase } from './journey/practitionerViewsCaseDetailOfOwnedCase';
+import { practitionerViewsCaseDetailOfPendingCase } from './journey/practitionerViewsCaseDetailOfPendingCase';
+import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
+import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
 const test = setupTest();
 
@@ -41,6 +41,7 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -70,6 +71,7 @@ describe('Practitioner requests access to case', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

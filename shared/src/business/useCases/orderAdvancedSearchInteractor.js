@@ -1,16 +1,18 @@
 const {
+  DocumentSearch,
+} = require('../../business/entities/documents/DocumentSearch');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { Document } = require('../../business/entities/Document');
-const { OrderSearch } = require('../../business/entities/orders/OrderSearch');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * orderAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, orderKeyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
+ * @param {object} providers the providers object containing applicationContext, keyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
  * @returns {object} the orders data
  */
 exports.orderAdvancedSearchInteractor = async ({
@@ -21,7 +23,7 @@ exports.orderAdvancedSearchInteractor = async ({
   endDateMonth,
   endDateYear,
   judge,
-  orderKeyword,
+  keyword,
   startDateDay,
   startDateMonth,
   startDateYear,
@@ -32,14 +34,14 @@ exports.orderAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderSearch = new OrderSearch({
+  const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,
     endDateDay,
     endDateMonth,
     endDateYear,
     judge,
-    orderKeyword,
+    keyword,
     startDateDay,
     startDateMonth,
     startDateYear,

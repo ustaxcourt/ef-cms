@@ -8,7 +8,7 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
     const errors = validateOpinionAdvancedSearchInteractor({
       applicationContext,
       opinionSearch: {
-        opinionKeyword: 'Joe Exotic',
+        keyword: 'Joe Exotic',
       },
     });
 
@@ -19,12 +19,12 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
     const errors = validateOpinionAdvancedSearchInteractor({
       applicationContext,
       opinionSearch: {
-        opinionKeyword: '',
+        keyword: '',
       },
     });
 
     expect(errors).toMatchObject({
-      opinionKeyword: 'Enter a keyword or phrase',
+      keyword: 'Enter a keyword or phrase',
     });
   });
 });

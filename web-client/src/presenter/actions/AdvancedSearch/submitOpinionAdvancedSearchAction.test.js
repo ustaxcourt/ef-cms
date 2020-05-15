@@ -14,7 +14,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
       state: {
         advancedSearchForm: {
           opinionSearch: {
-            opinionKeyword: 'a',
+            keyword: 'a',
           },
         },
       },
@@ -29,7 +29,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
         .calls[0][0],
     ).toMatchObject({
       searchParams: {
-        opinionKeyword: 'a',
+        keyword: 'a',
       },
     });
   });

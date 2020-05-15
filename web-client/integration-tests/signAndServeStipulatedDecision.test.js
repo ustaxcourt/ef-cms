@@ -45,6 +45,7 @@ describe('a user signs and serves a stipulated decision', () => {
 
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   loginAs(test, 'irsPractitioner');
