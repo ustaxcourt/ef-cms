@@ -1,4 +1,4 @@
-import { OpinionSearch } from '../../shared/src/business/entities/opinions/OpinionSearch';
+import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 
@@ -23,14 +23,14 @@ describe('docket clerk opinion advanced search', () => {
     await test.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      opinionKeyword: OpinionSearch.VALIDATION_ERROR_MESSAGES.opinionKeyword,
+      keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });
 
   it('search for a keyword that is not present in any served opinion', async () => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
-        opinionKeyword: 'osteodontolignikeratic',
+        keyword: 'osteodontolignikeratic',
       },
     });
 
@@ -43,7 +43,7 @@ describe('docket clerk opinion advanced search', () => {
   it('search for a keyword that is present in a served opinion', async () => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
-        opinionKeyword: 'sunglasses',
+        keyword: 'sunglasses',
       },
     });
 
@@ -63,7 +63,7 @@ describe('docket clerk opinion advanced search', () => {
   it('clears search fields', async () => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
-        opinionKeyword: 'sunglasses',
+        keyword: 'sunglasses',
       },
     });
 
@@ -72,7 +72,7 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     expect(test.getState('advancedSearchForm.opinionSearch')).toEqual({
-      opinionKeyword: '',
+      keyword: '',
     });
   });
 
