@@ -10,7 +10,7 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 
 const test = setupTest();
 
-describe('Petition Service Email Sent on Serve', () => {
+describe.skip('Petition Service Email Sent on Serve', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
