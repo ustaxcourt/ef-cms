@@ -15,13 +15,13 @@ exports.deleteCustomDomains = async ({ environment }) => {
     await apiGateway
       .deleteDomainName({ DomainName: domain.DomainName })
       .promise();
-    await sleep(10000);
+    await sleep(100);
   }
 
   let resourceCount = customDomains.length;
 
   while (resourceCount > 0) {
-    await sleep(5000);
+    await sleep(1000);
     const refreshedDomains = await getCustomDomains({
       apiGateway,
       environment,
