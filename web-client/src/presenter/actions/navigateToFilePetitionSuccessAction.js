@@ -6,5 +6,5 @@
  * @returns {Promise} async action
  */
 export const navigateToFilePetitionSuccessAction = async ({ router }) => {
-  await router.route('file-a-petition/success');
+  await router.route('/file-a-petition/success');
 };
