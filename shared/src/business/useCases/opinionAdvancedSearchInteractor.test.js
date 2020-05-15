@@ -52,7 +52,7 @@ describe('opinionAdvancedSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await opinionAdvancedSearchInteractor({
       applicationContext,
-      opinionKeyword: 'candy',
+      keyword: 'candy',
     });
 
     expect(result).toMatchObject([
@@ -81,11 +81,11 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('searches for documents that are of type opinions', async () => {
-    const opinionKeyword = 'keyword';
+    const keyword = 'keyword';
 
     await opinionAdvancedSearchInteractor({
       applicationContext,
-      opinionKeyword,
+      keyword,
     });
 
     expect(

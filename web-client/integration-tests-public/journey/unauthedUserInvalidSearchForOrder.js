@@ -1,4 +1,4 @@
-import { OrderSearch } from '../../../shared/src/business/entities/orders/OrderSearch';
+import { DocumentSearch } from '../../../shared/src/business/entities/documents/DocumentSearch';
 
 export const unauthedUserInvalidSearchForOrder = test => {
   return it('Search for order without a keyword', async () => {
@@ -7,7 +7,7 @@ export const unauthedUserInvalidSearchForOrder = test => {
     await test.runSequence('submitPublicOrderAdvancedSearchSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      orderKeyword: OrderSearch.VALIDATION_ERROR_MESSAGES.orderKeyword,
+      keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });
 };

@@ -49,7 +49,7 @@ describe('orderPublicSearchInteractor', () => {
   it('should only search for order document types', async () => {
     await orderPublicSearchInteractor({
       applicationContext,
-      orderKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(
@@ -63,7 +63,7 @@ describe('orderPublicSearchInteractor', () => {
   it('returns results with sealed cases filtered out', async () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
-      orderKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(result).toMatchObject([

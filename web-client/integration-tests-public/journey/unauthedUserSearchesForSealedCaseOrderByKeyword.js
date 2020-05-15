@@ -9,7 +9,7 @@ export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
 
     test.setState('advancedSearchForm', {
       orderSearch: {
-        orderKeyword: 'dismiss',
+        keyword: 'dismiss',
       },
     });
 
