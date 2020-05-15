@@ -74,7 +74,7 @@ export const AdvancedDocumentSearch = props => {
               Judge
             </label>
             <select
-              className="usa-input"
+              className="usa-input usa-select"
               id="order-judge"
               name="judge"
               onChange={e => {
