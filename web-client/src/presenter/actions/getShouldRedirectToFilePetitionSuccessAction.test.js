@@ -25,11 +25,9 @@ describe('getShouldRedirectToFilePetitionSuccessAction', () => {
         caseDetail: {
           docketNumber: '1234-54',
         },
+        currentPage: 'StartCaseWizard',
         form: {
-          wizardStep: 5,
-        },
-        screenMetadata: {
-          page: 'StartCaseWizard',
+          wizardStep: '5',
         },
       },
     });
