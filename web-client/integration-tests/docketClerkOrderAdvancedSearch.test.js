@@ -1,4 +1,4 @@
-import { OrderSearch } from '../../shared/src/business/entities/orders/OrderSearch';
+import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -101,15 +101,16 @@ describe('docket clerk order advanced search', () => {
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
       expect(test.getState('validationErrors')).toEqual({
-        orderKeyword: OrderSearch.VALIDATION_ERROR_MESSAGES.orderKeyword,
+        keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
       });
     });
+
     it('clears search fields', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           docketNumber: caseDetail.docketNumber,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -118,7 +119,7 @@ describe('docket clerk order advanced search', () => {
       });
 
       expect(test.getState('advancedSearchForm.orderSearch')).toEqual({
-        orderKeyword: '',
+        keyword: '',
       });
     });
 
@@ -144,7 +145,7 @@ describe('docket clerk order advanced search', () => {
     it('search for a keyword that is not present in any served order', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
-          orderKeyword: 'osteodontolignikeratic',
+          keyword: 'osteodontolignikeratic',
         },
       });
 
@@ -160,7 +161,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           docketNumber: docketNumberNoOrders,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -175,7 +176,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           caseTitleOrPetitioner: caseCaptionNoOrders,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -190,7 +191,7 @@ describe('docket clerk order advanced search', () => {
           endDateDay: '03',
           endDateMonth: '01',
           endDateYear: '2005',
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
           startDateDay: '01',
           startDateMonth: '01',
           startDateYear: '2005',
@@ -208,7 +209,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           judge: invalidJudge,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -222,7 +223,7 @@ describe('docket clerk order advanced search', () => {
     it('search for a keyword that is present in served orders', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -248,7 +249,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           docketNumber: caseDetail.docketNumber,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -274,7 +275,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -307,7 +308,7 @@ describe('docket clerk order advanced search', () => {
           endDateDay: orderCreationDate,
           endDateMonth: orderCreationMonth + 1,
           endDateYear: orderCreationYear,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
           startDateDay: orderCreationDate,
           startDateMonth: orderCreationMonth - 1,
           startDateYear: orderCreationYear,
@@ -338,7 +339,7 @@ describe('docket clerk order advanced search', () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
           judge: signedByJudge,
-          orderKeyword: 'dismissal',
+          keyword: 'dismissal',
         },
       });
 
@@ -361,7 +362,7 @@ describe('docket clerk order advanced search', () => {
     it('includes the number of pages present in each document in the search results', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
-          orderKeyword: 'Order of Dismissal Entered',
+          keyword: 'Order of Dismissal Entered',
         },
       });
 
@@ -379,7 +380,7 @@ describe('docket clerk order advanced search', () => {
     it('includes the number of pages present in each document in the search results', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
-          orderKeyword: 'Order of Dismissal Entered',
+          keyword: 'Order of Dismissal Entered',
         },
       });
 

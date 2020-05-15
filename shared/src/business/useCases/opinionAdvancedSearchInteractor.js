@@ -1,10 +1,10 @@
 const {
+  DocumentSearch,
+} = require('../../business/entities/documents/DocumentSearch');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  OpinionSearch,
-} = require('../../business/entities/opinions/OpinionSearch');
 const { Document } = require('../../business/entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -13,12 +13,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers providers object
  * @param {object} providers.applicationContext api applicationContext
- * @param {object} providers.opinionKeyword keyword used for searching opinions
+ * @param {object} providers.keyword keyword used for searching opinions
  * @returns {object} the opinions data
  */
 exports.opinionAdvancedSearchInteractor = async ({
   applicationContext,
-  opinionKeyword,
+  keyword,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -26,8 +26,8 @@ exports.opinionAdvancedSearchInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const opinionSearch = new OpinionSearch({
-    opinionKeyword,
+  const opinionSearch = new DocumentSearch({
+    keyword,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
