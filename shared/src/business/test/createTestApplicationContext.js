@@ -250,6 +250,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
+  const mockGetStorageClient = appContextProxy({
+    getObject: jest.fn().mockReturnValue({
+      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    }),
+  });
+
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
     createCase: jest.fn().mockImplementation(createCase),
@@ -381,6 +387,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
+    getIrsSuperuserEmail: jest.fn(),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
@@ -395,7 +402,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
-    getStorageClient: appContextProxy(),
+    getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
       .fn()
@@ -440,4 +447,5 @@ module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
+  getFakeFile,
 };

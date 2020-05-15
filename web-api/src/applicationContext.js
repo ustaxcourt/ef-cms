@@ -636,9 +636,6 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
-  saveIntermediateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -657,11 +654,17 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  scrapePdfContents,
+} = require('../../shared/src/business/utilities/scrapePdfContents');
+const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
+  sendIrsSuperuserPetitionEmail,
+} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -883,6 +886,19 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+const getDocumentClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoClientCache[type]) {
+    dynamoClientCache[type] = new DynamoDB.DocumentClient({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
+  }
+  return dynamoClientCache[type];
+};
+
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
@@ -940,20 +956,7 @@ module.exports = (appContextUser = {}) => {
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
     }),
-    getDocumentClient: ({ useMasterRegion = false } = {}) => {
-      const type = useMasterRegion ? 'master' : 'region';
-      if (!dynamoClientCache[type]) {
-        dynamoClientCache[type] = new DynamoDB.DocumentClient({
-          endpoint: useMasterRegion
-            ? environment.masterDynamoDbEndpoint
-            : environment.dynamoDbEndpoint,
-          region: useMasterRegion
-            ? environment.masterRegion
-            : environment.region,
-        });
-      }
-      return dynamoClientCache[type];
-    },
+    getDocumentClient,
     getDocumentGenerators: () => ({
       caseInventoryReport,
       changeOfAddress,
@@ -968,16 +971,43 @@ module.exports = (appContextUser = {}) => {
     },
     getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
-      if (!sesCache) {
-        sesCache = new SES({
-          region: 'us-east-1',
-        });
+      if (process.env.CI) {
+        return {
+          sendBulkTemplatedEmail: params => {
+            return {
+              promise: () =>
+                Promise.all(
+                  params.Destinations.map(Destination => {
+                    const address = Destination.Destination.ToAddresses[0];
+                    const template = Destination.ReplacementTemplateData;
+                    return getDocumentClient()
+                      .put({
+                        Item: {
+                          pk: `email-${address}`,
+                          sk: getUniqueId(),
+                          template,
+                        },
+                        TableName: `efcms-${environment.stage}`,
+                      })
+                      .promise();
+                  }),
+                ),
+            };
+          },
+        };
+      } else {
+        if (!sesCache) {
+          sesCache = new SES({
+            region: 'us-east-1',
+          });
+        }
+        return sesCache;
       }
-      return sesCache;
     },
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
@@ -1003,6 +1033,11 @@ module.exports = (appContextUser = {}) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
+    getPdfJs: () => {
+      const pdfjsLib = require('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      return pdfjsLib;
+    },
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
@@ -1183,6 +1218,7 @@ module.exports = (appContextUser = {}) => {
         generatePaperServiceAddressPagePdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
+        sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1288,7 +1324,6 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
-        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         serveCaseToIrsInteractor,
@@ -1339,6 +1374,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,
+        scrapePdfContents,
         setServiceIndicatorsForCase,
       };
     },

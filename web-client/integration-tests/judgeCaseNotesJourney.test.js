@@ -7,8 +7,8 @@ import { judgeViewsNotesFromCaseDetail } from './journey/judgeViewsNotesFromCase
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
 
@@ -46,6 +46,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
     test.docketNumber = caseDetail.docketNumber;

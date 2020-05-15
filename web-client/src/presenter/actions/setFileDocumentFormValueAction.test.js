@@ -35,7 +35,35 @@ describe('setFileDocumentFormValueAction', () => {
       },
     });
 
-    expect(state.form['previousDocument']).toEqual({
+    expect(state.form.previousDocument).toEqual({
+      documentId: '234',
+      documentTitle: 'Test Document Title Two',
+    });
+  });
+
+  it('sets state.form.secondaryDocument.previousDocument to the document associated with the id in props.value', async () => {
+    const { state } = await runAction(setFileDocumentFormValueAction, {
+      props: {
+        key: 'secondaryDocument.previousDocument',
+        value: '234',
+      },
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: '123',
+              documentTitle: 'Test Document Title One',
+            },
+            {
+              documentId: '234',
+              documentTitle: 'Test Document Title Two',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(state.form.secondaryDocument.previousDocument).toEqual({
       documentId: '234',
       documentTitle: 'Test Document Title Two',
     });
@@ -54,6 +82,6 @@ describe('setFileDocumentFormValueAction', () => {
       },
     });
 
-    expect(state.form['testKey']).toBeUndefined();
+    expect(state.form.testKey).toBeUndefined();
   });
 });

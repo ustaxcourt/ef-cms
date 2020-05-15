@@ -1,6 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
-export default test => {
+export const petitionsClerkViewsMessages = test => {
   return it('Petitions clerk views messages', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');

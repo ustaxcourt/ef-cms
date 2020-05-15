@@ -11,13 +11,13 @@ import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/d
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
+import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkViewsDraftOrder from './journey/petitionsClerkViewsDraftOrder';
+import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 // petitioner
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 
 const test = setupTest({
   useCases: {

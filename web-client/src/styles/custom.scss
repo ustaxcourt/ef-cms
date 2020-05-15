@@ -1013,7 +1013,7 @@ hr.lighter {
   }
 }
 
-#order-advanced {
+#document-advanced {
   .grid-container .usa-form-group:last-child,
   .grid-container .usa-fieldset:last-child {
     margin-bottom: 5px;
@@ -1495,4 +1495,8 @@ button.change-scanner-button {
 
 .upload-court-document-description-container {
   min-height: 471px;
+}
+
+.accordion-item-title {
+  align-self: center;
 }
