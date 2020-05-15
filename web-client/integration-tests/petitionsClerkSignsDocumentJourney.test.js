@@ -6,13 +6,13 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkAppliesSignatureToDraftDocument } from './journey/petitionsClerkAppliesSignatureToDraftDocument';
 import { petitionsClerkClearsSignatureFromDraftDocument } from './journey/petitionsClerkClearsSignatureFromDraftDocument';
+import { petitionsClerkRemovesSignatureFromDraftDocument } from './journey/petitionsClerkRemovesSignatureFromDraftDocument';
+import { petitionsClerkSavesSignatureForDraftDocument } from './journey/petitionsClerkSavesSignatureForDraftDocument';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkRemovesSignatureFromDraftDocument from './journey/petitionsClerkRemovesSignatureFromDraftDocument';
-import petitionsClerkSavesSignatureForDraftDocument from './journey/petitionsClerkSavesSignatureForDraftDocument';
-import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
-import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocumentDetail';
-import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
-import petitionsClerkViewsSignDraftDocument from './journey/petitionsClerkViewsSignDraftDocument';
+import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
+import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
+import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
+import { petitionsClerkViewsSignDraftDocument } from './journey/petitionsClerkViewsSignDraftDocument';
 
 const test = setupTest({
   useCases: {

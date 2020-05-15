@@ -5,11 +5,11 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
-import petitionsClerkDeletesCaseDeadline from './journey/petitionsClerkDeletesCaseDeadline';
-import petitionsClerkEditsCaseDeadline from './journey/petitionsClerkEditsCaseDeadline';
-import petitionsClerkViewCaseDeadline from './journey/petitionsClerkViewCaseDeadline';
-import petitionsClerkViewsCaseWithNoDeadlines from './journey/petitionsClerkViewsCaseWithNoDeadlines';
-import petitionsClerkViewsDeadlineReport from './journey/petitionsClerkViewsDeadlineReport';
+import { petitionsClerkDeletesCaseDeadline } from './journey/petitionsClerkDeletesCaseDeadline';
+import { petitionsClerkEditsCaseDeadline } from './journey/petitionsClerkEditsCaseDeadline';
+import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCaseDeadline';
+import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
+import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
 
 const test = setupTest();
 

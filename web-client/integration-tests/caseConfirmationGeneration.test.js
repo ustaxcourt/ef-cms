@@ -3,10 +3,10 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
-import userNavigatesToCreateCaseConfirmation from './journey/userNavigatesToCreateCaseConfirmation';
+import { petitionsClerkGetsMyMessagesInboxCount } from './journey/petitionsClerkGetsMyMessagesInboxCount';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkViewsMyMessagesInbox } from './journey/petitionsClerkViewsMyMessagesInbox';
+import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
 
 const test = setupTest();
 

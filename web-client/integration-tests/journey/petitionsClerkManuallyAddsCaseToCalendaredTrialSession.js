@@ -1,6 +1,9 @@
 import { wait } from '../helpers';
 
-export default (test, createdCasesIndex) => {
+export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
+  test,
+  createdCasesIndex,
+) => {
   return it('Petitions clerk manually adds a case to a calendared trial session', async () => {
     const caseToAdd = test.createdCases[createdCasesIndex];
 

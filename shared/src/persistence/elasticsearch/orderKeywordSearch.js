@@ -6,8 +6,8 @@ exports.orderKeywordSearch = async ({
   docketNumber,
   endDate,
   judge,
+  keyword,
   orderEventCodes,
-  orderKeyword,
   startDate,
 }) => {
   const sourceFields = [
@@ -54,11 +54,11 @@ exports.orderKeywordSearch = async ({
     });
   }
 
-  if (orderKeyword) {
+  if (keyword) {
     queryParams.push({
       simple_query_string: {
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: orderKeyword,
+        query: keyword,
       },
     });
   }

@@ -7,7 +7,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-(async function() {
+(async function () {
   let hasMoreResults = true;
   let lastKey = null;
   while (hasMoreResults) {

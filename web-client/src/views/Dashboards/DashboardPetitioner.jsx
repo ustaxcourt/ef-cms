@@ -62,7 +62,7 @@ export const DashboardPetitioner = connect(
                   </p>
                   <p>
                     <a
-                      className="usa-link"
+                      className="usa-link--external"
                       href="https://www.ustaxcourt.gov/forms.htm"
                       rel="noopener noreferrer"
                       target="_blank"
@@ -114,7 +114,7 @@ export const DashboardPetitioner = connect(
                       <br />
                       <Button
                         className="margin-bottom-3 margin-top-2"
-                        href="https://pay.gov"
+                        href="https://pay.gov/public/form/start/60485840"
                         id="pay_filing_fee"
                         target="_blank"
                       >
@@ -142,20 +142,18 @@ export const DashboardPetitioner = connect(
                         <br />
                         <br />
                         <strong>Can’t afford to pay the filing fee?</strong>
-                        <p>
-                          <Button
-                            link
-                            className="usa-link--external text-left"
-                            href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                            icon="file-pdf"
-                            iconColor="blue"
-                            rel="noopener noreferrer"
-                            shouldWrapText={true}
-                            target="_blank"
-                          >
-                            Download Application For Waiver of Filing Fee
-                          </Button>
-                        </p>
+                        <Button
+                          link
+                          className="usa-link--external text-left"
+                          href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                          icon="file-pdf"
+                          iconColor="blue"
+                          rel="noopener noreferrer"
+                          shouldWrapText={true}
+                          target="_blank"
+                        >
+                          Download Application For Waiver of Filing Fee
+                        </Button>
                       </AccordionItem>
                     </Accordion>
                   </div>
