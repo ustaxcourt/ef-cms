@@ -39,7 +39,7 @@ export const FilePetitionSuccess = connect(
             className="tablet-full-width"
             href={'/'}
             icon="step-backward"
-            id="button-file-document"
+            id="button-back-to-dashboard"
           >
             Back to Dashboard
           </Button>

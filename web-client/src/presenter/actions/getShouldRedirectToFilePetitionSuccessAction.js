@@ -12,15 +12,11 @@ import { state } from 'cerebral';
  * @returns {object} continue path for the sequence
  */
 export const getShouldRedirectToFilePetitionSuccessAction = ({ get, path }) => {
-  const currentPage = get(state.screenMetadata.page);
-  const caseDetail = get(state.caseDetail);
+  const currentPage = get(state.currentPage);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const wizardStep = get(state.form.wizardStep);
 
-  if (
-    currentPage === 'StartCaseWizard' &&
-    caseDetail.docketNumber &&
-    wizardStep === 5
-  ) {
+  if (currentPage === 'StartCaseWizard' && docketNumber && wizardStep === '5') {
     return path.yes();
   }
 
