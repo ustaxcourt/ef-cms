@@ -1,5 +1,11 @@
+import { getShouldRedirectToFilePetitionSuccessAction } from '../actions/getShouldRedirectToFilePetitionSuccessAction';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoFilePetitionSuccessSequence = [
-  setCurrentPageAction('FilePetitionSuccess'),
+  getShouldRedirectToFilePetitionSuccessAction,
+  {
+    no: navigateToDashboardAction,
+    yes: setCurrentPageAction('FilePetitionSuccess'),
+  },
 ];
