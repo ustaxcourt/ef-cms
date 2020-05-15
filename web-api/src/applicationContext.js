@@ -28,6 +28,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  advancedDocumentSearch,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -1045,6 +1048,7 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        advancedDocumentSearch,
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
