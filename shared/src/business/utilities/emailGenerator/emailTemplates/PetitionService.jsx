@@ -97,8 +97,8 @@ export const PetitionService = ({
 
       <p>Certain documents may require your action.</p>
 
-      <div id="for-irs">
-        <div>For IRS only:</div>
+      <div id="computer-readable">
+        <div>---- COMPUTER-READABLE DATA ----</div>
         <div>docketNumber: {caseDetail.docketNumber}</div>
         <div>docketEntryNo: {docketEntryNumber}</div>
         <div>documentId: {documentDetail.documentId}</div>

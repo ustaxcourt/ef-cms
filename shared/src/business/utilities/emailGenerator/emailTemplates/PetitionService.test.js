@@ -207,7 +207,7 @@ describe('PetitionService', () => {
     expect(practitionerInfo.length).toEqual(0);
   });
 
-  it('renders content for the IRS', () => {
+  it('renders computer-readable content', () => {
     const wrapper = shallow(
       <PetitionService
         caseDetail={caseDetail}
@@ -219,7 +219,7 @@ describe('PetitionService', () => {
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const irs = wrapper.find('#for-irs');
+    const irs = wrapper.find('#computer-readable');
 
     expect(irs.text()).toContain(caseDetail.docketNumber);
     expect(irs.text()).toContain(docketEntryNumber);
