@@ -748,5 +748,9 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     expect(test.getState('alertError')).toBeUndefined();
 
     expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
   });
 };
