@@ -972,30 +972,27 @@ module.exports = (appContextUser = {}) => {
     },
     getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
-      console.log('process.env.CI', process.env.CI);
       if (process.env.CI) {
         return {
           sendBulkTemplatedEmail: params => {
-            // save email to dynamo?
             return {
               promise: () =>
-                new Promise(async resolve => {
-                  for (const Destination of params.Destinations) {
+                Promise.all(
+                  params.Destinations.map(Destination => {
                     const address = Destination.Destination.ToAddresses[0];
                     const template = Destination.ReplacementTemplateData;
-                    await getDocumentClient()
+                    return getDocumentClient()
                       .put({
-                        TableName: `efcms-${environment.stage}`,
                         Item: {
                           pk: `email-${address}`,
                           sk: getUniqueId(),
                           template,
                         },
+                        TableName: `efcms-${environment.stage}`,
                       })
                       .promise();
-                  }
-                  resolve();
-                }),
+                  }),
+                ),
             };
           },
         };
