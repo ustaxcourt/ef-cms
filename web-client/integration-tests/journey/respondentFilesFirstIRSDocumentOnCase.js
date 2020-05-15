@@ -1,4 +1,4 @@
-export default (test, fakeFile) => {
+export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
   return it('Respondent files first IRS document on a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

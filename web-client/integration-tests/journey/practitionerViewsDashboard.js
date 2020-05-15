@@ -1,4 +1,4 @@
-export default test => {
+export const practitionerViewsDashboard = test => {
   return it('Practitioner views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardPractitioner');

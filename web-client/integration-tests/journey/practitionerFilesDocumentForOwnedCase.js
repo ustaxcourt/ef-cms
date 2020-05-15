@@ -1,4 +1,4 @@
-export default (test, fakeFile) => {
+export const practitionerFilesDocumentForOwnedCase = (test, fakeFile) => {
   return it('Practitioner files document for owned case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
