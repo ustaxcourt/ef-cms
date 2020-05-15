@@ -10,22 +10,30 @@ const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
 const joiStrictTimestamp = getTimestampSchema();
 
-OrderSearch.ORDER_SEARCH_PAGE_LOAD_SIZE = 6;
+DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-OrderSearch.validationName = 'OrderSearch';
+DocumentSearch.validationName = 'DocumentSearch';
+
+DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
+  'YYYY/MM/DD',
+  'YYYY/MM/D',
+  'YYYY/M/DD',
+  'YYYY/M/D',
+  'YYYY-MM-DDTHH:mm:ss.SSSZ',
+];
 
 /**
- * Order Search entity
+ * Document Search entity
  *
- * @param {object} rawProps the raw order search data
+ * @param {object} rawProps the raw document search data
  * @constructor
  */
-function OrderSearch(rawProps = {}) {
+function DocumentSearch(rawProps = {}) {
   if (!isEmpty(rawProps.judge)) {
     this.judge = rawProps.judge;
   }
 
-  this.orderKeyword = rawProps.orderKeyword;
+  this.keyword = rawProps.keyword;
 
   if (!isEmpty(rawProps.docketNumber)) {
     this.docketNumber = rawProps.docketNumber;
@@ -59,15 +67,15 @@ function OrderSearch(rawProps = {}) {
   }
 }
 
-OrderSearch.VALIDATION_ERROR_MESSAGES = {
+DocumentSearch.VALIDATION_ERROR_MESSAGES = {
   chooseOneValue:
     'Enter either a Docket number or a Case name/Petitioner name, not both',
   endDate: 'Enter a valid end date',
-  orderKeyword: 'Enter a keyword or phrase',
+  keyword: 'Enter a keyword or phrase',
   startDate: 'Enter a valid start date',
 };
 
-OrderSearch.schema = joi
+DocumentSearch.schema = joi
   .object()
   .keys({
     caseTitleOrPetitioner: joi
@@ -81,12 +89,14 @@ OrderSearch.schema = joi
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .less(joi.ref('tomorrow'))
         .optional()
         .description(
           'The end date search filter is not required if there is no start date',
         ),
       then: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
         .optional()
@@ -98,19 +108,21 @@ OrderSearch.schema = joi
       .string()
       .optional()
       .description('The name of the judge to filter the search results by'),
-    orderKeyword: joi
+    keyword: joi
       .string()
       .required()
       .description('The only required field to filter the search by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
       otherwise: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .max('now')
         .optional()
         .description(
           'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
         ),
       then: joiStrictTimestamp
+        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
         .max('now')
         .required()
         .description(
@@ -126,14 +138,15 @@ OrderSearch.schema = joi
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
 joiValidationDecorator(
-  OrderSearch,
-  OrderSearch.schema,
-  OrderSearch.VALIDATION_ERROR_MESSAGES,
+  DocumentSearch,
+  DocumentSearch.schema,
+  DocumentSearch.VALIDATION_ERROR_MESSAGES,
 );
 
-const originalGetValidationErrors = OrderSearch.prototype.getValidationErrors;
+const originalGetValidationErrors =
+  DocumentSearch.prototype.getValidationErrors;
 
-OrderSearch.prototype.getValidationErrors = function () {
+DocumentSearch.prototype.getValidationErrors = function () {
   const validationErrors = originalGetValidationErrors.call(this);
 
   if (validationErrors && validationErrors['object.oxor']) {
@@ -144,4 +157,4 @@ OrderSearch.prototype.getValidationErrors = function () {
   return validationErrors;
 };
 
-module.exports = { OrderSearch };
+module.exports = { DocumentSearch };

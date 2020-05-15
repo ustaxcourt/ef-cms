@@ -70,13 +70,13 @@ export const AdvancedDocumentSearch = props => {
         </FormGroup>
         <FormGroup>
           <div className="grid-row judge-search-row">
-            <label className="usa-label padding-top-105" htmlFor="judge">
+            <label className="usa-label padding-top-105" htmlFor="order-judge">
               Judge
             </label>
             <BindedSelect
               bind="formName.judge"
               className="usa-input"
-              id="judge"
+              id="order-judge"
               name="judge"
             >
               <option value="">- Select -</option>
@@ -109,8 +109,8 @@ export const AdvancedDocumentSearch = props => {
                         month: formName.startDateMonth,
                         year: formName.startDateYear,
                       }}
-                      onBlur={() => validateSequence()}
-                      onChange={() => updateSequence()}
+                      onBlur={validateSequence}
+                      onChange={updateSequence}
                     />
                   </div>
                   <div className="grid-row">
@@ -137,8 +137,8 @@ export const AdvancedDocumentSearch = props => {
                         month: formName.endDateMonth,
                         year: formName.endDateYear,
                       }}
-                      onBlur={() => validateSequence()}
-                      onChange={() => updateSequence()}
+                      onBlur={validateSequence}
+                      onChange={updateSequence}
                     />
                   </div>
                 </FormGroup>
@@ -164,8 +164,8 @@ export const AdvancedDocumentSearch = props => {
                           month: formName.startDateMonth,
                           year: formName.startDateYear,
                         }}
-                        onBlur={() => validateSequence()}
-                        onChange={() => updateSequence()}
+                        onBlur={validateSequence}
+                        onChange={updateSequence}
                       />
                     </div>
                     <div className="grid-col-2 padding-left-1">
@@ -190,8 +190,8 @@ export const AdvancedDocumentSearch = props => {
                           month: formName.endDateMonth,
                           year: formName.endDateYear,
                         }}
-                        onBlur={() => validateSequence()}
-                        onChange={() => updateSequence()}
+                        onBlur={validateSequence}
+                        onChange={updateSequence}
                       />
                     </div>
                   </div>

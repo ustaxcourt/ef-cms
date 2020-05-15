@@ -1,5 +1,5 @@
 const { Document } = require('../../entities/Document');
-const { OpinionSearch } = require('../../entities/opinions/OpinionSearch');
+const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 
 /**
  * opinionPublicSearchInteractor
@@ -10,10 +10,10 @@ const { OpinionSearch } = require('../../entities/opinions/OpinionSearch');
  */
 exports.opinionPublicSearchInteractor = async ({
   applicationContext,
-  opinionKeyword,
+  keyword,
 }) => {
-  const opinionSearch = new OpinionSearch({
-    opinionKeyword,
+  const opinionSearch = new DocumentSearch({
+    keyword,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
