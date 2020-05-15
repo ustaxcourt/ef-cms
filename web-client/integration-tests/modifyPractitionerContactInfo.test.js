@@ -16,6 +16,7 @@ describe('Modify Practitioner Contact Information', () => {
     loginAs(test, 'privatePractitioner');
     it(`login as a practitioner and create case #${i}`, async () => {
       caseDetail = await uploadPetition(test, {}, 'privatePractitioner');
+      expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }

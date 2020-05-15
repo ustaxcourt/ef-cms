@@ -68,7 +68,6 @@ describe('addCoversheetInteractor', () => {
         lodged: true,
       },
     ],
-    irsSendDate: '2019-04-19T14:45:15.595Z',
     partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
   };
 
@@ -144,7 +143,6 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       ],
-      irsSendDate: '2019-04-19T14:45:15.595Z',
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     };
 

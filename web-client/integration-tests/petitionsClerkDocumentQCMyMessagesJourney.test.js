@@ -32,6 +32,7 @@ describe('Petitions Clerk Document QC Journey', () => {
   for (let i = 0; i < caseCreationCount; i++) {
     it(`create case ${i + 1}`, async () => {
       const caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       createdCases.push(caseDetail);
     });
   }

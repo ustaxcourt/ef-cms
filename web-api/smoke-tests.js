@@ -58,7 +58,7 @@ const getUserToken = async (username, password) => {
 };
 
 (async () => {
-  var apigateway = new AWS.APIGateway({
+  let apigateway = new AWS.APIGateway({
     region: REGION,
   });
   const { items: apis } = await apigateway

@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
-export default (test, fakeFile) => {
+export const practitionerCreatesNewCase = (test, fakeFile) => {
   return it('Practitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('updateStartCaseFormValueSequence', {
