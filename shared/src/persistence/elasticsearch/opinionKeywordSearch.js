@@ -2,8 +2,8 @@ const { search } = require('./searchClient');
 
 exports.opinionKeywordSearch = async ({
   applicationContext,
+  keyword,
   opinionEventCodes,
-  opinionKeyword,
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -16,12 +16,13 @@ exports.opinionKeywordSearch = async ({
     'numberOfPages',
     'documentId',
     'documentTitle',
+    'documentType',
     'filingDate',
     'irsPractitioners',
     'isSealed',
     'privatePractitioners',
     'sealedDate',
-    'signedJudgeName',
+    'judge',
   ];
 
   const queryParams = [
@@ -36,11 +37,11 @@ exports.opinionKeywordSearch = async ({
     },
   ];
 
-  if (opinionKeyword) {
+  if (keyword) {
     queryParams.push({
       simple_query_string: {
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: opinionKeyword,
+        query: keyword,
       },
     });
   }

@@ -22,16 +22,16 @@ export const OpinionSearchByKeyword = connect(
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-12">
             <h4>Enter Keyword or Phrase</h4>
-            <FormGroup errorText={validationErrors.opinionKeyword}>
+            <FormGroup errorText={validationErrors.keyword}>
               <label className="usa-label" htmlFor="opinion-search">
                 Search for...
               </label>
               <input
                 className="usa-input"
                 id="opinion-search"
-                name="opinionKeyword"
+                name="keyword"
                 type="text"
-                value={advancedSearchForm.opinionSearch.opinionKeyword || ''}
+                value={advancedSearchForm.opinionSearch.keyword || ''}
                 onBlur={() => validateOpinionSearchSequence()}
                 onChange={e => {
                   updateAdvancedSearchFormValueSequence({

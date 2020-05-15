@@ -17,6 +17,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
         documentType: 'Order',
         filingDate: '2019-01-01T00:01:00.000Z',
+        freeText: 'some free text',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: [{ name: 'Some Party' }],
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -104,7 +105,10 @@ describe('updateDocketEntryMetaInteractor', () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
-      docketEntryMeta: {},
+      docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
+      },
       docketRecordIndex: 0,
     });
 
@@ -118,6 +122,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         action: 'Updated Action',
       },
       docketRecordIndex: 0,
@@ -134,6 +140,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         description: 'Updated Description',
       },
       docketRecordIndex: 0,
@@ -150,6 +158,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         filedBy: 'New Filer',
       },
       docketRecordIndex: 0,
@@ -170,6 +180,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketRecordIndex: 0,
@@ -186,6 +198,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         servedAt: '2020-01-01T00:01:00.000Z',
       },
       docketRecordIndex: 0,
@@ -200,11 +214,34 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
 
+  it('should update a non-required field to undefined if undefined value is passed in', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
+        freeText: undefined,
+      },
+      docketRecordIndex: 0,
+    });
+
+    const updatedDocketEntry = result.docketRecord.find(
+      record => record.index === 0,
+    );
+    const updatedDocument = result.documents.find(
+      document => document.documentId === updatedDocketEntry.documentId,
+    );
+    expect(updatedDocument.freeText).toBeUndefined();
+  });
+
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         servedAt: '2020-01-01T00:01:00.000Z',
       },
       docketRecordIndex: 0,
@@ -220,6 +257,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         filingDate: '2020-01-01T00:01:00.000Z',
       },
       docketRecordIndex: 0,
@@ -235,6 +274,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
       },
@@ -251,6 +292,8 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
         description: 'Updated Description',
       },
       docketRecordIndex: 0,
@@ -267,6 +310,8 @@ describe('updateDocketEntryMetaInteractor', () => {
         applicationContext,
         caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
         docketEntryMeta: {
+          ...docketRecord[0],
+          ...documents[0],
           action: 'asdf',
           certificateOfServiceDate: null,
           description: 'Request for Place of Trial at Houston, Texas',

@@ -1,4 +1,4 @@
-const { OpinionSearch } = require('../entities/opinions/OpinionSearch');
+const { DocumentSearch } = require('../entities/documents/DocumentSearch');
 
 /**
  * validateOpinionAdvancedSearchInteractor
@@ -11,7 +11,7 @@ exports.validateOpinionAdvancedSearchInteractor = ({
   applicationContext,
   opinionSearch,
 }) => {
-  const search = new OpinionSearch(opinionSearch, {
+  const search = new DocumentSearch(opinionSearch, {
     applicationContext,
   });
 

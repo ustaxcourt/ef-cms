@@ -21,16 +21,16 @@ export const OrderSearchByKeyword = connect(
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-12">
             <h4>Enter Keyword or Phrase</h4>
-            <FormGroup errorText={validationErrors.orderKeyword}>
+            <FormGroup errorText={validationErrors.keyword}>
               <label className="usa-label" htmlFor="order-search">
                 Search for...
               </label>
               <input
                 className="usa-input"
                 id="order-search"
-                name="orderKeyword"
+                name="keyword"
                 type="text"
-                value={advancedSearchForm.orderSearch.orderKeyword || ''}
+                value={advancedSearchForm.orderSearch.keyword || ''}
                 onBlur={() => validateOrderSearchSequence()}
                 onChange={e => {
                   updateAdvancedOrderSearchFormValueSequence({

@@ -1,8 +1,10 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
+import { getEmailsForAddress, deleteEmails } from '../helpers';
+
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export default test => {
+export const petitionsClerkSubmitsCaseToIrs = test => {
   return it('Petitions clerk submits case to IRS', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
