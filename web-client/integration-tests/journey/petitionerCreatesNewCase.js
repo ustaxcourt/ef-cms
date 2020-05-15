@@ -109,11 +109,9 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'wizardStep',
-      value: '4',
+      value: '5',
     });
     await test.runSequence('submitFilePetitionSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
