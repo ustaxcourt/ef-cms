@@ -1,6 +1,9 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export default (test, testClient) => {
+export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
+  test,
+  testClient,
+) => {
   return it('Search for sealed case order by keyword', async () => {
     await refreshElasticsearchIndex();
 

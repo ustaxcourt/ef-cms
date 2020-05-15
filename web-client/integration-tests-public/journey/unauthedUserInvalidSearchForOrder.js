@@ -1,6 +1,6 @@
 import { DocumentSearch } from '../../../shared/src/business/entities/documents/DocumentSearch';
 
-export default test => {
+export const unauthedUserInvalidSearchForOrder = test => {
   return it('Search for order without a keyword', async () => {
     await test.runSequence('gotoPublicSearchSequence');
 
