@@ -79,7 +79,7 @@
     "lint-staged": "^10.2.2",
     "lodash": "^4.17.15",
     "madge": "^3.9.0",
-    "moment": "2.24.0",
+    "moment": "^2.25.3",
     "moment-timezone": "^0.5.27",
     "node-sass": "^4.14.0",
     "npm-force-resolutions": "0.0.3",
