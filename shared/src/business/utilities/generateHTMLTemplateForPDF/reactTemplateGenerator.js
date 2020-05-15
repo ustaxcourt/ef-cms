@@ -24,6 +24,9 @@ const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
 const {
+  PendingReport,
+} = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
+const {
   ReceiptOfFiling,
 } = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
 const {
@@ -52,6 +55,7 @@ const components = {
   DocumentService,
   NoticeOfDocketChange,
   PageMetaHeaderDocket,
+  PendingReport,
   PetitionService,
   ReceiptOfFiling,
   ReportsMetaHeader,

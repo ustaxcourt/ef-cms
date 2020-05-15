@@ -305,7 +305,7 @@ th {
 }
 
 #reports-header {
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   font-family: 'nimbus_roman', serif;
   text-align: center;
 
@@ -321,12 +321,13 @@ th {
   }
 
   h2 {
+    margin-top: -10px;
     margin-bottom: 10px;
     font-size: 20px;
   }
 
   h3 {
-    margin-top: 0px;
+    margin-top: 0;
     font-size: 14px;
     font-weight: normal;
     text-decoration: none;
