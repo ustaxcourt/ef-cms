@@ -5,16 +5,16 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const FilePetitionSuccess = connect(
-  {
-    docketNumber: state.caseDetail.docketNumber,
-  },
-  function FilePetitionSuccess({ docketNumber }) {
+  { docketNumberWithSuffix: state.formattedCaseDetail.docketNumberWithSuffix },
+  function FilePetitionSuccess({ docketNumberWithSuffix }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
 
         <section className="usa-section grid-container">
-          <p>Your case has been assigned Docket Number {docketNumber}.</p>
+          <p>
+            Your case has been assigned Docket Number {docketNumberWithSuffix}.
+          </p>
 
           <p>
             Once your Petition is processed by the Court, you’ll be able to see
