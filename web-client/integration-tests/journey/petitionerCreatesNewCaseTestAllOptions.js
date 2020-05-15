@@ -747,8 +747,6 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('modal.showModal')).toEqual(
-      'FilePetitionSuccessModal',
-    );
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
   });
 };

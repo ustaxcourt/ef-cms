@@ -118,9 +118,7 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('modal.showModal')).toEqual(
-      'FilePetitionSuccessModal',
-    );
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
 
     test.docketNumber = test.getState('cases.0.docketNumber');
   });
