@@ -52,33 +52,17 @@ describe('DocumentService', () => {
     expect(documentInfo.text()).toContain(documentDetail.filedBy);
   });
 
-  it('renders IRS information if user name is IRS', () => {
+  it('renders computer-readable information if user name is IRS', () => {
     const wrapper = shallow(
       <DocumentService
         caseDetail={caseDetail}
         docketEntryNumber={docketEntryNumber}
         documentDetail={documentDetail}
-        name="IRS"
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const documentInfo = wrapper.find('#irs-information');
+    const documentInfo = wrapper.find('#computer-readable');
 
-    expect(documentInfo.text()).toContain('For IRS only');
-  });
-
-  it('does not render IRS information if user name is not IRS', () => {
-    const wrapper = shallow(
-      <DocumentService
-        caseDetail={caseDetail}
-        docketEntryNumber={docketEntryNumber}
-        documentDetail={documentDetail}
-        name="Guy Fieri"
-        taxCourtLoginUrl={taxCourtLoginUrl}
-      />,
-    );
-    const documentInfo = wrapper.find('#irs-information');
-
-    expect(documentInfo).toEqual({});
+    expect(documentInfo.text()).toContain('docketNumber');
   });
 });

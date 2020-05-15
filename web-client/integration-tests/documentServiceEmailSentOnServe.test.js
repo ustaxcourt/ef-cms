@@ -19,7 +19,7 @@ const test = setupTest({
 });
 test.draftOrders = [];
 
-describe('Document Service Email Sent on Serve', () => {
+describe.skip('Document Service Email Sent on Serve', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
