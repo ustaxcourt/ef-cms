@@ -52,9 +52,10 @@ exports.opinionAdvancedSearchInteractor = async ({
 
   const results = await applicationContext
     .getPersistenceGateway()
-    .opinionKeywordSearch({
+    .advancedDocumentSearch({
       applicationContext,
-      opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      judgeType: 'judge',
       ...rawSearch,
     });
 

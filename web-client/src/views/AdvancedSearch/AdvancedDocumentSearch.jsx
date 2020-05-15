@@ -73,11 +73,16 @@ export const AdvancedDocumentSearch = props => {
             <label className="usa-label padding-top-105" htmlFor="order-judge">
               Judge
             </label>
-            <BindedSelect
-              bind="formName.judge"
+            <select
               className="usa-input"
               id="order-judge"
               name="judge"
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
             >
               <option value="">- Select -</option>
               {judges.map((judge, idx) => (
@@ -85,7 +90,7 @@ export const AdvancedDocumentSearch = props => {
                   {judge.name}
                 </option>
               ))}
-            </BindedSelect>
+            </select>
           </div>
           <div className="grid-row date-search-row">
             <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
