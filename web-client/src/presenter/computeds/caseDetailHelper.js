@@ -110,7 +110,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showDocketRecordInProgressState: !isExternalUser,
-    showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
     showEditPetitionerInformation,
@@ -121,7 +120,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       isExternalUser &&
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
-    showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
     showPractitionerSection:
       !isExternalUser ||

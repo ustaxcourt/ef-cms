@@ -18,6 +18,7 @@ describe('Modify Respondent Contact Information', () => {
 
     it(`create case #${i} and associate a respondent`, async () => {
       caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
