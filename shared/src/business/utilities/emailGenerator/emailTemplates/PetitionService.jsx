@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { EmailHeader } from '../components/EmailHeader';
+import React from 'react';
 
 const RenderContactAddress = ({ contact }) => {
   return (
@@ -58,17 +57,19 @@ export const PetitionService = ({
         <RenderContactAddress contact={contactPrimary} />
         <div>Service: {contactPrimary.serviceIndicator}</div>
 
-        {contactSecondary && (
+        {contactSecondary && contactSecondary.name && (
           <>
             <br />
-            <div>{contactSecondary.name}</div>
-            <RenderContactAddress contact={contactSecondary} />
-            <div>Service: {contactSecondary.serviceIndicator}</div>
+            <div id="contact-secondary">
+              <div>{contactSecondary.name}</div>
+              <RenderContactAddress contact={contactSecondary} />
+              <div>Service: {contactSecondary.serviceIndicator}</div>
+            </div>
           </>
         )}
       </div>
 
-      {practitioners && (
+      {practitioners && practitioners.length > 0 && (
         <div id="practitioner-information">
           <br />
           <div>Counsel Information:</div>
@@ -96,7 +97,7 @@ export const PetitionService = ({
 
       <p>Certain documents may require your action.</p>
 
-      <div>
+      <div id="for-irs">
         <div>For IRS only:</div>
         <div>docketNumber: {caseDetail.docketNumber}</div>
         <div>docketEntryNo: {docketEntryNumber}</div>

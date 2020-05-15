@@ -14,6 +14,7 @@ describe('docket clerk edits a petition payment fee', () => {
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   loginAs(test, 'docketclerk');

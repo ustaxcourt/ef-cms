@@ -40,7 +40,6 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 Object.assign(applicationContext, {
-  getScanner: getScannerInterface,
   getDocumentClient: () => {
     return new DynamoDB.DocumentClient({
       endpoint: 'http://localhost:8000',
@@ -50,6 +49,7 @@ Object.assign(applicationContext, {
   getEnvironment: () => ({
     stage: 'local',
   }),
+  getScanner: getScannerInterface,
 });
 
 const fakeData =
@@ -93,11 +93,11 @@ export const deleteEmails = emails => {
   return Promise.all(
     emails.map(email =>
       client.delete({
+        applicationContext,
         key: {
           pk: email.pk,
           sk: email.sk,
         },
-        applicationContext,
       }),
     ),
   );
@@ -376,11 +376,11 @@ export const uploadPetition = async (
       address3: 'Et sunt veritatis ei',
       city: 'Et id aut est velit',
       countryType: 'domestic',
+      email: user.email,
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
       state: 'CT',
-      email: user.email,
     },
     contactSecondary: overrides.contactSecondary || {},
     filingType: 'Myself',
@@ -416,6 +416,7 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
+  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -567,8 +568,8 @@ export const gotoRoute = (routes, routeToGoTo) => {
         '$',
     );
     if (routeToGoTo.match(regex)) {
-      let match = regex.exec(routeToGoTo);
-      while (match != null) {
+      const match = regex.exec(routeToGoTo);
+      if (match != null) {
         const args = match.splice(1);
         return route.cb.call(this, ...args);
       }

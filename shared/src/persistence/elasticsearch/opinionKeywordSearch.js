@@ -16,12 +16,13 @@ exports.opinionKeywordSearch = async ({
     'numberOfPages',
     'documentId',
     'documentTitle',
+    'documentType',
     'filingDate',
     'irsPractitioners',
     'isSealed',
     'privatePractitioners',
     'sealedDate',
-    'signedJudgeName',
+    'judge',
   ];
 
   const queryParams = [

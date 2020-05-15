@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
@@ -121,7 +120,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   //   item => item.documentId !== deletedStinDocumentId,
   // );
 
-  caseEntity.markAsSentToIRS(createISODateString());
+  caseEntity.markAsSentToIRS();
 
   const petitionDocument = caseEntity.documents.find(
     document =>

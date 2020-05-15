@@ -7,8 +7,13 @@ describe('sendServedPartiesEmails', () => {
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case', async () => {
     await sendServedPartiesEmails({
       applicationContext,
-      caseEntity: { caseCaption: 'A Caption', docketNumber: '123-20' },
+      caseEntity: {
+        caseCaption: 'A Caption',
+        docketNumber: '123-20',
+        docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
+      },
       documentEntity: {
+        documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',
       },
@@ -37,8 +42,13 @@ describe('sendServedPartiesEmails', () => {
   it('should not call sendBulkTemplatedEmail if there are no electronic service parties on the case', async () => {
     await sendServedPartiesEmails({
       applicationContext,
-      caseEntity: { caseCaption: 'A Caption', docketNumber: '123-20' },
+      caseEntity: {
+        caseCaption: 'A Caption',
+        docketNumber: '123-20',
+        docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
+      },
       documentEntity: {
+        documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
         documentTitle: 'The Document',
         servedAt: '2019-03-01T21:40:46.415Z',
       },

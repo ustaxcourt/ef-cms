@@ -36,6 +36,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   loginAs(test, 'docketclerk');
