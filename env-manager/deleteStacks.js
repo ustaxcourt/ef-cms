@@ -11,13 +11,13 @@ exports.deleteStacks = async ({ environment }) => {
   for (const stack of stacks) {
     console.log('Delete ', stack.StackName);
     await cloudFormation.deleteStack({ StackName: stack.StackName }).promise();
-    await sleep(5000);
+    await sleep(100);
   }
 
   let resourceCount = stacks.length;
 
   while (resourceCount > 0) {
-    await sleep(5000);
+    await sleep(1000);
     const refreshedStacks = await getStacks({
       cloudFormation,
       environment,

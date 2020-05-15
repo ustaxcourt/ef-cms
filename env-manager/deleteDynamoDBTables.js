@@ -24,7 +24,7 @@ exports.deleteDynamoDBTables = async ({ environment }) => {
       environment,
     });
     console.log(
-      'Waiting for domains to be deleted: ',
+      'Waiting for tables to be deleted: ',
       Date(),
       refreshedTables.length,
     );

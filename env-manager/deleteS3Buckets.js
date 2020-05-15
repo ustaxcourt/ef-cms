@@ -1,6 +1,5 @@
 const { getS3 } = require('./getS3');
 const { getS3Buckets } = require('./getS3Buckets');
-const { sleep } = require('./sleep');
 
 exports.deleteS3Buckets = async ({ environment }) => {
   const s3 = getS3({ environment });
@@ -11,46 +10,50 @@ exports.deleteS3Buckets = async ({ environment }) => {
   });
 
   for (const bucket of buckets) {
+    console.log('Deleting items from', bucket.Name);
+
     const objects = await s3
-      .listObjectVersions({ Bucket: bucket.Name, MaxKeys: 1000 })
+      .listObjects({ Bucket: bucket.Name, MaxKeys: 1000 })
       .promise();
 
-    console.log(objects.DeleteMarkers.length);
-
-    if (objects.DeleteMarkers.length > 0) {
+    if (objects.Contents.length > 0) {
       await s3
         .deleteObjects({
           Bucket: bucket.Name,
           Delete: {
-            Objects: objects.DeleteMarkers.map(object => {
-              return { Key: object.Key, VersionId: object.VersionId };
+            Objects: objects.Contents.map(object => {
+              return { Key: object.Key };
             }),
           },
         })
         .promise();
-      console.log('Deleted ', objects.DeleteMarkers.length);
+
+      console.log('Deleted objects:', objects.Contents.length);
     }
-  }
 
-  for (const bucket of buckets) {
-    console.log('Deleting', bucket.Name);
+    const objectVersions = await s3
+      .listObjectVersions({ Bucket: bucket.Name, MaxKeys: 1000 })
+      .promise();
+
+    if (objectVersions.Versions.length > 0) {
+      await s3
+        .deleteObjects({
+          Bucket: bucket.Name,
+          Delete: {
+            Objects: objectVersions.Versions.map(objectVersion => {
+              return {
+                Key: objectVersion.Key,
+                VersionId: objectVersion.VersionId,
+              };
+            }),
+          },
+        })
+        .promise();
+      console.log('Deleted versions:', objectVersions.Versions.length);
+    }
+
     await s3.deleteBucket({ Bucket: bucket.Name }).promise();
-    await sleep(5000);
-  }
 
-  let resourceCount = buckets.length;
-
-  while (resourceCount > 0) {
-    await sleep(5000);
-    const refreshedBuckets = await getS3Buckets({
-      environment,
-      s3,
-    });
-    console.log(
-      'Waiting for buckets to be deleted: ',
-      Date(),
-      refreshedBuckets.length,
-    );
-    resourceCount = refreshedBuckets.length;
+    console.log('Deleted bucket:', bucket.Name);
   }
 };
