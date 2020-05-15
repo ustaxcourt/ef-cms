@@ -1,20 +1,18 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePractitionerSearchByNameAction } from '../actions/AdvancedSearch/validatePractitionerSearchByNameAction';
 
 export const validatePractitionerSearchByNameFormSequence = [
-  validatePractitionerSearchByNameAction,
+  shouldValidateAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      clearSearchResultsAction,
-      startShowValidationAction,
+    ignore: [],
+    validate: [
+      validatePractitionerSearchByNameAction,
+      {
+        error: [setValidationErrorsAction],
+        success: [clearAlertsAction],
+      },
     ],
-    success: [clearAlertsAction, stopShowValidationAction],
   },
 ];
