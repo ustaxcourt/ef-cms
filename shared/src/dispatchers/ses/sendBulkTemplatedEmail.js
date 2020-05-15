@@ -48,10 +48,6 @@ exports.sendBulkTemplatedEmail = async ({
 
     applicationContext.logger.info('Bulk Email Response', response);
   } catch (err) {
-    console.log('hi there');
-    console.log(err);
-    console.log(err);
-    console.log(err);
     applicationContext.logger.error(err);
   }
 };
