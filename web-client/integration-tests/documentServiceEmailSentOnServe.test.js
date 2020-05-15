@@ -38,12 +38,6 @@ describe('Document Service Email Sent on Serve', () => {
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-
-  // it('delete emails for petitioner', async () => {
-  //   const emails = await getEmailsForAddress('petitioner');
-  //   await deleteEmails(emails);
-  // });
-
   docketClerkServesOrder(test, 0);
 
   it('should send the expected emails for parties', async () => {
