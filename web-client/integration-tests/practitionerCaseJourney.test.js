@@ -1,17 +1,17 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
-import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
-import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
-import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
-import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
-import practitionerSearchesForNonexistentCase from './journey/practitionerSearchesForNonexistentCase';
-import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
-import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
-import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
-import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
-import practitionerViewsDashboardBeforeAddingCase from './journey/practitionerViewsDashboardBeforeAddingCase';
+import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
+import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
+import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
+import { practitionerRequestsPendingAccessToCase } from './journey/practitionerRequestsPendingAccessToCase';
+import { practitionerSearchesForCase } from './journey/practitionerSearchesForCase';
+import { practitionerSearchesForNonexistentCase } from './journey/practitionerSearchesForNonexistentCase';
+import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
+import { practitionerViewsCaseDetailOfOwnedCase } from './journey/practitionerViewsCaseDetailOfOwnedCase';
+import { practitionerViewsCaseDetailOfPendingCase } from './journey/practitionerViewsCaseDetailOfPendingCase';
+import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
+import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
 const test = setupTest();
 

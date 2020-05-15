@@ -1,4 +1,4 @@
-export default (test, fakeFile) => {
+export const respondentFilesDocumentForAssociatedCase = (test, fakeFile) => {
   return it('Respondent files document for associated case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

@@ -1,4 +1,4 @@
-export default test => {
+export const unauthedUserViewsCaseDetailForSealedCase = test => {
   return it('View case detail for a sealed case', async () => {
     await test.runSequence('gotoPublicCaseDetailSequence', {
       docketNumber: test.docketNumber,
