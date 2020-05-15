@@ -114,6 +114,56 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const pendingReport = async ({ applicationContext, data }) => {
+  const { docketNumberWithSuffix, pendingItems, subtitle } = data;
+
+  const pendingReportTemplate = reactTemplateGenerator({
+    componentName: 'PendingReport',
+    data: {
+      pendingItems,
+      subtitle,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: pendingReportTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Pending Report',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: `Pending Report: ${subtitle}`,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: docketNumberWithSuffix,
+      footerHtml,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const receiptOfFiling = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -289,6 +339,7 @@ module.exports = {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 };

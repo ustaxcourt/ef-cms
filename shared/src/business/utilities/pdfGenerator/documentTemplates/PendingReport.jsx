@@ -1,0 +1,40 @@
+const React = require('react');
+
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+const { ReportsHeader } = require('../components/ReportsHeader.jsx');
+
+export const PendingReport = ({ pendingItems, subtitle }) => {
+  return (
+    <>
+      <PrimaryHeader />
+      <ReportsHeader subtitle={subtitle} title="Pending Report" />
+      <table>
+        <thead>
+          <tr>
+            <th>Docket</th>
+            <th>Date Filed</th>
+            <th>Case name</th>
+            <th>Filings and proceedings</th>
+            <th>Case status</th>
+            <th>Judge</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pendingItems &&
+            pendingItems.map(pendingItem => {
+              return (
+                <tr key={pendingItem.docketNumberWithSuffix}>
+                  <td>{pendingItem.docketNumberWithSuffix}</td>
+                  <td>{pendingItem.dateFiled}</td>
+                  <td>{pendingItem.caseTitle}</td>
+                  <td>{pendingItem.filingsAndProceedings}</td>
+                  <td>{pendingItem.status}</td>
+                  <td>{pendingItem.judge}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </>
+  );
+};
