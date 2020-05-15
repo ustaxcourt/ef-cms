@@ -1,30 +1,16 @@
 import {
-  fakeFile,
+  deleteEmails,
+  getEmailsForAddress,
   loginAs,
   setupTest,
-  getEmailsForAddress,
-  deleteEmails,
   uploadPetition,
 } from './helpers';
 
-// docketClerk
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
-import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
-import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
 import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
-// petitionsClerk
-import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
-// petitioner
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 
 const test = setupTest({
   useCases: {
@@ -46,7 +32,7 @@ describe('Document Service Email Sent on Serve', () => {
 
   loginAs(test, 'docketclerk');
   docketClerkCreatesAnOrder(test, {
-    documentTitle: 'Order to do something',
+    documentTitle: 'Order which should send an email',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
@@ -64,7 +50,16 @@ describe('Document Service Email Sent on Serve', () => {
   it('should send the expected emails for parties', async () => {
     const emails = await getEmailsForAddress('petitioner');
     expect(emails.length).toEqual(1);
-    expect(emails[0].template.replace(/<!-- -->/g, '')).toContain(
+    emails.forEach(email => {
+      email.template = email.template.replace(/<!-- -->/g, '');
+    });
+    const orderEmail = emails.find(
+      email =>
+        email.template.indexOf(
+          'Document Type: O Order which should send an email',
+        ) !== -1,
+    );
+    expect(orderEmail.template.replace(/<!-- -->/g, '')).toContain(
       `Docket Number: ${test.docketNumber}`,
     );
   });
