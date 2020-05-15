@@ -584,17 +584,11 @@ const {
   opinionAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
 const {
-  opinionKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
-const {
   opinionPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
 const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
-const {
-  orderKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
@@ -1126,8 +1120,6 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        opinionKeywordSearch,
-        orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,

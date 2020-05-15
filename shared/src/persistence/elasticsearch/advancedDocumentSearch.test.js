@@ -3,7 +3,7 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 
-describe('orderKeywordSearch', () => {
+describe('advancedDocumentSearch', () => {
   let searchStub;
   const orderEventCodes = ['O', 'OOD'];
   const opinionEventCodes = ['MOP', 'TCOP'];
