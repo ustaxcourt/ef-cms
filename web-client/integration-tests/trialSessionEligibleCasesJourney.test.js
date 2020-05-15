@@ -46,6 +46,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       loginAs(test, 'petitioner');
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
+        expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
@@ -67,6 +68,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       loginAs(test, 'petitioner');
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
+        expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
@@ -88,6 +90,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       loginAs(test, 'petitioner');
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
+        expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
@@ -109,6 +112,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       loginAs(test, 'petitioner');
       it('Create case #4', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
+        expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
@@ -130,6 +134,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       loginAs(test, 'petitioner');
       it('Create case #5', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
+        expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
         createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;

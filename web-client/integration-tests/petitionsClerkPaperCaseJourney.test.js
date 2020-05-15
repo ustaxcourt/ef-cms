@@ -18,7 +18,7 @@ describe('Petitions clerk paper case flow', () => {
   loginAs(test, 'petitioner');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
-
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
     test.documentId = caseDetail.documents[0].documentId;
     test.caseId = caseDetail.caseId;

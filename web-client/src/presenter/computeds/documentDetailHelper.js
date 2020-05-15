@@ -136,7 +136,7 @@ export const documentDetailHelper = (get, applicationContext) => {
       (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
   const showPrintCaseConfirmationButton =
-    document.status === 'served' && formattedDocument.isPetition === true;
+    !!document.servedAt && formattedDocument.isPetition === true;
 
   const showAddCourtIssuedDocketEntryButton =
     (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
