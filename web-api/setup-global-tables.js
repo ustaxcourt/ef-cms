@@ -31,7 +31,7 @@ async function processGlobalTables() {
 }
 
 /**
- *
+ * @param gt
  */
 function getUnprocessedRegions(gt) {
   if (!gt.GlobalTableDescription.ReplicationGroup.length) {
@@ -44,7 +44,7 @@ function getUnprocessedRegions(gt) {
 }
 
 /**
- *
+ * @param unprocessedRegions
  */
 async function updateGlobalTable(unprocessedRegions) {
   const params = {

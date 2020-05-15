@@ -109,7 +109,7 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
-    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_DOCUMENT_SERVED_TEMPLATE: document_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
@@ -282,18 +282,6 @@ functions:
     events:
       - http:
           path: /{caseId}/docket-entry-meta
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  saveIntermediateDocketEntry:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
-    events:
-      - http:
-          path: /{caseId}/docket-entry-in-progress
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

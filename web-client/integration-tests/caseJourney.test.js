@@ -30,15 +30,15 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAssignsWorkItemToOther } from './journey/petitionsClerkAssignsWorkItemToOther';
 import { petitionsClerkAssignsWorkItemToSelf } from './journey/petitionsClerkAssignsWorkItemToSelf';
 import { petitionsClerkCaseSearch } from './journey/petitionsClerkCaseSearch';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkUpdatesCaseDetail } from './journey/petitionsClerkUpdatesCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
-import petitionsClerkViewsMessages from './journey/petitionsClerkViewsMessages';
-import petitionsClerkViewsMessagesAfterReassign from './journey/petitionsClerkViewsMessagesAfterReassign';
-import respondentAddsAnswer from './journey/respondentAddsAnswer';
-import respondentAddsMotion from './journey/respondentAddsMotion';
-import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
-import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import { petitionsClerkViewsMessages } from './journey/petitionsClerkViewsMessages';
+import { petitionsClerkViewsMessagesAfterReassign } from './journey/petitionsClerkViewsMessagesAfterReassign';
+import { respondentAddsAnswer } from './journey/respondentAddsAnswer';
+import { respondentAddsMotion } from './journey/respondentAddsMotion';
+import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
+import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
 const test = setupTest();
 

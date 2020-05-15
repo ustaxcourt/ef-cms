@@ -68,6 +68,7 @@ describe('Create a work item', () => {
 
   it('create the case for this test', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     ({ docketNumber } = caseDetail);
     petitionDocument = caseDetail.documents.find(
       d => d.documentType === 'Petition',

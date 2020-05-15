@@ -44,7 +44,7 @@ exports.completeDocketEntryQCInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId, documentType } = entryMetadata;
+  const { caseId, documentId } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -66,15 +66,38 @@ exports.completeDocketEntryQCInteractor = async ({
     documentId,
   });
 
+  const editableFields = {
+    addToCoversheet: entryMetadata.addToCoversheet,
+    additionalInfo: entryMetadata.additionalInfo,
+    additionalInfo2: entryMetadata.additionalInfo2,
+    attachments: entryMetadata.attachments,
+    certificateOfService: entryMetadata.certificateOfService,
+    certificateOfServiceDate: entryMetadata.certificateOfServiceDate,
+    documentTitle: entryMetadata.documentTitle,
+    documentType: entryMetadata.documentType,
+    eventCode: entryMetadata.eventCode,
+    freeText: entryMetadata.freeText,
+    freeText2: entryMetadata.freeText2,
+    isFileAttached: entryMetadata.isFileAttached,
+    lodged: entryMetadata.lodged,
+    mailingDate: entryMetadata.mailingDate,
+    objections: entryMetadata.objections,
+    ordinalValue: entryMetadata.ordinalValue,
+    partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
+    partyPrimary: entryMetadata.partyPrimary,
+    partySecondary: entryMetadata.partySecondary,
+    pending: entryMetadata.pending,
+    receivedAt: entryMetadata.receivedAt,
+    scenario: entryMetadata.scenario,
+    serviceDate: entryMetadata.serviceDate,
+  };
+
   const updatedDocument = new Document(
     {
-      ...entryMetadata,
-      createdAt: currentDocument.createdAt,
-      documentId,
-      documentType,
+      ...currentDocument,
+      ...editableFields,
       relationship: 'primaryDocument',
       userId: user.userId,
-      workItems: currentDocument.workItems,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,

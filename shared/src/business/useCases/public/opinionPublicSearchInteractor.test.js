@@ -47,7 +47,7 @@ describe('opinionPublicSearchInteractor', () => {
   it('should only search for opinion document types', async () => {
     await opinionPublicSearchInteractor({
       applicationContext,
-      opinionKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(
@@ -61,7 +61,7 @@ describe('opinionPublicSearchInteractor', () => {
   it('should return search results based on the supplied opinion keyword', async () => {
     const result = await opinionPublicSearchInteractor({
       applicationContext,
-      opinionKeyword: 'memorandum',
+      keyword: 'memorandum',
     });
 
     expect(result).toEqual(mockOpinionSearchResult);

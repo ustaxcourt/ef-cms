@@ -52,6 +52,7 @@ describe('Create a work item', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   it('petitioner uploads the external documents', async () => {

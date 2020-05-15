@@ -1,4 +1,7 @@
-const { formatDateString } = require('../../utilities/DateHandler');
+const {
+  reactTemplateGenerator,
+} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { Case } = require('../../entities/cases/Case');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,
@@ -6,16 +9,50 @@ exports.sendServedPartiesEmails = async ({
   documentEntity,
   servedParties,
 }) => {
+  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+
+  const {
+    documentId,
+    documentTitle,
+    documentType,
+    eventCode,
+    filedBy,
+    servedAt,
+  } = documentEntity;
+
+  const docketEntry = caseEntity.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
+  const currentDate = applicationContext
+    .getUtilities()
+    .formatNow('MMMM D, YYYY');
+
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {
-      caseCaption: caseEntity.caseCaption,
-      docketNumber: caseEntity.docketNumber,
-      documentName: documentEntity.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+      emailContent: reactTemplateGenerator({
+        componentName: 'DocumentService',
+        data: {
+          caseDetail: {
+            caseTitle: Case.getCaseTitle(caseCaption),
+            docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
+          },
+          currentDate,
+          docketEntryNumber: docketEntry && docketEntry.index,
+          documentDetail: {
+            documentId,
+            documentTitle: documentTitle || documentType,
+            eventCode,
+            filedBy,
+            servedAtFormatted: applicationContext
+              .getUtilities()
+              .formatDateString(servedAt, 'DATE_TIME_TZ'),
+          },
+          name: party.name,
+          taxCourtLoginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+        },
+      }),
     },
   }));
 
@@ -23,16 +60,13 @@ exports.sendServedPartiesEmails = async ({
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
+        docketNumber: `${caseEntity.docketNumber}${
+          caseEntity.docketNumberSuffix || ''
+        }`,
+        emailContent: '',
       },
       destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
+      templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,
     });
   }
 };
