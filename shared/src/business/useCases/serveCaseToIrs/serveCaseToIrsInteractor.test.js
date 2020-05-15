@@ -232,5 +232,8 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendIrsSuperuserPetitionEmail,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
   });
 });
