@@ -1,9 +1,15 @@
 const { search } = require('./searchClient');
 
-exports.opinionKeywordSearch = async ({
+exports.advancedDocumentSearch = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  documentEventCodes,
+  endDate,
+  judge,
+  judgeType,
   keyword,
-  opinionEventCodes,
+  startDate,
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -22,13 +28,13 @@ exports.opinionKeywordSearch = async ({
     'isSealed',
     'privatePractitioners',
     'sealedDate',
-    'judge',
+    judgeType,
   ];
 
   const queryParams = [
     {
       bool: {
-        should: opinionEventCodes.map(eventCode => ({
+        should: documentEventCodes.map(eventCode => ({
           match: {
             'eventCode.S': eventCode,
           },
@@ -46,7 +52,57 @@ exports.opinionKeywordSearch = async ({
     });
   }
 
-  const opinionQuery = {
+  if (caseTitleOrPetitioner) {
+    queryParams.push({
+      simple_query_string: {
+        fields: [
+          'caseCaption.S',
+          'contactPrimary.M.name.S',
+          'contactSecondary.M.name.S',
+        ],
+        query: caseTitleOrPetitioner,
+      },
+    });
+  }
+
+  if (judge) {
+    const judgeField = `${judgeType}.S`;
+
+    queryParams.push({
+      bool: {
+        must: {
+          match: {
+            [judgeField]: judge,
+          },
+        },
+      },
+    });
+  }
+
+  if (docketNumber) {
+    queryParams.push({
+      match: {
+        'docketNumber.S': {
+          operator: 'and',
+          query: docketNumber,
+        },
+      },
+    });
+  }
+
+  if (startDate && endDate) {
+    queryParams.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+  }
+
+  const documentQuery = {
     body: {
       _source: sourceFields,
       query: {
@@ -70,7 +126,7 @@ exports.opinionKeywordSearch = async ({
 
   const { results } = await search({
     applicationContext,
-    searchParameters: opinionQuery,
+    searchParameters: documentQuery,
   });
 
   return results;

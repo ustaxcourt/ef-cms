@@ -12,7 +12,7 @@ describe('orderAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .orderKeywordSearch.mockResolvedValue([
+      .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
           caseId: '1',
@@ -89,10 +89,10 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
     });
   });
 });
