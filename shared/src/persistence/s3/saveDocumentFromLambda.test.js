@@ -54,4 +54,27 @@ describe('saveDocumentFromLambda', () => {
       Key: expectedDocumentId,
     });
   });
+
+  it('saves the document with a custom mime type (contentType)', async () => {
+    applicationContext.getStorageClient = () => ({
+      putObject: putObjectStub,
+    });
+    applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
+    const expectedDocumentId = 'abc';
+    const expectedArray = new Uint8Array(['a']);
+
+    await saveDocumentFromLambda({
+      applicationContext,
+      contentType: 'text/plain',
+      document: new Uint8Array(['a']),
+      documentId: expectedDocumentId,
+    });
+
+    expect(putObjectStub).toHaveBeenCalledWith({
+      Body: Buffer.from(expectedArray),
+      Bucket: 'aBucket',
+      ContentType: 'text/plain',
+      Key: expectedDocumentId,
+    });
+  });
 });

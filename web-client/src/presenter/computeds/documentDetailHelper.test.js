@@ -1106,7 +1106,7 @@ describe('document detail helper', () => {
               {
                 documentId: 'abc',
                 documentType: 'Petition',
-                status: 'served',
+                servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
           },

@@ -110,7 +110,7 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
-    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_DOCUMENT_SERVED_TEMPLATE: document_served_${opt:stage}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
 

@@ -30,6 +30,7 @@ describe('docket clerk update case journey', () => {
 
   it('create a case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });

@@ -2,7 +2,7 @@ import { CaseAssociationRequestFactory } from '../../../shared/src/business/enti
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-export default (test, fakeFile) => {
+export const respondentRequestsAccessToCase = (test, fakeFile) => {
   return it('Respondent requests access to case', async () => {
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,

@@ -1,4 +1,4 @@
-const { OrderSearch } = require('../entities/orders/OrderSearch');
+const { DocumentSearch } = require('../entities/documents/DocumentSearch');
 
 /**
  * validateOrderAdvancedSearchInteractor
@@ -11,7 +11,7 @@ exports.validateOrderAdvancedSearchInteractor = ({
   applicationContext,
   orderSearch,
 }) => {
-  const search = new OrderSearch(orderSearch, {
+  const search = new DocumentSearch(orderSearch, {
     applicationContext,
   });
 

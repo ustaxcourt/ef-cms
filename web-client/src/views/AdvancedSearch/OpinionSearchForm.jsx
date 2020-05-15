@@ -30,7 +30,7 @@ export const OpinionSearchForm = connect(
         <div className="header-with-blue-background grid-row">
           <h3>Search Opinions</h3>
         </div>
-        <div className="blue-container order-search-container">
+        <div className="blue-container opinion-search-container">
           <form
             className="grid-container grid-row"
             onSubmit={e => {
@@ -38,7 +38,7 @@ export const OpinionSearchForm = connect(
               submitAdvancedSearchSequence();
             }}
           >
-            <div className="grid-col" id="order-basic">
+            <div className="grid-col" id="opinion-basic">
               <OpinionSearchByKeyword />
 
               <NonMobile>

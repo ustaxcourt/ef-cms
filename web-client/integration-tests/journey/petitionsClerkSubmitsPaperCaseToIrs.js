@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { User } from '../../../shared/src/business/entities/User';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -69,6 +70,8 @@ export const petitionsClerkSubmitsPaperCaseToIrs = test => {
     const documents = test.getState('caseDetail.documents');
     for (const document of documents) {
       expect(document.servedAt).toBeDefined();
+      expect(document.servedParties.length).toEqual(1);
+      expect(document.servedParties[0].role).toEqual(User.ROLES.irsSuperuser);
     }
   });
 };

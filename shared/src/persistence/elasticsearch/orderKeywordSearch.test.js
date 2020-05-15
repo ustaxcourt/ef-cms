@@ -74,8 +74,8 @@ describe('orderKeywordSearch', () => {
   it('does a search for keyword in document contents or document title', async () => {
     await orderKeywordSearch({
       applicationContext,
+      keyword: 'Guy Fieri',
       orderEventCodes,
-      orderKeyword: 'Guy Fieri',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
