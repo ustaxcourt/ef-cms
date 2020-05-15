@@ -30,10 +30,10 @@ describe('Petition Service Email Sent on Serve', () => {
     emails.forEach(email => {
       email.template = email.template.replace(/<!-- -->/g, '');
     });
-    console.log(emails);
     const orderEmail = emails.find(
-      email => email.template.indexOf('A new Petition has been served') !== -1,
+      email =>
+        email.template.indexOf(`docketNumber: ${test.docketNumber}`) !== -1,
     );
-    expect(orderEmail.template).toContain(`docketNumber: ${test.docketNumber}`);
+    expect(orderEmail.template).toContain('A new Petition has been served');
   });
 });

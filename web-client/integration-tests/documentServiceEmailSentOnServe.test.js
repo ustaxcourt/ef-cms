@@ -53,15 +53,12 @@ describe('Document Service Email Sent on Serve', () => {
     emails.forEach(email => {
       email.template = email.template.replace(/<!-- -->/g, '');
     });
-    console.log(emails);
     const orderEmail = emails.find(
       email =>
-        email.template.indexOf(
-          'Document Type: O Order which should send an email',
-        ) !== -1,
+        email.template.indexOf(`Docket Number: ${test.docketNumber}`) !== -1,
     );
     expect(orderEmail.template).toContain(
-      `Docket Number: ${test.docketNumber}`,
+      'Document Type: O Order which should send an email',
     );
   });
 });
