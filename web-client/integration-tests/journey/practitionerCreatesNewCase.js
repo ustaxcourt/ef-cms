@@ -185,6 +185,11 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
       value: 'Whistleblower',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '5',
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError')).toBeUndefined();

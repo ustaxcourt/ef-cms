@@ -742,6 +742,11 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       state: 'CA',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '5',
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
