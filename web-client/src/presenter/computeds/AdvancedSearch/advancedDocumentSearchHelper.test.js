@@ -3,7 +3,7 @@ import { applicationContext } from '../../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-describe('advancedOrderSearchHelper', () => {
+describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
@@ -146,7 +146,7 @@ describe('advancedOrderSearchHelper', () => {
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Order for Amended Petition and Filing Fee',
-        formattedEventCode: 'O',
+        formattedEventCode: 'OAPF',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
