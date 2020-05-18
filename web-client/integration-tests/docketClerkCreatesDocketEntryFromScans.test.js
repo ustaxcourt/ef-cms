@@ -46,6 +46,10 @@ presenter.providers.router = {
     if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
     }
+
+    if (url === '/file-a-petition/success') {
+      await test.runSequence('gotoFilePetitionSuccessSequence');
+    }
   },
 };
 
