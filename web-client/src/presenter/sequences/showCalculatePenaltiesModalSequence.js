@@ -1,7 +1,7 @@
 import { setDefaultPenaltiesAction } from '../actions/setDefaultPenaltiesAction';
-import { showCalculatePenaltiesModalAction } from '../actions/showCalculatePenaltiesModalAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const showCalculatePenaltiesModalSequence = [
   setDefaultPenaltiesAction,
-  showCalculatePenaltiesModalAction,
+  setShowModalFactoryAction('CalculatePenaltiesModal'),
 ];

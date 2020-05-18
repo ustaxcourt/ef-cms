@@ -12,8 +12,8 @@ const PenaltyInput = ({ index, value }) => {
       </label>
       <input
         className="usa-input"
+        defaultValue={value}
         id={`penalty_${index}`}
-        initialValue={value}
         name={`penalty_${index}`}
       />
     </div>
