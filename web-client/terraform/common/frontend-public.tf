@@ -76,8 +76,8 @@ module "ui-public-certificate" {
 
   domain_name            = "ui-public-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
-  is_hosted_zone_private = "false"
-  validation_method      = "DNS"
+  # is_hosted_zone_private = "false"
+  # validation_method      = "DNS"
   certificate_name       = "ui-public-${var.environment}.${var.dns_domain}"
   environment            = "${var.environment}"
   description            = "Certificate for ui-public-${var.environment}.${var.dns_domain}"
