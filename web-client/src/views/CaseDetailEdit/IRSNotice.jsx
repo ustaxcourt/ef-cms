@@ -1,3 +1,4 @@
+import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { StatisticsForm } from '../StartCaseInternal/StatisticsForm';
@@ -11,6 +12,7 @@ export const IRSNotice = connect(
     caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
+    showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
@@ -21,6 +23,7 @@ export const IRSNotice = connect(
     caseDetailEditHelper,
     form,
     setIrsNoticeFalseSequence,
+    showModal,
     statisticsFormHelper,
     updateFormValueSequence,
     validateCaseDetailSequence,
@@ -120,6 +123,8 @@ export const IRSNotice = connect(
         {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
 
         {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
+
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
       </div>
     );
   },
