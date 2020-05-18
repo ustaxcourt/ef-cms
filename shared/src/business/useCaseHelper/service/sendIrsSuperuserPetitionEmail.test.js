@@ -131,4 +131,78 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
     ]);
   });
+
+  it('should include a formatted document filingDate', async () => {
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity: {
+        caseCaption: 'A Caption',
+        contactPrimary: {
+          name: 'Joe Exotic',
+        },
+        docketNumber: '123-20',
+        docketRecord: [],
+        privatePractitioners: [],
+      },
+      documentEntity: {
+        filingDate: '2019-03-05T21:40:46.415Z',
+      },
+    });
+
+    const { documentDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+
+    expect(documentDetail).toMatchObject({
+      filingDate: '03/05/19',
+    });
+  });
+
+  it('should include the trial location from the case', async () => {
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity: {
+        caseCaption: 'A Caption',
+        contactPrimary: {
+          name: 'Joe Exotic',
+        },
+        docketNumber: '123-20',
+        docketRecord: [],
+        preferredTrialCity: 'Fake Trial Location, ST',
+        privatePractitioners: [],
+      },
+      documentEntity: {
+        filingDate: '2019-03-05T21:40:46.415Z',
+      },
+    });
+
+    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+
+    expect(caseDetail).toMatchObject({
+      trialLocation: 'Fake Trial Location, ST',
+    });
+  });
+
+  it('should default the trial location if not set on the case', async () => {
+    await sendIrsSuperuserPetitionEmail({
+      applicationContext,
+      caseEntity: {
+        caseCaption: 'A Caption',
+        contactPrimary: {
+          name: 'Joe Exotic',
+        },
+        docketNumber: '123-20',
+        docketRecord: [],
+        preferredTrialCity: '',
+        privatePractitioners: [],
+      },
+      documentEntity: {
+        filingDate: '2019-03-05T21:40:46.415Z',
+      },
+    });
+
+    const { caseDetail } = reactTemplateGenerator.mock.calls[0][0].data;
+
+    expect(caseDetail).toMatchObject({
+      trialLocation: 'No requested place of trial',
+    });
+  });
 });
