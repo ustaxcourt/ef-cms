@@ -101,7 +101,7 @@ EOF
 #Petition Service Email Template
 resource "aws_ses_template" "petition_served" {
   name    = "petition_served_${var.environment}"
-  subject = "eService Notification from US Tax Court"
+  subject = "eService Notification from US Tax Court on Case {{docketNumber}}"
   html    = <<EOF
   {{emailContent}}
 EOF
