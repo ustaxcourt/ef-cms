@@ -20,11 +20,14 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
         normalizeWhitespace: false,
       });
 
-      let lastY,
+      let lastY = null,
         pageText = '';
 
       for (let item of pageTextContent.items) {
-        if (lastY == item.transform[5] || !lastY) {
+        console.log('lastY', lastY);
+        console.log('item.transform[5]', item.transform[5]);
+        console.log('-----------------------');
+        if (lastY === item.transform[5] || !lastY) {
           pageText += item.str;
         } else {
           pageText += '\n' + item.str;
