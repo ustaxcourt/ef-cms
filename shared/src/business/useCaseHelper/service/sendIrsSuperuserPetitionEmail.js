@@ -19,7 +19,13 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     trialLocation,
   } = caseEntity;
 
-  const { documentId, documentTitle, eventCode, servedAt } = documentEntity;
+  const {
+    documentId,
+    documentTitle,
+    eventCode,
+    filingDate,
+    servedAt,
+  } = documentEntity;
 
   const docketEntry = caseEntity.docketRecord.find(
     entry => entry.documentId === documentId,
@@ -44,13 +50,19 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     .getUtilities()
     .formatNow('MMMM D, YYYY');
 
+  const filingDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(filingDate, 'MM/DD/YY');
+
+  const docketNumberWithSuffix = `${docketNumber}${docketNumberSuffix || ''}`;
+
   const templateHtml = reactTemplateGenerator({
     componentName: 'PetitionService',
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber: `${docketNumber}${docketNumberSuffix || ''}`,
-        trialLocation,
+        docketNumber: docketNumberWithSuffix,
+        trialLocation: trialLocation || 'No requested place of trial',
       },
       contactPrimary,
       contactSecondary,
@@ -59,6 +71,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
       documentDetail: {
         documentTitle,
         eventCode,
+        filingDate: filingDateFormatted,
         mailingDate,
         servedAtFormatted: applicationContext
           .getUtilities()
@@ -72,6 +85,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   const destination = {
     email: applicationContext.getIrsSuperuserEmail(),
     templateData: {
+      docketNumber: docketNumberWithSuffix,
       emailContent: templateHtml,
     },
   };
@@ -79,9 +93,10 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     defaultTemplateData: {
+      docketNumber: '',
       emailContent: 'A petition has been served.',
     },
     destinations: [destination],
-    templateName: process.env.EMAIL_DOCUMENT_SERVED_TEMPLATE,
+    templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
   });
 };
