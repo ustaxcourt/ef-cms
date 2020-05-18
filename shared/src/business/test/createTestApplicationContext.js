@@ -215,7 +215,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
-    generatePendingReportPdf: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
@@ -226,6 +225,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
   };
@@ -249,6 +249,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       setContent: jest.fn(),
     }),
   };
+
+  const mockGetStorageClient = appContextProxy({
+    getObject: jest.fn().mockReturnValue({
+      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    }),
+  });
 
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
@@ -396,7 +402,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
-    getStorageClient: appContextProxy(),
+    getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
       .fn()
@@ -441,4 +447,5 @@ module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
+  getFakeFile,
 };

@@ -1,4 +1,4 @@
-export default test => {
+export const trialClerkViewsTrialSessionWorkingCopy = test => {
   return it('Trial Clerk views trial session working copy', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: test.trialSessionId,

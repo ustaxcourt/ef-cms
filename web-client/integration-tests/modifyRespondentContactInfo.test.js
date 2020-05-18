@@ -1,7 +1,7 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
-import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
-import respondentViewsCaseDetailNoticeOfChangeOfAddress from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
+import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
+import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
 const test = setupTest();
 

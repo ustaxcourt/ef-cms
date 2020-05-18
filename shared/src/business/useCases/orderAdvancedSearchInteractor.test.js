@@ -12,7 +12,7 @@ describe('orderAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .orderKeywordSearch.mockResolvedValue([
+      .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
           caseId: '1',
@@ -52,7 +52,7 @@ describe('orderAdvancedSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderAdvancedSearchInteractor({
       applicationContext,
-      orderKeyword: 'candy',
+      keyword: 'candy',
     });
 
     expect(result).toMatchObject([
@@ -81,18 +81,18 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('searches for documents that are of type orders', async () => {
-    const orderKeyword = 'keyword';
+    const keyword = 'keyword';
 
     await orderAdvancedSearchInteractor({
       applicationContext,
-      orderKeyword,
+      keyword,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
     });
   });
 });

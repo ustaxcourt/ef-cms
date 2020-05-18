@@ -12,7 +12,7 @@ describe('opinionAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .opinionKeywordSearch.mockResolvedValue([
+      .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
           caseId: '1',
@@ -52,7 +52,7 @@ describe('opinionAdvancedSearchInteractor', () => {
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await opinionAdvancedSearchInteractor({
       applicationContext,
-      opinionKeyword: 'candy',
+      keyword: 'candy',
     });
 
     expect(result).toMatchObject([
@@ -81,18 +81,18 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('searches for documents that are of type opinions', async () => {
-    const opinionKeyword = 'keyword';
+    const keyword = 'keyword';
 
     await opinionAdvancedSearchInteractor({
       applicationContext,
-      opinionKeyword,
+      keyword,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().opinionKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
     });
   });
 });

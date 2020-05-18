@@ -9,7 +9,7 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
 import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
-import petitionsDeletesOrderFromCase from './journey/petitionsDeletesOrderFromCase';
+import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
 const test = setupTest({
   useCases: {

@@ -18,11 +18,11 @@ import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketCl
 import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
 
 // Public User
-import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
-import unauthedUserSearchesByDocketNumber from './journey/unauthedUserSearchesByDocketNumber';
-import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
-import unauthedUserViewsCaseDetail from './journey/unauthedUserViewsCaseDetail';
-import unauthedUserViewsPrintableDocketRecord from './journey/unauthedUserViewsPrintableDocketRecord';
+import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
+import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
+import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
+import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
+import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
 const test = setupTest({
   useCases: {

@@ -28,11 +28,13 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         contactSecondary: {},
         docketNumber: '123-20',
         docketRecord: [],
+        preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
       documentEntity: {
         documentId: 'test-document-id',
-        documentTitle: 'The Document',
+        documentType: 'The Document',
+        eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });
@@ -61,6 +63,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumber: '123-20',
         docketNumberSuffix: 'S',
         docketRecord: [],
+        preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
             representingPrimary: true,
@@ -73,7 +76,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
       documentEntity: {
         documentId: 'test-document-id',
-        documentTitle: 'The Document',
+        documentType: 'The Document',
+        eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });
@@ -95,6 +99,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketNumber: '123-20',
         docketRecord: [],
+        preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
             representingPrimary: true,
@@ -107,7 +112,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       },
       documentEntity: {
         documentId: 'test-document-id',
-        documentTitle: 'The Document',
+        documentType: 'The Document',
+        eventCode: 'P',
         servedAt: '2019-03-01T21:40:46.415Z',
       },
     });

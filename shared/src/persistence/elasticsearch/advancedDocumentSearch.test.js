@@ -1,13 +1,14 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { orderKeywordSearch } = require('./orderKeywordSearch');
+const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 
-describe('orderKeywordSearch', () => {
+describe('advancedDocumentSearch', () => {
   let searchStub;
   const orderEventCodes = ['O', 'OOD'];
+  const opinionEventCodes = ['MOP', 'TCOP'];
 
-  const baseQueryParams = [
+  const orderQueryParams = [
     { match: { 'pk.S': 'case|' } },
     { match: { 'sk.S': 'document|' } },
     {
@@ -20,12 +21,38 @@ describe('orderKeywordSearch', () => {
         should: [
           {
             match: {
-              'eventCode.S': 'O',
+              'eventCode.S': orderEventCodes[0],
             },
           },
           {
             match: {
-              'eventCode.S': 'OOD',
+              'eventCode.S': orderEventCodes[1],
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  const opinionQueryParams = [
+    { match: { 'pk.S': 'case|' } },
+    { match: { 'sk.S': 'document|' } },
+    {
+      exists: {
+        field: 'servedAt',
+      },
+    },
+    {
+      bool: {
+        should: [
+          {
+            match: {
+              'eventCode.S': opinionEventCodes[0],
+            },
+          },
+          {
+            match: {
+              'eventCode.S': opinionEventCodes[1],
             },
           },
         ],
@@ -42,22 +69,25 @@ describe('orderKeywordSearch', () => {
   });
 
   it('does a bare search for just eventCodes', async () => {
-    await orderKeywordSearch({ applicationContext, orderEventCodes });
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+    });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      baseQueryParams,
+      orderQueryParams,
     );
   });
 
   it('does a search for case title or petitioner name', async () => {
-    await orderKeywordSearch({
+    await advancedDocumentSearch({
       applicationContext,
       caseTitleOrPetitioner: 'Guy Fieri',
-      orderEventCodes,
+      documentEventCodes: opinionEventCodes,
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
-      ...baseQueryParams,
+      ...opinionQueryParams,
       {
         simple_query_string: {
           fields: [
@@ -72,14 +102,14 @@ describe('orderKeywordSearch', () => {
   });
 
   it('does a search for keyword in document contents or document title', async () => {
-    await orderKeywordSearch({
+    await advancedDocumentSearch({
       applicationContext,
-      orderEventCodes,
-      orderKeyword: 'Guy Fieri',
+      documentEventCodes: orderEventCodes,
+      keyword: 'Guy Fieri',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
-      ...baseQueryParams,
+      ...orderQueryParams,
       {
         simple_query_string: {
           fields: ['documentContents.S', 'documentTitle.S'],
@@ -89,15 +119,16 @@ describe('orderKeywordSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge', async () => {
-    await orderKeywordSearch({
+  it('does a search for a signed judge when the judgeType is signed judge', async () => {
+    await advancedDocumentSearch({
       applicationContext,
+      documentEventCodes: orderEventCodes,
       judge: 'Judge Guy Fieri',
-      orderEventCodes,
+      judgeType: 'signedJudgeName',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
-      ...baseQueryParams,
+      ...orderQueryParams,
       {
         bool: {
           must: {
@@ -110,15 +141,37 @@ describe('orderKeywordSearch', () => {
     ]);
   });
 
-  it('does a search for docket number of a case', async () => {
-    await orderKeywordSearch({
+  it('does a search for a judge when the judgeType is  judge', async () => {
+    await advancedDocumentSearch({
       applicationContext,
-      docketNumber: '101-20',
-      orderEventCodes,
+      documentEventCodes: opinionEventCodes,
+      judge: 'Judge Guy Fieri',
+      judgeType: 'judge',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
-      ...baseQueryParams,
+      ...opinionQueryParams,
+      {
+        bool: {
+          must: {
+            match: {
+              'judge.S': 'Judge Guy Fieri',
+            },
+          },
+        },
+      },
+    ]);
+  });
+
+  it('does a search for docket number of a case', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      docketNumber: '101-20',
+      documentEventCodes: orderEventCodes,
+    });
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...orderQueryParams,
       {
         match: {
           'docketNumber.S': {
@@ -131,15 +184,15 @@ describe('orderKeywordSearch', () => {
   });
 
   it('does a date range search for filing / received date', async () => {
-    await orderKeywordSearch({
+    await advancedDocumentSearch({
       applicationContext,
+      documentEventCodes: opinionEventCodes,
       endDate: '2020-02-21T04:59:59.999Z',
-      orderEventCodes,
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
-      ...baseQueryParams,
+      ...opinionQueryParams,
       {
         range: {
           'filingDate.S': {
@@ -153,26 +206,26 @@ describe('orderKeywordSearch', () => {
   });
 
   it('does a NOT search for date range if just given startDate', async () => {
-    await orderKeywordSearch({
+    await advancedDocumentSearch({
       applicationContext,
-      orderEventCodes,
+      documentEventCodes: orderEventCodes,
       startDate: '2020-02-20T00:00:00.000Z',
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      baseQueryParams,
+      orderQueryParams,
     );
   });
 
   it('does a NOT search for date range if just given endDate', async () => {
-    await orderKeywordSearch({
+    await advancedDocumentSearch({
       applicationContext,
+      documentEventCodes: orderEventCodes,
       endDate: '2020-02-20T04:59:59.999Z',
-      orderEventCodes,
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      baseQueryParams,
+      orderQueryParams,
     );
   });
 });

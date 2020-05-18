@@ -1,6 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
-export default (test, fakeFile) => {
+export const respondentAddsStipulatedDecision = (test, fakeFile) => {
   return it('Respondent adds stipulated decision', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,

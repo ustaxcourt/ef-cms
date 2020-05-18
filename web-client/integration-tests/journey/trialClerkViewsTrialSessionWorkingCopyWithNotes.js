@@ -6,7 +6,7 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export default test => {
+export const trialClerkViewsTrialSessionWorkingCopyWithNotes = test => {
   return it('Trial Clerk views trial session working copy with notes', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: test.trialSessionId,

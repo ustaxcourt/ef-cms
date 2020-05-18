@@ -28,6 +28,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  advancedDocumentSearch,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -68,6 +71,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -273,12 +277,6 @@ const {
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
-const {
-  generatePdfReportInteractor,
-} = require('../../shared/src/business/useCases/generatePdfReportInteractor');
-const {
-  generatePendingReportPdf,
-} = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
 const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor');
@@ -581,17 +579,11 @@ const {
   opinionAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
 const {
-  opinionKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
-const {
   opinionPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
 const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
-const {
-  orderKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
@@ -658,6 +650,9 @@ const {
 const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
+const {
+  scrapePdfContents,
+} = require('../../shared/src/business/utilities/scrapePdfContents');
 const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
@@ -888,6 +883,19 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+const getDocumentClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoClientCache[type]) {
+    dynamoClientCache[type] = new DynamoDB.DocumentClient({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
+  }
+  return dynamoClientCache[type];
+};
+
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
@@ -945,25 +953,13 @@ module.exports = (appContextUser = {}) => {
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
     }),
-    getDocumentClient: ({ useMasterRegion = false } = {}) => {
-      const type = useMasterRegion ? 'master' : 'region';
-      if (!dynamoClientCache[type]) {
-        dynamoClientCache[type] = new DynamoDB.DocumentClient({
-          endpoint: useMasterRegion
-            ? environment.masterDynamoDbEndpoint
-            : environment.dynamoDbEndpoint,
-          region: useMasterRegion
-            ? environment.masterRegion
-            : environment.region,
-        });
-      }
-      return dynamoClientCache[type];
-    },
+    getDocumentClient,
     getDocumentGenerators: () => ({
       caseInventoryReport,
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      pendingReport,
       receiptOfFiling,
       standingPretrialOrder,
     }),
@@ -972,12 +968,38 @@ module.exports = (appContextUser = {}) => {
     },
     getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
-      if (!sesCache) {
-        sesCache = new SES({
-          region: 'us-east-1',
-        });
+      if (process.env.CI) {
+        return {
+          sendBulkTemplatedEmail: params => {
+            return {
+              promise: () =>
+                Promise.all(
+                  params.Destinations.map(Destination => {
+                    const address = Destination.Destination.ToAddresses[0];
+                    const template = Destination.ReplacementTemplateData;
+                    return getDocumentClient()
+                      .put({
+                        Item: {
+                          pk: `email-${address}`,
+                          sk: getUniqueId(),
+                          template,
+                        },
+                        TableName: `efcms-${environment.stage}`,
+                      })
+                      .promise();
+                  }),
+                ),
+            };
+          },
+        };
+      } else {
+        if (!sesCache) {
+          sesCache = new SES({
+            region: 'us-east-1',
+          });
+        }
+        return sesCache;
       }
-      return sesCache;
     },
     getEntityByName: name => {
       return entitiesByName[name];
@@ -1008,9 +1030,15 @@ module.exports = (appContextUser = {}) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
+    getPdfJs: () => {
+      const pdfjsLib = require('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      return pdfjsLib;
+    },
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        advancedDocumentSearch,
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
@@ -1088,8 +1116,6 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        opinionKeywordSearch,
-        orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1186,7 +1212,6 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
-        generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
@@ -1235,7 +1260,6 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
-        generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
@@ -1346,6 +1370,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,
+        scrapePdfContents,
         setServiceIndicatorsForCase,
       };
     },

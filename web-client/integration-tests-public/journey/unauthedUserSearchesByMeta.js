@@ -1,4 +1,4 @@
-export default (test, overrides = {}) => {
+export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
   return it('Search for cases by meta data', async () => {
     const queryParams = {
       countryType: 'domestic',
