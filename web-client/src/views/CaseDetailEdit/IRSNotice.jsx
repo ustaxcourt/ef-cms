@@ -1,5 +1,6 @@
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { StatisticsForm } from '../StartCaseInternal/StatisticsForm';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -10,6 +11,7 @@ export const IRSNotice = connect(
     caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
+    statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validationErrors: state.validationErrors,
@@ -19,6 +21,7 @@ export const IRSNotice = connect(
     caseDetailEditHelper,
     form,
     setIrsNoticeFalseSequence,
+    statisticsFormHelper,
     updateFormValueSequence,
     validateCaseDetailSequence,
     validationErrors,
@@ -115,6 +118,8 @@ export const IRSNotice = connect(
         />
 
         {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
+
+        {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
       </div>
     );
   },

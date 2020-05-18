@@ -43,5 +43,9 @@ export const formatOrderSearchResultRecord = (
     ? applicationContext.getUtilities().getJudgeLastName(result.signedJudgeName)
     : '';
 
+  result.formattedJudgeName = result.judge
+    ? applicationContext.getUtilities().getJudgeLastName(result.judge)
+    : '';
+
   return result;
 };
