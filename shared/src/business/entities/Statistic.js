@@ -66,7 +66,7 @@ joiValidationDecorator(
     yearOrPeriod: joi
       .string()
       .required()
-      .valid('year', 'period')
+      .valid('Year', 'Period')
       .description('Whether the statistics are for a year or period.'),
   }),
   Statistic.VALIDATION_ERROR_MESSAGES,
