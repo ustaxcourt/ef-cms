@@ -34,6 +34,7 @@ describe('PetitionService', () => {
   const documentDetail = {
     documentTitle: 'Petition',
     eventCode: 'P',
+    filingDate: '02/05/20',
     mailingDate: '02/02/20',
     servedAtFormatted: '02/03/2020 12:00am EST',
   };
@@ -101,6 +102,7 @@ describe('PetitionService', () => {
     expect(documentInfo.text()).toContain(
       `Docket Entry No.: ${docketEntryNumber}`,
     );
+    expect(documentInfo.text()).toContain(documentDetail.filingDate);
     expect(documentInfo.text()).toContain(documentDetail.mailingDate);
     expect(documentInfo.text()).toContain(documentDetail.servedAtFormatted);
   });
