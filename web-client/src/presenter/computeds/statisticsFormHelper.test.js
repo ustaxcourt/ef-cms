@@ -76,4 +76,27 @@ describe('case detail edit computed', () => {
     });
     expect(result.showAddMoreStatisticsButton).toBeTruthy();
   });
+
+  it('sets statisticOptions to empty array is statistics is not present on the form', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+      },
+    });
+    expect(result.statisticOptions).toEqual([]);
+  });
+
+  it('sets statisticOptions showYearInput and showPeriodInput for all statistics in form based on yearOrPeriod value', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {
+          statistics: [{ yearOrPeriod: 'Year' }, { yearOrPeriod: 'Period' }],
+        },
+      },
+    });
+    expect(result.statisticOptions).toEqual([
+      { showYearInput: true },
+      { showPeriodInput: true },
+    ]);
+  });
 });
