@@ -1,5 +1,4 @@
 import {
-  deleteEmails,
   getEmailsForAddress,
   loginAs,
   setupTest,
@@ -39,26 +38,20 @@ describe.skip('Document Service Email Sent on Serve', () => {
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-
-  it('delete emails for petitioner', async () => {
-    const emails = await getEmailsForAddress('petitioner');
-    await deleteEmails(emails);
-  });
-
   docketClerkServesOrder(test, 0);
 
   it('should send the expected emails for parties', async () => {
     const emails = await getEmailsForAddress('petitioner');
-    expect(emails.length).toEqual(1);
     emails.forEach(email => {
       email.template = email.template.replace(/<!-- -->/g, '');
     });
     const orderEmail = emails.find(
       email =>
-        email.template.indexOf(`Docket Number: ${test.docketNumber}`) !== -1,
+        email.template.indexOf(`Docket Number: ${test.docketNumber}`) !== -1 &&
+        email.template.indexOf(
+          'Document Type: O Order which should send an email',
+        ) !== -1,
     );
-    expect(orderEmail.template).toContain(
-      'Document Type: O Order which should send an email',
-    );
+    expect(orderEmail).toBeDefined();
   });
 });

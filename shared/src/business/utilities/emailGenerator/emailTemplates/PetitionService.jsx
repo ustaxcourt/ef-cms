@@ -46,6 +46,7 @@ export const PetitionService = ({
         <div>Document Information:</div>
         <div>Document Name: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
+        <div>Filed Date: {documentDetail.filingDate}</div>
         <div>Postmarked: {documentDetail.mailingDate}</div>
         <div>Served: {documentDetail.servedAtFormatted}</div>
       </div>
