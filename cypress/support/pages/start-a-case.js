@@ -36,4 +36,8 @@ exports.fillInAndSubmitForm = () => {
 
   // step 5
   cy.get('button#submit-case').scrollIntoView().click();
+
+  // success page
+  cy.url().should('include', 'file-a-petition/success');
+  cy.get('a#button-back-to-dashboard').click();
 };
