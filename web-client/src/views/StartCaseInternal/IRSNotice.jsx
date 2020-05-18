@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
@@ -127,10 +126,8 @@ export const IRSNotice = connect(
           renderIrsNoticeDate()}
 
         {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
-        
-        {showModal === 'CalculatePenaltiesModal' && (
-          <CalculatePenaltiesModal />
-         )}
+
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
       </div>
     );
   },

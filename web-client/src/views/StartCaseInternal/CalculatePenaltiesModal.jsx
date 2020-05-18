@@ -5,16 +5,17 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const PenaltyInput = ({ index, value }) => {
+  const oneBaseIndex = index + 1;
   return (
     <div className="margin-top-3">
-      <label className="usa-label" htmlFor={`penalty_${index}`}>
-        Penalty {index} (IRS)
+      <label className="usa-label" htmlFor={`penalty_${oneBaseIndex}`}>
+        Penalty {oneBaseIndex} (IRS)
       </label>
       <input
         className="usa-input"
         defaultValue={value}
-        id={`penalty_${index}`}
-        name={`penalty_${index}`}
+        id={`penalty_${oneBaseIndex}`}
+        name={`penalty_${oneBaseIndex}`}
       />
     </div>
   );
@@ -25,7 +26,7 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.dismissModalSequence,
-    penalties: state.modal.meta.penalties,
+    penalties: state.modal.penalties,
   },
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,

@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const setDefaultPenaltiesAction = ({ store }) => {
-  store.set(state.modal.meta.penalties, ['', '', '', '', '']);
+  store.set(state.modal.penalties, ['', '', '', '', '']);
 };
