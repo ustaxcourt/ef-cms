@@ -86,7 +86,7 @@ export const AdvancedDocumentSearch = connect(
                   <select
                     className="usa-input usa-select"
                     id="order-opinion"
-                    name="opinion"
+                    name="opinionType"
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
