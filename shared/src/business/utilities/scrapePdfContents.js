@@ -24,9 +24,6 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
         pageText = '';
 
       for (let item of pageTextContent.items) {
-        console.log('lastY', lastY);
-        console.log('item.transform[5]', item.transform[5]);
-        console.log('-----------------------');
         if (lastY === item.transform[5] || !lastY) {
           pageText += item.str;
         } else {
