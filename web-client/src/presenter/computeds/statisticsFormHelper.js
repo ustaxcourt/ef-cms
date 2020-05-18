@@ -19,8 +19,19 @@ export const statisticsFormHelper = (get, applicationContext) => {
   const showAddMoreStatisticsButton =
     form.statistics && form.statistics.length < 12;
 
+  const statisticOptions = [];
+
+  (form.statistics || []).forEach(statistic => {
+    if (statistic.yearOrPeriod === 'Year') {
+      statisticOptions.push({ showYearInput: true });
+    } else if (statistic.yearOrPeriod === 'Period') {
+      statisticOptions.push({ showPeriodInput: true });
+    }
+  });
+
   return {
     showAddMoreStatisticsButton,
     showStatisticsForm,
+    statisticOptions,
   };
 };
