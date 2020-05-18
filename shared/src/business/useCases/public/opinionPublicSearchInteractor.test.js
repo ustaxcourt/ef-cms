@@ -41,27 +41,27 @@ describe('opinionPublicSearchInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .opinionKeywordSearch.mockResolvedValue(mockOpinionSearchResult);
+      .advancedDocumentSearch.mockResolvedValue(mockOpinionSearchResult);
   });
 
   it('should only search for opinion document types', async () => {
     await opinionPublicSearchInteractor({
       applicationContext,
-      opinionKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().opinionKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
     });
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
     const result = await opinionPublicSearchInteractor({
       applicationContext,
-      opinionKeyword: 'memorandum',
+      keyword: 'memorandum',
     });
 
     expect(result).toEqual(mockOpinionSearchResult);

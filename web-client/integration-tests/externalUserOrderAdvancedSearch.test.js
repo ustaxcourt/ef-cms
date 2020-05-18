@@ -55,25 +55,25 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'privatePractitioner1');
   unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner2');
   unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'docketclerk');
@@ -85,24 +85,24 @@ describe('external users perform an advanced search for orders', () => {
   loginAs(test, 'privatePractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'privatePractitioner1');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner');
   associatedUserSearchesForServedOrder(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 
   loginAs(test, 'irsPractitioner2');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
     draftOrderIndex: 0,
-    orderKeyword: 'Jiminy Cricket',
+    keyword: 'Jiminy Cricket',
   });
 });

@@ -32,6 +32,7 @@ describe('PetitionService', () => {
   const docketEntryNumber = 1;
 
   const documentDetail = {
+    documentId: '1234',
     documentTitle: 'Petition',
     eventCode: 'P',
     filingDate: '02/05/20',
@@ -128,10 +129,10 @@ describe('PetitionService', () => {
     expect(petitionerInfo.text()).toContain(contactPrimary.postalCode);
     expect(petitionerInfo.text()).toContain(contactPrimary.serviceIndicator);
 
-    expect(petitionerInfo.text()).not.toContain(contactSecondary.name);
+    expect(petitionerInfo.find('#contact-secondary').length).toEqual(0);
   });
 
-  it('renders additional petitioner information if contactSecondary is provided', () => {
+  it('renders additional petitioner information if contactSecondary is provided and has at least a name', () => {
     const wrapper = mount(
       <PetitionService
         caseDetail={caseDetail}
@@ -143,7 +144,7 @@ describe('PetitionService', () => {
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const petitionerInfo = wrapper.find('#petitioner-information');
+    const petitionerInfo = wrapper.find('#contact-secondary');
 
     expect(petitionerInfo.text()).toContain(contactSecondary.name);
     expect(petitionerInfo.text()).toContain(contactSecondary.address1);
@@ -189,5 +190,42 @@ describe('PetitionService', () => {
     expect(practitionerInfo.text()).toContain(
       `Representing: ${practitioners[1].representing}`,
     );
+  });
+
+  it('renders no practitioner information if there are no practitioners', () => {
+    const wrapper = mount(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        contactSecondary={contactSecondary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={[]}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const practitionerInfo = wrapper.find('#practitioner-information');
+
+    expect(practitionerInfo.length).toEqual(0);
+  });
+
+  it('renders computer-readable content', () => {
+    const wrapper = shallow(
+      <PetitionService
+        caseDetail={caseDetail}
+        contactPrimary={contactPrimary}
+        contactSecondary={contactSecondary}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetail}
+        practitioners={[]}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const irs = wrapper.find('#computer-readable');
+
+    expect(irs.text()).toContain(caseDetail.docketNumber);
+    expect(irs.text()).toContain(docketEntryNumber);
+    expect(irs.text()).toContain(documentDetail.documentId);
+    expect(irs.text()).toContain(documentDetail.eventCode);
   });
 });

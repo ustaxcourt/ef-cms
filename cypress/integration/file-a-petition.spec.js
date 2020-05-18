@@ -178,7 +178,7 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('submits forms and shows a success message dialog', () => {
+  it('submits forms and redirects to the file petition success page', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
     cy.get('button#submit-case').scrollIntoView().click();
@@ -188,11 +188,10 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
-    cy.get('div.modal-success', { timeout: 300000 }).should(
-      'contain',
-      'Your case has been successfully submitted.',
-    );
+    cy.url().should('include', 'file-a-petition/success');
+    cy.get('a#button-back-to-dashboard').click();
   });
+
   it('case list table reflects newly-added record', () => {
     cy.get('table')
       .find('tr')

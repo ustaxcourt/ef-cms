@@ -6,7 +6,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkGetsMyMessagesInboxCount } from './journey/petitionsClerkGetsMyMessagesInboxCount';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsMyMessagesInbox } from './journey/petitionsClerkViewsMyMessagesInbox';
-import userNavigatesToCreateCaseConfirmation from './journey/userNavigatesToCreateCaseConfirmation';
+import { userNavigatesToCreateCaseConfirmation } from './journey/userNavigatesToCreateCaseConfirmation';
 
 const test = setupTest();
 

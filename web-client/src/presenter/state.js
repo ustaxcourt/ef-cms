@@ -3,11 +3,9 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import {
-  advancedOpinionSearchHelper,
-  advancedOrderSearchHelper,
-  advancedSearchHelper,
-} from './computeds/advancedSearchHelper';
+import { advancedOpinionSearchHelper } from './computeds/AdvancedSearch/advancedOpinionSearchHelper';
+import { advancedOrderSearchHelper } from './computeds/AdvancedSearch/advancedOrderSearchHelper';
+import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';

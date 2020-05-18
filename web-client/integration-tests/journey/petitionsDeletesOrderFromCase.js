@@ -6,7 +6,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default test => {
+export const petitionsDeletesOrderFromCase = test => {
   return it('Petitions clerk deletes Order from case', async () => {
     const formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),

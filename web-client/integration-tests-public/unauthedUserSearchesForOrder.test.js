@@ -10,10 +10,10 @@ import {
   uploadPetition,
 } from '../integration-tests/helpers';
 import { setupTest } from './helpers';
-import unauthedUserInvalidSearchForOrder from './journey/unauthedUserInvalidSearchForOrder';
-import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
-import unauthedUserSearchesForOrderByKeyword from './journey/unauthedUserSearchesForOrderByKeyword';
-import unauthedUserSearchesForSealedCaseOrderByKeyword from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
+import { unauthedUserInvalidSearchForOrder } from './journey/unauthedUserInvalidSearchForOrder';
+import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
+import { unauthedUserSearchesForOrderByKeyword } from './journey/unauthedUserSearchesForOrderByKeyword';
+import { unauthedUserSearchesForSealedCaseOrderByKeyword } from './journey/unauthedUserSearchesForSealedCaseOrderByKeyword';
 
 const test = setupTest();
 const testClient = setupTestClient({
