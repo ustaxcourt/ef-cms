@@ -40,23 +40,23 @@ export const formatDocumentSearchResultRecord = (
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
-  if (Document.OPINION_DOCUMENT_TYPES.includes(result.documentType)) {
-    result.formattedJudgeName = applicationContext
-      .getUtilities()
-      .getJudgeLastName(result.judge);
+  const eventCodeAndDocumentType = result.documentType.split('-');
+  result.formattedEventCode = eventCodeAndDocumentType[0].trim();
+  result.formattedDocumentType = eventCodeAndDocumentType[1].trim();
 
-    result.formattedDocumentType = result.documentType.split('-').pop().trim();
-  } else if (Document.ORDER_DOCUMENT_TYPES.includes(result.documentType)) {
+  if (Document.OPINION_DOCUMENT_TYPES.includes(result.formattedEventCode)) {
+    result.formattedJudgeName = result.judge
+      ? applicationContext.getUtilities().getJudgeLastName(result.judge)
+      : '';
+  } else if (
+    Document.ORDER_DOCUMENT_TYPES.includes(result.formattedEventCode)
+  ) {
     result.formattedSignedJudgeName = result.signedJudgeName
       ? applicationContext
           .getUtilities()
           .getJudgeLastName(result.signedJudgeName)
       : '';
   }
-
-  result.formattedJudgeName = result.judge
-    ? applicationContext.getUtilities().getJudgeLastName(result.judge)
-    : '';
 
   return result;
 };
