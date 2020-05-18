@@ -12,10 +12,7 @@ const joiStrictTimestamp = getTimestampSchema();
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic, { applicationContext }) {
-  if (!applicationContext) {
-    throw new TypeError('applicationContext must be defined');
-  }
+function Statistic(rawStatistic) {
   this.entityName = 'Statistic';
 
   this.deficiencyAmount = rawStatistic.deficiencyAmount;
