@@ -7,14 +7,14 @@ import React from 'react';
 
 export const OpinionSearchResults = connect(
   {
-    advancedOpinionSearchHelper: state.advancedOpinionSearchHelper,
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     baseUrl: state.baseUrl,
     pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     token: state.token,
   },
   function OpinionSearchResults({
-    advancedOpinionSearchHelper,
+    advancedDocumentSearchHelper,
     baseUrl,
     pageSize,
     showMoreResultsSequence,
@@ -22,10 +22,10 @@ export const OpinionSearchResults = connect(
   }) {
     return (
       <>
-        {advancedOpinionSearchHelper.showSearchResults && (
+        {advancedDocumentSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">
-              ({advancedOpinionSearchHelper.searchResultsCount}) Results
+              ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
 
             <table className="usa-table search-results responsive-table row-border-only">
@@ -42,7 +42,7 @@ export const OpinionSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {advancedOpinionSearchHelper.formattedSearchResults.map(
+                {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
                       <td aria-hidden="true" className="small-column">
@@ -65,7 +65,7 @@ export const OpinionSearchResults = connect(
                       <td>
                         <a
                           href={
-                            advancedOpinionSearchHelper.isPublic
+                            advancedDocumentSearchHelper.isPublic
                               ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
                               : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
                           }
@@ -85,7 +85,7 @@ export const OpinionSearchResults = connect(
             </table>
           </>
         )}
-        {advancedOpinionSearchHelper.showLoadMore && (
+        {advancedDocumentSearchHelper.showLoadMore && (
           <Button
             secondary
             aria-label={`load ${pageSize} more results`}
@@ -94,7 +94,7 @@ export const OpinionSearchResults = connect(
             Load {pageSize} More
           </Button>
         )}
-        {advancedOpinionSearchHelper.showNoMatches && (
+        {advancedDocumentSearchHelper.showNoMatches && (
           <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
