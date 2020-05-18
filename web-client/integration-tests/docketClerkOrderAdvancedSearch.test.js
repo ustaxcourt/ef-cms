@@ -245,6 +245,7 @@ describe('docket clerk order advanced search', () => {
         ]),
       );
     });
+
     it('search for a docket number that is present in served orders', async () => {
       test.setState('advancedSearchForm', {
         orderSearch: {
@@ -354,24 +355,6 @@ describe('docket clerk order advanced search', () => {
         expect.arrayContaining([
           expect.objectContaining({
             documentId: test.draftOrders[2].documentId,
-          }),
-        ]),
-      );
-    });
-
-    it('includes the number of pages present in each document in the search results', async () => {
-      test.setState('advancedSearchForm', {
-        orderSearch: {
-          keyword: 'Order of Dismissal Entered',
-        },
-      });
-
-      await test.runSequence('submitOrderAdvancedSearchSequence');
-
-      expect(test.getState('searchResults')).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            numberOfPages: 1,
           }),
         ]),
       );
