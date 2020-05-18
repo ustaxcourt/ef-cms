@@ -53,7 +53,7 @@ describe('Document Search entity', () => {
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
 
-    expect(documentSearch.judge).toBeUndefined();
+    expect(documentSearch.judge).toBeDefined();
     expect(validationErrors).toBeNull();
   });
 
