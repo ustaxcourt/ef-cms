@@ -109,18 +109,18 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'wizardStep',
-      value: '4',
+      value: '5',
     });
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
-
-    expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('modal.showModal')).toEqual(
-      'FilePetitionSuccessModal',
-    );
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
 
     test.docketNumber = test.getState('cases.0.docketNumber');
   });
