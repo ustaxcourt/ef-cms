@@ -5,6 +5,7 @@ import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStat
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
 import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
 import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
+import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -30,6 +31,7 @@ export const submitPetitionFromPaperSequence = [
       computeReceivedAtDateAction,
       computeIrsNoticeDateAction,
       computePetitionFeeDatesAction,
+      computeStatisticDatesAction,
       validatePetitionFromPaperAction,
       {
         error: [
