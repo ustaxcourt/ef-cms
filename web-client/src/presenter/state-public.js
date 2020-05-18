@@ -1,7 +1,6 @@
 import { menuHelper } from './computeds/menuHelper';
 
-import { advancedOpinionSearchHelper } from './computeds/AdvancedSearch/advancedOpinionSearchHelper';
-import { advancedOrderSearchHelper } from './computeds/AdvancedSearch/advancedOrderSearchHelper';
+import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
@@ -9,8 +8,7 @@ import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetai
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
 const helpers = {
-  advancedOpinionSearchHelper,
-  advancedOrderSearchHelper,
+  advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   loadingHelper,
