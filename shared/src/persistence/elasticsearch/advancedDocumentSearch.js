@@ -90,12 +90,22 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (startDate && endDate) {
+  if (startDate) {
     queryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
+        },
+      },
+    });
+  }
+
+  if (endDate) {
+    queryParams.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
           lte: endDate,
         },
       },
