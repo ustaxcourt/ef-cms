@@ -6,14 +6,12 @@ describe('setDefaultPenaltiesAction', () => {
     const result = await runAction(setDefaultPenaltiesAction, {
       state: {
         modal: {
-          meta: {
-            penalties: null,
-          },
+          penalties: null,
         },
       },
     });
 
-    const { penalties } = result.state.modal.meta;
+    const { penalties } = result.state.modal;
 
     expect(penalties.length).toEqual(5);
   });

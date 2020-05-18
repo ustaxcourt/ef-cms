@@ -18,7 +18,6 @@ export const StatisticsForm = connect(
   function StatisticsForm({
     addStatisticToFormSequence,
     form,
-    index,
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
     updateFormValueSequence,

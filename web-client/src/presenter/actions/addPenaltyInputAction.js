@@ -9,8 +9,8 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 export const addPenaltyInputAction = ({ get, store }) => {
-  const penalties = get(state.modal.meta.penalties) || [];
+  const penalties = get(state.modal.penalties) || [];
   penalties.push('');
 
-  store.set(state.modal.meta.penalties, penalties);
+  store.set(state.modal.penalties, penalties);
 };
