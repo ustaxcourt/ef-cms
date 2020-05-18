@@ -3,18 +3,20 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AdvancedDocumentSearch = connect(
   {
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    opinionDocumentTypes: state.opinionDocumentTypes,
   },
   function AdvancedDocumentSearch({
     clearAdvancedSearchFormSequence,
     formName,
     formType,
     judges,
+    opinionDocumentTypes,
     updateSequence,
     validateSequence,
     validationErrors,
@@ -73,6 +75,34 @@ export const AdvancedDocumentSearch = connect(
               </div>
             </FormGroup>
             <FormGroup>
+              {formType === 'opinionSearch' && (
+                <div className="grid-row opinion-type-search-row">
+                  <label
+                    className="usa-label padding-top-105"
+                    htmlFor="order-opinion"
+                  >
+                    Opinion type
+                  </label>
+                  <select
+                    className="usa-input usa-select"
+                    id="order-opinion"
+                    name="opinion"
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {opinionDocumentTypes.map((opinionType, idx) => (
+                      <option key={idx} value={opinionType}>
+                        {opinionType}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="grid-row judge-search-row">
                 <label
                   className="usa-label padding-top-105"
