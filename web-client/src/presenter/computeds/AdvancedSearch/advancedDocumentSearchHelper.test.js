@@ -1,4 +1,4 @@
-import { advancedOrderSearchHelper as advancedOrderSearchHelperComputed } from './advancedOrderSearchHelper';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
 import { applicationContext } from '../../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -6,8 +6,8 @@ import { withAppContextDecorator } from '../../../withAppContext';
 describe('advancedOrderSearchHelper', () => {
   const pageSizeOverride = 5;
 
-  const advancedOrderSearchHelper = withAppContextDecorator(
-    advancedOrderSearchHelperComputed,
+  const advancedDocumentSearchHelper = withAppContextDecorator(
+    advancedDocumentSearchHelperComputed,
     {
       ...applicationContext,
       getConstants: () => {
@@ -20,7 +20,7 @@ describe('advancedOrderSearchHelper', () => {
   );
 
   it('returns an empty object when searchResults is undefined', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
       },
@@ -30,7 +30,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [],
@@ -45,7 +45,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns isPublic false if state.isPublic is not defined', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [],
@@ -56,7 +56,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns isPublic true if state.isPublic is true', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         isPublic: true,
@@ -68,7 +68,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
@@ -93,7 +93,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('formats search results for an order search', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
