@@ -52,7 +52,7 @@ export const CalculatePenaltiesModal = connect(
           icon="plus-circle"
           onClick={() => addPenaltyInputSequence()}
         >
-          Add More Penalties
+          Add another penalty
         </Button>
       </ModalDialog>
     );
