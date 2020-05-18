@@ -28,6 +28,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  advancedDocumentSearch,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -68,6 +71,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -273,12 +277,6 @@ const {
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
-const {
-  generatePdfReportInteractor,
-} = require('../../shared/src/business/useCases/generatePdfReportInteractor');
-const {
-  generatePendingReportPdf,
-} = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
 const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor');
@@ -581,17 +579,11 @@ const {
   opinionAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
 const {
-  opinionKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/opinionKeywordSearch');
-const {
   opinionPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
 const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
-const {
-  orderKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
@@ -967,6 +959,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      pendingReport,
       receiptOfFiling,
       standingPretrialOrder,
     }),
@@ -1045,6 +1038,7 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        advancedDocumentSearch,
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
@@ -1122,8 +1116,6 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        opinionKeywordSearch,
-        orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1220,7 +1212,6 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
-        generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
@@ -1269,7 +1260,6 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
-        generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,

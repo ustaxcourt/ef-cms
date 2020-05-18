@@ -1,13 +1,14 @@
 const { search } = require('./searchClient');
 
-exports.orderKeywordSearch = async ({
+exports.advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
+  documentEventCodes,
   endDate,
   judge,
+  judgeType,
   keyword,
-  orderEventCodes,
   startDate,
 }) => {
   const sourceFields = [
@@ -21,18 +22,19 @@ exports.orderKeywordSearch = async ({
     'numberOfPages',
     'documentId',
     'documentTitle',
+    'documentType',
     'filingDate',
     'irsPractitioners',
     'isSealed',
     'privatePractitioners',
     'sealedDate',
-    'signedJudgeName',
+    judgeType,
   ];
 
   const queryParams = [
     {
       bool: {
-        should: orderEventCodes.map(eventCode => ({
+        should: documentEventCodes.map(eventCode => ({
           match: {
             'eventCode.S': eventCode,
           },
@@ -40,6 +42,15 @@ exports.orderKeywordSearch = async ({
       },
     },
   ];
+
+  if (keyword) {
+    queryParams.push({
+      simple_query_string: {
+        fields: ['documentContents.S', 'documentTitle.S'],
+        query: keyword,
+      },
+    });
+  }
 
   if (caseTitleOrPetitioner) {
     queryParams.push({
@@ -54,21 +65,14 @@ exports.orderKeywordSearch = async ({
     });
   }
 
-  if (keyword) {
-    queryParams.push({
-      simple_query_string: {
-        fields: ['documentContents.S', 'documentTitle.S'],
-        query: keyword,
-      },
-    });
-  }
-
   if (judge) {
+    const judgeField = `${judgeType}.S`;
+
     queryParams.push({
       bool: {
         must: {
           match: {
-            'signedJudgeName.S': judge,
+            [judgeField]: judge,
           },
         },
       },
@@ -86,19 +90,29 @@ exports.orderKeywordSearch = async ({
     });
   }
 
-  if (startDate && endDate) {
+  if (startDate) {
     queryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
+        },
+      },
+    });
+  }
+
+  if (endDate && startDate) {
+    queryParams.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
           lte: endDate,
         },
       },
     });
   }
 
-  const orderQuery = {
+  const documentQuery = {
     body: {
       _source: sourceFields,
       query: {
@@ -122,7 +136,7 @@ exports.orderKeywordSearch = async ({
 
   const { results } = await search({
     applicationContext,
-    searchParameters: orderQuery,
+    searchParameters: documentQuery,
   });
 
   return results;

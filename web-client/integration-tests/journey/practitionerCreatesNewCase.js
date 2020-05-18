@@ -185,13 +185,20 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
       value: 'Whistleblower',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '5',
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('modal.showModal')).toEqual(
-      'FilePetitionSuccessModal',
-    );
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPractitioner');
 
     test.docketNumber = test.getState('cases.0.docketNumber');
   });

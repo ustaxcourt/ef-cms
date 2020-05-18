@@ -5,8 +5,8 @@ export const DatePrintedFooter = ({ datePrinted }) => {
     <div
       className="date-printed-footer"
       style={{
-        'font-size': '10px',
-        'text-align': 'center',
+        fontSize: '10px',
+        textAlign: 'center',
       }}
     >
       Printed {datePrinted}
