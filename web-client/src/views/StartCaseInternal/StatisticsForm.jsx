@@ -7,12 +7,15 @@ import React from 'react';
 export const StatisticsForm = connect(
   {
     form: state.form,
+    showCalculatePenaltiesModalSequence:
+      sequences.showCalculatePenaltiesModalSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function StatisticsForm({
     form,
     index,
+    showCalculatePenaltiesModalSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -132,7 +135,12 @@ export const StatisticsForm = connect(
           </div>
         </div>
 
-        <Button link className="padding-0" icon="calculator">
+        <Button
+          link
+          className="padding-0"
+          icon="calculator"
+          onClick={() => showCalculatePenaltiesModalSequence()}
+        >
           Calculate Penalties on IRS Notice
         </Button>
 

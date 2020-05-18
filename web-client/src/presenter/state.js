@@ -202,6 +202,7 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   modal: {
+    meta: {},
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   },
