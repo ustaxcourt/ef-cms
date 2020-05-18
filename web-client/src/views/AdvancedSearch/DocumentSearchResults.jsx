@@ -77,7 +77,10 @@ export const DocumentSearchResults = connect(
                       </td>
                       <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.formattedSignedJudgeName}</td>
+                      <td>
+                        {result.formattedSignedJudgeName ||
+                          result.formattedJudgeName}
+                      </td>
                     </tr>
                   ),
                 )}

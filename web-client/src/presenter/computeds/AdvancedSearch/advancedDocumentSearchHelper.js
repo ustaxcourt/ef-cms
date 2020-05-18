@@ -54,5 +54,9 @@ export const formatDocumentSearchResultRecord = (
       : '';
   }
 
+  result.formattedJudgeName = result.judge
+    ? applicationContext.getUtilities().getJudgeLastName(result.judge)
+    : '';
+
   return result;
 };
