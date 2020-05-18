@@ -5,6 +5,7 @@ import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError'
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
+import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
@@ -397,6 +398,7 @@ export const presenter = {
   providers: {},
   sequences: {
     addCaseToTrialSessionSequence,
+    addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
     advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,

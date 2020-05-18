@@ -10,23 +10,23 @@ export const StatisticsForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
-  function StatisticsForm({ form, updateFormValueSequence, validationErrors }) {
+  function StatisticsForm({
+    form,
+    index,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <>
-        <h4>
-          Statistics Proposed By IRS{' '}
-          <span className="usa-hint">(optional)</span>
-        </h4>
-
-        <FormGroup errorText={validationErrors.yearOrPeriod}>
+        <FormGroup>
           <fieldset className="usa-fieldset">
             {['Year', 'Period'].map(option => (
               <div className="usa-radio usa-radio__inline" key={option}>
                 <input
-                  checked={form.yearOrPeriod === option}
+                  checked={form.statistics[index].yearOrPeriod === option}
                   className="usa-radio__input"
-                  id={`year-or-period-${option}`}
-                  name="yearOrPeriod"
+                  id={`year-or-period-${index}-${option}`}
+                  name={`statistics.${index}.yearOrPeriod`}
                   type="radio"
                   value={option}
                   onChange={e => {
@@ -38,7 +38,7 @@ export const StatisticsForm = connect(
                 />
                 <label
                   className="usa-radio__label"
-                  htmlFor={`year-or-period-${option}`}
+                  htmlFor={`year-or-period-${index}-${option}`}
                 >
                   {option}
                 </label>
@@ -49,17 +49,23 @@ export const StatisticsForm = connect(
 
         <div className="grid-row grid-gap-2">
           <div className="grid-col-2">
-            <FormGroup errorText={validationErrors.year}>
-              <label className="usa-label" htmlFor="year">
+            <FormGroup
+              errorText={
+                validationErrors.statistics &&
+                validationErrors.statistics[index] &&
+                validationErrors.statistics[index].year
+              }
+            >
+              <label className="usa-label" htmlFor={`year-${index}`}>
                 Year
               </label>
               <input
                 className="usa-input usa-input-inline"
-                id="year"
+                id={`year-${index}`}
                 maxLength="25"
-                name="year"
+                name={`statistics.${index}.year`}
                 placeholder="YYYY"
-                value={form.year || ''}
+                value={form.statistics[index].year || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -70,16 +76,25 @@ export const StatisticsForm = connect(
             </FormGroup>
           </div>
           <div className="grid-col-4">
-            <FormGroup errorText={validationErrors.deficiencyAmount}>
-              <label className="usa-label" htmlFor="deficiencyAmount">
+            <FormGroup
+              errorText={
+                validationErrors.statistics &&
+                validationErrors.statistics[index] &&
+                validationErrors.statistics[index].deficiencyAmount
+              }
+            >
+              <label
+                className="usa-label"
+                htmlFor={`deficiency-amount-${index}`}
+              >
                 Decifiency
               </label>
               <input
                 className="usa-input usa-input-inline"
-                id="deficiencyAmount"
+                id={`deficiency-amount-${index}`}
                 maxLength="25"
-                name="deficiencyAmount"
-                value={form.deficiencyAmount || ''}
+                name={`statistics.${index}.deficiencyAmount`}
+                value={form.statistics[index].deficiencyAmount || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -90,16 +105,22 @@ export const StatisticsForm = connect(
             </FormGroup>
           </div>
           <div className="grid-col-4">
-            <FormGroup errorText={validationErrors.totalPenalties}>
-              <label className="usa-label" htmlFor="totalPenalties">
+            <FormGroup
+              errorText={
+                validationErrors.statistics &&
+                validationErrors.statistics[index] &&
+                validationErrors.statistics[index].totalPenalties
+              }
+            >
+              <label className="usa-label" htmlFor={`total-penalties-${index}`}>
                 Total penalties
               </label>
               <input
                 className="usa-input usa-input-inline"
-                id="totalPenalties"
+                id={`total-penalties-${index}`}
                 maxLength="25"
-                name="totalPenalties"
-                value={form.totalPenalties || ''}
+                name={`statistics.${index}.totalPenalties`}
+                value={form.statistics[index].totalPenalties || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -116,10 +137,6 @@ export const StatisticsForm = connect(
         </Button>
 
         <hr />
-
-        <Button secondary icon="plus-circle">
-          Add Another Year/Period
-        </Button>
       </>
     );
   },
