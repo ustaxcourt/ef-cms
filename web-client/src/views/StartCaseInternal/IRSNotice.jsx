@@ -10,7 +10,6 @@ import React from 'react';
 export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
-    addStatisticToFormSequence: sequences.addStatisticToFormSequence,
     form: state.form,
     showModal: state.modal.showModal,
     startCaseInternalHelper: state.startCaseInternalHelper,
@@ -21,7 +20,6 @@ export const IRSNotice = connect(
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
-    addStatisticToFormSequence,
     CASE_TYPES,
     form,
     showModal,
@@ -128,31 +126,11 @@ export const IRSNotice = connect(
         {startCaseInternalHelper.shouldShowIrsNoticeDate &&
           renderIrsNoticeDate()}
 
-        {statisticsFormHelper.showStatisticsForm && (
-          <>
-            <h4>
-              Statistics Proposed By IRS{' '}
-              <span className="usa-hint">(optional)</span>
-            </h4>
-
-            {form.statistics.map((statistic, index) => (
-              <StatisticsForm index={index} key={index} />
-            ))}
-
-            {form.statistics.length < 12 && (
-              <Button
-                secondary
-                icon="plus-circle"
-                onClick={() => addStatisticToFormSequence()}
-              >
-                Add Another Year/Period
-              </Button>
-            )}
-            {showModal === 'CalculatePenaltiesModal' && (
-              <CalculatePenaltiesModal />
-            )}
-          </>
-        )}
+        {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
+        
+        {showModal === 'CalculatePenaltiesModal' && (
+          <CalculatePenaltiesModal />
+         )}
       </div>
     );
   },
