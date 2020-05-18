@@ -33,6 +33,7 @@ import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/E
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
@@ -104,6 +105,7 @@ const pages = {
   EditUploadCourtIssuedDocument,
   Error,
   FileDocumentWizard,
+  FilePetitionSuccess,
   IdleLogout,
   Interstitial,
   Loading,
