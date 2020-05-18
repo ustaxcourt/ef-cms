@@ -1,7 +1,8 @@
+import { Document } from '../../../../../shared/src/business/entities/Document';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from 'cerebral';
 
-export const advancedOrderSearchHelper = (get, applicationContext) => {
+export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
@@ -15,7 +16,7 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatOrderSearchResultRecord(searchResult, { applicationContext }),
+        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
     );
   }
 
@@ -25,7 +26,7 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
   };
 };
 
-export const formatOrderSearchResultRecord = (
+export const formatDocumentSearchResultRecord = (
   result,
   { applicationContext },
 ) => {
@@ -39,9 +40,23 @@ export const formatOrderSearchResultRecord = (
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
-  result.formattedSignedJudgeName = result.signedJudgeName
-    ? applicationContext.getUtilities().getJudgeLastName(result.signedJudgeName)
-    : '';
+  const eventCodeAndDocumentType = result.documentType.split('-');
+  result.formattedEventCode = eventCodeAndDocumentType[0].trim();
+  result.formattedDocumentType = eventCodeAndDocumentType[1].trim();
+
+  if (Document.OPINION_DOCUMENT_TYPES.includes(result.formattedEventCode)) {
+    result.formattedJudgeName = result.judge
+      ? applicationContext.getUtilities().getJudgeLastName(result.judge)
+      : '';
+  } else if (
+    Document.ORDER_DOCUMENT_TYPES.includes(result.formattedEventCode)
+  ) {
+    result.formattedSignedJudgeName = result.signedJudgeName
+      ? applicationContext
+          .getUtilities()
+          .getJudgeLastName(result.signedJudgeName)
+      : '';
+  }
 
   return result;
 };
