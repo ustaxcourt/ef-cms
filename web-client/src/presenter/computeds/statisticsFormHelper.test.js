@@ -45,4 +45,35 @@ describe('case detail edit computed', () => {
     });
     expect(result.showStatisticsForm).toBeFalsy();
   });
+
+  it('sets showAddMoreStatisticsButton false if statistics is not present on the form', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+      },
+    });
+    expect(result.showAddMoreStatisticsButton).toBeFalsy();
+  });
+
+  it('sets showAddMoreStatisticsButton false if statistics array length is greater than 12', () => {
+    const manyStatistics = [];
+    for (let i = 0; i < 12; i++) {
+      manyStatistics.push({ yearOrPeriod: 'Period' });
+    }
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: { statistics: manyStatistics },
+      },
+    });
+    expect(result.showAddMoreStatisticsButton).toBeFalsy();
+  });
+
+  it('sets showAddMoreStatisticsButton true if statistics array length is less than 12', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: { statistics: [{ yearOrPeriod: 'Year' }] },
+      },
+    });
+    expect(result.showAddMoreStatisticsButton).toBeTruthy();
+  });
 });

@@ -11,13 +11,16 @@ import { state } from 'cerebral';
  */
 export const statisticsFormHelper = (get, applicationContext) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
-  const caseDetail = get(state.form);
+  const form = get(state.form);
 
   const showStatisticsForm =
-    caseDetail.caseType === CASE_TYPES_MAP.deficiency &&
-    caseDetail.hasVerifiedIrsNotice;
+    form.caseType === CASE_TYPES_MAP.deficiency && form.hasVerifiedIrsNotice;
+
+  const showAddMoreStatisticsButton =
+    form.statistics && form.statistics.length < 12;
 
   return {
+    showAddMoreStatisticsButton,
     showStatisticsForm,
   };
 };
