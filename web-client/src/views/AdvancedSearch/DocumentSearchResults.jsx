@@ -7,14 +7,14 @@ import React from 'react';
 
 export const DocumentSearchResults = connect(
   {
-    advancedOrderSearchHelper: state.advancedOrderSearchHelper,
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     baseUrl: state.baseUrl,
     pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     token: state.token,
   },
   function DocumentSearchResults({
-    advancedOrderSearchHelper,
+    advancedDocumentSearchHelper,
     baseUrl,
     pageSize,
     showMoreResultsSequence,
@@ -22,10 +22,10 @@ export const DocumentSearchResults = connect(
   }) {
     return (
       <>
-        {advancedOrderSearchHelper.showSearchResults && (
+        {advancedDocumentSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">
-              ({advancedOrderSearchHelper.searchResultsCount}) Results
+              ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
 
             <table className="usa-table search-results responsive-table row-border-only">
@@ -42,7 +42,7 @@ export const DocumentSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {advancedOrderSearchHelper.formattedSearchResults.map(
+                {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
                       <td aria-hidden="true" className="small-column">
@@ -65,7 +65,7 @@ export const DocumentSearchResults = connect(
                       <td>
                         <a
                           href={
-                            advancedOrderSearchHelper.isPublic
+                            advancedDocumentSearchHelper.isPublic
                               ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
                               : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
                           }
@@ -77,7 +77,10 @@ export const DocumentSearchResults = connect(
                       </td>
                       <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.formattedSignedJudgeName}</td>
+                      <td>
+                        {result.formattedSignedJudgeName ||
+                          result.formattedJudgeName}
+                      </td>
                     </tr>
                   ),
                 )}
@@ -85,7 +88,7 @@ export const DocumentSearchResults = connect(
             </table>
           </>
         )}
-        {advancedOrderSearchHelper.showLoadMore && (
+        {advancedDocumentSearchHelper.showLoadMore && (
           <Button
             secondary
             aria-label={`load ${pageSize} more results`}
@@ -94,7 +97,7 @@ export const DocumentSearchResults = connect(
             Load {pageSize} More
           </Button>
         )}
-        {advancedOrderSearchHelper.showNoMatches && (
+        {advancedDocumentSearchHelper.showNoMatches && (
           <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
