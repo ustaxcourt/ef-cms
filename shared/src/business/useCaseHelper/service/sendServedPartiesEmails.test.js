@@ -4,6 +4,11 @@ const {
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 
 describe('sendServedPartiesEmails', () => {
+  beforeAll(() => {
+    applicationContext.getIrsSuperuserEmail.mockReturnValue(
+      'irsSuperuser@example.com',
+    );
+  });
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case', async () => {
     await sendServedPartiesEmails({
       applicationContext,
@@ -32,14 +37,13 @@ describe('sendServedPartiesEmails', () => {
       applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
         .calls[0][0].destinations,
     ).toMatchObject([
-      {
-        email: '1@example.com',
-      },
+      { email: '1@example.com' },
       { email: '2@example.com' },
+      { email: 'irsSuperuser@example.com' },
     ]);
   });
 
-  it('should not call sendBulkTemplatedEmail if there are no electronic service parties on the case', async () => {
+  it('should call sendBulkTemplatedEmail only for the irs superuser if there are no electronic service parties on the case', async () => {
     await sendServedPartiesEmails({
       applicationContext,
       caseEntity: {
@@ -59,6 +63,10 @@ describe('sendServedPartiesEmails', () => {
 
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).not.toBeCalled();
+    ).toBeCalled();
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[0][0].destinations,
+    ).toMatchObject([{ email: 'irsSuperuser@example.com' }]);
   });
 });
