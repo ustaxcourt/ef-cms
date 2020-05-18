@@ -9,6 +9,8 @@ export const StatisticsForm = connect(
   {
     addStatisticToFormSequence: sequences.addStatisticToFormSequence,
     form: state.form,
+    showCalculatePenaltiesModalSequence:
+      sequences.showCalculatePenaltiesModalSequence,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -16,6 +18,7 @@ export const StatisticsForm = connect(
   function StatisticsForm({
     addStatisticToFormSequence,
     form,
+    showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
     updateFormValueSequence,
     validationErrors,
@@ -170,7 +173,12 @@ export const StatisticsForm = connect(
           </>
         )}
 
-        <Button link className="padding-0" icon="calculator">
+        <Button
+          link
+          className="padding-0"
+          icon="calculator"
+          onClick={() => showCalculatePenaltiesModalSequence()}
+        >
           Calculate Penalties on IRS Notice
         </Button>
 
