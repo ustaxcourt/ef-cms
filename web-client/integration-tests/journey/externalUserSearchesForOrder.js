@@ -1,9 +1,4 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { wait } from '../helpers';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-export const externalUserSearchesForOrder = (test, options) => {
+export const externalUserSearchesForOrder = test => {
   return it('external user searches for an order', async () => {
     test.setState('advancedSearchForm', {
       orderSearch: {
