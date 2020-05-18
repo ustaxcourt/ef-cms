@@ -166,8 +166,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketNumber: '123-20',
         docketRecord: [],
+        preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
-        trialLocation: 'Fake Trial Location, ST',
       },
       documentEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
@@ -191,8 +191,8 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         },
         docketNumber: '123-20',
         docketRecord: [],
+        preferredTrialCity: '',
         privatePractitioners: [],
-        trialLocation: '',
       },
       documentEntity: {
         filingDate: '2019-03-05T21:40:46.415Z',
