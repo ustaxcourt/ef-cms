@@ -38,9 +38,10 @@ exports.orderPublicSearchInteractor = async ({
 
   const results = await applicationContext
     .getPersistenceGateway()
-    .orderKeywordSearch({
+    .advancedDocumentSearch({
       applicationContext,
-      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      judgeType: 'signedJudgeName',
       ...rawSearch,
     });
 

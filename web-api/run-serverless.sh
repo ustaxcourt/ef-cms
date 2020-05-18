@@ -36,17 +36,20 @@ cp "./dist/${handler}" web-api/src
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 export SLS_DEBUG="*"
 
-CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
+#CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
-echo "current color: ${CURRENT_COLOR}"
+#echo "current color: ${CURRENT_COLOR}"
 
-if [[ $CURRENT_COLOR == 'green' ]] ; then
-  NEW_COLOR='blue'
-else
-  NEW_COLOR='green'
-fi
+#if [[ $CURRENT_COLOR == 'green' ]] ; then
+#  NEW_COLOR='blue'
+#else
+#  NEW_COLOR='green'
+#fi
 
-echo "new color: ${NEW_COLOR}"
+#echo "new color: ${NEW_COLOR}"
+
+# temp fix until serverless-domain-manager issue is resolved
+NEW_COLOR="green"
 
 set -- \
   --accountId "${ACCOUNT_ID}" \

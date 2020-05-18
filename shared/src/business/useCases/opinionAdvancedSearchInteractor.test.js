@@ -12,7 +12,7 @@ describe('opinionAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .opinionKeywordSearch.mockResolvedValue([
+      .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
           caseId: '1',
@@ -89,10 +89,10 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().opinionKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
     });
   });
 });

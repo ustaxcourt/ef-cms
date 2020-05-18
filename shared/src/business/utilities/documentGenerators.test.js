@@ -12,6 +12,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
 } = require('./documentGenerators');
@@ -49,6 +50,39 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
+  });
+  describe('caseInventoryReport', () => {
+    it('generates a Case Inventory Report document', async () => {
+      const pdf = await caseInventoryReport({
+        applicationContext,
+        data: {
+          formattedCases: [
+            {
+              associatedJudge: 'Judge Armen',
+              caseTitle: 'rick james b',
+              docketNumber: '101-20',
+              docketNumberSuffix: 'L',
+              status: 'Closed',
+            },
+          ],
+          reportTitle: 'General Docket - Not at Issue',
+          showJudgeColumn: true,
+          showStatusColumn: true,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Case_Inventory_Report', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 
   describe('changeOfAddress', () => {
@@ -251,29 +285,52 @@ describe('documentGenerators', () => {
     });
   });
 
-  describe('caseInventoryReport', () => {
-    it('generates a Case Inventory Report document', async () => {
-      const pdf = await caseInventoryReport({
+  describe('pendingReport', () => {
+    it('generates a Pending Report document', async () => {
+      const pdf = await pendingReport({
         applicationContext,
         data: {
-          formattedCases: [
+          pendingItems: [
             {
-              associatedJudge: 'Judge Armen',
-              caseTitle: 'rick james b',
-              docketNumber: '101-20',
-              docketNumberSuffix: 'L',
-              status: 'Closed',
+              caseTitle: 'Test Petitioner',
+              dateFiled: '02/02/20',
+              docketNumberWithSuffix: '123-45S',
+              filingsAndProceedings: 'Order',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Test Petitioner',
+              dateFiled: '02/22/20',
+              docketNumberWithSuffix: '123-45S',
+              filingsAndProceedings: 'Motion for a New Trial',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Other Petitioner',
+              dateFiled: '03/03/20',
+              docketNumberWithSuffix: '321-45S',
+              filingsAndProceedings: 'Order',
+              judge: 'Chief Judge',
+              status: 'closed',
+            },
+            {
+              caseTitle: 'Other Petitioner',
+              dateFiled: '03/23/20',
+              docketNumberWithSuffix: '321-45S',
+              filingsAndProceedings: 'Order to Show Cause',
+              judge: 'Chief Judge',
+              status: 'closed',
             },
           ],
-          reportTitle: 'General Docket - Not at Issue',
-          showJudgeColumn: true,
-          showStatusColumn: true,
+          subtitle: 'Chief Judge',
         },
       });
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Case_Inventory_Report', pdf);
+        writePdfFile('Pending_Report', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

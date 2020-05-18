@@ -10,17 +10,38 @@ const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
  */
 exports.opinionPublicSearchInteractor = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  endDateDay,
+  endDateMonth,
+  endDateYear,
+  judge,
   keyword,
+  startDateDay,
+  startDateMonth,
+  startDateYear,
 }) => {
   const opinionSearch = new DocumentSearch({
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDateDay,
+    endDateMonth,
+    endDateYear,
+    judge,
     keyword,
+    startDateDay,
+    startDateMonth,
+    startDateYear,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  return await applicationContext.getPersistenceGateway().opinionKeywordSearch({
-    applicationContext,
-    opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
-    ...rawSearch,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      judgeType: 'judge',
+      ...rawSearch,
+    });
 };

@@ -1,0 +1,29 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ develop, experimental, master ]
+  pull_request:
+    branches: [ develop, experimental, master ]
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: NPM Install
+      run: npm ci --no-optional && npm rebuild node-sass
+    - name: Lint
+      run: npm run lint
+    - name: Shellcheck
+      run: ./run-shellcheck.sh
+

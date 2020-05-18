@@ -18,7 +18,16 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.opinionAdvancedSearchInteractor = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  endDateDay,
+  endDateMonth,
+  endDateYear,
+  judge,
   keyword,
+  startDateDay,
+  startDateMonth,
+  startDateYear,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -27,16 +36,26 @@ exports.opinionAdvancedSearchInteractor = async ({
   }
 
   const opinionSearch = new DocumentSearch({
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDateDay,
+    endDateMonth,
+    endDateYear,
+    judge,
     keyword,
+    startDateDay,
+    startDateMonth,
+    startDateYear,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
   const results = await applicationContext
     .getPersistenceGateway()
-    .opinionKeywordSearch({
+    .advancedDocumentSearch({
       applicationContext,
-      opinionEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      judgeType: 'judge',
       ...rawSearch,
     });
 

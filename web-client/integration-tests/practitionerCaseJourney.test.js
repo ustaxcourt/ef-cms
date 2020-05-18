@@ -1,6 +1,5 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';

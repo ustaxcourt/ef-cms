@@ -26,13 +26,10 @@ export const DocumentService = ({
       <br />
 
       <div id="document-information">
-        <div>
-          Document Type: {documentDetail.eventCode}{' '}
-          {documentDetail.documentTitle}
-        </div>
+        <div>Document Type: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
         <div>Filed by: {documentDetail.filedBy}</div>
-        <div>Served: {documentDetail.servedAtFormatted} ET</div>
+        <div>Served: {documentDetail.servedAtFormatted}</div>
       </div>
       <br />
 
@@ -42,15 +39,13 @@ export const DocumentService = ({
       </p>
       <p>Certain documents may require your action.</p>
 
-      {name === 'IRS' && (
-        <div id="irs-information">
-          <div>For IRS only:</div>
-          <div>docketNumber: {caseDetail.docketNumber}</div>
-          <div>docketEntryNo: {docketEntryNumber}</div>
-          <div>documentId: {documentDetail.documentId}</div>
-          <div>eventCode: {documentDetail.eventCode}</div>
-        </div>
-      )}
+      <div id="computer-readable">
+        <div>---- COMPUTER-READABLE DATA ----</div>
+        <div>docketNumber: {caseDetail.docketNumber}</div>
+        <div>docketEntryNo: {docketEntryNumber}</div>
+        <div>documentId: {documentDetail.documentId}</div>
+        <div>eventCode: {documentDetail.eventCode}</div>
+      </div>
 
       <p>
         <em>
