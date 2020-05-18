@@ -101,7 +101,7 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (endDate) {
+  if (endDate && startDate) {
     queryParams.push({
       range: {
         'filingDate.S': {
