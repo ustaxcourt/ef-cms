@@ -26,13 +26,10 @@ export const DocumentService = ({
       <br />
 
       <div id="document-information">
-        <div>
-          Document Type: {documentDetail.eventCode}{' '}
-          {documentDetail.documentTitle}
-        </div>
+        <div>Document Type: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
         <div>Filed by: {documentDetail.filedBy}</div>
-        <div>Served: {documentDetail.servedAtFormatted} ET</div>
+        <div>Served: {documentDetail.servedAtFormatted}</div>
       </div>
       <br />
 
