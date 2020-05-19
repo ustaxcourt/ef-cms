@@ -29,7 +29,29 @@ export const statisticsFormHelper = (get, applicationContext) => {
     }
   });
 
+  const getErrorText = (validationErrors, index) => {
+    if (!Array.isArray(validationErrors.statistics))
+      return validationErrors.statistics;
+
+    console.log('validationErrors.statistics', validationErrors.statistics);
+
+    const error = validationErrors.statistics.find(s => s.index === index);
+
+    return (
+      error &&
+      [
+        error.lastDateOfPeriod,
+        error.year,
+        error.deficiencyAmount,
+        error.totalPenalties,
+      ]
+        .filter(s => s)
+        .join(', ')
+    );
+  };
+
   return {
+    getErrorText,
     showAddMoreStatisticsButton,
     showStatisticsForm,
     statisticOptions,
