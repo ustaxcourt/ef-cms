@@ -17,6 +17,7 @@ exports.advancedDocumentSearch = async ({
     'contactPrimary',
     'contactSecondary',
     'docketNumber',
+    'docketNumberWithSuffix',
     'docketNumberSuffix',
     'documentContents',
     'numberOfPages',
@@ -81,11 +82,13 @@ exports.advancedDocumentSearch = async ({
 
   if (docketNumber) {
     queryParams.push({
-      match: {
-        'docketNumber.S': {
-          operator: 'and',
-          query: docketNumber,
-        },
+      simple_query_string: {
+        fields: [
+          'docketNumber.S',
+          'docketNumberSuffix.S',
+          'docketNumberWithSuffix.S',
+        ],
+        query: docketNumber,
       },
     });
   }
