@@ -1,7 +1,7 @@
-const { CognitoIdentity } = require('aws-sdk');
+const { CognitoIdentityServiceProvider } = require('aws-sdk');
 
 exports.getCognito = ({ environment }) => {
-  const cognito = new CognitoIdentity({
+  const cognito = new CognitoIdentityServiceProvider({
     accessKeyId: environment.accessKeyId,
     apiVersion: 'latest',
     credentials: environment.credentials,
