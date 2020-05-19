@@ -38,9 +38,6 @@ describe('createOrderAction', () => {
     expect(applicationContextForClient.getCaseTitle).toBeCalled();
     expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
-    expect(
-      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
-    ).toBeCalled();
   });
 
   it('creates an order for a notice', async () => {
@@ -69,8 +66,5 @@ describe('createOrderAction', () => {
     ).toBeCalled();
     expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
     expect(result.output.htmlString.indexOf('Bobby Flay')).toBeTruthy();
-    expect(
-      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
-    ).toBeCalled();
   });
 });
