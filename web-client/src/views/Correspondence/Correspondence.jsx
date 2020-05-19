@@ -1,5 +1,5 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CorrespondenceHeader } from './CorrespondenceHeader';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -43,32 +43,29 @@ export const Correspondence = connect(
                   <td className="center-column hide-on-mobile">
                     {entry.eventCode}
                   </td>
-                  <td>{entry.index}</td>
-
-                  <td
-                    aria-hidden="true"
-                    className="filing-type-icon hide-on-mobile"
-                  >
-                    {entry.isPaper && (
-                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                    )}
-
-                    {entry.showInProgress && (
-                      <FontAwesomeIcon icon={['fas', 'thumbtack']} />
-                    )}
-
-                    {entry.showQcUntouched && (
-                      <FontAwesomeIcon icon={['fa', 'star']} />
-                    )}
-
-                    {entry.showLoadingIcon && (
-                      <FontAwesomeIcon
-                        className="fa-spin spinner"
-                        icon="spinner"
-                      />
-                    )}
-                  </td>
                   <td className="hide-on-mobile">{entry.filedBy}</td>
+
+                  <td>
+                    {/* {entry.showEditDocketRecordEntry && ( */}
+                    <Button
+                      link
+                      href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                    {/* )} */}
+                  </td>
+                  <td>
+                    <Button
+                      link
+                      className="red-warning text-left padding-0 margin-left-1"
+                      icon="trash"
+                    >
+                      Delete
+                    </Button>
+                    {/* )} */}
+                  </td>
                 </tr>
               );
             })}
