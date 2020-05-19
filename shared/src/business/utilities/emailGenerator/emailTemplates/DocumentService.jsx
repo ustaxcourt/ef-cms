@@ -28,7 +28,7 @@ export const DocumentService = ({
       <div id="document-information">
         <div>Document Type: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
-        <div>Filed by: {documentDetail.filedBy}</div>
+        <div>Filed by: {documentDetail.filedBy || 'N/A'}</div>
         <div>Served: {documentDetail.servedAtFormatted}</div>
       </div>
       <br />
