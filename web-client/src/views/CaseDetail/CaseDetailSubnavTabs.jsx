@@ -36,6 +36,13 @@ export const CaseDetailSubnavTabs = connect(
                 title="In Progress"
               />
             )}
+            {caseDetailSubnavHelper.showCorrespondenceTab && (
+              <Tab
+                id="tab-correspondence"
+                tabName="correspondence"
+                title="Correspondence"
+              />
+            )}
             {caseDetailSubnavHelper.showCaseInformationTab && (
               <Tab
                 id="tab-case-information"
