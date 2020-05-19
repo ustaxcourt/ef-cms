@@ -1,13 +1,13 @@
-import { advancedOrderSearchHelper as advancedOrderSearchHelperComputed } from './advancedOrderSearchHelper';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
 import { applicationContext } from '../../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-describe('advancedOrderSearchHelper', () => {
+describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
 
-  const advancedOrderSearchHelper = withAppContextDecorator(
-    advancedOrderSearchHelperComputed,
+  const advancedDocumentSearchHelper = withAppContextDecorator(
+    advancedDocumentSearchHelperComputed,
     {
       ...applicationContext,
       getConstants: () => {
@@ -20,7 +20,7 @@ describe('advancedOrderSearchHelper', () => {
   );
 
   it('returns an empty object when searchResults is undefined', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
       },
@@ -30,7 +30,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [],
@@ -45,7 +45,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns isPublic false if state.isPublic is not defined', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [],
@@ -56,7 +56,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns isPublic true if state.isPublic is true', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         isPublic: true,
@@ -68,7 +68,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
@@ -77,6 +77,7 @@ describe('advancedOrderSearchHelper', () => {
             docketNumberSuffix: 'Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
+            documentType: 'O - Order',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -93,7 +94,7 @@ describe('advancedOrderSearchHelper', () => {
   });
 
   it('formats search results for an order search', () => {
-    const result = runCompute(advancedOrderSearchHelper, {
+    const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
         searchResults: [
@@ -103,6 +104,7 @@ describe('advancedOrderSearchHelper', () => {
             docketNumberSuffix: 'Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
+            documentType: 'O - Order',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -112,6 +114,7 @@ describe('advancedOrderSearchHelper', () => {
             docketNumberSuffix: 'P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order for Stuff',
+            documentType: 'OAPF - Order for Amended Petition and Filing Fee',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Cohen',
           },
@@ -128,6 +131,8 @@ describe('advancedOrderSearchHelper', () => {
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Order',
         filingDate: '2019-03-01T05:00:00.000Z',
+        formattedDocumentType: 'Order',
+        formattedEventCode: 'O',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Buch',
       },
@@ -138,7 +143,71 @@ describe('advancedOrderSearchHelper', () => {
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Order for Stuff',
+        documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
+        formattedDocumentType: 'Order for Amended Petition and Filing Fee',
+        formattedEventCode: 'OAPF',
+        formattedFiledDate: '03/01/19',
+        judge: 'Judge Cohen',
+      },
+    ]);
+  });
+
+  it('formats search results for an opinion search', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchForm: { currentPage: 1 },
+        searchResults: [
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'My Opinion',
+            documentType: 'TCOP - T.C. Opinion',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Buch',
+          },
+          {
+            caseCaption: 'Test Petitioner, Petitioner',
+            docketNumber: '102-19',
+            docketNumberSuffix: 'P',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Opinion for Stuff',
+            documentType: 'TCOP - T.C. Opinion',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            judge: 'Judge Cohen',
+          },
+        ],
+      },
+    });
+
+    expect(result.formattedSearchResults).toMatchObject([
+      {
+        caseTitle: 'Test Petitioner',
+        docketNumber: '101-19',
+        docketNumberSuffix: 'Z',
+        docketNumberWithSuffix: '101-19Z',
+        documentContents: 'Test Petitioner, Petitioner',
+        documentTitle: 'My Opinion',
+        documentType: 'TCOP - T.C. Opinion',
+        filingDate: '2019-03-01T05:00:00.000Z',
+        formattedDocumentType: 'T.C. Opinion',
+        formattedEventCode: 'TCOP',
+        formattedFiledDate: '03/01/19',
+        judge: 'Judge Buch',
+      },
+      {
+        caseTitle: 'Test Petitioner',
+        docketNumber: '102-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '102-19P',
+        documentContents: 'Test Petitioner, Petitioner',
+        documentTitle: 'Opinion for Stuff',
+        documentType: 'TCOP - T.C. Opinion',
+        filingDate: '2019-03-01T05:00:00.000Z',
+        formattedDocumentType: 'T.C. Opinion',
+        formattedEventCode: 'TCOP',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
