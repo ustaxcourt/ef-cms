@@ -150,6 +150,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "docketNumber": "102-20",
+    "docketNumberWithSuffix": "102-20S",
     "status": "New"
   },
   {

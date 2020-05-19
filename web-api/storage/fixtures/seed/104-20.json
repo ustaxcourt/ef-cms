@@ -191,6 +191,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
     "docketNumber": "104-20",
+    "docketNumberWithSuffix": "104-20R",
     "status": "Closed"
   },
   {

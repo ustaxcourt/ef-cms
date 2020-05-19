@@ -275,6 +275,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "docketNumber": "103-20",
+    "docketNumberWithSuffix": "103-20L",
     "status": "Calendared"
   },
   {

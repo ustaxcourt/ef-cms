@@ -623,6 +623,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "docketNumber": "105-20",
+    "docketNumberWithSuffix": "105-20L",
     "petitionPaymentWaivedDate": null,
     "status": "General Docket - Not at Issue"
   },

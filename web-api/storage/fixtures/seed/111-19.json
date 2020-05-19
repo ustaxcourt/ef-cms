@@ -43,6 +43,7 @@
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "pk": "case|fd8d1139-5e54-4117-9b94-7a69359423c2",
     "docketNumber": "111-19",
+    "docketNumberWithSuffix": "111-19L",
     "status": "Submitted"
   },
   {
