@@ -241,7 +241,14 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          statistics: [{ yearOrPeriod: 'Year' }],
+          statistics: [
+            {
+              deficiencyAmount: 1,
+              totalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
         },
         {
           applicationContext,
