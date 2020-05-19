@@ -14,7 +14,6 @@ export const Correspondence = connect(
     showModal: state.modal.showModal,
   },
   function Correspondence({
-    formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence,
     showModal,
   }) {
@@ -35,49 +34,38 @@ export const Correspondence = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.formattedDocketEntries.map(entry => {
-              return (
-                <tr
-                  className={classNames(
-                    entry.showInProgress && 'in-progress',
-                    entry.showQcUntouched && 'qc-untouched',
-                  )}
-                  key={entry.index}
+            <tr>
+              <td>
+                <span className="no-wrap">01/01/2001</span>
+              </td>
+              <td>
+                <Button link className="padding-0">
+                  This will be the linked correspondence name
+                </Button>
+              </td>
+              <td>Name of the user who filed this</td>
+              <td>
+                <Button
+                  link
+                  className="text-left padding-0 margin-left-1"
+                  icon="edit"
                 >
-                  <td>
-                    <span className="no-wrap">{entry.createdAtFormatted}</span>
-                  </td>
-                  <td className="center-column hide-on-mobile">
-                    {entry.eventCode}
-                  </td>
-                  <td className="hide-on-mobile">{entry.filedBy}</td>
-
-                  <td>
-                    <Button
-                      link
-                      className="text-left padding-0 margin-left-1"
-                      // href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
-                      icon="edit"
-                    >
-                      Edit
-                    </Button>
-                  </td>
-                  <td>
-                    <Button
-                      link
-                      className="red-warning padding-0 text-left margin-left-1"
-                      icon="trash"
-                      onClick={() => {
-                        openConfirmDeleteCorrespondenceModalSequence();
-                      }}
-                    >
-                      Delete
-                    </Button>
-                    {/* )} */}
-                  </td>
-                </tr>
-              );
-            })}
+                  Edit
+                </Button>
+              </td>
+              <td>
+                <Button
+                  link
+                  className="red-warning padding-0 text-left margin-left-1"
+                  icon="trash"
+                  onClick={() => {
+                    openConfirmDeleteCorrespondenceModalSequence();
+                  }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
           </tbody>
         </table>
 
