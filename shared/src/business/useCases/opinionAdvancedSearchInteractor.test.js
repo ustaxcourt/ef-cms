@@ -20,8 +20,9 @@ describe('opinionAdvancedSearchInteractor', () => {
           docketNumberSuffix: 'AAA',
           documentContents:
             'Everyone knows that Reeses Outrageous bars are the best candy',
-          documentTitle: 'Opinion for More Candy',
-          eventCode: 'ODD',
+          documentTitle: 'T.C. Opinion for More Candy',
+          documentType: 'TCOP - T.C. Opinion',
+          eventCode: 'TCOP',
           signedJudgeName: 'Guy Fieri',
         },
         {
@@ -30,8 +31,9 @@ describe('opinionAdvancedSearchInteractor', () => {
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'KitKats are inferior candies',
-          documentTitle: 'Opinion for KitKats',
-          eventCode: 'ODD',
+          documentTitle: 'Summary Opinion for KitKats',
+          documentType: 'Summary Opinion',
+          eventCode: 'SOP',
           signedJudgeName: 'Guy Fieri',
         },
       ]);
@@ -63,8 +65,9 @@ describe('opinionAdvancedSearchInteractor', () => {
         docketNumberSuffix: 'AAA',
         documentContents:
           'Everyone knows that Reeses Outrageous bars are the best candy',
-        documentTitle: 'Opinion for More Candy',
-        eventCode: 'ODD',
+        documentTitle: 'T.C. Opinion for More Candy',
+        documentType: 'TCOP - T.C. Opinion',
+        eventCode: 'TCOP',
         signedJudgeName: 'Guy Fieri',
       },
       {
@@ -73,8 +76,9 @@ describe('opinionAdvancedSearchInteractor', () => {
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents: 'KitKats are inferior candies',
-        documentTitle: 'Opinion for KitKats',
-        eventCode: 'ODD',
+        documentTitle: 'Summary Opinion for KitKats',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
         signedJudgeName: 'Guy Fieri',
       },
     ]);
