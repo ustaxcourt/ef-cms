@@ -17,6 +17,7 @@ describe('generateChangeOfAddressTemplate', () => {
     },
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '123-45S',
   };
 
   it('Returns HTML with the given case and contact data', async () => {
@@ -25,8 +26,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -53,8 +53,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Test Document Title',
         name: 'Test Name',
         newData: {
@@ -73,8 +72,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -99,8 +97,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Telephone Number',
         name: 'Test Name',
         newData: {
@@ -127,8 +124,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address and Telephone Number',
         name: 'Test Name',
         newData: {
@@ -156,8 +152,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -178,8 +173,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -203,8 +197,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -229,8 +222,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -252,8 +244,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -276,8 +267,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {
@@ -302,8 +292,7 @@ describe('generateChangeOfAddressTemplate', () => {
       content: {
         caseCaptionExtension: 'Petitioner(s)',
         caseTitle: caseDetail.caseTitle,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         documentTitle: 'Notice of Change of Address',
         name: 'Test Name',
         newData: {

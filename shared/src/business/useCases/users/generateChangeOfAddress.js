@@ -98,9 +98,7 @@ exports.generateChangeOfAddress = async ({
           content: {
             caseCaptionExtension,
             caseTitle,
-            docketNumberWithSuffix: `${caseDetail.docketNumber}${
-              caseDetail.docketNumberSuffix || ''
-            }`,
+            docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
             documentTitle: documentType.title,
             name: `${name} (${user.barNumber})`,
             newData,
