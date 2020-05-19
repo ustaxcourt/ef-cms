@@ -99,11 +99,11 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
     const formattedDeficiencyAmount = applicationContext
       .getUtilities()
-      .formatMoney(statistic.deficiencyAmount);
+      .formatDollars(statistic.deficiencyAmount);
 
     const formattedTotalPenalties = applicationContext
       .getUtilities()
-      .formatMoney(statistic.totalPenalties);
+      .formatDollars(statistic.totalPenalties);
 
     return {
       ...statistic,
