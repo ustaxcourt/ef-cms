@@ -165,6 +165,7 @@ import { openChangeScannerSourceModalSequence } from './sequences/openChangeScan
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
+import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
@@ -560,6 +561,7 @@ export const presenter = {
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
+    openConfirmDeleteCorrespondenceModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,

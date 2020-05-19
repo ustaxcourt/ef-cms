@@ -1,16 +1,23 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CorrespondenceHeader } from './CorrespondenceHeader';
+import { DeleteCorrespondenceModal } from './DeleteCorrespondenceModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const Correspondence = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    openConfirmDeleteCorrespondenceModalSequence:
+      sequences.openConfirmDeleteCorrespondenceModalSequence,
     showModal: state.modal.showModal,
   },
-  function Correspondence({ formattedCaseDetail }) {
+  function Correspondence({
+    formattedCaseDetail,
+    openConfirmDeleteCorrespondenceModalSequence,
+    showModal,
+  }) {
     return (
       <>
         <CorrespondenceHeader />
@@ -46,21 +53,23 @@ export const Correspondence = connect(
                   <td className="hide-on-mobile">{entry.filedBy}</td>
 
                   <td>
-                    {/* {entry.showEditDocketRecordEntry && ( */}
                     <Button
                       link
-                      href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                      className="text-left padding-0 margin-left-1"
+                      // href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
                       icon="edit"
                     >
                       Edit
                     </Button>
-                    {/* )} */}
                   </td>
                   <td>
                     <Button
                       link
-                      className="red-warning text-left padding-0 margin-left-1"
+                      className="red-warning padding-0 text-left margin-left-1"
                       icon="trash"
+                      onClick={() => {
+                        openConfirmDeleteCorrespondenceModalSequence();
+                      }}
                     >
                       Delete
                     </Button>
@@ -71,6 +80,10 @@ export const Correspondence = connect(
             })}
           </tbody>
         </table>
+
+        {showModal === 'DeleteCorrespondenceModal' && (
+          <DeleteCorrespondenceModal />
+        )}
       </>
     );
   },
