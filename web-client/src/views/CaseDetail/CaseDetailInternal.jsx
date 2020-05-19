@@ -4,6 +4,7 @@ import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
+import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
@@ -89,6 +90,15 @@ export const CaseDetailInternal = connect(
                 <CaseDetailPendingReportList />
               </Tab>
             </Tabs>
+          )}
+          {primaryTab === 'correspondence' && (
+            <>
+              <Correspondence />
+            </>
+          )}
+
+          {primaryTab === 'caseInformation' && showEditPetition && (
+            <EditPetitionDetails />
           )}
           {primaryTab === 'caseInformation' && showEditPetition && (
             <EditPetitionDetails />
