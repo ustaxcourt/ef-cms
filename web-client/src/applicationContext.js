@@ -13,6 +13,7 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
+import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -491,6 +492,7 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatDollars,
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,

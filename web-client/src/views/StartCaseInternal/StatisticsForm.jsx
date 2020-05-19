@@ -32,7 +32,7 @@ export const StatisticsForm = connect(
         }
       >
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
-          Decifiency
+          Deficiency
         </label>
         <input
           className="usa-input usa-input-inline"
@@ -177,7 +177,11 @@ export const StatisticsForm = connect(
           link
           className="padding-0"
           icon="calculator"
-          onClick={() => showCalculatePenaltiesModalSequence()}
+          onClick={() =>
+            showCalculatePenaltiesModalSequence({
+              statisticIndex: index,
+            })
+          }
         >
           Calculate Penalties on IRS Notice
         </Button>
