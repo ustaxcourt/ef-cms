@@ -663,7 +663,6 @@ Case.validationRules = {
     ),
   statistics: joi
     .array()
-    .min(1)
     .items(joi.object().meta({ entityName: 'Statistic' }))
     .required()
     .description('List of Statistic Entities for the case.'),
