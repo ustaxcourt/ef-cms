@@ -30,6 +30,7 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
       contains: 'must be less than or equal to',
       message: 'Enter a valid last date of period',
     },
+    'last date of period is required',
   ],
 };
 
@@ -38,28 +39,40 @@ joiValidationDecorator(
   joi.object().keys({
     deficiencyAmount: joi
       .number()
-      .optional()
+      .required()
       .allow(null)
       .description('The amount of the deficiency.'),
     entityName: joi.string().valid('Statistic').required(),
-    lastDateOfPeriod: joiStrictTimestamp
-      .max('now')
-      .optional()
-      .allow(null)
-      .description('Last date of the statistics period.'),
+    lastDateOfPeriod: joi.when('yearOrPeriod', {
+      is: 'Period',
+      otherwise: joi
+        .optional()
+        .allow(null)
+        .description('Last date of the statistics period.'),
+      then: joiStrictTimestamp
+        .max('now')
+        .required()
+        .allow(null)
+        .description('Last date of the statistics period.'),
+    }),
     totalPenalties: joi
       .number()
-      .optional()
-      .allow(null)
+      .required()
       .description('The total amount of penalties for the period or year.'),
-    year: joi
-      .number()
-      .integer()
-      .min(1900)
-      .max(new Date().getFullYear())
-      .optional()
-      .allow(null)
-      .description('The year of the statistics period.'),
+    year: joi.when('yearOrPeriod', {
+      is: 'Year',
+      otherwise: joi
+        .optional()
+        .allow(null)
+        .description('The year of the statistics period.'),
+      then: joi
+        .number()
+        .integer()
+        .required()
+        .min(1900)
+        .max(new Date().getFullYear())
+        .description('The year of the statistics period.'),
+    }),
     yearOrPeriod: joi
       .string()
       .required()
