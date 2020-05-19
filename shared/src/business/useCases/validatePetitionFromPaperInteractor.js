@@ -12,10 +12,8 @@ exports.validatePetitionFromPaperInteractor = ({
   applicationContext,
   petition,
 }) => {
-  console.log('petition', petition);
   const errors = new CaseInternal(petition, {
     applicationContext,
   }).getFormattedValidationErrors();
-  console.log('errors', errors);
   return errors || null;
 };
