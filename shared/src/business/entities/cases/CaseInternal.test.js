@@ -46,6 +46,7 @@ describe('CaseInternal entity', () => {
         receivedAt: new Date().toISOString(),
         requestForPlaceOfTrialFile: { anObject: true },
         requestForPlaceOfTrialFileSize: 1,
+        statistics: [{ yearOrPeriod: 'Year' }],
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
