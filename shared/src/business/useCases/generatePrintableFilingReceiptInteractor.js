@@ -70,9 +70,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     data: {
       caseCaptionExtension,
       caseTitle,
-      docketNumberWithSuffix: `${caseEntity.docketNumber}${
-        caseEntity.docketNumberSuffix || ''
-      }`,
+      docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
       filedAt: applicationContext
         .getUtilities()
         .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),

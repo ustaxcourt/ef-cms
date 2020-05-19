@@ -6,9 +6,7 @@ export const publicCaseDetailHeaderHelper = get => {
   return {
     caseCaption: caseDetail.caseCaption || '',
     docketNumber: caseDetail.docketNumber,
-    docketNumberWithSuffix: `${caseDetail.docketNumber}${
-      caseDetail.docketNumberSuffix || ''
-    }`,
+    docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
     isCaseSealed: !!caseDetail.isSealed,
   };
 };

@@ -22,6 +22,7 @@ const mockCaseDetailBase = {
   createdAt: new Date(),
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
+  docketNumberWithSuffix: '123-45S',
   receivedAt: new Date(),
 };
 
@@ -258,14 +259,12 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       caseCaption: 'Johnny Joe Jacobson, Petitioner',
-      docketNumberSuffix: undefined,
       hasVerifiedIrsNotice: true,
       trialTime: 11,
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('receivedAtFormatted');
-    expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseTitle).toEqual('Johnny Joe Jacobson');

@@ -51,7 +51,7 @@ describe('createCase integration test', () => {
     expect(createdCase).toMatchObject({
       caseCaption: 'Rick Petitioner, Petitioner',
       docketNumber: '101-19',
-      docketNumberSuffix: 'S',
+      docketNumberWithSuffix: '101-19S',
       docketRecord: [
         {
           description: 'Petition',
@@ -73,7 +73,7 @@ describe('createCase integration test', () => {
               assigneeName: null,
               caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
-              docketNumberSuffix: 'S',
+              docketNumberWithSuffix: '101-19S',
               document: {
                 documentType: 'Petition',
                 filedBy: 'Petr. Rick Petitioner',
@@ -131,7 +131,7 @@ describe('createCase integration test', () => {
         assigneeName: null,
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-19S',
         document: {
           documentType: 'Petition',
           eventCode: 'P',

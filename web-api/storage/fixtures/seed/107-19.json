@@ -162,6 +162,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
     "status": "General Docket - At Issue (Ready for Trial)",
     "associatedJudge": "Chief Judge"
   },
@@ -200,7 +201,7 @@
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "107-19L",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
