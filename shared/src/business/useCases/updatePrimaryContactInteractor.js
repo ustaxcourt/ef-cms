@@ -135,6 +135,7 @@ exports.updatePrimaryContactInteractor = async ({
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
         docketNumber: caseEntity.docketNumber,
         docketNumberSuffix: caseEntity.docketNumberSuffix,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         document: {
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,
