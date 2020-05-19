@@ -4,7 +4,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PenaltyInput = ({ index, value }) => {
+const PenaltyInput = ({ index, onChange, value }) => {
   const oneBaseIndex = index + 1;
   return (
     <div className="margin-top-3">
@@ -13,9 +13,11 @@ const PenaltyInput = ({ index, value }) => {
       </label>
       <input
         className="usa-input"
-        defaultValue={value}
         id={`penalty_${oneBaseIndex}`}
-        name={`penalty_${oneBaseIndex}`}
+        name={`penalties.${index}`}
+        type="text"
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
@@ -25,14 +27,16 @@ export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.dismissModalSequence,
+    confirmSequence: sequences.calculatePenaltiesSequence,
     penalties: state.modal.penalties,
+    updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
     penalties,
+    updateModalValueSequence,
   }) {
     return (
       <ModalDialog
@@ -44,7 +48,17 @@ export const CalculatePenaltiesModal = connect(
       >
         {penalties &&
           penalties.map((penalty, idx) => (
-            <PenaltyInput index={idx} key={idx} value={penalty} />
+            <PenaltyInput
+              index={idx}
+              key={idx}
+              value={penalty}
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
           ))}
         <Button
           link
