@@ -72,12 +72,12 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
 
 
 module "ui-public-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.2.1"
 
   domain_name            = "ui-public-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
-  is_hosted_zone_private = "false"
-  validation_method      = "DNS"
+  # is_hosted_zone_private = "false"
+  # validation_method      = "DNS"
   certificate_name       = "ui-public-${var.environment}.${var.dns_domain}"
   environment            = "${var.environment}"
   description            = "Certificate for ui-public-${var.environment}.${var.dns_domain}"
@@ -115,7 +115,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     custom_header {
       name = "x-allowed-domain"
       value = "${var.dns_domain}"
-    } 
+    }
   }
 
 
@@ -133,7 +133,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     custom_header {
       name = "x-allowed-domain"
       value = "${var.dns_domain}"
-    } 
+    }
   }
 
   custom_error_response = [
