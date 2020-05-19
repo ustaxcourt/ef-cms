@@ -237,6 +237,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
+    it('Creates a valid case with statistics', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [{ yearOrPeriod: 'Year' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
       const myCase = new Case(
         {

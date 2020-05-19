@@ -1,6 +1,6 @@
 [
   {
-    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "102-20S",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
@@ -61,7 +61,7 @@
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "102-20S",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
@@ -150,6 +150,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "docketNumber": "102-20",
+    "docketNumberWithSuffix": "102-20S",
     "status": "New"
   },
   {

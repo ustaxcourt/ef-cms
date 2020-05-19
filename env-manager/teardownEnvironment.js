@@ -1,6 +1,7 @@
 const { deleteCognitoPools } = require('./deleteCognitoPools');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { deleteDynamoDBTables } = require('./deleteDynamoDBTables');
+const { deleteS3Buckets } = require('./deleteS3Buckets');
 const { deleteStacks } = require('./deleteStacks');
 
 // TODO: get all values from ENV variables and validate that they exist
@@ -31,6 +32,9 @@ const teardownEnvironment = async () => {
   await deleteDynamoDBTables({ environment: environmentWest });
 
   await deleteCognitoPools({ environment: environmentEast });
+
+  await deleteS3Buckets({ environment: environmentEast });
+  await deleteS3Buckets({ environment: environmentWest });
 };
 
 teardownEnvironment();

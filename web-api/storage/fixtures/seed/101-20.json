@@ -46,6 +46,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "docketNumber": "101-20",
+    "docketNumberWithSuffix": "101-20S",
     "status": "Calendared"
   },
   {

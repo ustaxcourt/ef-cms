@@ -14,6 +14,7 @@ describe('PetitionService', () => {
     address2: 'Unit B',
     city: 'Somecity',
     name: 'Test Petitioner',
+    phone: '1234567890',
     postalCode: '12345',
     serviceIndicator: 'Electronic',
     state: 'ST',
@@ -127,6 +128,7 @@ describe('PetitionService', () => {
     expect(petitionerInfo.text()).toContain(contactPrimary.city);
     expect(petitionerInfo.text()).toContain(contactPrimary.state);
     expect(petitionerInfo.text()).toContain(contactPrimary.postalCode);
+    expect(petitionerInfo.text()).toContain(contactPrimary.phone);
     expect(petitionerInfo.text()).toContain(contactPrimary.serviceIndicator);
 
     expect(petitionerInfo.find('#contact-secondary').length).toEqual(0);
