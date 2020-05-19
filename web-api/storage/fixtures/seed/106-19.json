@@ -1,6 +1,6 @@
 [
   {
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "106-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
@@ -132,7 +132,7 @@
   },
   {
     "completedAt": "2019-07-12T17:11:27.244Z",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "106-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "completed",
@@ -412,7 +412,7 @@
     "updatedAt": "2019-07-12T17:11:47.010Z"
   },
   {
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "106-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
@@ -449,7 +449,7 @@
     "updatedAt": "2019-07-12T17:11:47.010Z"
   },
   {
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "106-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
@@ -527,6 +527,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "docketNumber": "106-19",
+    "docketNumberWithSuffix": "106-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
   },

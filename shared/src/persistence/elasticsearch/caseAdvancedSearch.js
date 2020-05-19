@@ -29,6 +29,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
           'contactSecondary',
           'docketNumber',
           'docketNumberSuffix',
+          'docketNumberWithSuffix',
           'irsPractitioners',
           'privatePractitioners',
           'receivedAt',
