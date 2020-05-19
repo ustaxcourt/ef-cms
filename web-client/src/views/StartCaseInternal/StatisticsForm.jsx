@@ -3,6 +3,7 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import NumberFormat from 'react-number-format';
 import React from 'react';
 
 export const StatisticsForm = connect(
@@ -34,16 +35,20 @@ export const StatisticsForm = connect(
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
           Deficiency
         </label>
-        <input
+        <NumberFormat
           className="usa-input usa-input-inline"
+          decimalScale="2"
+          fixedDecimalScale={true}
           id={`deficiency-amount-${index}`}
-          maxLength="25"
+          isNumericString={true}
           name={`statistics.${index}.deficiencyAmount`}
+          prefix="$"
+          thousandSeparator={true}
           value={form.statistics[index].deficiencyAmount || ''}
-          onChange={e => {
+          onValueChange={values => {
             updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
+              key: `statistics.${index}.deficiencyAmount`,
+              value: values.value,
             });
           }}
         />
@@ -61,16 +66,20 @@ export const StatisticsForm = connect(
         <label className="usa-label" htmlFor={`total-penalties-${index}`}>
           Total penalties
         </label>
-        <input
+        <NumberFormat
           className="usa-input usa-input-inline"
+          decimalScale="2"
+          fixedDecimalScale={true}
           id={`total-penalties-${index}`}
-          maxLength="25"
+          isNumericString={true}
           name={`statistics.${index}.totalPenalties`}
+          prefix="$"
+          thousandSeparator={true}
           value={form.statistics[index].totalPenalties || ''}
-          onChange={e => {
+          onValueChange={values => {
             updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
+              key: `statistics.${index}.totalPenalties`,
+              value: values.value,
             });
           }}
         />
