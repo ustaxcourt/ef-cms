@@ -9,6 +9,7 @@ exports.advancedDocumentSearch = async ({
   judge,
   judgeType,
   keyword,
+  opinionType,
   startDate,
 }) => {
   const sourceFields = [
@@ -17,6 +18,7 @@ exports.advancedDocumentSearch = async ({
     'contactPrimary',
     'contactSecondary',
     'docketNumber',
+    'docketNumberWithSuffix',
     'docketNumberSuffix',
     'documentContents',
     'numberOfPages',
@@ -79,13 +81,26 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (docketNumber) {
+  if (opinionType) {
     queryParams.push({
       match: {
-        'docketNumber.S': {
+        'documentType.S': {
           operator: 'and',
-          query: docketNumber,
+          query: opinionType,
         },
+      },
+    });
+  }
+
+  if (docketNumber) {
+    queryParams.push({
+      simple_query_string: {
+        fields: [
+          'docketNumber.S',
+          'docketNumberSuffix.S',
+          'docketNumberWithSuffix.S',
+        ],
+        query: docketNumber,
       },
     });
   }

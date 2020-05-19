@@ -141,6 +141,26 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
+  it('does a search by opinion type when an opinion document type is provided', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      opinionType: 'Summary Opinion',
+    });
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...orderQueryParams,
+      {
+        match: {
+          'documentType.S': {
+            operator: 'and',
+            query: 'Summary Opinion',
+          },
+        },
+      },
+    ]);
+  });
+
   it('does a search for a judge when the judgeType is  judge', async () => {
     await advancedDocumentSearch({
       applicationContext,
@@ -173,11 +193,13 @@ describe('advancedDocumentSearch', () => {
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
       {
-        match: {
-          'docketNumber.S': {
-            operator: 'and',
-            query: '101-20',
-          },
+        simple_query_string: {
+          fields: [
+            'docketNumber.S',
+            'docketNumberSuffix.S',
+            'docketNumberWithSuffix.S',
+          ],
+          query: '101-20',
         },
       },
     ]);

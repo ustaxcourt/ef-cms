@@ -84,9 +84,7 @@ exports.updatePrimaryContactInteractor = async ({
           caseCaptionExtension,
           caseTitle,
           docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: `${caseEntity.docketNumber}${
-            caseEntity.docketNumberSuffix || ''
-          }`,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
           name: contactInfo.name,
           newData: contactInfo,
@@ -136,7 +134,7 @@ exports.updatePrimaryContactInteractor = async ({
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
         docketNumber: caseEntity.docketNumber,
-        docketNumberSuffix: caseEntity.docketNumberSuffix,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         document: {
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,

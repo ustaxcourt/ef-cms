@@ -68,7 +68,6 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
       deadlineDateReal: applicationContext
         .getUtilities()
         .prepareDateFromString(d.deadlineDate),
-      docketNumberWithSuffix: `${d.docketNumber}${d.docketNumberSuffix || ''}`,
       formattedDeadline: applicationContext
         .getUtilities()
         .formatDateString(d.deadlineDate, 'MMDDYY'),

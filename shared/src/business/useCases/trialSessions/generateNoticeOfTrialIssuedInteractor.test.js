@@ -28,12 +28,14 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
           return {
             caseCaption: 'Test Case Caption',
             docketNumber: '123-45',
+            docketNumberWithSuffix: '123-45',
           };
         } else {
           return {
             caseCaption: 'Test Case Caption',
             docketNumber: '234-56',
             docketNumberSuffix: 'S',
+            docketNumberWithSuffix: '234-56S',
           };
         }
       });

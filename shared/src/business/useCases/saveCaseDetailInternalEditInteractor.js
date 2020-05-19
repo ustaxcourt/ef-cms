@@ -61,6 +61,7 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     preferredTrialCity: caseToUpdate.preferredTrialCity,
     procedureType: caseToUpdate.procedureType,
     receivedAt: caseToUpdate.receivedAt,
+    statistics: caseToUpdate.statistics,
   };
 
   const theCase = await applicationContext

@@ -102,13 +102,16 @@ describe('caseInventoryReportHelper', () => {
           foundCases: [
             {
               docketNumber: '123-20',
+              docketNumberWithSuffix: '123-20',
             },
             {
               docketNumber: '123-19',
               docketNumberSuffix: 'L',
+              docketNumberWithSuffix: '123-19L',
             },
             {
               docketNumber: '135-19',
+              docketNumberWithSuffix: '135-19',
             },
           ],
         },

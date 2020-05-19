@@ -25,6 +25,7 @@ function PublicCase(rawCase, { applicationContext }) {
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
+  this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
   this.receivedAt = rawCase.receivedAt;
   this.isSealed = !!rawCase.sealedDate;
 
