@@ -10,7 +10,7 @@ exports.deleteS3Buckets = async ({ environment }) => {
   });
 
   for (const bucket of buckets) {
-    console.log('Deleting items from', bucket.Name);
+    console.log('Deleting items from S3 Bucket:', bucket.Name);
 
     const objects = await s3
       .listObjects({ Bucket: bucket.Name, MaxKeys: 1000 })
@@ -27,8 +27,6 @@ exports.deleteS3Buckets = async ({ environment }) => {
           },
         })
         .promise();
-
-      console.log('Deleted objects:', objects.Contents.length);
     }
 
     const objectVersions = await s3
@@ -49,11 +47,10 @@ exports.deleteS3Buckets = async ({ environment }) => {
           },
         })
         .promise();
-      console.log('Deleted versions:', objectVersions.Versions.length);
     }
 
     await s3.deleteBucket({ Bucket: bucket.Name }).promise();
 
-    console.log('Deleted bucket:', bucket.Name);
+    console.log('Deleted S3 Bucket:', bucket.Name);
   }
 };
