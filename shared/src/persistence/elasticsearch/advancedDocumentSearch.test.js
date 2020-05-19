@@ -173,11 +173,13 @@ describe('advancedDocumentSearch', () => {
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
       {
-        match: {
-          'docketNumber.S': {
-            operator: 'and',
-            query: '101-20',
-          },
+        simple_query_string: {
+          fields: [
+            'docketNumber.S',
+            'docketNumberSuffix.S',
+            'docketNumberWithSuffix.S',
+          ],
+          query: '101-20',
         },
       },
     ]);
