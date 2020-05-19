@@ -33,7 +33,6 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
-  this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.document = omit(rawWorkItem.document, 'workItems');
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;

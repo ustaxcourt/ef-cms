@@ -177,7 +177,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 caseStatus: caseEntity.status,
                 caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
                 docketNumber: caseEntity.docketNumber,
-                docketNumberSuffix: caseEntity.docketNumberSuffix,
                 docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
                 document: {
                   ...documentEntity.toRawObject(),

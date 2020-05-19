@@ -16,6 +16,7 @@ exports.MOCK_CASE = {
     title: 'Executor',
   },
   docketNumber: '101-18',
+  docketNumberWithSuffix: '101-18',
   docketRecord: [
     {
       description: 'first record',
