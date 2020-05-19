@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -13,7 +14,7 @@ export const AdvancedDocumentSearch = connect(
   },
   function AdvancedDocumentSearch({
     clearAdvancedSearchFormSequence,
-    formName,
+    form,
     formType,
     judges,
     opinionDocumentTypes,
@@ -40,7 +41,7 @@ export const AdvancedDocumentSearch = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={formName.docketNumber || ''}
+                    value={form.docketNumber || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -62,7 +63,7 @@ export const AdvancedDocumentSearch = connect(
                     id="title-or-name"
                     name="caseTitleOrPetitioner"
                     type="text"
-                    value={formName.caseTitleOrPetitioner || ''}
+                    value={form.caseTitleOrPetitioner || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -110,16 +111,11 @@ export const AdvancedDocumentSearch = connect(
                 >
                   Judge
                 </label>
-                <select
-                  className="usa-input usa-select"
+                <BindedSelect
+                  bind={`advancedSearchForm.${formType}.judge`}
+                  className="usa-input"
                   id="order-judge"
                   name="judge"
-                  onChange={e => {
-                    updateSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
                 >
                   <option value="">- Select -</option>
                   {judges.map((judge, idx) => (
@@ -127,7 +123,7 @@ export const AdvancedDocumentSearch = connect(
                       {judge.name}
                     </option>
                   ))}
-                </select>
+                </BindedSelect>
               </div>
               <div className="grid-row date-search-row">
                 <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
@@ -147,9 +143,9 @@ export const AdvancedDocumentSearch = connect(
                             year: 'startDateYear',
                           }}
                           values={{
-                            day: formName.startDateDay,
-                            month: formName.startDateMonth,
-                            year: formName.startDateYear,
+                            day: form.startDateDay,
+                            month: form.startDateMonth,
+                            year: form.startDateYear,
                           }}
                           onBlur={validateSequence}
                           onChange={updateSequence}
@@ -173,9 +169,9 @@ export const AdvancedDocumentSearch = connect(
                             year: 'endDateYear',
                           }}
                           values={{
-                            day: formName.endDateDay,
-                            month: formName.endDateMonth,
-                            year: formName.endDateYear,
+                            day: form.endDateDay,
+                            month: form.endDateMonth,
+                            year: form.endDateYear,
                           }}
                           onBlur={validateSequence}
                           onChange={updateSequence}
@@ -206,7 +202,7 @@ export const AdvancedDocumentSearch = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={formName.docketNumber || ''}
+                    value={form.docketNumber || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -228,7 +224,7 @@ export const AdvancedDocumentSearch = connect(
                     id="title-or-name"
                     name="caseTitleOrPetitioner"
                     type="text"
-                    value={formName.caseTitleOrPetitioner || ''}
+                    value={form.caseTitleOrPetitioner || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -312,9 +308,9 @@ export const AdvancedDocumentSearch = connect(
                           year: 'startDateYear',
                         }}
                         values={{
-                          day: formName.startDateDay,
-                          month: formName.startDateMonth,
-                          year: formName.startDateYear,
+                          day: form.startDateDay,
+                          month: form.startDateMonth,
+                          year: form.startDateYear,
                         }}
                         onBlur={validateSequence}
                         onChange={updateSequence}
@@ -340,9 +336,9 @@ export const AdvancedDocumentSearch = connect(
                           year: 'endDateYear',
                         }}
                         values={{
-                          day: formName.endDateDay,
-                          month: formName.endDateMonth,
-                          year: formName.endDateYear,
+                          day: form.endDateDay,
+                          month: form.endDateMonth,
+                          year: form.endDateYear,
                         }}
                         onBlur={validateSequence}
                         onChange={updateSequence}
