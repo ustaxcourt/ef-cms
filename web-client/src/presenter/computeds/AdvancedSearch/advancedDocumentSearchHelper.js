@@ -36,10 +36,6 @@ export const formatDocumentSearchResultRecord = (
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix ? result.docketNumberSuffix : ''
-  }`;
-
   const eventCodeAndDocumentType = result.documentType.split('-');
   result.formattedEventCode = eventCodeAndDocumentType[0].trim();
   result.formattedDocumentType = eventCodeAndDocumentType[1].trim();
