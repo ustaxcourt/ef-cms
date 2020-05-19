@@ -84,9 +84,7 @@ exports.updatePrimaryContactInteractor = async ({
           caseCaptionExtension,
           caseTitle,
           docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: `${caseEntity.docketNumber}${
-            caseEntity.docketNumberSuffix || ''
-          }`,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
           name: contactInfo.name,
           newData: contactInfo,
