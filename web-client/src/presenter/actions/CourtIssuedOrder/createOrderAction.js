@@ -35,9 +35,7 @@ export const createOrderAction = async ({ applicationContext, get }) => {
     signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
 
-  const docketNumberWithSuffix = applicationContext
-    .getUtilities()
-    .formatDocketNumberWithSuffix(caseDetail);
+  const { docketNumberWithSuffix } = caseDetail;
 
   const doc = replaceWithID(
     {

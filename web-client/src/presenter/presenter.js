@@ -5,6 +5,8 @@ import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError'
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
+import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
+import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
@@ -17,6 +19,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
+import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
@@ -248,6 +251,7 @@ import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from '.
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
+import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
@@ -397,6 +401,8 @@ export const presenter = {
   providers: {},
   sequences: {
     addCaseToTrialSessionSequence,
+    addPenaltyInputSequence,
+    addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
     advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,
@@ -409,6 +415,7 @@ export const presenter = {
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
+    calculatePenaltiesSequence,
     cancelAddDraftDocumentSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
@@ -639,6 +646,7 @@ export const presenter = {
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,
+    showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
     showMoreResultsSequence,
     signOutSequence,

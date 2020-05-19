@@ -12,10 +12,7 @@ const joiStrictTimestamp = getTimestampSchema();
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic, { applicationContext }) {
-  if (!applicationContext) {
-    throw new TypeError('applicationContext must be defined');
-  }
+function Statistic(rawStatistic) {
   this.entityName = 'Statistic';
 
   this.deficiencyAmount = rawStatistic.deficiencyAmount;
@@ -66,7 +63,7 @@ joiValidationDecorator(
     yearOrPeriod: joi
       .string()
       .required()
-      .valid('year', 'period')
+      .valid('Year', 'Period')
       .description('Whether the statistics are for a year or period.'),
   }),
   Statistic.VALIDATION_ERROR_MESSAGES,

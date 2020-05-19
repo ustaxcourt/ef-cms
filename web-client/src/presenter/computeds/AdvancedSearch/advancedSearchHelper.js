@@ -12,10 +12,6 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix ? result.docketNumberSuffix : ''
-  }`;
-
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.fullStateNamePrimary =

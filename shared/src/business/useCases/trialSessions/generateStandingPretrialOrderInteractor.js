@@ -42,9 +42,7 @@ exports.generateStandingPretrialOrderInteractor = async ({
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix: `${caseDetail.docketNumber}${
-          caseDetail.docketNumberSuffix || ''
-        }`,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         footerDate,
         trialInfo: {
           ...trialSession,

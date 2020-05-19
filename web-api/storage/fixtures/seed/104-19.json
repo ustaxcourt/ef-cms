@@ -51,6 +51,7 @@
     "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "businessType": "Corporation",
     "docketNumber": "104-19",
+    "docketNumberWithSuffix": "104-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
   },
@@ -137,7 +138,7 @@
     "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "104-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {

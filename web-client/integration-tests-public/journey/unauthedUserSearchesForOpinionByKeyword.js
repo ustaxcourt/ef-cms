@@ -18,6 +18,19 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
+        opinionType: 'Summary Opinion',
+      },
+    });
+
+    await test.runSequence('submitPublicOpinionAdvancedSearchSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('searchResults')).toEqual([]);
+
+    test.setState('advancedSearchForm', {
+      opinionSearch: {
+        keyword: 'opinion',
+        opinionType: 'TCOP - T.C. Opinion',
       },
     });
 

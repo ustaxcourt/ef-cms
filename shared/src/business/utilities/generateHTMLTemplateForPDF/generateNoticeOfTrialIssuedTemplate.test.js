@@ -10,6 +10,7 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
     caseCaption: 'Test Case Caption, Petitioner',
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '123-45S',
   };
 
   it('Returns HTML with the given case and trial session data', async () => {
@@ -17,8 +18,7 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
       applicationContext,
       content: {
         caseCaption: caseDetail.caseCaption,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         trialInfo: {
           address1: '123 Some Street',
           address2: 'Courtroom 2',

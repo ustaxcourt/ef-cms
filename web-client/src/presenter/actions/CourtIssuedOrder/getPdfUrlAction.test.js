@@ -36,15 +36,12 @@ describe('getPdfUrlAction', () => {
         presenter,
       },
       props: { htmlString: '<p>hi</p>' },
-      state: {},
+      state: { caseDetail: {} },
     });
 
     expect(
       applicationContextForClient.getUseCases()
         .createCourtIssuedOrderPdfFromHtmlInteractor,
-    ).toBeCalled();
-    expect(
-      applicationContextForClient.getUtilities().formatDocketNumberWithSuffix,
     ).toBeCalled();
     expect(result.output.pdfUrl).toBe(mockPdf.url);
   });
