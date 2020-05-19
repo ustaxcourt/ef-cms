@@ -588,7 +588,7 @@
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
     "updatedAt": "2020-04-14T19:59:46.118Z",
     "completedAt": "2020-04-14T19:59:46.850Z",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "104-20",
     "completedMessage": "Served to IRS",
     "isInitializeCase": true,
     "assigneeId": "4805d1ab-18d0-43ec-bafb-654e83405416",

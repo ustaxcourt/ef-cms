@@ -137,7 +137,7 @@
     "sk": "work-item|9055257a-0a95-4b80-a728-5bb754c60e59",
     "pk": "work-item|9055257a-0a95-4b80-a728-5bb754c60e59",
     "gsi1pk": "work-item|9055257a-0a95-4b80-a728-5bb754c60e59",
-    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "103-19S",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -215,7 +215,7 @@
   {
     "sk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "pk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "103-19S",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -375,7 +375,7 @@
     "updatedAt": "2019-08-08T14:33:24.183Z"
   },
   {
-    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "103-19S",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",

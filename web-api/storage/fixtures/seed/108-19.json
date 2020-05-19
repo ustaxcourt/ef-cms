@@ -1,7 +1,7 @@
 [
   {
     "completedAt": "2019-08-16T19:22:13.925Z",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "108-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "Served on IRS",

@@ -87,7 +87,7 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "docketNumberSuffix": "P",
+    "docketNumberWithSuffix": "102-19P",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -126,7 +126,7 @@
   {
     "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "pk": "section|petitions",
-    "docketNumberSuffix": "P",
+    "docketNumberWithSuffix": "102-19P",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -166,7 +166,7 @@
     "sk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
     "gsi1pk": "work-item|4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "docketNumberSuffix": "P",
+    "docketNumberWithSuffix": "102-19P",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {

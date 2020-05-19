@@ -138,7 +138,7 @@
     "sk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "104-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {

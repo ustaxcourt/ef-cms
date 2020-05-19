@@ -55,7 +55,7 @@
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
   {
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "103-20L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
@@ -173,7 +173,7 @@
     "updatedAt": "2020-01-23T21:45:34.520Z"
   },
   {
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "103-20L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
     "document": {
