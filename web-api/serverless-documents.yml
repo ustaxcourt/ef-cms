@@ -109,6 +109,7 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
+    IRS_SUPERUSER_EMAIL: ${opt:irsSuperuserEmail, self:custom.vars.irsSuperuserEmail}
 
 package:
   exclude:
