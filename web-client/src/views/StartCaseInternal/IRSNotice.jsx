@@ -1,4 +1,4 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { StatisticsForm } from './StatisticsForm';
@@ -9,8 +9,8 @@ import React from 'react';
 export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
-    addStatisticToFormSequence: sequences.addStatisticToFormSequence,
     form: state.form,
+    showModal: state.modal.showModal,
     startCaseInternalHelper: state.startCaseInternalHelper,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -19,9 +19,9 @@ export const IRSNotice = connect(
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
-    addStatisticToFormSequence,
     CASE_TYPES,
     form,
+    showModal,
     startCaseInternalHelper,
     statisticsFormHelper,
     updateFormValueSequence,
@@ -125,28 +125,9 @@ export const IRSNotice = connect(
         {startCaseInternalHelper.shouldShowIrsNoticeDate &&
           renderIrsNoticeDate()}
 
-        {statisticsFormHelper.showStatisticsForm && (
-          <>
-            <h4>
-              Statistics Proposed By IRS{' '}
-              <span className="usa-hint">(optional)</span>
-            </h4>
+        {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
 
-            {form.statistics.map((statistic, index) => (
-              <StatisticsForm index={index} key={index} />
-            ))}
-
-            {form.statistics.length < 12 && (
-              <Button
-                secondary
-                icon="plus-circle"
-                onClick={() => addStatisticToFormSequence()}
-              >
-                Add Another Year/Period
-              </Button>
-            )}
-          </>
-        )}
+        {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
       </div>
     );
   },
