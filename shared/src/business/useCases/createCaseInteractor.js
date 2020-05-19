@@ -31,6 +31,7 @@ const addPetitionDocumentToCase = ({
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
       docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
