@@ -177,7 +177,11 @@ export const StatisticsForm = connect(
           link
           className="padding-0"
           icon="calculator"
-          onClick={() => showCalculatePenaltiesModalSequence()}
+          onClick={() =>
+            showCalculatePenaltiesModalSequence({
+              statisticIndex: index,
+            })
+          }
         >
           Calculate Penalties on IRS Notice
         </Button>
