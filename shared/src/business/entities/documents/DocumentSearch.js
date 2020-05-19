@@ -33,6 +33,10 @@ function DocumentSearch(rawProps = {}) {
     this.judge = rawProps.judge;
   }
 
+  if (!isEmpty(rawProps.opinionType)) {
+    this.opinionType = rawProps.opinionType;
+  }
+
   this.keyword = rawProps.keyword;
 
   if (!isEmpty(rawProps.docketNumber)) {
@@ -112,6 +116,10 @@ DocumentSearch.schema = joi
       .string()
       .required()
       .description('The only required field to filter the search by'),
+    opinionType: joi
+      .string()
+      .optional()
+      .description('The opinion document type to filter the search results by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
       otherwise: joiStrictTimestamp

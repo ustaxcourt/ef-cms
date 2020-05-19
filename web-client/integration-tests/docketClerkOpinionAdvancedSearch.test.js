@@ -40,6 +40,20 @@ describe('docket clerk opinion advanced search', () => {
       expect(test.getState('validationErrors')).toEqual({});
       expect(test.getState('searchResults')).toEqual([]);
     });
+
+    it('search for an opinion type that is not present in any served opinion', async () => {
+      test.setState('advancedSearchForm', {
+        opinionSearch: {
+          keyword: 'opinion',
+          opinionType: 'Summary Opinion',
+        },
+      });
+
+      await test.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(test.getState('validationErrors')).toEqual({});
+      expect(test.getState('searchResults')).toEqual([]);
+    });
   });
 
   describe('search for things that should be found', () => {
@@ -97,6 +111,27 @@ describe('docket clerk opinion advanced search', () => {
         expect.arrayContaining([
           expect.objectContaining({
             numberOfPages: 1,
+          }),
+        ]),
+      );
+    });
+
+    it('search for an opinion type that is present in any served opinion', async () => {
+      test.setState('advancedSearchForm', {
+        opinionSearch: {
+          keyword: 'opinion',
+          opinionType: 'TCOP - T.C. Opinion',
+        },
+      });
+
+      await test.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(test.getState('searchResults')).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            documentId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Armen Some very strong opinions about sunglasses',
           }),
         ]),
       );
