@@ -4,11 +4,7 @@
  * @param {number} number the number to format as money
  * @returns {string} the formatted string
  */
-export const formatMoney = number => {
-  const formatter = new Intl.NumberFormat('en-US', {
-    currency: 'USD',
-    style: 'currency',
-  });
-
-  return formatter.format(number);
-};
+export const formatMoney = new Intl.NumberFormat('en-US', {
+  currency: 'USD',
+  style: 'currency',
+}).format;
