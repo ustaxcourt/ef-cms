@@ -103,7 +103,7 @@ const { Case } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
-const { formatMoney } = require('../utilities/formatMoney');
+const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
@@ -179,7 +179,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(formatDocument),
-    formatMoney: jest.fn().mockImplementation(formatMoney),
+    formatDollars: jest.fn().mockImplementation(formatDollars),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formattedTrialSessionDetails: jest
       .fn()

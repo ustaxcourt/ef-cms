@@ -13,11 +13,11 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
+import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
-import { formatMoney } from '../../shared/src/business/utilities/formatMoney';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
@@ -494,8 +494,8 @@ const applicationContext = {
       formatDateString,
       formatDocketNumberWithSuffix,
       formatDocument,
+      formatDollars,
       formatJudgeName,
-      formatMoney,
       formatNow,
       formattedTrialSessionDetails,
       getCaseCaption: Case.getCaseCaption,
