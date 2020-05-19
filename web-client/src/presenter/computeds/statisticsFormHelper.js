@@ -33,8 +33,6 @@ export const statisticsFormHelper = (get, applicationContext) => {
     if (!Array.isArray(validationErrors.statistics))
       return validationErrors.statistics;
 
-    console.log('validationErrors.statistics', validationErrors.statistics);
-
     const error = validationErrors.statistics.find(s => s.index === index);
 
     return (
