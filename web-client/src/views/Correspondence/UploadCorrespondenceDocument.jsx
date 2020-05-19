@@ -48,7 +48,7 @@ export const UploadCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Upload Correspondence</h2>
+                <h2 className="heading-1">Add Correspondence File</h2>
               </div>
             </div>
 
@@ -63,7 +63,7 @@ export const UploadCorrespondenceDocument = connect(
                       htmlFor="upload-description"
                       id="upload-description-label"
                     >
-                      Description
+                      Correspondence description
                     </label>
                     <input
                       aria-labelledby="upload-description-label"
@@ -91,7 +91,7 @@ export const UploadCorrespondenceDocument = connect(
                     <div className="grid-row grid-gap">
                       <div className="grid-col-6">
                         <h3 className="margin-bottom-0 margin-left-105">
-                          Add Correspondence
+                          Add Document
                         </h3>
                       </div>
                     </div>
@@ -137,7 +137,7 @@ export const UploadCorrespondenceDocument = connect(
                     // });
                   }}
                 >
-                  Save
+                  Finish
                 </Button>
                 <Button
                   link
