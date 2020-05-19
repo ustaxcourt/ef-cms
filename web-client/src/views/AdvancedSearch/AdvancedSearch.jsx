@@ -3,7 +3,6 @@ import { CaseSearchForm } from './CaseSearchForm';
 import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from './OpinionSearchForm';
-import { OpinionSearchResults } from './OpinionSearchResults';
 import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
@@ -84,7 +83,7 @@ export const AdvancedSearch = connect(
                   submitOpinionAdvancedSearchSequence
                 }
               />
-              <OpinionSearchResults />
+              <DocumentSearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab

@@ -69,7 +69,7 @@ export const OrderSearch = connect(
               </NonMobile>
             </div>
             <AdvancedDocumentSearch
-              formName={advancedSearchForm.orderSearch}
+              form={advancedSearchForm.orderSearch}
               formType="orderSearch"
               judges={judges}
               updateSequence={updateAdvancedOrderSearchFormValueSequence}

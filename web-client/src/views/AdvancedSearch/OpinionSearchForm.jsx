@@ -69,7 +69,7 @@ export const OpinionSearchForm = connect(
             </div>
 
             <AdvancedDocumentSearch
-              formName={advancedSearchForm.opinionSearch}
+              form={advancedSearchForm.opinionSearch}
               formType="opinionSearch"
               judges={judges}
               updateSequence={updateAdvancedOpinionSearchFormValueSequence}

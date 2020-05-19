@@ -43,7 +43,6 @@ describe('DocumentService', () => {
     );
     const documentInfo = wrapper.find('#document-information');
 
-    expect(documentInfo.text()).toContain(documentDetail.eventCode);
     expect(documentInfo.text()).toContain(documentDetail.documentTitle);
     expect(documentInfo.text()).toContain(
       `Docket Entry No.: ${docketEntryNumber}`,

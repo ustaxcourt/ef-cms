@@ -54,4 +54,26 @@ describe('setDefaultStartCaseInternalFormAction', () => {
 
     expect(result.state.form.hasVerifiedIrsNotice).toEqual(true);
   });
+
+  it('sets state.form.statistics to an array with a default value for yearOrPeriod', async () => {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: {} },
+    });
+
+    expect(result.state.form.statistics).toEqual([{ yearOrPeriod: 'Year' }]);
+  });
+
+  it('does not override statistics if it is already present on the form', async () => {
+    const result = await runAction(setDefaultStartCaseInternalFormAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: { statistics: [{ yearOrPeriod: 'Period' }] } },
+    });
+
+    expect(result.state.form.statistics[0].yearOrPeriod).toEqual('Period');
+  });
 });

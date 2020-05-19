@@ -3,8 +3,7 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import { advancedOpinionSearchHelper } from './computeds/AdvancedSearch/advancedOpinionSearchHelper';
-import { advancedOrderSearchHelper } from './computeds/AdvancedSearch/advancedOrderSearchHelper';
+import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
@@ -65,6 +64,7 @@ import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
+import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -82,8 +82,7 @@ const helpers = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
-  advancedOpinionSearchHelper,
-  advancedOrderSearchHelper,
+  advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
   batchDownloadHelper,
@@ -142,6 +141,7 @@ const helpers = {
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
+  statisticsFormHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,

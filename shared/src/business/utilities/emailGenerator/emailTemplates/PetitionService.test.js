@@ -14,6 +14,7 @@ describe('PetitionService', () => {
     address2: 'Unit B',
     city: 'Somecity',
     name: 'Test Petitioner',
+    phone: '1234567890',
     postalCode: '12345',
     serviceIndicator: 'Electronic',
     state: 'ST',
@@ -35,6 +36,7 @@ describe('PetitionService', () => {
     documentId: '1234',
     documentTitle: 'Petition',
     eventCode: 'P',
+    filingDate: '02/05/20',
     mailingDate: '02/02/20',
     servedAtFormatted: '02/03/2020 12:00am EST',
   };
@@ -102,6 +104,7 @@ describe('PetitionService', () => {
     expect(documentInfo.text()).toContain(
       `Docket Entry No.: ${docketEntryNumber}`,
     );
+    expect(documentInfo.text()).toContain(documentDetail.filingDate);
     expect(documentInfo.text()).toContain(documentDetail.mailingDate);
     expect(documentInfo.text()).toContain(documentDetail.servedAtFormatted);
   });
@@ -125,6 +128,7 @@ describe('PetitionService', () => {
     expect(petitionerInfo.text()).toContain(contactPrimary.city);
     expect(petitionerInfo.text()).toContain(contactPrimary.state);
     expect(petitionerInfo.text()).toContain(contactPrimary.postalCode);
+    expect(petitionerInfo.text()).toContain(contactPrimary.phone);
     expect(petitionerInfo.text()).toContain(contactPrimary.serviceIndicator);
 
     expect(petitionerInfo.find('#contact-secondary').length).toEqual(0);

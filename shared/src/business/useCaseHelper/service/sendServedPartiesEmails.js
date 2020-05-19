@@ -28,6 +28,12 @@ exports.sendServedPartiesEmails = async ({
     .getUtilities()
     .formatNow('MMMM D, YYYY');
 
+  //serve every document on IRS superuser
+  servedParties.electronic.push({
+    email: applicationContext.getIrsSuperuserEmail(),
+    name: 'IRS',
+  });
+
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {

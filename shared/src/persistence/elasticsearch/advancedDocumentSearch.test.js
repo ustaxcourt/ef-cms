@@ -141,6 +141,26 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
+  it('does a search by opinion type when an opinion document type is provided', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      opinionType: 'Summary Opinion',
+    });
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...orderQueryParams,
+      {
+        match: {
+          'documentType.S': {
+            operator: 'and',
+            query: 'Summary Opinion',
+          },
+        },
+      },
+    ]);
+  });
+
   it('does a search for a judge when the judgeType is  judge', async () => {
     await advancedDocumentSearch({
       applicationContext,
@@ -183,7 +203,27 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a date range search for filing / received date', async () => {
+  it('does a date range search (start date only) for filing / received date', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: opinionEventCodes,
+      startDate: '2020-02-20T05:00:00.000Z',
+    });
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...opinionQueryParams,
+      {
+        range: {
+          'filingDate.S': {
+            format: 'strict_date_time',
+            gte: '2020-02-20T05:00:00.000Z',
+          },
+        },
+      },
+    ]);
+  });
+
+  it('does a date range search (both dates) for filing / received date', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -198,6 +238,13 @@ describe('advancedDocumentSearch', () => {
           'filingDate.S': {
             format: 'strict_date_time',
             gte: '2020-02-20T05:00:00.000Z',
+          },
+        },
+      },
+      {
+        range: {
+          'filingDate.S': {
+            format: 'strict_date_time',
             lte: '2020-02-21T04:59:59.999Z',
           },
         },
@@ -205,27 +252,15 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a NOT search for date range if just given startDate', async () => {
+  it('does NOT date range search for filing / received date when only end date is given', async () => {
     await advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: orderEventCodes,
-      startDate: '2020-02-20T00:00:00.000Z',
+      documentEventCodes: opinionEventCodes,
+      endDate: '2020-02-20T05:00:00.000Z',
     });
 
-    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      orderQueryParams,
-    );
-  });
-
-  it('does a NOT search for date range if just given endDate', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      endDate: '2020-02-20T04:59:59.999Z',
-    });
-
-    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual(
-      orderQueryParams,
-    );
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...opinionQueryParams,
+    ]);
   });
 });

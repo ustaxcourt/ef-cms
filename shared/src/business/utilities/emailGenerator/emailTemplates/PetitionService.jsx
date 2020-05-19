@@ -12,6 +12,7 @@ const RenderContactAddress = ({ contact }) => {
         {contact.state && <span>{contact.state} </span>}
         {contact.postalCode && <span>{contact.postalCode}</span>}
       </div>
+      {contact.phone && <div>{contact.phone}</div>}
     </div>
   );
 };
@@ -46,7 +47,8 @@ export const PetitionService = ({
         <div>Document Information:</div>
         <div>Document Name: {documentDetail.documentTitle}</div>
         <div>Docket Entry No.: {docketEntryNumber}</div>
-        <div>Postmarked: {documentDetail.mailingDate}</div>
+        <div>Filed Date: {documentDetail.filingDate}</div>
+        <div>{documentDetail.mailingDate}</div>
         <div>Served: {documentDetail.servedAtFormatted}</div>
       </div>
       <br />
