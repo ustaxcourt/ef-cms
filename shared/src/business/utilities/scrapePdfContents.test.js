@@ -10,11 +10,15 @@ describe('scrapePdfContents', () => {
             items: [
               {
                 str: 'this is the content',
-                transform: [0, 0, 0, 0, 'transform'],
+                transform: [0, 0, 0, 0, 0, 'transform'],
               },
               {
                 str: 'this is some more content',
-                transform: [0, 0, 0, 0, 'transform'],
+                transform: [0, 0, 0, 0, 0, 'transformed'],
+              },
+              {
+                str: '',
+                transform: [0, 0, 0, 0, 0, false],
               },
             ],
           }),
@@ -31,8 +35,29 @@ describe('scrapePdfContents', () => {
     });
 
     expect(contents.trim()).toEqual(
-      'this is the contentthis is some more content',
+      `this is the content
+this is some more content`,
     );
+  });
+
+  it('scrapes the pdf that has no contents', async () => {
+    applicationContext.getPdfJs().getDocument.mockReturnValue({
+      promise: {
+        getPage: jest.fn().mockResolvedValue({
+          getTextContent: jest.fn().mockResolvedValue({
+            items: [],
+          }),
+        }),
+        numPages: 1,
+      },
+    });
+
+    const contents = await scrapePdfContents({
+      applicationContext,
+      pdfBuffer: [],
+    });
+
+    expect(contents).toEqual('');
   });
 
   it('fails to scrape the pdf contents', async () => {

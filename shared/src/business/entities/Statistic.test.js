@@ -8,7 +8,7 @@ describe('Statistic', () => {
 
     try {
       statistic = new Statistic({
-        yearOrPeriod: 'year',
+        yearOrPeriod: 'Year',
       });
     } catch (e) {
       error = e;
@@ -35,7 +35,7 @@ describe('Statistic', () => {
     it('passes validation with minimal required information', () => {
       const statistic = new Statistic(
         {
-          yearOrPeriod: 'year',
+          yearOrPeriod: 'Year',
         },
         { applicationContext },
       );
@@ -47,7 +47,7 @@ describe('Statistic', () => {
         {
           deficiencyAmount: 'something else',
           totalPenalties: 'something else',
-          yearOrPeriod: 'year',
+          yearOrPeriod: 'Year',
         },
         { applicationContext },
       );
@@ -62,7 +62,7 @@ describe('Statistic', () => {
       const statistic = new Statistic(
         {
           lastDateOfPeriod: '2050-03-01T21:40:46.415Z',
-          yearOrPeriod: 'period',
+          yearOrPeriod: 'Period',
         },
         { applicationContext },
       );
@@ -77,7 +77,7 @@ describe('Statistic', () => {
       const statistic = new Statistic(
         {
           year: 2050,
-          yearOrPeriod: 'year',
+          yearOrPeriod: 'Year',
         },
         { applicationContext },
       );
@@ -94,7 +94,7 @@ describe('Statistic', () => {
           lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
           totalPenalties: 123.45,
           year: 2015,
-          yearOrPeriod: 'year',
+          yearOrPeriod: 'Year',
         },
         { applicationContext },
       );

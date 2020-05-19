@@ -45,6 +45,18 @@ describe('Document Search entity', () => {
     expect(validationErrors).toBeNull();
   });
 
+  it('should pass validation when judge is provided', () => {
+    const documentSearch = new DocumentSearch({
+      judge: 'Guy Fieri',
+      keyword: 'sunglasses',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.judge).toBeDefined();
+    expect(validationErrors).toBeNull();
+  });
+
   describe('date search validation', () => {
     it('should not validate end date and start date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({

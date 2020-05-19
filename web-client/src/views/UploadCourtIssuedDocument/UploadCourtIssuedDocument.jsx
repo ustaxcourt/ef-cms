@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -111,9 +110,6 @@ export const UploadCourtIssuedDocument = connect(
                       id="primary-document-label"
                     >
                       Upload your file{' '}
-                      <span className="success-message">
-                        <FontAwesomeIcon icon="check-circle" size="1x" />
-                      </span>
                     </label>
                     <span className="usa-hint">
                       File must be in PDF format (.pdf). Max file size{' '}
