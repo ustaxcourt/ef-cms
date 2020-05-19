@@ -228,8 +228,8 @@ export const ReviewSavedPetition = connect(
                         Edit
                       </Button>
                     </h3>
-                    <div className="grid-row grid-gap">
-                      <div className="tablet:grid-col-4 margin-bottom-1">
+                    <div className="grid-row grid-gap margin-bottom-4">
+                      <div className="grid-col-4">
                         <div>
                           <span
                             className="usa-label usa-label-display"
@@ -239,17 +239,17 @@ export const ReviewSavedPetition = connect(
                           </span>
                           {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
                         </div>
-                        <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
-                            Type of notice/case
-                          </span>
-                          {form.caseType}
-                        </div>
                       </div>
-                      <div className="tablet:grid-col-4 margin-bottom-1">
+                      <div className="grid-col-4">
+                        <span
+                          className="usa-label usa-label-display"
+                          htmlFor="filing-type"
+                        >
+                          Type of notice/case
+                        </span>
+                        {form.caseType}
+                      </div>
+                      <div className="grid-col-4">
                         {reviewSavedPetitionHelper.shouldShowIrsNoticeDate && (
                           <div>
                             <span
@@ -263,6 +263,54 @@ export const ReviewSavedPetition = connect(
                         )}
                       </div>
                     </div>
+                    {reviewSavedPetitionHelper.showStatistics && (
+                      <>
+                        <div className="grid-row grid-gap">
+                          <div className="grid-col-4">
+                            <span
+                              className="usa-label usa-label-display"
+                              htmlFor="filing-type"
+                            >
+                              Year/Period
+                            </span>
+                          </div>
+                          <div className="grid-col-4">
+                            <span
+                              className="usa-label usa-label-display"
+                              htmlFor="filing-type"
+                            >
+                              Deficiency
+                            </span>
+                          </div>
+                          <div className="grid-col-4">
+                            <span
+                              className="usa-label usa-label-display"
+                              htmlFor="filing-type"
+                            >
+                              Total penalties
+                            </span>
+                          </div>
+                        </div>
+                        {reviewSavedPetitionHelper.formattedStatistics.map(
+                          (statistic, index) => (
+                            <div
+                              className="grid-row grid-gap margin-bottom-1"
+                              key={index}
+                            >
+                              <div className="grid-col-4">
+                                {statistic.formattedDate}
+                              </div>
+                              <div className="grid-col-4">
+                                {statistic.formattedDeficiencyAmount}
+                              </div>
+                              <div className="grid-col-4">
+                                {statistic.formattedTotalPenalties}
+                              </div>
+                            </div>
+                          ),
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

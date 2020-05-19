@@ -32,7 +32,7 @@ export const StatisticsForm = connect(
         }
       >
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
-          Decifiency
+          Deficiency
         </label>
         <input
           className="usa-input usa-input-inline"
