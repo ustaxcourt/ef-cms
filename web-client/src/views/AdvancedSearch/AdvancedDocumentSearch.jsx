@@ -241,6 +241,34 @@ export const AdvancedDocumentSearch = connect(
               </div>
             </FormGroup>
             <FormGroup>
+              {formType === 'opinionSearch' && (
+                <div className="grid-row opinion-type-search-row">
+                  <label
+                    className="usa-label padding-top-105"
+                    htmlFor="order-opinion"
+                  >
+                    Opinion type
+                  </label>
+                  <select
+                    className="usa-input usa-select"
+                    id="order-opinion"
+                    name="opinionType"
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {opinionDocumentTypes.map((opinionType, idx) => (
+                      <option key={idx} value={opinionType}>
+                        {opinionType}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="grid-row judge-search-row">
                 <label
                   className="usa-label padding-top-105"
