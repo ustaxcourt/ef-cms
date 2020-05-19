@@ -72,12 +72,12 @@ data "aws_iam_policy_document" "allow_public_failover" {
 
 
 module "ui-certificate" {
-  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
+  source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.2.1"
 
   domain_name            = "ui-${var.environment}.${var.dns_domain}"
   hosted_zone_name       = "${var.dns_domain}."
-  is_hosted_zone_private = "false"
-  validation_method      = "DNS"
+  # is_hosted_zone_private = "false"
+  # validation_method      = "DNS"
   certificate_name       = "ui-${var.environment}.${var.dns_domain}"
   environment            = "${var.environment}"
   description            = "Certificate for ui-${var.environment}.${var.dns_domain}"
@@ -104,7 +104,7 @@ resource "aws_cloudfront_distribution" "distribution" {
       origin_id = "failover-${var.environment}.${var.dns_domain}"
     }
   }
-  
+
   origin {
     domain_name = "${aws_s3_bucket.frontend.website_endpoint}"
     origin_id   = "primary-${var.environment}.${var.dns_domain}"
@@ -119,7 +119,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     custom_header {
       name = "x-allowed-domain"
       value = "${var.dns_domain}"
-    } 
+    }
   }
 
 
@@ -137,7 +137,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     custom_header {
       name = "x-allowed-domain"
       value = "${var.dns_domain}"
-    } 
+    }
   }
 
   custom_error_response = [

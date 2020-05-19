@@ -59,6 +59,7 @@
       }
     ],
     "docketNumber": "101-19",
+    "docketNumberWithSuffix": "101-19W",
     "status": "New",
     "associatedJudge": "Chief Judge"
   },
@@ -73,7 +74,7 @@
   {
     "sk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "pk": "section|petitions",
-    "docketNumberSuffix": "W",
+    "docketNumberWithSuffix": "101-19W",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -114,7 +115,7 @@
   {
     "sk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "pk": "work-item|2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "docketNumberSuffix": "W",
+    "docketNumberWithSuffix": "101-19W",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {

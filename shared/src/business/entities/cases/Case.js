@@ -358,6 +358,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.orderToChangeDesignatedPlaceOfTrial =
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
 
+  this.docketNumberWithSuffix =
+    this.docketNumber + (this.docketNumberSuffix || '');
+
   const contacts = ContactFactory.createContacts({
     contactInfo: {
       primary: rawCase.contactPrimary,
@@ -467,6 +470,10 @@ Case.validationRules = {
     .allow(null)
     .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  docketNumberWithSuffix: joi
+    .string()
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
   docketRecord: joi
     .array()
     .items(joi.object().meta({ entityName: 'DocketRecord' }))

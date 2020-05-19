@@ -168,6 +168,7 @@ describe('advancedSearchHelper', () => {
               state: 'TN',
             },
             docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19',
             receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
@@ -180,6 +181,7 @@ describe('advancedSearchHelper', () => {
             contactSecondary: { name: 'Another Person', state: 'TX' },
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            docketNumberWithSuffix: '102-18W',
             receivedAt: '2019-05-01T05:00:00.000Z',
           },
         ],
@@ -223,6 +225,7 @@ describe('advancedSearchHelper', () => {
               state: 'TN',
             },
             docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19',
             receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
@@ -266,6 +269,7 @@ describe('advancedSearchHelper', () => {
               state: 'TN',
             },
             docketNumber: '101-19',
+            docketNumberWithSuffix: '101-19',
             receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
@@ -278,6 +282,7 @@ describe('advancedSearchHelper', () => {
             contactSecondary: { name: 'Another Person', state: 'TX' },
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            docketNumberWithSuffix: '102-18W',
             receivedAt: '2018-05-01T05:00:00.000Z',
           },
           {
@@ -286,12 +291,14 @@ describe('advancedSearchHelper', () => {
             contactSecondary: { name: 'Another Petitioner', state: 'TN' },
             docketNumber: '101-18',
             docketNumberSuffix: 'W',
+            docketNumberWithSuffix: '101-18W',
             receivedAt: '2018-04-01T05:00:00.000Z',
           },
           {
             contactSecondary: { name: 'Another Person', state: 'AX' },
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            docketNumberWithSuffix: '102-18W',
             receivedAt: '2018-05-01T05:00:00.000Z',
           },
         ],

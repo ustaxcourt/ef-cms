@@ -623,6 +623,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "docketNumber": "105-20",
+    "docketNumberWithSuffix": "105-20L",
     "petitionPaymentWaivedDate": null,
     "status": "General Docket - Not at Issue"
   },
@@ -863,7 +864,7 @@
   {
     "associatedJudge": "Chief Judge",
     "completedAt": "2020-04-29T15:51:29.331Z",
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "105-20L",
     "caseStatus": "New",
     "completedMessage": "Served to IRS",
     "document": {
