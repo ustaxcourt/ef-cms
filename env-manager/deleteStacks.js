@@ -9,7 +9,7 @@ exports.deleteStacks = async ({ environment }) => {
     environment,
   });
   for (const stack of stacks) {
-    console.log('Delete ', stack.StackName);
+    console.log('Delete CloudFormation Stack:', stack.StackName);
     await cloudFormation.deleteStack({ StackName: stack.StackName }).promise();
     await sleep(100);
   }
@@ -23,7 +23,7 @@ exports.deleteStacks = async ({ environment }) => {
       environment,
     });
     console.log(
-      'Waiting for stacks to be deleted: ',
+      'Waiting for stacks to be deleted:',
       Date(),
       refreshedStacks.length,
     );
