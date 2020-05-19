@@ -527,6 +527,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "docketNumber": "106-19",
+    "docketNumberWithSuffix": "106-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
   },

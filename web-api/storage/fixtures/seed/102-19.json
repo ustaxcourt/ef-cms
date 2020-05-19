@@ -54,6 +54,7 @@
     "preferredTrialCity": "Boise, Idaho",
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "docketNumber": "102-19",
+    "docketNumberWithSuffix": "102-19P",
     "status": "New",
     "hasVerifiedIrsNotice": true,
     "associatedJudge": "Chief Judge"
