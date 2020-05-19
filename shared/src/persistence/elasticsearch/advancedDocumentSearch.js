@@ -9,6 +9,7 @@ exports.advancedDocumentSearch = async ({
   judge,
   judgeType,
   keyword,
+  opinionType,
   startDate,
 }) => {
   const sourceFields = [
@@ -79,6 +80,17 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  if (opinionType) {
+    queryParams.push({
+      match: {
+        'documentType.S': {
+          operator: 'and',
+          query: opinionType,
+        },
+      },
+    });
+  }
+
   if (docketNumber) {
     queryParams.push({
       match: {
@@ -90,12 +102,22 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (startDate && endDate) {
+  if (startDate) {
     queryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
+        },
+      },
+    });
+  }
+
+  if (endDate && startDate) {
+    queryParams.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
           lte: endDate,
         },
       },

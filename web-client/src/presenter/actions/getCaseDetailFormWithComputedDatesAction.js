@@ -128,6 +128,15 @@ export const getCaseDetailFormWithComputedDatesAction = ({
     `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
   );
 
+  if (form.statistics) {
+    form.statistics.forEach(statistic => {
+      statistic.lastDateOfPeriod = checkDate(
+        applicationContext,
+        `${statistic.lastDateOfPeriodYear}-${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}`,
+      );
+    });
+  }
+
   return {
     formWithComputedDates: form,
   };

@@ -28,6 +28,17 @@ describe('defaultAdvancedSearchFormAction', () => {
     });
   });
 
+  it('sets defaults on state.opinionDocumentTypes if state.advancedSearchForm is empty', async () => {
+    const result = await runAction(defaultAdvancedSearchFormAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+
+    expect(result.state.opinionDocumentTypes).toEqual([]);
+  });
+
   it('does not overwrite values for form data if they are present on state.advancedSearchForm', async () => {
     const result = await runAction(defaultAdvancedSearchFormAction, {
       modules: { presenter },

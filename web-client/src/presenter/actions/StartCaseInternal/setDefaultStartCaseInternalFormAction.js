@@ -18,6 +18,7 @@ export const setDefaultStartCaseInternalFormAction = ({
     preferredTrialCity,
     procedureType,
     requestForPlaceOfTrialFile,
+    statistics,
   } = get(state.form);
   const { DEFAULT_PROCEDURE_TYPE } = applicationContext.getConstants();
 
@@ -35,5 +36,12 @@ export const setDefaultStartCaseInternalFormAction = ({
     !requestForPlaceOfTrialFile
   ) {
     store.set(state.form.orderDesignatingPlaceOfTrial, true);
+  }
+
+  if (!statistics) {
+    const defaultStatistic = {
+      yearOrPeriod: 'Year',
+    };
+    store.set(state.form.statistics, [defaultStatistic]);
   }
 };

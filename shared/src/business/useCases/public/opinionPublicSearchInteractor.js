@@ -10,10 +10,30 @@ const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
  */
 exports.opinionPublicSearchInteractor = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
+  endDateDay,
+  endDateMonth,
+  endDateYear,
+  judge,
   keyword,
+  opinionType,
+  startDateDay,
+  startDateMonth,
+  startDateYear,
 }) => {
   const opinionSearch = new DocumentSearch({
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDateDay,
+    endDateMonth,
+    endDateYear,
+    judge,
     keyword,
+    opinionType,
+    startDateDay,
+    startDateMonth,
+    startDateYear,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
