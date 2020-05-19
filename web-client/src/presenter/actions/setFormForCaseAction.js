@@ -75,4 +75,32 @@ export const setFormForCaseAction = async ({
       petitionPaymentWaivedDate.format('YYYY'),
     );
   }
+
+  if (caseDetail.statistics) {
+    caseDetail.statistics.forEach((statistic, index) => {
+      if (statistic.lastDateOfPeriod) {
+        const lastDateOfPeriod = applicationContext
+          .getUtilities()
+          .prepareDateFromString(statistic.lastDateOfPeriod, 'YYYY/MM/DD');
+        if (
+          lastDateOfPeriod &&
+          lastDateOfPeriod.toDate() instanceof Date &&
+          !isNaN(lastDateOfPeriod.toDate())
+        ) {
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodMonth,
+            lastDateOfPeriod.format('M'),
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodDay,
+            lastDateOfPeriod.format('D'),
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodYear,
+            lastDateOfPeriod.format('YYYY'),
+          );
+        }
+      }
+    });
+  }
 };

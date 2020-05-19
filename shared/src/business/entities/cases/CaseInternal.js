@@ -8,6 +8,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
+const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
 CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
@@ -58,6 +59,13 @@ function CaseInternal(rawCase) {
   this.receivedAt = rawCase.receivedAt;
   this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
+  if (Array.isArray(rawCase.statistics)) {
+    this.statistics = rawCase.statistics.map(
+      statistic => new Statistic(statistic),
+    );
+  } else {
+    this.statistics = [];
+  }
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
@@ -183,6 +191,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
+    statistics: Case.validationRules.statistics,
     stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
