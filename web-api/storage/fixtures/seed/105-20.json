@@ -864,7 +864,7 @@
   {
     "associatedJudge": "Chief Judge",
     "completedAt": "2020-04-29T15:51:29.331Z",
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "105-20L",
     "caseStatus": "New",
     "completedMessage": "Served to IRS",
     "document": {
