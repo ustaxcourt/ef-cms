@@ -45,6 +45,56 @@ describe('computeStatisticDatesAction', () => {
       },
     });
 
-    expect(result.state.form.statistics).toBeUndefined();
+    expect(result.state.form.statistics).toEqual([]);
+  });
+
+  it('filters out empty statistics', async () => {
+    const result = await runAction(computeStatisticDatesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [
+            {
+              yearOrPeriod: 'Year',
+            },
+            {
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.form.statistics).toEqual([]);
+  });
+
+  it('appends default statistic if deficiency and hasVerifiedIrsNotice', async () => {
+    const result = await runAction(computeStatisticDatesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: true,
+          statistics: [
+            {
+              yearOrPeriod: 'Year',
+            },
+            {
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.form.statistics).toEqual([
+      {
+        yearOrPeriod: 'Year',
+      },
+    ]);
   });
 });
