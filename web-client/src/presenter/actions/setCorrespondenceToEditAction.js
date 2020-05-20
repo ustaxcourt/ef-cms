@@ -9,11 +9,11 @@ import { state } from 'cerebral';
  * @returns {void} sets the documentToEdit on state
  */
 export const setCorrespondenceToEditAction = ({ props, store }) => {
-  const { caseDetail, documentId } = props;
+  const { caseDetail, documentToEditId } = props;
 
-  if (documentId) {
+  if (documentToEditId) {
     const documentToEdit = caseDetail.correspondence.find(
-      document => document.documentId === documentId,
+      document => document.documentId === documentToEditId,
     );
 
     store.set(state.documentToEdit, documentToEdit);
