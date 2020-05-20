@@ -57,13 +57,13 @@ const batchDownloadTrialSessionInteractor = async ({
   sessionCases = sessionCases
     .filter(caseToFilter => caseToFilter.status !== Case.STATUS_TYPES.closed)
     .map(caseToBatch => {
-      const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
-      const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
+      const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
+      const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;
 
       return {
         ...caseToBatch,
         caseFolder,
-        caseName,
+        caseTitle,
       };
     });
 
@@ -117,25 +117,33 @@ const batchDownloadTrialSessionInteractor = async ({
 
   await onDocketRecordCreation();
 
-  for (let index = 0; index < sessionCases.length; index++) {
-    let { caseId } = sessionCases[index];
-    extraFiles.push(
-      await applicationContext
-        .getUseCases()
-        .generateDocketRecordPdfInteractor({
-          applicationContext,
-          caseId,
-          includePartyDetail: true,
-        })
-        .then(async result => {
-          await onDocketRecordCreation(caseId);
-          return result;
-        }),
-    );
-    extraFileNames.push(
-      `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
-    );
-  }
+  const generateDocumentAndDocketRecordForCase = async sessionCase => {
+    const result = await applicationContext
+      .getUseCases()
+      .generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseId: sessionCase.caseId,
+        includePartyDetail: true,
+      });
+
+    const document = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        caseId: sessionCase.caseId,
+        documentId: result.fileId,
+        protocol: 'S3',
+        useTempBucket: true,
+      });
+
+    await onDocketRecordCreation({ caseId: sessionCase.caseId });
+
+    extraFiles.push(document);
+
+    extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
+  };
+
+  await Promise.all(sessionCases.map(generateDocumentAndDocketRecordForCase));
 
   const onEntry = entryData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({

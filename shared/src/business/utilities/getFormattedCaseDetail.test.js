@@ -257,7 +257,7 @@ describe('formatCase', () => {
   it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      caseCaption: 'Test Case Caption',
+      caseCaption: 'Johnny Joe Jacobson, Petitioner',
       docketNumberSuffix: undefined,
       hasVerifiedIrsNotice: true,
       trialTime: 11,
@@ -272,7 +272,7 @@ describe('formatCase', () => {
       result.irsDateFormatted,
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-    expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitle).toEqual('Johnny Joe Jacobson');
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
@@ -807,37 +807,37 @@ describe('sortDocketRecords', () => {
     expect(result[0].index).toEqual('1');
   });
 
-  it('should evaluate sort items by index if sorted by date and item dates match', () => {
+  it('should sort items by index when item calendar dates match', () => {
     const result = sortDocketRecords(
       [
         {
           index: '2',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
           },
         },
         {
           index: '1',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
           },
         },
         {
           index: '4',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
           },
         },
         {
           index: '3',
           record: {
-            filingDate: '2019-08-03T00:06:44.000Z',
+            filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
           },
         },
         {
           index: '5',
           record: {
-            filingDate: '2019-09-01T00:01:12.025Z',
+            filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
           },
         },
       ],
@@ -845,6 +845,23 @@ describe('sortDocketRecords', () => {
     );
 
     expect(result[0].index).toEqual('1');
+    expect(result).toMatchObject([
+      {
+        index: '1',
+      },
+      {
+        index: '2',
+      },
+      {
+        index: '4',
+      },
+      {
+        index: '3',
+      },
+      {
+        index: '5',
+      },
+    ]);
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {

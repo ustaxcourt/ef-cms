@@ -6,6 +6,7 @@ const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
+const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
@@ -26,6 +27,18 @@ exports.updateSecondaryContactInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
+  const editableFields = {
+    address1: contactInfo.address1,
+    address2: contactInfo.address2,
+    address3: contactInfo.address3,
+    city: contactInfo.city,
+    country: contactInfo.country,
+    countryType: contactInfo.countryType,
+    phone: contactInfo.phone,
+    postalCode: contactInfo.postalCode,
+    state: contactInfo.state,
+  };
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -38,7 +51,10 @@ exports.updateSecondaryContactInteractor = async ({
   }
 
   const caseEntity = new Case(
-    { ...caseToUpdate, contactSecondary: contactInfo },
+    {
+      ...caseToUpdate,
+      contactSecondary: { ...caseToUpdate.contactSecondary, ...editableFields },
+    },
     { applicationContext },
   );
 
@@ -53,23 +69,26 @@ exports.updateSecondaryContactInteractor = async ({
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
-      newData: contactInfo,
+      newData: editableFields,
       oldData: caseToUpdate.contactSecondary,
     });
 
   if (documentType) {
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
     const pdfContentHtml = await applicationContext
       .getTemplateGenerators()
       .generateChangeOfAddressTemplate({
         applicationContext,
         content: {
-          caption: caseEntity.caseCaption,
+          caseCaptionExtension,
+          caseTitle,
           docketNumberWithSuffix: `${caseEntity.docketNumber}${
             caseEntity.docketNumberSuffix || ''
           }`,
           documentTitle: documentType.title,
-          name: contactInfo.name,
-          newData: contactInfo,
+          name: caseToUpdate.contactSecondary.name,
+          newData: editableFields,
           oldData: caseToUpdate.contactSecondary,
         },
       });
@@ -89,7 +108,7 @@ exports.updateSecondaryContactInteractor = async ({
     const changeOfAddressDocument = new Document(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${contactInfo.name}`,
+        additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
         caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
@@ -121,12 +140,10 @@ exports.updateSecondaryContactInteractor = async ({
         assigneeId: null,
         assigneeName: null,
         associatedJudge: caseEntity.associatedJudge,
-        caseCaptionNames: Case.getCaseCaptionNames(
-          Case.getCaseCaption(caseEntity),
-        ),
         caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
+        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
         docketNumber: caseEntity.docketNumber,
         docketNumberSuffix: caseEntity.docketNumberSuffix,
         document: {

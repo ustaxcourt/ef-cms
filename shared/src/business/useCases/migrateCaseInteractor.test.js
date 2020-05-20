@@ -55,7 +55,6 @@ describe('migrateCaseInteractor', () => {
         postalCode: '69580',
         state: 'AR',
       },
-      contactSecondary: {},
       docketNumber: '00101-00',
       docketRecord: MOCK_CASE.docketRecord,
       documents: MOCK_CASE.documents,
@@ -112,21 +111,13 @@ describe('migrateCaseInteractor', () => {
   });
 
   it('should create a case successfully', async () => {
-    let error;
-    let result;
-
     expect(createdCases.length).toEqual(0);
 
-    try {
-      result = await migrateCaseInteractor({
-        applicationContext,
-        caseMetadata,
-      });
-    } catch (e) {
-      error = e;
-    }
+    const result = await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata,
+    });
 
-    expect(error).toBeUndefined();
     expect(result).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().createCase,
@@ -153,7 +144,7 @@ describe('migrateCaseInteractor', () => {
             docketRecord: [{}],
           },
         }),
-      ).rejects.toThrow('The DocketRecord entity was invalid');
+      ).rejects.toThrow('The Case entity was invalid');
     });
   });
 });

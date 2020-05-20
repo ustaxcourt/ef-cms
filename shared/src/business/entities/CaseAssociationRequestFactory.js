@@ -5,7 +5,9 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
+const joiStrictTimestamp = getTimestampSchema();
 
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -129,7 +131,7 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schemaOptionalItems = {
     attachments: joi.boolean().required(),
-    certificateOfServiceDate: joi.date().iso().max('now').required(),
+    certificateOfServiceDate: joiStrictTimestamp.max('now').required(),
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: joi.string().required(),
@@ -137,8 +139,6 @@ function CaseAssociationRequestFactory(rawProps) {
     representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(),
   };
-
-  let customValidate;
 
   const makeRequired = itemName => {
     schema[itemName] = schemaOptionalItems[itemName];
@@ -175,7 +175,6 @@ function CaseAssociationRequestFactory(rawProps) {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
     CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );
 

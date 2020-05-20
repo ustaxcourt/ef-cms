@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -30,10 +31,12 @@ export const OrderSearchResults = connect(
             <table className="usa-table search-results responsive-table row-border-only">
               <thead>
                 <tr>
-                  <th aria-hidden="true"></th>
+                  <th aria-hidden="true" className="small-column"></th>
+                  <th aria-hidden="true" className="small-column"></th>
                   <th>Docket number</th>
                   <th>Case title</th>
                   <th>Order</th>
+                  <th>Pages</th>
                   <th>Date</th>
                   <th>Judge</th>
                 </tr>
@@ -42,20 +45,37 @@ export const OrderSearchResults = connect(
                 {advancedOrderSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
                     <tr className="search-result" key={idx}>
-                      <td aria-hidden="true">{idx + 1}</td>
+                      <td aria-hidden="true" className="small-column">
+                        {idx + 1}
+                      </td>
+                      <td aria-hidden="true" className="small-column">
+                        {result.isSealed && (
+                          <Icon
+                            aria-label="sealed"
+                            className="iconSealed"
+                            icon={['fa', 'lock']}
+                            size="1x"
+                          />
+                        )}
+                      </td>
                       <td>
                         <CaseLink formattedCase={result} />
                       </td>
-                      <td>{result.caseCaption}</td>
+                      <td>{result.caseTitle}</td>
                       <td>
                         <a
-                          href={`${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`}
+                          href={
+                            advancedOrderSearchHelper.isPublic
+                              ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
+                              : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
+                          }
                           rel="noopener noreferrer"
                           target="_blank"
                         >
                           {result.documentTitle}
                         </a>
                       </td>
+                      <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.formattedSignedJudgeName}</td>
                     </tr>
@@ -66,7 +86,11 @@ export const OrderSearchResults = connect(
           </>
         )}
         {advancedOrderSearchHelper.showLoadMore && (
-          <Button secondary onClick={() => showMoreResultsSequence()}>
+          <Button
+            secondary
+            aria-label={`load ${pageSize} more results`}
+            onClick={() => showMoreResultsSequence()}
+          >
             Load {pageSize} More
           </Button>
         )}

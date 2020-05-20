@@ -34,3 +34,19 @@ When the Case Deadline expires.
 User provided description of the Case Deadline.
 
 > `string` | required
+
+##### Maximum limit
+
+
+`120`
+
+##### Minimum limit
+
+
+`1`
+
+### entityName
+
+> `string` | required
+
+##### Can be CaseDeadline.

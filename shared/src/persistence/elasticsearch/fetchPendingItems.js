@@ -15,7 +15,7 @@ exports.fetchPendingItems = async ({ applicationContext, judge, source }) => {
       },
       size: 5000,
     },
-    index: 'efcms',
+    index: 'efcms-case',
   };
 
   if (judge) {

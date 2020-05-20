@@ -1,3 +1,5 @@
+const { ForwardMessage } = require('../../entities/ForwardMessage');
+
 /**
  * validateForwardMessageInteractor
  *
@@ -10,7 +12,7 @@ exports.validateForwardMessageInteractor = ({
   applicationContext,
   message,
 }) => {
-  return new (applicationContext.getEntityConstructors().ForwardMessage)(
-    message,
-  ).getFormattedValidationErrors();
+  return new ForwardMessage(message, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 };

@@ -1,6 +1,6 @@
 const {
-  CaseAssociationRequestFactory,
-} = require('../../entities/CaseAssociationRequestFactory');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   validateCaseAssociationRequestInteractor,
 } = require('./validateCaseAssociationRequestInteractor');
@@ -8,11 +8,7 @@ const {
 describe('validateCaseAssociationRequest', () => {
   it('returns the expected errors object on an empty case association request', () => {
     const errors = validateCaseAssociationRequestInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseAssociationRequestFactory,
-        }),
-      },
+      applicationContext,
       caseAssociationRequest: {},
     });
 
@@ -29,14 +25,10 @@ describe('validateCaseAssociationRequest', () => {
 
   it('returns null for a valid case association request', () => {
     const errors = validateCaseAssociationRequestInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseAssociationRequestFactory,
-        }),
-      },
+      applicationContext,
       caseAssociationRequest: {
         certificateOfService: true,
-        certificateOfServiceDate: '1212-12-12',
+        certificateOfServiceDate: '1987-08-06T07:53:09.001Z',
         documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
         documentType: 'Entry of Appearance',
         eventCode: '123',

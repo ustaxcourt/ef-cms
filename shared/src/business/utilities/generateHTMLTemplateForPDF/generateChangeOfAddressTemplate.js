@@ -1,5 +1,5 @@
-const { Case } = require('../../entities/cases/Case');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+const { reactTemplateGenerator } = require('./reactTemplateGenerator');
 
 /**
  * HTML template generator for printable change of address/telephone PDF views
@@ -14,7 +14,8 @@ const generateChangeOfAddressTemplate = async ({
   content,
 }) => {
   const {
-    caption,
+    caseCaptionExtension,
+    caseTitle,
     docketNumberWithSuffix,
     documentTitle,
     name,
@@ -22,50 +23,36 @@ const generateChangeOfAddressTemplate = async ({
     oldData,
   } = content;
 
-  const templateData = {
-    name,
-    newData,
-    oldData,
-    showAddressAndPhoneChange:
-      documentTitle === 'Notice of Change of Address and Telephone Number',
-    showOnlyPhoneChange:
-      documentTitle === 'Notice of Change of Telephone Number',
-  };
-
-  const changeOfAddressTemplateContent = require('./changeOfAddress.pug_');
-
-  const pug = applicationContext.getPug();
-  const compiledFunction = pug.compile(changeOfAddressTemplateContent);
-  const main = compiledFunction({
-    ...templateData,
+  const reactNoticeHTMLTemplate = reactTemplateGenerator({
+    componentName: 'ChangeOfAddress',
+    data: {
+      name,
+      newData,
+      oldData,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        h3: documentTitle,
+        showAddressAndPhoneChange:
+          documentTitle === 'Notice of Change of Address and Telephone Number',
+        showOnlyPhoneChange:
+          documentTitle === 'Notice of Change of Telephone Number',
+      },
+    },
   });
 
-  const changeOfAddressSassContent = require('./changeOfAddress.scss_');
-  const sass = applicationContext.getNodeSass();
-
-  const { css } = await new Promise(resolve => {
-    sass.render({ data: changeOfAddressSassContent }, (err, result) => {
-      return resolve(result);
-    });
-  });
-
-  const templateContent = {
-    caseCaptionWithPostfix: `${caption} ${Case.CASE_CAPTION_POSTFIX}`,
-    docketNumberWithSuffix,
-    main,
-  };
-
-  const options = {
-    h3: documentTitle,
-    styles: css,
-    title: 'Change of Contact Information',
-  };
-
-  return await generateHTMLTemplateForPDF({
+  const htmlTemplate = generateHTMLTemplateForPDF({
     applicationContext,
-    content: templateContent,
-    options,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactNoticeHTMLTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Change of Contact Information',
+    },
   });
+
+  return htmlTemplate;
 };
 
 module.exports = {

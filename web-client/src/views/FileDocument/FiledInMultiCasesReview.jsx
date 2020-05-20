@@ -14,7 +14,7 @@ export const FiledInMultiCasesReview = connect(
         {formattedSelectedCasesAsCase.map((selectedCase, index) => (
           <div className="grid-row grid-gap margin-bottom-1" key={index}>
             <div className="tablet:grid-col-2">{selectedCase.docketNumber}</div>
-            <div className="tablet:grid-col-10">{selectedCase.caseName}</div>
+            <div className="tablet:grid-col-10">{selectedCase.caseTitle}</div>
           </div>
         ))}
       </>

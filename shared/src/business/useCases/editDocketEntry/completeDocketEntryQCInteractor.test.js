@@ -40,6 +40,16 @@ describe('completeDocketEntryQCInteractor', () => {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: 'Deficiency',
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
       createdAt: '',
       docketNumber: '45678-18',
       docketRecord: [
@@ -173,29 +183,23 @@ describe('completeDocketEntryQCInteractor', () => {
       countryType: 'domestic',
       email: 'test@example.com',
       name: 'Test Petitioner',
+      phone: '1234567890',
       postalCode: '12345',
       state: 'AK',
     };
 
-    let result, error;
+    const result = await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Something Else',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+      },
+    });
 
-    try {
-      result = await completeDocketEntryQCInteractor({
-        applicationContext,
-        entryMetadata: {
-          caseId: caseRecord.caseId,
-          description: 'Memorandum in Support',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          documentTitle: 'Something Else',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();
@@ -293,25 +297,18 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
-    let error;
-    let result;
+    const result = await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Something Else',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+      },
+    });
 
-    try {
-      result = await completeDocketEntryQCInteractor({
-        applicationContext,
-        entryMetadata: {
-          caseId: caseRecord.caseId,
-          description: 'Memorandum in Support',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          documentTitle: 'Something Else',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();
@@ -339,25 +336,18 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
-    let error;
-    let result;
+    const result = await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Notice of Change of Address',
+        documentType: 'Notice of Change of Address',
+        eventCode: 'MISP',
+      },
+    });
 
-    try {
-      result = await completeDocketEntryQCInteractor({
-        applicationContext,
-        entryMetadata: {
-          caseId: caseRecord.caseId,
-          description: 'Memorandum in Support',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          documentTitle: 'Notice of Change of Address',
-          documentType: 'Notice of Change of Address',
-          eventCode: 'MISP',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();
@@ -384,25 +374,18 @@ describe('completeDocketEntryQCInteractor', () => {
       state: 'AK',
     };
 
-    let error;
-    let result;
+    const result = await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Notice of Change of Address',
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+      },
+    });
 
-    try {
-      result = await completeDocketEntryQCInteractor({
-        applicationContext,
-        entryMetadata: {
-          caseId: caseRecord.caseId,
-          description: 'Memorandum in Support',
-          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          documentTitle: 'Notice of Change of Address',
-          documentType: 'Notice of Change of Address',
-          eventCode: 'NCA',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByCaseId,
     ).toBeCalled();

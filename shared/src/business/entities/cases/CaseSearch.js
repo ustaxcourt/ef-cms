@@ -53,7 +53,6 @@ CaseSearch.schema = joi.object().keys({
 joiValidationDecorator(
   CaseSearch,
   CaseSearch.schema,
-  undefined,
   CaseSearch.VALIDATION_ERROR_MESSAGES,
 );
 

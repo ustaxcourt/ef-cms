@@ -3,6 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * Case Deadline entity
@@ -14,6 +16,8 @@ function CaseDeadline(rawProps, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'CaseDeadline';
+
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
@@ -51,14 +55,10 @@ CaseDeadline.schema = joi.object().keys({
     })
     .required()
     .description('Unique Case ID only used by the system.'),
-  createdAt: joi
-    .date()
-    .iso()
+  createdAt: joiStrictTimestamp
     .required()
     .description('When the Case Deadline was added to the system.'),
-  deadlineDate: joi
-    .date()
-    .iso()
+  deadlineDate: joiStrictTimestamp
     .required()
     .description('When the Case Deadline expires.'),
   description: joi
@@ -67,12 +67,12 @@ CaseDeadline.schema = joi.object().keys({
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
+  entityName: joi.string().valid('CaseDeadline').required(),
 });
 
 joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
-  undefined,
   CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 

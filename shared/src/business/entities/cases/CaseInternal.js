@@ -7,7 +7,9 @@ const {
 } = require('../../../persistence/s3/getUploadPolicy');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
+const joiStrictTimestamp = getTimestampSchema();
 CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
 
 /**
@@ -33,6 +35,12 @@ function CaseInternal(rawCase) {
     this.orderDesignatingPlaceOfTrial = undefined;
   }
   this.orderForOds = rawCase.orderForOds;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition;
+  this.orderForAmendedPetitionAndFilingFee =
+    rawCase.orderForAmendedPetitionAndFilingFee;
+  this.orderForFilingFee = rawCase.orderForFilingFee;
+  this.orderForRatification = rawCase.orderForRatification;
+  this.orderToShowCause = rawCase.orderToShowCause;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -104,6 +112,13 @@ const paperRequirements = joi
     mailingDate: joi.string().max(25).required(),
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      Case.validationRules.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: Case.validationRules.orderForFilingFee,
+    orderForOds: Case.validationRules.orderForOds,
+    orderForRatification: Case.validationRules.orderForRatification,
+    orderToShowCause: Case.validationRules.orderToShowCause,
     ownershipDisclosureFile: joi.when('partyType', {
       is: joi
         .exist()
@@ -134,8 +149,8 @@ const paperRequirements = joi
     }),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joi.date().iso().optional().allow(null),
-      then: joi.date().iso().max('now').required(),
+      otherwise: joiStrictTimestamp.optional().allow(null),
+      then: joiStrictTimestamp.max('now').required(),
     }),
     petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
     petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
@@ -148,7 +163,7 @@ const paperRequirements = joi
         then: joi.string().required(),
       }),
     procedureType: joi.string().required(),
-    receivedAt: joi.date().iso().max('now').required(),
+    receivedAt: joiStrictTimestamp.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {
@@ -161,7 +176,7 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    stinFile: joi.object().required(),
+    stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
@@ -177,9 +192,6 @@ const paperRequirements = joi
 joiValidationDecorator(
   CaseInternal,
   paperRequirements,
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   CaseInternal.VALIDATION_ERROR_MESSAGES,
 );
 

@@ -8,21 +8,25 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
     const entityConstructor = applicationContext.getEntityByName(
       data[0].entityName,
     );
-    returnData = data.map(
-      result =>
-        new entityConstructor(result, {
-          applicationContext,
-          filtered: true,
-        }),
-    );
+    if (entityConstructor) {
+      returnData = data.map(
+        result =>
+          new entityConstructor(result, {
+            applicationContext,
+            filtered: true,
+          }),
+      );
+    }
   } else if (data && data.entityName) {
     const entityConstructor = applicationContext.getEntityByName(
       data.entityName,
     );
-    returnData = new entityConstructor(data, {
-      applicationContext,
-      filtered: true,
-    });
+    if (entityConstructor) {
+      returnData = new entityConstructor(data, {
+        applicationContext,
+        filtered: true,
+      });
+    }
   }
   return returnData;
 };
@@ -41,7 +45,6 @@ exports.genericHandler = (event, cb, options = {}) => {
     const user = options.user || getUserFromAuthHeader(event);
     const applicationContext =
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
-    const honeybadger = applicationContext.initHoneybadger();
 
     const {
       isPublicUser,
@@ -84,7 +87,7 @@ exports.genericHandler = (event, cb, options = {}) => {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);
-        honeybadger && honeybadger.notify(e);
+        await applicationContext.notifyHoneybadger(e);
       }
       throw e;
     }

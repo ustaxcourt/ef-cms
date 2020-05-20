@@ -26,9 +26,13 @@ export const setDocketEntryMetaFormForEditAction = ({
     if (date) {
       const { day, month, year } = deconstructDate(date);
 
-      deconstructedDate[`${fieldName}Day`] = day;
-      deconstructedDate[`${fieldName}Month`] = month;
-      deconstructedDate[`${fieldName}Year`] = year;
+      const dayFieldName = fieldName ? `${fieldName}Day` : 'day';
+      const monthFieldName = fieldName ? `${fieldName}Month` : 'month';
+      const yearFieldName = fieldName ? `${fieldName}Year` : 'year';
+
+      deconstructedDate[dayFieldName] = day;
+      deconstructedDate[monthFieldName] = month;
+      deconstructedDate[yearFieldName] = year;
     }
     return deconstructedDate;
   };
@@ -40,16 +44,16 @@ export const setDocketEntryMetaFormForEditAction = ({
   store.set(state.docketRecordIndex, docketRecordIndex);
 
   if (docketRecordEntry.documentId) {
-    const documentDetail = documents.find(
-      document => docketRecordEntry.documentId === document.documentId,
-    );
+    const documentDetail =
+      documents.find(
+        document => docketRecordEntry.documentId === document.documentId,
+      ) || {};
 
     // TODO: Abstract this (also in getFormattedCaseDetail)
     if (docketRecordEntry.servedPartiesCode) {
       documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
     } else {
       if (
-        documentDetail &&
         !!documentDetail.servedAt &&
         documentDetail.servedParties &&
         documentDetail.servedParties.length > 0
@@ -66,14 +70,14 @@ export const setDocketEntryMetaFormForEditAction = ({
       ...documentDetail,
       lodged: !!documentDetail.lodged,
       ...deconstructDateWrapper(
-        (documentDetail && documentDetail.filingDate) ||
-          docketRecordEntry.filingDate,
+        documentDetail.filingDate || docketRecordEntry.filingDate,
         'filingDate',
       ),
       ...deconstructDateWrapper(
-        documentDetail && documentDetail.certificateOfServiceDate,
+        documentDetail.certificateOfServiceDate,
         'certificateOfService',
       ),
+      ...deconstructDateWrapper(documentDetail.date),
     });
 
     // TODO: add to unit test

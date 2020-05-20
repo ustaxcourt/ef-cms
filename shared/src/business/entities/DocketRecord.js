@@ -3,7 +3,9 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * DocketRecord constructor
  *
@@ -14,6 +16,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'DocketRecord';
 
   this.docketRecordId =
     rawDocketRecord.docketRecordId || applicationContext.getUniqueId();
@@ -65,6 +68,7 @@ joiValidationDecorator(
       .optional()
       .meta({ tags: ['Restricted'] })
       .description('JSON representation of the in-progress edit of this item.'),
+    entityName: joi.string().valid('DocketRecord').required(),
     eventCode: joi
       .string()
       .valid(...getAllEventCodes())
@@ -78,10 +82,8 @@ joiValidationDecorator(
       .allow(null)
       .meta({ tags: ['Restricted'] })
       .description('ID of the user that filed this Docket Record item.'),
-    filingDate: joi
-      .date()
+    filingDate: joiStrictTimestamp
       .max('now')
-      .iso()
       .required()
       .description('Date that this Docket Record item was filed.'),
     index: joi
@@ -95,7 +97,6 @@ joiValidationDecorator(
       .optional()
       .description('Served parties code to override system-computed code.'),
   }),
-  undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 

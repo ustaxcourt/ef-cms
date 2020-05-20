@@ -15,7 +15,10 @@ export const canSetTrialSessionToCalendarAction = async ({
   path,
 }) => {
   const trialSession = get(state.trialSession);
-  const canSetAsCalendared = applicationContext
+  const {
+    canSetAsCalendared,
+    emptyFields,
+  } = applicationContext
     .getUseCases()
     .canSetTrialSessionAsCalendaredInteractor({
       applicationContext,
@@ -26,11 +29,6 @@ export const canSetTrialSessionToCalendarAction = async ({
     return path.yes();
   }
 
-  const { TrialSession } = applicationContext.getEntityConstructors();
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
-  const emptyFields = trialSessionEntity.getEmptyFields();
   const addressProperties = ['address1', 'city', 'state', 'postalCode'];
   const missingAddressProperties = addressProperties.filter(property =>
     emptyFields.includes(property),

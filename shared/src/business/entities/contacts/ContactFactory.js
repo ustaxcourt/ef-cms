@@ -443,7 +443,6 @@ ContactFactory.createContactFactory = ({
         ...ContactFactory.getValidationObject({ countryType, isPaper }),
         ...additionalValidation,
       }),
-      undefined,
       GenericContactConstructor.errorToMessageMap,
     );
 

@@ -4,6 +4,7 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('./orderPublicSearchInteractor');
+const { Document } = require('../../entities/Document');
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -31,12 +32,38 @@ describe('orderPublicSearchInteractor', () => {
           eventCode: 'ODD',
           signedJudgeName: 'Guy Fieri',
         },
+        {
+          caseCaption: 'Gal Fieri, Petitioner',
+          caseId: '3',
+          docketNumber: '104-19',
+          docketNumberSuffix: 'AAA',
+          documentContents: 'Baby Ruth is gross',
+          documentTitle: 'Order for Baby Ruth',
+          eventCode: 'ODD',
+          isSealed: true,
+          signedJudgeName: 'Gal Fieri',
+        },
       ]);
   });
 
-  it('returns results with an authorized user role (petitionsclerk)', async () => {
+  it('should only search for order document types', async () => {
+    await orderPublicSearchInteractor({
+      applicationContext,
+      orderKeyword: 'fish',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+    });
+  });
+
+  it('returns results with sealed cases filtered out', async () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
+      orderKeyword: 'fish',
     });
 
     expect(result).toMatchObject([

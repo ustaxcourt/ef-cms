@@ -77,7 +77,7 @@ If this occurs, rerun the build.
 
 ```
   Serverless Error ---------------------------------------
- 
+
   ServerlessError: An error occurred: CasePublicSearchLambdaFunction - Code storage limit exceeded. (Service: AWSLambdaInternal; Status Code: 400; Error Code: CodeStorageExceededException
 ```
 
@@ -113,8 +113,6 @@ To revert your `serverless-prune-plugin`, just change `before` back to `after` o
 
 `[illegal_argument_exception] Limit of total fields [4000] in index [efcms] has been exceeded`
 
-This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit. To investigate, run the command
-
-`./web-api/check-elasticsearch-mappings.sh [ENV]`
+This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit.
 
 The script will output data related to the mapping for the environment and can help pinpoint areas to look into further. To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.

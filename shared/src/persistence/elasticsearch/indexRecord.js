@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 exports.indexRecord = async ({
   applicationContext,
@@ -7,14 +8,17 @@ exports.indexRecord = async ({
   record,
 }) => {
   const searchClient = applicationContext.getSearchClient();
+  const index = getIndexNameForRecord(fullRecord);
 
-  const body = isAlreadyMarshalled
-    ? fullRecord
-    : { ...AWS.DynamoDB.Converter.marshall(fullRecord) };
+  if (index) {
+    const body = isAlreadyMarshalled
+      ? fullRecord
+      : { ...AWS.DynamoDB.Converter.marshall(fullRecord) };
 
-  await searchClient.index({
-    body,
-    id: `${record.recordPk}_${record.recordSk}`,
-    index: 'efcms',
-  });
+    await searchClient.index({
+      body,
+      id: `${record.recordPk}_${record.recordSk}`,
+      index,
+    });
+  }
 };

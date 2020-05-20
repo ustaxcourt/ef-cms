@@ -8,7 +8,8 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 const ADMISSIONS_STATUS_OPTIONS = [
@@ -38,6 +39,7 @@ const roleMap = {
 
 Practitioner.prototype.init = function (rawUser) {
   userDecorator(this, rawUser);
+  this.entityName = 'Practitioner';
   this.name = Practitioner.getFullName(rawUser);
   this.firstName = rawUser.firstName;
   this.lastName = rawUser.lastName;
@@ -90,9 +92,7 @@ const validationRules = {
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
-  admissionsDate: joi
-    .date()
-    .iso()
+  admissionsDate: joiStrictTimestamp
     .max('now')
     .required()
     .description(
@@ -126,6 +126,7 @@ const validationRules = {
     .valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
+  entityName: joi.string().valid('Practitioner').required(),
   firmName: joi
     .string()
     .optional()
@@ -167,7 +168,6 @@ joiValidationDecorator(
   joi.object().keys({
     ...validationRules,
   }),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

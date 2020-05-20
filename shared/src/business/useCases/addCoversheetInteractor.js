@@ -1,9 +1,8 @@
-const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
-
 const {
   generateCoverPagePdf,
 } = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+const { Case } = require('../entities/cases/Case');
+const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -56,11 +55,11 @@ exports.generateCoverSheetData = ({
     '';
 
   const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
-  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
-  if (caseCaptionNames !== caseCaption) {
-    caseCaptionNames += ', ';
-    caseCaptionExtension = caseCaption.replace(caseCaptionNames, '');
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
 
   let documentTitle =
@@ -74,7 +73,7 @@ exports.generateCoverSheetData = ({
 
   const coverSheetData = {
     caseCaptionExtension,
-    caseCaptionNames,
+    caseTitle,
     certificateOfService:
       documentEntity.certificateOfService === true
         ? 'Certificate of Service'
@@ -130,7 +129,7 @@ exports.addCoverToPdf = async ({
 
   pdfDoc.insertPage(0, coverPageDocumentPages[0]);
 
-  return pdfDoc.save();
+  return await pdfDoc.save();
 };
 
 /**
@@ -140,7 +139,6 @@ exports.addCoverToPdf = async ({
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the case id
  * @param {string} providers.documentId the document id
- * @returns {Uint8Array} the new pdf data
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
@@ -197,6 +195,4 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     documentId,
   });
-
-  return newPdfData;
 };

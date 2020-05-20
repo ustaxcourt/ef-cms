@@ -9,9 +9,13 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   #warmup:
   #enabled: true
 
@@ -156,6 +160,10 @@ functions:
           path: /{documentId}/validate
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     alarms:
       - errorExceptions
 
@@ -182,16 +190,25 @@ functions:
           path: /filing-receipt-pdf
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   virusScan:
     handler: web-api/${self:provider.dir}/documentsHandlers.virusScanPdfLambda
     memorySize: 3008
     timeout: 900
     layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-av:latest
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-avm:latest
     events:
       - http:
           path: /{documentId}/virus-scan
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

@@ -22,6 +22,16 @@ describe('getAllCaseDeadlinesInteractor', () => {
       caseCaption: 'A caption, Petitioner',
       caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
       caseType: 'CDP (Lien/Levy)',
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: 'domestic',
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
       docketNumber: '101-19',
       partyType: 'Petitioner',
       procedureType: 'Regular',
@@ -71,6 +81,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
         description: 'A deadline!',
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
+        entityName: 'CaseDeadline',
       },
     ]);
   });

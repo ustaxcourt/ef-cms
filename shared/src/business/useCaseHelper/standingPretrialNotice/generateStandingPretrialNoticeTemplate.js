@@ -36,11 +36,11 @@ const generateStandingPretrialNoticeTemplate = async ({
   );
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
-  let caseName = Case.getCaseCaptionNames(caseCaption);
+  let caseTitle = Case.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
-  if (caseName !== caseCaption) {
-    caseName += ', ';
-    caseCaptionExtension = caseCaption.replace(caseName, '');
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
 
   let respondentContactText = 'not available at this time';
@@ -53,7 +53,7 @@ const generateStandingPretrialNoticeTemplate = async ({
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
     caseCaptionExtension,
-    caseName,
+    caseTitle,
     docketNumberWithSuffix,
     footerDate,
     headerDate,

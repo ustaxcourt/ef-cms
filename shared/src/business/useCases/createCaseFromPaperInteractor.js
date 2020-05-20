@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
@@ -22,12 +23,10 @@ const addPetitionDocumentWithWorkItemToCase = ({
       assigneeId: user.userId,
       assigneeName: user.name,
       associatedJudge: caseToAdd.associatedJudge,
-      caseCaptionNames: Case.getCaseCaptionNames(
-        Case.getCaseCaption(caseToAdd),
-      ),
       caseId: caseToAdd.caseId,
-      caseIsInProgress: caseToAdd.inProgress,
+      caseIsInProgress: true,
       caseStatus: caseToAdd.status,
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
       docketNumberSuffix: caseToAdd.docketNumberSuffix,
       document: {
@@ -96,7 +95,6 @@ exports.createCaseFromPaperInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { CaseInternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseInternal({
     ...petitionMetadata,
     applicationForWaiverOfFilingFeeFileId,
