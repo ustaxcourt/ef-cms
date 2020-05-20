@@ -13,7 +13,17 @@ export const computeStatisticDatesAction = ({
   get,
   store,
 }) => {
-  const { statistics } = get(state.form);
+  let { statistics } = get(state.form);
+
+  statistics = statistics.filter(
+    statistic =>
+      statistic.year ||
+      statistic.lastDateOfPeriodDay ||
+      statistic.lastDateOfPeriodMonth ||
+      statistic.lastDateOfPeriodYear ||
+      statistic.deficiencyAmount ||
+      statistic.totalPenalties,
+  );
 
   (statistics || []).forEach((statistic, index) => {
     if (
@@ -30,10 +40,14 @@ export const computeStatisticDatesAction = ({
           month: statistic.lastDateOfPeriodMonth,
           year: statistic.lastDateOfPeriodYear,
         });
-      store.set(
-        state.form.statistics[index].lastDateOfPeriod,
-        computedLastDateOfPeriod,
-      );
+      statistics[index].lastDateOfPeriod = computedLastDateOfPeriod;
     }
   });
+
+  if (statistics.length === 0) {
+    statistics.push({
+      yearOrPeriod: 'Year',
+    });
+  }
+  store.set(state.form.statistics, statistics);
 };
