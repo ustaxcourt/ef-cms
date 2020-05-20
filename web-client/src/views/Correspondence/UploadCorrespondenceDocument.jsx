@@ -132,7 +132,9 @@ export const UploadCorrespondenceDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    uploadCorrespondenceDocumentSequence();
+                    uploadCorrespondenceDocumentSequence({
+                      tab: 'correspondence',
+                    });
                   }}
                 >
                   Finish
