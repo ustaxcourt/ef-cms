@@ -12,7 +12,6 @@ import {
 } from '../src/router';
 
 import { DynamoDB } from 'aws-sdk';
-import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -607,11 +606,9 @@ export const wait = time => {
 };
 
 export const refreshElasticsearchIndex = async () => {
-  await Promise.all(
-    elasticsearchIndexes.map(async index => {
-      await axios.post(`http://localhost:9200/${index}/_refresh`);
-    }),
-  );
+  // refresh all ES indices:
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
+  await axios.post('http://localhost:9200/_refresh');
   return await wait(1500);
 };
 
