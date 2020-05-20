@@ -180,7 +180,7 @@ export const StatisticsForm = connect(
 
         <Button
           link
-          className="padding-0"
+          className="padding-0 calculate-penalties"
           icon="calculator"
           onClick={() =>
             showCalculatePenaltiesModalSequence({
