@@ -132,7 +132,6 @@ export const UploadCorrespondenceDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    console.log('yeehaw');
                     uploadCorrespondenceDocumentSequence();
                   }}
                 >
