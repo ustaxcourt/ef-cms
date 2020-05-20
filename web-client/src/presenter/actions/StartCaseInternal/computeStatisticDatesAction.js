@@ -13,11 +13,7 @@ export const computeStatisticDatesAction = ({
   get,
   store,
 }) => {
-  const { caseType, hasVerifiedIrsNotice, statistics } = get(state.form);
-
-  if (caseType !== 'Deficiency' || !hasVerifiedIrsNotice) {
-    statistics.splice(0, statistics.length);
-  }
+  const { statistics } = get(state.form);
 
   (statistics || []).forEach((statistic, index) => {
     if (
