@@ -7,12 +7,13 @@ const { Correspondence } = require('../../entities/Correspondence');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * fileCorrespondenceDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document
- * @returns {Promise<*>} the updated case entity after the document is added
+ * @returns {Promise<*>} the raw case object
  */
 exports.fileCorrespondenceDocumentInteractor = async ({
   applicationContext,

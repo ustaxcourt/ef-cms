@@ -1768,7 +1768,7 @@ Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
 };
 
 /**
- * generates the case confirmation pdf file name
+ * adds the correspondence document to the list of correspondences on the case
  *
  * @param {Correspondence} correspondenceEntity the correspondence document to add to the case
  * @returns {Case} this case entity
