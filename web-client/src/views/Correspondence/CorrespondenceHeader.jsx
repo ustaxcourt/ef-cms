@@ -14,7 +14,6 @@ export const CorrespondenceHeader = connect(
   },
   function CorrespondenceHeader({
     formattedCaseDetail,
-    navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
     updateSessionMetadataSequence,
   }) {
@@ -37,12 +36,8 @@ export const CorrespondenceHeader = connect(
                 link
                 aria-label="printable docket record"
                 className="margin-right-0"
+                href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
                 icon="envelope-open"
-                onClick={() => {
-                  navigateToPrintableDocketRecordSequence({
-                    docketNumber: formattedCaseDetail.docketNumber,
-                  });
-                }}
               >
                 Add Correspondence File
               </Button>
