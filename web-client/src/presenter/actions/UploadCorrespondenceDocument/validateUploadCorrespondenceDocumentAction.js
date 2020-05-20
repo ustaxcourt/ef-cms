@@ -23,10 +23,6 @@ export const validateUploadCorrespondenceDocumentAction = ({ get, path }) => {
     errors.primaryDocumentFile = 'Upload a document';
   }
 
-  console.log('freeText', freeText);
-  console.log('errors', errors);
-  console.log('primaryDocumentFile', primaryDocumentFile);
-
   if (isEmpty(errors)) {
     return path.success();
   } else {
