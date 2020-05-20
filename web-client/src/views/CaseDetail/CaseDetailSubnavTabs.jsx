@@ -7,10 +7,12 @@ export const CaseDetailSubnavTabs = connect(
   {
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
     clearAlertSequence: sequences.clearAlertSequence,
+    setCaseDetailPrimaryTabSequence: sequences.setCaseDetailPrimaryTabSequence,
   },
   function CaseDetailSubnavTabs({
     caseDetailSubnavHelper,
     clearAlertSequence,
+    setCaseDetailPrimaryTabSequence,
   }) {
     return (
       <div className="case-detail-primary-tabs__container">
@@ -18,7 +20,10 @@ export const CaseDetailSubnavTabs = connect(
           <Tabs
             bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
-            onSelect={() => clearAlertSequence()}
+            onSelect={() => {
+              clearAlertSequence();
+              setCaseDetailPrimaryTabSequence();
+            }}
           >
             <Tab
               className="padding-left-2"
@@ -34,6 +39,13 @@ export const CaseDetailSubnavTabs = connect(
                 id="tab-in-progress"
                 tabName="inProgress"
                 title="In Progress"
+              />
+            )}
+            {caseDetailSubnavHelper.showCorrespondenceTab && (
+              <Tab
+                id="tab-correspondence"
+                tabName="correspondence"
+                title="Correspondence"
               />
             )}
             {caseDetailSubnavHelper.showCaseInformationTab && (

@@ -241,7 +241,14 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          statistics: [{ yearOrPeriod: 'Year' }],
+          statistics: [
+            {
+              deficiencyAmount: 1,
+              totalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
         },
         {
           applicationContext,
@@ -2888,6 +2895,65 @@ describe('Case entity', () => {
       expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
         'case-123-20-confirmation.pdf',
       );
+    });
+  });
+
+  describe('Statistics', () => {
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: true,
+          statistics: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        statistics: '"statistics" must contain at least 1 items',
+      });
+    });
+
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be required for other cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Other',
+          hasVerifiedIrsNotice: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });
