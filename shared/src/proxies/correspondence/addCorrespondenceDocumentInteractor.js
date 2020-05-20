@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * fileCorrespondenceDocumentProxy
+ * addCorrespondenceDocumentProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCorrespondenceDocumentInteractor = ({
+exports.addCorrespondenceDocumentInteractor = ({
   applicationContext,
   documentMetadata,
   primaryDocumentFileId,
