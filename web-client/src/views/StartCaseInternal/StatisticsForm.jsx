@@ -25,13 +25,7 @@ export const StatisticsForm = connect(
     validationErrors,
   }) {
     const getDeficiencyAmountInput = index => (
-      <FormGroup
-        errorText={
-          validationErrors.statistics &&
-          validationErrors.statistics[index] &&
-          validationErrors.statistics[index].deficiencyAmount
-        }
-      >
+      <>
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
           Deficiency
         </label>
@@ -52,17 +46,11 @@ export const StatisticsForm = connect(
             });
           }}
         />
-      </FormGroup>
+      </>
     );
 
     const getTotalPenaltiesInput = index => (
-      <FormGroup
-        errorText={
-          validationErrors.statistics &&
-          validationErrors.statistics[index] &&
-          validationErrors.statistics[index].totalPenalties
-        }
-      >
+      <>
         <label className="usa-label" htmlFor={`total-penalties-${index}`}>
           Total penalties
         </label>
@@ -83,7 +71,7 @@ export const StatisticsForm = connect(
             });
           }}
         />
-      </FormGroup>
+      </>
     );
 
     const getSingleStatisticForm = index => (
@@ -117,70 +105,67 @@ export const StatisticsForm = connect(
           </fieldset>
         </FormGroup>
 
-        {statisticsFormHelper.statisticOptions[index].showYearInput && (
-          <div className="grid-row grid-gap-2">
-            <div className="grid-col-2">
-              <FormGroup
-                errorText={
-                  validationErrors.statistics &&
-                  validationErrors.statistics[index] &&
-                  validationErrors.statistics[index].year
-                }
-              >
-                <label className="usa-label" htmlFor={`year-${index}`}>
-                  Year
-                </label>
-                <input
-                  className="usa-input usa-input-inline"
-                  id={`year-${index}`}
-                  maxLength="25"
-                  name={`statistics.${index}.year`}
-                  placeholder="YYYY"
-                  value={form.statistics[index].year || ''}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-            </div>
-            <div className="grid-col-4">{getDeficiencyAmountInput(index)}</div>
-            <div className="grid-col-4">{getTotalPenaltiesInput(index)}</div>
-          </div>
-        )}
-
-        {statisticsFormHelper.statisticOptions[index].showPeriodInput && (
-          <>
-            <DateInput
-              errorText={
-                validationErrors.statistics &&
-                validationErrors.statistics[index] &&
-                validationErrors.statistics[index].lastDateOfPeriod
-              }
-              id={`last-date-of-period-${index}`}
-              label="Last date of period"
-              names={{
-                day: `statistics.${index}.lastDateOfPeriodDay`,
-                month: `statistics.${index}.lastDateOfPeriodMonth`,
-                year: `statistics.${index}.lastDateOfPeriodYear`,
-              }}
-              values={{
-                day: form.statistics[index].lastDateOfPeriodDay,
-                month: form.statistics[index].lastDateOfPeriodMonth,
-                year: form.statistics[index].lastDateOfPeriodYear,
-              }}
-              onChange={updateFormValueSequence}
-            />
+        <FormGroup
+          errorText={statisticsFormHelper.getErrorText(validationErrors, index)}
+        >
+          {statisticsFormHelper.statisticOptions[index].showYearInput && (
             <div className="grid-row grid-gap-2">
+              <div className="grid-col-2">
+                <>
+                  <label className="usa-label" htmlFor={`year-${index}`}>
+                    Year
+                  </label>
+                  <input
+                    className="usa-input usa-input-inline"
+                    id={`year-${index}`}
+                    maxLength="25"
+                    name={`statistics.${index}.year`}
+                    placeholder="YYYY"
+                    value={form.statistics[index].year || ''}
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </>
+              </div>
               <div className="grid-col-4">
                 {getDeficiencyAmountInput(index)}
               </div>
               <div className="grid-col-4">{getTotalPenaltiesInput(index)}</div>
             </div>
-          </>
-        )}
+          )}
+
+          {statisticsFormHelper.statisticOptions[index].showPeriodInput && (
+            <>
+              <DateInput
+                id={`last-date-of-period-${index}`}
+                label="Last date of period"
+                names={{
+                  day: `statistics.${index}.lastDateOfPeriodDay`,
+                  month: `statistics.${index}.lastDateOfPeriodMonth`,
+                  year: `statistics.${index}.lastDateOfPeriodYear`,
+                }}
+                values={{
+                  day: form.statistics[index].lastDateOfPeriodDay,
+                  month: form.statistics[index].lastDateOfPeriodMonth,
+                  year: form.statistics[index].lastDateOfPeriodYear,
+                }}
+                onChange={updateFormValueSequence}
+              />
+              <div className="grid-row grid-gap-2">
+                <div className="grid-col-4">
+                  {getDeficiencyAmountInput(index)}
+                </div>
+                <div className="grid-col-4">
+                  {getTotalPenaltiesInput(index)}
+                </div>
+              </div>
+            </>
+          )}
+        </FormGroup>
 
         <Button
           link
