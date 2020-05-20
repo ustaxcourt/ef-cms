@@ -26,7 +26,7 @@ export const refreshStatisticsAction = async ({ get, store }) => {
           yearOrPeriod: 'Year',
         },
       ];
-      store.set(state.form.statistics, [statistics]);
+      store.set(state.form.statistics, statistics);
     }
   }
 };
