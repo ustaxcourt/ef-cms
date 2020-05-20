@@ -164,6 +164,7 @@ const app = {
       faClock,
       faClockSolid,
       faClone,
+      faEnvelopeOpen,
       faCloudDownloadAlt,
       faCloudUploadAlt,
       faCopy,
