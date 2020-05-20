@@ -197,10 +197,7 @@ export const StatisticsForm = connect(
 
     return (
       <>
-        <h4>
-          Statistics Proposed By IRS{' '}
-          <span className="usa-hint">(optional)</span>
-        </h4>
+        <h4>Statistics Proposed By IRS</h4>
 
         {form.statistics.map((statistic, index) =>
           getSingleStatisticForm(index),
