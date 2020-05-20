@@ -1,5 +1,20 @@
 import { state } from 'cerebral';
 
+export const getErrorText = (validationErrors, index, statistic) => {
+  if (!Array.isArray(validationErrors.statistics))
+    return validationErrors.statistics;
+
+  const error = validationErrors.statistics.find(s => s.index === index);
+
+  if (error) {
+    if (statistic.yearOrPeriod === 'Year') {
+      return 'Enter year, deficiency amount, and total penalties';
+    } else {
+      return 'Enter period, deficiency amount, and total penalties';
+    }
+  }
+};
+
 /**
  * gets the statistics form helper fields
  *
@@ -24,28 +39,17 @@ export const statisticsFormHelper = (get, applicationContext) => {
   (form.statistics || []).forEach(statistic => {
     if (statistic.yearOrPeriod === 'Year') {
       statisticOptions.push({ showYearInput: true });
-    } else if (statistic.yearOrPeriod === 'Period') {
+    } else {
       statisticOptions.push({ showPeriodInput: true });
     }
   });
 
-  const getErrorText = (validationErrors, index, statistic) => {
-    if (!Array.isArray(validationErrors.statistics))
-      return validationErrors.statistics;
-
-    const error = validationErrors.statistics.find(s => s.index === index);
-
-    if (error) {
-      if (statistic.yearOrPeriod === 'Year') {
-        return 'Enter year, deficiency amount, and total penalties';
-      } else {
-        return 'Enter period, deficiency amount, and total penalties';
-      }
-    }
-  };
+  const penalties = get(state.modal.penalties);
+  const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
 
   return {
     getErrorText,
+    showAddAnotherPenaltyButton,
     showAddMoreStatisticsButton,
     showStatisticsForm,
     statisticOptions,
