@@ -13,9 +13,9 @@ export const computeStatisticDatesAction = ({
   get,
   store,
 }) => {
-  const { statistics } = get(state.form);
+  let statistics = get(state.form.statistics) || [];
 
-  (statistics || []).forEach((statistic, index) => {
+  statistics = statistics.map(statistic => {
     if (
       applicationContext
         .getUtilities()
@@ -30,10 +30,10 @@ export const computeStatisticDatesAction = ({
           month: statistic.lastDateOfPeriodMonth,
           year: statistic.lastDateOfPeriodYear,
         });
-      store.set(
-        state.form.statistics[index].lastDateOfPeriod,
-        computedLastDateOfPeriod,
-      );
+      statistic.lastDateOfPeriod = computedLastDateOfPeriod;
     }
+    return statistic;
   });
+
+  store.set(state.form.statistics, statistics);
 };

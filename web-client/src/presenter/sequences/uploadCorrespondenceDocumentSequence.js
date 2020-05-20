@@ -14,6 +14,7 @@ import { setupUploadMetadataAction } from '../actions/UploadCorrespondenceDocume
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { submitCorrespondenceAction } from '../actions/UploadCorrespondenceDocument/submitCorrespondenceAction';
 import { uploadCorrespondenceFileAction } from '../actions/UploadCorrespondenceDocument/uploadCorrespondenceFileAction';
 import { validateUploadCorrespondenceDocumentAction } from '../actions/UploadCorrespondenceDocument/validateUploadCorrespondenceDocumentAction';
 
@@ -34,7 +35,7 @@ export const uploadCorrespondenceDocumentSequence = [
         error: [openFileUploadErrorModal],
         success: [
           setupUploadMetadataAction,
-          // TODO: add correspondence document to case
+          submitCorrespondenceAction,
           setCaseAction,
           getUploadCorrespondenceDocumentAlertSuccessAction,
           setAlertSuccessAction,
