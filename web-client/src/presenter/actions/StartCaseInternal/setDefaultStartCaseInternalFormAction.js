@@ -39,9 +39,6 @@ export const setDefaultStartCaseInternalFormAction = ({
   }
 
   if (!statistics) {
-    const defaultStatistic = {
-      yearOrPeriod: 'Year',
-    };
-    store.set(state.form.statistics, [defaultStatistic]);
+    store.set(state.form.statistics, []);
   }
 };

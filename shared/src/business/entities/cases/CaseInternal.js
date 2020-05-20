@@ -59,16 +59,13 @@ function CaseInternal(rawCase) {
   this.receivedAt = rawCase.receivedAt;
   this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
-  if (Array.isArray(rawCase.statistics)) {
-    this.statistics = rawCase.statistics.map(
-      statistic => new Statistic(statistic),
-    );
-  } else {
-    this.statistics = [];
-  }
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
+
+  this.statistics = Array.isArray(rawCase.statistics)
+    ? rawCase.statistics.map(statistic => new Statistic(statistic))
+    : [];
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {

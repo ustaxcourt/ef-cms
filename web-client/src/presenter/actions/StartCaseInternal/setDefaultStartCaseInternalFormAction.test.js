@@ -63,7 +63,7 @@ describe('setDefaultStartCaseInternalFormAction', () => {
       state: { form: {} },
     });
 
-    expect(result.state.form.statistics).toEqual([{ yearOrPeriod: 'Year' }]);
+    expect(result.state.form.statistics).toEqual([]);
   });
 
   it('does not override statistics if it is already present on the form', async () => {
@@ -71,9 +71,9 @@ describe('setDefaultStartCaseInternalFormAction', () => {
       modules: {
         presenter,
       },
-      state: { form: { statistics: [{ yearOrPeriod: 'Period' }] } },
+      state: { form: { statistics: [{ yearOrPeriod: 'Year' }] } },
     });
 
-    expect(result.state.form.statistics[0].yearOrPeriod).toEqual('Period');
+    expect(result.state.form.statistics).toEqual([{ yearOrPeriod: 'Year' }]);
   });
 });
