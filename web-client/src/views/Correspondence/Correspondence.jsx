@@ -13,6 +13,7 @@ export const Correspondence = connect(
     showModal: state.modal.showModal,
   },
   function Correspondence({
+    formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence,
     showModal,
   }) {
@@ -47,6 +48,7 @@ export const Correspondence = connect(
                 <Button
                   link
                   className="text-left padding-0 margin-left-1"
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/1234`}
                   icon="edit"
                 >
                   Edit
