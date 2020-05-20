@@ -2897,4 +2897,63 @@ describe('Case entity', () => {
       );
     });
   });
+
+  describe('Statistics', () => {
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: true,
+          statistics: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        statistics: '"statistics" must contain at least 1 items',
+      });
+    });
+
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be required for other cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Other',
+          hasVerifiedIrsNotice: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+  });
 });

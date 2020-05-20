@@ -10,6 +10,7 @@ export const IRSNotice = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
     form: state.form,
+    refreshStatisticsSequence: sequences.refreshStatisticsSequence,
     showModal: state.modal.showModal,
     startCaseInternalHelper: state.startCaseInternalHelper,
     statisticsFormHelper: state.statisticsFormHelper,
@@ -21,6 +22,7 @@ export const IRSNotice = connect(
   function IRSNotice({
     CASE_TYPES,
     form,
+    refreshStatisticsSequence,
     showModal,
     startCaseInternalHelper,
     statisticsFormHelper,
@@ -48,6 +50,7 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
+                refreshStatisticsSequence();
               }}
             />
             <label
