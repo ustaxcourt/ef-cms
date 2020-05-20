@@ -15,7 +15,7 @@ export const validatePetitionFromPaperSequence = [
       computeReceivedAtDateAction,
       computeIrsNoticeDateAction,
       computePetitionFeeDatesAction,
-      computeStatisticDatesAction,
+      computeStatisticDatesAction({ filterEmptyStatistics: false }),
       validatePetitionFromPaperAction,
       {
         error: [setValidationErrorsAction],

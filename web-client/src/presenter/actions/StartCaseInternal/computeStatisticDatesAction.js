@@ -9,16 +9,15 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const computeStatisticDatesAction = ({
-  applicationContext,
-  get,
-  store,
-}) => {
+  filterEmptyStatistics,
+} = {}) => ({ applicationContext, get, store }) => {
   const { caseType, hasVerifiedIrsNotice } = get(state.form);
   let statistics = get(state.form.statistics) || [];
 
   statistics = statistics
     .filter(
       statistic =>
+        !filterEmptyStatistics ||
         statistic.year ||
         statistic.lastDateOfPeriodDay ||
         statistic.lastDateOfPeriodMonth ||
