@@ -401,8 +401,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  addCorrespondenceDocument:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.addCorrespondenceDocumentLambda
+  fileCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCorrespondenceDocumentLambda
     events:
       - http:
           path: /{caseId}/correspondence

@@ -1,6 +1,4 @@
 module.exports = {
-  addCorrespondenceDocumentLambda: require('./correspondence/addCorrespondenceDocumentLambda')
-    .addCorrespondenceDocumentLambda,
   addCoversheetLambda: require('./documents/addCoversheetLambda')
     .addCoversheetLambda,
   archiveDraftDocumentLambda: require('./documents/archiveDraftDocumentLambda')
@@ -11,6 +9,8 @@ module.exports = {
     .createWorkItemLambda,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .downloadPolicyUrlLambda,
+  fileCorrespondenceDocumentLambda: require('./correspondence/fileCorrespondenceDocumentLambda')
+    .fileCorrespondenceDocumentLambda,
   fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
     .fileCourtIssuedDocketEntryLambda,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
