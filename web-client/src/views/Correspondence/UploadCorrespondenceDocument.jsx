@@ -13,26 +13,28 @@ import classNames from 'classnames';
 export const UploadCorrespondenceDocument = connect(
   {
     constants: state.constants,
+    documentId: state.documentId,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    // uploadCorrespondenceDocumentSequence:
-    //   sequences.uploadCorrespondenceDocumentSequence,
-    // validateUploadCorrespondenceDocumentSequence:
-    //   sequences.validateUploadCorrespondenceDocumentSequence,
+    uploadCorrespondenceDocumentSequence:
+      sequences.uploadCorrespondenceDocumentSequence,
+    validateUploadCorrespondenceDocumentSequence:
+      sequences.validateUploadCorrespondenceDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function UploadCorrespondenceDocument({
     constants,
+    documentId,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
     showModal,
     updateFormValueSequence,
-    // uploadCorrespondenceDocumentSequence,
-    // validateUploadCorrespondenceDocumentSequence,
+    uploadCorrespondenceDocumentSequence,
+    validateUploadCorrespondenceDocumentSequence,
     validationErrors,
   }) {
     return (
@@ -48,7 +50,12 @@ export const UploadCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Add Correspondence File</h2>
+                {documentId && (
+                  <h2 className="heading-1">Edit Correspondence File</h2>
+                )}
+                {!documentId && (
+                  <h2 className="heading-1">Add Correspondence File</h2>
+                )}
               </div>
             </div>
 
@@ -78,7 +85,7 @@ export const UploadCorrespondenceDocument = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        // validateUploadCorrespondenceDocumentSequence();
+                        validateUploadCorrespondenceDocumentSequence();
                       }}
                     />
                   </FormGroup>
@@ -132,9 +139,8 @@ export const UploadCorrespondenceDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    // uploadCorrespondenceDocumentSequence({
-                    //   tab: 'inProgress',
-                    // });
+                    console.log('yeehaw');
+                    uploadCorrespondenceDocumentSequence();
                   }}
                 >
                   Finish
