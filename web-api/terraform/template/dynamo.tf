@@ -45,10 +45,6 @@ resource "aws_dynamodb_table" "efcms-east" {
     attribute_name = "ttl"
     enabled        = true
   }
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_dynamodb_table" "efcms-west" {
@@ -96,10 +92,6 @@ resource "aws_dynamodb_table" "efcms-west" {
   ttl {
     attribute_name = "ttl"
     enabled        = true
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 }
 
