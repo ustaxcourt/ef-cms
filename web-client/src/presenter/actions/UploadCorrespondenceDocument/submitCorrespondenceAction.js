@@ -54,7 +54,7 @@ export const submitCorrespondenceAction = async ({
   } else {
     caseDetail = await applicationContext
       .getUseCases()
-      .fileCorrespondenceDocumentInteractor({
+      .addCorrespondenceDocumentInteractor({
         applicationContext,
         documentMetadata,
         primaryDocumentFileId: documentId,

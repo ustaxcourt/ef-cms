@@ -1,4 +1,6 @@
 module.exports = {
+  addCorrespondenceDocumentLambda: require('./correspondence/addCorrespondenceDocumentLambda')
+    .addCorrespondenceDocumentLambda,
   addCoversheetLambda: require('./documents/addCoversheetLambda')
     .addCoversheetLambda,
   archiveDraftDocumentLambda: require('./documents/archiveDraftDocumentLambda')
@@ -29,6 +31,8 @@ module.exports = {
     .serveCourtIssuedDocumentLambda,
   signDocumentLambda: require('./documents/signDocumentLambda')
     .signDocumentLambda,
+  updateCorrespondenceDocumentLambda: require('./correspondence/updateCorrespondenceDocumentLambda')
+    .updateCorrespondenceDocumentLambda,
   updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
     .updateCourtIssuedDocketEntryLambda,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')
