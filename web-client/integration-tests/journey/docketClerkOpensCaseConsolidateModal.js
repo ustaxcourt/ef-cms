@@ -3,6 +3,8 @@ export const docketClerkOpensCaseConsolidateModal = test => {
     await test.runSequence('openCleanModalSequence', {
       showModal: 'AddConsolidatedCaseModal',
     });
-    expect(test.getState('modal.showModal')).toEqual('AddConsolidatedCaseModal');
+    expect(test.getState('modal.showModal')).toEqual(
+      'AddConsolidatedCaseModal',
+    );
   });
 };

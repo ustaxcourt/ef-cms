@@ -95,13 +95,16 @@ exports.createCaseFromPaperInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseInternal({
-    ...petitionMetadata,
-    applicationForWaiverOfFilingFeeFileId,
-    ownershipDisclosureFileId,
-    petitionFileId,
-    stinFileId,
-  }).validate();
+  const petitionEntity = new CaseInternal(
+    {
+      ...petitionMetadata,
+      applicationForWaiverOfFilingFeeFileId,
+      ownershipDisclosureFileId,
+      petitionFileId,
+      stinFileId,
+    },
+    { applicationContext },
+  ).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
