@@ -18,10 +18,10 @@ export const UploadCorrespondenceDocument = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    // uploadCorrespondenceDocumentSequence:
-    //   sequences.uploadCorrespondenceDocumentSequence,
-    // validateUploadCorrespondenceDocumentSequence:
-    //   sequences.validateUploadCorrespondenceDocumentSequence,
+    uploadCorrespondenceDocumentSequence:
+      sequences.uploadCorrespondenceDocumentSequence,
+    validateUploadCorrespondenceDocumentSequence:
+      sequences.validateUploadCorrespondenceDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function UploadCorrespondenceDocument({
@@ -31,8 +31,8 @@ export const UploadCorrespondenceDocument = connect(
     formCancelToggleCancelSequence,
     showModal,
     updateFormValueSequence,
-    // uploadCorrespondenceDocumentSequence,
-    // validateUploadCorrespondenceDocumentSequence,
+    uploadCorrespondenceDocumentSequence,
+    validateUploadCorrespondenceDocumentSequence,
     validationErrors,
   }) {
     return (
@@ -78,7 +78,7 @@ export const UploadCorrespondenceDocument = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        // validateUploadCorrespondenceDocumentSequence();
+                        validateUploadCorrespondenceDocumentSequence();
                       }}
                     />
                   </FormGroup>
@@ -132,9 +132,9 @@ export const UploadCorrespondenceDocument = connect(
               <div className="grid-col-8">
                 <Button
                   onClick={() => {
-                    // uploadCorrespondenceDocumentSequence({
-                    //   tab: 'inProgress',
-                    // });
+                    uploadCorrespondenceDocumentSequence({
+                      tab: 'correspondence',
+                    });
                   }}
                 >
                   Finish
