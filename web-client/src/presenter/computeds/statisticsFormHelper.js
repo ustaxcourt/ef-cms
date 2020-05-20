@@ -29,23 +29,19 @@ export const statisticsFormHelper = (get, applicationContext) => {
     }
   });
 
-  const getErrorText = (validationErrors, index) => {
+  const getErrorText = (validationErrors, index, statistic) => {
     if (!Array.isArray(validationErrors.statistics))
       return validationErrors.statistics;
 
     const error = validationErrors.statistics.find(s => s.index === index);
 
-    return (
-      error &&
-      [
-        error.lastDateOfPeriod,
-        error.year,
-        error.deficiencyAmount,
-        error.totalPenalties,
-      ]
-        .filter(s => s)
-        .join(', ')
-    );
+    if (error) {
+      if (statistic.yearOrPeriod === 'Year') {
+        return 'Enter year, deficiency amount, and total penalties';
+      } else {
+        return 'Enter period, deficiency amount, and total penalties';
+      }
+    }
   };
 
   return {
