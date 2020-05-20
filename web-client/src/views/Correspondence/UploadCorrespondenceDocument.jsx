@@ -13,7 +13,7 @@ import classNames from 'classnames';
 export const UploadCorrespondenceDocument = connect(
   {
     constants: state.constants,
-    document: state.documentToEdit,
+    documentToEdit: state.documentToEdit,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -27,7 +27,7 @@ export const UploadCorrespondenceDocument = connect(
   },
   function UploadCorrespondenceDocument({
     constants,
-    document,
+    documentToEdit,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
@@ -50,10 +50,12 @@ export const UploadCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                {document && (
-                  <h2 className="heading-1">Edit {document.documentTitle}</h2>
+                {documentToEdit && (
+                  <h2 className="heading-1">
+                    Edit {documentToEdit.documentTitle}
+                  </h2>
                 )}
-                {!document && (
+                {!documentToEdit && (
                   <h2 className="heading-1">Add Correspondence File</h2>
                 )}
               </div>

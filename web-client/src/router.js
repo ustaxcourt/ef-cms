@@ -440,13 +440,13 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*',
-      ifHasAccess((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentToEditId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
           docketNumber,
-          documentId,
+          documentToEditId,
         });
       }),
     );
