@@ -10,7 +10,7 @@ describe('setupUploadMetadataAction', () => {
       },
       state: {
         form: {
-          description: 'something',
+          freeText: 'something',
         },
       },
     });
