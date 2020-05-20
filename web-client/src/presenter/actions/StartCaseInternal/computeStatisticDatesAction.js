@@ -15,36 +15,36 @@ export const computeStatisticDatesAction = ({
 }) => {
   let { statistics } = get(state.form);
 
-  statistics = statistics.filter(
-    statistic =>
-      statistic.year ||
-      statistic.lastDateOfPeriodDay ||
-      statistic.lastDateOfPeriodMonth ||
-      statistic.lastDateOfPeriodYear ||
-      statistic.deficiencyAmount ||
-      statistic.totalPenalties,
-  );
+  (statistics || [])
+    .filter(
+      statistic =>
+        statistic.year ||
+        statistic.lastDateOfPeriodDay ||
+        statistic.lastDateOfPeriodMonth ||
+        statistic.lastDateOfPeriodYear ||
+        statistic.deficiencyAmount ||
+        statistic.totalPenalties,
+    )
+    .forEach((statistic, index) => {
+      if (
+        applicationContext
+          .getUtilities()
+          .isValidDateString(
+            `${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}-${statistic.lastDateOfPeriodYear}`,
+          )
+      ) {
+        const computedLastDateOfPeriod = applicationContext
+          .getUtilities()
+          .createISODateStringFromObject({
+            day: statistic.lastDateOfPeriodDay,
+            month: statistic.lastDateOfPeriodMonth,
+            year: statistic.lastDateOfPeriodYear,
+          });
+        statistics[index].lastDateOfPeriod = computedLastDateOfPeriod;
+      }
+    });
 
-  (statistics || []).forEach((statistic, index) => {
-    if (
-      applicationContext
-        .getUtilities()
-        .isValidDateString(
-          `${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}-${statistic.lastDateOfPeriodYear}`,
-        )
-    ) {
-      const computedLastDateOfPeriod = applicationContext
-        .getUtilities()
-        .createISODateStringFromObject({
-          day: statistic.lastDateOfPeriodDay,
-          month: statistic.lastDateOfPeriodMonth,
-          year: statistic.lastDateOfPeriodYear,
-        });
-      statistics[index].lastDateOfPeriod = computedLastDateOfPeriod;
-    }
-  });
-
-  if (statistics.length === 0) {
+  if (statistics && statistics.length === 0) {
     statistics.push({
       yearOrPeriod: 'Year',
     });
