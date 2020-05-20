@@ -250,41 +250,27 @@ export const ReviewSavedPetition = connect(
                     </div>
                     {reviewSavedPetitionHelper.showStatistics && (
                       <>
-                        <div className="grid-row grid-gap">
-                          <div className="grid-col-4">
-                            <span className="usa-label usa-label-display">
-                              Year/Period
-                            </span>
-                          </div>
-                          <div className="grid-col-4">
-                            <span className="usa-label usa-label-display">
-                              Deficiency
-                            </span>
-                          </div>
-                          <div className="grid-col-4">
-                            <span className="usa-label usa-label-display">
-                              Total penalties
-                            </span>
-                          </div>
-                        </div>
-                        {reviewSavedPetitionHelper.formattedStatistics.map(
-                          (statistic, index) => (
-                            <div
-                              className="grid-row grid-gap margin-bottom-1"
-                              key={index}
-                            >
-                              <div className="grid-col-4">
-                                {statistic.formattedDate}
-                              </div>
-                              <div className="grid-col-4">
-                                {statistic.formattedDeficiencyAmount}
-                              </div>
-                              <div className="grid-col-4">
-                                {statistic.formattedTotalPenalties}
-                              </div>
-                            </div>
-                          ),
-                        )}
+                        <h4>Statistics</h4>
+                        <table className="usa-table docket-record responsive-table row-border-only">
+                          <thead>
+                            <tr>
+                              <th>Year/Period</th>
+                              <th>Deficiency</th>
+                              <th>Total penalties</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {reviewSavedPetitionHelper.formattedStatistics.map(
+                              (statistic, index) => (
+                                <tr key={index}>
+                                  <td>{statistic.formattedDate}</td>
+                                  <td>{statistic.formattedDeficiencyAmount}</td>
+                                  <td>{statistic.formattedTotalPenalties}</td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
                       </>
                     )}
                   </div>
