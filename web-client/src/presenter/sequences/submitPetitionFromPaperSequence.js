@@ -31,7 +31,7 @@ export const submitPetitionFromPaperSequence = [
       computeReceivedAtDateAction,
       computeIrsNoticeDateAction,
       computePetitionFeeDatesAction,
-      computeStatisticDatesAction,
+      computeStatisticDatesAction({ filterEmptyStatistics: true }),
       validatePetitionFromPaperAction,
       {
         error: [
