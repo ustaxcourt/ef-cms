@@ -20,10 +20,10 @@ export const Correspondence = connect(
     return (
       <>
         <CorrespondenceHeader />
-        {formattedCaseDetail.correspondences.length === 0 && (
+        {formattedCaseDetail.correspondence.length === 0 && (
           <p>There are no correspondence files.</p>
         )}
-        {formattedCaseDetail.correspondences.length > 0 && (
+        {formattedCaseDetail.correspondence.length > 0 && (
           <table
             aria-label="docket record"
             className="usa-table case-detail docket-record responsive-table row-border-only"
@@ -38,7 +38,7 @@ export const Correspondence = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedCaseDetail.correspondences.map(document => {
+              {formattedCaseDetail.correspondence.map(document => {
                 return (
                   <tr key={document.index}>
                     <td>
