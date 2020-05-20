@@ -13,9 +13,10 @@ export const computeStatisticDatesAction = ({
   get,
   store,
 }) => {
-  let { statistics } = get(state.form);
+  const { caseType, hasVerifiedIrsNotice } = get(state.form);
+  let statistics = get(state.form.statistics) || [];
 
-  (statistics || [])
+  statistics = statistics
     .filter(
       statistic =>
         statistic.year ||
@@ -25,7 +26,7 @@ export const computeStatisticDatesAction = ({
         statistic.deficiencyAmount ||
         statistic.totalPenalties,
     )
-    .forEach((statistic, index) => {
+    .map(statistic => {
       if (
         applicationContext
           .getUtilities()
@@ -40,14 +41,23 @@ export const computeStatisticDatesAction = ({
             month: statistic.lastDateOfPeriodMonth,
             year: statistic.lastDateOfPeriodYear,
           });
-        statistics[index].lastDateOfPeriod = computedLastDateOfPeriod;
+        statistic.lastDateOfPeriod = computedLastDateOfPeriod;
       }
+      return statistic;
     });
 
-  if (statistics && statistics.length === 0) {
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
+  if (
+    caseType === CASE_TYPES_MAP.deficiency &&
+    hasVerifiedIrsNotice &&
+    statistics &&
+    statistics.length === 0
+  ) {
     statistics.push({
       yearOrPeriod: 'Year',
     });
   }
+
   store.set(state.form.statistics, statistics);
 };
