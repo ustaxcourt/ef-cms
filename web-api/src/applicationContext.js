@@ -232,6 +232,12 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
+  fileCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/fileCaseCorrespondence');
+const {
+  fileCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
+const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor');
 const {
@@ -1070,6 +1076,7 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         fetchPendingItems: fetchPendingItemsPersistence,
+        fileCaseCorrespondence,
         getAllCaseDeadlines,
         getAllCatalogCases,
         getBlockedCases,
@@ -1250,6 +1257,7 @@ module.exports = (appContextUser = {}) => {
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
+        fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
