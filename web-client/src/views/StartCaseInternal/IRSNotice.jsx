@@ -75,6 +75,7 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: false,
                 });
+                refreshStatisticsSequence();
               }}
             />
             <label
@@ -123,6 +124,7 @@ export const IRSNotice = connect(
           validation="validatePetitionFromPaperSequence"
           value={form.caseType}
           onChange="updateFormValueSequence"
+          onChangePreValidation="refreshStatisticsSequence"
         />
 
         {startCaseInternalHelper.shouldShowIrsNoticeDate &&
