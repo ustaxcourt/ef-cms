@@ -9,7 +9,7 @@ describe('computeStatisticDatesAction', () => {
   });
 
   it('creates date from form month, day, year fields for each statistic in the array if they are present', async () => {
-    const result = await runAction(computeStatisticDatesAction(), {
+    const result = await runAction(computeStatisticDatesAction, {
       modules: {
         presenter,
       },
@@ -36,7 +36,7 @@ describe('computeStatisticDatesAction', () => {
   });
 
   it('does not attempt to calculate statistic dates if statistics array is not present on the form', async () => {
-    const result = await runAction(computeStatisticDatesAction(), {
+    const result = await runAction(computeStatisticDatesAction, {
       modules: {
         presenter,
       },
@@ -46,61 +46,5 @@ describe('computeStatisticDatesAction', () => {
     });
 
     expect(result.state.form.statistics).toEqual([]);
-  });
-
-  it('filters out empty statistics', async () => {
-    const result = await runAction(
-      computeStatisticDatesAction({ filterEmptyStatistics: true }),
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            statistics: [
-              {
-                yearOrPeriod: 'Year',
-              },
-              {
-                yearOrPeriod: 'Year',
-              },
-            ],
-          },
-        },
-      },
-    );
-
-    expect(result.state.form.statistics).toEqual([]);
-  });
-
-  it('appends default statistic if deficiency and hasVerifiedIrsNotice', async () => {
-    const result = await runAction(
-      computeStatisticDatesAction({ filterEmptyStatistics: true }),
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            caseType: 'Deficiency',
-            hasVerifiedIrsNotice: true,
-            statistics: [
-              {
-                yearOrPeriod: 'Year',
-              },
-              {
-                yearOrPeriod: 'Year',
-              },
-            ],
-          },
-        },
-      },
-    );
-
-    expect(result.state.form.statistics).toEqual([
-      {
-        yearOrPeriod: 'Year',
-      },
-    ]);
   });
 });

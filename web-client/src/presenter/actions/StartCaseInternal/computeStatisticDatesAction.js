@@ -9,54 +9,31 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const computeStatisticDatesAction = ({
-  filterEmptyStatistics,
-} = {}) => ({ applicationContext, get, store }) => {
-  const { caseType, hasVerifiedIrsNotice } = get(state.form);
+  applicationContext,
+  get,
+  store,
+}) => {
   let statistics = get(state.form.statistics) || [];
 
-  statistics = statistics
-    .filter(
-      statistic =>
-        !filterEmptyStatistics ||
-        statistic.year ||
-        statistic.lastDateOfPeriodDay ||
-        statistic.lastDateOfPeriodMonth ||
-        statistic.lastDateOfPeriodYear ||
-        statistic.deficiencyAmount ||
-        statistic.totalPenalties,
-    )
-    .map(statistic => {
-      if (
-        applicationContext
-          .getUtilities()
-          .isValidDateString(
-            `${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}-${statistic.lastDateOfPeriodYear}`,
-          )
-      ) {
-        const computedLastDateOfPeriod = applicationContext
-          .getUtilities()
-          .createISODateStringFromObject({
-            day: statistic.lastDateOfPeriodDay,
-            month: statistic.lastDateOfPeriodMonth,
-            year: statistic.lastDateOfPeriodYear,
-          });
-        statistic.lastDateOfPeriod = computedLastDateOfPeriod;
-      }
-      return statistic;
-    });
-
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
-
-  if (
-    caseType === CASE_TYPES_MAP.deficiency &&
-    hasVerifiedIrsNotice &&
-    statistics &&
-    statistics.length === 0
-  ) {
-    statistics.push({
-      yearOrPeriod: 'Year',
-    });
-  }
+  statistics = statistics.map(statistic => {
+    if (
+      applicationContext
+        .getUtilities()
+        .isValidDateString(
+          `${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}-${statistic.lastDateOfPeriodYear}`,
+        )
+    ) {
+      const computedLastDateOfPeriod = applicationContext
+        .getUtilities()
+        .createISODateStringFromObject({
+          day: statistic.lastDateOfPeriodDay,
+          month: statistic.lastDateOfPeriodMonth,
+          year: statistic.lastDateOfPeriodYear,
+        });
+      statistic.lastDateOfPeriod = computedLastDateOfPeriod;
+    }
+    return statistic;
+  });
 
   store.set(state.form.statistics, statistics);
 };
