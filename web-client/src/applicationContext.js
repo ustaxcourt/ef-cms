@@ -181,6 +181,7 @@ import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
+import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
@@ -364,6 +365,7 @@ const allUseCases = {
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
   updateUserContactInformationInteractor,
+  uploadCorrespondenceDocumentInteractor,
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
