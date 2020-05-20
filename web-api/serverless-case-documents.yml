@@ -400,3 +400,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  fileCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCorrespondenceDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/correspondence
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocument
+    events:
+      - http:
+          path: /{caseId}/correspondence/{documentIdToEdit}
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
