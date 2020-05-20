@@ -121,7 +121,7 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "caseCaptionNames": "Mufutau Wade",
+    "caseTitle": "Mufutau Wade",
     "messages": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -161,7 +161,7 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "caseCaptionNames": "Mufutau Wade",
+    "caseTitle": "Mufutau Wade",
     "messages": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -217,6 +217,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -232,6 +233,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,
@@ -247,6 +249,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "workItems": [
       {
@@ -262,7 +265,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseCaptionNames": "Mufutau Wade",
+        "caseTitle": "Mufutau Wade",
         "section": "petitions",
         "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
         "isInitializeCase": true,

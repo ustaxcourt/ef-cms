@@ -12,16 +12,21 @@ exports.orderKeywordSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'documentContents',
-    'docketNumber',
-    'documentTitle',
-    'docketNumberSuffix',
+    'caseId',
     'contactPrimary',
     'contactSecondary',
-    'filingDate',
-    'signedJudgeName',
-    'caseId',
+    'docketNumber',
+    'docketNumberSuffix',
+    'documentContents',
+    'numberOfPages',
     'documentId',
+    'documentTitle',
+    'filingDate',
+    'irsPractitioners',
+    'isSealed',
+    'privatePractitioners',
+    'sealedDate',
+    'signedJudgeName',
   ];
 
   const queryParams = [
@@ -84,8 +89,8 @@ exports.orderKeywordSearch = async ({
   if (startDate && endDate) {
     queryParams.push({
       range: {
-        'receivedAt.S': {
-          format: 'yyyy-MM-dd',
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
           gte: startDate,
           lte: endDate,
         },
@@ -112,7 +117,7 @@ exports.orderKeywordSearch = async ({
       },
       size: 5000,
     },
-    index: 'efcms',
+    index: 'efcms-document',
   };
 
   const { results } = await search({

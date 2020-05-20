@@ -10,6 +10,11 @@ Restricted
 
 > `string` | optional
 
+##### Maximum limit
+
+
+`50`
+
 ### automaticBlocked
 
 
@@ -80,6 +85,11 @@ The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mar
 
 > `string` | required
 
+##### Maximum limit
+
+
+`500`
+
 ### caseId
 
 
@@ -93,6 +103,11 @@ Unique case ID only used by the system.
 Restricted
 
 > `string` | optional
+
+##### Maximum limit
+
+
+`500`
 
 ### caseType
 
@@ -239,6 +254,11 @@ Case caption before modification.
 
 > `string` | optional
 
+##### Maximum limit
+
+
+`500`
+
 ##### Can be null.
 
 ### initialDocketNumberSuffix
@@ -248,6 +268,11 @@ Case docket number suffix before modification.
 
 > `string` | optional
 
+##### Maximum limit
+
+
+`2`
+
 ##### Can be null.
 
 ### irsNoticeDate
@@ -256,6 +281,11 @@ Case docket number suffix before modification.
 Last date that the petitioner is allowed to file before.
 
 > `date` | optional
+
+##### Maximum date
+
+
+`now`
 
 ##### Can be null.
 
@@ -310,6 +340,13 @@ Reminder for clerks to review the notice of attachments.
 Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
+
+### orderDesignatingPlaceOfTrial
+
+
+Reminder for clerks to review the Order Designating Place of Trial.
+
+> `boolean` | optional
 
 ### orderForAmendedPetition
 
@@ -761,7 +798,7 @@ Time of day when this case goes to trial.
 ##### Regex Pattern
 
 
-`/^[0-9]+:([0-5][0-9])$/`
+`/^[0-9]{1,2}:([0-5][0-9])$/`
 
 ### userId
 
@@ -772,6 +809,11 @@ The unique ID of the User who added the case to the system.
 Restricted
 
 > `string` | optional
+
+##### Maximum limit
+
+
+`50`
 
 ### workItems
 

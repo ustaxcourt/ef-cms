@@ -12,26 +12,26 @@ describe('getInboxMessagesForSectionInteractor', () => {
     userId: 'petitionsClerk',
   };
 
-  let getInboxMessagesForSectionStub;
-  let validateRawCollectionStub;
+  let mockWorkItem = {
+    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    createdAt: '',
+    docketNumber: '101-18',
+    docketNumberSuffix: 'S',
+    document: {
+      sentBy: 'petitioner',
+    },
+    isQC: false,
+    messages: [],
+    section: 'petitions',
+    sentBy: 'docketclerk',
+  };
 
   beforeEach(() => {
-    getInboxMessagesForSectionStub = jest.fn();
-    validateRawCollectionStub = jest.fn();
-
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
-
-    applicationContext.getEntityConstructors = () => ({
-      WorkItem: {
-        validateRawCollection: validateRawCollectionStub,
-      },
-    });
 
     applicationContext
       .getPersistenceGateway()
-      .getInboxMessagesForSection.mockReturnValue(
-        getInboxMessagesForSectionStub,
-      );
+      .getInboxMessagesForSection.mockReturnValue([mockWorkItem]);
   });
 
   it('gets inbox messages for a section', async () => {
@@ -43,7 +43,6 @@ describe('getInboxMessagesForSectionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getInboxMessagesForSection,
     ).toHaveBeenCalled();
-    expect(validateRawCollectionStub).toHaveBeenCalled();
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
@@ -52,15 +51,11 @@ describe('getInboxMessagesForSectionInteractor', () => {
       userId: 'petitioner',
     });
 
-    let error;
-    try {
-      await getInboxMessagesForSectionInteractor({
+    await expect(
+      getInboxMessagesForSectionInteractor({
         applicationContext,
         section: 'docket',
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 });

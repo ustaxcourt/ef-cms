@@ -24,6 +24,9 @@ describe('Update trial session working copy', () => {
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionWorkingCopy.mockReturnValue(MOCK_WORKING_COPY);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -52,7 +55,7 @@ describe('Update trial session working copy', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .updateTrialSessionWorkingCopy.mockResolvedValue(
+      .getTrialSessionWorkingCopy.mockResolvedValue(
         omit(MOCK_WORKING_COPY, 'userId'),
       );
 
@@ -61,9 +64,7 @@ describe('Update trial session working copy', () => {
         applicationContext,
         trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
       }),
-    ).rejects.toThrow(
-      'The TrialSessionWorkingCopy entity was invalid ValidationError: "userId" is required',
-    );
+    ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {

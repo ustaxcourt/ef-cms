@@ -11,6 +11,7 @@ Quill.register(Size, true);
 
 export const TextEditor = ({
   defaultValue,
+  editorDelta,
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
@@ -44,7 +45,7 @@ export const TextEditor = ({
   return (
     <>
       <ReactQuill
-        defaultValue={defaultValue}
+        defaultValue={editorDelta || defaultValue}
         formats={[
           'size',
           'bold',
@@ -83,6 +84,10 @@ export const TextEditor = ({
           updateFormValueSequence({
             key: 'richText',
             value: html,
+          });
+          updateFormValueSequence({
+            key: 'editorDelta',
+            value: fullDelta,
           });
           updateFormValueSequence({
             key: 'documentContents',

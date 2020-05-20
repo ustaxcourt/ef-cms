@@ -16,9 +16,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
   }`;
 
-  result.caseCaptionNames = applicationContext.getCaseCaptionNames(
-    result.caseCaption || '',
-  );
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.fullStateNamePrimary =
     US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
@@ -42,6 +40,8 @@ export const formatOrderSearchResultRecord = (
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
+
+  result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.docketNumberWithSuffix = `${result.docketNumber}${
     result.docketNumberSuffix ? result.docketNumberSuffix : ''
@@ -99,6 +99,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
 export const advancedOrderSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const searchResults = get(state.searchResults);
+  const isPublic = get(state.isPublic);
 
   if (searchResults) {
     paginatedResults = paginationHelper(
@@ -113,7 +114,10 @@ export const advancedOrderSearchHelper = (get, applicationContext) => {
     );
   }
 
-  return paginatedResults;
+  return {
+    ...paginatedResults,
+    isPublic,
+  };
 };
 
 const paginationHelper = (searchResults, currentPage, pageSize) => {

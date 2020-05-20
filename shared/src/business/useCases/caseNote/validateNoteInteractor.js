@@ -1,3 +1,5 @@
+const { Note } = require('../../entities/notes/Note');
+
 /**
  * validateNote
  *
@@ -7,9 +9,9 @@
  * @returns {object} the errors or null
  */
 exports.validateNoteInteractor = ({ applicationContext, note }) => {
-  const errors = new (applicationContext.getEntityConstructors().Note)(
-    note,
-  ).getFormattedValidationErrors();
+  const errors = new Note(note, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   if (!errors) return null;
   return errors;
 };

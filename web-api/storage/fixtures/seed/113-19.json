@@ -76,6 +76,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-12-11T16:02:31.176Z",
     "partyPrimary": true,
     "workItems": [],
@@ -94,6 +95,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-12-11T16:02:31.174Z",
     "partyPrimary": true,
     "workItems": [
@@ -116,7 +118,7 @@
           "receivedAt": "2019-12-11T16:02:31.174Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
-        "caseCaptionNames": "Letti Toretto",
+        "caseTitle": "Letti Toretto",
         "section": "petitions",
         "workItemId": "f1f8459d-771d-4d60-b97c-9f05c7f79b94",
         "isInitializeCase": true,

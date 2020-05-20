@@ -3,11 +3,14 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Document } = require('../Document');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
 const { Order } = require('../orders/Order');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * Public Case Entity
@@ -52,11 +55,11 @@ const publicCaseSchema = {
       version: ['uuidv4'],
     })
     .optional(),
-  createdAt: joi.date().iso().optional(),
+  createdAt: joiStrictTimestamp.optional(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
   isSealed: joi.boolean(),
-  receivedAt: joi.date().iso().optional(),
+  receivedAt: joiStrictTimestamp.optional(),
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
@@ -77,7 +80,6 @@ joiValidationDecorator(
   joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
     then: joi.object(sealedCaseSchemaRestricted),
   }),
-  undefined,
   {},
 );
 

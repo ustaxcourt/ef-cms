@@ -119,8 +119,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
-  const { Document } = applicationContext.getEntityConstructors();
-  const showTrackOption = !Document.isPendingOnCreation(form);
+  const showTrackOption = !applicationContext
+    .getUtilities()
+    .isPendingOnCreation(form);
 
   return {
     certificateOfServiceDateFormatted,
