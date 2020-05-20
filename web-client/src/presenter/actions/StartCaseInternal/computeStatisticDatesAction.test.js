@@ -45,6 +45,6 @@ describe('computeStatisticDatesAction', () => {
       },
     });
 
-    expect(result.state.form.statistics).toBeUndefined();
+    expect(result.state.form.statistics).toEqual([]);
   });
 });
