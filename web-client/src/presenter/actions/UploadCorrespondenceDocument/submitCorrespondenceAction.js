@@ -31,8 +31,6 @@ export const submitCorrespondenceAction = async ({
     docketNumber,
   };
 
-  documentMetadata.draftState = { ...documentMetadata };
-
   await applicationContext.getUseCases().virusScanPdfInteractor({
     applicationContext,
     documentId,
