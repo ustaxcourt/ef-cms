@@ -5,8 +5,8 @@ import { initializeUploadFormAction } from '../actions/uploadCourtIssuedDocument
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCorrespondenceToEditAction } from '../actions/setCorrespondenceToEditAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoEditCorrespondenceDocument = [
@@ -17,7 +17,7 @@ const gotoEditCorrespondenceDocument = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  setDocumentIdAction,
+  setCorrespondenceToEditAction,
   setCurrentPageAction('UploadCorrespondenceDocument'),
 ];
 
