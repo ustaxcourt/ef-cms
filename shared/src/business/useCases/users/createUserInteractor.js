@@ -37,7 +37,13 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
       await createPractitionerUser({ applicationContext, user }),
     );
   } else {
-    userEntity = new User(user, { applicationContext });
+    if (user.barNumber === '') {
+      delete user.barNumber;
+    }
+    userEntity = new User(
+      { ...user, userId: applicationContext.getUniqueId() },
+      { applicationContext },
+    );
   }
 
   await applicationContext.getPersistenceGateway().createUser({
