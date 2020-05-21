@@ -14,6 +14,8 @@ export const StatisticsForm = connect(
       sequences.showCalculatePenaltiesModalSequence,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validatePetitionFromPaperSequence:
+      sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
   function StatisticsForm({
@@ -22,6 +24,7 @@ export const StatisticsForm = connect(
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
     updateFormValueSequence,
+    validatePetitionFromPaperSequence,
     validationErrors,
   }) {
     const getDeficiencyAmountInput = index => (
@@ -39,6 +42,7 @@ export const StatisticsForm = connect(
           prefix="$"
           thousandSeparator={true}
           value={form.statistics[index].deficiencyAmount || ''}
+          onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateFormValueSequence({
               key: `statistics.${index}.deficiencyAmount`,
@@ -64,6 +68,7 @@ export const StatisticsForm = connect(
           prefix="$"
           thousandSeparator={true}
           value={form.statistics[index].totalPenalties || ''}
+          onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateFormValueSequence({
               key: `statistics.${index}.totalPenalties`,
@@ -106,7 +111,11 @@ export const StatisticsForm = connect(
         </FormGroup>
 
         <FormGroup
-          errorText={statisticsFormHelper.getErrorText(validationErrors, index)}
+          errorText={statisticsFormHelper.getErrorText(
+            validationErrors,
+            index,
+            form.statistics[index],
+          )}
         >
           {statisticsFormHelper.statisticOptions[index].showYearInput && (
             <div className="grid-row grid-gap-2">
@@ -122,6 +131,7 @@ export const StatisticsForm = connect(
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}
+                    onBlur={() => validatePetitionFromPaperSequence()}
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
@@ -153,6 +163,7 @@ export const StatisticsForm = connect(
                   month: form.statistics[index].lastDateOfPeriodMonth,
                   year: form.statistics[index].lastDateOfPeriodYear,
                 }}
+                onBlur={() => validatePetitionFromPaperSequence()}
                 onChange={updateFormValueSequence}
               />
               <div className="grid-row grid-gap-2">
@@ -169,7 +180,7 @@ export const StatisticsForm = connect(
 
         <Button
           link
-          className="padding-0"
+          className="padding-0 calculate-penalties"
           icon="calculator"
           onClick={() =>
             showCalculatePenaltiesModalSequence({
@@ -186,10 +197,7 @@ export const StatisticsForm = connect(
 
     return (
       <>
-        <h4>
-          Statistics Proposed By IRS{' '}
-          <span className="usa-hint">(optional)</span>
-        </h4>
+        <h4>Statistics Proposed By IRS</h4>
 
         {form.statistics.map((statistic, index) =>
           getSingleStatisticForm(index),
