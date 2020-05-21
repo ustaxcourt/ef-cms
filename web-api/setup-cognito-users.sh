@@ -174,9 +174,9 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
-createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "" "GM9999" "privatePractitioner" "Private Practitioner Gmail"
-createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "" "GM4444" "irsPractitioner" "IRS Practitioner Gmail"
-createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
+createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
+createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
+createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
 createManyAccounts "10" "clerkofcourt" "clerkofcourt"

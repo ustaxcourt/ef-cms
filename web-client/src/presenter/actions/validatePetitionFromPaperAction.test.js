@@ -51,4 +51,42 @@ describe('validatePetitionFromPaperAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('aggregates statistics errors', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        statistics: [
+          { deficiency: 'enter deficiency amount', index: 1 },
+          { index: 2, totalPenalties: 'enter total penalties' },
+        ],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [
+            { yearOrPeriod: 'Year' },
+            { yearOrPeriod: 'Period' },
+            { yearOrPeriod: 'Year' },
+          ],
+        },
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors.statistics).toEqual([
+      {},
+      {
+        enterAllValues: 'Enter period, deficiency amount, and total penalties',
+        index: 1,
+      },
+      {
+        enterAllValues: 'Enter year, deficiency amount, and total penalties',
+        index: 2,
+      },
+    ]);
+  });
 });

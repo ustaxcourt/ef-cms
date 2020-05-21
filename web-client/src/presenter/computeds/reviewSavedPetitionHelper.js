@@ -88,7 +88,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
 
-  const showStatistics = statistics && statistics.length;
+  const showStatistics = statistics && statistics.length > 0;
 
   const formattedStatistics = (statistics || []).map(statistic => {
     const formattedDate =
