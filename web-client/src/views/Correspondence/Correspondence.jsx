@@ -38,12 +38,12 @@ export const Correspondence = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedCaseDetail.correspondence.map(document => {
+              {formattedCaseDetail.correspondence.map((document, index) => {
                 return (
-                  <tr key={document.index}>
+                  <tr key={index}>
                     <td>
-                      <span className="no-wrap" key={document.index}>
-                        {document.filingDate}
+                      <span className="no-wrap">
+                        {document.formattedFilingDate}
                       </span>
                     </td>
                     <td>
