@@ -35,6 +35,27 @@ describe('computeStatisticDatesAction', () => {
     expect(result.state.form.statistics[1]).toEqual({ year: '2012' });
   });
 
+  it('unsets lastDateOfPeriod date if lastDateOfPeriodDay is not defined', async () => {
+    const result = await runAction(computeStatisticDatesAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [
+            {
+              lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
+              lastDateOfPeriodMonth: '5',
+              lastDateOfPeriodYear: '2017',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.form.statistics[0].lastDateOfPeriod).toBeUndefined();
+  });
+
   it('does not attempt to calculate statistic dates if statistics array is not present on the form', async () => {
     const result = await runAction(computeStatisticDatesAction, {
       modules: {
