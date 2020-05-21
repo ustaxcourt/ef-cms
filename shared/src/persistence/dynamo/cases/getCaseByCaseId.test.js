@@ -26,6 +26,7 @@ describe('getCaseByCaseId', () => {
 
     expect(result).toEqual({
       caseId: '123',
+      correspondence: [],
       docketRecord: [],
       documents: [],
       irsPractitioners: [],
@@ -78,6 +79,7 @@ describe('getCaseByCaseId', () => {
 
     expect(result).toEqual({
       caseId: '123',
+      correspondence: [],
       docketRecord: [
         {
           docketRecordId: 'abc-123',
@@ -119,6 +121,7 @@ describe('getCaseByCaseId', () => {
     });
 
     expect(result).toEqual({
+      correspondence: [],
       docketRecord: [],
       documents: [],
       irsPractitioners: [],
