@@ -69,20 +69,17 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
 4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
 5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
 6. Edit `get-env.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the environment name.
-7. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
 8. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
 9. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
 10. Add mention of your environment, if appropriate, to `SETUP.md`
     - to create Lambda roles & policies:
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
-    - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
 11. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
 12. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
 13. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
 14. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
 15. Update CircleCI to have all the new environment variables needed:
      - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
-     - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`
 
 A deploy of a new environment is likely to require _two_ attempts to work, due to Terraform limitations. See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.

@@ -31,6 +31,8 @@ export const computeStatisticDatesAction = ({
           year: statistic.lastDateOfPeriodYear,
         });
       statistic.lastDateOfPeriod = computedLastDateOfPeriod;
+    } else {
+      statistic.lastDateOfPeriod = undefined;
     }
     return statistic;
   });
