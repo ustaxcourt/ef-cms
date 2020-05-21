@@ -12,6 +12,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const mockUser = {
+    name: 'Docket Clerk',
     role: User.ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
@@ -107,7 +108,11 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     ).rejects.toThrow('Case 123 was not found');
   });
 
-  it('should make add the correspondence document to the case when the case entity is valid', async () => {
+  it('should add the correspondence document to the case when the case entity is valid', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(mockCase);
@@ -129,7 +134,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       correspondence: {
         documentId: '111',
         documentTitle: 'A title',
-        filedBy: undefined,
+        filedBy: mockUser.name,
         filingDate: '2001-02-01',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
@@ -156,7 +161,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         {
           documentId: '111',
           documentTitle: 'A title',
-          filedBy: undefined,
+          filedBy: mockUser.name,
           filingDate: '2001-02-01',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
         },
