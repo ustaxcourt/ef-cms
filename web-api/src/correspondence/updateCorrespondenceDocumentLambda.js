@@ -1,4 +1,4 @@
-// const { genericHandler } = require('../genericHandler');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * upload a correspondence document
