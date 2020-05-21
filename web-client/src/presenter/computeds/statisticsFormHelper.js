@@ -24,12 +24,16 @@ export const statisticsFormHelper = (get, applicationContext) => {
   (form.statistics || []).forEach(statistic => {
     if (statistic.yearOrPeriod === 'Year') {
       statisticOptions.push({ showYearInput: true });
-    } else if (statistic.yearOrPeriod === 'Period') {
+    } else {
       statisticOptions.push({ showPeriodInput: true });
     }
   });
 
+  const penalties = get(state.modal.penalties);
+  const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
+
   return {
+    showAddAnotherPenaltyButton,
     showAddMoreStatisticsButton,
     showStatisticsForm,
     statisticOptions,

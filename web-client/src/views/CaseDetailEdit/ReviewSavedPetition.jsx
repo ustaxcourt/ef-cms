@@ -140,19 +140,13 @@ export const ReviewSavedPetition = connect(
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-05">
                         <div className="margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
+                          <span className="usa-label usa-label-display">
                             Date received
                           </span>
                           {reviewSavedPetitionHelper.receivedAtFormatted}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
+                          <span className="usa-label usa-label-display">
                             Case caption
                           </span>
                           {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
@@ -228,34 +222,25 @@ export const ReviewSavedPetition = connect(
                         Edit
                       </Button>
                     </h3>
-                    <div className="grid-row grid-gap">
-                      <div className="tablet:grid-col-4 margin-bottom-1">
+                    <div className="grid-row grid-gap margin-bottom-4">
+                      <div className="grid-col-4">
                         <div>
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
+                          <span className="usa-label usa-label-display">
                             Notice attached to petition?
                           </span>
                           {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
                         </div>
-                        <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-type"
-                          >
-                            Type of notice/case
-                          </span>
-                          {form.caseType}
-                        </div>
                       </div>
-                      <div className="tablet:grid-col-4 margin-bottom-1">
+                      <div className="grid-col-4">
+                        <span className="usa-label usa-label-display">
+                          Type of notice/case
+                        </span>
+                        {form.caseType}
+                      </div>
+                      <div className="grid-col-4">
                         {reviewSavedPetitionHelper.shouldShowIrsNoticeDate && (
                           <div>
-                            <span
-                              className="usa-label usa-label-display"
-                              htmlFor="filing-type"
-                            >
+                            <span className="usa-label usa-label-display">
                               Date of notice
                             </span>
                             {reviewSavedPetitionHelper.irsNoticeDateFormatted}
@@ -263,6 +248,31 @@ export const ReviewSavedPetition = connect(
                         )}
                       </div>
                     </div>
+                    {reviewSavedPetitionHelper.showStatistics && (
+                      <>
+                        <h4>Statistics</h4>
+                        <table className="usa-table docket-record responsive-table row-border-only">
+                          <thead>
+                            <tr>
+                              <th>Year/Period</th>
+                              <th>Deficiency</th>
+                              <th>Total penalties</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {reviewSavedPetitionHelper.formattedStatistics.map(
+                              (statistic, index) => (
+                                <tr key={index}>
+                                  <td>{statistic.formattedDate}</td>
+                                  <td>{statistic.formattedDeficiencyAmount}</td>
+                                  <td>{statistic.formattedTotalPenalties}</td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

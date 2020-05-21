@@ -18,6 +18,7 @@ import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
@@ -49,6 +50,7 @@ export const gotoCaseDetailSequence = [
   clearFormAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
+  setIsPrimaryTabAction,
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,

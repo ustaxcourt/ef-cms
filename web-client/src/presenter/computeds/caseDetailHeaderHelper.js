@@ -59,8 +59,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
 
+  const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
+    showAddCorrespondenceButton,
     showAddDocketEntryButton,
     showCaseDetailHeaderMenu,
     showConsolidatedCaseIcon,

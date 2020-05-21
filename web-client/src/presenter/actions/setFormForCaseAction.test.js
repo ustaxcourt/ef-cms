@@ -19,7 +19,7 @@ describe('setFormForCaseAction', () => {
           isPaper: true,
           petitionPaymentDate: '2019-05-01T21:40:46.415Z',
           petitionPaymentWaivedDate: '2019-07-01T21:40:46.415Z',
-          receivedAt: '2019-03-01T04:00:00.000Z',
+          receivedAt: '2019-03-01T05:00:00.000Z',
         },
       },
       state: { form: {} },
@@ -48,7 +48,7 @@ describe('setFormForCaseAction', () => {
       props: {
         caseDetail: {
           isPaper: false,
-          receivedAt: '2019-03-01T04:00:00.000Z',
+          receivedAt: '2019-03-01T05:00:00.000Z',
         },
       },
       state: { form: {} },

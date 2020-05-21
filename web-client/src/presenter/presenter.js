@@ -131,6 +131,7 @@ import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDeta
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
+import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
 import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCourtIssuedDocumentSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
@@ -166,6 +167,7 @@ import { openChangeScannerSourceModalSequence } from './sequences/openChangeScan
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
+import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
@@ -200,6 +202,7 @@ import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
+import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
@@ -231,6 +234,7 @@ import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
+import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
@@ -343,6 +347,7 @@ import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessi
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
+import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
@@ -382,6 +387,7 @@ import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWi
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
+import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
@@ -527,6 +533,7 @@ export const presenter = {
     gotoTrialSessionPlanningReportSequence,
     gotoTrialSessionWorkingCopySequence,
     gotoTrialSessionsSequence,
+    gotoUploadCorrespondenceDocumentSequence,
     gotoUploadCourtIssuedDocumentSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
@@ -562,6 +569,7 @@ export const presenter = {
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
+    openConfirmDeleteCorrespondenceModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
@@ -596,6 +604,7 @@ export const presenter = {
     redirectToLoginSequence,
     refreshCaseSequence,
     refreshPdfSequence,
+    refreshStatisticsSequence,
     removeBatchSequence,
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
@@ -627,6 +636,7 @@ export const presenter = {
     serveCourtIssuedDocumentSequence,
     setCanvasForPDFSigningSequence,
     setCaseDetailPageTabSequence,
+    setCaseDetailPrimaryTabSequence,
     setCurrentPageIndexSequence,
     setDocumentDetailTabSequence,
     setDocumentForUploadSequence,
@@ -737,6 +747,7 @@ export const presenter = {
     updateTrialSessionSequence,
     updateUserCaseNoteOnWorkingCopySequence,
     updateWorkingCopySessionNoteSequence,
+    uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
     validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
@@ -776,6 +787,7 @@ export const presenter = {
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
+    validateUploadCorrespondenceDocumentSequence,
     validateUploadCourtIssuedDocumentSequence,
     validateUserContactSequence,
   },

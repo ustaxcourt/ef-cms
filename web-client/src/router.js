@@ -427,6 +427,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/upload-correspondence',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add Correspondence`,
+        );
+        return app.getSequence('gotoUploadCorrespondenceDocumentSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);

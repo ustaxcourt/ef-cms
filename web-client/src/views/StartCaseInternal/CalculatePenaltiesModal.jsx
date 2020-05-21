@@ -1,27 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-const PenaltyInput = ({ index, onChange, value }) => {
-  const oneBaseIndex = index + 1;
-  return (
-    <div className="margin-top-3">
-      <label className="usa-label" htmlFor={`penalty_${oneBaseIndex}`}>
-        Penalty {oneBaseIndex} (IRS)
-      </label>
-      <input
-        className="usa-input"
-        id={`penalty_${oneBaseIndex}`}
-        name={`penalties.${index}`}
-        type="text"
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  );
-};
 
 export const CalculatePenaltiesModal = connect(
   {
@@ -29,6 +11,7 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
     penalties: state.modal.penalties,
+    statisticsFormHelper: state.statisticsFormHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function CalculatePenaltiesModal({
@@ -36,6 +19,7 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence,
     confirmSequence,
     penalties,
+    statisticsFormHelper,
     updateModalValueSequence,
   }) {
     return (
@@ -47,27 +31,35 @@ export const CalculatePenaltiesModal = connect(
         title="Calculate Penalties on IRS Notice"
       >
         {penalties &&
-          penalties.map((penalty, idx) => (
-            <PenaltyInput
-              index={idx}
-              key={idx}
-              value={penalty}
-              onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
+          penalties.map((penalty, index) => (
+            <div className="margin-top-3" key={index}>
+              <label className="usa-label" htmlFor={`penalty_${index}`}>
+                Penalty {index + 1} (IRS)
+              </label>
+              <DollarsInput
+                className="usa-input"
+                id={`penalty_${index}`}
+                name={`penalties.${index}`}
+                value={penalties[index]}
+                onValueChange={values => {
+                  updateModalValueSequence({
+                    key: `penalties.${index}`,
+                    value: values.value,
+                  });
+                }}
+              />
+            </div>
           ))}
-        <Button
-          link
-          className="margin-top-2"
-          icon="plus-circle"
-          onClick={() => addPenaltyInputSequence()}
-        >
-          Add another penalty
-        </Button>
+        {statisticsFormHelper.showAddAnotherPenaltyButton && (
+          <Button
+            link
+            className="margin-top-2 add-another-penalty-button"
+            icon="plus-circle"
+            onClick={() => addPenaltyInputSequence()}
+          >
+            Add another penalty
+          </Button>
+        )}
       </ModalDialog>
     );
   },
