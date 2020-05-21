@@ -101,11 +101,11 @@ export const StatisticsForm = connect(
         </FormGroup>
 
         <FormGroup
-          errorText={statisticsFormHelper.getErrorText(
-            validationErrors,
-            index,
-            form.statistics[index],
-          )}
+          errorText={
+            validationErrors.statistics &&
+            validationErrors.statistics[index] &&
+            validationErrors.statistics[index].enterAllValues
+          }
         >
           {statisticsFormHelper.statisticOptions[index].showYearInput && (
             <div className="grid-row grid-gap-2">
