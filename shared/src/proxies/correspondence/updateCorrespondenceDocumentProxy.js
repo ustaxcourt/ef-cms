@@ -1,12 +1,12 @@
 const { put } = require('../requests');
 
 /**
- * updateCourtIssuedOrderProxy
+ * updateCorrespondenceDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentIdToEdit the id of the correspondence document
  * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the promise of the api call
  */
 exports.updateCorrespondenceDocumentInteractor = ({
