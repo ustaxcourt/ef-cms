@@ -29,6 +29,7 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
     penalties: state.modal.penalties,
+    statisticsFormHelper: state.statisticsFormHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function CalculatePenaltiesModal({
@@ -36,6 +37,7 @@ export const CalculatePenaltiesModal = connect(
     cancelSequence,
     confirmSequence,
     penalties,
+    statisticsFormHelper,
     updateModalValueSequence,
   }) {
     return (
@@ -60,14 +62,16 @@ export const CalculatePenaltiesModal = connect(
               }}
             />
           ))}
-        <Button
-          link
-          className="margin-top-2"
-          icon="plus-circle"
-          onClick={() => addPenaltyInputSequence()}
-        >
-          Add another penalty
-        </Button>
+        {statisticsFormHelper.showAddAnotherPenaltyButton && (
+          <Button
+            link
+            className="margin-top-2 add-another-penalty-button"
+            icon="plus-circle"
+            onClick={() => addPenaltyInputSequence()}
+          >
+            Add another penalty
+          </Button>
+        )}
       </ModalDialog>
     );
   },

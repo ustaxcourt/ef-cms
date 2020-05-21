@@ -347,6 +347,7 @@ import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessi
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
+import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
@@ -386,6 +387,7 @@ import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWi
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
+import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
@@ -745,6 +747,7 @@ export const presenter = {
     updateTrialSessionSequence,
     updateUserCaseNoteOnWorkingCopySequence,
     updateWorkingCopySessionNoteSequence,
+    uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
     validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
@@ -784,6 +787,7 @@ export const presenter = {
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
+    validateUploadCorrespondenceDocumentSequence,
     validateUploadCourtIssuedDocumentSequence,
     validateUserContactSequence,
   },
