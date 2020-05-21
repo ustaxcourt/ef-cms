@@ -4,14 +4,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('overwriteCorrespondenceFileAction', () => {
-  let errorStub;
-  let successStub;
+  const errorStub = jest.fn();
+  const successStub = jest.fn();
 
-  beforeEach(() => {
-    errorStub = jest.fn();
-    successStub = jest.fn();
-
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContextForClient;
+
     presenter.providers.path = {
       error: errorStub,
       success: successStub,

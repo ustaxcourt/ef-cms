@@ -47,13 +47,13 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   caseEntity.updateDocument(updatedCorrespondenceEntity);
 
-  if (caseEntity.validate()) {
-    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
-      applicationContext,
-      caseId,
-      correspondence: updatedCorrespondenceEntity.validate().toRawObject(),
-    });
-  }
+  const caseEntityRaw = caseEntity.validate().toRawObject();
 
-  return caseEntity.toRawObject();
+  await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+    applicationContext,
+    caseId,
+    correspondence: updatedCorrespondenceEntity.validate().toRawObject(),
+  });
+
+  return caseEntityRaw;
 };
