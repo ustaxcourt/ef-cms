@@ -8,8 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.updateCorrespondenceDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    // return await applicationContext.getUseCases().uploadCorrespondenceDocument({
-    //   ...JSON.parse(event.body),
-    //   applicationContext,
-    // });
+    return await applicationContext
+      .getUseCases()
+      .updateCorrespondenceDocumentInteractor({
+        ...JSON.parse(event.body),
+        applicationContext,
+      });
   });
