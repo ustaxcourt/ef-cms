@@ -7,10 +7,10 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setDocumentTitleFromFormAction } from '../actions/UploadCorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupUploadMetadataAction } from '../actions/UploadCorrespondenceDocument/setupUploadMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -34,7 +34,7 @@ export const uploadCorrespondenceDocumentSequence = [
       {
         error: [openFileUploadErrorModal],
         success: [
-          setupUploadMetadataAction,
+          setDocumentTitleFromFormAction,
           submitCorrespondenceAction,
           setCaseAction,
           getUploadCorrespondenceDocumentAlertSuccessAction,

@@ -1,16 +1,16 @@
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setupUploadMetadataAction } from './setupUploadMetadataAction';
+import { setDocumentTitleFromFormAction } from './setDocumentTitleFromFormAction';
 
-describe('setupUploadMetadataAction', () => {
+describe('setDocumentTitleFromFormAction', () => {
   it('should update the forms document title', async () => {
-    const results = await runAction(setupUploadMetadataAction, {
+    const results = await runAction(setDocumentTitleFromFormAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          freeText: 'something',
+          documentTitle: 'something',
         },
       },
     });

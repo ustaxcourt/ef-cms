@@ -2,16 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  createPractitionerUser,
-} = require('../../utilities/createPractitionerUser');
-const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
 const { createUserInteractor } = require('./createUserInteractor');
 const { User } = require('../../entities/User');
-jest.mock('../../utilities/createPractitionerUser', () => ({
-  createPractitionerUser: jest.fn(),
-}));
 
 describe('create user', () => {
   it('creates the user', async () => {
@@ -75,10 +69,10 @@ describe('create user', () => {
     });
 
     const userToCreate = {
-      admissionsDate: new Date(),
+      admissionsDate: new Date().toISOString(),
       admissionsStatus: 'Active',
       birthYear: '1993',
-      employer: 'DOJ',
+      employer: 'Private',
       firstName: 'Test',
       lastName: 'PrivatePractitioner',
       originalBarState: 'CA',
@@ -86,12 +80,15 @@ describe('create user', () => {
       role: User.ROLES.privatePractitioner,
     };
 
-    await createUserInteractor({
+    const user = await createUserInteractor({
       applicationContext,
       user: userToCreate,
     });
 
-    expect(createPractitionerUser).toHaveBeenCalled();
+    expect(user).toMatchObject({
+      barNumber: 'CS20001',
+      role: User.ROLES.privatePractitioner,
+    });
   });
 
   it('should create a practitioner user when the user role is irsPractitioner', async () => {
@@ -105,9 +102,9 @@ describe('create user', () => {
       role: User.ROLES.irsPractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19');
+    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
 
-    await createUserInteractor({
+    const user = await createUserInteractor({
       applicationContext,
       user: {
         admissionsDate: mockAdmissionsDate,
@@ -122,7 +119,10 @@ describe('create user', () => {
       },
     });
 
-    expect(createPractitionerUser).toHaveBeenCalled();
+    expect(user).toMatchObject({
+      barNumber: 'CS20001',
+      role: 'irsPractitioner',
+    });
   });
 
   it('should create a practitioner user when the user role is inactivePractitioner', async () => {
@@ -136,13 +136,13 @@ describe('create user', () => {
       role: User.ROLES.inactivePractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19');
+    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
 
-    await createUserInteractor({
+    const user = await createUserInteractor({
       applicationContext,
       user: {
         admissionsDate: mockAdmissionsDate,
-        admissionsStatus: 'Active',
+        admissionsStatus: 'Inactive',
         birthYear: '1993',
         employer: 'DOJ',
         firstName: 'Test',
@@ -153,6 +153,9 @@ describe('create user', () => {
       },
     });
 
-    expect(createPractitionerUser).toHaveBeenCalled();
+    expect(user).toMatchObject({
+      barNumber: 'CS20001',
+      role: User.ROLES.inactivePractitioner,
+    });
   });
 });

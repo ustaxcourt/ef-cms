@@ -57,13 +57,22 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
           const error = props.errors[key];
           if (Array.isArray(error)) {
             return error.map(subError => {
-              const subErrorKeys = Object.keys(subError).filter(
+              let subErrorKeys = Object.keys(subError).filter(
                 k => k !== 'index',
               );
+              if (props.errorDisplayOrder) {
+                subErrorKeys = props.errorDisplayOrder.filter(
+                  subKey => subError[subKey] !== undefined,
+                );
+              }
+              let displayKey = key;
+              if (props.errorDisplayMap) {
+                displayKey = props.errorDisplayMap[key];
+              }
               return subErrorKeys.map(subErrorKey => {
-                return `${key} #${
-                  subError.index + 1
-                } - ${subErrorKey} field - ${subError[subErrorKey]}`;
+                return `${displayKey} #${subError.index + 1} - ${
+                  subError[subErrorKey]
+                }`;
               });
             });
           } else if (typeof error === 'object') {

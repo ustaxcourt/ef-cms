@@ -9,11 +9,11 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setDocumentTitleFromFormAction } from '../actions/UploadCorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupUploadMetadataAction } from '../actions/UploadCorrespondenceDocument/setupUploadMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -23,7 +23,7 @@ import { validateUploadCorrespondenceDocumentAction } from '../actions/UploadCor
 
 const onError = [openFileUploadErrorModal];
 const onSuccess = [
-  setupUploadMetadataAction,
+  setDocumentTitleFromFormAction,
   submitCorrespondenceAction,
   setCaseAction,
   getUploadCorrespondenceDocumentAlertSuccessAction,
