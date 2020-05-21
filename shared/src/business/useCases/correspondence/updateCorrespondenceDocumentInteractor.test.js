@@ -10,8 +10,9 @@ const { createISODateString } = require('../../utilities/DateHandler');
 const { User } = require('../../entities/User');
 
 describe('updateCorrespondenceDocumentInteractor', () => {
+  let mockUser;
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
-  const mockUser = {
+  const mockUserFixture = {
     name: 'Docket Clerk',
     role: User.ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
@@ -78,18 +79,16 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   };
 
   beforeEach(() => {
+    mockUser = mockUserFixture;
+
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
+      .getCaseByCaseId.mockReturnValue(mockCase);
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
-    const user = { ...mockUser, role: User.ROLES.petitioner };
-    applicationContext.getCurrentUser.mockReturnValue(user);
+    mockUser = { ...mockUser, role: User.ROLES.petitioner };
 
     await expect(
       updateCorrespondenceDocumentInteractor({
@@ -100,13 +99,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
-
     await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
@@ -129,10 +121,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
 
   it('should return an updated raw case object', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
-
     const result = await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
