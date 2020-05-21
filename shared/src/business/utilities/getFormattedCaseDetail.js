@@ -259,12 +259,13 @@ const formatCase = (applicationContext, caseDetail) => {
         .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
     }));
 
-  result.correspondence.forEach(document => {
-    document.formattedFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(document.filingDate, 'MMDDYY');
-  }) || [];
-
+  if (result.correspondence.length) {
+    result.correspondence.forEach(doc => {
+      doc.formattedFilingDate = applicationContext
+        .getUtilities()
+        .formatDateString(doc.filingDate, 'MMDDYY');
+    }) || [];
+  }
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;

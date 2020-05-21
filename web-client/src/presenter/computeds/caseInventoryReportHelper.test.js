@@ -101,15 +101,18 @@ describe('caseInventoryReportHelper', () => {
         caseInventoryReportData: {
           foundCases: [
             {
+              correspondence: [],
               docketNumber: '123-20',
               docketNumberWithSuffix: '123-20',
             },
             {
+              correspondence: [],
               docketNumber: '123-19',
               docketNumberSuffix: 'L',
               docketNumberWithSuffix: '123-19L',
             },
             {
+              correspondence: [],
               docketNumber: '135-19',
               docketNumberWithSuffix: '135-19',
             },
@@ -252,7 +255,7 @@ describe('caseInventoryReportHelper', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [{ docketNumber: '123-20' }],
+          foundCases: [{ correspondence: [], docketNumber: '123-20' }],
           totalCount: 1,
         },
         screenMetadata: {
