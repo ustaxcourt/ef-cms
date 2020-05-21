@@ -186,7 +186,7 @@ exports.fileExternalDocumentInteractor = async ({
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
-          caseEntity: caseToUpdate,
+          caseEntity,
           documentEntity,
           servedParties,
         });
