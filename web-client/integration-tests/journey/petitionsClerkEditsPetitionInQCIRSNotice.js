@@ -1,10 +1,15 @@
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from '../../src/presenter/computeds/caseDetailEditHelper';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { statisticsFormHelper as statisticsFormHelperComputed } from '../../src/presenter/computeds/statisticsFormHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailEditHelper = withAppContextDecorator(
   caseDetailEditHelperComputed,
+);
+
+const reviewSavedPetitionHelper = withAppContextDecorator(
+  reviewSavedPetitionHelperComputed,
 );
 
 const statisticsFormHelper = withAppContextDecorator(
@@ -192,6 +197,24 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     expect(statistics[0].totalPenalties).toEqual('$6.01');
     expect(modal.showModal).toBeUndefined();
 
+    // Attempt to insert a non-number into currency amount inputs
+    await test.runSequence('updateFormValueSequence', {
+      key: 'statistics.0.deficiencyAmount',
+      value: '$100',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'statistics.0.totalPenalties',
+      value: '1,000',
+    });
+
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    errors = test.getState('validationErrors.statistics');
+
+    expect(errors[0].deficiencyAmount).toContain('must be a number');
+    expect(errors[0].deficiencyAmount).toContain('must be a number');
+
     // Fill out all statistics values and submit
     for (let i = 0; i < 12; i++) {
       await test.runSequence('updateFormValueSequence', {
@@ -201,15 +224,111 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
       await test.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.deficiencyAmount`,
-        value: '$1,000',
+        value: 1000 + i,
       });
 
       await test.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.totalPenalties`,
-        value: '$100',
+        value: 100 + i,
       });
     }
 
-    //await test.runSequence('saveSavedCaseForLaterSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    errors = test.getState('validationErrors.statistics');
+    expect(errors).toBeUndefined();
+
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    let reviewUiHelper = runCompute(reviewSavedPetitionHelper, {
+      state: test.getState(),
+    });
+
+    expect(reviewUiHelper.formattedStatistics).toEqual([
+      expect.objectContaining({
+        deficiencyAmount: 1000,
+        formattedDeficiencyAmount: '$1,000.00',
+        formattedTotalPenalties: '$100.00',
+        totalPenalties: 100,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1001,
+        formattedDeficiencyAmount: '$1,001.00',
+        formattedTotalPenalties: '$101.00',
+        totalPenalties: 101,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1002,
+        formattedDeficiencyAmount: '$1,002.00',
+        formattedTotalPenalties: '$102.00',
+        totalPenalties: 102,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1003,
+        formattedDeficiencyAmount: '$1,003.00',
+        formattedTotalPenalties: '$103.00',
+        totalPenalties: 103,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1004,
+        formattedDeficiencyAmount: '$1,004.00',
+        formattedTotalPenalties: '$104.00',
+        totalPenalties: 104,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1005,
+        formattedDeficiencyAmount: '$1,005.00',
+        formattedTotalPenalties: '$105.00',
+        totalPenalties: 105,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1006,
+        formattedDeficiencyAmount: '$1,006.00',
+        formattedTotalPenalties: '$106.00',
+        totalPenalties: 106,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1007,
+        formattedDeficiencyAmount: '$1,007.00',
+        formattedTotalPenalties: '$107.00',
+        totalPenalties: 107,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1008,
+        formattedDeficiencyAmount: '$1,008.00',
+        formattedTotalPenalties: '$108.00',
+        totalPenalties: 108,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1009,
+        formattedDeficiencyAmount: '$1,009.00',
+        formattedTotalPenalties: '$109.00',
+        totalPenalties: 109,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1010,
+        formattedDeficiencyAmount: '$1,010.00',
+        formattedTotalPenalties: '$110.00',
+        totalPenalties: 110,
+        year: 2019,
+      }),
+      expect.objectContaining({
+        deficiencyAmount: 1011,
+        formattedDeficiencyAmount: '$1,011.00',
+        formattedTotalPenalties: '$111.00',
+        totalPenalties: 111,
+        year: 2019,
+      }),
+    ]);
   });
 };
