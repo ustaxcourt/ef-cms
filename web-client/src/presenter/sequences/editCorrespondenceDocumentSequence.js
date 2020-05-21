@@ -1,6 +1,6 @@
 import { chooseByTruthyStateActionFactory } from '../actions/editUploadCourtIssuedDocument/chooseByTruthyStateActionFactory';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/UploadCorrespondenceDocument/getUploadCorrespondenceDocumentAlertSuccessAction';
+import { getEditCorrespondenceDocumentAlertSuccessAction } from '../actions/UploadCorrespondenceDocument/getEditCorrespondenceDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteCorrespondenceFileAction } from '../actions/CourtIssuedOrder/overwriteCorrespondenceFileAction';
@@ -26,7 +26,7 @@ const onSuccess = [
   setDocumentTitleFromFormAction,
   submitCorrespondenceAction,
   setCaseAction,
-  getUploadCorrespondenceDocumentAlertSuccessAction,
+  getEditCorrespondenceDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   setCaseDetailPageTabAction,
