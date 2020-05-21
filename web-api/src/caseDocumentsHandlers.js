@@ -9,6 +9,8 @@ module.exports = {
     .createWorkItemLambda,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .downloadPolicyUrlLambda,
+  fileCorrespondenceDocumentLambda: require('./correspondence/fileCorrespondenceDocumentLambda')
+    .fileCorrespondenceDocumentLambda,
   fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
     .fileCourtIssuedDocketEntryLambda,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
@@ -29,6 +31,8 @@ module.exports = {
     .serveCourtIssuedDocumentLambda,
   signDocumentLambda: require('./documents/signDocumentLambda')
     .signDocumentLambda,
+  updateCorrespondenceDocumentLambda: require('./correspondence/updateCorrespondenceDocumentLambda')
+    .updateCorrespondenceDocumentLambda,
   updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
     .updateCourtIssuedDocketEntryLambda,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')
