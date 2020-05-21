@@ -17,6 +17,7 @@ export const EditCorrespondenceDocument = connect(
   {
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     constants: state.constants,
+    documentDetailHelper: state.documentDetailHelper,
     editCorrespondenceDocumentSequence:
       sequences.editCorrespondenceDocumentSequence,
     fileDocumentHelper: state.fileDocumentHelper,
@@ -32,6 +33,7 @@ export const EditCorrespondenceDocument = connect(
   function EditCorrespondenceDocument({
     clearExistingDocumentSequence,
     constants,
+    documentDetailHelper,
     editCorrespondenceDocumentSequence,
     fileDocumentHelper,
     form,
@@ -58,7 +60,9 @@ export const EditCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Edit this thing</h2>
+                <h2 className="heading-1">
+                  Edit {documentDetailHelper.formattedDocument.documentTitle}
+                </h2>
               </div>
             </div>
 
