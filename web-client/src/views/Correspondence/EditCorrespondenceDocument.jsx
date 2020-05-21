@@ -1,19 +1,17 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
-export const UploadCorrespondenceDocument = connect(
+export const EditCorrespondenceDocument = connect(
   {
-    constants: state.constants,
-    fileDocumentHelper: state.fileDocumentHelper,
+    documentToEdit: state.documentToEdit,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -24,9 +22,8 @@ export const UploadCorrespondenceDocument = connect(
       sequences.validateUploadCorrespondenceDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  function UploadCorrespondenceDocument({
-    constants,
-    fileDocumentHelper,
+  function EditCorrespondenceDocument({
+    documentToEdit,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -38,7 +35,6 @@ export const UploadCorrespondenceDocument = connect(
     return (
       <>
         <CaseDetailHeader hideActionButtons />
-
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
@@ -49,7 +45,9 @@ export const UploadCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Add Correspondence File</h2>
+                <h2 className="heading-1">
+                  Edit {documentToEdit.documentTitle}
+                </h2>
               </div>
             </div>
 
@@ -100,31 +98,7 @@ export const UploadCorrespondenceDocument = connect(
                 </div>
 
                 <div className="document-select-container">
-                  <FormGroup errorText={validationErrors.primaryDocumentFile}>
-                    <label
-                      className={classNames(
-                        'usa-label ustc-upload with-hint',
-                        fileDocumentHelper.showPrimaryDocumentValid &&
-                          'validated',
-                      )}
-                      htmlFor="primary-document-file"
-                      id="primary-document-label"
-                    >
-                      Upload your file{' '}
-                    </label>
-                    <span className="usa-hint">
-                      File must be in PDF format (.pdf). Max file size{' '}
-                      {constants.MAX_FILE_SIZE_MB}MB.
-                    </span>
-
-                    <StateDrivenFileInput
-                      aria-describedby="primary-document-label"
-                      id="primary-document-file"
-                      name="primaryDocumentFile"
-                      updateFormValueSequence="updateFormValueSequence"
-                      validationSequence="validateUploadCorrespondenceDocumentSequence"
-                    />
-                  </FormGroup>
+                  <DocumentDisplayIframe />
                 </div>
               </div>
             </div>

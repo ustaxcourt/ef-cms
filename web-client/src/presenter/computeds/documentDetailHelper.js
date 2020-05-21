@@ -49,9 +49,13 @@ export const documentDetailHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const documentId = get(state.documentId);
-  const document = caseDetail.documents.find(
+  const allCaseDocuments = caseDetail.documents.concat(
+    caseDetail.correspondence,
+  );
+  const document = allCaseDocuments.find(
     item => item.documentId === documentId,
   );
+
   if (!document) {
     return;
   }

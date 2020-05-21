@@ -18,7 +18,7 @@ const gotoEditCorrespondenceDocument = [
   getCaseAction,
   setCaseAction,
   setCorrespondenceToEditAction,
-  setCurrentPageAction('UploadCorrespondenceDocument'),
+  setCurrentPageAction('EditCorrespondenceDocument'),
 ];
 
 export const gotoEditCorrespondenceDocumentSequence = [
