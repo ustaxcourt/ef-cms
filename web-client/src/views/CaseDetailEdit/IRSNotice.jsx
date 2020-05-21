@@ -11,6 +11,7 @@ export const IRSNotice = connect(
     CASE_TYPES: state.constants.CASE_TYPES,
     caseDetailEditHelper: state.caseDetailEditHelper,
     form: state.form,
+    refreshStatisticsSequence: sequences.refreshStatisticsSequence,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
@@ -22,6 +23,7 @@ export const IRSNotice = connect(
     CASE_TYPES,
     caseDetailEditHelper,
     form,
+    refreshStatisticsSequence,
     setIrsNoticeFalseSequence,
     showModal,
     statisticsFormHelper,
@@ -49,6 +51,7 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
+                refreshStatisticsSequence();
               }}
             />
             <label
@@ -70,6 +73,7 @@ export const IRSNotice = connect(
               value="No"
               onChange={() => {
                 setIrsNoticeFalseSequence();
+                refreshStatisticsSequence();
               }}
             />
             <label
@@ -118,6 +122,7 @@ export const IRSNotice = connect(
           validation="validateCaseDetailSequence"
           value={form.caseType}
           onChange="updateFormValueSequence"
+          onChangePreValidation="refreshStatisticsSequence"
         />
 
         {caseDetailEditHelper.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
