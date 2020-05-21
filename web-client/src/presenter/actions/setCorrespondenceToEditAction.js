@@ -16,6 +16,7 @@ export const setCorrespondenceToEditAction = ({ props, store }) => {
       document => document.documentId === documentToEditId,
     );
 
+    store.set(state.documentId, documentToEdit.documentId);
     store.set(state.documentToEdit, documentToEdit);
     store.set(state.form.freeText, documentToEdit.documentTitle);
   }
