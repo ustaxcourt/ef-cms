@@ -52,6 +52,7 @@ describe('getCasesByUser', () => {
     expect(result).toEqual([
       {
         caseId: '123',
+        correspondence: [],
         docketRecord: [],
         documents: [],
         irsPractitioners: [],
