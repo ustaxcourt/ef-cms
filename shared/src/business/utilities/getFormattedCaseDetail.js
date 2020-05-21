@@ -264,7 +264,7 @@ const formatCase = (applicationContext, caseDetail) => {
       doc.formattedFilingDate = applicationContext
         .getUtilities()
         .formatDateString(doc.filingDate, 'MMDDYY');
-    }) || [];
+    });
   }
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
