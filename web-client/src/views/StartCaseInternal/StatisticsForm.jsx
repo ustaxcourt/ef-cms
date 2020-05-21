@@ -1,9 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import NumberFormat from 'react-number-format';
 import React from 'react';
 
 export const StatisticsForm = connect(
@@ -32,15 +32,10 @@ export const StatisticsForm = connect(
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
           Deficiency
         </label>
-        <NumberFormat
+        <DollarsInput
           className="usa-input usa-input-inline"
-          decimalScale="2"
-          fixedDecimalScale={true}
           id={`deficiency-amount-${index}`}
-          isNumericString={true}
           name={`statistics.${index}.deficiencyAmount`}
-          prefix="$"
-          thousandSeparator={true}
           value={form.statistics[index].deficiencyAmount || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
@@ -58,15 +53,10 @@ export const StatisticsForm = connect(
         <label className="usa-label" htmlFor={`total-penalties-${index}`}>
           Total penalties
         </label>
-        <NumberFormat
+        <DollarsInput
           className="usa-input usa-input-inline"
-          decimalScale="2"
-          fixedDecimalScale={true}
           id={`total-penalties-${index}`}
-          isNumericString={true}
           name={`statistics.${index}.totalPenalties`}
-          prefix="$"
-          thousandSeparator={true}
           value={form.statistics[index].totalPenalties || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
@@ -111,11 +101,11 @@ export const StatisticsForm = connect(
         </FormGroup>
 
         <FormGroup
-          errorText={statisticsFormHelper.getErrorText(
-            validationErrors,
-            index,
-            form.statistics[index],
-          )}
+          errorText={
+            validationErrors.statistics &&
+            validationErrors.statistics[index] &&
+            validationErrors.statistics[index].enterAllValues
+          }
         >
           {statisticsFormHelper.statisticOptions[index].showYearInput && (
             <div className="grid-row grid-gap-2">
