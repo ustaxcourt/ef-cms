@@ -5,7 +5,6 @@ const {
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const { compareStrings } = require('../../utilities/sortFunctions');
 const {
   CHIEF_JUDGE,
   DOCKET_NUMBER_MATCHER,
@@ -17,6 +16,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
