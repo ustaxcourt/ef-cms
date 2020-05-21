@@ -170,7 +170,16 @@ export const baseState = {
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentViewMetadata: {
-    caseDetail: {},
+    caseDetail: {
+      caseDetailInternalTabs: {
+        caseInformation: false,
+        correspondence: false,
+        deadlines: false,
+        docketRecord: false,
+        inProgress: false,
+        notes: false,
+      },
+    },
     documentDetail: {
       tab: '',
     },

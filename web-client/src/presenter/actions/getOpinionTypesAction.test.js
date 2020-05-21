@@ -6,9 +6,9 @@ describe('getOpinionTypesAction', () => {
     const result = await runAction(getOpinionTypesAction);
     expect(result.output).toEqual({
       opinionDocumentTypes: [
-        'MOP - Memorandum Opinion',
+        'Memorandum Opinion',
         'Summary Opinion',
-        'TCOP - T.C. Opinion',
+        'T.C. Opinion',
       ],
     });
   });

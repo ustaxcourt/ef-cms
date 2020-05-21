@@ -51,6 +51,25 @@ describe('DocumentService', () => {
     expect(documentInfo.text()).toContain(documentDetail.filedBy);
   });
 
+  it('renders N/A if filedBy is not present on documentDetail', () => {
+    const documentDetailWithoutFiledBy = {
+      ...documentDetail,
+      filedBy: undefined,
+    };
+
+    const wrapper = shallow(
+      <DocumentService
+        caseDetail={caseDetail}
+        docketEntryNumber={docketEntryNumber}
+        documentDetail={documentDetailWithoutFiledBy}
+        taxCourtLoginUrl={taxCourtLoginUrl}
+      />,
+    );
+    const documentInfo = wrapper.find('#document-information');
+
+    expect(documentInfo.text()).toContain('Filed by: N/A');
+  });
+
   it('renders computer-readable information if user name is IRS', () => {
     const wrapper = shallow(
       <DocumentService

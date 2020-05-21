@@ -4,26 +4,36 @@ import { state } from 'cerebral';
  * computes the date from a month, day and year value
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
- * @param {object} providers.get the cerebral get function
  * @returns {object} props object
  */
-export const computeReceivedAtDateAction = ({ get, store }) => {
-  let formDate = null;
-  const formMonth = get(state.form.receivedAtMonth);
-  const formDay = get(state.form.receivedAtDay);
-  const formYear = get(state.form.receivedAtYear);
+export const computeReceivedAtDateAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
+  let receivedAt = null;
+  const form = get(state.form);
 
-  if (formMonth || formDay || formYear) {
-    formDate = `${formYear}-${formMonth}-${formDay}`;
-
-    formDate = formDate
-      .split('-')
-      .map(segment => segment.padStart(2, '0'))
-      .join('-');
+  if (
+    applicationContext
+      .getUtilities()
+      .isValidDateString(
+        `${form.receivedAtMonth}-${form.receivedAtDay}-${form.receivedAtYear}`,
+      )
+  ) {
+    receivedAt = applicationContext
+      .getUtilities()
+      .createISODateStringFromObject({
+        day: form.receivedAtDay,
+        month: form.receivedAtMonth,
+        year: form.receivedAtYear,
+      });
   }
 
-  store.set(state.form.receivedAt, formDate);
+  store.set(state.form.receivedAt, receivedAt);
 
-  return { receivedAt: formDate };
+  return { receivedAt };
 };

@@ -9,12 +9,13 @@ import React from 'react';
 
 export const AdvancedDocumentSearch = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     opinionDocumentTypes: state.opinionDocumentTypes,
   },
   function AdvancedDocumentSearch({
+    advancedSearchForm,
     clearAdvancedSearchFormSequence,
-    form,
     formType,
     judges,
     opinionDocumentTypes,
@@ -41,7 +42,7 @@ export const AdvancedDocumentSearch = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={form.docketNumber || ''}
+                    value={advancedSearchForm[formType].docketNumber || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -63,7 +64,9 @@ export const AdvancedDocumentSearch = connect(
                     id="title-or-name"
                     name="caseTitleOrPetitioner"
                     type="text"
-                    value={form.caseTitleOrPetitioner || ''}
+                    value={
+                      advancedSearchForm[formType].caseTitleOrPetitioner || ''
+                    }
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -84,16 +87,11 @@ export const AdvancedDocumentSearch = connect(
                   >
                     Opinion type
                   </label>
-                  <select
-                    className="usa-input usa-select"
+                  <BindedSelect
+                    bind={`advancedSearchForm.${formType}.opinionType`}
+                    className="usa-input"
                     id="order-opinion"
                     name="opinionType"
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
                   >
                     <option value="">- Select -</option>
                     {opinionDocumentTypes.map((opinionType, idx) => (
@@ -101,7 +99,7 @@ export const AdvancedDocumentSearch = connect(
                         {opinionType}
                       </option>
                     ))}
-                  </select>
+                  </BindedSelect>
                 </div>
               )}
               <div className="grid-row judge-search-row">
@@ -143,9 +141,9 @@ export const AdvancedDocumentSearch = connect(
                             year: 'startDateYear',
                           }}
                           values={{
-                            day: form.startDateDay,
-                            month: form.startDateMonth,
-                            year: form.startDateYear,
+                            day: advancedSearchForm[formType].startDateDay,
+                            month: advancedSearchForm[formType].startDateMonth,
+                            year: advancedSearchForm[formType].startDateYear,
                           }}
                           onBlur={validateSequence}
                           onChange={updateSequence}
@@ -169,9 +167,9 @@ export const AdvancedDocumentSearch = connect(
                             year: 'endDateYear',
                           }}
                           values={{
-                            day: form.endDateDay,
-                            month: form.endDateMonth,
-                            year: form.endDateYear,
+                            day: advancedSearchForm[formType].endDateDay,
+                            month: advancedSearchForm[formType].endDateMonth,
+                            year: advancedSearchForm[formType].endDateYear,
                           }}
                           onBlur={validateSequence}
                           onChange={updateSequence}
@@ -202,7 +200,7 @@ export const AdvancedDocumentSearch = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={form.docketNumber || ''}
+                    value={advancedSearchForm[formType].docketNumber || ''}
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -224,7 +222,9 @@ export const AdvancedDocumentSearch = connect(
                     id="title-or-name"
                     name="caseTitleOrPetitioner"
                     type="text"
-                    value={form.caseTitleOrPetitioner || ''}
+                    value={
+                      advancedSearchForm[formType].caseTitleOrPetitioner || ''
+                    }
                     onBlur={() => validateSequence()}
                     onChange={e => {
                       updateSequence({
@@ -245,16 +245,11 @@ export const AdvancedDocumentSearch = connect(
                   >
                     Opinion type
                   </label>
-                  <select
-                    className="usa-input usa-select"
+                  <BindedSelect
+                    bind={`advancedSearchForm.${formType}.opinionType`}
+                    className="usa-input"
                     id="order-opinion"
                     name="opinionType"
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
                   >
                     <option value="">- Select -</option>
                     {opinionDocumentTypes.map((opinionType, idx) => (
@@ -262,7 +257,7 @@ export const AdvancedDocumentSearch = connect(
                         {opinionType}
                       </option>
                     ))}
-                  </select>
+                  </BindedSelect>
                 </div>
               )}
               <div className="grid-row judge-search-row">
@@ -272,16 +267,11 @@ export const AdvancedDocumentSearch = connect(
                 >
                   Judge
                 </label>
-                <select
-                  className="usa-input usa-select"
+                <BindedSelect
+                  bind={`advancedSearchForm.${formType}.judge`}
+                  className="usa-input"
                   id="order-judge"
                   name="judge"
-                  onChange={e => {
-                    updateSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
                 >
                   <option value="">- Select -</option>
                   {judges.map((judge, idx) => (
@@ -289,7 +279,7 @@ export const AdvancedDocumentSearch = connect(
                       {judge.name}
                     </option>
                   ))}
-                </select>
+                </BindedSelect>
               </div>
               <div className="grid-row date-search-row">
                 <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
@@ -308,9 +298,9 @@ export const AdvancedDocumentSearch = connect(
                           year: 'startDateYear',
                         }}
                         values={{
-                          day: form.startDateDay,
-                          month: form.startDateMonth,
-                          year: form.startDateYear,
+                          day: advancedSearchForm[formType].startDateDay,
+                          month: advancedSearchForm[formType].startDateMonth,
+                          year: advancedSearchForm[formType].startDateYear,
                         }}
                         onBlur={validateSequence}
                         onChange={updateSequence}
@@ -336,9 +326,9 @@ export const AdvancedDocumentSearch = connect(
                           year: 'endDateYear',
                         }}
                         values={{
-                          day: form.endDateDay,
-                          month: form.endDateMonth,
-                          year: form.endDateYear,
+                          day: advancedSearchForm[formType].endDateDay,
+                          month: advancedSearchForm[formType].endDateMonth,
+                          year: advancedSearchForm[formType].endDateYear,
                         }}
                         onBlur={validateSequence}
                         onChange={updateSequence}

@@ -99,4 +99,38 @@ describe('case detail edit computed', () => {
       { showPeriodInput: true },
     ]);
   });
+
+  it('sets showAddAnotherPenaltyButton true if state.modal.penalties length is less than 10', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+        modal: {
+          penalties: [''],
+        },
+      },
+    });
+    expect(result.showAddAnotherPenaltyButton).toBeTruthy();
+  });
+
+  it('sets showAddAnotherPenaltyButton false if state.modal.penalties length is 10', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+        modal: {
+          penalties: new Array(10).fill(''),
+        },
+      },
+    });
+    expect(result.showAddAnotherPenaltyButton).toBeFalsy();
+  });
+
+  it('sets showAddAnotherPenaltyButton false if state.modal.penalties is undefined', () => {
+    const result = runCompute(statisticsFormHelper, {
+      state: {
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.showAddAnotherPenaltyButton).toBeFalsy();
+  });
 });

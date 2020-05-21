@@ -15,8 +15,10 @@ export const getOpinionTypesAction = () => {
       return courtIssuedDocument;
     }
   });
-  const opinionDocumentTypes = opinionDocuments.map(
-    opinionDocument => opinionDocument.documentType,
+
+  const opinionDocumentTypes = opinionDocuments.map(opinionDocument =>
+    opinionDocument.documentType.split('-').pop().trim(),
   );
+
   return { opinionDocumentTypes };
 };

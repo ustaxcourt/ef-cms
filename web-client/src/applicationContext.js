@@ -13,6 +13,7 @@ import {
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
+import { formatDollars } from '../../shared/src/business/utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -68,6 +69,7 @@ import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/dele
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
+import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentInteractor';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
@@ -165,6 +167,7 @@ import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritiz
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
@@ -180,6 +183,7 @@ import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
+import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
@@ -265,6 +269,7 @@ const allUseCases = {
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   fetchPendingItemsInteractor,
+  fileCorrespondenceDocumentInteractor,
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
   fileDocketEntryInteractor,
@@ -348,6 +353,7 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
@@ -363,6 +369,7 @@ const allUseCases = {
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
   updateUserContactInformationInteractor,
+  uploadCorrespondenceDocumentInteractor,
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
@@ -491,6 +498,7 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatDollars,
       formatJudgeName,
       formatNow,
       formattedTrialSessionDetails,

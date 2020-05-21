@@ -35,10 +35,43 @@ export const validatePetitionFromPaperAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayMap = {
+      statistics: 'Statistics',
+    };
+
+    if (errors.statistics) {
+      const newErrorStatistics = [];
+      const formStatistics = get(state.form.statistics);
+
+      formStatistics.forEach((formStatistic, index) => {
+        const errorStatistic = errors.statistics.find(s => s.index === index);
+        if (errorStatistic) {
+          if (formStatistic.yearOrPeriod === 'Year') {
+            newErrorStatistics.push({
+              enterAllValues:
+                'Enter year, deficiency amount, and total penalties',
+              index,
+            });
+          } else {
+            newErrorStatistics.push({
+              enterAllValues:
+                'Enter period, deficiency amount, and total penalties',
+              index,
+            });
+          }
+        } else {
+          newErrorStatistics.push({});
+        }
+      });
+
+      errors.statistics = newErrorStatistics;
+    }
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayMap,
       errors,
     });
   }
