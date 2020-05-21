@@ -4,7 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Correspondence } = require('../../entities/Correspondence');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -37,6 +37,10 @@ exports.fileCorrespondenceDocumentInteractor = async ({
       applicationContext,
       caseId,
     });
+
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${caseId} was not found`);
+  }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
