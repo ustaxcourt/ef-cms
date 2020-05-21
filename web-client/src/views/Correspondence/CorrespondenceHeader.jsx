@@ -1,29 +1,13 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const CorrespondenceHeader = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
-    navigateToPrintableDocketRecordSequence:
-      sequences.navigateToPrintableDocketRecordSequence,
-    printDocketRecordSequence: sequences.printDocketRecordSequence,
-    toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-    updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
-  function CorrespondenceHeader({
-    formattedCaseDetail,
-    printDocketRecordSequence,
-    updateSessionMetadataSequence,
-  }) {
-    const openDocketRecordPrintPreview = (options = {}) => {
-      updateSessionMetadataSequence({
-        key: `docketRecordSort.${formattedCaseDetail.caseId}`,
-        value: 'byDate',
-      });
-      printDocketRecordSequence(options);
-    };
+  function CorrespondenceHeader({ formattedCaseDetail }) {
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
@@ -46,13 +30,8 @@ export const CorrespondenceHeader = connect(
               <Button
                 link
                 aria-hidden="true"
-                icon="print"
-                onClick={() => {
-                  openDocketRecordPrintPreview({
-                    openNewTab: true,
-                    openNewView: false,
-                  });
-                }}
+                href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
+                icon="envelope-open"
               >
                 Add Correspondence File
               </Button>
