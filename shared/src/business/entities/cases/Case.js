@@ -5,6 +5,7 @@ const {
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const {
   CHIEF_JUDGE,
   DOCKET_NUMBER_MATCHER,
@@ -311,7 +312,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.correspondence = [];
   }
@@ -319,7 +320,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.documents = [];
   }
