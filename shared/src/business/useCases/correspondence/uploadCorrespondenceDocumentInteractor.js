@@ -15,7 +15,7 @@ exports.uploadCorrespondenceDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderDocumentId = await applicationContext
+  const correspondenceDocumentId = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
       applicationContext,
@@ -24,5 +24,5 @@ exports.uploadCorrespondenceDocumentInteractor = async ({
       onUploadProgress: () => {},
     });
 
-  return orderDocumentId;
+  return correspondenceDocumentId;
 };
