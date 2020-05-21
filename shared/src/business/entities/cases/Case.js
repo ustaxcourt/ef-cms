@@ -17,6 +17,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
@@ -304,6 +305,17 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
+  if (Array.isArray(rawCase.correspondence)) {
+    this.correspondence = rawCase.correspondence
+      .map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      )
+      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+  } else {
+    this.correspondence = [];
+  }
+
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
@@ -455,6 +467,10 @@ Case.validationRules = {
   }),
   contactPrimary: joi.object().required(),
   contactSecondary: joi.object().optional().allow(null),
+  correspondence: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .description('List of Correspondence documents for the case.'),
   createdAt: joiStrictTimestamp
     .required()
     .description(
@@ -1749,6 +1765,18 @@ Case.prototype.setAsSealed = function () {
  */
 Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
   return `case-${this.docketNumber}-confirmation.pdf`;
+};
+
+/**
+ * adds the correspondence document to the list of correspondences on the case
+ *
+ * @param {Correspondence} correspondenceEntity the correspondence document to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.fileCorrespondence = function (correspondenceEntity) {
+  this.correspondence = [...this.correspondence, correspondenceEntity];
+
+  return this;
 };
 
 exports.Case = Case;
