@@ -162,16 +162,37 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
       statisticIndex: 0,
     });
 
+    statisticsUiHelper = runCompute(statisticsFormHelper, {
+      state: test.getState(),
+    });
+
     let modal = test.getState('modal');
 
     expect(modal.statisticIndex).toEqual(0);
     expect(modal.penalties).toMatchObject(['', '', '', '', '']);
     expect(modal.showModal).toEqual('CalculatePenaltiesModal');
+    expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(true);
 
-    // Add additional penalty inputs in the modal
+    // Add 5 more penalty inputs in the modal (reaching the maximum number of 10)
+    for (let i = 5; i < 10; i++) {
+      await test.runSequence('addPenaltyInputSequence');
+    }
+
+    statisticsUiHelper = runCompute(statisticsFormHelper, {
+      state: test.getState(),
+    });
+
+    modal = test.getState('modal');
+
+    expect(modal.penalties.length).toEqual(10); // contains 5 additional elements in penalties array
+    expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(false); // UI should not allow additional to be created
+
+    // Attempt to add penalty inputs in modal after max is reached
     await test.runSequence('addPenaltyInputSequence');
 
-    expect(modal.penalties).toMatchObject(['', '', '', '', '', '']); // contains additional element in penalties array
+    modal = test.getState('modal');
+
+    expect(modal.penalties.length).toEqual(10);
 
     // Add some penalties and calculate the sum
     await test.runSequence('updateModalValueSequence', {
