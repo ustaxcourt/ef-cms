@@ -34,7 +34,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
     });
   });
 
-  it('should remove the doc ketNumberSuffix when a docket number is present', async () => {
+  it('should remove the docketNumberSuffix when a docket number is present', async () => {
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: {
         presenter,
