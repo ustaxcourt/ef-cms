@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { Document } = require('../Document');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
@@ -45,7 +46,7 @@ function PublicCase(rawCase, { applicationContext }) {
   this.documents = (rawCase.documents || [])
     .map(document => new PublicDocument(document, { applicationContext }))
     .filter(document => !isDraftDocument(document, this.docketRecord))
-    .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+    .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
 const publicCaseSchema = {

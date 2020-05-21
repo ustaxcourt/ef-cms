@@ -16,6 +16,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
@@ -311,7 +312,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.correspondence = [];
   }
@@ -319,7 +320,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.documents = [];
   }
