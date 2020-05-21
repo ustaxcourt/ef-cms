@@ -8,5 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.get the get function
  */
 export const setupUploadMetadataAction = ({ get, store }) => {
-  store.set(state.form.documentTitle, get(state.form.freeText));
+  store.set(state.form.documentTitle, get(state.form.documentTitle));
 };

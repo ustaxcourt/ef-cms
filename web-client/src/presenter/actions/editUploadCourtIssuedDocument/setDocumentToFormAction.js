@@ -11,7 +11,11 @@ import { state } from 'cerebral';
 export const setDocumentToFormAction = ({ props, store }) => {
   const { caseDetail, documentId } = props;
 
-  const documentToSet = caseDetail.documents.find(
+  const allCaseDocuments = [
+    ...(caseDetail.documents || []),
+    ...(caseDetail.correspondence || []),
+  ];
+  const documentToSet = allCaseDocuments.find(
     document => document.documentId === documentId,
   );
 

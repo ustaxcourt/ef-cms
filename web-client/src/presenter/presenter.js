@@ -64,6 +64,7 @@ import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingC
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
@@ -467,6 +468,7 @@ export const presenter = {
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
+    editCorrespondenceDocumentSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
