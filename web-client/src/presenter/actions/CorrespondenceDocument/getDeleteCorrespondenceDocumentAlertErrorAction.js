@@ -1,7 +1,7 @@
 /**
- * get alert message when a correspondence is successfully updated
+ * get alert message when a correspondence fails to delete
  *
- * @returns {object} the prop of the alert success message
+ * @returns {object} the prop of the alert error message
  */
 export const getDeleteCorrespondenceDocumentAlertErrorAction = () => {
   return {
