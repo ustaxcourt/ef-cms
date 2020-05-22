@@ -1077,7 +1077,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
-        deleteDocument: args => (process.env.CI ? null : deleteDocument(args)),
+        deleteDocument,
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
