@@ -159,7 +159,7 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
-    });
+    }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
     return (
