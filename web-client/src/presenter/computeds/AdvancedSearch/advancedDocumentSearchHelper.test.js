@@ -19,14 +19,19 @@ describe('advancedDocumentSearchHelper', () => {
     },
   );
 
-  it('returns an empty object when searchResults is undefined', () => {
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
+        advancedSearchTab: 'opinion',
+        isPublic: true,
       },
     });
 
-    expect(result).toEqual({});
+    expect(result).toEqual({
+      documentTypeVerbiage: 'Opinion',
+      isPublic: true,
+    });
   });
 
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
