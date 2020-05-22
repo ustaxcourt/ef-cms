@@ -18,13 +18,20 @@ describe('clearStatisticsFormValuesAction', () => {
               lastDateOfPeriodYear: '2010',
               totalPenalties: '123',
               year: '2012',
+              yearOrPeriod: 'Year',
             },
           ],
         },
       },
     });
 
-    expect(result.state.form).toEqual({ statistics: [{}] });
+    expect(result.state.form).toEqual({
+      statistics: [
+        {
+          yearOrPeriod: 'Year',
+        },
+      ],
+    });
   });
 
   it('should not unset statistics form values if props.key does not contain yearOrPeriod', async () => {
