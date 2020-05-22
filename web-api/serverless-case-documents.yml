@@ -424,3 +424,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  deleteCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.deleteCorrespondenceDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/correspondence/{documentIdToDelete}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
