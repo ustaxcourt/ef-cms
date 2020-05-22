@@ -253,6 +253,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  formatJudgeName,
+} = require('../../shared/src/business/utilities/getFormattedJudgeName');
+const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -1373,6 +1376,7 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatCaseForTrialSession,
         formatDateString,
+        formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,
