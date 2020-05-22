@@ -38,47 +38,47 @@ export const Correspondence = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedCaseDetail.correspondence.map(
-                (document, arrayIndex) => {
-                  return (
-                    <tr key={arrayIndex}>
-                      <td>
-                        <span className="no-wrap">{document.filingDate}</span>
-                      </td>
-                      <td>
-                        <Button link className="padding-0">
-                          {document.documentTitle}
-                        </Button>
-                      </td>
-                      <td>{document.filedBy}</td>
-                      <td>
-                        <Button
-                          link
-                          className="text-left padding-0 margin-left-1"
-                          href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
-                          icon="edit"
-                        >
-                          Edit
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          link
-                          className="red-warning padding-0 text-left margin-left-1"
-                          icon="trash"
-                          onClick={() => {
-                            openConfirmDeleteCorrespondenceModalSequence(
-                              document.documentId,
-                            );
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+              {formattedCaseDetail.correspondence.map((document, index) => {
+                return (
+                  <tr key={index}>
+                    <td>
+                      <span className="no-wrap">
+                        {document.formattedFilingDate}
+                      </span>
+                    </td>
+                    <td>
+                      <Button link className="padding-0">
+                        {document.documentTitle}
+                      </Button>
+                    </td>
+                    <td>{document.filedBy}</td>
+                    <td>
+                      <Button
+                        link
+                        className="text-left padding-0 margin-left-1"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
+                    </td>
+                    <td>
+                      <Button
+                        link
+                        className="red-warning padding-0 text-left margin-left-1"
+                        icon="trash"
+                        onClick={() => {
+                          openConfirmDeleteCorrespondenceModalSequence(
+                            document.documentId,
+                          );
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
