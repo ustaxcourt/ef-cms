@@ -1024,4 +1024,18 @@ describe('Document entity', () => {
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
     });
   });
+
+  describe('getFormattedType', () => {
+    it('strips out the dash and returns the verbiage after it', () => {
+      expect(Document.getFormattedType('TCOP - T.C. Opinion')).toEqual(
+        'T.C. Opinion',
+      );
+    });
+
+    it("returns the verbiage if there's no dash", () => {
+      expect(Document.getFormattedType('Summary Opinion')).toEqual(
+        'Summary Opinion',
+      );
+    });
+  });
 });

@@ -35,7 +35,9 @@ export const DocumentSearchResults = connect(
                   <th aria-hidden="true" className="small-column"></th>
                   <th>Docket number</th>
                   <th>Case title</th>
-                  <th>Order</th>
+                  <th>
+                    {advancedDocumentSearchHelper.documentTypeVerbiage} type
+                  </th>
                   <th>Pages</th>
                   <th>Date</th>
                   <th>Judge</th>

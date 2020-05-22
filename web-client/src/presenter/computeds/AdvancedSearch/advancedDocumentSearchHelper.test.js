@@ -19,14 +19,19 @@ describe('advancedDocumentSearchHelper', () => {
     },
   );
 
-  it('returns an empty object when searchResults is undefined', () => {
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
+        advancedSearchTab: 'opinion',
+        isPublic: true,
       },
     });
 
-    expect(result).toEqual({});
+    expect(result).toEqual({
+      documentTypeVerbiage: 'Opinion',
+      isPublic: true,
+    });
   });
 
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
@@ -134,7 +139,6 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'Order',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Order',
-        formattedEventCode: 'O',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Buch',
       },
@@ -148,7 +152,6 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Order for Amended Petition and Filing Fee',
-        formattedEventCode: 'OAPF',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
@@ -178,7 +181,7 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Opinion for Stuff',
-            documentType: 'TCOP - T.C. Opinion',
+            documentType: 'Summary Opinion',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Cohen',
           },
@@ -197,7 +200,6 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'TCOP - T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'T.C. Opinion',
-        formattedEventCode: 'TCOP',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Buch',
       },
@@ -208,10 +210,9 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Opinion for Stuff',
-        documentType: 'TCOP - T.C. Opinion',
+        documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedDocumentType: 'T.C. Opinion',
-        formattedEventCode: 'TCOP',
+        formattedDocumentType: 'Summary Opinion',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
