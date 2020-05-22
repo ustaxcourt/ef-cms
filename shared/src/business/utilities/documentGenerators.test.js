@@ -423,10 +423,16 @@ describe('documentGenerators', () => {
         data: {
           cases: [
             {
-              caseTitle: 'Test Petitioner',
+              caseTitle: 'Paul Simon',
               docketNumber: '123-45S',
               petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
               respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
+            },
+            {
+              caseTitle: 'Art Garfunkel',
+              docketNumber: '234-56',
+              petitionerCounsel: ['Mick Haller'],
+              respondentCounsel: ['Joy Falotico'],
             },
           ],
           sessionDetail: {
