@@ -57,6 +57,7 @@ import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequen
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
+import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
@@ -462,6 +463,7 @@ export const presenter = {
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
+    deleteCorrespondenceDocumentSequence,
     deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteTrialSessionSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
