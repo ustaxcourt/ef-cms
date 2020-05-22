@@ -87,6 +87,7 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 
+import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
@@ -265,6 +266,7 @@ const allUseCases = {
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
+  deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,

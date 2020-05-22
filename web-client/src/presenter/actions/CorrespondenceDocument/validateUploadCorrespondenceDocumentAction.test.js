@@ -4,14 +4,11 @@ import { runAction } from 'cerebral/test';
 import { validateUploadCorrespondenceDocumentAction } from './validateUploadCorrespondenceDocumentAction';
 
 describe('validateUploadCorrespondenceDocumentAction', () => {
-  let successStub;
-  let errorStub;
+  const successStub = jest.fn();
+  const errorStub = jest.fn();
 
-  beforeEach(() => {
+  beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-
-    successStub = jest.fn();
-    errorStub = jest.fn();
 
     presenter.providers.path = {
       error: errorStub,
