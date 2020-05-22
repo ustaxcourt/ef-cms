@@ -39,7 +39,6 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
-
   result.formattedDocumentType = Document.getFormattedType(result.documentType);
 
   if (Document.OPINION_DOCUMENT_TYPES.includes(result.eventCode)) {
