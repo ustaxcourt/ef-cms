@@ -652,4 +652,8 @@ Document.prototype.isAutoServed = function () {
   );
 };
 
+Document.getFormattedType = function (documentType) {
+  return documentType.split('-').slice(-1).join('').trim();
+};
+
 exports.Document = Document;
