@@ -25,11 +25,11 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
               return (
                 <tr key={pendingItem.docketNumberWithSuffix}>
                   <td>{pendingItem.docketNumberWithSuffix}</td>
-                  <td>{pendingItem.dateFiled}</td>
+                  <td>{pendingItem.formattedFiledDate}</td>
                   <td>{pendingItem.caseTitle}</td>
-                  <td>{pendingItem.filingsAndProceedings}</td>
+                  <td>{pendingItem.formattedName}</td>
                   <td>{pendingItem.status}</td>
-                  <td>{pendingItem.judge}</td>
+                  <td>{pendingItem.associatedJudgeFormatted}</td>
                 </tr>
               );
             })}
