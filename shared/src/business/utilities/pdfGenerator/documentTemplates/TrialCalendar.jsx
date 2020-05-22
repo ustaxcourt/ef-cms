@@ -13,9 +13,9 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
       />
 
       <div>
-        <div className="card width-half float-left">
-          <div className="card-header">Trial Information</div>
-          <div className="card-content">
+        <div className="info-box width-half float-left">
+          <div className="info-box-header">Trial Information</div>
+          <div className="info-box-content">
             <div className="width-half float-left" id="start-time">
               <strong>Start Time</strong>
               <br />
@@ -29,7 +29,7 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
               {!sessionDetail.noLocationEntered && (
                 <>
                   {sessionDetail.courthouseName && (
-                    <p>{sessionDetail.courthouseName}</p>
+                    <div>{sessionDetail.courthouseName}</div>
                   )}
                   {sessionDetail.address1 && (
                     <div>{sessionDetail.address1}</div>
@@ -47,9 +47,9 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
           </div>
         </div>
 
-        <div className="card width-half float-right" id="assignments">
-          <div className="card-header">Assignments</div>
-          <div className="card-content">
+        <div className="info-box width-half float-right" id="assignments">
+          <div className="info-box-header">Assignments</div>
+          <div className="info-box-content">
             <div>
               <div className="width-half float-left">
                 <strong>Judge</strong>
@@ -61,6 +61,7 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
               </div>
               <div className="clear"></div>
             </div>
+            <br />
             <div>
               <div className="width-half float-left">
                 <strong>Court Reporter</strong>
@@ -77,9 +78,9 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
         <div className="clear"></div>
       </div>
 
-      <div className="card" id="notes">
-        <div className="card-header">Session Notes</div>
-        <div className="card-content">{sessionDetail.notes}</div>
+      <div className="info-box" id="notes">
+        <div className="info-box-header">Session Notes</div>
+        <div className="info-box-content">{sessionDetail.notes}</div>
       </div>
 
       <h4 className="text-center" id="cases-count">
