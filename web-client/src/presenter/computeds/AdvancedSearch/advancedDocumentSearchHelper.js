@@ -35,18 +35,13 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+  result.formattedDocumentType = Document.getFormattedType(result.documentType);
 
-  const eventCodeAndDocumentType = result.documentType.split('-');
-  result.formattedEventCode = eventCodeAndDocumentType[0].trim();
-  result.formattedDocumentType = eventCodeAndDocumentType[1].trim();
-
-  if (Document.OPINION_DOCUMENT_TYPES.includes(result.formattedEventCode)) {
+  if (Document.OPINION_DOCUMENT_TYPES.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';
-  } else if (
-    Document.ORDER_DOCUMENT_TYPES.includes(result.formattedEventCode)
-  ) {
+  } else if (Document.ORDER_DOCUMENT_TYPES.includes(result.eventCode)) {
     result.formattedSignedJudgeName = result.signedJudgeName
       ? applicationContext
           .getUtilities()
