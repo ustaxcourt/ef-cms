@@ -259,7 +259,7 @@ const formatCase = (applicationContext, caseDetail) => {
         .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
     }));
 
-  if (result.correspondence.length) {
+  if (result.correspondence && result.correspondence.length) {
     result.correspondence.forEach(doc => {
       doc.formattedFilingDate = applicationContext
         .getUtilities()
