@@ -345,6 +345,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStateSequence } from './sequences/updateStateSequence';
+import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
@@ -747,6 +748,7 @@ export const presenter = {
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
     updateStateSequence,
+    updateStatisticsFormValueSequence,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     updateUserCaseNoteOnWorkingCopySequence,
