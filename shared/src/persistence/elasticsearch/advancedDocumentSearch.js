@@ -25,6 +25,7 @@ exports.advancedDocumentSearch = async ({
     'documentId',
     'documentTitle',
     'documentType',
+    'eventCode',
     'filingDate',
     'irsPractitioners',
     'isSealed',
