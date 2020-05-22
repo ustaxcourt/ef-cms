@@ -1,4 +1,5 @@
 import { Document } from '../../../../../shared/src/business/entities/Document';
+import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from 'cerebral';
 
@@ -6,6 +7,8 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
+  const advancedSearchTab = get(state.advancedSearchTab);
+  const documentTypeVerbiage = capitalize(advancedSearchTab);
 
   if (searchResults) {
     paginatedResults = paginationHelper(
@@ -22,6 +25,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 
   return {
     ...paginatedResults,
+    documentTypeVerbiage,
     isPublic,
   };
 };
