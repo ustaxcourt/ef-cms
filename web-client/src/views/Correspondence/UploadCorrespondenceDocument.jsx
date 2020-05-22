@@ -37,7 +37,8 @@ export const UploadCorrespondenceDocument = connect(
   }) {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader hideActionButtons />
+
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
@@ -56,7 +57,9 @@ export const UploadCorrespondenceDocument = connect(
               <div className="grid-col-5">
                 <div className="blue-container upload-court-document-description-container">
                   <FormGroup
-                    errorText={validationErrors && validationErrors.freeText}
+                    errorText={
+                      validationErrors && validationErrors.documentTitle
+                    }
                   >
                     <label
                       className="usa-label"
@@ -70,9 +73,9 @@ export const UploadCorrespondenceDocument = connect(
                       autoCapitalize="none"
                       className="usa-input"
                       id="upload-description"
-                      name="freeText"
+                      name="documentTitle"
                       type="text"
-                      value={form.freeText || ''}
+                      value={form.documentTitle || ''}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,

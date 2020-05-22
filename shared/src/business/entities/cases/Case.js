@@ -1053,7 +1053,9 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 Case.prototype.getDocumentById = function ({ documentId }) {
-  return this.documents.find(document => document.documentId === documentId);
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+
+  return allCaseDocuments.find(document => document.documentId === documentId);
 };
 
 Case.prototype.getPetitionDocument = function () {
@@ -1162,14 +1164,17 @@ Case.prototype.updateDocketRecord = function (
 
 /**
  *
- * @param {Document} updatedDocument the document to update on the case
+ * @param {Document|Correspondence} updatedDocument the document or correspondence to update on the case
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function (updatedDocument) {
-  const foundDocument = this.documents.find(
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+  const foundDocument = allCaseDocuments.find(
     document => document.documentId === updatedDocument.documentId,
   );
+
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
   return this;
 };
 
