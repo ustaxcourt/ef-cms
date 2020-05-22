@@ -55,6 +55,7 @@ describe('getCalendaredCasesForTrialSession', () => {
     expect(result).toEqual([
       {
         caseId: '123',
+        correspondence: [],
         disposition: 'something',
         docketRecord: [
           {

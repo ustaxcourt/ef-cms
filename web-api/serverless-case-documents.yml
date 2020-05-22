@@ -414,7 +414,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCorrespondenceDocument:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocument
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocumentLambda
     events:
       - http:
           path: /{caseId}/correspondence/{documentIdToEdit}
