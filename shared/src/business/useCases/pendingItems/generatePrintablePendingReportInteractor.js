@@ -34,10 +34,9 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   const formattedPendingItems = pendingItems.map(pendingItem => ({
     ...pendingItem,
-    associatedJudgeFormatted: (pendingItem.associatedJudge || '').replace(
-      /^Judge\s+/,
-      '',
-    ),
+    associatedJudgeFormatted: applicationContext
+      .getUtilities()
+      .formatJudgeName(pendingItem.associatedJudge),
     caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
     docketNumberWithSuffix: `${pendingItem.docketNumber}${
       pendingItem.docketNumberSuffix || ''
