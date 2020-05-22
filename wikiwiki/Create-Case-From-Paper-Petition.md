@@ -123,7 +123,7 @@
 **Add Another Year/Period**
 * Clerks are able to add up to 12 year/period sets
 * Sets 2-12 are optional UNLESS any field in a set includes data
-* If any field in a set has data,  then all fields in that set are required 
+* If any field in a set has data, then all fields in that set are required 
 
 #### Upload PDFs
 
