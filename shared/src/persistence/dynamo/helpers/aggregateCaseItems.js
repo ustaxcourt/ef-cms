@@ -23,7 +23,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
 
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
-  const sortedCorrespondences = sortBy(correspondences, 'filingDate');
+  const sortedCorrespondences = sortBy(correspondences, 'createdAt');
 
   return {
     ...theCase,
