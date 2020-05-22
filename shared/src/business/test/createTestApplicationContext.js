@@ -37,6 +37,9 @@ const {
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatJudgeName,
+} = require('../../../src/business/utilities/getFormattedJudgeName');
+const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -180,6 +183,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
+    formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formattedTrialSessionDetails: jest
       .fn()
