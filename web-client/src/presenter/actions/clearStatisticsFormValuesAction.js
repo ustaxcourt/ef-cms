@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.form to the pros.value passed in
+ * clears the statistics form values if the yearOrPeriod value changes
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
@@ -9,11 +9,12 @@ import { state } from 'cerebral';
  */
 export const clearStatisticsFormValuesAction = ({ props, store }) => {
   if (props.key.includes('yearOrPeriod')) {
-    store.unset(state.form.lastDateOfPeriodDay);
-    store.unset(state.form.lastDateOfPeriodMonth);
-    store.unset(state.form.lastDateOfPeriodYear);
-    store.unset(state.form.year);
-    store.unset(state.form.deficiencyAmount);
-    store.unset(state.form.totalPenalties);
+    const index = props.key.split('.')[1];
+    store.unset(state.form.statistics[index].lastDateOfPeriodDay);
+    store.unset(state.form.statistics[index].lastDateOfPeriodMonth);
+    store.unset(state.form.statistics[index].lastDateOfPeriodYear);
+    store.unset(state.form.statistics[index].year);
+    store.unset(state.form.statistics[index].deficiencyAmount);
+    store.unset(state.form.statistics[index].totalPenalties);
   }
 };
