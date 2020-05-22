@@ -1,8 +1,8 @@
 import { getDeleteCorrespondenceDocumentAlertErrorAction } from './getDeleteCorrespondenceDocumentAlertErrorAction';
 import { runAction } from 'cerebral/test';
 
-describe('getDeleteCorrespondenceDocumentAlertSuccessAction', () => {
-  it('should return alertSuccess prop', async () => {
+describe('getDeleteCorrespondenceDocumentAlertErrorAction', () => {
+  it('should return alertError prop', async () => {
     const result = await runAction(
       getDeleteCorrespondenceDocumentAlertErrorAction,
       {},
