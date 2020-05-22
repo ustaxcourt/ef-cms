@@ -16,6 +16,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
@@ -311,7 +312,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.correspondence = [];
   }
@@ -319,7 +320,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.documents = [];
   }
@@ -1052,7 +1053,9 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 Case.prototype.getDocumentById = function ({ documentId }) {
-  return this.documents.find(document => document.documentId === documentId);
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+
+  return allCaseDocuments.find(document => document.documentId === documentId);
 };
 
 Case.prototype.getPetitionDocument = function () {
@@ -1161,14 +1164,17 @@ Case.prototype.updateDocketRecord = function (
 
 /**
  *
- * @param {Document} updatedDocument the document to update on the case
+ * @param {Document|Correspondence} updatedDocument the document or correspondence to update on the case
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function (updatedDocument) {
-  const foundDocument = this.documents.find(
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+  const foundDocument = allCaseDocuments.find(
     document => document.documentId === updatedDocument.documentId,
   );
+
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
   return this;
 };
 

@@ -19,6 +19,7 @@ export const submitCorrespondenceAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId: documentId } = props;
   const formData = get(state.form);
+
   const { documentIdToEdit } = formData;
 
   let documentMetadata = omit(formData, [

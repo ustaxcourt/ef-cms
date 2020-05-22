@@ -58,7 +58,7 @@ describe('submitCorrespondenceAction', () => {
     });
   });
 
-  it('updates an existing document for correspondence', async () => {
+  it('updates an existing document for correspondence when state.form has a documentIdToEdit', async () => {
     const result = await runAction(submitCorrespondenceAction, {
       modules: {
         presenter,
