@@ -74,6 +74,7 @@ const {
   pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
+  trialCalendar,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   casePublicSearch: casePublicSearchPersistence,
@@ -968,6 +969,7 @@ module.exports = (appContextUser = {}) => {
       pendingReport,
       receiptOfFiling,
       standingPretrialOrder,
+      trialCalendar,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;

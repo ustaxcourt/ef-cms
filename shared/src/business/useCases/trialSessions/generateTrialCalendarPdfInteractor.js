@@ -35,29 +35,66 @@ exports.generateTrialCalendarPdfInteractor = async ({
       trialSessionId,
     });
 
+  const getPractitionerName = practitioner => {
+    const { barNumber, name } = practitioner;
+    const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
+    return `${name}${barNumberFormatted}`;
+  };
+
   const formattedOpenCases = openCases.map(openCase => {
-    return applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: openCase,
-    });
+    return {
+      caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
+      docketNumber: `${openCase.docketNumber}${
+        openCase.docketNumberSuffix || ''
+      }`,
+      petitionerCounsel: (openCase.privatePractitioners || []).map(
+        getPractitionerName,
+      ),
+      respondentCounsel: (openCase.irsPractitioners || []).map(
+        getPractitionerName,
+      ),
+    };
   });
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateTrialCalendarTemplate({
-      applicationContext,
-      content: {
-        formattedTrialSessionDetails: formattedTrialSession,
-        openCases: formattedOpenCases,
-      },
-    });
+  const {
+    address1,
+    address2,
+    courthouseName,
+    formattedCityStateZip,
+    formattedCourtReporter,
+    formattedIrsCalendarAdministrator,
+    formattedJudge,
+    formattedStartDateFull,
+    formattedStartTime,
+    formattedTrialClerk,
+    notes,
+    sessionType,
+    trialLocation,
+  } = formattedTrialSession;
 
-  const file = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
-      contentHtml,
-    });
+  const sessionDetail = {
+    address1,
+    address2,
+    courtReporter: formattedCourtReporter,
+    courthouseName,
+    formattedCityStateZip,
+    irsCalendarAdministrator: formattedIrsCalendarAdministrator,
+    judge: formattedJudge,
+    locationName: trialLocation,
+    notes,
+    startDate: formattedStartDateFull,
+    startTime: formattedStartTime,
+    trialClerk: formattedTrialClerk,
+    type: sessionType,
+  };
+
+  const file = await applicationContext.getDocumentGenerators().trialCalendar({
+    applicationContext,
+    data: {
+      cases: formattedOpenCases,
+      sessionDetail,
+    },
+  });
 
   return await saveFileAndGenerateUrl({ applicationContext, file });
 };
