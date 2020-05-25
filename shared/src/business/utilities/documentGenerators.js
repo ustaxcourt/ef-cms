@@ -334,10 +334,10 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-export const trialCalendar = async ({ applicationContext, data }) => {
+const trialCalendar = async ({ applicationContext, data }) => {
   const { cases, sessionDetail } = data;
 
-  const trialCalendarTempalte = reactTemplateGenerator({
+  const trialCalendarTemplate = reactTemplateGenerator({
     componentName: 'TrialCalendar',
     data: {
       cases,
@@ -348,7 +348,7 @@ export const trialCalendar = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
-    content: { main: trialCalendarTempalte },
+    content: { main: trialCalendarTemplate },
     options: {
       overwriteMain: true,
       title: 'Trial Calendar',
