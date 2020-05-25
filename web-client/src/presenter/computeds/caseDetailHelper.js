@@ -26,6 +26,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
   let showQcWorkItemsUntouchedState = false;
+  let showAddCorrespondenceButton = false;
 
   if (isExternalUser) {
     if (userAssociatedWithCase) {
@@ -41,6 +42,12 @@ export const caseDetailHelper = (get, applicationContext) => {
   } else {
     userHasAccessToCase = true;
     showQcWorkItemsUntouchedState = true;
+
+    if (
+      [USER_ROLES.petitionsClerk, USER_ROLES.docketClerk].includes(user.role)
+    ) {
+      showAddCorrespondenceButton = true;
+    }
 
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
@@ -105,6 +112,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
+    showAddCorrespondenceButton,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
