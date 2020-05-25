@@ -14,13 +14,13 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
         h3="Standing Pre Trial Notice"
       />
 
-      <div className="card" id="trial-information">
-        <div className="card-header">
+      <div className="info-box" id="trial-information">
+        <div className="info-box-header text-normal text-center">
           This case is set for the trial session beginning at{' '}
           <strong>{trialInfo.startTime}</strong> on{' '}
           <strong>{trialInfo.fullStartDate}</strong>.
         </div>
-        <div className="card-content text-center" id="trial-location">
+        <div className="info-box-content text-center" id="trial-location">
           <div>{trialInfo.courthouseName}</div>
           <div>{trialInfo.address1}</div>
           {trialInfo.address2 && (
@@ -55,7 +55,7 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
             </li>
           </ul>
         </li>
-        <li>
+        <li style={{ paddingTop: '20px' }}>
           <strong>WHAT TO DO THE DAY OF THE TRIAL SESSION</strong>
           <ul>
             <li>
@@ -69,7 +69,7 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
             </li>
           </ul>
         </li>
-        <li>
+        <li style={{ paddingTop: '20px' }}>
           Find out more at{' '}
           <a href="http://www.ustaxcourt.gov">www.ustaxcourt.gov</a> or call
           call 202-521-0700.

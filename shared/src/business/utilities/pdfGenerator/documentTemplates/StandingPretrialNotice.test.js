@@ -17,6 +17,7 @@ describe('StandingPretrialNotice', () => {
     trialInfo = {
       address1: '123 Some St.',
       city: 'Some City',
+      courthouseName: 'Hall of Justice',
       fullStartDate: 'Friday May 8, 2020',
       judge: {
         name: 'Test Judge',
@@ -61,6 +62,7 @@ describe('StandingPretrialNotice', () => {
 
     const trialInformation = wrapper.find('#trial-information');
 
+    expect(trialInformation.text()).toContain(trialInfo.courthouseName);
     expect(trialInformation.text()).toContain(trialInfo.address1);
     expect(trialInformation.text()).toContain(trialInfo.city);
     expect(trialInformation.text()).toContain(trialInfo.state);
