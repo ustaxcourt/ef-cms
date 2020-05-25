@@ -57,35 +57,22 @@ exports.generateTrialCalendarPdfInteractor = async ({
   });
 
   const {
-    address1,
-    address2,
-    courthouseName,
-    formattedCityStateZip,
     formattedCourtReporter,
     formattedIrsCalendarAdministrator,
     formattedJudge,
     formattedStartDateFull,
     formattedStartTime,
     formattedTrialClerk,
-    notes,
-    sessionType,
-    trialLocation,
   } = formattedTrialSession;
 
   const sessionDetail = {
-    address1,
-    address2,
+    ...formattedTrialSession,
     courtReporter: formattedCourtReporter,
-    courthouseName,
-    formattedCityStateZip,
     irsCalendarAdministrator: formattedIrsCalendarAdministrator,
     judge: formattedJudge,
-    locationName: trialLocation,
-    notes,
     startDate: formattedStartDateFull,
     startTime: formattedStartTime,
     trialClerk: formattedTrialClerk,
-    type: sessionType,
   };
 
   const file = await applicationContext.getDocumentGenerators().trialCalendar({

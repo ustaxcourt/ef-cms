@@ -24,12 +24,12 @@ describe('TrialCalendar', () => {
       formattedCityStateZip: 'New York, NY 10108',
       irsCalendarAdministrator: 'iCalRS Admin',
       judge: 'Joseph Dredd',
-      locationName: 'New York City, New York',
       notes: 'The one with the velour shirt is definitely looking at me funny.',
+      sessionType: 'Hybrid',
       startDate: 'May 1, 2020',
       startTime: '10:00am',
       trialClerk: 'Clerky McGee',
-      type: 'Hybrid',
+      trialLocation: 'New York City, New York',
     };
   });
 
