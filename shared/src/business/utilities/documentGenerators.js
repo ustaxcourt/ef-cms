@@ -362,12 +362,20 @@ const trialCalendar = async ({ applicationContext, data }) => {
     },
   });
 
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
+      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
