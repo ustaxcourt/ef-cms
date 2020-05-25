@@ -33,6 +33,9 @@ const {
   ReportsMetaHeader,
 } = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
 const {
+  StandingPretrialNotice,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialNotice.jsx');
+const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
 const {
@@ -62,6 +65,7 @@ const components = {
   PetitionService,
   ReceiptOfFiling,
   ReportsMetaHeader,
+  StandingPretrialNotice,
   StandingPretrialOrder,
   TrialCalendar,
 };
