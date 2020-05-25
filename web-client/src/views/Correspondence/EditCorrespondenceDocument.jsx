@@ -60,7 +60,7 @@ export const EditCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">
+                <h2 className="heading-1" id="edit-correpsondence-header">
                   Edit {documentDetailHelper.formattedDocument.documentTitle}
                 </h2>
               </div>
