@@ -7,15 +7,19 @@ import React from 'react';
 
 export const Correspondence = connect(
   {
+    baseUrl: state.baseUrl,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence:
       sequences.openConfirmDeleteCorrespondenceModalSequence,
     showModal: state.modal.showModal,
+    token: state.token,
   },
   function Correspondence({
+    baseUrl,
     formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence,
     showModal,
+    token,
   }) {
     return (
       <>
@@ -47,7 +51,13 @@ export const Correspondence = connect(
                       </span>
                     </td>
                     <td>
-                      <Button link className="padding-0">
+                      <Button
+                        link
+                        className="padding-0"
+                        href={`${baseUrl}/case-documents/${formattedCaseDetail.caseId}/${document.documentId}/document-download-url?token=${token}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
                         {document.documentTitle}
                       </Button>
                     </td>
