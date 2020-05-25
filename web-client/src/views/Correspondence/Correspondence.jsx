@@ -70,9 +70,10 @@ export const Correspondence = connect(
                       {showAddCorrespondenceButton && (
                         <Button
                           link
-                          className="text-left padding-0 margin-left-1"
+                          className="text-left padding-0 margin-left-"
                           href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
                           icon="edit"
+                          id="edit-correspondence-button"
                         >
                           Edit
                         </Button>
