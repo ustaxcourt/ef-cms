@@ -333,6 +333,55 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const trialCalendar = async ({ applicationContext, data }) => {
+  const { cases, sessionDetail } = data;
+
+  const trialCalendarTemplate = reactTemplateGenerator({
+    componentName: 'TrialCalendar',
+    data: {
+      cases,
+      sessionDetail,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: trialCalendarTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Trial Calendar',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: sessionDetail.docketNumber,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 module.exports = {
   caseInventoryReport,
   changeOfAddress,
@@ -341,4 +390,5 @@ module.exports = {
   pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
+  trialCalendar,
 };
