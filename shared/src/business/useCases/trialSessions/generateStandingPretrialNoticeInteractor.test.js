@@ -14,12 +14,6 @@ describe('generateStandingPretrialNoticeInteractor', () => {
       );
 
     applicationContext
-      .getTemplateGenerators()
-      .generateStandingPretrialNoticeTemplate.mockImplementation(
-        ({ content }) => `<html>${content.docketNumberWithSuffix}</html>`,
-      );
-
-    applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         if (docketNumber === '123-45') {
