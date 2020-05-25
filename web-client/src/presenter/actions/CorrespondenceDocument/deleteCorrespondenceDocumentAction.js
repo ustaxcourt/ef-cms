@@ -28,11 +28,6 @@ export const deleteCorrespondenceDocumentAction = async ({
 
     return path.success();
   } catch (err) {
-    return path.error({
-      alertError: {
-        title:
-          'An error occurred when attempting to delete the correspondence document.',
-      },
-    });
+    return path.error();
   }
 };

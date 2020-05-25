@@ -68,9 +68,10 @@ export const Correspondence = connect(
                         className="red-warning padding-0 text-left margin-left-1"
                         icon="trash"
                         onClick={() => {
-                          openConfirmDeleteCorrespondenceModalSequence(
-                            document.documentId,
-                          );
+                          openConfirmDeleteCorrespondenceModalSequence({
+                            documentId: document.documentId,
+                            documentTitle: document.documentTitle,
+                          });
                         }}
                       >
                         Delete
