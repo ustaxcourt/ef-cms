@@ -19,6 +19,7 @@ applicationContext.getCurrentUser = () =>
 
 const mockCaseDetailBase = {
   caseId: '123-456-abc-def',
+  correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
@@ -101,6 +102,21 @@ describe('formatCase', () => {
     expect(result.documents[0]).toHaveProperty('servedPartiesCode');
 
     expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
+  });
+
+  it('should format the filing date of all correspondence documents', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      correspondence: [
+        {
+          documentTitle: 'Test Correspondence',
+          filedBy: 'Test Docket Clerk',
+          filingDate: '2020-05-21T18:21:59.818Z',
+        },
+      ],
+    });
+
+    expect(result.correspondence[0].formattedFilingDate).toEqual('05/21/20');
   });
 
   it('should format docket records if the case docket record array is set', () => {

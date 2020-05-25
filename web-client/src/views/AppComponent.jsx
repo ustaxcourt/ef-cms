@@ -23,6 +23,7 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
@@ -97,6 +98,7 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditCorrespondenceDocument,
   EditDocketEntry,
   EditDocketEntryMeta,
   EditPetitionDetails,
@@ -159,7 +161,7 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
-    });
+    }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
     return (

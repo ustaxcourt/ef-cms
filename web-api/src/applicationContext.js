@@ -169,6 +169,9 @@ const {
   createWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
+const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -180,6 +183,9 @@ const {
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
+const {
+  deleteCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/deleteCorrespondenceDocumentInteractor');
 const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
@@ -252,6 +258,9 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
+const {
+  formatJudgeName,
+} = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
@@ -738,6 +747,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor');
+const {
   updateCounselOnCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor');
 const {
@@ -1062,9 +1074,10 @@ module.exports = (appContextUser = {}) => {
         createUser,
         createUserInboxRecord,
         createWorkItem,
+        deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
-        deleteDocument: args => (process.env.CI ? null : deleteDocument(args)),
+        deleteDocument,
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -1242,7 +1255,6 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
-
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
@@ -1253,6 +1265,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
+        deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
@@ -1343,6 +1356,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateCorrespondenceDocumentInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
@@ -1373,6 +1387,7 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatCaseForTrialSession,
         formatDateString,
+        formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,

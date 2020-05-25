@@ -4,14 +4,11 @@ import { runAction } from 'cerebral/test';
 import { validateUploadCorrespondenceDocumentAction } from './validateUploadCorrespondenceDocumentAction';
 
 describe('validateUploadCorrespondenceDocumentAction', () => {
-  let successStub;
-  let errorStub;
+  const successStub = jest.fn();
+  const errorStub = jest.fn();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-
-    successStub = jest.fn();
-    errorStub = jest.fn();
 
     presenter.providers.path = {
       error: errorStub,
@@ -19,14 +16,14 @@ describe('validateUploadCorrespondenceDocumentAction', () => {
     };
   });
 
-  it('should call path.success and not path.error if freeText and primaryDocumentFile are defined', async () => {
+  it('should call path.success and not path.error if documentTitle and primaryDocumentFile are defined', async () => {
     await runAction(validateUploadCorrespondenceDocumentAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          freeText: 'Some text',
+          documentTitle: 'Some text',
           primaryDocumentFile: '01010101',
         },
       },

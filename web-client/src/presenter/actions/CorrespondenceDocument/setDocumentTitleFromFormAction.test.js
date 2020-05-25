@@ -1,16 +1,16 @@
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setDocumentTitleFromFreeTextAction } from './setDocumentTitleFromFreeTextAction';
+import { setDocumentTitleFromFormAction } from './setDocumentTitleFromFormAction';
 
-describe('setDocumentTitleFromFreeTextAction', () => {
+describe('setDocumentTitleFromFormAction', () => {
   it('should update the forms document title', async () => {
-    const results = await runAction(setDocumentTitleFromFreeTextAction, {
+    const results = await runAction(setDocumentTitleFromFormAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          freeText: 'something',
+          documentTitle: 'something',
         },
       },
     });
