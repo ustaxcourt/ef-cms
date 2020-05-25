@@ -11,6 +11,8 @@ export const Correspondence = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence:
       sequences.openConfirmDeleteCorrespondenceModalSequence,
+    showAddCorrespondenceButton:
+      state.caseDetailHelper.showAddCorrespondenceButton,
     showModal: state.modal.showModal,
     token: state.token,
   },
@@ -18,6 +20,7 @@ export const Correspondence = connect(
     baseUrl,
     formattedCaseDetail,
     openConfirmDeleteCorrespondenceModalSequence,
+    showAddCorrespondenceButton,
     showModal,
     token,
   }) {
@@ -29,8 +32,9 @@ export const Correspondence = connect(
         )}
         {formattedCaseDetail.correspondence.length > 0 && (
           <table
-            aria-label="docket record"
-            className="usa-table case-detail docket-record responsive-table row-border-only"
+            aria-label="correspondence"
+            className="usa-table case-detail responsive-table row-border-only"
+            id="correspondence-documents-table"
           >
             <thead>
               <tr>
@@ -63,29 +67,33 @@ export const Correspondence = connect(
                     </td>
                     <td>{document.filedBy}</td>
                     <td>
-                      <Button
-                        link
-                        className="text-left padding-0 margin-left-1"
-                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
-                        icon="edit"
-                      >
-                        Edit
-                      </Button>
+                      {showAddCorrespondenceButton && (
+                        <Button
+                          link
+                          className="text-left padding-0 margin-left-1"
+                          href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
+                          icon="edit"
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </td>
                     <td>
-                      <Button
-                        link
-                        className="red-warning padding-0 text-left margin-left-1"
-                        icon="trash"
-                        onClick={() => {
-                          openConfirmDeleteCorrespondenceModalSequence({
-                            documentId: document.documentId,
-                            documentTitle: document.documentTitle,
-                          });
-                        }}
-                      >
-                        Delete
-                      </Button>
+                      {showAddCorrespondenceButton && (
+                        <Button
+                          link
+                          className="red-warning padding-0 text-left margin-left-1"
+                          icon="trash"
+                          onClick={() => {
+                            openConfirmDeleteCorrespondenceModalSequence({
+                              documentId: document.documentId,
+                              documentTitle: document.documentTitle,
+                            });
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 );

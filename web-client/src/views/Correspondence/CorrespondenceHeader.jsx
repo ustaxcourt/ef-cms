@@ -6,8 +6,13 @@ import React from 'react';
 export const CorrespondenceHeader = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    showAddCorrespondenceButton:
+      state.caseDetailHelper.showAddCorrespondenceButton,
   },
-  function CorrespondenceHeader({ formattedCaseDetail }) {
+  function CorrespondenceHeader({
+    formattedCaseDetail,
+    showAddCorrespondenceButton,
+  }) {
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
@@ -16,15 +21,17 @@ export const CorrespondenceHeader = connect(
               <h1>Correspondence Files</h1>
             </div>
             <div className="tablet:grid-col-2 text-right hide-on-mobile add-correspondence-file">
-              <Button
-                link
-                aria-label="printable docket record"
-                className="margin-right-0"
-                href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
-                icon="envelope-open"
-              >
-                Add Correspondence File
-              </Button>
+              {showAddCorrespondenceButton && (
+                <Button
+                  link
+                  aria-label="printable docket record"
+                  className="margin-right-0"
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
+                  icon="envelope-open"
+                >
+                  Add Correspondence File
+                </Button>
+              )}
             </div>
             <div className="only-small-screens">
               <Button
