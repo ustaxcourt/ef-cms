@@ -7,6 +7,7 @@ const {
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -1622,6 +1623,26 @@ describe('Case entity', () => {
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
     });
+
+    it('should get a correspondence document by id', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = myCase.getDocumentById({
+        documentId: mockCorrespondence.documentId,
+      });
+
+      expect(result.documentId).toEqual(mockCorrespondence.documentId);
+    });
   });
 
   describe('getPetitionDocument', () => {
@@ -1709,15 +1730,42 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
+
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
+
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
       ).toEqual('success');
+    });
+
+    it('should update a correspondence document', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      myCase.updateDocument({
+        documentId: mockCorrespondence.documentId,
+        documentTitle: 'updated title',
+      });
+
+      expect(
+        myCase.correspondence.find(
+          d => d.documentId === mockCorrespondence.documentId,
+        ).documentTitle,
+      ).toEqual('updated title');
     });
   });
 

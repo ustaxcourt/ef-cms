@@ -10,13 +10,13 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateUploadCorrespondenceDocumentAction = ({ get, path }) => {
-  const { freeText, primaryDocumentFile } = get(state.form);
+  const { documentTitle, primaryDocumentFile } = get(state.form);
 
   let errors = {};
-  let errorDisplayOrder = ['freeText', 'primaryDocumentFile'];
+  let errorDisplayOrder = ['documentTitle', 'primaryDocumentFile'];
 
-  if (!freeText) {
-    errors.freeText = 'Enter a description';
+  if (!documentTitle) {
+    errors.documentTitle = 'Enter a description';
   }
 
   if (!primaryDocumentFile) {

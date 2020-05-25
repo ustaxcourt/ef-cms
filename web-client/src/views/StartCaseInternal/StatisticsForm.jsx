@@ -13,7 +13,8 @@ export const StatisticsForm = connect(
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     statisticsFormHelper: state.statisticsFormHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateStatisticsFormValueSequence:
+      sequences.updateStatisticsFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
@@ -23,7 +24,7 @@ export const StatisticsForm = connect(
     form,
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
-    updateFormValueSequence,
+    updateStatisticsFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) {
@@ -39,7 +40,7 @@ export const StatisticsForm = connect(
           value={form.statistics[index].deficiencyAmount || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
-            updateFormValueSequence({
+            updateStatisticsFormValueSequence({
               key: `statistics.${index}.deficiencyAmount`,
               value: values.value,
             });
@@ -60,7 +61,7 @@ export const StatisticsForm = connect(
           value={form.statistics[index].totalPenalties || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
-            updateFormValueSequence({
+            updateStatisticsFormValueSequence({
               key: `statistics.${index}.totalPenalties`,
               value: values.value,
             });
@@ -83,7 +84,7 @@ export const StatisticsForm = connect(
                   type="radio"
                   value={option}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateStatisticsFormValueSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -117,13 +118,13 @@ export const StatisticsForm = connect(
                   <input
                     className="usa-input usa-input-inline"
                     id={`year-${index}`}
-                    maxLength="25"
+                    maxLength="4"
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}
                     onBlur={() => validatePetitionFromPaperSequence()}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateStatisticsFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -154,7 +155,7 @@ export const StatisticsForm = connect(
                   year: form.statistics[index].lastDateOfPeriodYear,
                 }}
                 onBlur={() => validatePetitionFromPaperSequence()}
-                onChange={updateFormValueSequence}
+                onChange={updateStatisticsFormValueSequence}
               />
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-4">
