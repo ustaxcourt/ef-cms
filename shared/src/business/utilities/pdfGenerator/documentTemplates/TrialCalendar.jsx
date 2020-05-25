@@ -8,8 +8,8 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
     <>
       <PrimaryHeader />
       <ReportsHeader
-        subtitle={`${sessionDetail.startDate} ${sessionDetail.type}`}
-        title={sessionDetail.locationName}
+        subtitle={`${sessionDetail.startDate} ${sessionDetail.sessionType}`}
+        title={sessionDetail.trialLocation}
       />
 
       <div className="column">

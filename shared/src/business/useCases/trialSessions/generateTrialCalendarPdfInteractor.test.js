@@ -19,12 +19,31 @@ describe('generateTrialCalendarPdfInteractor', () => {
       ]);
 
     applicationContext
-      .getTemplateGenerators()
-      .generateTrialCalendarTemplate.mockReturnValue(true);
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
 
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
+      .getTrialSessionById.mockReturnValue({
+        address1: '123 Some Street',
+        address2: 'Suite B',
+        city: 'New York',
+        courtReporter: 'Lois Lane',
+        courthouseName: 'Test Courthouse',
+        irsCalendarAdministrator: 'iCalRS Admin',
+        judge: { name: 'Joseph Dredd' },
+        notes:
+          'The one with the velour shirt is definitely looking at me funny.',
+        sessionType: 'Hybrid',
+        startDate: '2019-12-02T05:00:00.000Z',
+        startTime: '09:00',
+        state: 'NY',
+        term: 'Fall',
+        termYear: '2019',
+        trialClerk: 'Clerky McGee',
+        trialLocation: 'New York City, New York',
+        zip: '10108',
+      });
   });
 
   it('should find the cases for a trial session successfully', async () => {
@@ -42,19 +61,15 @@ describe('generateTrialCalendarPdfInteractor', () => {
         .length,
     ).toBe(1);
     expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession.mock.calls.length,
+    ).toBe(1);
+    expect(
       applicationContext.getUtilities().formattedTrialSessionDetails.mock.calls
         .length,
     ).toBe(1);
     expect(
-      applicationContext.getUtilities().getFormattedCaseDetail.mock.calls
-        .length,
-    ).toBe(3);
-    expect(
-      applicationContext.getTemplateGenerators().generateTrialCalendarTemplate
-        .mock.calls.length,
-    ).toBe(1);
-    expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor.mock.calls
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls
         .length,
     ).toBe(1);
   });
