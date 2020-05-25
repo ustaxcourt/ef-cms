@@ -12,16 +12,16 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
         title={sessionDetail.locationName}
       />
 
-      <div>
-        <div className="info-box width-half float-left">
-          <div className="info-box-header">Trial Information</div>
-          <div className="info-box-content">
-            <div className="width-half float-left" id="start-time">
+      <div className="column">
+        <div className="card width-half">
+          <div className="card-header">Trial Information</div>
+          <div className="card-content">
+            <div className="width-half" id="start-time">
               <strong>Start Time</strong>
               <br />
               {sessionDetail.startTime}
             </div>
-            <div className="width-half float-right" id="location">
+            <div className="width-half" id="location">
               <strong>Location</strong>
               {sessionDetail.noLocationEntered && (
                 <div>No location entered</div>
@@ -47,40 +47,38 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
           </div>
         </div>
 
-        <div className="info-box width-half float-right" id="assignments">
-          <div className="info-box-header">Assignments</div>
-          <div className="info-box-content">
-            <div>
-              <div className="width-half float-left">
-                <strong>Judge</strong>
-                <div>{sessionDetail.judge}</div>
-              </div>
-              <div className="width-half float-right">
-                <strong>Trial Clerk</strong>
-                <div>{sessionDetail.trialClerk}</div>
-              </div>
-              <div className="clear"></div>
+        <div className="card width-half" id="assignments">
+          <div className="card-header">Assignments</div>
+          <div className="card-content">
+            <div className="width-half">
+              <strong>Judge</strong>
+              <div>{sessionDetail.judge}</div>
             </div>
-            <br />
-            <div>
-              <div className="width-half float-left">
-                <strong>Court Reporter</strong>
-                <div>{sessionDetail.courtReporter}</div>
-              </div>
-              <div className="width-half float-right">
-                <strong>IRS Calendar Administrator</strong>
-                <div>{sessionDetail.irsCalendarAdministrator}</div>
-              </div>
-              <div className="clear"></div>
+            <div className="width-half">
+              <strong>Trial Clerk</strong>
+              <div>{sessionDetail.trialClerk}</div>
             </div>
+            <div className="clear"></div>
+          </div>
+          <br />
+          <div className="card-content">
+            <div className="width-half">
+              <strong>Court Reporter</strong>
+              <div>{sessionDetail.courtReporter}</div>
+            </div>
+            <div className="width-half">
+              <strong>IRS Calendar Admin</strong>
+              <div>{sessionDetail.irsCalendarAdministrator}</div>
+            </div>
+            <div className="clear"></div>
           </div>
         </div>
-        <div className="clear"></div>
       </div>
+      <div className="clear"></div>
 
-      <div className="info-box" id="notes">
-        <div className="info-box-header">Session Notes</div>
-        <div className="info-box-content">{sessionDetail.notes}</div>
+      <div className="card margin-top-0" id="notes">
+        <div className="card-header">Session Notes</div>
+        <div className="card-content">{sessionDetail.notes}</div>
       </div>
 
       <h4 className="text-center" id="cases-count">

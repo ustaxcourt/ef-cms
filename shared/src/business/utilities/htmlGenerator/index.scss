@@ -171,6 +171,24 @@ th {
 .clear {
   clear: both;
 }
+
+.column {
+  display: flex;
+  flex: 1;
+
+  .width-half {
+    width: 50%;
+
+    &:first-child {
+      margin-right: 6px;
+    }
+
+    &:last-child {
+      margin-left: 6px;
+    }
+  }
+}
+
 .card {
   border: 1px solid #ccc;
   margin: 12px 0 12px 0;
@@ -186,7 +204,6 @@ th {
 
 .card-content {
   display: flex;
-  flex-flow: row wrap;
   align-items: flex-start;
   padding: 10px;
 }
