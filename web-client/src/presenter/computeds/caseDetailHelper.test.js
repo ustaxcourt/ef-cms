@@ -22,6 +22,48 @@ const getBaseState = user => {
 };
 
 describe('case detail computed', () => {
+  it('should set showAddCorrespondenceButton to false when the current user is not a petitions clerk or a docket clerk', () => {
+    const user = {
+      role: User.ROLES.privatePractitioner,
+      userId: '123',
+    };
+
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { privatePractitioners: [] },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showAddCorrespondenceButton).toEqual(false);
+  });
+
+  it('should set showAddCorrespondenceButton to true when the current user is a petitions clerk', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { privatePractitioners: [] },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showAddCorrespondenceButton).toEqual(true);
+  });
+
   it('should set showFileDocumentButton to true if current page is CaseDetail, user role is practitioner, and case is owned by user', () => {
     const user = {
       role: User.ROLES.privatePractitioner,
