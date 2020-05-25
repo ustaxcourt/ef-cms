@@ -241,7 +241,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generateStandingPretrialNoticeTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
