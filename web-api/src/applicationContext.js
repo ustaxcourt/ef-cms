@@ -73,6 +73,7 @@ const {
   noticeOfDocketChange,
   pendingReport,
   receiptOfFiling,
+  standingPretrialNotice,
   standingPretrialOrder,
   trialCalendar,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -967,6 +968,7 @@ module.exports = (appContextUser = {}) => {
       noticeOfDocketChange,
       pendingReport,
       receiptOfFiling,
+      standingPretrialNotice,
       standingPretrialOrder,
       trialCalendar,
     }),
