@@ -14,7 +14,7 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
         h3="Standing Pre Trial Notice"
       />
 
-      <div className="info-box" id="trial-information">
+      <div className="info-box margin-bottom-0" id="trial-information">
         <div className="info-box-header text-normal text-center">
           This case is set for the trial session beginning at{' '}
           <strong>{trialInfo.startTime}</strong> on{' '}
@@ -55,7 +55,40 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
             </li>
           </ul>
         </li>
-        <li style={{ paddingTop: '20px' }}>
+        <li style={{ paddingTop: '10px' }}>
+          <strong>WHAT TO DO BEFORE TRIAL</strong>
+          <ul>
+            <li>
+              Talk to the IRS lawyer about what facts and documents you can both
+              stipulate (agree) to. Facts might include your name, address, and
+              the tax year(s) involved. Documents might include the notice or
+              your tax returns.
+            </li>
+            <li>
+              For documents you cannot agree on, bring 3 copies to trial. A
+              photocopier may not be available at the courthouse. Only documents
+              presented at trial will be part of the case record. The Tax Court
+              is not part of the IRS. If you gave something to the IRS before,
+              bring a copy with you!
+            </li>
+            <li>
+              Consider filing a &quot;pretrial memorandum&quot; because it is
+              helpful to the Judge. A form you can use is attached.
+            </li>
+            <li>
+              You can send an update to the Court a week in advance if you need
+              to by filing a Final Status Report, available at
+              https://www.ustaxcourt.gov/FinalStatusReport/.
+            </li>
+            <li>
+              Your case may not be tried on {trialInfo.fullStartDate} because
+              trial sessions can last more than one day. If you have witnesses
+              that can only be there on {trialInfo.startDay}, please put that in
+              your pretrial memorandum or Final Status Report.
+            </li>
+          </ul>
+        </li>
+        <li style={{ paddingTop: '10px' }}>
           <strong>WHAT TO DO THE DAY OF THE TRIAL SESSION</strong>
           <ul>
             <li>
@@ -69,7 +102,7 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
             </li>
           </ul>
         </li>
-        <li style={{ paddingTop: '20px' }}>
+        <li style={{ paddingTop: '10px' }}>
           Find out more at{' '}
           <a href="http://www.ustaxcourt.gov">www.ustaxcourt.gov</a> or call
           call 202-521-0700.
