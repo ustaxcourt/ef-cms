@@ -15,7 +15,7 @@ export const deleteCorrespondenceDocumentAction = async ({
   path,
 }) => {
   const caseId = get(state.caseDetail.caseId);
-  const documentIdToDelete = get(state.modal.correspondenceToDelete.documentId);
+  const documentId = get(state.modal.correspondenceToDelete.documentId);
 
   try {
     await applicationContext
@@ -23,7 +23,7 @@ export const deleteCorrespondenceDocumentAction = async ({
       .deleteCorrespondenceDocumentInteractor({
         applicationContext,
         caseId,
-        documentIdToDelete,
+        documentId,
       });
 
     return path.success();
