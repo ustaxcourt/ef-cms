@@ -1,4 +1,4 @@
-import { formatStatistic } from './formattedStatistics';
+import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
