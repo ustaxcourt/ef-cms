@@ -5,15 +5,21 @@ import React from 'react';
 
 export const Statistics = connect(
   {
+    caseDetail: state.caseDetail,
     statisticsHelper: state.statisticsHelper,
   },
-  function Statistics({ statisticsHelper }) {
+  function Statistics({ caseDetail, statisticsHelper }) {
     return (
       <>
         {statisticsHelper.showAddButtons && (
           <div className="grid-row grid-gap flex-justify-end margin-bottom-2">
             {statisticsHelper.showAddOtherStatisticsButton && (
-              <Button link className="push-right padding-0" icon="plus-circle">
+              <Button
+                link
+                className="push-right padding-0"
+                href={`/case-detail/${caseDetail.docketNumber}/add-other-statistics`}
+                icon="plus-circle"
+              >
                 Add Other Statistics
               </Button>
             )}
