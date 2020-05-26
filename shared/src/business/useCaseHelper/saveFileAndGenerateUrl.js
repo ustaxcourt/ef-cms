@@ -10,7 +10,7 @@
 exports.saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
-  useTempBucket = true,
+  useTempBucket = false,
 }) => {
   const fileId = applicationContext.getUniqueId();
 

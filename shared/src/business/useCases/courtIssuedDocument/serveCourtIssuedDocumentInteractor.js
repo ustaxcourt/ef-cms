@@ -226,6 +226,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     const { url } = await saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
+      useTempBucket: true,
     });
 
     return { pdfUrl: url };
