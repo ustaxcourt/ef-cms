@@ -523,7 +523,13 @@ joiValidationDecorator(
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi.string().optional().allow(null),
+    signedByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
