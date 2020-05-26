@@ -35,6 +35,9 @@ const {
 const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+const {
+  TrialCalendar,
+} = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
 
 // Emails
 const {
@@ -60,6 +63,7 @@ const components = {
   ReceiptOfFiling,
   ReportsMetaHeader,
   StandingPretrialOrder,
+  TrialCalendar,
 };
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {
