@@ -645,6 +645,7 @@ workflows:
                 - test
                 - master
                 - experimental
+                - experimental2
       - deploy-api-east:
           requires:
             - pre-deploy
@@ -655,6 +656,7 @@ workflows:
                 - test
                 - master
                 - experimental
+                - experimental2
       - deploy-api-west:
           requires:
             - pre-deploy
@@ -665,6 +667,7 @@ workflows:
                 - test
                 - master
                 - experimental
+                - experimental2
       - switch-and-deploy-ui:
           requires:
             - deploy-api-west
@@ -676,6 +679,7 @@ workflows:
                 - test
                 - master
                 - experimental
+                - experimental2
       - post-deploy:
           requires:
             - switch-and-deploy-ui
@@ -686,3 +690,4 @@ workflows:
                 - test
                 - master
                 - experimental
+                - experimental2

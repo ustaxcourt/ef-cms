@@ -57,6 +57,7 @@ import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequen
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
+import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
@@ -64,6 +65,7 @@ import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingC
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
@@ -93,6 +95,7 @@ import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoEditCorrespondenceDocumentSequence } from './sequences/gotoEditCorrespondenceDocumentSequence';
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
 import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
@@ -343,6 +346,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStateSequence } from './sequences/updateStateSequence';
+import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
@@ -459,6 +463,7 @@ export const presenter = {
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
+    deleteCorrespondenceDocumentSequence,
     deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteTrialSessionSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
@@ -466,6 +471,7 @@ export const presenter = {
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
+    editCorrespondenceDocumentSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
@@ -495,6 +501,7 @@ export const presenter = {
     gotoCreatePractitionerUserSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoEditCorrespondenceDocumentSequence,
     gotoEditCourtIssuedDocketEntrySequence,
     gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,
@@ -743,6 +750,7 @@ export const presenter = {
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
     updateStateSequence,
+    updateStatisticsFormValueSequence,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     updateUserCaseNoteOnWorkingCopySequence,

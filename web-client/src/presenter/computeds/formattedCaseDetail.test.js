@@ -55,6 +55,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -78,6 +79,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record documents', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -119,6 +121,7 @@ describe('formattedCaseDetail', () => {
       contactSecondary: {
         name: 'Bill',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Amended Petition',
@@ -328,6 +331,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Order for Amended Petition',
@@ -406,6 +410,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -504,6 +509,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -567,6 +573,7 @@ describe('formattedCaseDetail', () => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         caseId: 'abdc-1234-5678-xyz',
+        correspondence: [],
         docketRecord: [
           {
             description: 'Petition',
@@ -759,6 +766,7 @@ describe('formattedCaseDetail', () => {
   describe('case name mapping', () => {
     it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -774,6 +782,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -789,6 +798,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo and friends,  Petitioners ',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -804,6 +814,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -821,6 +832,7 @@ describe('formattedCaseDetail', () => {
     it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
@@ -838,6 +850,7 @@ describe('formattedCaseDetail', () => {
     it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
@@ -858,6 +871,7 @@ describe('formattedCaseDetail', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
@@ -880,6 +894,7 @@ describe('formattedCaseDetail', () => {
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
@@ -902,6 +917,7 @@ describe('formattedCaseDetail', () => {
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
@@ -945,6 +961,7 @@ describe('formattedCaseDetail', () => {
 
     it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
@@ -968,6 +985,7 @@ describe('formattedCaseDetail', () => {
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -987,6 +1005,7 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
+        correspondence: [],
         docketRecord: [
           {
             description: 'Petition',
@@ -1115,6 +1134,7 @@ describe('formattedCaseDetail', () => {
         consolidatedCases: [
           {
             associatedJudge: 'Guy Fieri',
+            correspondence: [],
             petitioners: [{ name: 'Bobby Flay' }],
             status: Case.STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
@@ -1122,6 +1142,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '123',
           },
         ],
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
@@ -1144,6 +1165,7 @@ describe('formattedCaseDetail', () => {
     it('should default consolidatedCases to an empty array if they do not exist', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
@@ -1173,6 +1195,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {
           name: 'Bob',
         },
+        correspondence: [],
         docketRecord: [
           {
             description: 'Motion to Dismiss for Lack of Jurisdiction',

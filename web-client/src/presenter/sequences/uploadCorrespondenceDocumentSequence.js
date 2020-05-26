@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/UploadCorrespondenceDocument/getUploadCorrespondenceDocumentAlertSuccessAction';
+import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/CorrespondenceDocument/getUploadCorrespondenceDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -7,16 +7,16 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
-import { setDocumentTitleFromFreeTextAction } from '../actions/UploadCorrespondenceDocument/setDocumentTitleFromFreeTextAction';
+import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitCorrespondenceAction } from '../actions/UploadCorrespondenceDocument/submitCorrespondenceAction';
-import { uploadCorrespondenceFileAction } from '../actions/UploadCorrespondenceDocument/uploadCorrespondenceFileAction';
-import { validateUploadCorrespondenceDocumentAction } from '../actions/UploadCorrespondenceDocument/validateUploadCorrespondenceDocumentAction';
+import { submitCorrespondenceAction } from '../actions/CorrespondenceDocument/submitCorrespondenceAction';
+import { uploadCorrespondenceFileAction } from '../actions/CorrespondenceDocument/uploadCorrespondenceFileAction';
+import { validateUploadCorrespondenceDocumentAction } from '../actions/CorrespondenceDocument/validateUploadCorrespondenceDocumentAction';
 
 export const uploadCorrespondenceDocumentSequence = [
   startShowValidationAction,
@@ -34,7 +34,7 @@ export const uploadCorrespondenceDocumentSequence = [
       {
         error: [openFileUploadErrorModal],
         success: [
-          setDocumentTitleFromFreeTextAction,
+          setDocumentTitleFromFormAction,
           submitCorrespondenceAction,
           setCaseAction,
           getUploadCorrespondenceDocumentAlertSuccessAction,

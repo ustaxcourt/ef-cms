@@ -115,7 +115,7 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
 };
 
 const pendingReport = async ({ applicationContext, data }) => {
-  const { docketNumberWithSuffix, pendingItems, subtitle } = data;
+  const { pendingItems, subtitle } = data;
 
   const pendingReportTemplate = reactTemplateGenerator({
     componentName: 'PendingReport',
@@ -155,7 +155,6 @@ const pendingReport = async ({ applicationContext, data }) => {
       applicationContext,
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
-      docketNumber: docketNumberWithSuffix,
       footerHtml,
       headerHtml,
       overwriteHeader: true,

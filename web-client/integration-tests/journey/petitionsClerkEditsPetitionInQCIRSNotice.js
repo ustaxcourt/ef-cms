@@ -118,9 +118,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     let errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('required');
-    expect(errors[0].totalPenalties).toContain('required');
-    expect(errors[0].year).toContain('required');
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Change between a statistic period and year
     await test.runSequence('updateFormValueSequence', {
@@ -137,14 +137,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
       true,
     );
 
+    // Attempt to submit without required (period) statistics fields
     await test.runSequence('saveSavedCaseForLaterSequence');
 
     errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('required');
-    expect(errors[0].totalPenalties).toContain('required');
-    expect(errors[0].year).toBeUndefined();
+    expect(errors[0].enterAllValues).toContain(
+      'Enter period, deficiency amount, and total penalties',
+    );
 
+    // Switch back to year input
     await test.runSequence('updateFormValueSequence', {
       key: 'statistics.0.yearOrPeriod',
       value: 'Year',
@@ -156,6 +158,14 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     expect(statisticsUiHelper.statisticOptions[0].showYearInput).toEqual(true);
     expect(statisticsUiHelper.statisticOptions[0].showPeriodInput).toBeFalsy();
+
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    errors = test.getState('validationErrors.statistics');
+
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Select calculate penalties for the first statistic
     await test.runSequence('showCalculatePenaltiesModalSequence', {
@@ -233,8 +243,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('must be a number');
-    expect(errors[0].deficiencyAmount).toContain('must be a number');
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Fill out all statistics values and submit
     for (let i = 0; i < 12; i++) {

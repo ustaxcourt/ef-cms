@@ -6,6 +6,8 @@ if [[ $BRANCH == 'develop' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_DEV}"
 elif [[ $BRANCH == 'experimental' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
+elif [[ $BRANCH == 'experimental2' ]] ; then
+  echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_PROD}"
 elif [[ $BRANCH == 'staging' ]] ; then
