@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props.tab the tab to display
  * @returns {Function} a function that sets the tab name
  */
-export const setCaseDetailPageTabAction = tab => {
+export const setCaseDetailPageTabActionGenerator = tab => {
   return ({ props, store }) => {
     const tabName = tab || props.tab;
     if (props.isSecondary) {

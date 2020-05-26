@@ -5,7 +5,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -40,7 +40,7 @@ export const uploadCorrespondenceDocumentSequence = [
           getUploadCorrespondenceDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
-          setCaseDetailPageTabAction(),
+          setCaseDetailPageTabActionGenerator(),
           setCaseDetailPageTabFrozenAction,
           navigateToCaseDetailAction,
         ],
