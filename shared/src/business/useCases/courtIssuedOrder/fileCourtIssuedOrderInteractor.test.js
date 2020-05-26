@@ -64,7 +64,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
-        name: 'Olivia Jade',
+        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
         role: User.ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -72,7 +72,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
-        name: 'Olivia Jade',
+        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
         role: User.ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),

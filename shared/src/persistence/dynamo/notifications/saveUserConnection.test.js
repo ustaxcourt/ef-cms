@@ -17,7 +17,7 @@ describe('saveUserConnection', () => {
       applicationContext,
       connectionId: 'abc',
       endpoint: {},
-      userId: '123',
+      userId: 'a66ac519-fd1a-44ac-8226-b4a53d348677',
     });
 
     expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
@@ -25,7 +25,7 @@ describe('saveUserConnection', () => {
         connectionId: 'abc',
         endpoint: {},
         gsi1pk: 'connection|abc',
-        pk: 'user|123',
+        pk: 'user|a66ac519-fd1a-44ac-8226-b4a53d348677',
         sk: 'connection|abc',
         ttl: expect.anything(),
       },

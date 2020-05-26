@@ -110,7 +110,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     };
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -136,7 +136,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   it('should throw an error if the document is not found on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -155,7 +155,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   it('should call updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -182,7 +182,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -215,7 +215,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   it('should not update non-editable fields on the document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

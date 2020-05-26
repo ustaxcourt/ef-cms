@@ -73,7 +73,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('should throw an error if not authorized', async () => {
     mockUser = new User({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -99,7 +99,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('should throw an error if document is not found', async () => {
     mockUser = new User({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -123,7 +123,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('update existing document within case', async () => {
     mockUser = new User({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -153,7 +153,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('stores documentContents in S3 if present', async () => {
     mockUser = new User({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -194,7 +194,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
   it('does not update non-editable fields on document', async () => {
     mockUser = new User({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
