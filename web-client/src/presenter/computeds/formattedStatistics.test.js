@@ -21,6 +21,8 @@ describe('formattedStatistics', () => {
               yearOrPeriod: 'Year',
             },
             {
+              determinationDeficiencyAmount: 1234,
+              determinationTotalPenalties: 33.45,
               irsDeficiencyAmount: 0,
               irsTotalPenalties: 21,
               lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
@@ -39,6 +41,8 @@ describe('formattedStatistics', () => {
       },
       {
         formattedDate: '03/01/19',
+        formattedDeterminationDeficiencyAmount: '$1,234.00',
+        formattedDeterminationTotalPenalties: '$33.45',
         formattedIrsDeficiencyAmount: '$0.00',
         formattedIrsTotalPenalties: '$21.00',
       },
