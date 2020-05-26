@@ -107,6 +107,9 @@ describe('createCaseFromPaperInteractor', () => {
     });
 
     expect(caseFromPaper).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('creates a case from paper with a secondary contact', async () => {
@@ -154,6 +157,9 @@ describe('createCaseFromPaperInteractor', () => {
     });
 
     expect(caseFromPaper).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
@@ -201,6 +207,9 @@ describe('createCaseFromPaperInteractor', () => {
     });
 
     expect(caseFromPaper).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('creates a case from paper with Application for Waiver of Filing Fee', async () => {
@@ -248,5 +257,8 @@ describe('createCaseFromPaperInteractor', () => {
     });
 
     expect(caseFromPaper).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(3);
   });
 });

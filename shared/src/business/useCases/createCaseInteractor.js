@@ -145,12 +145,20 @@ exports.createCaseInteractor = async ({
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
 
+  const petitionNumberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentId: petitionFileId,
+    });
+
   const petitionDocumentEntity = new Document(
     {
       documentId: petitionFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
+      numberOfPages: petitionNumberOfPages,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -182,12 +190,20 @@ exports.createCaseInteractor = async ({
     ),
   );
 
+  const stinNumberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentId: stinFileId,
+    });
+
   const stinDocumentEntity = new Document(
     {
       documentId: stinFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,
+      numberOfPages: stinNumberOfPages,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -203,6 +219,13 @@ exports.createCaseInteractor = async ({
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
+    const numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        documentId: ownershipDisclosureFileId,
+      });
+
     const odsDocumentEntity = new Document(
       {
         documentId: ownershipDisclosureFileId,
@@ -211,6 +234,7 @@ exports.createCaseInteractor = async ({
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,
+        numberOfPages,
         partyPrimary: true,
         partySecondary,
         privatePractitioners,
