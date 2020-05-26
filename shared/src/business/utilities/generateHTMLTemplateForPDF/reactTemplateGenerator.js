@@ -41,6 +41,7 @@ const {
 const {
   TrialCalendar,
 } = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
+const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
 const {
@@ -60,6 +61,7 @@ const components = {
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  Order,
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
