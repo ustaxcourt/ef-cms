@@ -48,8 +48,8 @@ describe('CaseInternal entity', () => {
         requestForPlaceOfTrialFileSize: 1,
         statistics: [
           {
-            deficiencyAmount: 1,
-            totalPenalties: 1,
+            irsDeficiencyAmount: 1,
+            irsTotalPenalties: 1,
             year: '2001',
             yearOrPeriod: 'Year',
           },

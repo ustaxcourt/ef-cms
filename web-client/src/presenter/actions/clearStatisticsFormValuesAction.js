@@ -14,7 +14,7 @@ export const clearStatisticsFormValuesAction = ({ props, store }) => {
     store.unset(state.form.statistics[index].lastDateOfPeriodMonth);
     store.unset(state.form.statistics[index].lastDateOfPeriodYear);
     store.unset(state.form.statistics[index].year);
-    store.unset(state.form.statistics[index].deficiencyAmount);
-    store.unset(state.form.statistics[index].totalPenalties);
+    store.unset(state.form.statistics[index].irsDeficiencyAmount);
+    store.unset(state.form.statistics[index].irsTotalPenalties);
   }
 };
