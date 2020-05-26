@@ -99,18 +99,21 @@ export const AddDeficiencyStatistics = connect(
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-3">
                   <FormGroup>
-                    <label className="usa-label" htmlFor={'deficiency-amount'}>
+                    <label
+                      className="usa-label"
+                      htmlFor={'irs-deficiency-amount'}
+                    >
                       Deficiency (IRS Notice)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline"
-                      id={'deficiency-amount'}
-                      name={'deficiencyAmount'}
-                      value={form.deficiencyAmount || ''}
+                      id={'irs-deficiency-amount'}
+                      name={'irsDeficiencyAmount'}
+                      value={form.irsDeficiencyAmount || ''}
                       // onBlur={() => validatePetitionFromPaperSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
-                          key: 'deficiencyAmount',
+                          key: 'irsDeficiencyAmount',
                           value: values.value,
                         });
                       }}
@@ -120,18 +123,21 @@ export const AddDeficiencyStatistics = connect(
 
                 <div className="grid-col-3">
                   <FormGroup>
-                    <label className="usa-label" htmlFor={'total-penalties'}>
+                    <label
+                      className="usa-label"
+                      htmlFor={'irs-total-penalties'}
+                    >
                       Total penalties (IRS Notice)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline"
-                      id={'deficiency-amount'}
-                      name={'totalPenalties'}
-                      value={form.totalPenalties || ''}
+                      id={'irs-deficiency-amount'}
+                      name={'irsTotalPenalties'}
+                      value={form.irsTotalPenalties || ''}
                       // onBlur={() => validatePetitionFromPaperSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
-                          key: 'totalPenalties',
+                          key: 'irsTotalPenalties',
                           value: values.value,
                         });
                       }}
@@ -146,7 +152,7 @@ export const AddDeficiencyStatistics = connect(
                     icon="calculator"
                     onClick={() =>
                       showCalculatePenaltiesModalSequence({
-                        key: 'totalPenalties',
+                        key: 'irsTotalPenalties',
                         title: 'Calculate Penalties on IRS Notice',
                       })
                     }
@@ -161,19 +167,19 @@ export const AddDeficiencyStatistics = connect(
                   <FormGroup>
                     <label
                       className="usa-label"
-                      htmlFor={'deficiency-amount-determination'}
+                      htmlFor={'determination-deficiency-amount'}
                     >
                       Deficiency (Determination)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline"
-                      id={'deficiency-amount-determination'}
-                      name={'deficiencyAmountDetermination'}
-                      value={form.deficiencyAmountDetermination || ''}
+                      id={'determination-deficiency-amount'}
+                      name={'determinationDeficiencyAmount'}
+                      value={form.determinationDeficiencyAmount || ''}
                       // onBlur={() => validatePetitionFromPaperSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
-                          key: 'deficiencyAmountDetermination',
+                          key: 'determinationDeficiencyAmount',
                           value: values.value,
                         });
                       }}
@@ -185,19 +191,19 @@ export const AddDeficiencyStatistics = connect(
                   <FormGroup>
                     <label
                       className="usa-label"
-                      htmlFor={'total-penalties-determination'}
+                      htmlFor={'deficiency-total-penalties'}
                     >
                       Total penalties (Determination)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline"
-                      id={'deficiency-amount-determination'}
-                      name={'totalPenaltiesDetermination'}
-                      value={form.totalPenaltiesDetermination || ''}
+                      id={'deficiency-total-penalties'}
+                      name={'determinationTotalPenalties'}
+                      value={form.determinationTotalPenalties || ''}
                       // onBlur={() => validatePetitionFromPaperSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
-                          key: 'totalPenaltiesDetermination',
+                          key: 'determinationTotalPenalties',
                           value: values.value,
                         });
                       }}
@@ -211,7 +217,7 @@ export const AddDeficiencyStatistics = connect(
                     icon="calculator"
                     onClick={() =>
                       showCalculatePenaltiesModalSequence({
-                        key: 'totalPenaltiesDetermination',
+                        key: 'determinationTotalPenalties',
                         title: 'Calculate Penalties as determined by Court',
                       })
                     }
@@ -233,7 +239,7 @@ export const AddDeficiencyStatistics = connect(
         </section>
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
-            confirmSequence={() => calculatePenaltiesForAddSequence()}
+            confirmSequenceOverride={() => calculatePenaltiesForAddSequence()}
           />
         )}
       </>
