@@ -1493,8 +1493,10 @@ button.change-scanner-button {
   font-size: 17px;
 }
 
-.upload-court-document-description-container {
-  min-height: 471px;
+.desktop\:upload-court-document-description-container {
+  @media only screen and (min-width: $medium-screen) {
+    min-height: 471px;
+  }
 }
 
 .accordion-item-title {

@@ -10,7 +10,7 @@ export const closeModalAndReturnToCaseDetailDraftDocumentsSequence = [
   clearModalAction,
   setCasePropFromStateAction,
   setTabToInProgressAction,
-  setCaseDetailPageTabAction,
+  setCaseDetailPageTabAction(),
   setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,

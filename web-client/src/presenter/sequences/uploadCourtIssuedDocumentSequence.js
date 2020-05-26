@@ -43,7 +43,7 @@ export const uploadCourtIssuedDocumentSequence = [
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
-          setCaseDetailPageTabAction,
+          setCaseDetailPageTabAction(),
           setIsPrimaryTabAction,
           setCaseDetailPageTabFrozenAction,
           navigateToCaseDetailAction,

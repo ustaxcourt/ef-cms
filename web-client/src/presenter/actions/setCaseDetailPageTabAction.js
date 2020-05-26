@@ -8,8 +8,9 @@ import { state } from 'cerebral';
  * @param {object} providers.props.tab the tab to display
  * @returns {Function} a function that sets the tab name
  */
-export const setCaseDetailPageTabAction = tabName => ({ props, store }) => {
-  if (!tabName) {
+export const setCaseDetailPageTabAction = tab => {
+  return ({ props, store }) => {
+    const tabName = tab || props.tab;
     if (props.isSecondary) {
       store.set(
         state.currentViewMetadata.caseDetail.primaryTab,
@@ -17,12 +18,10 @@ export const setCaseDetailPageTabAction = tabName => ({ props, store }) => {
       );
       store.set(
         state.currentViewMetadata.caseDetail.caseInformationTab,
-        props.tab,
+        tabName,
       );
     } else {
-      store.set(state.currentViewMetadata.caseDetail.primaryTab, props.tab);
+      store.set(state.currentViewMetadata.caseDetail.primaryTab, tabName);
     }
-  } else {
-    store.set(state.currentViewMetadata.caseDetail.primaryTab, tabName);
-  }
+  };
 };
