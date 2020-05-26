@@ -41,7 +41,6 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
-import { formattedStatistics } from './computeds/formattedStatistics';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -66,6 +65,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
+import { statisticsHelper } from './computeds/statisticsHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -119,7 +119,6 @@ const helpers = {
   formattedCases,
   formattedDashboardTrialSessions,
   formattedPendingItems,
-  formattedStatistics,
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
@@ -144,6 +143,7 @@ const helpers = {
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
+  statisticsHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,

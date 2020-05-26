@@ -5,24 +5,42 @@ import React from 'react';
 
 export const Statistics = connect(
   {
-    formattedStatistics: state.formattedStatistics,
+    caseDetail: state.caseDetail,
+    statisticsHelper: state.statisticsHelper,
   },
-  function Statistics({ formattedStatistics }) {
+  function Statistics({ caseDetail, statisticsHelper }) {
     return (
       <>
-        <div className="grid-row flex-justify-end margin-bottom-2">
-          <Button link className="push-right padding-0" icon="plus-circle">
-            Add Other Statistics
-          </Button>
-          <Button link className="push-right padding-0" icon="plus-circle">
-            Add Deficiency Statistics
-          </Button>
-        </div>
-        {!formattedStatistics && <p>There are no statistics for this case.</p>}
-        {formattedStatistics && (
+        {statisticsHelper.showAddButtons && (
+          <div className="grid-row grid-gap flex-justify-end margin-bottom-2">
+            {statisticsHelper.showAddOtherStatisticsButton && (
+              <Button
+                link
+                className="push-right padding-0"
+                href={`/case-detail/${caseDetail.docketNumber}/add-other-statistics`}
+                icon="plus-circle"
+              >
+                Add Other Statistics
+              </Button>
+            )}
+            {statisticsHelper.showAddDeficiencyStatisticsButton && (
+              <Button link className="push-right padding-0" icon="plus-circle">
+                Add Deficiency Statistics
+              </Button>
+            )}
+          </div>
+        )}
+        {statisticsHelper.formattedStatistics ? (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
-              <h4>Deficiency</h4>
+              <h4>
+                Deficiency
+                {statisticsHelper.showEditButtons && (
+                  <Button link className="padding-0 margin-left-2" icon="edit">
+                    Edit
+                  </Button>
+                )}
+              </h4>
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>
@@ -32,15 +50,17 @@ export const Statistics = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {formattedStatistics.map((statistic, index) => (
-                    <tr key={index}>
-                      <td>{statistic.formattedDate}</td>
-                      <td>{statistic.formattedIrsDeficiencyAmount}</td>
-                      <td>
-                        {statistic.formattedDeterminationDeficiencyAmount}
-                      </td>
-                    </tr>
-                  ))}
+                  {statisticsHelper.formattedStatistics.map(
+                    (statistic, index) => (
+                      <tr key={index}>
+                        <td>{statistic.formattedDate}</td>
+                        <td>{statistic.formattedIrsDeficiencyAmount}</td>
+                        <td>
+                          {statistic.formattedDeterminationDeficiencyAmount}
+                        </td>
+                      </tr>
+                    ),
+                  )}
                 </tbody>
               </table>
             </div>
@@ -55,12 +75,46 @@ export const Statistics = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {formattedStatistics.map((statistic, index) => (
-                    <tr key={index}>
-                      <td>{statistic.formattedIrsTotalPenalties}</td>
-                      <td>{statistic.formattedDeterminationTotalPenalties}</td>
-                    </tr>
-                  ))}
+                  {statisticsHelper.formattedStatistics.map(
+                    (statistic, index) => (
+                      <tr key={index}>
+                        <td>{statistic.formattedIrsTotalPenalties}</td>
+                        <td>
+                          {statistic.formattedDeterminationTotalPenalties}
+                        </td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <p>There are no statistics for this case.</p>
+        )}
+        {statisticsHelper.showOtherStatistics && (
+          <div className="grid-row grid-gap flex-justify">
+            <div className="grid-col-6">
+              <h4>
+                Other
+                {statisticsHelper.showEditButtons && (
+                  <Button link className="padding-0 margin-left-2" icon="edit">
+                    Edit
+                  </Button>
+                )}
+              </h4>
+              <table className="usa-table docket-record responsive-table row-border-only">
+                <thead>
+                  <tr>
+                    <th>Litigation costs</th>
+                    <th>Damages (IRC §6673)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{statisticsHelper.formattedLitigationCosts}</td>
+                    <td>{statisticsHelper.formattedDamages}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
