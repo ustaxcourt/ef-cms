@@ -1,4 +1,5 @@
 import { docketClerkAddsCorrespondence } from './journey/docketClerkAddsCorrespondence';
+import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCorrespondence';
 import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorrespondence';
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
 import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
@@ -25,6 +26,5 @@ describe('Adds correspondence to a case', () => {
   docketClerkAddsCorrespondence(test, correspondenceTitle);
   docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);
   docketClerkEditsCorrespondence(test);
-
-  // docketClerkDeletesCorrespondence(test);
+  docketClerkDeletesCorrespondence(test);
 });
