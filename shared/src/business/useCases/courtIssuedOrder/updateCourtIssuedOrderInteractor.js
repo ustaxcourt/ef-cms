@@ -59,7 +59,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
       documentId: documentContentsId,
-      useTempBucket: true,
+      useTempBucket: false,
     });
 
     delete documentMetadata.documentContents;

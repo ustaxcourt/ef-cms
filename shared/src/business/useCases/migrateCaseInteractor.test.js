@@ -42,6 +42,7 @@ describe('migrateCaseInteractor', () => {
     });
 
     caseMetadata = {
+      caseCaption: 'Custom Caption',
       caseType: 'Other',
       contactPrimary: {
         address1: '99 South Oak Lane',
