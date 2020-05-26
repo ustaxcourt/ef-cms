@@ -60,6 +60,9 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       applicationContext,
     });
 
+    expect(
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
+    ).toBeCalled();
     expect(result).toEqual(mockPdfUrl);
   });
 });

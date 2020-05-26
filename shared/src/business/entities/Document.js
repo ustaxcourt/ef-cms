@@ -286,6 +286,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
 
 Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
 
+Document.OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -368,8 +370,8 @@ joiValidationDecorator(
   Document,
   joi.object().keys({
     addToCoversheet: joi.boolean().optional(),
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(500).optional(),
+    additionalInfo2: joi.string().max(500).optional(),
     archived: joi
       .boolean()
       .optional()
@@ -378,6 +380,9 @@ joiValidationDecorator(
       ),
     caseId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
@@ -404,6 +409,7 @@ joiValidationDecorator(
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
     docketNumbers: joi
       .string()
+      .max(500)
       .optional()
       .description(
         'Optional Docket Number text used when generating a fully concatenated document title.',
@@ -424,6 +430,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     documentTitle: joi
       .string()
+      .max(500)
       .optional()
       .description('The title of this document.'),
     documentType: joi
@@ -439,8 +446,8 @@ joiValidationDecorator(
       .max('now')
       .required()
       .description('Date that this Document was filed.'),
-    freeText: joi.string().optional(),
-    freeText2: joi.string().optional(),
+    freeText: joi.string().max(500).optional(),
+    freeText2: joi.string().max(500).optional(),
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
@@ -456,7 +463,10 @@ joiValidationDecorator(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     numberOfPages: joi.number().optional().allow(null),
-    objections: joi.string().optional(),
+    objections: joi
+      .string()
+      .valid(...Document.OBJECTIONS_OPTIONS)
+      .optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
@@ -471,7 +481,7 @@ joiValidationDecorator(
     previousDocument: joi.object().optional(),
     privatePractitioners: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(500).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
@@ -498,7 +508,7 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(500).required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')

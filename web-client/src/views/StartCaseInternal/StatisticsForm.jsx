@@ -36,12 +36,12 @@ export const StatisticsForm = connect(
         <DollarsInput
           className="usa-input usa-input-inline"
           id={`deficiency-amount-${index}`}
-          name={`statistics.${index}.deficiencyAmount`}
-          value={form.statistics[index].deficiencyAmount || ''}
+          name={`statistics.${index}.irsDeficiencyAmount`}
+          value={form.statistics[index].irsDeficiencyAmount || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
-              key: `statistics.${index}.deficiencyAmount`,
+              key: `statistics.${index}.irsDeficiencyAmount`,
               value: values.value,
             });
           }}
@@ -57,12 +57,12 @@ export const StatisticsForm = connect(
         <DollarsInput
           className="usa-input usa-input-inline"
           id={`total-penalties-${index}`}
-          name={`statistics.${index}.totalPenalties`}
-          value={form.statistics[index].totalPenalties || ''}
+          name={`statistics.${index}.irsTotalPenalties`}
+          value={form.statistics[index].irsTotalPenalties || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
             updateStatisticsFormValueSequence({
-              key: `statistics.${index}.totalPenalties`,
+              key: `statistics.${index}.irsTotalPenalties`,
               value: values.value,
             });
           }}
@@ -176,6 +176,7 @@ export const StatisticsForm = connect(
           onClick={() =>
             showCalculatePenaltiesModalSequence({
               statisticIndex: index,
+              title: 'Calculate Penalties on IRS Notice',
             })
           }
         >

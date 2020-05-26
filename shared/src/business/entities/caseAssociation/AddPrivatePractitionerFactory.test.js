@@ -17,7 +17,7 @@ describe('AddPrivatePractitionerFactory', () => {
     it('should be valid when all fields are present', () => {
       const entity = AddPrivatePractitionerFactory.get({
         representingPrimary: true,
-        user: { userId: 'abc' },
+        user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
@@ -25,7 +25,7 @@ describe('AddPrivatePractitionerFactory', () => {
     it('should not be valid if representingPrimary is false and representingSecondary is not present', () => {
       const entity = AddPrivatePractitionerFactory.get({
         representingPrimary: false,
-        user: { userId: 'abc' },
+        user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
         representingPrimary: errorMessages.representingPrimary,
