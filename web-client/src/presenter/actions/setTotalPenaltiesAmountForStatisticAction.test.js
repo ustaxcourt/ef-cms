@@ -2,22 +2,22 @@ import { runAction } from 'cerebral/test';
 import { setTotalPenaltiesAmountForStatisticAction } from './setTotalPenaltiesAmountForStatisticAction';
 
 describe('setTotalPenaltiesAmountForStatisticAction,', () => {
-  it('sets the totalPenalties value for the given index', async () => {
+  it('sets the irsTotalPenalties value for the given index', async () => {
     const result = await runAction(setTotalPenaltiesAmountForStatisticAction, {
       props: {
-        totalPenalties: '$112.99',
+        irsTotalPenalties: '$112.99',
       },
       state: {
         form: {
           statistics: [
             {
-              totalPenalties: '$1.00',
+              irsTotalPenalties: '$1.00',
             },
             {
-              totalPenalties: '$2.00',
+              irsTotalPenalties: '$2.00',
             },
             {
-              totalPenalties: '$3.00',
+              irsTotalPenalties: '$3.00',
             },
           ],
         },
@@ -29,13 +29,13 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
 
     expect(result.state.form.statistics).toMatchObject([
       {
-        totalPenalties: '$1.00',
+        irsTotalPenalties: '$1.00',
       },
       {
-        totalPenalties: '$112.99',
+        irsTotalPenalties: '$112.99',
       },
       {
-        totalPenalties: '$3.00',
+        irsTotalPenalties: '$3.00',
       },
     ]);
   });
