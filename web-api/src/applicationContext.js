@@ -74,6 +74,7 @@ const {
   pendingReport,
   receiptOfFiling,
   standingPretrialOrder,
+  trialCalendar,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   casePublicSearch: casePublicSearchPersistence,
@@ -274,7 +275,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
@@ -980,6 +980,7 @@ module.exports = (appContextUser = {}) => {
       pendingReport,
       receiptOfFiling,
       standingPretrialOrder,
+      trialCalendar,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -1219,7 +1220,6 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
         generateStandingPretrialNoticeTemplate,
-        generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
     },

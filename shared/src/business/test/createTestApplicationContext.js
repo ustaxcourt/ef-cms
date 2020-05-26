@@ -234,6 +234,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    trialCalendar: jest.fn().mockImplementation(getFakeFile),
   };
 
   const getTemplateGeneratorsReturnMock = {
@@ -244,7 +245,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockResolvedValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
