@@ -18,6 +18,6 @@ export const calculatePenaltiesAction = ({ get }) => {
   const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));
 
   return {
-    totalPenalties: total,
+    irsTotalPenalties: total,
   };
 };

@@ -15,6 +15,8 @@ import classNames from 'classnames';
 
 export const EditCorrespondenceDocument = connect(
   {
+    cancelAndNavigateToCorrespondenceSequence:
+      sequences.cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
@@ -48,7 +50,7 @@ export const EditCorrespondenceDocument = connect(
       <>
         <CaseDetailHeader hideActionButtons />
         {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          <FormCancelModalDialog onCancelSequence="cancelAndNavigateToCorrespondenceSequence" />
         )}
 
         <section className="usa-section grid-container">
@@ -60,15 +62,15 @@ export const EditCorrespondenceDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">
+                <h2 className="heading-1" id="edit-correspondence-header">
                   Edit {documentDetailHelper.formattedDocument.documentTitle}
                 </h2>
               </div>
             </div>
 
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
-                <div className="blue-container upload-court-document-description-container">
+              <div className="desktop:grid-col-5 tablet:grid-row">
+                <div className="blue-container desktop:upload-court-document-description-container">
                   <FormGroup
                     errorText={
                       validationErrors && validationErrors.documentTitle
@@ -101,7 +103,7 @@ export const EditCorrespondenceDocument = connect(
                 </div>
               </div>
 
-              <div className="grid-col-7">
+              <div className="desktop:grid-col-7 tablet:grid-row">
                 {(screenMetadata.documentReset && (
                   <>
                     <div className="scanner-area-header">
