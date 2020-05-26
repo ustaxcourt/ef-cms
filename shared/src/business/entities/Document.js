@@ -473,7 +473,7 @@ joiValidationDecorator(
     previousDocument: joi.object().optional(),
     privatePractitioners: joi
       .array()
-      .items({ name: joi.string().max(100).required() })
+      .items({ name: joi.string().max(500).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
@@ -500,7 +500,7 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().max(100).required() })
+      .items({ name: joi.string().max(500).required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')
