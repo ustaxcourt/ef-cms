@@ -44,14 +44,29 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  * @param {object} applicationContext the application context
  * @returns {object} formatted statistics
  */
-export const formattedStatistics = (get, applicationContext) => {
-  const statitistics = get(state.caseDetail.statistics);
+export const statisticsHelper = (get, applicationContext) => {
+  const { damages, litigationCosts, statistics } = get(state.caseDetail);
 
-  if (statitistics && statitistics.length > 0) {
-    const formattedStatistics = statitistics.map(statistic =>
+  let formattedStatistics;
+
+  if (statistics && statistics.length > 0) {
+    formattedStatistics = statistics.map(statistic =>
       formatStatistic({ applicationContext, statistic }),
     );
-
-    return formattedStatistics;
   }
+
+  const formattedDamages =
+    damages && applicationContext.getUtilities().formatDollars(damages);
+  const formattedLitigationCosts =
+    litigationCosts &&
+    applicationContext.getUtilities().formatDollars(litigationCosts);
+
+  const showOtherStatistics = !!formattedDamages || !!formattedLitigationCosts;
+
+  return {
+    formattedDamages,
+    formattedLitigationCosts,
+    formattedStatistics,
+    showOtherStatistics,
+  };
 };
