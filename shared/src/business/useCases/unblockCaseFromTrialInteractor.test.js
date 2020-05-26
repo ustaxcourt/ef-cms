@@ -9,7 +9,7 @@ describe('unblockCaseFromTrialInteractor', () => {
   it('should set the blocked flag to false and remove the blockedReason', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext
       .getPersistenceGateway()
