@@ -63,7 +63,14 @@ describe('Get case', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(applicationContext.getPersistenceGateway().getDocument).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      documentId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
+      protocol: 'S3',
+      useTempBucket: false,
+    });
     expect(caseRecord.documents[0]).toMatchObject({
       documentContents: 'the contents!',
       draftState: {

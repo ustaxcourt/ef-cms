@@ -12,7 +12,7 @@ describe('calculatePenaltiesAction', () => {
       },
     });
 
-    expect(result.output.totalPenalties).toEqual('$6.00');
+    expect(result.output.irsTotalPenalties).toEqual('$6.00');
   });
 
   it('fixes the result with two decimal places', async () => {
@@ -25,7 +25,7 @@ describe('calculatePenaltiesAction', () => {
       },
     });
 
-    expect(result.output.totalPenalties).toEqual('$6.00');
+    expect(result.output.irsTotalPenalties).toEqual('$6.00');
   });
 
   it('handles stringified and numerical values', async () => {
@@ -38,7 +38,7 @@ describe('calculatePenaltiesAction', () => {
       },
     });
 
-    expect(result.output.totalPenalties).toEqual('$6.00');
+    expect(result.output.irsTotalPenalties).toEqual('$6.00');
   });
 
   it('coerces empty string and null values to 0', async () => {
@@ -51,6 +51,6 @@ describe('calculatePenaltiesAction', () => {
       },
     });
 
-    expect(result.output.totalPenalties).toEqual('$6.00');
+    expect(result.output.irsTotalPenalties).toEqual('$6.00');
   });
 });

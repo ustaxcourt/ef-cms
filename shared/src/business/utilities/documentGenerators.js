@@ -224,6 +224,59 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const standingPretrialNotice = async ({ applicationContext, data }) => {
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    footerDate,
+    trialInfo,
+  } = data;
+
+  const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
+    componentName: 'StandingPretrialNotice',
+    data: {
+      footerDate,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      trialInfo,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactStandingPretrialNoticeTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Standing Pre-trial Order',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: docketNumberWithSuffix,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const standingPretrialOrder = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -389,6 +442,7 @@ module.exports = {
   noticeOfDocketChange,
   pendingReport,
   receiptOfFiling,
+  standingPretrialNotice,
   standingPretrialOrder,
   trialCalendar,
 };
