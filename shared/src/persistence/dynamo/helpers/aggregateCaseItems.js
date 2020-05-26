@@ -21,8 +21,6 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     item.sk.startsWith('correspondence|'),
   );
 
-  console.log('correspondences', correspondences);
-
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
   const sortedCorrespondences = sortBy(correspondences, 'filingDate');
