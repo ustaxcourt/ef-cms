@@ -5,22 +5,20 @@ import React from 'react';
 
 export const Statistics = connect(
   {
-    caseDetail: state.caseDetail,
+    formattedStatistics: state.formattedStatistics,
   },
-  function Statistics({ caseDetail }) {
+  function Statistics({ formattedStatistics }) {
     return (
       <>
         <div>
           <Button link className="push-right padding-0" icon="plus-circle">
-            Add Deficiency Statistics
-          </Button>
-          <Button link className="push-right padding-0" icon="plus-circle">
             Add Other Statistics
           </Button>
+          <Button link className="push-right padding-0" icon="plus-circle">
+            Add Deficiency Statistics
+          </Button>
         </div>
-        {caseDetail.statistics.length === 0 && (
-          <p>There are no statistics for this case.</p>
-        )}
+        {!formattedStatistics && <p>There are no statistics for this case.</p>}
       </>
     );
   },
