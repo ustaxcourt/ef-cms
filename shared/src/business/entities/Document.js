@@ -527,7 +527,12 @@ joiValidationDecorator(
       .description(
         'An optional trial location used when generating a fully concatenated document title.',
       ),
-    userId: joi.string().required(),
+    userId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .required(),
     workItems: joi.array().optional(),
   }),
 );
