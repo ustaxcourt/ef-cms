@@ -1,4 +1,5 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
+import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
@@ -76,6 +77,7 @@ import React, { useEffect } from 'react';
 
 const pages = {
   AccessibilityStatement,
+  AddDeficiencyStatistics,
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,
