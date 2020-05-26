@@ -7,7 +7,7 @@ import { overwriteCorrespondenceFileAction } from '../actions/CourtIssuedOrder/o
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
@@ -29,7 +29,7 @@ const onSuccess = [
   getEditCorrespondenceDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  setCaseDetailPageTabAction,
+  setCaseDetailPageTabActionGenerator(),
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,
 ];

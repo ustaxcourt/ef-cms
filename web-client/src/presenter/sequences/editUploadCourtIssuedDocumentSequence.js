@@ -8,7 +8,7 @@ import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteO
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
@@ -32,7 +32,7 @@ const onSuccess = [
   getUploadCourtIssuedDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  setCaseDetailPageTabAction,
+  setCaseDetailPageTabActionGenerator(),
   setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,

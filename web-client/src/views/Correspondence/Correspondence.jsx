@@ -70,7 +70,7 @@ export const Correspondence = connect(
                       {showAddCorrespondenceButton && (
                         <Button
                           link
-                          className="text-left padding-0 margin-left-1"
+                          className="edit-correspondence-button text-left padding-0 margin-left-1"
                           href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${document.documentId}`}
                           icon="edit"
                         >
@@ -82,7 +82,7 @@ export const Correspondence = connect(
                       {showAddCorrespondenceButton && (
                         <Button
                           link
-                          className="red-warning padding-0 text-left margin-left-1"
+                          className="delete-correspondence-button red-warning padding-0 text-left margin-left-1"
                           icon="trash"
                           onClick={() => {
                             openConfirmDeleteCorrespondenceModalSequence({
