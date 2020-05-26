@@ -83,6 +83,16 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-deficiency-statistics',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddDeficiencyStatisticsSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/add-other-statistics',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
