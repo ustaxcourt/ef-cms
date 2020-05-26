@@ -6,6 +6,24 @@ const {
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
+  it('should save the file to S3', async () => {
+    const mockPdfUrl = 'www.example.com';
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
+
+    await createCourtIssuedOrderPdfFromHtmlInteractor({
+      applicationContext,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock
+        .calls[0][0],
+    ).toMatchObject({
+      useTempBucket: false,
+    });
+  });
+
   it('returns the pdf url', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext
