@@ -15,7 +15,7 @@ describe('validateAddPrivatePractitioner', () => {
 
     mockAddPrivatePractitioner = {
       representingPrimary: true,
-      user: { userId: 'abc' },
+      user: { userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291' },
     };
 
     presenter.providers.applicationContext = applicationContextForClient;
