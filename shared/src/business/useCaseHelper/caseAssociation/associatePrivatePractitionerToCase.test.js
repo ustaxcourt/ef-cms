@@ -62,7 +62,7 @@ describe('associatePrivatePractitionerToCase', () => {
           documentTitle: 'Petition',
           documentType: 'Petition',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
         },
       ],
       filingType: 'Myself',

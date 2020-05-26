@@ -38,19 +38,19 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
     ],
     filingType: 'Myself',
@@ -58,7 +58,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: User.ROLES.petitioner,
-    userId: 'petitioner',
+    userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
 
   beforeEach(() => {

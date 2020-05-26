@@ -41,25 +41,25 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
-          userId: 'irsPractitioner',
+          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
         },
         {
           docketNumber: '45678-18',
           documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
-          userId: 'irsPractitioner',
+          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
-          userId: 'irsPractitioner',
+          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
-          userId: 'irsPractitioner',
+          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
               assigneeId: 'bob',
@@ -83,7 +83,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'TRAN - Transcript',
           eventCode: 'TRAN',
-          userId: 'irsPractitioner',
+          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
               assigneeId: 'bob',
@@ -106,7 +106,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
