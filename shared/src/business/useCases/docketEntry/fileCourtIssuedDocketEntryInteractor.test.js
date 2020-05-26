@@ -55,7 +55,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
         {
           docketNumber: '45678-18',
@@ -63,7 +63,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
         {
           docketNumber: '45678-18',
@@ -71,7 +71,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
         {
           docketNumber: '45678-18',
@@ -79,7 +79,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
         {
           docketNumber: '45678-18',
@@ -87,7 +87,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
         {
           docketNumber: '45678-18',
@@ -95,7 +95,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'TRAN - Transcript',
           eventCode: 'TRAN',
-          userId: 'irsPractitioner',
+          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
         },
       ],
       filingType: 'Myself',
@@ -103,7 +103,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
   });
 
