@@ -10,21 +10,32 @@ export const Statistics = connect(
   function Statistics({ statisticsHelper }) {
     return (
       <>
-        <div className="grid-row flex-justify-end margin-bottom-2">
-          <Button link className="push-right padding-0" icon="plus-circle">
-            Add Other Statistics
-          </Button>
-          <Button link className="push-right padding-0" icon="plus-circle">
-            Add Deficiency Statistics
-          </Button>
-        </div>
+        {statisticsHelper.showAddAndEditButtons && (
+          <div className="grid-row grid-gap flex-justify-end margin-bottom-2">
+            {!statisticsHelper.showOtherStatistics && (
+              <Button link className="push-right padding-0" icon="plus-circle">
+                Add Other Statistics
+              </Button>
+            )}
+            <Button link className="push-right padding-0" icon="plus-circle">
+              Add Deficiency Statistics
+            </Button>
+          </div>
+        )}
         {!statisticsHelper.formattedStatistics && (
           <p>There are no statistics for this case.</p>
         )}
         {statisticsHelper.formattedStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
-              <h4>Deficiency</h4>
+              <h4>
+                Deficiency
+                {statisticsHelper.showAddAndEditButtons && (
+                  <Button link className="padding-0 margin-left-2" icon="edit">
+                    Edit
+                  </Button>
+                )}
+              </h4>
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>
@@ -77,7 +88,14 @@ export const Statistics = connect(
         {statisticsHelper.showOtherStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
-              <h4>Other</h4>
+              <h4>
+                Other
+                {statisticsHelper.showAddAndEditButtons && (
+                  <Button link className="padding-0 margin-left-2" icon="edit">
+                    Edit
+                  </Button>
+                )}
+              </h4>
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>

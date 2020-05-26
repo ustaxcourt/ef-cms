@@ -32,6 +32,9 @@ describe('statisticsHelper', () => {
             },
           ],
         },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
       },
     });
 
@@ -64,6 +67,9 @@ describe('statisticsHelper', () => {
         caseDetail: {
           statistics: [],
         },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
       },
     });
 
@@ -74,11 +80,45 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {},
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
       },
     });
 
     expect(result).toEqual({
+      showAddAndEditButtons: true,
       showOtherStatistics: false,
+    });
+  });
+
+  it('returns showAddAndEditButtons true if permissions.ADD_EDIT_STATISTICS is true', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddAndEditButtons: true,
+    });
+  });
+
+  it('returns showAddAndEditButtons false if permissions.ADD_EDIT_STATISTICS is false', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {
+          ADD_EDIT_STATISTICS: false,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddAndEditButtons: false,
     });
   });
 });
