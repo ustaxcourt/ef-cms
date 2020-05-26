@@ -147,10 +147,11 @@ export const AddDeficiencyStatistics = connect(
                     onClick={() =>
                       showCalculatePenaltiesModalSequence({
                         key: 'totalPenalties',
+                        title: 'Calculate Penalties on IRS Notice',
                       })
                     }
                   >
-                    Calculate Penalties as determined by Court
+                    Calculate Penalties on IRS Notice
                   </Button>
                 </div>
               </div>
@@ -211,10 +212,11 @@ export const AddDeficiencyStatistics = connect(
                     onClick={() =>
                       showCalculatePenaltiesModalSequence({
                         key: 'totalPenaltiesDetermination',
+                        title: 'Calculate Penalties as determined by Court',
                       })
                     }
                   >
-                    Calculate Penalties on IRS Notice
+                    Calculate Penalties as determined by Court
                   </Button>
                 </div>
               </div>

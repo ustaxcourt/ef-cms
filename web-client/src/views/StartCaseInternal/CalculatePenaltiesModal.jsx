@@ -13,6 +13,7 @@ export const CalculatePenaltiesModal = connect(
       props.confirmSequence || sequences.calculatePenaltiesSequence,
     penalties: state.modal.penalties,
     statisticsFormHelper: state.statisticsFormHelper,
+    title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function CalculatePenaltiesModal({
@@ -21,6 +22,7 @@ export const CalculatePenaltiesModal = connect(
     confirmSequence,
     penalties,
     statisticsFormHelper,
+    title,
     updateModalValueSequence,
   }) {
     return (
@@ -29,7 +31,7 @@ export const CalculatePenaltiesModal = connect(
         cancelSequence={cancelSequence}
         confirmLabel="Calculate"
         confirmSequence={confirmSequence}
-        title="Calculate Penalties on IRS Notice"
+        title={title}
       >
         {penalties &&
           penalties.map((penalty, index) => (
