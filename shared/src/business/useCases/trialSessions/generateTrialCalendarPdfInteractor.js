@@ -83,5 +83,9 @@ exports.generateTrialCalendarPdfInteractor = async ({
     },
   });
 
-  return await saveFileAndGenerateUrl({ applicationContext, file });
+  return await saveFileAndGenerateUrl({
+    applicationContext,
+    file,
+    useTempBucket: true,
+  });
 };

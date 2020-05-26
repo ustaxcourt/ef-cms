@@ -10,7 +10,9 @@ describe('AddIrsPractitioner', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const entity = new AddIrsPractitioner({ user: { userId: 'abc' } });
+      const entity = new AddIrsPractitioner({
+        user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
+      });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
   });

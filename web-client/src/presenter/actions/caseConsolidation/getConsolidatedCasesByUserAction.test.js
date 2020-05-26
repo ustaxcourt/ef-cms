@@ -22,7 +22,7 @@ describe('getConsolidatedCasesByUserAction', () => {
         },
       ]);
     applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'abc-123',
+      userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
     });
 
     presenter.providers.applicationContext = applicationContext;
