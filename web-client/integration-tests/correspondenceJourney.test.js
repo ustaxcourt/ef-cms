@@ -1,34 +1,11 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkAddsCorrespondence } from './journey/docketClerkAddsCorrespondence';
+import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 let caseDetail;
 
-const secondAddCorr = test => {
-  it('can add a correspondence document to a case', async () => {
-    await test.runSequence('updateFormValueSequence', {
-      key: 'documentTitle',
-      value: 'My correspondence',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'documentTitle',
-      value: 'My correspondence',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await test.runSequence('uploadCorrespondenceDocumentSequence');
-
-    console.log('-----', test.getState('caseDetail'));
-
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('caseDetail.correspondence')).not.toBe([]);
-  });
-};
-describe('Create a work item', () => {
+describe('Adds correspondence to a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -41,14 +18,6 @@ describe('Create a work item', () => {
   });
 
   loginAs(test, 'docketclerk');
-  it('cannot add a correspondence without a title or [rimary document file', async () => {
-    await test.runSequence('uploadCorrespondenceDocumentSequence');
-
-    expect(test.getState('validationErrors')).toEqual({
-      documentTitle: 'Enter a description',
-      primaryDocumentFile: 'Upload a document',
-    });
-  });
-
-  // secondAddCorr(test);
+  docketClerkNavigatesToAddCorrespondence(test);
+  docketClerkAddsCorrespondence(test);
 });
