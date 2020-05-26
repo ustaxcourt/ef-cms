@@ -80,7 +80,7 @@ exports.fileDocketEntryInteractor = async ({
     secondarySupportingDocumentMetadata.eventCode = 'MISL';
   }
 
-  [
+  const documentsToFile = [
     [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
     [
       supportingDocumentFileId,
@@ -93,8 +93,16 @@ exports.fileDocketEntryInteractor = async ({
       secondarySupportingDocumentMetadata,
       'secondarySupportingDocument',
     ],
-  ].forEach(([documentId, metadata, relationship]) => {
+  ];
+
+  for (let document of documentsToFile) {
+    const [documentId, metadata, relationship] = document;
+
     if (documentId && metadata) {
+      const numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({ applicationContext, documentId });
+
       const documentEntity = new Document(
         {
           ...baseMetadata,
@@ -102,6 +110,7 @@ exports.fileDocketEntryInteractor = async ({
           documentId,
           documentType: metadata.documentType,
           mailingDate: metadata.mailingDate,
+          numberOfPages,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
@@ -181,12 +190,13 @@ exports.fileDocketEntryInteractor = async ({
             editState: JSON.stringify(docketRecordEditState),
             eventCode: documentEntity.eventCode,
             filingDate: documentEntity.receivedAt,
+            numberOfPages,
           },
           { applicationContext },
         ),
       );
     }
-  });
+  }
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
