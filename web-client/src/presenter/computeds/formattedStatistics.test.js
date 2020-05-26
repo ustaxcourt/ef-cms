@@ -36,6 +36,8 @@ describe('formattedStatistics', () => {
     expect(result).toMatchObject([
       {
         formattedDate: '2012',
+        formattedDeterminationDeficiencyAmount: 'TBD',
+        formattedDeterminationTotalPenalties: 'TBD',
         formattedIrsDeficiencyAmount: '$123.00',
         formattedIrsTotalPenalties: '$30,000.00',
       },
