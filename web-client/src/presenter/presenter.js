@@ -19,6 +19,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
+import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
@@ -81,7 +82,9 @@ import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence
 import { goBackToStartCaseInternalSequence } from './sequences/goBackToStartCaseInternalSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
+import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
+import { gotoAddOtherStatisticsSequence } from './sequences/gotoAddOtherStatisticsSequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
 import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
@@ -426,6 +429,7 @@ export const presenter = {
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
+    calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
     cancelAddDraftDocumentSequence,
     cancelAndNavigateToCorrespondenceSequence,
@@ -488,7 +492,9 @@ export const presenter = {
     goBackToStartCaseInternalSequence,
     gotoAccessibilityStatementSequence,
     gotoAddCourtIssuedDocketEntrySequence,
+    gotoAddDeficiencyStatisticsSequence,
     gotoAddDocketEntrySequence,
+    gotoAddOtherStatisticsSequence,
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
     gotoAllCaseDeadlinesSequence,
