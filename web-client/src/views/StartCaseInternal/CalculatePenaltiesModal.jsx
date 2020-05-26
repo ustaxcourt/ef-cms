@@ -9,8 +9,8 @@ export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence:
-      props.confirmSequence || sequences.calculatePenaltiesSequence,
+    confirmSequence: sequences.calculatePenaltiesSequence,
+    confirmSequenceOverride: props.confirmSequenceOverride,
     penalties: state.modal.penalties,
     statisticsFormHelper: state.statisticsFormHelper,
     title: state.modal.title,
@@ -20,6 +20,7 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
+    confirmSequenceOverride,
     penalties,
     statisticsFormHelper,
     title,
@@ -30,7 +31,11 @@ export const CalculatePenaltiesModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Calculate"
-        confirmSequence={confirmSequence}
+        confirmSequence={() => {
+          confirmSequenceOverride
+            ? confirmSequenceOverride()
+            : confirmSequence();
+        }}
         title={title}
       >
         {penalties &&
