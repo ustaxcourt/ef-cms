@@ -439,6 +439,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-correspondence/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
+        );
+        return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
