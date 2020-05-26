@@ -248,8 +248,10 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.blockedDate = rawCase.blockedDate;
     this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
+    this.damages = rawCase.damages;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
+    this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
     this.userId = rawCase.userId;
@@ -477,6 +479,11 @@ Case.validationRules = {
     .description(
       'When the paper or electronic case was added to the system. This value cannot be edited.',
     ),
+  damages: joi
+    .number()
+    .optional()
+    .allow(null)
+    .description('Damages for the case.'),
   docketNumber: joi
     .string()
     .regex(DOCKET_NUMBER_MATCHER)
@@ -561,6 +568,11 @@ Case.validationRules = {
     .description(
       'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
     ),
+  litigationCosts: joi
+    .number()
+    .optional()
+    .allow(null)
+    .description('Litigation costs for the case.'),
   mailingDate: joi
     .when('isPaper', {
       is: true,
