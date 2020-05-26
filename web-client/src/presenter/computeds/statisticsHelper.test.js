@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { statisticsHelper as statisticsHelperComputed } from './statisticsHelper';
@@ -32,9 +33,7 @@ describe('statisticsHelper', () => {
             },
           ],
         },
-        permissions: {
-          ADD_EDIT_STATISTICS: true,
-        },
+        permissions: {},
       },
     });
 
@@ -57,7 +56,6 @@ describe('statisticsHelper', () => {
           formattedIrsTotalPenalties: '$21.00',
         },
       ],
-      showOtherStatistics: true,
     });
   });
 
@@ -67,9 +65,7 @@ describe('statisticsHelper', () => {
         caseDetail: {
           statistics: [],
         },
-        permissions: {
-          ADD_EDIT_STATISTICS: true,
-        },
+        permissions: {},
       },
     });
 
@@ -80,19 +76,72 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {},
+        permissions: {},
+      },
+    });
+
+    expect(result).toMatchObject({
+      formattedDamages: undefined,
+      formattedLitigationCosts: undefined,
+      formattedStatistics: undefined,
+    });
+  });
+
+  it('returns showAddDeficiencyStatisticsButton true if permissions.ADD_EDIT_STATISTICS is true and case type is deficiency', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          caseType: Case.CASE_TYPES_MAP.deficiency,
+        },
         permissions: {
           ADD_EDIT_STATISTICS: true,
         },
       },
     });
 
-    expect(result).toEqual({
-      showAddAndEditButtons: true,
-      showOtherStatistics: false,
+    expect(result).toMatchObject({
+      showAddButtons: true,
+      showAddDeficiencyStatisticsButton: true,
     });
   });
 
-  it('returns showAddAndEditButtons true if permissions.ADD_EDIT_STATISTICS is true', () => {
+  it('returns showAddDeficiencyStatisticsButton false if permissions.ADD_EDIT_STATISTICS is false and case type is deficiency', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          caseType: Case.CASE_TYPES_MAP.deficiency,
+        },
+        permissions: {
+          ADD_EDIT_STATISTICS: false,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddButtons: false,
+      showAddDeficiencyStatisticsButton: false,
+    });
+  });
+
+  it('returns showAddDeficiencyStatisticsButton false if permissions.ADD_EDIT_STATISTICS is true and case type is not deficiency', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          caseType: Case.CASE_TYPES_MAP.cdp,
+        },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddButtons: true,
+      showAddDeficiencyStatisticsButton: false,
+    });
+  });
+
+  it('returns showAddOtherStatisticsButton true if permissions.ADD_EDIT_STATISTICS is true and other statistics are not already added', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {},
@@ -103,11 +152,30 @@ describe('statisticsHelper', () => {
     });
 
     expect(result).toMatchObject({
-      showAddAndEditButtons: true,
+      showAddButtons: true,
+      showAddOtherStatisticsButton: true,
     });
   });
 
-  it('returns showAddAndEditButtons false if permissions.ADD_EDIT_STATISTICS is false', () => {
+  it('returns showAddOtherStatisticsButton false if permissions.ADD_EDIT_STATISTICS is true and other statistics are already added', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          litigationCosts: 1234,
+        },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddButtons: false,
+      showAddOtherStatisticsButton: false,
+    });
+  });
+
+  it('returns showEditButtons false if permissions.ADD_EDIT_STATISTICS is false', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {},
@@ -117,8 +185,19 @@ describe('statisticsHelper', () => {
       },
     });
 
-    expect(result).toMatchObject({
-      showAddAndEditButtons: false,
+    expect(result.showEditButtons).toEqual(false);
+  });
+
+  it('returns showEditButtons true if permissions.ADD_EDIT_STATISTICS is true', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
     });
+
+    expect(result.showEditButtons).toEqual(true);
   });
 });
