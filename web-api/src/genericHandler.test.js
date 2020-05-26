@@ -12,7 +12,10 @@ const MOCK_EVENT = {
   },
 };
 
-const MOCK_USER = { name: 'Test User', userId: '1' };
+const MOCK_USER = {
+  name: 'Test User',
+  userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
+};
 
 let logged = [];
 let lastLoggedValue;
