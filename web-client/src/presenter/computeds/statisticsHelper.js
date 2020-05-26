@@ -45,8 +45,11 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  * @returns {object} formatted statistics
  */
 export const statisticsHelper = (get, applicationContext) => {
-  const { damages, litigationCosts, statistics } = get(state.caseDetail);
+  const { caseType, damages, litigationCosts, statistics } = get(
+    state.caseDetail,
+  );
   const permissions = get(state.permissions);
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
   let formattedStatistics;
 
@@ -64,11 +67,20 @@ export const statisticsHelper = (get, applicationContext) => {
 
   const showOtherStatistics = !!formattedDamages || !!formattedLitigationCosts;
 
+  const showAddDeficiencyStatisticsButton =
+    permissions.ADD_EDIT_STATISTICS && caseType === CASE_TYPES_MAP.deficiency;
+  const showAddOtherStatisticsButton =
+    permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
+
   return {
     formattedDamages,
     formattedLitigationCosts,
     formattedStatistics,
-    showAddAndEditButtons: permissions.ADD_EDIT_STATISTICS,
+    showAddButtons:
+      showAddDeficiencyStatisticsButton || showAddOtherStatisticsButton,
+    showAddDeficiencyStatisticsButton,
+    showAddOtherStatisticsButton,
+    showEditButtons: permissions.ADD_EDIT_STATISTICS,
     showOtherStatistics,
   };
 };
