@@ -7,7 +7,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.deleteCorrespondenceDocumentInteractor = async ({
   applicationContext,
   caseId,
-  documentIdToDelete,
+  documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -17,12 +17,12 @@ exports.deleteCorrespondenceDocumentInteractor = async ({
 
   await applicationContext.getPersistenceGateway().deleteDocument({
     applicationContext,
-    key: documentIdToDelete,
+    key: documentId,
   });
 
   await applicationContext.getPersistenceGateway().deleteCaseCorrespondence({
     applicationContext,
     caseId,
-    documentIdToDelete,
+    documentId,
   });
 };

@@ -44,14 +44,43 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  * @param {object} applicationContext the application context
  * @returns {object} formatted statistics
  */
-export const formattedStatistics = (get, applicationContext) => {
-  const statitistics = get(state.caseDetail.statistics);
+export const statisticsHelper = (get, applicationContext) => {
+  const { caseType, damages, litigationCosts, statistics } = get(
+    state.caseDetail,
+  );
+  const permissions = get(state.permissions);
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
-  if (statitistics && statitistics.length > 0) {
-    const formattedStatistics = statitistics.map(statistic =>
+  let formattedStatistics;
+
+  if (statistics && statistics.length > 0) {
+    formattedStatistics = statistics.map(statistic =>
       formatStatistic({ applicationContext, statistic }),
     );
-
-    return formattedStatistics;
   }
+
+  const formattedDamages =
+    damages && applicationContext.getUtilities().formatDollars(damages);
+  const formattedLitigationCosts =
+    litigationCosts &&
+    applicationContext.getUtilities().formatDollars(litigationCosts);
+
+  const showOtherStatistics = !!formattedDamages || !!formattedLitigationCosts;
+
+  const showAddDeficiencyStatisticsButton =
+    permissions.ADD_EDIT_STATISTICS && caseType === CASE_TYPES_MAP.deficiency;
+  const showAddOtherStatisticsButton =
+    permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
+
+  return {
+    formattedDamages,
+    formattedLitigationCosts,
+    formattedStatistics,
+    showAddButtons:
+      showAddDeficiencyStatisticsButton || showAddOtherStatisticsButton,
+    showAddDeficiencyStatisticsButton,
+    showAddOtherStatisticsButton,
+    showEditButtons: permissions.ADD_EDIT_STATISTICS,
+    showOtherStatistics,
+  };
 };
