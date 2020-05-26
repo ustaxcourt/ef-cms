@@ -1,9 +1,12 @@
 import { docketClerkAddsCorrespondence } from './journey/docketClerkAddsCorrespondence';
+import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorrespondence';
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
+import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 let caseDetail;
+const correspondenceTitle = 'My correspondence';
 
 describe('Adds correspondence to a case', () => {
   beforeAll(() => {
@@ -19,5 +22,9 @@ describe('Adds correspondence to a case', () => {
 
   loginAs(test, 'docketclerk');
   docketClerkNavigatesToAddCorrespondence(test);
-  docketClerkAddsCorrespondence(test);
+  docketClerkAddsCorrespondence(test, correspondenceTitle);
+  docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);
+  docketClerkEditsCorrespondence(test);
+
+  // docketClerkDeletesCorrespondence(test);
 });
