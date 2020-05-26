@@ -99,7 +99,7 @@ const filterRecords = async ({ applicationContext, records }) => {
               applicationContext,
               documentId: document.documentContentsId,
               protocol: 'S3',
-              useTempBucket: true,
+              useTempBucket: false,
             });
 
           const { documentContents } = JSON.parse(buffer.toString());
