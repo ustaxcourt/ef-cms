@@ -2,14 +2,15 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CalculatePenaltiesModal = connect(
   {
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.calculatePenaltiesSequence,
+    confirmSequence:
+      props.confirmSequence || sequences.calculatePenaltiesSequence,
     penalties: state.modal.penalties,
     statisticsFormHelper: state.statisticsFormHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
