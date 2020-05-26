@@ -12,11 +12,11 @@ describe('clearStatisticsFormValuesAction', () => {
         form: {
           statistics: [
             {
-              deficiencyAmount: '123',
+              irsDeficiencyAmount: '123',
+              irsTotalPenalties: '123',
               lastDateOfPeriodDay: '1',
               lastDateOfPeriodMonth: '1',
               lastDateOfPeriodYear: '2010',
-              totalPenalties: '123',
               year: '2012',
               yearOrPeriod: 'Year',
             },
@@ -36,11 +36,11 @@ describe('clearStatisticsFormValuesAction', () => {
 
   it('should not unset statistics form values if props.key does not contain yearOrPeriod', async () => {
     const statisticsForm = {
-      deficiencyAmount: '123',
+      irsDeficiencyAmount: '123',
+      irsTotalPenalties: '123',
       lastDateOfPeriodDay: '1',
       lastDateOfPeriodMonth: '1',
       lastDateOfPeriodYear: '2010',
-      totalPenalties: '123',
       year: '2012',
     };
     const result = await runAction(clearStatisticsFormValuesAction, {
