@@ -380,6 +380,9 @@ joiValidationDecorator(
       ),
     caseId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
