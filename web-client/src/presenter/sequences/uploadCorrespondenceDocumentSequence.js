@@ -40,7 +40,7 @@ export const uploadCorrespondenceDocumentSequence = [
           getUploadCorrespondenceDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
-          setCaseDetailPageTabAction,
+          setCaseDetailPageTabAction(),
           setCaseDetailPageTabFrozenAction,
           navigateToCaseDetailAction,
         ],

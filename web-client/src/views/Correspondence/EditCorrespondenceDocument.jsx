@@ -69,8 +69,8 @@ export const EditCorrespondenceDocument = connect(
             </div>
 
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
-                <div className="blue-container upload-court-document-description-container">
+              <div className="desktop:grid-col-5 tablet:grid-row">
+                <div className="blue-container desktop:upload-court-document-description-container">
                   <FormGroup
                     errorText={
                       validationErrors && validationErrors.documentTitle
@@ -103,7 +103,7 @@ export const EditCorrespondenceDocument = connect(
                 </div>
               </div>
 
-              <div className="grid-col-7">
+              <div className="desktop:grid-col-7 tablet:grid-row">
                 {(screenMetadata.documentReset && (
                   <>
                     <div className="scanner-area-header">

@@ -29,7 +29,7 @@ const onSuccess = [
   getEditCorrespondenceDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  setCaseDetailPageTabAction,
+  setCaseDetailPageTabAction(),
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,
 ];
