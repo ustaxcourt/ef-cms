@@ -19,7 +19,7 @@ const getDocumentContentsForDocuments = async ({
           applicationContext,
           documentId: document.documentContentsId,
           protocol: 'S3',
-          useTempBucket: true,
+          useTempBucket: false,
         });
 
       const documentContentsData = JSON.parse(documentContentsFile.toString());
