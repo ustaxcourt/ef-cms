@@ -97,19 +97,19 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
         .getUtilities()
         .formatDateString(statistic.lastDateOfPeriod, 'MMDDYY');
 
-    const formattedDeficiencyAmount = applicationContext
+    const formattedIrsDeficiencyAmount = applicationContext
       .getUtilities()
-      .formatDollars(statistic.deficiencyAmount);
+      .formatDollars(statistic.irsDeficiencyAmount);
 
-    const formattedTotalPenalties = applicationContext
+    const formattedIrsTotalPenalties = applicationContext
       .getUtilities()
-      .formatDollars(statistic.totalPenalties);
+      .formatDollars(statistic.irsTotalPenalties);
 
     return {
       ...statistic,
       formattedDate,
-      formattedDeficiencyAmount,
-      formattedTotalPenalties,
+      formattedIrsDeficiencyAmount,
+      formattedIrsTotalPenalties,
     };
   });
 
