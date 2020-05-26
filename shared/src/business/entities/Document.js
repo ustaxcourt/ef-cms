@@ -488,7 +488,13 @@ joiValidationDecorator(
       ),
     processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUserId: joi.string().optional().allow(null),
+    qcByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
