@@ -286,6 +286,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
 
 Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
 
+Document.OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -458,7 +460,10 @@ joiValidationDecorator(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     numberOfPages: joi.number().optional().allow(null),
-    objections: joi.string().max(500).optional(),
+    objections: joi
+      .string()
+      .valid(...Document.OBJECTIONS_OPTIONS)
+      .optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
