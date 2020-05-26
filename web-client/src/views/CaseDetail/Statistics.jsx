@@ -10,27 +10,26 @@ export const Statistics = connect(
   function Statistics({ statisticsHelper }) {
     return (
       <>
-        {statisticsHelper.showAddAndEditButtons && (
+        {statisticsHelper.showAddButtons && (
           <div className="grid-row grid-gap flex-justify-end margin-bottom-2">
-            {!statisticsHelper.showOtherStatistics && (
+            {statisticsHelper.showAddOtherStatisticsButton && (
               <Button link className="push-right padding-0" icon="plus-circle">
                 Add Other Statistics
               </Button>
             )}
-            <Button link className="push-right padding-0" icon="plus-circle">
-              Add Deficiency Statistics
-            </Button>
+            {statisticsHelper.showAddDeficiencyStatisticsButton && (
+              <Button link className="push-right padding-0" icon="plus-circle">
+                Add Deficiency Statistics
+              </Button>
+            )}
           </div>
         )}
-        {!statisticsHelper.formattedStatistics && (
-          <p>There are no statistics for this case.</p>
-        )}
-        {statisticsHelper.formattedStatistics && (
+        {statisticsHelper.formattedStatistics ? (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>
                 Deficiency
-                {statisticsHelper.showAddAndEditButtons && (
+                {statisticsHelper.showEditButtons && (
                   <Button link className="padding-0 margin-left-2" icon="edit">
                     Edit
                   </Button>
@@ -84,13 +83,15 @@ export const Statistics = connect(
               </table>
             </div>
           </div>
+        ) : (
+          <p>There are no statistics for this case.</p>
         )}
         {statisticsHelper.showOtherStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>
                 Other
-                {statisticsHelper.showAddAndEditButtons && (
+                {statisticsHelper.showEditButtons && (
                   <Button link className="padding-0 margin-left-2" icon="edit">
                     Edit
                   </Button>
