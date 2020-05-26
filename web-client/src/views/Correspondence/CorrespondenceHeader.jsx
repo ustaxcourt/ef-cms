@@ -24,25 +24,28 @@ export const CorrespondenceHeader = connect(
               {showAddCorrespondenceButton && (
                 <Button
                   link
-                  aria-label="printable docket record"
+                  aria-label="add correspondence file"
                   className="margin-right-0"
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
                   icon="envelope-open"
+                  id="add-correspondence-file"
                 >
                   Add Correspondence File
                 </Button>
               )}
             </div>
-            <div className="only-small-screens">
-              <Button
-                link
-                aria-hidden="true"
-                href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
-                icon="envelope-open"
-              >
-                Add Correspondence File
-              </Button>
-            </div>
+            {showAddCorrespondenceButton && (
+              <div className="only-small-screens">
+                <Button
+                  link
+                  aria-hidden="true"
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
+                  icon="envelope-open"
+                >
+                  Add Correspondence File
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </React.Fragment>
