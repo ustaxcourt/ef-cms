@@ -56,6 +56,7 @@ describe('Order', () => {
         options={options}
         orderContent={orderContent}
         orderTitle={orderTitle}
+        signatureText=""
       />,
     );
     expect(wrapper.find('#order-signature').length).toEqual(0);
