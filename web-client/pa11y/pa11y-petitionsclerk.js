@@ -242,6 +242,24 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=correspondence-tab',
   },
   {
+    actions: ['wait for element #upload-correspondence to be visible'],
+    notes: 'checks a11y of add correspondence page',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19/upload-correspondence&info=add-correspondence',
+  },
+  {
+    actions: [
+      'wait for #tab-correspondence to be visible',
+      'click element #tab-correspondence',
+      'wait for #correspondence-documents-table to be visible',
+      'click element .edit-correspondence-button',
+      'wait for element #edit-correspondence-header to be visible',
+    ],
+    notes: 'checks a11y of edit correspondence page',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-correspondence',
+  },
+  {
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
