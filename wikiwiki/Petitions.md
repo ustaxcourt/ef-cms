@@ -10,6 +10,21 @@
 **Petitions QC Served**
  * Served - newest to oldest by Served date
 
+
+## Petition Links
+**Section Document QC Inbox / My Document QC Inbox**
+* On click of Petition document link, app navigates to Petition QC screen > Parties tab
+
+**Section Document QC In Progress box / My Document QC In Progress box**
+* On click of Petition document link, app navigates to Review and Serve Your Petition screen
+
+**Section Document QC Served box/ My Document QC Served box**
+* On click of Petition document link, app navigates to Petition Document Detail screen
+
+**Petition link on Docket Record**
+* On click of Petition document link from Docket Record, app navigates to the standard Document Detail screen for the Petition
+
+
 ## QC Icons
 ### Petitions
 * If Unread - Bold with closed envelope icon
@@ -20,6 +35,16 @@
 ### Electronic petitions
 * Petition is filed electronically, shows in Section Inbox and as unassigned
 * Petition gets assigned to clerk, shows up in clerk’s Inbox, and in Section Inbox with clerk assigned
+
+**Date received**
+* if e-filed, date received displays read-only and is populated by date received into system
+
+**Mailing date**
+* If e-filed, mailing date field displays read-only and is populated with "Electronically filed"
+
+**Trial location and Order Designating Place of Trial**
+* If e-filed, trial location is displayed read-only and populated with user selection from Petition form
+Order Designating Place of Trial checkbox is hidden
 
 
 #### Received Date and Filing Date
