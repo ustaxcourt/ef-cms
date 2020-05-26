@@ -399,7 +399,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
       compile: () => {
