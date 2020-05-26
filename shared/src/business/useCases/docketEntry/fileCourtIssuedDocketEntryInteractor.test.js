@@ -141,7 +141,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Document not found');
   });
 
-  it('should call updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
+  it('should call countPagesInDocument, updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Olivia Jade',
       role: User.ROLES.docketClerk,
@@ -169,6 +169,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().createSectionInboxRecord,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
   });
 
