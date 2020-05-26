@@ -30,7 +30,10 @@ export const Statistics = connect(
             )}
           </div>
         )}
-        {statisticsHelper.formattedStatistics ? (
+        {statisticsHelper.showNoStatistics && (
+          <p>There are no statistics for this case.</p>
+        )}
+        {statisticsHelper.formattedStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>
@@ -89,8 +92,6 @@ export const Statistics = connect(
               </table>
             </div>
           </div>
-        ) : (
-          <p>There are no statistics for this case.</p>
         )}
         {statisticsHelper.showOtherStatistics && (
           <div className="grid-row grid-gap flex-justify">
