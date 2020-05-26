@@ -61,5 +61,6 @@ exports.generateCaseInventoryReportPdf = async ({
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
     file: caseInventoryReportPdf,
+    useTempBucket: true,
   });
 };
