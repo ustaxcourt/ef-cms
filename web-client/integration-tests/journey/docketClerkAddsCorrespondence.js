@@ -1,15 +1,10 @@
 import { fakeFile } from '../helpers';
 
-export const docketClerkAddsCorrespondence = test =>
+export const docketClerkAddsCorrespondence = (test, correspondenceTitle) =>
   it('docketclerk adds correspondence to case', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
-      value: 'My correspondence',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'documentTitle',
-      value: 'My correspondence',
+      value: correspondenceTitle,
     });
 
     await test.runSequence('updateFormValueSequence', {
