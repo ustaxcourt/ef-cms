@@ -17,11 +17,8 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock
-        .calls[0][0],
-    ).toMatchObject({
-      useTempBucket: false,
-    });
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
+    ).toBeCalled();
   });
 
   it('returns the pdf url', async () => {
