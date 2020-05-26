@@ -46,6 +46,7 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  */
 export const statisticsHelper = (get, applicationContext) => {
   const { damages, litigationCosts, statistics } = get(state.caseDetail);
+  const permissions = get(state.permissions);
 
   let formattedStatistics;
 
@@ -67,6 +68,7 @@ export const statisticsHelper = (get, applicationContext) => {
     formattedDamages,
     formattedLitigationCosts,
     formattedStatistics,
+    showAddAndEditButtons: permissions.ADD_EDIT_STATISTICS,
     showOtherStatistics,
   };
 };
