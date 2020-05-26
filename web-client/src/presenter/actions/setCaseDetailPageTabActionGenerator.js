@@ -3,9 +3,7 @@ import { state } from 'cerebral';
 /**
  * Sets the currentViewMetadata.caseDetail.primaryTab view.
  *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
- * @param {object} providers.props.tab the tab to display
+ * @param {string} tab the tab to display
  * @returns {Function} a function that sets the tab name
  */
 export const setCaseDetailPageTabActionGenerator = tab => {
