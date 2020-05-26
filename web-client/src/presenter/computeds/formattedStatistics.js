@@ -15,9 +15,23 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
     .getUtilities()
     .formatDollars(statistic.irsTotalPenalties);
 
+  const formattedDeterminationDeficiencyAmount = statistic.determinationDeficiencyAmount
+    ? applicationContext
+        .getUtilities()
+        .formatDollars(statistic.determinationDeficiencyAmount)
+    : 'TBD';
+
+  const formattedDeterminationTotalPenalties = statistic.determinationTotalPenalties
+    ? applicationContext
+        .getUtilities()
+        .formatDollars(statistic.determinationTotalPenalties)
+    : 'TBD';
+
   return {
     ...statistic,
     formattedDate,
+    formattedDeterminationDeficiencyAmount,
+    formattedDeterminationTotalPenalties,
     formattedIrsDeficiencyAmount,
     formattedIrsTotalPenalties,
   };
