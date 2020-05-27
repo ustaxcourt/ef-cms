@@ -1798,5 +1798,17 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
   return this;
 };
 
+/**
+ * adds the statistic to the list of statistics on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.addStatistic = function (statisticEntity) {
+  this.statistics = [...this.statistics, statisticEntity];
+
+  return this;
+};
+
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;

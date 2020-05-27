@@ -99,9 +99,13 @@ exports.fileDocketEntryInteractor = async ({
     const [documentId, metadata, relationship] = document;
 
     if (documentId && metadata) {
-      const numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, documentId });
+      let numberOfPages = null;
+
+      if (metadata.isFileAttached) {
+        numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({ applicationContext, documentId });
+      }
 
       const documentEntity = new Document(
         {
