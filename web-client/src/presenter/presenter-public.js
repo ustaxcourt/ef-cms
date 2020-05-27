@@ -23,6 +23,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
+import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
@@ -52,6 +53,7 @@ export const presenter = {
     updateAdvancedSearchFormValueSequence,
     updateDocketNumberSearchFormSequence,
     validateCaseAdvancedSearchFormSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validateOpinionSearchSequence,
     validateOrderSearchSequence,
   },
