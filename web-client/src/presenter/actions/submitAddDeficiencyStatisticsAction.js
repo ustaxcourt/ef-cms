@@ -30,7 +30,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
   const { caseId } = get(state.caseDetail);
 
   try {
-    applicationContext.getUseCases().addDeficiencyStatisticInteractor({
+    await applicationContext.getUseCases().addDeficiencyStatisticInteractor({
       applicationContext,
       caseId,
       determinationDeficiencyAmount,
@@ -44,7 +44,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
 
     return path.success({
       alertSuccess: {
-        message: 'Statistics updated.',
+        message: 'Year/Period added.',
       },
     });
   } catch (e) {

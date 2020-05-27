@@ -71,34 +71,32 @@ export const StatisticsForm = connect(
     );
 
     const getSingleStatisticForm = index => (
-      <React.Fragment key={index}>
+      <div className="statistic-form" key={index}>
         <FormGroup>
-          <fieldset className="usa-fieldset">
-            {['Year', 'Period'].map(option => (
-              <div className="usa-radio usa-radio__inline" key={option}>
-                <input
-                  checked={form.statistics[index].yearOrPeriod === option}
-                  className="usa-radio__input"
-                  id={`year-or-period-${index}-${option}`}
-                  name={`statistics.${index}.yearOrPeriod`}
-                  type="radio"
-                  value={option}
-                  onChange={e => {
-                    updateStatisticsFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-radio__label"
-                  htmlFor={`year-or-period-${index}-${option}`}
-                >
-                  {option}
-                </label>
-              </div>
-            ))}
-          </fieldset>
+          {['Year', 'Period'].map(option => (
+            <div className="usa-radio usa-radio__inline" key={option}>
+              <input
+                checked={form.statistics[index].yearOrPeriod === option}
+                className="usa-radio__input"
+                id={`year-or-period-${index}-${option}`}
+                name={`statistics.${index}.yearOrPeriod`}
+                type="radio"
+                value={option}
+                onChange={e => {
+                  updateStatisticsFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor={`year-or-period-${index}-${option}`}
+              >
+                {option}
+              </label>
+            </div>
+          ))}
         </FormGroup>
 
         <FormGroup
@@ -184,7 +182,7 @@ export const StatisticsForm = connect(
         </Button>
 
         <hr />
-      </React.Fragment>
+      </div>
     );
 
     return (
