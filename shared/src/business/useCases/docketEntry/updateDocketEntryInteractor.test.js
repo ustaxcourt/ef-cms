@@ -122,7 +122,9 @@ describe('updateDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
+          eventCode: 'P',
           isFileAttached: false,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -148,7 +150,9 @@ describe('updateDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
+          eventCode: 'P',
           isFileAttached: true,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -199,7 +203,9 @@ describe('updateDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
+          eventCode: 'P',
           isPaper: true,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
