@@ -33,7 +33,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
     await deleteCorrespondenceDocumentInteractor({
       applicationContext,
       caseId: '111',
-      documentIdToDelete: 'abc',
+      documentId: 'abc',
     });
 
     expect(
@@ -48,7 +48,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
     await deleteCorrespondenceDocumentInteractor({
       applicationContext,
       caseId: '111',
-      documentIdToDelete: 'abc',
+      documentId: 'abc',
     });
 
     expect(
@@ -56,7 +56,7 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       caseId: '111',
-      documentIdToDelete: 'abc',
+      documentId: 'abc',
     });
   });
 });

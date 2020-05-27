@@ -83,7 +83,7 @@ describe('serveCaseToIrsInteractor', () => {
 
   it('should throw unauthorized error when user is unauthorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'notauser',
+      userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
     });
 
     await expect(
@@ -186,7 +186,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],
         },
         {
@@ -197,7 +197,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],
         },
       ],

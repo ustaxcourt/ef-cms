@@ -12,7 +12,7 @@ describe('deleteCaseCorrespondence', () => {
     await deleteCaseCorrespondence({
       applicationContext,
       caseId: '234',
-      documentIdToDelete: '123',
+      documentId: '123',
     });
 
     expect(

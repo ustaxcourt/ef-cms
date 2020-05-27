@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 let currentUser = {
   role: User.ROLES.judge,
-  userId: '777',
+  userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
 };
 
 const trialSessionsHelper = withAppContextDecorator(

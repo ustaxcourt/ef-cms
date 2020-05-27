@@ -417,7 +417,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocumentLambda
     events:
       - http:
-          path: /{caseId}/correspondence/{documentIdToEdit}
+          path: /{caseId}/correspondence/{documentId}
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -429,7 +429,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.deleteCorrespondenceDocumentLambda
     events:
       - http:
-          path: /{caseId}/correspondence/{documentIdToDelete}
+          path: /{caseId}/correspondence/{documentId}
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

@@ -56,7 +56,7 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should throw an error when not authorized', async () => {
     mockCurrentUser = {
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -72,7 +72,7 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should not add mapping if already there', async () => {
     mockCurrentUser = {
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -87,7 +87,7 @@ describe('submitCaseAssociationRequest', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -120,7 +120,7 @@ describe('submitCaseAssociationRequest', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -144,7 +144,7 @@ describe('submitCaseAssociationRequest', () => {
 
   it('should add mapping for an irsPractitioner', async () => {
     mockCurrentUser = {
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -159,7 +159,7 @@ describe('submitCaseAssociationRequest', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
