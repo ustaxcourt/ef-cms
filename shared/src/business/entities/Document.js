@@ -488,7 +488,13 @@ joiValidationDecorator(
       ),
     processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUserId: joi.string().optional().allow(null),
+    qcByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
@@ -517,7 +523,13 @@ joiValidationDecorator(
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi.string().optional().allow(null),
+    signedByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
@@ -527,7 +539,12 @@ joiValidationDecorator(
       .description(
         'An optional trial location used when generating a fully concatenated document title.',
       ),
-    userId: joi.string().required(),
+    userId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .required(),
     workItems: joi.array().optional(),
   }),
 );
