@@ -15,6 +15,7 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
+const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
@@ -3015,6 +3016,25 @@ describe('Case entity', () => {
       });
 
       expect(caseEntity.correspondence.length).toEqual(1);
+    });
+  });
+
+  describe('addStatistic', () => {
+    it('should successfully add a statistic', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      const statisticToAdd = new Statistic({
+        determinationDeficiencyAmount: 567,
+        determinationTotalPenalties: 789,
+        irsDeficiencyAmount: 11.2,
+        irsTotalPenalties: 66.87,
+        year: 2012,
+        yearOrPeriod: 'Year',
+      });
+
+      caseEntity.addStatistic(statisticToAdd);
+
+      expect(caseEntity.statistics.length).toEqual(1);
     });
   });
 });

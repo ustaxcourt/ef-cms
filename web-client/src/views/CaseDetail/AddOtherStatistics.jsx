@@ -11,9 +11,15 @@ import React from 'react';
 export const AddOtherStatistics = connect(
   {
     form: state.form,
+    submitAddOtherStatisticsSequence:
+      sequences.submitAddOtherStatisticsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function AddOtherStatistics({ form, updateFormValueSequence }) {
+  function AddOtherStatistics({
+    form,
+    submitAddOtherStatisticsSequence,
+    updateFormValueSequence,
+  }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-1" />
@@ -71,7 +77,13 @@ export const AddOtherStatistics = connect(
           </div>
 
           <div className="margin-top-3">
-            <Button onClick={() => {}}>Save</Button>
+            <Button
+              onClick={() => {
+                submitAddOtherStatisticsSequence();
+              }}
+            >
+              Save
+            </Button>
 
             <Button link onClick={() => {}}>
               Cancel

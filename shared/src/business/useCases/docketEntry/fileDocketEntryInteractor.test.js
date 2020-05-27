@@ -8,7 +8,7 @@ const { User } = require('../../entities/User');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
-    name: 'Olivia Jade',
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: User.ROLES.docketClerk,
     section: 'docket',
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -104,6 +104,7 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -144,16 +145,19 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         lodged: true,
         secondaryDocument: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
         secondarySupportingDocumentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
