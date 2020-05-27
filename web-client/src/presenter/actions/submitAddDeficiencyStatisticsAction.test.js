@@ -10,7 +10,7 @@ presenter.providers.path = {
 };
 
 describe('submitAddDeficiencyStatisticsAction', () => {
-  it('calls the other statistics submit interactor, returning the success path', async () => {
+  it('calls the deficiency statistics submit interactor, returning the success path', async () => {
     await runAction(submitAddDeficiencyStatisticsAction, {
       modules: {
         presenter,
