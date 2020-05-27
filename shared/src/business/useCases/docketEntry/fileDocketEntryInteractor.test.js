@@ -8,7 +8,7 @@ const { User } = require('../../entities/User');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
-    name: 'Olivia Jade',
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: User.ROLES.docketClerk,
     section: 'docket',
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
