@@ -49,41 +49,24 @@ joiValidationDecorator(
       .alternatives()
       .conditional('determinationTotalPenalties', {
         is: joi.exist().not(null),
-        otherwise: joi
-          .number()
-          .optional()
-          .allow(null)
-          .description('The amount of the deficiency determined by the Court.'),
-        then: joi
-          .number()
-          .required()
-          .allow(null)
-          .description('The amount of the deficiency determined by the Court.'),
-      }),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
+      })
+      .description('The amount of the deficiency determined by the Court.'),
     determinationTotalPenalties: joi
       .alternatives()
       .conditional('determinationDeficiencyAmount', {
         is: joi.exist().not(null),
-        otherwise: joi
-          .number()
-          .optional()
-          .allow(null)
-          .description(
-            'The total amount of penalties for the period or year determined by the Court.',
-          ),
-        then: joi
-          .number()
-          .required()
-          .allow(null)
-          .description(
-            'The total amount of penalties for the period or year determined by the Court.',
-          ),
-      }),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
+      })
+      .description(
+        'The total amount of penalties for the period or year determined by the Court.',
+      ),
     entityName: joi.string().valid('Statistic').required(),
     irsDeficiencyAmount: joi
       .number()
       .required()
-      .allow(null)
       .description('The amount of the deficiency on the IRS notice.'),
     irsTotalPenalties: joi
       .number()
@@ -95,7 +78,7 @@ joiValidationDecorator(
       .when('yearOrPeriod', {
         is: 'Period',
         otherwise: joi.optional().allow(null),
-        then: joiStrictTimestamp.max('now').required().allow(null),
+        then: joiStrictTimestamp.max('now').required(),
       })
       .description('Last date of the statistics period.'),
     year: joi

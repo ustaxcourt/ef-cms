@@ -15,13 +15,13 @@ export const AddDeficiencyStatistics = connect(
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
     form: state.form,
-    setupAddDeficiencyStatisticsFormSequence:
-      sequences.setupAddDeficiencyStatisticsFormSequence,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
     submitAddDeficiencyStatisticsSequence:
       sequences.submitAddDeficiencyStatisticsSequence,
+    updateAddDeficiencyFormValueSequence:
+      sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence:
       sequences.validateAddDeficiencyStatisticsSequence,
@@ -30,10 +30,10 @@ export const AddDeficiencyStatistics = connect(
   function StatisticsForm({
     calculatePenaltiesForAddSequence,
     form,
-    setupAddDeficiencyStatisticsFormSequence,
     showCalculatePenaltiesModalSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
+    updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
     validationErrors,
@@ -65,15 +65,12 @@ export const AddDeficiencyStatistics = connect(
                         name="yearOrPeriod"
                         type="radio"
                         value={option}
-                        onChange={e => {
-                          setupAddDeficiencyStatisticsFormSequence({
-                            yearOrPeriod: e.target.value,
-                          });
-                          updateFormValueSequence({
+                        onChange={async e => {
+                          await updateAddDeficiencyFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validateAddDeficiencyStatisticsSequence();
+                          await validateAddDeficiencyStatisticsSequence();
                         }}
                       />
                       <label
