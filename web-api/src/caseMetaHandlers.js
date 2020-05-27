@@ -1,6 +1,8 @@
 module.exports = {
   addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
     .addConsolidatedCaseLambda,
+  addDeficiencyStatisticLambda: require('./cases/addDeficiencyStatisticLambda')
+    .addDeficiencyStatisticLambda,
   blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda')
     .blockCaseFromTrialLambda,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda')
