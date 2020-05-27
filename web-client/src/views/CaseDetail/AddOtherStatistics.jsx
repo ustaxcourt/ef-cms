@@ -34,15 +34,14 @@ export const AddOtherStatistics = connect(
             <div className="grid-row grid-gap-6">
               <div className="grid-col-2">
                 <FormGroup>
-                  <label className="usa-label" htmlFor={'litigation-costs'}>
+                  <label className="usa-label" htmlFor="litigation-costs">
                     Litigation costs
                   </label>
                   <DollarsInput
                     className="usa-input usa-input-inline"
-                    id={'litigation-costs'}
-                    name={'litigationCosts'}
+                    id="litigation-costs"
+                    name="litigationCosts"
                     value={form.litigationCosts || ''}
-                    // onBlur={() => validatePetitionFromPaperSequence()}
                     onValueChange={values => {
                       updateFormValueSequence({
                         key: 'litigationCosts',
@@ -55,15 +54,14 @@ export const AddOtherStatistics = connect(
 
               <div className="grid-col-2">
                 <FormGroup>
-                  <label className="usa-label" htmlFor={'damages'}>
+                  <label className="usa-label" htmlFor="damages">
                     Damages (IRC §6673)
                   </label>
                   <DollarsInput
                     className="usa-input usa-input-inline"
-                    id={'damages'}
-                    name={'damages'}
+                    id="damages"
+                    name="damages"
                     value={form.damages || ''}
-                    // onBlur={() => validatePetitionFromPaperSequence()}
                     onValueChange={values => {
                       updateFormValueSequence({
                         key: 'damages',

@@ -104,6 +104,7 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -113,6 +114,9 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('sets the eventCode to MISL when the document is lodged', async () => {
@@ -141,16 +145,19 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         lodged: true,
         secondaryDocument: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
         secondarySupportingDocumentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -172,6 +179,9 @@ describe('fileDocketEntryInteractor', () => {
       eventCode: 'MISL',
       lodged: true,
     });
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(3);
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {

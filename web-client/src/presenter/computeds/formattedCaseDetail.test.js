@@ -1400,4 +1400,143 @@ describe('formattedCaseDetail', () => {
       ).toEqual(true);
     });
   });
+
+  describe('showEditDocketRecordEntry', () => {
+    let caseDetail;
+
+    beforeAll(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {
+          name: 'Bob',
+        },
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 2,
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 7,
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+        ],
+      };
+    });
+
+    it('should show number of pages from the docket record with a mapped document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].numberOfPages).toEqual(24);
+    });
+
+    it('should show number of pages from the document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[4].numberOfPages).toEqual(9);
+    });
+
+    it('should show zero (0) number of pages with no document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[1].numberOfPages).toEqual(0);
+    });
+  });
 });
