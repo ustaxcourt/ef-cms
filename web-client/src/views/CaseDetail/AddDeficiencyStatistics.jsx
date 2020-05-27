@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -18,6 +19,8 @@ export const AddDeficiencyStatistics = connect(
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateAddDeficiencyStatisticsSequence:
+      sequences.validateAddDeficiencyStatisticsSequence,
   },
   function StatisticsForm({
     calculatePenaltiesForAddSequence,
@@ -25,6 +28,7 @@ export const AddDeficiencyStatistics = connect(
     showCalculatePenaltiesModalSequence,
     showModal,
     updateFormValueSequence,
+    validateAddDeficiencyStatisticsSequence,
   }) {
     return (
       <>
@@ -73,26 +77,54 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-4">
                 <div className="grid-col-3">
-                  <FormGroup>
-                    <label className="usa-label" htmlFor={'year'}>
-                      Year
-                    </label>
-                    <input
-                      className="usa-input usa-input-inline"
-                      id={'year'}
-                      maxLength="4"
-                      name={'year'}
-                      placeholder="YYYY"
-                      value={form.year || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </FormGroup>
+                  {form.yearOrPeriod === 'Year' && (
+                    <FormGroup>
+                      <label className="usa-label" htmlFor={'year'}>
+                        Year
+                      </label>
+                      <input
+                        className="usa-input usa-input-inline year-small"
+                        id={'year'}
+                        maxLength="4"
+                        name={'year'}
+                        placeholder="YYYY"
+                        value={form.year || ''}
+                        onBlur={() => validateAddDeficiencyStatisticsSequence()}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </FormGroup>
+                  )}
+
+                  {form.yearOrPeriod === 'Period' && (
+                    <FormGroup>
+                      <DateInput
+                        id={'last-date-of-period'}
+                        label="Last date of period"
+                        names={{
+                          day: 'lastDateOfPeriodDay',
+                          month: 'lastDateOfPeriodMonth',
+                          year: 'lastDateOfPeriodYear',
+                        }}
+                        values={{
+                          day: form.lastDateOfPeriodDay,
+                          month: form.lastDateOfPeriodMonth,
+                          year: form.lastDateOfPeriodYear,
+                        }}
+                        onBlur={() => validateAddDeficiencyStatisticsSequence()}
+                        onChange={({ key, value }) => {
+                          updateFormValueSequence({
+                            key,
+                            value,
+                          });
+                        }}
+                      />
+                    </FormGroup>
+                  )}
                 </div>
               </div>
 
@@ -110,7 +142,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'irs-deficiency-amount'}
                       name={'irsDeficiencyAmount'}
                       value={form.irsDeficiencyAmount || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'irsDeficiencyAmount',
@@ -134,7 +166,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'irs-deficiency-amount'}
                       name={'irsTotalPenalties'}
                       value={form.irsTotalPenalties || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'irsTotalPenalties',
@@ -176,7 +208,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'determination-deficiency-amount'}
                       name={'determinationDeficiencyAmount'}
                       value={form.determinationDeficiencyAmount || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'determinationDeficiencyAmount',
@@ -200,7 +232,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'deficiency-total-penalties'}
                       name={'determinationTotalPenalties'}
                       value={form.determinationTotalPenalties || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'determinationTotalPenalties',
