@@ -98,9 +98,6 @@ exports.fileDocketEntryInteractor = async ({
   for (let document of documentsToFile) {
     const [documentId, metadata, relationship] = document;
 
-    console.log('documentId', documentId);
-    console.log('metadata', metadata);
-
     if (documentId && metadata) {
       let numberOfPages = null;
 
