@@ -10,7 +10,6 @@ import { getConstants } from '../../getConstants';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { parallel, set } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
