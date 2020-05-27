@@ -44,7 +44,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
 
     return path.success({
       alertSuccess: {
-        message: 'Statistics updated.',
+        message: 'Year/Period added.',
       },
     });
   } catch (e) {
