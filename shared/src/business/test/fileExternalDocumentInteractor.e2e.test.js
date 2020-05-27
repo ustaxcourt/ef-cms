@@ -204,7 +204,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           ],
         },
         {
-          caseId,
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: 'Statement of Taxpayer Identification',
           filedBy: 'Petr. Test Petitioner',
@@ -213,7 +212,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         {
           attachments: false,
-          caseId,
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -229,13 +227,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
                 attachments: false,
-                caseId,
                 certificateOfService: false,
                 certificateOfServiceDate: 'undefined-undefined-undefined',
                 docketNumber: '201-19',
@@ -263,7 +259,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           ],
         },
         {
-          caseId,
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -278,7 +273,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
@@ -438,7 +432,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumberWithSuffix: '101-19S',
         document: {
           attachments: false,
-          caseId,
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -465,7 +458,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseId,
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
