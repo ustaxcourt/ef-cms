@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { deleteOtherStatisticsAction } from '../actions/deleteOtherStatisticsAction';
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -16,6 +17,7 @@ export const deleteOtherStatisticsSequence = [
         setSaveAlertsForNavigationAction,
         setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
+        clearModalAction,
         navigateToCaseDetailCaseInformationAction,
       ],
     },
