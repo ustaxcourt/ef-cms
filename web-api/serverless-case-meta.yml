@@ -277,3 +277,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  updateOtherStatistics:
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.updateOtherStatisticsLambda
+    events:
+      - http:
+          path: /{caseId}/other-statistics
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  addDeficiencyStatistic:
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.addDeficiencyStatisticLambda
+    events:
+      - http:
+          path: /{caseId}/statistics
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
