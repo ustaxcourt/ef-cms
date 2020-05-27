@@ -320,6 +320,7 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20&info=statistics',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/add-other-statistics',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20/add-deficiency-statistics',
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
@@ -335,6 +336,38 @@ module.exports = [
     notes: 'checks a11y of editable fields exposed when Yes notice attached',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/petition-qc?tab=irsNotice&info=reveal-notice-options',
+  },
+  {
+    actions: [
+      'wait for #tab-irs-notice to be visible',
+      'click element #tab-irs-notice',
+      'wait for #irs-verified-notice-radios to be visible',
+      'click element #has-irs-verified-notice-yes',
+      'wait for #date-of-notice-legend to be visible',
+      'set field #case-type to Deficiency',
+      'check field #case-type',
+      'wait for .statistic-form to be visible',
+    ],
+    notes: 'checks the statistics section of the petition QC screen',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=statistics-petition-qc',
+  },
+  {
+    actions: [
+      'wait for #tab-irs-notice to be visible',
+      'click element #tab-irs-notice',
+      'wait for #irs-verified-notice-radios to be visible',
+      'click element #has-irs-verified-notice-yes',
+      'wait for #date-of-notice-legend to be visible',
+      'set field #case-type to Deficiency',
+      'check field #case-type',
+      'wait for .calculate-penalties to be visible',
+      'click element .calculate-penalties',
+      'wait for .modal-screen to be visible',
+    ],
+    notes: 'checks the Calculate Penalties on IRS Notice modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
   },
 
   /* review petition */
@@ -413,21 +446,4 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
-  {
-    actions: [
-      'wait for #tab-irs-notice to be visible',
-      'click element #tab-irs-notice',
-      'wait for #irs-verified-notice-radios to be visible',
-      'click element #has-irs-verified-notice-yes',
-      'wait for #date-of-notice-legend to be visible',
-      'set field #case-type to Deficiency',
-      'check field #case-type',
-      'wait for .calculate-penalties to be visible',
-      'click element .calculate-penalties',
-      'wait for .modal-screen to be visible',
-    ],
-    notes: 'checks the Calculate Penalties on IRS Notice modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
-  },
 ];
