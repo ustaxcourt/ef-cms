@@ -53,8 +53,8 @@ export const AddDeficiencyStatistics = connect(
                       <input
                         checked={form.yearOrPeriod === option}
                         className="usa-radio__input"
-                        id={'year-or-period'}
-                        name={'yearOrPeriod'}
+                        id={`year-or-period-${option}`}
+                        name="yearOrPeriod"
                         type="radio"
                         value={option}
                         onChange={e => {
@@ -66,7 +66,7 @@ export const AddDeficiencyStatistics = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'year-or-period'}
+                        htmlFor={`year-or-period-${option}`}
                       >
                         {option}
                       </label>
@@ -138,7 +138,7 @@ export const AddDeficiencyStatistics = connect(
                       Deficiency (IRS Notice)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'irs-deficiency-amount'}
                       name={'irsDeficiencyAmount'}
                       value={form.irsDeficiencyAmount || ''}
@@ -162,7 +162,7 @@ export const AddDeficiencyStatistics = connect(
                       Total penalties (IRS Notice)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'irs-deficiency-amount'}
                       name={'irsTotalPenalties'}
                       value={form.irsTotalPenalties || ''}
@@ -174,23 +174,20 @@ export const AddDeficiencyStatistics = connect(
                         });
                       }}
                     />
+                    <Button
+                      link
+                      className="padding-0 calculate-penalties"
+                      icon="calculator"
+                      onClick={() =>
+                        showCalculatePenaltiesModalSequence({
+                          key: 'irsTotalPenalties',
+                          title: 'Calculate Penalties on IRS Notice',
+                        })
+                      }
+                    >
+                      Calculate penalties on IRS Notice
+                    </Button>
                   </FormGroup>
-                </div>
-
-                <div className="grid-col-3">
-                  <Button
-                    link
-                    className="padding-0 calculate-penalties"
-                    icon="calculator"
-                    onClick={() =>
-                      showCalculatePenaltiesModalSequence({
-                        key: 'irsTotalPenalties',
-                        title: 'Calculate Penalties on IRS Notice',
-                      })
-                    }
-                  >
-                    Calculate Penalties on IRS Notice
-                  </Button>
                 </div>
               </div>
 
@@ -204,7 +201,7 @@ export const AddDeficiencyStatistics = connect(
                       Deficiency (Determination)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'determination-deficiency-amount'}
                       name={'determinationDeficiencyAmount'}
                       value={form.determinationDeficiencyAmount || ''}
@@ -228,7 +225,7 @@ export const AddDeficiencyStatistics = connect(
                       Total penalties (Determination)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'deficiency-total-penalties'}
                       name={'determinationTotalPenalties'}
                       value={form.determinationTotalPenalties || ''}
@@ -240,22 +237,20 @@ export const AddDeficiencyStatistics = connect(
                         });
                       }}
                     />
+                    <Button
+                      link
+                      className="padding-0 calculate-penalties"
+                      icon="calculator"
+                      onClick={() =>
+                        showCalculatePenaltiesModalSequence({
+                          key: 'determinationTotalPenalties',
+                          title: 'Calculate Penalties as determined by Court',
+                        })
+                      }
+                    >
+                      Calculate penalties as determined by Court
+                    </Button>
                   </FormGroup>
-                </div>
-                <div className="grid-col-3">
-                  <Button
-                    link
-                    className="padding-0 calculate-penalties"
-                    icon="calculator"
-                    onClick={() =>
-                      showCalculatePenaltiesModalSequence({
-                        key: 'determinationTotalPenalties',
-                        title: 'Calculate Penalties as determined by Court',
-                      })
-                    }
-                  >
-                    Calculate Penalties as determined by Court
-                  </Button>
                 </div>
               </div>
             </div>

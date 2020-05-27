@@ -25,6 +25,9 @@ const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
+  addDeficiencyStatisticInteractor,
+} = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -71,6 +74,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  order,
   pendingReport,
   receiptOfFiling,
   standingPretrialNotice,
@@ -978,6 +982,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      order,
       pendingReport,
       receiptOfFiling,
       standingPretrialNotice,
@@ -1245,6 +1250,7 @@ module.exports = (appContextUser = {}) => {
         addCaseToTrialSessionInteractor,
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
+        addDeficiencyStatisticInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
