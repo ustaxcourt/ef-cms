@@ -2,10 +2,10 @@ import { runAction } from 'cerebral/test';
 import { setTotalPenaltiesAmountForStatisticAction } from './setTotalPenaltiesAmountForStatisticAction';
 
 describe('setTotalPenaltiesAmountForStatisticAction,', () => {
-  it('sets the irsTotalPenalties value for the given index', async () => {
+  it('sets the totalPenalties value for the given index', async () => {
     const result = await runAction(setTotalPenaltiesAmountForStatisticAction, {
       props: {
-        irsTotalPenalties: '$112.99',
+        totalPenalties: '$112.99',
       },
       state: {
         form: {

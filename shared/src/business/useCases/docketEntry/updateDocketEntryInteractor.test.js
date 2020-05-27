@@ -96,13 +96,13 @@ describe('updateDocketEntryInteractor', () => {
 
   it('updates the workitem without updating the document if no file is attached', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

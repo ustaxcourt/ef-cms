@@ -141,7 +141,7 @@ export const StartCaseStep4 = connect(
                 trialCitiesByState={
                   trialCitiesHelper(form.procedureType).trialCitiesByState
                 }
-                value={form.preferredTrialCity}
+                value={form.preferredTrialCity || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
