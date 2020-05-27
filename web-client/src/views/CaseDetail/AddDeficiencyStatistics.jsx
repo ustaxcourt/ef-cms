@@ -18,17 +18,22 @@ export const AddDeficiencyStatistics = connect(
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
+    submitAddDeficiencyStatisticsSequence:
+      sequences.submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence:
       sequences.validateAddDeficiencyStatisticsSequence,
+    validationErrors: state.validationErrors,
   },
   function StatisticsForm({
     calculatePenaltiesForAddSequence,
     form,
     showCalculatePenaltiesModalSequence,
     showModal,
+    submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -78,7 +83,7 @@ export const AddDeficiencyStatistics = connect(
               <div className="grid-row grid-gap-4">
                 <div className="grid-col-3">
                   {form.yearOrPeriod === 'Year' && (
-                    <FormGroup>
+                    <FormGroup errorText={validationErrors.year}>
                       <label className="usa-label" htmlFor={'year'}>
                         Year
                       </label>
@@ -101,7 +106,7 @@ export const AddDeficiencyStatistics = connect(
                   )}
 
                   {form.yearOrPeriod === 'Period' && (
-                    <FormGroup>
+                    <FormGroup errorText={validationErrors.lastDateOfPeriod}>
                       <DateInput
                         id={'last-date-of-period'}
                         label="Last date of period"
@@ -130,7 +135,7 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
                     <label
                       className="usa-label"
                       htmlFor={'irs-deficiency-amount'}
@@ -154,7 +159,7 @@ export const AddDeficiencyStatistics = connect(
                 </div>
 
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
                     <label
                       className="usa-label"
                       htmlFor={'irs-total-penalties'}
@@ -257,7 +262,13 @@ export const AddDeficiencyStatistics = connect(
           </div>
 
           <div className="margin-top-3">
-            <Button onClick={() => {}}>Save</Button>
+            <Button
+              onClick={() => {
+                submitAddDeficiencyStatisticsSequence();
+              }}
+            >
+              Save
+            </Button>
 
             <Button link onClick={() => {}}>
               Cancel
