@@ -1,3 +1,4 @@
+import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from 'cerebral';
 
 /**
@@ -16,12 +17,17 @@ export const validateAddDeficiencyStatisticsAction = ({
 }) => {
   const form = get(state.form);
 
+  const combinedForm = combineLastDateOfPeriodFields({
+    applicationContext,
+    form,
+  });
+
   const errors = applicationContext
     .getUseCases()
     .validateAddDeficiencyStatisticsInteractor({
       applicationContext,
       statistic: {
-        ...form,
+        ...combinedForm,
       },
     });
 
