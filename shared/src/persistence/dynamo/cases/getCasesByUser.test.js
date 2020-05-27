@@ -19,7 +19,7 @@ applicationContext.getDocumentClient.mockReturnValue({
 
 const user = {
   role: User.ROLES.petitioner,
-  userId: 'petitioner',
+  userId: '522573b0-dc40-47f7-96fd-64758da315f5',
 };
 
 describe('getCasesByUser', () => {
