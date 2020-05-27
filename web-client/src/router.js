@@ -103,6 +103,16 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-other-statistics',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoEditOtherStatisticsSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*?openModal=*',
       ifHasAccess((docketNumber, openModal) => {
         setPageTitle(`Docket ${docketNumber}`);
