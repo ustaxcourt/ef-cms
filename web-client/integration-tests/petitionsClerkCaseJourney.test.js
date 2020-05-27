@@ -10,7 +10,7 @@ import { petitionsClerkVerifiesPetitionPaymentFeeOptions } from './journey/petit
 
 const test = setupTest();
 
-describe('Petitions clerk paper case flow', () => {
+describe('Petitions clerk case journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -19,7 +19,7 @@ describe('Petitions clerk paper case flow', () => {
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
 
   loginAs(test, 'petitioner');
-  it('Create case', async () => {
+  it('Create case #1', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
@@ -33,6 +33,17 @@ describe('Petitions clerk paper case flow', () => {
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
   petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
+
+  loginAs(test, 'petitioner');
+  it('Create case #2', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    test.documentId = caseDetail.documents[0].documentId;
+    test.caseId = caseDetail.caseId;
+  });
+
+  loginAs(test, 'petitionsclerk');
   petitionsClerkAddsDeficiencyStatisticToCase(test);
   petitionsClerkAddsOtherStatisticsToCase(test);
 });
