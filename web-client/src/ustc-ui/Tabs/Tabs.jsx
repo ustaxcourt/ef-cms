@@ -63,8 +63,8 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   useEffect(() => {
-    defaultActiveTab && setTab(defaultActiveTab);
-  }, [defaultActiveTab]);
+    setTab(activeKey);
+  }, [activeKey]);
 
   const renderTab = child => {
     const { icon, iconColor, id, showIcon, tabName, title } = child.props;
