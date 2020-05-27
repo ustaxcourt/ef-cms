@@ -74,5 +74,35 @@ describe('Statistic', () => {
       });
       expect(statistic.isValid()).toBeTruthy();
     });
+
+    it('requires determinationDeficiencyAmount be defined if determinationTotalPenalties is set', () => {
+      const statistic = new Statistic({
+        determinationTotalPenalties: 100.11,
+        irsDeficiencyAmount: 654.32,
+        irsTotalPenalties: 123.45,
+        lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
+      expect(statistic.isValid()).toBeFalsy();
+      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+        'determinationDeficiencyAmount',
+      ]);
+    });
+
+    it('requires determinationTotalPenalties be defined if determinationDeficiencyAmount is set', () => {
+      const statistic = new Statistic({
+        determinationDeficiencyAmount: 100.11,
+        irsDeficiencyAmount: 654.32,
+        irsTotalPenalties: 123.45,
+        lastDateOfPeriod: '2015-03-01T21:40:46.415Z',
+        year: 2015,
+        yearOrPeriod: 'Year',
+      });
+      expect(statistic.isValid()).toBeFalsy();
+      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+        'determinationTotalPenalties',
+      ]);
+    });
   });
 });
