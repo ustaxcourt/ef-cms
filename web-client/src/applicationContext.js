@@ -87,6 +87,7 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 
+import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
@@ -246,6 +247,7 @@ const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  addDeficiencyStatisticInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,

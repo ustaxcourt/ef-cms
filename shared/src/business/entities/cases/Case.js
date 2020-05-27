@@ -951,6 +951,7 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
         eventCode: document.eventCode,
         filedBy: document.filedBy,
         filingDate: document.receivedAt || document.createdAt,
+        numberOfPages: document.numberOfPages,
       },
       { applicationContext },
     ),
@@ -1793,6 +1794,18 @@ Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
  */
 Case.prototype.fileCorrespondence = function (correspondenceEntity) {
   this.correspondence = [...this.correspondence, correspondenceEntity];
+
+  return this;
+};
+
+/**
+ * adds the statistic to the list of statistics on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.addStatistic = function (statisticEntity) {
+  this.statistics = [...this.statistics, statisticEntity];
 
   return this;
 };
