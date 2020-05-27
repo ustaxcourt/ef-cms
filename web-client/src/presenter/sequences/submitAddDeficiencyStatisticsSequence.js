@@ -1,5 +1,4 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -31,7 +30,6 @@ export const submitAddDeficiencyStatisticsSequence = [
             setSaveAlertsForNavigationAction,
             setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
-            getCaseAction,
             navigateToCaseDetailCaseInformationAction,
           ],
         },

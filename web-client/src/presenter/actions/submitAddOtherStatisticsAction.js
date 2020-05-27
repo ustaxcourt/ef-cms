@@ -25,7 +25,7 @@ export const submitAddOtherStatisticsAction = async ({
     });
     return path.success({
       alertSuccess: {
-        message: 'Statistics updated.',
+        message: 'Other statistics added.',
       },
     });
   } catch (e) {
