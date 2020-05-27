@@ -20,7 +20,12 @@ export const AddDeficiencyStatistics = connect(
     showModal: state.modal.showModal,
     submitAddDeficiencyStatisticsSequence:
       sequences.submitAddDeficiencyStatisticsSequence,
+    updateAddDeficiencyFormValueSequence:
+      sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateAddDeficiencyStatisticsSequence:
+      sequences.validateAddDeficiencyStatisticsSequence,
+    validationErrors: state.validationErrors,
   },
   function StatisticsForm({
     calculatePenaltiesForAddSequence,
@@ -28,7 +33,10 @@ export const AddDeficiencyStatistics = connect(
     showCalculatePenaltiesModalSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
+    updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
+    validateAddDeficiencyStatisticsSequence,
+    validationErrors,
   }) {
     return (
       <>
@@ -57,11 +65,12 @@ export const AddDeficiencyStatistics = connect(
                         name="yearOrPeriod"
                         type="radio"
                         value={option}
-                        onChange={e => {
-                          updateFormValueSequence({
+                        onChange={async e => {
+                          await updateAddDeficiencyFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          await validateAddDeficiencyStatisticsSequence();
                         }}
                       />
                       <label
@@ -78,7 +87,7 @@ export const AddDeficiencyStatistics = connect(
               <div className="grid-row grid-gap-4">
                 <div className="grid-col-3">
                   {form.yearOrPeriod === 'Year' && (
-                    <FormGroup>
+                    <FormGroup errorText={validationErrors.year}>
                       <label className="usa-label" htmlFor={'year'}>
                         Year
                       </label>
@@ -89,7 +98,7 @@ export const AddDeficiencyStatistics = connect(
                         name={'year'}
                         placeholder="YYYY"
                         value={form.year || ''}
-                        // onBlur={() => validatePetitionFromPaperSequence()}
+                        onBlur={() => validateAddDeficiencyStatisticsSequence()}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -101,7 +110,7 @@ export const AddDeficiencyStatistics = connect(
                   )}
 
                   {form.yearOrPeriod === 'Period' && (
-                    <FormGroup>
+                    <FormGroup errorText={validationErrors.lastDateOfPeriod}>
                       <DateInput
                         id={'last-date-of-period'}
                         label="Last date of period"
@@ -115,7 +124,7 @@ export const AddDeficiencyStatistics = connect(
                           month: form.lastDateOfPeriodMonth,
                           year: form.lastDateOfPeriodYear,
                         }}
-                        // onBlur={() => validatePetitionFromPaperSequence()}
+                        onBlur={() => validateAddDeficiencyStatisticsSequence()}
                         onChange={({ key, value }) => {
                           updateFormValueSequence({
                             key,
@@ -130,7 +139,7 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
                     <label
                       className="usa-label"
                       htmlFor={'irs-deficiency-amount'}
@@ -142,7 +151,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'irs-deficiency-amount'}
                       name={'irsDeficiencyAmount'}
                       value={form.irsDeficiencyAmount || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'irsDeficiencyAmount',
@@ -154,7 +163,7 @@ export const AddDeficiencyStatistics = connect(
                 </div>
 
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup errorText={validationErrors.irsTotalPenalties}>
                     <label
                       className="usa-label"
                       htmlFor={'irs-total-penalties'}
@@ -166,7 +175,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'irs-deficiency-amount'}
                       name={'irsTotalPenalties'}
                       value={form.irsTotalPenalties || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'irsTotalPenalties',
@@ -193,7 +202,9 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup
+                    errorText={validationErrors.determinationDeficiencyAmount}
+                  >
                     <label
                       className="usa-label"
                       htmlFor={'determination-deficiency-amount'}
@@ -205,7 +216,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'determination-deficiency-amount'}
                       name={'determinationDeficiencyAmount'}
                       value={form.determinationDeficiencyAmount || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'determinationDeficiencyAmount',
@@ -217,7 +228,9 @@ export const AddDeficiencyStatistics = connect(
                 </div>
 
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup
+                    errorText={validationErrors.determinationTotalPenalties}
+                  >
                     <label
                       className="usa-label"
                       htmlFor={'deficiency-total-penalties'}
@@ -229,7 +242,7 @@ export const AddDeficiencyStatistics = connect(
                       id={'deficiency-total-penalties'}
                       name={'determinationTotalPenalties'}
                       value={form.determinationTotalPenalties || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
+                      onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
                         updateFormValueSequence({
                           key: 'determinationTotalPenalties',
@@ -257,7 +270,11 @@ export const AddDeficiencyStatistics = connect(
           </div>
 
           <div className="margin-top-3">
-            <Button onClick={() => submitAddDeficiencyStatisticsSequence()}>
+            <Button
+              onClick={() => {
+                submitAddDeficiencyStatisticsSequence();
+              }}
+            >
               Save
             </Button>
 
@@ -268,7 +285,10 @@ export const AddDeficiencyStatistics = connect(
         </section>
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
-            confirmSequenceOverride={() => calculatePenaltiesForAddSequence()}
+            confirmSequenceOverride={async () => {
+              await calculatePenaltiesForAddSequence();
+              await validateAddDeficiencyStatisticsSequence();
+            }}
           />
         )}
       </>
