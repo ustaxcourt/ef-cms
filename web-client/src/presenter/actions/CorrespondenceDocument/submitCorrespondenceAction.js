@@ -48,7 +48,7 @@ export const submitCorrespondenceAction = async ({
       .getUseCases()
       .updateCorrespondenceDocumentInteractor({
         applicationContext,
-        documentIdToEdit,
+        documentId: documentIdToEdit,
         documentMetadata,
       });
   } else {

@@ -14,7 +14,7 @@ describe('submitPendingCaseAssociationRequest', () => {
 
   it('should throw an error when not authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -30,12 +30,12 @@ describe('submitPendingCaseAssociationRequest', () => {
 
   it('should not add mapping if already associated', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

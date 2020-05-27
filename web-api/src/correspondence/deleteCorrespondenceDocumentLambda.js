@@ -8,13 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.deleteCorrespondenceDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, documentIdToDelete } = event.pathParameters || {};
+    const { caseId, documentId } = event.pathParameters || {};
 
     return await applicationContext
       .getUseCases()
       .deleteCorrespondenceDocumentInteractor({
         applicationContext,
         caseId,
-        documentIdToDelete,
+        documentId,
       });
   });

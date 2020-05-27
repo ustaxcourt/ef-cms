@@ -165,12 +165,22 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('click the small radio button', () => {
+  it('click the regular radio button', () => {
     cy.get('#procedure-type-radios').scrollIntoView();
-    cy.get('#procedure-type-radios label').first().click();
+    cy.get('#procedure-type-radios label').eq(1).click();
   });
 
   it('select a city', () => {
+    cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+  });
+
+  it('click the small radio button', () => {
+    cy.get('#procedure-type-radios').scrollIntoView();
+    cy.get('#procedure-type-radios label').eq(0).click();
+  });
+
+  it('select a city', () => {
+    cy.get('#preferred-trial-city').should('have.value', '');
     cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
   });
 
