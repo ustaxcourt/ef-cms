@@ -349,7 +349,7 @@ describe('documentGenerators', () => {
           reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
           
           <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>`,
-          orderTitle: 'Order',
+          orderTitle: 'ORDER',
           signatureText: 'Test Signature',
         },
       });

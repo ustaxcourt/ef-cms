@@ -54,7 +54,9 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
     },
   });
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .saveFileAndGenerateUrl({ applicationContext, file: orderPdf });
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
+    applicationContext,
+    file: orderPdf,
+    useTempBucket: true,
+  });
 };

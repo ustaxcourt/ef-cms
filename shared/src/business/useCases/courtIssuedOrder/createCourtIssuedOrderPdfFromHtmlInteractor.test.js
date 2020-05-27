@@ -55,14 +55,14 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
   });
 
-  it('returns the pdf url', async () => {
+  it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
     });
 
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
-    ).toBeCalled();
+    ).toBeCalledWith(expect.objectContaining({ useTempBucket: true }));
     expect(result).toEqual(mockPdfUrl);
   });
 });
