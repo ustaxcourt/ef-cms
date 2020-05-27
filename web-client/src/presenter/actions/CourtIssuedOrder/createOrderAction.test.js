@@ -32,12 +32,16 @@ describe('createOrderAction', () => {
         caseDetail: {
           caseCaption: 'Guy Fieri',
         },
+        form: {
+          documentTitle: 'Test Title',
+          richText: '<b>Foo</b>',
+        },
       },
     });
 
-    expect(applicationContextForClient.getCaseTitle).toBeCalled();
-    expect(applicationContextForClient.getPdfStyles).toBeCalled();
-    expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
+    expect(result.output.contentHtml).toEqual('<b>Foo</b>');
+    expect(result.output.documentTitle).toEqual('TEST TITLE');
+    expect(result.output.signatureText).toEqual('');
   });
 
   it('creates an order for a notice', async () => {
@@ -59,12 +63,11 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(applicationContextForClient.getCaseTitle).toBeCalled();
-    expect(applicationContextForClient.getPdfStyles).toBeCalled();
     expect(
       applicationContextForClient.getClerkOfCourtNameForSigning,
     ).toBeCalled();
-    expect(result.output.htmlString.indexOf('Guy Fieri')).toBeTruthy();
-    expect(result.output.htmlString.indexOf('Bobby Flay')).toBeTruthy();
+    expect(result.output.contentHtml).toEqual('');
+    expect(result.output.documentTitle).toEqual('');
+    expect(result.output.signatureText).toEqual('Bobby Flay');
   });
 });
