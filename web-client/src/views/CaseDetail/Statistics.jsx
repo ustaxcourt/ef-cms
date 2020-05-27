@@ -13,6 +13,16 @@ export const Statistics = connect(
       <>
         {statisticsHelper.showAddButtons && (
           <div className="grid-row grid-gap flex-justify-end margin-bottom-2">
+            {statisticsHelper.showAddDeficiencyStatisticsButton && (
+              <Button
+                link
+                className="push-right padding-0"
+                href={`/case-detail/${caseDetail.docketNumber}/add-deficiency-statistics`}
+                icon="plus-circle"
+              >
+                Add New Year/Period
+              </Button>
+            )}
             {statisticsHelper.showAddOtherStatisticsButton && (
               <Button
                 link
@@ -23,14 +33,12 @@ export const Statistics = connect(
                 Add Other Statistics
               </Button>
             )}
-            {statisticsHelper.showAddDeficiencyStatisticsButton && (
-              <Button link className="push-right padding-0" icon="plus-circle">
-                Add Deficiency Statistics
-              </Button>
-            )}
           </div>
         )}
-        {statisticsHelper.formattedStatistics ? (
+        {statisticsHelper.showNoStatistics && (
+          <p>There are no statistics for this case.</p>
+        )}
+        {statisticsHelper.formattedStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>
@@ -89,8 +97,6 @@ export const Statistics = connect(
               </table>
             </div>
           </div>
-        ) : (
-          <p>There are no statistics for this case.</p>
         )}
         {statisticsHelper.showOtherStatistics && (
           <div className="grid-row grid-gap flex-justify">

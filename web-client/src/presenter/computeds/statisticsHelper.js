@@ -81,6 +81,7 @@ export const statisticsHelper = (get, applicationContext) => {
     showAddDeficiencyStatisticsButton,
     showAddOtherStatisticsButton,
     showEditButtons: permissions.ADD_EDIT_STATISTICS,
+    showNoStatistics: !formattedStatistics && !showOtherStatistics,
     showOtherStatistics,
   };
 };

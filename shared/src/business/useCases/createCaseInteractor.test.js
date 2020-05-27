@@ -143,6 +143,9 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(3);
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
@@ -203,5 +206,8 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(3);
   });
 });

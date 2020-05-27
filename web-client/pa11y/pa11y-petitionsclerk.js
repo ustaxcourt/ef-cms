@@ -307,6 +307,19 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
   },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-statistics to be visible',
+      'click element #tab-statistics',
+      'wait for #tabContent-statistics to be visible',
+    ],
+    notes: 'checks the case detail => case information => statistics tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20&info=statistics',
+  },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/add-other-statistics',
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',

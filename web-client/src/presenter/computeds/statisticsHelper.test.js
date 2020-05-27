@@ -200,4 +200,48 @@ describe('statisticsHelper', () => {
 
     expect(result.showEditButtons).toEqual(true);
   });
+
+  it('returns showNoStatistics true if there are no statistics on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {},
+      },
+    });
+
+    expect(result.showNoStatistics).toEqual(true);
+  });
+
+  it('returns showNoStatistics false if there are statistics on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          statistics: [
+            {
+              irsDeficiencyAmount: 123,
+              irsTotalPenalties: 30000,
+              year: '2012',
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showNoStatistics).toEqual(false);
+  });
+
+  it('returns showNoStatistics false if there are damages on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          damages: 1234,
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showNoStatistics).toEqual(false);
+  });
 });
