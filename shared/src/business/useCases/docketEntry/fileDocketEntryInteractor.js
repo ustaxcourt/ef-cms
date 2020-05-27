@@ -98,10 +98,17 @@ exports.fileDocketEntryInteractor = async ({
   for (let document of documentsToFile) {
     const [documentId, metadata, relationship] = document;
 
+    console.log('documentId', documentId);
+    console.log('metadata', metadata);
+
     if (documentId && metadata) {
-      const numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, documentId });
+      let numberOfPages = null;
+
+      if (metadata.isFileAttached) {
+        numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({ applicationContext, documentId });
+      }
 
       const documentEntity = new Document(
         {
