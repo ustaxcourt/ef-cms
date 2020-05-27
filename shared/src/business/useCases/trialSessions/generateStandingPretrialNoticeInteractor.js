@@ -1,7 +1,6 @@
 const {
   createISODateString,
   formatDateString,
-  formatNow,
 } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
@@ -33,7 +32,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
       docketNumber,
     });
 
-  const { docketNumberSuffix, irsPractitioners } = caseDetail;
+  const { docketNumberWithSuffix, irsPractitioners } = caseDetail;
 
   let respondentContactText = 'not available at this time';
   if (irsPractitioners && irsPractitioners.length) {
@@ -61,8 +60,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix: `${docketNumber}${docketNumberSuffix || ''}`,
-        footerDate: formatNow('MMDDYYYY'),
+        docketNumberWithSuffix,
         trialInfo: {
           ...trialSession,
           fullStartDate,
