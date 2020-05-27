@@ -133,7 +133,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.archived = rawDocument.archived;
   this.attachments = rawDocument.attachments;
-  this.caseId = rawDocument.caseId;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
@@ -378,13 +377,6 @@ joiValidationDecorator(
       .description(
         'A document that was archived instead of added to the Docket Record.',
       ),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
