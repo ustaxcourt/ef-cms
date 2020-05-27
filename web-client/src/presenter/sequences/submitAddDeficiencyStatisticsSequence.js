@@ -1,7 +1,9 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -27,7 +29,9 @@ export const submitAddDeficiencyStatisticsSequence = [
           success: [
             clearFormAction,
             setSaveAlertsForNavigationAction,
+            setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
+            getCaseAction,
             navigateToCaseDetailCaseInformationAction,
           ],
         },
