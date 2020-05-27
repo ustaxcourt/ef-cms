@@ -17,6 +17,8 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
     });
     await test.runSequence('saveSavedCaseForLaterSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
+
     await test.runSequence('gotoAddDeficiencyStatisticsSequence', {
       docketNumber: test.docketNumber,
     });

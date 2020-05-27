@@ -2,6 +2,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -18,6 +19,7 @@ export const submitAddDeficiencyStatisticsSequence = [
         setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
         getCaseAction,
+        setCaseAction,
         navigateToCaseDetailCaseInformationAction,
       ],
     },
