@@ -1,6 +1,8 @@
 module.exports = {
   addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
     .addConsolidatedCaseLambda,
+  addDeficiencyStatisticLambda: require('./cases/addDeficiencyStatisticLambda')
+    .addDeficiencyStatisticLambda,
   blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda')
     .blockCaseFromTrialLambda,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda')
@@ -16,6 +18,8 @@ module.exports = {
     .updateCaseContextLambda,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .updateCaseTrialSortTagsLambda,
+  updateOtherStatisticsLambda: require('./cases/updateOtherStatisticsLambda')
+    .updateOtherStatisticsLambda,
   updateQcCompleteForTrialLambda: require('./cases/updateQcCompleteForTrialLambda')
     .updateQcCompleteForTrialLambda,
 };

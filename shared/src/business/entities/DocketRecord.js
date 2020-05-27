@@ -25,6 +25,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.documentId = rawDocketRecord.documentId;
   this.editState = rawDocketRecord.editState;
   this.eventCode = rawDocketRecord.eventCode;
+  this.numberOfPages = rawDocketRecord.numberOfPages;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
@@ -91,6 +92,7 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
       .allow(null)

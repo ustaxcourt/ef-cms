@@ -145,6 +145,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isPaper,
         isPending: document && document.pending,
         isServed: document && !!document.servedAt,
+        numberOfPages:
+          record.numberOfPages || (document && document.numberOfPages),
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode:
           record.servedPartiesCode || (document && document.servedPartiesCode),
