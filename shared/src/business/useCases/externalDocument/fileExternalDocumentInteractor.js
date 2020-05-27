@@ -181,6 +181,7 @@ exports.fileExternalDocumentInteractor = async ({
           documentId: documentEntity.documentId,
           eventCode: documentEntity.eventCode,
           filingDate: documentEntity.receivedAt,
+          numberOfPages,
         },
         { applicationContext },
       );
