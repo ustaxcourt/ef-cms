@@ -63,7 +63,6 @@
     "description": "Request for Place of Trial at Birmingham, Alabama",
     "eventCode": "RQT",
     "index": 2,
-    "numberOfPages": 2,
     "docketRecordId": "25099fe1-0353-4e57-b84e-6eacc06e2ebb",
     "pk": "case|2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
     "sk": "docket-record|25099fe1-0353-4e57-b84e-6eacc06e2ebb"

@@ -217,7 +217,6 @@
     "description": "Request for Place of Trial",
     "index": 2,
     "documentId": "af6f67db-3160-4562-ac36-5481ab091952",
-    "numberOfPages": 1,
     "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb"
   },
   {
@@ -560,7 +559,6 @@
     "sk": "document|af6f67db-3160-4562-ac36-5481ab091952",
     "partySecondary": false,
     "documentId": "af6f67db-3160-4562-ac36-5481ab091952",
-    "numberOfPages": 1,
     "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
     "servedAt": "2020-04-14T19:59:46.672Z",
     "documentTitle": "Request for Place of Trial at San Francisco, California",

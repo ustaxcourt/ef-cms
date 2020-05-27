@@ -75,7 +75,6 @@
     "description": "Request for Place of Trial at Boise, Idaho",
     "eventCode": "RQT",
     "index": 2,
-    "numberOfPages": 2,
     "docketRecordId": "654441a9-e6d3-414e-b0dd-60b2898c298e",
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "docket-record|654441a9-e6d3-414e-b0dd-60b2898c298e"

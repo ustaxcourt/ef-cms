@@ -675,7 +675,6 @@
   },
   {
     "eventCode": "RQT",
-    "numberOfPages": 2,
     "docketRecordId": "b9471b59-fbe3-436f-a695-2583f013b975",
     "filingDate": "2020-04-29T15:50:41.686Z",
     "entityName": "DocketRecord",
