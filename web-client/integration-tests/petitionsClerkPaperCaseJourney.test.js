@@ -1,6 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 // import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
+import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
 import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
@@ -32,5 +33,6 @@ describe('Petitions clerk paper case flow', () => {
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
   petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
+  petitionsClerkAddsDeficiencyStatisticToCase(test);
   petitionsClerkAddsOtherStatisticsToCase(test);
 });
