@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/;
+const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/i;
 
 export const trimDocketNumberSearch = searchTerm => {
   const match = docketNumberMatcher.exec(searchTerm.trim());

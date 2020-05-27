@@ -25,6 +25,9 @@ const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
+  addDeficiencyStatisticInteractor,
+} = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -71,9 +74,12 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  order,
   pendingReport,
   receiptOfFiling,
+  standingPretrialNotice,
   standingPretrialOrder,
+  trialCalendar,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   casePublicSearch: casePublicSearchPersistence,
@@ -169,6 +175,9 @@ const {
   createWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/deleteCaseCorrespondence');
+const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -180,6 +189,9 @@ const {
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
+const {
+  deleteCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/deleteCorrespondenceDocumentInteractor');
 const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
@@ -253,6 +265,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  formatJudgeName,
+} = require('../../shared/src/business/utilities/getFormattedJudgeName');
+const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -265,7 +280,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
@@ -295,9 +309,6 @@ const {
 const {
   generateStandingPretrialNoticeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
-const {
-  generateStandingPretrialNoticeTemplate,
-} = require('../../shared/src/business/useCaseHelper/standingPretrialNotice/generateStandingPretrialNoticeTemplate');
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
@@ -738,6 +749,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor');
+const {
   updateCounselOnCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor');
 const {
@@ -758,6 +772,9 @@ const {
 const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
+const {
+  updateOtherStatisticsInteractor,
+} = require('../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor');
 const {
   updatePetitionDetailsInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
@@ -965,9 +982,12 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      order,
       pendingReport,
       receiptOfFiling,
+      standingPretrialNotice,
       standingPretrialOrder,
+      trialCalendar,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -1062,9 +1082,10 @@ module.exports = (appContextUser = {}) => {
         createUser,
         createUserInboxRecord,
         createWorkItem,
+        deleteCaseCorrespondence,
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
-        deleteDocument: args => (process.env.CI ? null : deleteDocument(args)),
+        deleteDocument,
         deleteElasticsearchReindexRecord,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -1205,8 +1226,6 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
-        generateStandingPretrialNoticeTemplate,
-        generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
     },
@@ -1231,6 +1250,7 @@ module.exports = (appContextUser = {}) => {
         addCaseToTrialSessionInteractor,
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
+        addDeficiencyStatisticInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
@@ -1242,7 +1262,6 @@ module.exports = (appContextUser = {}) => {
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
-
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
@@ -1253,6 +1272,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
+        deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
@@ -1343,11 +1363,13 @@ module.exports = (appContextUser = {}) => {
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateCorrespondenceDocumentInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updateDocketEntryMetaInteractor,
+        updateOtherStatisticsInteractor,
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
@@ -1373,6 +1395,7 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatCaseForTrialSession,
         formatDateString,
+        formatJudgeName,
         formatNow,
         formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,

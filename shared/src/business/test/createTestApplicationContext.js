@@ -37,6 +37,9 @@ const {
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatJudgeName,
+} = require('../../../src/business/utilities/getFormattedJudgeName');
+const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -180,6 +183,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
+    formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formattedTrialSessionDetails: jest
       .fn()
@@ -227,9 +231,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialNotice: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    trialCalendar: jest.fn().mockImplementation(getFakeFile),
   };
 
   const getTemplateGeneratorsReturnMock = {
@@ -239,8 +246,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
@@ -394,7 +399,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfStyles: jest.fn(),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
       compile: () => {

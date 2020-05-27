@@ -8,9 +8,6 @@ const {
   generatePrintableDocketRecordTemplate,
 } = require('./generatePrintableDocketRecordTemplate');
 const {
-  generateTrialCalendarTemplate,
-} = require('./generateTrialCalendarTemplate');
-const {
   generateTrialSessionPlanningReportTemplate,
 } = require('./generateTrialSessionPlanningReportTemplate');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
@@ -20,6 +17,5 @@ module.exports = {
   generateHTMLTemplateForPDF,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 };

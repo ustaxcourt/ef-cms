@@ -16,6 +16,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
@@ -247,8 +248,10 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.blockedDate = rawCase.blockedDate;
     this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
+    this.damages = rawCase.damages;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
+    this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
     this.userId = rawCase.userId;
@@ -311,7 +314,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.correspondence = [];
   }
@@ -319,7 +322,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
   } else {
     this.documents = [];
   }
@@ -476,6 +479,11 @@ Case.validationRules = {
     .description(
       'When the paper or electronic case was added to the system. This value cannot be edited.',
     ),
+  damages: joi
+    .number()
+    .optional()
+    .allow(null)
+    .description('Damages for the case.'),
   docketNumber: joi
     .string()
     .regex(DOCKET_NUMBER_MATCHER)
@@ -560,6 +568,11 @@ Case.validationRules = {
     .description(
       'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
     ),
+  litigationCosts: joi
+    .number()
+    .optional()
+    .allow(null)
+    .description('Litigation costs for the case.'),
   mailingDate: joi
     .when('isPaper', {
       is: true,
@@ -938,6 +951,7 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
         eventCode: document.eventCode,
         filedBy: document.filedBy,
         filingDate: document.receivedAt || document.createdAt,
+        numberOfPages: document.numberOfPages,
       },
       { applicationContext },
     ),
@@ -1052,7 +1066,9 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 };
 
 Case.prototype.getDocumentById = function ({ documentId }) {
-  return this.documents.find(document => document.documentId === documentId);
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+
+  return allCaseDocuments.find(document => document.documentId === documentId);
 };
 
 Case.prototype.getPetitionDocument = function () {
@@ -1161,14 +1177,17 @@ Case.prototype.updateDocketRecord = function (
 
 /**
  *
- * @param {Document} updatedDocument the document to update on the case
+ * @param {Document|Correspondence} updatedDocument the document or correspondence to update on the case
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function (updatedDocument) {
-  const foundDocument = this.documents.find(
+  const allCaseDocuments = [...this.documents, ...this.correspondence];
+  const foundDocument = allCaseDocuments.find(
     document => document.documentId === updatedDocument.documentId,
   );
+
   if (foundDocument) Object.assign(foundDocument, updatedDocument);
+
   return this;
 };
 
@@ -1775,6 +1794,18 @@ Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
  */
 Case.prototype.fileCorrespondence = function (correspondenceEntity) {
   this.correspondence = [...this.correspondence, correspondenceEntity];
+
+  return this;
+};
+
+/**
+ * adds the statistic to the list of statistics on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.addStatistic = function (statisticEntity) {
+  this.statistics = [...this.statistics, statisticEntity];
 
   return this;
 };

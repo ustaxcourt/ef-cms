@@ -286,6 +286,8 @@ Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
 
 Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
 
+Document.OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -368,8 +370,8 @@ joiValidationDecorator(
   Document,
   joi.object().keys({
     addToCoversheet: joi.boolean().optional(),
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(500).optional(),
+    additionalInfo2: joi.string().max(500).optional(),
     archived: joi
       .boolean()
       .optional()
@@ -378,6 +380,9 @@ joiValidationDecorator(
       ),
     caseId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .description('Unique ID of the associated Case.'),
     certificateOfService: joi.boolean().optional(),
@@ -404,6 +409,7 @@ joiValidationDecorator(
       .description('Docket Number of the associated Case in XXXXX-YY format.'),
     docketNumbers: joi
       .string()
+      .max(500)
       .optional()
       .description(
         'Optional Docket Number text used when generating a fully concatenated document title.',
@@ -424,6 +430,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     documentTitle: joi
       .string()
+      .max(500)
       .optional()
       .description('The title of this document.'),
     documentType: joi
@@ -439,8 +446,8 @@ joiValidationDecorator(
       .max('now')
       .required()
       .description('Date that this Document was filed.'),
-    freeText: joi.string().optional(),
-    freeText2: joi.string().optional(),
+    freeText: joi.string().max(500).optional(),
+    freeText2: joi.string().max(500).optional(),
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
@@ -456,7 +463,10 @@ joiValidationDecorator(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
     numberOfPages: joi.number().optional().allow(null),
-    objections: joi.string().optional(),
+    objections: joi
+      .string()
+      .valid(...Document.OBJECTIONS_OPTIONS)
+      .optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrimary: joi
@@ -471,14 +481,20 @@ joiValidationDecorator(
     previousDocument: joi.object().optional(),
     privatePractitioners: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(500).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
       ),
     processingStatus: joi.string().optional(),
     qcAt: joiStrictTimestamp.optional(),
-    qcByUserId: joi.string().optional().allow(null),
+    qcByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
@@ -498,7 +514,7 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().required() })
+      .items({ name: joi.string().max(500).required() })
       .optional(),
     serviceDate: joiStrictTimestamp
       .max('now')
@@ -507,7 +523,13 @@ joiValidationDecorator(
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi.string().optional().allow(null),
+    signedByUserId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional()
+      .allow(null),
     signedJudgeName: joi.string().optional().allow(null),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
@@ -517,7 +539,12 @@ joiValidationDecorator(
       .description(
         'An optional trial location used when generating a fully concatenated document title.',
       ),
-    userId: joi.string().required(),
+    userId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .required(),
     workItems: joi.array().optional(),
   }),
 );
@@ -650,6 +677,18 @@ Document.prototype.isAutoServed = function () {
     (isExternalDocumentType || isPractitionerAssociationDocumentType) &&
     !isSimultaneous
   );
+};
+
+/**
+ * retrieves formatted document type (stripped eventCode, without the dash).
+ * if it's TCOP - TC Opinion, it retrieves TC Opinion.
+ * if it's Summary Opinion, then it returns Summary Opinion
+ *
+ * @param {string} documentType document type to strip the event code
+ * @returns {string} formatted document type
+ */
+Document.getFormattedType = function (documentType) {
+  return documentType.split('-').slice(-1).join('').trim();
 };
 
 exports.Document = Document;

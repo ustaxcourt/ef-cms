@@ -45,21 +45,21 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
       filingType: 'Myself',
@@ -67,7 +67,7 @@ describe('fileExternalDocumentInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
     applicationContext.getCurrentUser.mockReturnValue(
@@ -126,6 +126,9 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(updatedCase.documents[3].servedAt).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
@@ -186,6 +189,9 @@ describe('fileExternalDocumentInteractor', () => {
         lodged: true,
       },
     ]);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {

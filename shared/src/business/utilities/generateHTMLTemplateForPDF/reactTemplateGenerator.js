@@ -33,8 +33,15 @@ const {
   ReportsMetaHeader,
 } = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
 const {
+  StandingPretrialNotice,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialNotice.jsx');
+const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+const {
+  TrialCalendar,
+} = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
+const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
 const {
@@ -54,12 +61,15 @@ const components = {
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  Order,
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
   ReceiptOfFiling,
   ReportsMetaHeader,
+  StandingPretrialNotice,
   StandingPretrialOrder,
+  TrialCalendar,
 };
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {

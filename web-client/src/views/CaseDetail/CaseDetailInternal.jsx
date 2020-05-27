@@ -15,6 +15,7 @@ import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SealCaseModal } from './SealCaseModal';
+import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -108,6 +109,9 @@ export const CaseDetailInternal = connect(
             >
               <Tab id="tab-overview" tabName="overview" title="Overview">
                 <CaseInformationInternal />
+              </Tab>
+              <Tab id="tab-statistics" tabName="statistics" title="Statistics">
+                <Statistics />
               </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
                 <PetitionerInformation />

@@ -83,6 +83,26 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-deficiency-statistics',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddDeficiencyStatisticsSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/add-other-statistics',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddOtherStatisticsSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*?openModal=*',
       ifHasAccess((docketNumber, openModal) => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -434,6 +454,19 @@ const router = {
         );
         return app.getSequence('gotoUploadCorrespondenceDocumentSequence')({
           docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-correspondence/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
+        );
+        return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+          docketNumber,
+          documentId,
         });
       }),
     );
