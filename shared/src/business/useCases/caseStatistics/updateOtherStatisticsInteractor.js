@@ -10,7 +10,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Promise} the promise of the createUser call
+ * @param {string} providers.caseId the id of the case to update statistics
+ * @param {number} providers.damages damages statistic to add to the case
+ * @param {number} providers.litigationCosts litigation costs statistic to add to the case
+ * @returns {object} the updated case
  */
 exports.updateOtherStatisticsInteractor = async ({
   applicationContext,
@@ -28,10 +31,10 @@ exports.updateOtherStatisticsInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const newCase = new Case(oldCase, { applicationContext });
-
-  newCase.damages = damages;
-  newCase.litigationCosts = litigationCosts;
+  const newCase = new Case(
+    { ...oldCase, damages, litigationCosts },
+    { applicationContext },
+  );
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
