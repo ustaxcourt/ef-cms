@@ -1,3 +1,4 @@
+import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from 'cerebral';
 /**
  * submits the add deficiency statistics form
@@ -21,7 +22,10 @@ export const submitAddDeficiencyStatisticsAction = async ({
     lastDateOfPeriod,
     year,
     yearOrPeriod,
-  } = get(state.form);
+  } = combineLastDateOfPeriodFields({
+    applicationContext,
+    form: get(state.form),
+  });
 
   const { caseId } = get(state.caseDetail);
 
