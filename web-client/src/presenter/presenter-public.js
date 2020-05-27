@@ -10,6 +10,7 @@ import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSeq
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
+import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
@@ -38,6 +39,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
+    notFoundErrorSequence,
     showMoreResultsSequence,
     submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
