@@ -452,10 +452,6 @@ const applicationContext = {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
   },
-  getPdfStyles: async () => {
-    const pdfStyles = await import('../../shared/src/tools/pdfStyles.js');
-    return pdfStyles;
-  },
   getPersistenceGateway: () => {
     return {
       getDocument,
