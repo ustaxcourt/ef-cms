@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { Statistic } from '../../../shared/src/business/entities/Statistic';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {
@@ -47,6 +48,14 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
     await test.runSequence('updateFormValueSequence', {
       key: 'year',
       value: 2019,
+    });
+
+    await test.runSequence('submitAddDeficiencyStatisticsSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      irsDeficiencyAmount:
+        Statistic.VALIDATION_ERROR_MESSAGES.irsDeficiencyAmount,
+      irsTotalPenalties: Statistic.VALIDATION_ERROR_MESSAGES.irsTotalPenalties,
     });
 
     await test.runSequence('updateFormValueSequence', {
