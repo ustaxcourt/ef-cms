@@ -307,6 +307,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/add-other-statistics',
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
