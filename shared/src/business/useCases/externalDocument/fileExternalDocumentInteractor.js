@@ -110,12 +110,17 @@ exports.fileExternalDocumentInteractor = async ({
 
   for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
+      const numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({ applicationContext, documentId });
+
       const documentEntity = new Document(
         {
           ...baseMetadata,
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          numberOfPages,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
@@ -176,6 +181,7 @@ exports.fileExternalDocumentInteractor = async ({
           documentId: documentEntity.documentId,
           eventCode: documentEntity.eventCode,
           filingDate: documentEntity.receivedAt,
+          numberOfPages,
         },
         { applicationContext },
       );
