@@ -9,11 +9,24 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
-      value: false,
+      value: true,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: Case.CASE_TYPES_MAP.deficiency,
+    });
+    await test.runSequence('refreshStatisticsSequence');
+    await test.runSequence('updateFormValueSequence', {
+      key: 'statistics.0.year',
+      value: 2019,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'statistics.0.irsDeficiencyAmount',
+      value: 1000,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'statistics.0.irsTotalPenalties',
+      value: 100,
     });
     await test.runSequence('saveSavedCaseForLaterSequence');
 
