@@ -25,7 +25,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.documentId = rawDocketRecord.documentId;
   this.editState = rawDocketRecord.editState;
   this.eventCode = rawDocketRecord.eventCode;
-  this.numberOfPages = rawDocketRecord.numberOfPages;
+  this.numberOfPages = rawDocketRecord.numberOfPages || 0;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
