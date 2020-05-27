@@ -15,6 +15,8 @@ export const AddDeficiencyStatistics = connect(
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
     form: state.form,
+    setupAddDeficiencyStatisticsFormSequence:
+      sequences.setupAddDeficiencyStatisticsFormSequence,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
@@ -28,6 +30,7 @@ export const AddDeficiencyStatistics = connect(
   function StatisticsForm({
     calculatePenaltiesForAddSequence,
     form,
+    setupAddDeficiencyStatisticsFormSequence,
     showCalculatePenaltiesModalSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
@@ -63,10 +66,14 @@ export const AddDeficiencyStatistics = connect(
                         type="radio"
                         value={option}
                         onChange={e => {
+                          setupAddDeficiencyStatisticsFormSequence({
+                            yearOrPeriod: e.target.value,
+                          });
                           updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateAddDeficiencyStatisticsSequence();
                         }}
                       />
                       <label
@@ -159,7 +166,7 @@ export const AddDeficiencyStatistics = connect(
                 </div>
 
                 <div className="grid-col-3">
-                  <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
+                  <FormGroup errorText={validationErrors.irsTotalPenalties}>
                     <label
                       className="usa-label"
                       htmlFor={'irs-total-penalties'}
@@ -198,7 +205,9 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup
+                    errorText={validationErrors.determinationDeficiencyAmount}
+                  >
                     <label
                       className="usa-label"
                       htmlFor={'determination-deficiency-amount'}
@@ -222,7 +231,9 @@ export const AddDeficiencyStatistics = connect(
                 </div>
 
                 <div className="grid-col-3">
-                  <FormGroup>
+                  <FormGroup
+                    errorText={validationErrors.determinationTotalPenalties}
+                  >
                     <label
                       className="usa-label"
                       htmlFor={'deficiency-total-penalties'}
@@ -277,7 +288,10 @@ export const AddDeficiencyStatistics = connect(
         </section>
         {showModal === 'CalculatePenaltiesModal' && (
           <CalculatePenaltiesModal
-            confirmSequenceOverride={() => calculatePenaltiesForAddSequence()}
+            confirmSequenceOverride={async () => {
+              await calculatePenaltiesForAddSequence();
+              await validateAddDeficiencyStatisticsSequence();
+            }}
           />
         )}
       </>
