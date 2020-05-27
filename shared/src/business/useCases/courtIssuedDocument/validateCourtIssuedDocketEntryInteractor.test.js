@@ -1,6 +1,6 @@
 const {
-  CourtIssuedDocumentFactory,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   validateCourtIssuedDocketEntryInteractor,
 } = require('./validateCourtIssuedDocketEntryInteractor');
@@ -11,11 +11,7 @@ const {
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns default errors on empty entryMetadata', () => {
     const errors = validateCourtIssuedDocketEntryInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CourtIssuedDocumentFactory,
-        }),
-      },
+      applicationContext,
       entryMetadata: {},
     });
 
@@ -27,11 +23,7 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
 
   it('returns expected errors when only scenario is set', () => {
     const errors = validateCourtIssuedDocketEntryInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CourtIssuedDocumentFactory,
-        }),
-      },
+      applicationContext,
       entryMetadata: {
         scenario: 'Type A',
       },
@@ -45,11 +37,7 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
 
   it('returns no errors when all required data fields are set', () => {
     const errors = validateCourtIssuedDocketEntryInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CourtIssuedDocumentFactory,
-        }),
-      },
+      applicationContext,
       entryMetadata: {
         attachments: false,
         documentTitle: 'Order fixing amount of bond at [Anything]',

@@ -9,8 +9,8 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'partyType',
-      value: 'Guardian',
+      key: 'contactPrimary.name',
+      value: 'New Name',
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
@@ -20,9 +20,9 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
   });
 
   it('should save edits to an in progress case', async () => {
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     await wait(500);
@@ -69,7 +69,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(servedCase).toMatchObject({
-      caseCaptionNames: 'Mona Schultz',
+      caseTitle: 'Mona Schultz',
     });
     expect(servedCase.caseStatus).toEqual(Case.STATUS_TYPES.generalDocket);
   });
@@ -95,7 +95,7 @@ export const petitionsClerkEditsAnExistingCaseAndServesCase = test => {
       .find(x => x.docketNumber === test.docketNumber);
 
     expect(sectionServedCase).toMatchObject({
-      caseCaptionNames: 'Mona Schultz',
+      caseTitle: 'Mona Schultz',
     });
     expect(sectionServedCase.caseStatus).toEqual(
       Case.STATUS_TYPES.generalDocket,

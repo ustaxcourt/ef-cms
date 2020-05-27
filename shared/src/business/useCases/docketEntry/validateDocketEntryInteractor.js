@@ -1,3 +1,7 @@
+const {
+  DocketEntryFactory,
+} = require('../../entities/docketEntry/DocketEntryFactory');
+
 /**
  * validateDocketEntryInteractor
  *
@@ -10,9 +14,7 @@ exports.validateDocketEntryInteractor = ({
   applicationContext,
   entryMetadata,
 }) => {
-  const docketEntry = applicationContext
-    .getEntityConstructors()
-    .DocketEntryFactory(entryMetadata);
+  const docketEntry = DocketEntryFactory(entryMetadata, { applicationContext });
 
   return docketEntry.getFormattedValidationErrors();
 };

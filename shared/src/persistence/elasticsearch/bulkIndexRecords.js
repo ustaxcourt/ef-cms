@@ -1,3 +1,5 @@
+const { getIndexNameForRecord } = require('./getIndexNameForRecord');
+
 exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
@@ -5,10 +7,17 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
     .map(record => ({
       ...record.dynamodb.NewImage,
     }))
-    .flatMap(doc => [
-      { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: 'efcms' } },
-      doc,
-    ]);
+    .flatMap(doc => {
+      const index = getIndexNameForRecord(doc);
+
+      if (index) {
+        return [
+          { index: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } },
+          doc,
+        ];
+      }
+    })
+    .filter(item => item);
 
   const response = await searchClient.bulk({
     body,

@@ -6,6 +6,7 @@ import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
@@ -30,8 +31,6 @@ export const ReviewSavedPetition = connect(
     documentId: state.documentId,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateToEditSavedPetitionSequence:
-      sequences.navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence:
       sequences.openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper: state.reviewSavedPetitionHelper,
@@ -42,10 +41,9 @@ export const ReviewSavedPetition = connect(
   },
   function ReviewSavedPetition({
     constants,
-    documentId,
+    // documentId,
     form,
     formCancelToggleCancelSequence,
-    navigateToEditSavedPetitionSequence,
     openConfirmServeToIrsModalSequence,
     reviewSavedPetitionHelper,
     saveCaseAndServeToIrsSequence,
@@ -53,7 +51,7 @@ export const ReviewSavedPetition = connect(
     showModal,
     startCaseHelper,
   }) {
-    const { caseId } = form;
+    // const { caseId } = form;
 
     return (
       <>
@@ -77,7 +75,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="parties-card">
                       Parties
                       <Button
                         link
@@ -85,11 +83,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'partyInfo',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'partyInfo',
+                          // });
                         }}
                       >
                         Edit
@@ -116,8 +115,8 @@ export const ReviewSavedPetition = connect(
                           <address aria-labelledby="primary-label">
                             {AddressDisplay(form.contactPrimary, constants, {
                               nameOverride:
-                                startCaseHelper.showCaseNameForPrimary &&
-                                startCaseHelper.caseName,
+                                startCaseHelper.showCaseTitleForPrimary &&
+                                startCaseHelper.caseTitle,
                             })}
                           </address>
                         )}
@@ -142,7 +141,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="case-information-card">
                       Case Information
                       <Button
                         link
@@ -150,11 +149,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'caseInfo',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'caseInfo',
+                          // });
                         }}
                       >
                         Edit
@@ -239,7 +239,7 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-7 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">
+                    <h3 className="underlined" id="irs-notice-card">
                       IRS Notice
                       <Button
                         link
@@ -247,11 +247,12 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="edit"
                         onClick={() => {
-                          navigateToEditSavedPetitionSequence({
-                            caseId,
-                            documentId,
-                            tab: 'irsNotice',
-                          });
+                          // TODO in next story
+                          // navigateToEditSavedPetitionSequence({
+                          //   caseId,
+                          //   documentId,
+                          //   tab: 'irsNotice',
+                          // });
                         }}
                       >
                         Edit
@@ -298,16 +299,12 @@ export const ReviewSavedPetition = connect(
               <div className="tablet:grid-col-5 margin-bottom-4">
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Attachments</h3>
+                    <h3 className="underlined" id="attachments-card">
+                      Attachments
+                    </h3>
                     <div>
                       {reviewSavedPetitionHelper.petitionFile && (
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-petition"
-                          >
-                            Petition
-                          </span>
                           <div className="grid-row">
                             <div className="grid-col flex-auto">
                               <PDFPreviewButton
@@ -320,64 +317,56 @@ export const ReviewSavedPetition = connect(
                       )}
                       {reviewSavedPetitionHelper.stinFile && (
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-parties"
-                          >
-                            Statement of Taxpayer Identification
-                          </span>
-                          <div>
-                            <div className="grid-row">
-                              <div className="grid-col flex-auto">
-                                <PDFPreviewButton
-                                  file={reviewSavedPetitionHelper.stinFile}
-                                  title="Statement of Taxpayer Identification"
-                                />
-                              </div>
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <FontAwesomeIcon
+                                className="pdf-preview-btn padding-0"
+                                icon={['fas', 'file-pdf']}
+                                size="1x"
+                              />
+                              Statement of Taxpayer Identification
                             </div>
                           </div>
                         </div>
                       )}
                       {reviewSavedPetitionHelper.requestForPlaceOfTrialFile && (
                         <div className="margin-top-3 margin-bottom-3">
-                          <span
-                            className="usa-label usa-label-display margin-top-3"
-                            htmlFor="filing-parties"
-                          >
-                            Request for Place of Trial
-                          </span>
-                          <div>
-                            <div className="grid-row">
-                              <div className="grid-col flex-auto">
-                                <PDFPreviewButton
-                                  file={
-                                    reviewSavedPetitionHelper.requestForPlaceOfTrialFile
-                                  }
-                                  title="Request for Place of Trial"
-                                />
-                              </div>
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <PDFPreviewButton
+                                file={
+                                  reviewSavedPetitionHelper.requestForPlaceOfTrialFile
+                                }
+                                title="Request for Place of Trial"
+                              />
                             </div>
                           </div>
                         </div>
                       )}
                       {reviewSavedPetitionHelper.ownershipDisclosureFile && (
                         <div className="margin-top-3 margin-bottom-3">
-                          <span
-                            className="usa-label usa-label-display margin-top-3"
-                            htmlFor="filing-parties"
-                          >
-                            Ownership Disclosure Statement
-                          </span>
-                          <div>
-                            <div className="grid-row">
-                              <div className="grid-col flex-auto">
-                                <PDFPreviewButton
-                                  file={
-                                    reviewSavedPetitionHelper.ownershipDisclosureFile
-                                  }
-                                  title="Ownership Disclosure Statement"
-                                />
-                              </div>
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <PDFPreviewButton
+                                file={
+                                  reviewSavedPetitionHelper.ownershipDisclosureFile
+                                }
+                                title="Ownership Disclosure Statement"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile && (
+                        <div className="margin-top-3 margin-bottom-3">
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <PDFPreviewButton
+                                file={
+                                  reviewSavedPetitionHelper.applicationForWaiverOfFilingFeeFile
+                                }
+                                title="Application for Waiver of Filing Fee"
+                              />
                             </div>
                           </div>
                         </div>

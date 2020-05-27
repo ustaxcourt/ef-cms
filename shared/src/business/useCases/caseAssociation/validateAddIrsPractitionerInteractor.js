@@ -1,3 +1,7 @@
+const {
+  AddIrsPractitioner,
+} = require('../../entities/caseAssociation/AddIrsPractitioner');
+
 /**
  * validateAddIrsPractitionerInteractor
  *
@@ -10,9 +14,9 @@ exports.validateAddIrsPractitionerInteractor = ({
   applicationContext,
   counsel,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().AddIrsPractitioner)(
-    counsel,
-  ).getFormattedValidationErrors();
+  const errors = new AddIrsPractitioner(counsel, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 
   if (!errors) return null;
   return errors;

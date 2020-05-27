@@ -36,16 +36,18 @@ export const PractitionerDetail = connect(
             <div className="grid-col-9">
               <SuccessNotification />
             </div>
-            <div className="grid-col-3">
-              <Button
-                link
-                className="push-right margin-bottom-1"
-                href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
-                icon="edit"
-              >
-                Edit
-              </Button>
-            </div>
+            {practitionerDetailHelper.showEditLink && (
+              <div className="grid-col-3">
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              </div>
+            )}
           </div>
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-4 margin-bottom-4">

@@ -35,7 +35,6 @@ joiValidationDecorator(
     role: joi.string().optional().allow(null),
     userId: joi.string().optional().allow(null),
   }),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

@@ -8,9 +8,13 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   #warmup:
   #enabled: true
 
@@ -217,6 +221,9 @@ functions:
           path: /{caseId}/{documentId}
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   fileExternalDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
@@ -268,6 +275,10 @@ functions:
 
   updateDocketEntryMeta:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/docket-entry-meta
@@ -371,6 +382,11 @@ functions:
           path: /{caseId}/{documentId}/document-download-url
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+            identitySource: method.request.querystring.token
+            type: request
 
   orderAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda

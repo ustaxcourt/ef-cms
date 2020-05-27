@@ -47,9 +47,9 @@ const mockPendingItems = [
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseCaptionNames: 'Brett Osborne',
         caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
         caseStatus: 'New',
+        caseTitle: 'Brett Osborne',
         completedAt: '2019-11-13T00:38:59.049Z',
         completedBy: 'Test Docketclerk',
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -132,9 +132,9 @@ const mockPendingItems = [
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseCaptionNames: 'Brett Osborne',
         caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
         caseStatus: 'New',
+        caseTitle: 'Brett Osborne',
         completedAt: '2019-11-13T02:27:07.801Z',
         completedBy: 'Test Docketclerk',
         completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -214,7 +214,7 @@ describe('generatePendingReportPdf', () => {
         environment: {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCaseTitle: Case.getCaseTitle,
         getChromiumBrowser: () => {
           throw new Error('bad!');
         },
@@ -257,7 +257,7 @@ describe('generatePendingReportPdf', () => {
         environment: {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCaseTitle: Case.getCaseTitle,
         getChromiumBrowser: () => chromiumBrowserMock,
         getCurrentUser: () => {
           return { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
@@ -299,7 +299,7 @@ describe('generatePendingReportPdf', () => {
           environment: {
             tempDocumentsBucketName: 'MockDocumentBucketName',
           },
-          getCaseCaptionNames: Case.getCaseCaptionNames,
+          getCaseTitle: Case.getCaseTitle,
           getChromiumBrowser: () => {
             throw new Error('bad!');
           },

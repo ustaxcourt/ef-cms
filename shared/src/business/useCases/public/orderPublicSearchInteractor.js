@@ -1,32 +1,50 @@
-const { map } = require('lodash');
-const { Order } = require('../../entities/orders/Order');
+const { Document } = require('../../entities/Document');
+const { OrderSearch } = require('../../entities/orders/OrderSearch');
 
 /**
  * orderPublicSearchInteractor
  *
- * @param {object} providers object containing applicationContext and other necessary parameters needed for the interactor
+ * @param {object} providers the providers object containing applicationContext, orderKeyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
  * @param {object} providers.applicationContext application context object
- * @param {object} providers.orderKeyword the keyword to be used in the order search
- * @returns {object} the case data
+ * @returns {object} the order search results
  */
 exports.orderPublicSearchInteractor = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,
-  endDate,
+  endDateDay,
+  endDateMonth,
+  endDateYear,
   judge,
   orderKeyword,
-  startDate,
+  startDateDay,
+  startDateMonth,
+  startDateYear,
 }) => {
-  const orderEventCodes = map(Order.ORDER_TYPES, 'eventCode');
-  return await applicationContext.getPersistenceGateway().orderKeywordSearch({
-    applicationContext,
+  const orderSearch = new OrderSearch({
     caseTitleOrPetitioner,
     docketNumber,
-    endDate,
+    endDateDay,
+    endDateMonth,
+    endDateYear,
     judge,
-    orderEventCodes,
     orderKeyword,
-    startDate,
+    startDateDay,
+    startDateMonth,
+    startDateYear,
   });
+
+  const rawSearch = orderSearch.validate().toRawObject();
+
+  const results = await applicationContext
+    .getPersistenceGateway()
+    .orderKeywordSearch({
+      applicationContext,
+      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      ...rawSearch,
+    });
+
+  const filteredResults = results.filter(item => !item.isSealed);
+
+  return filteredResults;
 };

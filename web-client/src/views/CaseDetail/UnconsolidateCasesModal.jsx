@@ -57,7 +57,7 @@ export const UnconsolidateCasesModal = connect(
                     <div className="display-inline margin-right-1">
                       {consolidatedCase.docketNumberWithSuffix}
                     </div>
-                    {consolidatedCase.caseName}
+                    {consolidatedCase.caseTitle}
                   </label>
                 </div>
               ),

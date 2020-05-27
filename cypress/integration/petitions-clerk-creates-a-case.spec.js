@@ -22,31 +22,12 @@ describe('Create case and submit to IRS', function () {
 
     fillInCreateCaseFromPaperForm();
 
+    cy.server();
+    cy.route('POST', '**/paper').as('postPaperCase');
     cy.get('#submit-case').click();
-  });
-
-  it('should display a create case header', () => {
-    const banner = cy.get('.big-blue-header');
-    banner.contains('Create Case');
-  });
-
-  it('should display a tile for party information, case information, irs notice, and attachments each with edit buttons', () => {
-    cy.get('#parties-card').contains('Parties').find('button');
-
-    cy.get('#case-information-card')
-      .contains('Case Information')
-      .find('button');
-
-    cy.get('#irs-notice-card').contains('IRS Notice').find('button');
-
-    cy.get('#attachments-card').contains('Attachments').find('button');
-  });
-
-  it('should display serve to irs button', () => {
-    cy.get('#submit-case').should('exist');
-  });
-
-  it('should display save for later button', () => {
-    cy.get('#save-for-later').should('exist');
+    cy.wait('@postPaperCase');
+    cy.get('@postPaperCase').should(xhr => {
+      expect(xhr.responseBody).to.have.property('docketNumber');
+    });
   });
 });

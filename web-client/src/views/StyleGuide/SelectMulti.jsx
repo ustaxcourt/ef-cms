@@ -6,7 +6,7 @@ export const SelectMulti = () => (
     <hr />
     {/* note: the size attribute MUST be present and greater than 1, but height will be determined by css. */}
     <select className="ustc-select-multi" name="foo" size="2">
-      <option name="option" selected="selected" value="foo">
+      <option name="option" value="foo">
         Don’t make it too complicated.
       </option>{' '}
       <option name="option" value="foo">

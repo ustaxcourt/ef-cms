@@ -3,8 +3,11 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  *
@@ -29,7 +32,7 @@ CourtIssuedDocumentTypeH.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeH.schema = {
   attachments: joi.boolean().required(),
-  date: joi.date().iso().max('now').required(),
+  date: joiStrictTimestamp.max('now').required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().required(),
@@ -38,7 +41,6 @@ CourtIssuedDocumentTypeH.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentTypeH,
   CourtIssuedDocumentTypeH.schema,
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

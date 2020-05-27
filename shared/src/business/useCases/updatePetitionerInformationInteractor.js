@@ -12,6 +12,7 @@ const {
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
+const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -57,7 +58,7 @@ exports.updatePetitionerInformationInteractor = async ({
     oldCase.contactSecondary.name
       ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
           newData: contactSecondary,
-          oldData: oldCase.contactSecondary || {},
+          oldData: oldCase.contactSecondary,
         })
       : undefined;
 
@@ -83,12 +84,15 @@ exports.updatePetitionerInformationInteractor = async ({
     newData,
     oldData,
   }) => {
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+
     const pdfContentHtml = await applicationContext
       .getTemplateGenerators()
       .generateChangeOfAddressTemplate({
         applicationContext,
         content: {
-          caption: caseDetail.caseCaption,
+          caseCaptionExtension,
+          caseTitle,
           docketNumberWithSuffix: `${caseDetail.docketNumber}${
             caseDetail.docketNumberSuffix || ''
           }`,
@@ -224,7 +228,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
 
   return {
-    paperServiceParties: servedParties && servedParties.paper,
+    paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
     updatedCase,
   };

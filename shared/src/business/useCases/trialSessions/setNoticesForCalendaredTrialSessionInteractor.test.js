@@ -243,8 +243,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
 
-    expect(findNoticeOfTrial(calendaredCases[0]).status).toEqual('served');
-    expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
+    expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeDefined();
+    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
 
   it('Should set the servedAt field for the Notice of Trial for each case', async () => {
@@ -385,7 +385,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
-    expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
+    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
 
   it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
@@ -425,12 +425,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
 
-    expect(findStandingPretrialDocument(calendaredCases[0]).status).toEqual(
-      'served',
-    );
-    expect(findStandingPretrialDocument(calendaredCases[1]).status).toEqual(
-      'served',
-    );
+    expect(
+      findStandingPretrialDocument(calendaredCases[0]).servedAt,
+    ).toBeDefined();
+    expect(
+      findStandingPretrialDocument(calendaredCases[1]).servedAt,
+    ).toBeDefined();
   });
 
   it('Should set the servedAt field for the Standing Pretrial Document for each case', async () => {

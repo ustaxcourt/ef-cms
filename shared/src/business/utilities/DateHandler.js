@@ -7,9 +7,11 @@ const FORMATS = {
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
+  SORTABLE_CALENDAR: 'YYYY/MM/DD',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
   YEAR: 'YYYY',
+  YYYYMMDD: 'YYYY-MM-DD',
 };
 
 const USTC_TZ = 'America/New_York';
@@ -31,7 +33,7 @@ const prepareDateFromString = (dateString, inputFormat) => {
 const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
   if (!howMuch) return dateString;
 
-  return prepareDateFromString(dateString, FORMATS.ISO)
+  return prepareDateFromString(dateString || createISODateString(), FORMATS.ISO)
     .add(howMuch, units)
     .toISOString();
 };
@@ -50,6 +52,18 @@ const createISODateString = (dateString, inputFormat) => {
   }
 
   return result.toISOString();
+};
+
+const createEndOfDayISO = ({ day, month, year }) => {
+  const composedDate = `${year}-${month}-${day}T23:59:59.999`;
+  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
+  return prepareDateFromString(composedDate, composedFormat).toISOString();
+};
+
+const createStartOfDayISO = ({ day, month, year }) => {
+  const composedDate = `${year}-${month}-${day}T00:00:00.000`;
+  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
+  return prepareDateFromString(composedDate, composedFormat).toISOString();
 };
 
 /**
@@ -113,6 +127,24 @@ const dateStringsCompared = (a, b) => {
 };
 
 /**
+ * @param {string} a the first date to be compared
+ * @param {string} b the second date to be compared
+ * @returns {number} -1 if date a is larger, 1 if date b is larger, 0 if dates are equal
+ */
+const calendarDatesCompared = (a, b) => {
+  const aFormatEst = formatDateString(a, FORMATS.SORTABLE_CALENDAR);
+  const bFormatEst = formatDateString(b, FORMATS.SORTABLE_CALENDAR);
+
+  if (aFormatEst < bFormatEst) {
+    return -1;
+  } else if (aFormatEst > bFormatEst) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
+
+/**
  * @param {string} dateString date to be deconstructed
  * @returns {object} deconstructed date object
  */
@@ -163,8 +195,11 @@ module.exports = {
   FORMATS,
   calculateDifferenceInDays,
   calculateISODate,
+  calendarDatesCompared,
+  createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
+  createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,

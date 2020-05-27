@@ -9,6 +9,7 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
+import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -383,7 +384,9 @@ export const loginAs = (test, user) => {
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
-  global.Blob = () => {};
+  global.Blob = () => {
+    return fakeFile;
+  };
   global.File = () => {
     return fakeFile;
   };
@@ -410,6 +413,12 @@ export const setupTest = ({ useCases = {} } = {}) => {
   presenter.providers.applicationContext = Object.assign(applicationContext, {
     getScanner: getScannerInterface,
   });
+
+  presenter.providers.applicationContext = applicationContext;
+  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+    socketRouter,
+  });
+  presenter.providers.socket = { start, stop };
 
   test = CerebralTest(presenter);
   test.getSequence = name => async obj => await test.runSequence(name, obj);
@@ -448,12 +457,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     location: {},
   };
-
-  presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
-    socketRouter,
-  });
-  presenter.providers.socket = { start, stop };
 
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
@@ -558,7 +561,11 @@ export const wait = time => {
 };
 
 export const refreshElasticsearchIndex = async () => {
-  await axios.post('http://localhost:9200/efcms/_refresh');
+  await Promise.all(
+    elasticsearchIndexes.map(async index => {
+      await axios.post(`http://localhost:9200/${index}/_refresh`);
+    }),
+  );
   return await wait(1500);
 };
 

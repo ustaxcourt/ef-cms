@@ -19,11 +19,5 @@ exports.runTrialSessionPlanningReportInteractor = ({
       year,
     },
     endpoint: '/reports/planning-report',
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: {
-      responseType: 'blob',
-    },
   });
 };
