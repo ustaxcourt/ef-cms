@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -17,6 +18,8 @@ export const AddDeficiencyStatistics = connect(
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
+    submitAddDeficiencyStatisticsSequence:
+      sequences.submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function StatisticsForm({
@@ -24,6 +27,7 @@ export const AddDeficiencyStatistics = connect(
     form,
     showCalculatePenaltiesModalSequence,
     showModal,
+    submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -49,8 +53,8 @@ export const AddDeficiencyStatistics = connect(
                       <input
                         checked={form.yearOrPeriod === option}
                         className="usa-radio__input"
-                        id={'year-or-period'}
-                        name={'yearOrPeriod'}
+                        id={`year-or-period-${option}`}
+                        name="yearOrPeriod"
                         type="radio"
                         value={option}
                         onChange={e => {
@@ -62,7 +66,7 @@ export const AddDeficiencyStatistics = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'year-or-period'}
+                        htmlFor={`year-or-period-${option}`}
                       >
                         {option}
                       </label>
@@ -73,26 +77,54 @@ export const AddDeficiencyStatistics = connect(
 
               <div className="grid-row grid-gap-4">
                 <div className="grid-col-3">
-                  <FormGroup>
-                    <label className="usa-label" htmlFor={'year'}>
-                      Year
-                    </label>
-                    <input
-                      className="usa-input usa-input-inline"
-                      id={'year'}
-                      maxLength="4"
-                      name={'year'}
-                      placeholder="YYYY"
-                      value={form.year || ''}
-                      // onBlur={() => validatePetitionFromPaperSequence()}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </FormGroup>
+                  {form.yearOrPeriod === 'Year' && (
+                    <FormGroup>
+                      <label className="usa-label" htmlFor={'year'}>
+                        Year
+                      </label>
+                      <input
+                        className="usa-input usa-input-inline year-small"
+                        id={'year'}
+                        maxLength="4"
+                        name={'year'}
+                        placeholder="YYYY"
+                        value={form.year || ''}
+                        // onBlur={() => validatePetitionFromPaperSequence()}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </FormGroup>
+                  )}
+
+                  {form.yearOrPeriod === 'Period' && (
+                    <FormGroup>
+                      <DateInput
+                        id={'last-date-of-period'}
+                        label="Last date of period"
+                        names={{
+                          day: 'lastDateOfPeriodDay',
+                          month: 'lastDateOfPeriodMonth',
+                          year: 'lastDateOfPeriodYear',
+                        }}
+                        values={{
+                          day: form.lastDateOfPeriodDay,
+                          month: form.lastDateOfPeriodMonth,
+                          year: form.lastDateOfPeriodYear,
+                        }}
+                        // onBlur={() => validatePetitionFromPaperSequence()}
+                        onChange={({ key, value }) => {
+                          updateFormValueSequence({
+                            key,
+                            value,
+                          });
+                        }}
+                      />
+                    </FormGroup>
+                  )}
                 </div>
               </div>
 
@@ -106,7 +138,7 @@ export const AddDeficiencyStatistics = connect(
                       Deficiency (IRS Notice)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'irs-deficiency-amount'}
                       name={'irsDeficiencyAmount'}
                       value={form.irsDeficiencyAmount || ''}
@@ -130,7 +162,7 @@ export const AddDeficiencyStatistics = connect(
                       Total penalties (IRS Notice)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'irs-deficiency-amount'}
                       name={'irsTotalPenalties'}
                       value={form.irsTotalPenalties || ''}
@@ -142,23 +174,20 @@ export const AddDeficiencyStatistics = connect(
                         });
                       }}
                     />
+                    <Button
+                      link
+                      className="padding-0 calculate-penalties"
+                      icon="calculator"
+                      onClick={() =>
+                        showCalculatePenaltiesModalSequence({
+                          key: 'irsTotalPenalties',
+                          title: 'Calculate Penalties on IRS Notice',
+                        })
+                      }
+                    >
+                      Calculate penalties on IRS Notice
+                    </Button>
                   </FormGroup>
-                </div>
-
-                <div className="grid-col-3">
-                  <Button
-                    link
-                    className="padding-0 calculate-penalties"
-                    icon="calculator"
-                    onClick={() =>
-                      showCalculatePenaltiesModalSequence({
-                        key: 'irsTotalPenalties',
-                        title: 'Calculate Penalties on IRS Notice',
-                      })
-                    }
-                  >
-                    Calculate Penalties on IRS Notice
-                  </Button>
                 </div>
               </div>
 
@@ -172,7 +201,7 @@ export const AddDeficiencyStatistics = connect(
                       Deficiency (Determination)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'determination-deficiency-amount'}
                       name={'determinationDeficiencyAmount'}
                       value={form.determinationDeficiencyAmount || ''}
@@ -196,7 +225,7 @@ export const AddDeficiencyStatistics = connect(
                       Total penalties (Determination)
                     </label>
                     <DollarsInput
-                      className="usa-input usa-input-inline"
+                      className="usa-input usa-input-inline input-medium"
                       id={'deficiency-total-penalties'}
                       name={'determinationTotalPenalties'}
                       value={form.determinationTotalPenalties || ''}
@@ -208,29 +237,29 @@ export const AddDeficiencyStatistics = connect(
                         });
                       }}
                     />
+                    <Button
+                      link
+                      className="padding-0 calculate-penalties"
+                      icon="calculator"
+                      onClick={() =>
+                        showCalculatePenaltiesModalSequence({
+                          key: 'determinationTotalPenalties',
+                          title: 'Calculate Penalties as determined by Court',
+                        })
+                      }
+                    >
+                      Calculate penalties as determined by Court
+                    </Button>
                   </FormGroup>
-                </div>
-                <div className="grid-col-3">
-                  <Button
-                    link
-                    className="padding-0 calculate-penalties"
-                    icon="calculator"
-                    onClick={() =>
-                      showCalculatePenaltiesModalSequence({
-                        key: 'determinationTotalPenalties',
-                        title: 'Calculate Penalties as determined by Court',
-                      })
-                    }
-                  >
-                    Calculate Penalties as determined by Court
-                  </Button>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="margin-top-3">
-            <Button onClick={() => {}}>Save</Button>
+            <Button onClick={() => submitAddDeficiencyStatisticsSequence()}>
+              Save
+            </Button>
 
             <Button link onClick={() => {}}>
               Cancel

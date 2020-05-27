@@ -1,14 +1,15 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
-import { submitAddOtherStatisticsAction } from '../actions/submitAddOtherStatisticsAction';
+import { submitAddDeficiencyStatisticsAction } from '../actions/submitAddDeficiencyStatisticsAction';
 
-export const submitAddOtherStatisticsSequence = [
+export const submitAddDeficiencyStatisticsSequence = [
   showProgressSequenceDecorator([
-    submitAddOtherStatisticsAction,
+    submitAddDeficiencyStatisticsAction,
     {
       error: [],
       success: [
@@ -16,6 +17,7 @@ export const submitAddOtherStatisticsSequence = [
         setSaveAlertsForNavigationAction,
         setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
+        getCaseAction,
         navigateToCaseDetailCaseInformationAction,
       ],
     },

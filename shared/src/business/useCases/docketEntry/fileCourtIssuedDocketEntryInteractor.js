@@ -61,6 +61,10 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     secondaryDate = documentMeta.date;
   }
 
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({ applicationContext, documentId });
+
   const documentEntity = new Document(
     {
       ...omit(document, 'filedBy'),
@@ -73,6 +77,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       freeText: documentMeta.freeText,
       isFileAttached: true,
       judge: documentMeta.judge,
+      numberOfPages,
       scenario: documentMeta.scenario,
       secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
@@ -137,6 +142,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
         editState: JSON.stringify(documentMeta),
         eventCode: documentEntity.eventCode,
         filingDate: documentEntity.filingDate || createISODateString(),
+        numberOfPages,
       },
       { applicationContext },
     ),
