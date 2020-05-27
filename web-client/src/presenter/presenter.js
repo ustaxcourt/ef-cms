@@ -84,6 +84,7 @@ import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilit
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
+import { gotoAddOtherStatisticsSequence } from './sequences/gotoAddOtherStatisticsSequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
 import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
@@ -493,6 +494,7 @@ export const presenter = {
     gotoAddCourtIssuedDocketEntrySequence,
     gotoAddDeficiencyStatisticsSequence,
     gotoAddDocketEntrySequence,
+    gotoAddOtherStatisticsSequence,
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
     gotoAllCaseDeadlinesSequence,
