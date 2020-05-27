@@ -30,7 +30,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
   const { caseId } = get(state.caseDetail);
 
   try {
-    applicationContext.getUseCases().addDeficiencyStatisticInteractor({
+    await applicationContext.getUseCases().addDeficiencyStatisticInteractor({
       applicationContext,
       caseId,
       determinationDeficiencyAmount,
