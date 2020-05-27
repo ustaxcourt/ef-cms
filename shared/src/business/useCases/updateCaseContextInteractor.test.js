@@ -10,7 +10,7 @@ describe('updateCaseContextInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
-      userId: 'docketClerk',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
   });
 
@@ -35,7 +35,7 @@ describe('updateCaseContextInteractor', () => {
   it('should call updateCase with the updated case status and return the updated case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
-      userId: 'docketClerk',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext
       .getPersistenceGateway()
@@ -110,7 +110,7 @@ describe('updateCaseContextInteractor', () => {
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
-      userId: 'docketClerk',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...MOCK_CASE,
