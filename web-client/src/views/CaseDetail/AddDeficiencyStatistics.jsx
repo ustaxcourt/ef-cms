@@ -18,6 +18,8 @@ export const AddDeficiencyStatistics = connect(
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     showModal: state.modal.showModal,
+    submitAddDeficiencyStatisticsSequence:
+      sequences.submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function StatisticsForm({
@@ -25,6 +27,7 @@ export const AddDeficiencyStatistics = connect(
     form,
     showCalculatePenaltiesModalSequence,
     showModal,
+    submitAddDeficiencyStatisticsSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -254,7 +257,9 @@ export const AddDeficiencyStatistics = connect(
           </div>
 
           <div className="margin-top-3">
-            <Button onClick={() => {}}>Save</Button>
+            <Button onClick={() => submitAddDeficiencyStatisticsSequence()}>
+              Save
+            </Button>
 
             <Button link onClick={() => {}}>
               Cancel
