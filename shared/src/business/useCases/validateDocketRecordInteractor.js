@@ -1,3 +1,5 @@
+const { DocketRecord } = require('../entities/DocketRecord');
+
 /**
  * validateDocketRecordInteractor
  *
@@ -10,10 +12,9 @@ exports.validateDocketRecordInteractor = ({
   applicationContext,
   docketRecord,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().DocketRecord)(
-    docketRecord,
-    { applicationContext },
-  ).getFormattedValidationErrors();
+  const errors = new DocketRecord(docketRecord, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 
   return errors || null;
 };

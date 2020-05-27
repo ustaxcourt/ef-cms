@@ -7,27 +7,31 @@ const { Case } = require('../../entities/cases/Case');
 const applicationContext = createApplicationContext({});
 
 describe('generatePrintableDocketRecordTemplate', () => {
-  const content = {
-    caption: 'Test Case Caption',
+  const data = {
+    caseCaptionExtension: 'Petitioner(s)',
+    caseDetail: {
+      contactPrimary: {},
+      irsPractitioners: [],
+      partyType: 'Petitioner',
+      privatePractitioners: [],
+    },
+    caseTitle: 'Test Case Title',
     docketNumberWithSuffix: '123-45S',
-    docketRecord: '<table id="test-docket-record"></table>',
-    partyInfo: '<table id="test-party-info"></table>',
+    entries: [],
   };
 
   it('Returns HTML with the given content', async () => {
     const result = await generatePrintableDocketRecordTemplate({
       applicationContext,
-      content,
+      data,
     });
 
-    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+    expect(result.indexOf(data.caseTitle)).toBeGreaterThan(-1);
+    expect(result.indexOf(data.caseCaptionExtension)).toBeGreaterThan(-1);
     expect(result.indexOf(Case.CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
-    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
-    expect(
-      result.indexOf('<table id="test-docket-record"></table>'),
-    ).toBeGreaterThan(-1);
-    expect(
-      result.indexOf('<table id="test-party-info"></table>'),
-    ).toBeGreaterThan(-1);
+    expect(result.indexOf(data.docketNumberWithSuffix)).toBeGreaterThan(-1);
+    expect(result.indexOf('<div class="party-info"')).toBeGreaterThan(-1);
+    expect(result.indexOf('<table id="documents">')).toBeGreaterThan(-1);
   });
 });

@@ -52,9 +52,7 @@ describe('Get trial session details', () => {
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
-    ).rejects.toThrow(
-      'The TrialSession entity was invalid ValidationError: "maxCases" is required',
-    );
+    ).rejects.toThrow('The TrialSession entity was invalid');
   });
 
   it('throws a not found error if persistence does not return any results', async () => {

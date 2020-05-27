@@ -1,10 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from '../limitFileSize';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-
 export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
@@ -63,6 +63,9 @@ export const StateDrivenFileInput = connect(
 
         {form[name] && (
           <div>
+            <span className="success-message icon-upload margin-right-1">
+              <FontAwesomeIcon icon="check-circle" size="1x" />
+            </span>
             <span className="mr-1">{form[name].name}</span>
             <Button
               link

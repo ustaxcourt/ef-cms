@@ -24,11 +24,11 @@ export const createOrderAction = async ({ applicationContext, get }) => {
   const caseDetail = get(state.caseDetail);
   const caseCaption = caseDetail.caseCaption || '';
   const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
-  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
-  if (caseCaptionNames !== caseCaption) {
-    caseCaptionNames += ', ';
-    caseCaptionExtension = caseCaption.replace(caseCaptionNames, '');
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
   }
   let signatureForNotice = '';
   if (isOrderEvent) {
@@ -42,7 +42,7 @@ export const createOrderAction = async ({ applicationContext, get }) => {
   const doc = replaceWithID(
     {
       '#caseCaptionExtension': caseCaptionExtension,
-      '#caseCaptionNames': caseCaptionNames,
+      '#caseTitle': caseTitle,
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
       '#orderTitleHeader': documentTitle,

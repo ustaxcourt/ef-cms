@@ -20,7 +20,6 @@ joiValidationDecorator(
     name: joi.string().optional(),
     state: joi.string().optional(),
   }),
-  undefined,
   {},
 );
 

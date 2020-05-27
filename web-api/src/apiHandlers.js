@@ -5,8 +5,6 @@ module.exports = {
     .createCourtIssuedOrderPdfFromHtmlLambda,
   generateDocketRecordPdfLambda: require('./cases/generateDocketRecordPdfLambda')
     .generateDocketRecordPdfLambda,
-  generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
-    .generatePdfFromHtmlLambda,
   getNotificationsLambda: require('./users/getNotificationsLambda')
     .getNotificationsLambda,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').swaggerJsonLambda,

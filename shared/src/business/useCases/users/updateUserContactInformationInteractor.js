@@ -5,6 +5,7 @@ const {
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { isEqual } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * updateUserContactInformationInteractor
@@ -38,12 +39,14 @@ exports.updateUserContactInformationInteractor = async ({
     throw new Error('there were no changes found needing to be updated');
   }
 
+  const userEntity = new User({
+    ...user,
+    contact: { ...contactInfo },
+  });
+
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: {
-      ...user,
-      contact: { ...contactInfo },
-    },
+    user: userEntity.validate().toRawObject(),
   });
 
   const updatedCases = await generateChangeOfAddress({

@@ -62,7 +62,7 @@ export const PendingReportList = connect(
                   <CaseLink formattedCase={item} />
                 </td>
                 <td>{item.formattedFiledDate}</td>
-                <td>{item.caseCaptionNames}</td>
+                <td>{item.caseTitle}</td>
                 <td>
                   <a
                     href={`/case-detail/${item.docketNumber}/documents/${item.documentId}`}

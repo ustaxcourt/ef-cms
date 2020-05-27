@@ -160,10 +160,10 @@ export const CaseInfo = connect(
                 </a>
                 <div className="order-checkbox">
                   <input
-                    checked={form.orderToChangePlaceOfTrial}
+                    checked={form.orderToChangeDesignatedPlaceOfTrial}
                     className="usa-checkbox__input"
-                    id="order-to-change-place-of-trial"
-                    name="orderToChangePlaceOfTrial"
+                    id="order-to-change-designated-place-of-trial"
+                    name="orderToChangeDesignatedPlaceOfTrial"
                     type="checkbox"
                     onChange={e => {
                       updateFormValueSequence({
@@ -174,7 +174,7 @@ export const CaseInfo = connect(
                   />
                   <label
                     className="usa-checkbox__label inline-block"
-                    htmlFor="order-to-change-place-of-trial"
+                    htmlFor="order-to-change-designated-place-of-trial"
                   >
                     Order to Change Designated Place of Trial
                   </label>

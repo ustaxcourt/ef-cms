@@ -48,8 +48,6 @@ describe('Get trial sessions', () => {
       error = err;
     }
 
-    expect(error.message).toContain(
-      'The TrialSession entity was invalid ValidationError: "maxCases" is required',
-    );
+    expect(error.message).toContain('The TrialSession entity was invalid');
   });
 });

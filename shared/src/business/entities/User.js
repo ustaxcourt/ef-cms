@@ -26,6 +26,7 @@ User.ROLES = {
 };
 
 const userDecorator = (obj, rawObj) => {
+  obj.entityName = 'User';
   obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
@@ -90,6 +91,7 @@ const userValidation = {
     })
     .optional(),
   email: joi.string().optional(),
+  entityName: joi.string().valid('User').required(),
   judgeFullName: joi.when('role', {
     is: User.ROLES.judge,
     otherwise: joi.optional().allow(null),
@@ -142,7 +144,6 @@ User.validationName = 'User';
 joiValidationDecorator(
   User,
   joi.object().keys(userValidation),
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

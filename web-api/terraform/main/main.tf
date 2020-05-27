@@ -14,4 +14,5 @@ module "ef-cms_apis" {
   cognito_suffix = "${var.cognito_suffix}"
   ses_dmarc_rua = "${var.ses_dmarc_rua}"
   es_instance_count = "${var.es_instance_count}"
+  honeybadger_key = "${var.honeybadger_key}"
 }

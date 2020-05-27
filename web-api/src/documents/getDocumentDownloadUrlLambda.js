@@ -14,7 +14,6 @@ exports.getDocumentDownloadUrlLambda = event =>
   redirect(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const honeybadger = applicationContext.initHoneybadger();
     try {
       const results = await applicationContext
         .getUseCases()
@@ -28,7 +27,7 @@ exports.getDocumentDownloadUrlLambda = event =>
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
-      honeybadger && honeybadger.notify(e);
+      await applicationContext.notifyHoneybadger(e);
       throw e;
     }
   });

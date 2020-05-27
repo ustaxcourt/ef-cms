@@ -64,9 +64,7 @@ exports.generateCaseInventoryReportPdf = async ({
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(caseItem => ({
       ...caseItem,
-      caseCaptionNames: applicationContext.getCaseCaptionNames(
-        caseItem.caseCaption || '',
-      ),
+      caseTitle: applicationContext.getCaseTitle(caseItem.caseCaption || ''),
     }));
 
   let reportTitle = '';

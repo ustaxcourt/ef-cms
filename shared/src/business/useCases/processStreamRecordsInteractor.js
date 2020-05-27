@@ -88,33 +88,48 @@ const filterRecords = async ({ applicationContext, records }) => {
         },
         eventName: 'MODIFY',
       });
-    }
 
-    if (caseRecord.dynamodb.Keys.sk.S.includes('document|')) {
-      const documentWithCaseInfo = {
-        ...AWS.DynamoDB.Converter.marshall(fullCase),
-        ...caseRecord.dynamodb.NewImage,
-        docketRecord: undefined,
-        documents: undefined,
-        entityName: undefined,
-        irsPractitioners: undefined,
-        privatePractitioners: undefined,
-      };
+      //also reindex all of the documents on the case
+      const { documents } = fullCase;
+      for (const document of documents) {
+        if (document.documentContentsId) {
+          const buffer = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              documentId: document.documentContentsId,
+              protocol: 'S3',
+              useTempBucket: true,
+            });
 
-      filteredRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: caseRecord.dynamodb.Keys.pk.S,
+          const { documentContents } = JSON.parse(buffer.toString());
+          document.documentContents = documentContents;
+        }
+
+        const documentWithCaseInfo = {
+          ...AWS.DynamoDB.Converter.marshall(fullCase),
+          ...AWS.DynamoDB.Converter.marshall(document),
+          docketRecord: undefined,
+          documents: undefined,
+          entityName: { S: 'Document' },
+          sk: { S: `document|${document.documentId}` },
+        };
+
+        filteredRecords.push({
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: caseRecord.dynamodb.Keys.pk.S,
+              },
+              sk: {
+                S: `document|${document.documentId}`,
+              },
             },
-            sk: {
-              S: caseRecord.dynamodb.Keys.sk.S,
-            },
+            NewImage: documentWithCaseInfo,
           },
-          NewImage: documentWithCaseInfo,
-        },
-        eventName: 'MODIFY',
-      });
+          eventName: 'MODIFY',
+        });
+      }
     }
   }
 
@@ -132,8 +147,6 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
-  const searchClient = applicationContext.getSearchClient();
-  const honeybadger = applicationContext.initHoneybadger();
 
   const filteredRecords = await filterRecords({
     applicationContext,
@@ -152,10 +165,14 @@ exports.processStreamRecordsInteractor = async ({
       if (failedRecords.length) {
         for (const failedRecord of failedRecords) {
           try {
-            await searchClient.index({
-              body: { ...failedRecord },
-              id: `${failedRecord.pk.S}_${failedRecord.sk.S}`,
-              index: 'efcms',
+            await applicationContext.getPersistenceGateway().indexRecord({
+              applicationContext,
+              fullRecord: { ...failedRecord },
+              isAlreadyMarshalled: true,
+              record: {
+                recordPk: failedRecord.pk.S,
+                recordSk: failedRecord.sk.S,
+              },
             });
           } catch (e) {
             await applicationContext
@@ -167,7 +184,7 @@ exports.processStreamRecordsInteractor = async ({
               });
 
             applicationContext.logger.info('Error', e);
-            honeybadger && honeybadger.notify(e);
+            await applicationContext.notifyHoneybadger(e);
           }
         }
       }
@@ -202,7 +219,7 @@ exports.processStreamRecordsInteractor = async ({
             });
 
           applicationContext.logger.info('Error', e);
-          honeybadger && honeybadger.notify(e);
+          await applicationContext.notifyHoneybadger(e);
         }
       }
     }

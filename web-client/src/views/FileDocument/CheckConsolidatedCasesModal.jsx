@@ -65,7 +65,7 @@ export const CheckConsolidatedCasesModal = connect(
                   htmlFor={`case-${formattedConsolidatedCase.docketNumber}`}
                 >
                   {formattedConsolidatedCase.docketNumber}{' '}
-                  {formattedConsolidatedCase.caseName}
+                  {formattedConsolidatedCase.caseTitle}
                 </label>
               </div>
             ),

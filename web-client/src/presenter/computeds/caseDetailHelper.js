@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -48,11 +48,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       showCaseDeadlinesInternalEmpty = true;
     }
   }
-
-  const showCaseNameForPrimary = ![
-    PARTY_TYPES.petitioner,
-    PARTY_TYPES.petitionerDeceasedSpouse,
-  ].includes(caseDetail.partyType);
 
   let showEditContacts = false;
 
@@ -114,7 +109,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
-    showCaseNameForPrimary,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,

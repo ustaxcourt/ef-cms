@@ -37,7 +37,7 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
                     in when checking 'Order to Change Designated Place of Trial' has
                     additional functionality that allows the user to upload a new RQT
                     file and change the selected trial location. See reviewSavedPetitionHelper.js */
-                  /* {caseInformation.orderDesignatingPlaceOfTrial && (
+                  /* {caseInformation.orderToChangeDesignatedPlaceOfTrial && (
                     <div>Order to Change Designated Place of Trial</div>
                   )} */}
                   {caseInformation.orderForAmendedPetition && (

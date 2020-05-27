@@ -4,6 +4,8 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('reprocessFailedRecordsInteractor', () => {
+  const notifySpy = jest.fn();
+
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
 
@@ -24,9 +26,104 @@ describe('reprocessFailedRecordsInteractor', () => {
       pk: 'abc|123',
       sk: 'abc',
     });
+
     applicationContext
       .getPersistenceGateway()
       .indexRecord.mockReturnValue(null);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(20);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingFields.mockReturnValue({
+        field1: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field2: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field3: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field4: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+        field5: {
+          properties: {
+            S: {
+              type: 'text',
+            },
+          },
+        },
+      });
+    applicationContext.notifyHoneybadger.mockImplementation(notifySpy);
+  });
+
+  it('checks the current mapping count and notifies if it is at 50% of the limit', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(10);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('50% threshold');
+  });
+
+  it('checks the current mapping count and notifies if it is at 75% of the limit', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingLimit.mockReturnValue(6);
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('75% threshold');
+  });
+
+  it('checks the current mapping count and notifies for fields over 50 matches', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getIndexMappingFields.mockReturnValue({
+        field1: {
+          properties: (() => {
+            const fiftyOneProperties = {};
+            for (let i = 0; i < 51; i++) {
+              fiftyOneProperties[`prop_${i}`] = { type: 'text' };
+            }
+            return fiftyOneProperties;
+          })(),
+        },
+      });
+
+    await reprocessFailedRecordsInteractor({
+      applicationContext,
+    });
+
+    expect(notifySpy).toHaveBeenCalled();
+    expect(notifySpy.mock.calls[0][0]).toContain('greater than 50 indexes');
   });
 
   it('does not call index function if there are no records to process', async () => {

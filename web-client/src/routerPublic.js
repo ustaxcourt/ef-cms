@@ -23,7 +23,7 @@ const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
 
-    route('/', () => {
+    route('/..', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();
     });

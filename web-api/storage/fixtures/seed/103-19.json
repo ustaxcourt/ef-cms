@@ -120,7 +120,7 @@
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:53:50.098Z",
@@ -159,7 +159,7 @@
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:53:50.098Z",
@@ -198,7 +198,7 @@
     "createdAt": "2019-03-01T22:54:06.000Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:54:06.000Z",
@@ -236,7 +236,7 @@
     "createdAt": "2019-03-01T22:54:06.000Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:54:06.000Z",
@@ -277,7 +277,7 @@
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -317,7 +317,7 @@
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -339,7 +339,7 @@
     "caseStatus": "New",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "filingDate": "2019-03-01T22:54:05.993Z",
@@ -394,7 +394,7 @@
     "sentBySection": "petitions",
     "isQC": false,
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
@@ -434,7 +434,7 @@
     "sentBySection": "petitions",
     "isQC": false,
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "caseCaptionNames": "Samson Workman",
+    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
@@ -482,6 +482,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [],
     "pending": false,
@@ -497,6 +498,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
       {
@@ -512,7 +514,7 @@
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
         },
-        "caseCaptionNames": "Samson Workman",
+        "caseTitle": "Samson Workman",
         "section": "petitions",
         "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
         "isInitializeCase": true,
@@ -551,6 +553,7 @@
     "attachments": true,
     "serviceDate": null,
     "documentType": "Simultaneous Answering Brief",
+    "entityName": "Document",
     "filingDate": "2020-03-06T20:04:07.354Z",
     "partyPrimary": true,
     "pending": false,
@@ -599,7 +602,7 @@
           "category": "Simultaneous Brief",
           "docketNumber": "103-19"
         },
-        "caseCaptionNames": "Samson Workman",
+        "caseTitle": "Samson Workman",
         "isRead": true,
         "section": "docket",
         "workItemId": "c716022f-f0f8-4988-b75a-1ec3b501a9c7",
@@ -637,6 +640,7 @@
   },
   {
     "documentType": "Answer",
+    "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
       {
@@ -652,7 +656,7 @@
           "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Respondent"
         },
-        "caseCaptionNames": "Samson Workman",
+        "caseTitle": "Samson Workman",
         "section": "docket",
         "workItemId": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
         "assigneeId": null,

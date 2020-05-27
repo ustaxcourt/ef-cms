@@ -9,25 +9,20 @@ import { state } from 'cerebral';
 export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   get,
-  router,
 }) => {
   const caseDetail = get(state.caseDetail);
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.caseId],
   );
 
-  const docketRecordPdf = await applicationContext
-    .getUseCases()
-    .generateDocketRecordPdfInteractor({
-      applicationContext,
-      caseId: caseDetail.caseId,
-      docketRecordSort,
-      includePartyDetail: true,
-    });
+  const {
+    url,
+  } = await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+    applicationContext,
+    caseId: caseDetail.caseId,
+    docketRecordSort,
+    includePartyDetail: true,
+  });
 
-  const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
-
-  const pdfUrl = router.createObjectURL(pdfFile);
-
-  return { pdfUrl };
+  return { pdfUrl: url };
 };

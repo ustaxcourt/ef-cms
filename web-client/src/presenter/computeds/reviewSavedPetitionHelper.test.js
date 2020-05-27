@@ -57,6 +57,11 @@ describe('reviewSavedPetitionHelper', () => {
                 INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
             },
             { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
+            {
+              documentType:
+                INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
+                  .documentType,
+            },
           ],
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
@@ -70,18 +75,22 @@ describe('reviewSavedPetitionHelper', () => {
     });
 
     expect(result).toEqual({
+      applicationForWaiverOfFilingFeeFile: {
+        documentType:
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+      },
       hasIrsNoticeFormatted: 'Yes',
       hasOrders: true,
-      irsNoticeDateFormatted: '01/04/2020',
+      irsNoticeDateFormatted: '01/04/20',
       ownershipDisclosureFile: {
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
       },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
-      petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
+      petitionPaymentStatusFormatted: 'Paid 03/14/20 pay.gov',
       preferredTrialCityFormatted: 'No requested place of trial',
-      receivedAtFormatted: '01/04/2020',
+      receivedAtFormatted: '01/04/20',
       requestForPlaceOfTrialFile: {
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
@@ -135,6 +144,31 @@ describe('reviewSavedPetitionHelper', () => {
       requestForPlaceOfTrialFile: undefined,
       shouldShowIrsNoticeDate: false,
       stinFile: undefined,
+    });
+  });
+
+  [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderToShowCause',
+    'noticeOfAttachments',
+    'orderDesignatingPlaceOfTrial',
+  ].forEach(order => {
+    it(`verify hasOrders is true if ${order} is set`, () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            [order]: true,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({
+        hasOrders: true,
+      });
     });
   });
 });

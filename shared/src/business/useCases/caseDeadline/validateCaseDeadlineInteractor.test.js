@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   validateCaseDeadlineInteractor,
 } = require('./validateCaseDeadlineInteractor');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
@@ -6,12 +9,7 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
 describe('validateCaseDeadlineInteractor', () => {
   it('returns the expected errors object on an empty case deadline', () => {
     const errors = validateCaseDeadlineInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseDeadline,
-        }),
-        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
+      applicationContext,
       caseDeadline: {},
     });
 
@@ -29,12 +27,7 @@ describe('validateCaseDeadlineInteractor', () => {
     };
 
     const errors = validateCaseDeadlineInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseDeadline,
-        }),
-        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
+      applicationContext,
       caseDeadline: mockCaseDeadline,
     });
 

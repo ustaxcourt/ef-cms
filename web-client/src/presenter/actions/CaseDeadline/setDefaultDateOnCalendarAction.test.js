@@ -6,6 +6,7 @@ describe('setDefaultDateOnCalendarAction', () => {
   const currentDate = new Date('2019-05-14T04:00:00.000Z');
   global.Date = class extends Date {
     constructor() {
+      super();
       return currentDate;
     }
   };

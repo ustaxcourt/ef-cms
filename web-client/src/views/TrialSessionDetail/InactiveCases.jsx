@@ -32,7 +32,7 @@ export const InactiveCases = connect(
                 <td>
                   <CaseLink formattedCase={item} />
                 </td>
-                <td>{item.caseCaptionNames}</td>
+                <td>{item.caseTitle}</td>
                 <td>{item.disposition}</td>
                 <td>{item.removedFromTrialDateFormatted}</td>
               </tr>

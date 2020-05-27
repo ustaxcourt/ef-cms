@@ -22,7 +22,7 @@ export const StartCaseWizard = connect(
   function StartCaseWizard({ showModal, submitFilePetitionSequence }) {
     return (
       <>
-        <BigHeader text="File a Petition" />
+        <BigHeader text="Create a Case" />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"

@@ -8,18 +8,6 @@ const {
 describe('generateStandingPretrialOrderInteractor', () => {
   beforeEach(() => {
     applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(
-        ({ contentHtml }) => contentHtml,
-      );
-
-    applicationContext
-      .getTemplateGenerators()
-      .generateStandingPretrialOrderTemplate.mockImplementation(
-        ({ content }) => `<html>${content.docketNumberWithSuffix}</html>`,
-      );
-
-    applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         if (docketNumber === '123-45') {
@@ -51,8 +39,8 @@ describe('generateStandingPretrialOrderInteractor', () => {
       }));
   });
 
-  it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    const result = await generateStandingPretrialOrderInteractor({
+  it('get the case detail and trial session detail', async () => {
+    await generateStandingPretrialOrderInteractor({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -64,36 +52,16 @@ describe('generateStandingPretrialOrderInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getTemplateGenerators()
-        .generateStandingPretrialOrderTemplate,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-    ).toHaveBeenCalled();
-    expect(result.indexOf('123-45')).toBeGreaterThan(-1);
   });
 
-  it('should append the docket number suffix if present on the caseDetail', async () => {
-    const result = await generateStandingPretrialOrderInteractor({
+  it('should call the Standing Pretrial Order document generator', async () => {
+    await generateStandingPretrialOrderInteractor({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
-
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
+      applicationContext.getDocumentGenerators().standingPretrialOrder,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getTemplateGenerators()
-        .generateStandingPretrialOrderTemplate,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-    ).toHaveBeenCalled();
-    expect(result.indexOf('234-56S')).toBeGreaterThan(-1);
   });
 });

@@ -18,7 +18,6 @@ describe('CaseInternal entity', () => {
         petitionPaymentStatus: VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
         procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
         receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
-        stinFile: VALIDATION_ERROR_MESSAGES.stinFile,
       });
     });
 
@@ -47,8 +46,6 @@ describe('CaseInternal entity', () => {
         receivedAt: new Date().toISOString(),
         requestForPlaceOfTrialFile: { anObject: true },
         requestForPlaceOfTrialFileSize: 1,
-        stinFile: { anObject: true },
-        stinFileSize: 1,
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
@@ -80,8 +77,6 @@ describe('CaseInternal entity', () => {
         petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
-        stinFile: { anObject: true },
-        stinFileSize: 1,
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
@@ -112,8 +107,6 @@ describe('CaseInternal entity', () => {
         petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
-        stinFile: { anObject: true },
-        stinFileSize: 1,
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
