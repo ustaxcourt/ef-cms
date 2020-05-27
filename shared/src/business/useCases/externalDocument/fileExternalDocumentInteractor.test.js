@@ -126,6 +126,9 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(updatedCase.documents[3].servedAt).toBeDefined();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
@@ -186,6 +189,9 @@ describe('fileExternalDocumentInteractor', () => {
         lodged: true,
       },
     ]);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {

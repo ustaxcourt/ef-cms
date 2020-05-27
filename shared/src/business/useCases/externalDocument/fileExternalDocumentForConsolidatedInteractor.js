@@ -126,6 +126,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
+      const numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({ applicationContext, documentId });
+
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
       const rawDocument = new Document(
@@ -134,6 +138,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          numberOfPages,
           relationship,
           userId: user.userId,
         },
