@@ -11,6 +11,6 @@ export const setDefaultFormForAddDeficiencySatisticsAction = ({
   store,
 }) => {
   store.set(state.form, {
-    yearOrPeriod: props.yearOrPeriod || 'Year',
+    yearOrPeriod: props.yearOrPeriod,
   });
 };
