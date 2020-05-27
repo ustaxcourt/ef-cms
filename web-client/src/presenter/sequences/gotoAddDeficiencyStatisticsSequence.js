@@ -4,6 +4,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultFormForAddDeficiencySatisticsAction } from '../actions/setDefaultFormForAddDeficiencySatisticsAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddDeficiencyStatisticsSequence = [
@@ -15,6 +16,7 @@ export const gotoAddDeficiencyStatisticsSequence = [
       clearFormAction,
       getCaseAction,
       setCaseAction,
+      setDefaultFormForAddDeficiencySatisticsAction,
       setCurrentPageAction('AddDeficiencyStatistics'),
     ],
     unauthorized: [redirectToCognitoAction],
