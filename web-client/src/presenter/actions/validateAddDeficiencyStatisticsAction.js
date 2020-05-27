@@ -2,7 +2,7 @@ import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatis
 import { state } from 'cerebral';
 
 /**
- * validates the petition.
+ * validates the add deficiency statistic.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
