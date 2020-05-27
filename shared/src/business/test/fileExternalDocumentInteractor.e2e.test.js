@@ -169,7 +169,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       documents: [
         {
-          caseId,
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
           filedBy: 'Petr. Test Petitioner',
@@ -227,6 +226,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
+              caseId,
               caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
@@ -273,6 +273,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
+              caseId,
               caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',

@@ -197,7 +197,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
         editLink: '',
-        showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
+        showDocumentEditLink: permissions.UPDATE_CASE,
       };
     },
   );
