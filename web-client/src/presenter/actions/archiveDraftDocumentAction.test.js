@@ -16,9 +16,11 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          caseId: 'abc-123ghadsf-zdasdf',
           documentId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
+        },
+        caseDetail: {
+          caseId: 'abc-123ghadsf-zdasdf',
         },
       },
     });
@@ -39,10 +41,12 @@ describe('archiveDraftDocumentAction', () => {
       props: {},
       state: {
         archiveDraftDocument: {
-          caseId: 'abc-123ghadsf-zdasdf',
           documentId: 'def-gfed213-441-abce-312f',
           documentTitle: 'document-title-123',
           redirectToCaseDetail: true,
+        },
+        caseDetail: {
+          caseId: 'abc-123ghadsf-zdasdf',
         },
       },
     });
