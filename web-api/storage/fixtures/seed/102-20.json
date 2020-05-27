@@ -15,6 +15,7 @@
       "pending": false,
       "partySecondary": false,
       "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+      "numberOfPages": 1,
       "receivedAt": "2020-01-21T16:41:39.481Z",
       "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -76,6 +77,7 @@
       "pending": false,
       "partySecondary": false,
       "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+      "numberOfPages": 1,
       "receivedAt": "2020-01-21T16:41:39.481Z",
       "filingDate": "2020-01-21T16:41:39.481Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -158,6 +160,7 @@
     "description": "Petition",
     "index": 1,
     "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "numberOfPages": 1,
     "filingDate": "2020-01-21T16:41:39.481Z",
     "filedBy": "Petr. Eve Brewer",
     "docketRecordId": "48f4a2be-6395-4fc0-9439-f99e365c38ff",
@@ -169,6 +172,7 @@
     "description": "Request for Place of Trial at Nashville, Tennessee",
     "index": 2,
     "filingDate": "2020-01-21T16:41:39.474Z",
+    "numberOfPages": 2,
     "docketRecordId": "f15a6532-9805-479b-ae45-e8f112153d2a",
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
@@ -242,6 +246,7 @@
     "sk": "document|3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
+    "numberOfPages": 1,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   },
   {
@@ -267,6 +272,7 @@
           "pending": false,
           "partySecondary": false,
           "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+          "numberOfPages": 1,
           "receivedAt": "2020-01-21T16:41:39.481Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
@@ -304,6 +310,7 @@
     "sk": "document|d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "partySecondary": false,
     "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "numberOfPages": 1,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   }
 ]

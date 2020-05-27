@@ -23,6 +23,7 @@
       "pending": false,
       "partySecondary": false,
       "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+      "numberOfPages": 1,
       "receivedAt": "2020-01-23T21:44:54.043Z",
       "filingDate": "2020-01-23T21:44:54.043Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -79,6 +80,7 @@
       "certificateOfService": false,
       "certificateOfServiceDate": null,
       "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+      "numberOfPages": 1,
       "category": "Miscellaneous",
       "documentTitle": "Administrative Record",
       "relationship": "primaryDocument",
@@ -142,6 +144,7 @@
       "certificateOfService": false,
       "certificateOfServiceDate": null,
       "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+      "numberOfPages": 1,
       "category": "Miscellaneous",
       "documentTitle": "Administrative Record",
       "relationship": "primaryDocument",
@@ -187,6 +190,7 @@
       "pending": false,
       "partySecondary": false,
       "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+      "numberOfPages": 1,
       "receivedAt": "2020-01-23T21:44:54.043Z",
       "filingDate": "2020-01-23T21:44:54.043Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -283,15 +287,18 @@
     "description": "Petition",
     "index": 1,
     "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+    "numberOfPages": 1,
     "filingDate": "2020-01-23T21:44:54.043Z",
     "filedBy": "Petr. Reuben Blair",
     "docketRecordId": "6083daae-a943-4987-a658-1d28b2f2f029",
+    "numberOfPages": 2,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "sk": "docket-record|6083daae-a943-4987-a658-1d28b2f2f029"
   },
   {
     "eventCode": "RQT",
     "description": "Request for Place of Trial at Houston, Texas",
+    "numberOfPages": 1,
     "index": 2,
     "filingDate": "2020-01-23T21:44:54.034Z",
     "docketRecordId": "2a3825e3-9144-446c-96c1-3c2b2f4b7b1c",
@@ -303,6 +310,7 @@
     "description": "Notice of Trial",
     "index": 3,
     "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
+    "numberOfPages": 1,
     "filingDate": "2020-01-23T21:45:14.136Z",
     "filedBy": "Test Docketclerk",
     "docketRecordId": "f9ee32b9-f2b5-4f45-9b08-0d34263b456f",
@@ -314,6 +322,7 @@
     "description": "Administrative Record",
     "index": 4,
     "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+    "numberOfPages": 1,
     "filingDate": "2020-01-23T21:45:34.520Z",
     "docketRecordId": "f4e8b2a1-71d3-4225-b904-1e87dbddd854",
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
@@ -369,6 +378,7 @@
           "certificateOfService": false,
           "certificateOfServiceDate": null,
           "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+          "numberOfPages": 1,
           "category": "Miscellaneous",
           "documentTitle": "Administrative Record",
           "relationship": "primaryDocument",
@@ -403,6 +413,7 @@
     "processingStatus": "complete",
     "certificateOfServiceDate": null,
     "documentId": "2cca1543-21b2-4783-a1de-eeaaf269d32c",
+    "numberOfPages": 1,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "docketNumber": "103-20",
@@ -429,6 +440,7 @@
     "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
     "sk": "document|4d736f72-6312-4f7f-886e-210a0074fdc3",
     "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
+    "numberOfPages": 1,
     "servedAt": "2020-01-23T21:45:14.148Z",
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas",
@@ -457,6 +469,7 @@
           "pending": false,
           "partySecondary": false,
           "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+          "numberOfPages": 1,
           "receivedAt": "2020-01-23T21:44:54.043Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
@@ -494,6 +507,7 @@
     "sk": "document|ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
     "partySecondary": false,
     "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+    "numberOfPages": 1,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
   },
   {
@@ -514,6 +528,7 @@
     "sk": "document|f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
+    "numberOfPages": 1,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8"
   }
 ]

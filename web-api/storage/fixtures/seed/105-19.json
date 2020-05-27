@@ -49,6 +49,7 @@
     "description": "Petition",
     "eventCode": "P",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "numberOfPages": 1,
     "filingDate": "2019-03-27T21:53:00.297Z",
     "filedBy": "Test Practitioner",
     "index": 1,
@@ -61,6 +62,7 @@
     "filingDate": "2019-03-27T21:53:00.297Z",
     "eventCode": "RQT",
     "index": 2,
+    "numberOfPages": 2,
     "docketRecordId": "89cb2500-becf-4da9-83b9-e3ca561c2622",
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "docket-record|89cb2500-becf-4da9-83b9-e3ca561c2622"
@@ -85,6 +87,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -124,6 +127,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -191,6 +195,7 @@
         "document": {
           "createdAt": "2019-03-27T21:53:00.297Z",
           "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+          "numberOfPages": 1,
           "documentTitle": "Petition",
           "documentType": "Petition",
           "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -227,6 +232,7 @@
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "numberOfPages": 1,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
   },
   {
@@ -243,6 +249,7 @@
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "sk": "document|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
+    "numberOfPages": 1,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd"
   }
 ]
