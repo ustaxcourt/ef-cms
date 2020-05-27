@@ -285,20 +285,17 @@
   {
     "eventCode": "P",
     "description": "Petition",
-    "index": 1,
     "documentId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
     "numberOfPages": 1,
     "filingDate": "2020-01-23T21:44:54.043Z",
     "filedBy": "Petr. Reuben Blair",
     "docketRecordId": "6083daae-a943-4987-a658-1d28b2f2f029",
-    "numberOfPages": 2,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "sk": "docket-record|6083daae-a943-4987-a658-1d28b2f2f029"
   },
   {
     "eventCode": "RQT",
     "description": "Request for Place of Trial at Houston, Texas",
-    "numberOfPages": 1,
     "index": 2,
     "filingDate": "2020-01-23T21:44:54.034Z",
     "docketRecordId": "2a3825e3-9144-446c-96c1-3c2b2f4b7b1c",
