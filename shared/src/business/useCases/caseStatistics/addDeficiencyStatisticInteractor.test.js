@@ -1,13 +1,13 @@
 const {
+  addDeficiencyStatisticInteractor,
+} = require('./addDeficiencyStatisticInteractor');
+const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  updateOtherStatisticsInteractor,
-} = require('./updateOtherStatisticsInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
-describe('updateOtherStatisticsInteractor', () => {
+describe('addDeficiencyStatisticInteractor', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.docketClerk,
@@ -23,7 +23,7 @@ describe('updateOtherStatisticsInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateOtherStatisticsInteractor({
+      addDeficiencyStatisticInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
       }),
@@ -31,15 +31,22 @@ describe('updateOtherStatisticsInteractor', () => {
   });
 
   it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await updateOtherStatisticsInteractor({
+    const statistic = {
+      determinationDeficiencyAmount: 123,
+      determinationTotalPenalties: 456,
+      irsDeficiencyAmount: 789,
+      irsTotalPenalties: 1.1,
+      year: 2012,
+      yearOrPeriod: 'Year',
+    };
+
+    const result = await addDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      damages: 1234,
-      litigationCosts: 5678,
+      ...statistic,
     });
     expect(result).toMatchObject({
-      damages: 1234,
-      litigationCosts: 5678,
+      statistics: [statistic],
     });
   });
 });
