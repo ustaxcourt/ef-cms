@@ -122,35 +122,4 @@ describe('DocketRecord', () => {
       });
     });
   });
-
-  describe('numberOfPages', () => {
-    it('defaults to zero (0)', () => {
-      const docketRecord = new DocketRecord(
-        {
-          description: 'Test Docket Record',
-          eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
-          index: 0,
-        },
-        { applicationContext },
-      );
-
-      expect(docketRecord.numberOfPages).toEqual(0);
-    });
-
-    it('sets numberOfPages', () => {
-      const docketRecord = new DocketRecord(
-        {
-          description: 'Test Docket Record',
-          eventCode: 'O',
-          filingDate: new Date('2000-01-01').toISOString(),
-          index: 0,
-          numberOfPages: 45,
-        },
-        { applicationContext },
-      );
-
-      expect(docketRecord.numberOfPages).toEqual(45);
-    });
-  });
 });
