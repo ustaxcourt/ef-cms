@@ -39,6 +39,7 @@ export const DocketRecord = connect(
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and proceedings</th>
+              <th>Pages</th>
               <th>Filed by</th>
               <th>Action</th>
               <th>Served</th>
@@ -97,6 +98,7 @@ export const DocketRecord = connect(
                         entry={entry}
                       />
                     </td>
+                    <td className="hide-on-mobile">{entry.numberOfPages}</td>
                     <td className="hide-on-mobile">{entry.filedBy}</td>
                     <td className="hide-on-mobile">{entry.action}</td>
                     <td>

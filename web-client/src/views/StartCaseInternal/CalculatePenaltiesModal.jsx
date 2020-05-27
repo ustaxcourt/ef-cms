@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CalculatePenaltiesModal = connect(
@@ -10,16 +10,20 @@ export const CalculatePenaltiesModal = connect(
     addPenaltyInputSequence: sequences.addPenaltyInputSequence,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.calculatePenaltiesSequence,
+    confirmSequenceOverride: props.confirmSequenceOverride,
     penalties: state.modal.penalties,
     statisticsFormHelper: state.statisticsFormHelper,
+    title: state.modal.title,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function CalculatePenaltiesModal({
     addPenaltyInputSequence,
     cancelSequence,
     confirmSequence,
+    confirmSequenceOverride,
     penalties,
     statisticsFormHelper,
+    title,
     updateModalValueSequence,
   }) {
     return (
@@ -27,8 +31,12 @@ export const CalculatePenaltiesModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Calculate"
-        confirmSequence={confirmSequence}
-        title="Calculate Penalties on IRS Notice"
+        confirmSequence={() => {
+          confirmSequenceOverride
+            ? confirmSequenceOverride()
+            : confirmSequence();
+        }}
+        title={title}
       >
         {penalties &&
           penalties.map((penalty, index) => (
