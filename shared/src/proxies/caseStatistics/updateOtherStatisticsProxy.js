@@ -19,6 +19,6 @@ exports.updateOtherStatisticsInteractor = ({
   return post({
     applicationContext,
     body: { damages, litigationCosts },
-    endpoint: `/case-meta/${caseId}/statistics`,
+    endpoint: `/case-meta/${caseId}/other-statistics`,
   });
 };
