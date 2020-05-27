@@ -8,7 +8,7 @@ describe('unprioritizeCaseInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
   });
 
