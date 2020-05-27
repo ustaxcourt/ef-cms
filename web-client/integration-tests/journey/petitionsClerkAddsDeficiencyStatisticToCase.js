@@ -1,5 +1,22 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
 export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {
+    // set up case to allow statistics to be entered
+    await test.runSequence('gotoPetitionQcSequence', {
+      docketNumber: test.docketNumber,
+      tab: 'IrsNotice',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'caseType',
+      value: Case.CASE_TYPES_MAP.deficiency,
+    });
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
     await test.runSequence('gotoAddDeficiencyStatisticsSequence', {
       docketNumber: test.docketNumber,
     });
