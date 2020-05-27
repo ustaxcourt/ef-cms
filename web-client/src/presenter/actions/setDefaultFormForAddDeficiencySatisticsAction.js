@@ -6,11 +6,8 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
  */
-export const setDefaultFormForAddDeficiencySatisticsAction = ({
-  props,
-  store,
-}) => {
+export const setDefaultFormForAddDeficiencySatisticsAction = ({ store }) => {
   store.set(state.form, {
-    yearOrPeriod: props.yearOrPeriod,
+    yearOrPeriod: 'Year',
   });
 };
