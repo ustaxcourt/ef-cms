@@ -21,6 +21,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
             caseCaption: 'Test Case Caption',
             docketNumber: '123-45',
             docketNumberSuffix: '',
+            docketNumberWithSuffix: '123-45',
             irsPractitioners: [],
           };
         } else {
@@ -28,6 +29,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
             caseCaption: 'Test Case Caption',
             docketNumber: '234-56',
             docketNumberSuffix: 'S',
+            docketNumberWithSuffix: '234-56S',
             irsPractitioners: [
               {
                 contact: { phone: '123-123-1234' },
