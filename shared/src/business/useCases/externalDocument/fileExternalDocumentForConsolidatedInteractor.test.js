@@ -154,6 +154,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[0].documents[4].documentId).toEqual(documentId0);
     expect(result[1].documents[4].documentId).toEqual(documentId0);
     expect(result[2].documents.length).toEqual(4);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should generate a docket record entry on each case in the consolidated set', async () => {
@@ -175,6 +178,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[0].docketRecord[3].documentId).toEqual(documentId0);
     expect(result[1].docketRecord[3].documentId).toEqual(documentId0);
     expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
@@ -240,6 +246,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].documents.length).toEqual(6);
     expect(result[1].documents.length).toEqual(6);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should file multiple documents for each case if supporting documents are provided', async () => {
@@ -279,5 +288,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].documents.length).toEqual(8);
     expect(result[1].documents.length).toEqual(8);
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalledTimes(4);
   });
 });
