@@ -28,6 +28,8 @@ function Statistic(rawStatistic) {
 Statistic.validationName = 'Statistic';
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
+  irsDeficiencyAmount: 'Enter deficiency on IRS Notice',
+  irsTotalPenalties: 'Enter total penalties on IRS Notice',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
@@ -35,6 +37,7 @@ Statistic.VALIDATION_ERROR_MESSAGES = {
     },
     'last date of period is required',
   ],
+  year: 'Enter year',
 };
 
 joiValidationDecorator(
