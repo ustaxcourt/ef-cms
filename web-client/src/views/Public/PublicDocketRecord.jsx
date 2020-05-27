@@ -29,6 +29,7 @@ export const PublicDocketRecord = connect(
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and proceedings</th>
+              <th>Pages</th>
               <th>Filed by</th>
               <th>Action</th>
               <th>Served</th>
@@ -37,6 +38,7 @@ export const PublicDocketRecord = connect(
           </thead>
           <tbody>
             {publicCaseDetailHelper.formattedDocketEntries.map(entry => {
+              console.log('entry', entry);
               return (
                 <tr key={entry.index}>
                   <td className="center-column hide-on-mobile">
@@ -59,6 +61,7 @@ export const PublicDocketRecord = connect(
                   <td>
                     <PublicFilingsAndProceedings entry={entry} />
                   </td>
+                  <td className="hide-on-mobile">{entry.numberOfPages}</td>
                   <td className="hide-on-mobile">{entry.filedBy}</td>
                   <td className="hide-on-mobile">{entry.action}</td>
                   <td>
