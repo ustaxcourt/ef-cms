@@ -55,6 +55,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   createISODateStringFromObject,
+  dateStringsCompared,
   deconstructDate,
   formatDateString,
   formatNow,
@@ -498,6 +499,7 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,
       formatCase,

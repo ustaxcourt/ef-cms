@@ -1805,6 +1805,10 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
  * @returns {Case} this case entity
  */
 Case.prototype.addStatistic = function (statisticEntity) {
+  if (this.statistics.length === 12) {
+    throw new Error('maximum number of statistics reached');
+  }
+
   this.statistics = [...this.statistics, statisticEntity];
 
   return this;

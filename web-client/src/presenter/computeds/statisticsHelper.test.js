@@ -59,6 +59,39 @@ describe('statisticsHelper', () => {
     });
   });
 
+  it('sorts formatted statistics by year / lastDateOfPeriod', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          statistics: [
+            { year: 2012, yearOrPeriod: 'Year' },
+            { year: 2011, yearOrPeriod: 'Year' },
+            { year: 2010, yearOrPeriod: 'Year' },
+            {
+              lastDateOfPeriod: '2019-12-02T12:00:00.000Z',
+              yearOrPeriod: 'Period',
+            },
+            { year: 2013, yearOrPeriod: 'Year' },
+            {
+              lastDateOfPeriod: '2011-11-01T12:00:00.000Z',
+              yearOrPeriod: 'Period',
+            },
+          ],
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.formattedStatistics).toMatchObject([
+      { formattedDate: 2010 },
+      { formattedDate: '11/01/11' },
+      { formattedDate: 2011 },
+      { formattedDate: 2012 },
+      { formattedDate: 2013 },
+      { formattedDate: '12/02/19' },
+    ]);
+  });
+
   it('returns undefined formattedStatistics if caseDetail.statistics is length 0', () => {
     const result = runCompute(statisticsHelper, {
       state: {
@@ -128,6 +161,27 @@ describe('statisticsHelper', () => {
       state: {
         caseDetail: {
           caseType: Case.CASE_TYPES_MAP.cdp,
+        },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddButtons: true,
+      showAddDeficiencyStatisticsButton: false,
+    });
+  });
+
+  it('returns showAddDeficiencyStatisticsButton false if the maximum number of statistics for a case has been reached', () => {
+    const statisticsWithMaxLength = new Array(12); // 12 is the maximum number of statistics
+
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          caseType: Case.CASE_TYPES_MAP.deficiency,
+          statistics: statisticsWithMaxLength,
         },
         permissions: {
           ADD_EDIT_STATISTICS: true,
@@ -243,5 +297,44 @@ describe('statisticsHelper', () => {
     });
 
     expect(result.showNoStatistics).toEqual(false);
+  });
+
+  it('returns showOtherStatistics false if there are no damages or litigationCosts on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(false);
+  });
+
+  it('returns showDamages and showOtherStatistics true if there are damages on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          damages: 1234,
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(true);
+    expect(result.showDamages).toEqual(true);
+  });
+
+  it('returns showLitigationCosts showOtherStatistics true if there are damages on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          litigationCosts: 1234,
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(true);
+    expect(result.showLitigationCosts).toEqual(true);
   });
 });
