@@ -173,6 +173,7 @@ import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
+import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
@@ -363,6 +364,7 @@ const allUseCases = {
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
+  updateDeficiencyStatisticInteractor,
   updateDocketEntryInteractor,
   updateDocketEntryMetaInteractor,
   updateOtherStatisticsInteractor,

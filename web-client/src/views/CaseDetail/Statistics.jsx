@@ -41,14 +41,7 @@ export const Statistics = connect(
         {statisticsHelper.formattedStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
-              <h4>
-                Deficiency
-                {statisticsHelper.showEditButtons && (
-                  <Button link className="padding-0 margin-left-2" icon="edit">
-                    Edit
-                  </Button>
-                )}
-              </h4>
+              <h4>Deficiency</h4>
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>
@@ -80,6 +73,7 @@ export const Statistics = connect(
                   <tr>
                     <th>IRS Notice</th>
                     <th>Determination</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -89,6 +83,18 @@ export const Statistics = connect(
                         <td>{statistic.formattedIrsTotalPenalties}</td>
                         <td>
                           {statistic.formattedDeterminationTotalPenalties}
+                        </td>
+                        <td>
+                          {statisticsHelper.showEditButtons && (
+                            <Button
+                              link
+                              className="padding-0 margin-left-2"
+                              href={`/case-detail/${caseDetail.docketNumber}/edit-deficiency-statistic/${index}`}
+                              icon="edit"
+                            >
+                              Edit Year/Period
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ),
@@ -101,19 +107,7 @@ export const Statistics = connect(
         {statisticsHelper.showOtherStatistics && (
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
-              <h4>
-                Other
-                {statisticsHelper.showEditButtons && (
-                  <Button
-                    link
-                    className="padding-0 margin-left-2"
-                    href={`/case-detail/${caseDetail.docketNumber}/edit-other-statistics`}
-                    icon="edit"
-                  >
-                    Edit
-                  </Button>
-                )}
-              </h4>
+              <h4>Other</h4>
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>
@@ -123,6 +117,7 @@ export const Statistics = connect(
                     {statisticsHelper.showDamages && (
                       <th>Damages (IRC §6673)</th>
                     )}
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,6 +128,18 @@ export const Statistics = connect(
                     {statisticsHelper.showDamages && (
                       <td>{statisticsHelper.formattedDamages}</td>
                     )}
+                    <td>
+                      {statisticsHelper.showEditButtons && (
+                        <Button
+                          link
+                          className="padding-0 margin-left-2"
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-other-statistics`}
+                          icon="edit"
+                        >
+                          Edit Other Statistics
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 </tbody>
               </table>
