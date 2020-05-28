@@ -6,7 +6,7 @@ export const unauthedUserSearchesForSealedCasesByDocketNumber = test => {
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
-      value: '105-20L',
+      value: test.docketNumber,
     });
 
     await test.runSequence('submitPublicCaseDocketNumberSearchSequence');
