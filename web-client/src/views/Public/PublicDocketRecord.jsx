@@ -38,7 +38,6 @@ export const PublicDocketRecord = connect(
           </thead>
           <tbody>
             {publicCaseDetailHelper.formattedDocketEntries.map(entry => {
-              console.log('entry', entry);
               return (
                 <tr key={entry.index}>
                   <td className="center-column hide-on-mobile">
