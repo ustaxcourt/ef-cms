@@ -65,7 +65,9 @@ export const statisticsHelper = (get, applicationContext) => {
     litigationCosts &&
     applicationContext.getUtilities().formatDollars(litigationCosts);
 
-  const showOtherStatistics = !!formattedDamages || !!formattedLitigationCosts;
+  const showDamages = !!formattedDamages;
+  const showLitigationCosts = !!formattedLitigationCosts;
+  const showOtherStatistics = showDamages || showLitigationCosts;
 
   const showAddDeficiencyStatisticsButton =
     permissions.ADD_EDIT_STATISTICS && caseType === CASE_TYPES_MAP.deficiency;
@@ -80,7 +82,9 @@ export const statisticsHelper = (get, applicationContext) => {
       showAddDeficiencyStatisticsButton || showAddOtherStatisticsButton,
     showAddDeficiencyStatisticsButton,
     showAddOtherStatisticsButton,
+    showDamages,
     showEditButtons: permissions.ADD_EDIT_STATISTICS,
+    showLitigationCosts,
     showNoStatistics: !formattedStatistics && !showOtherStatistics,
     showOtherStatistics,
   };
