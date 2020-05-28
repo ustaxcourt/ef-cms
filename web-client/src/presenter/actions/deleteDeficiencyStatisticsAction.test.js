@@ -17,6 +17,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       irsDeficiencyAmount: '3',
       irsTotalPenalties: '4',
       lastDateOfPeriod: null,
+      statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: '2019',
       yearOrPeriod: 'Year',
     };
@@ -30,7 +31,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
           caseId: '123',
           statistics: [statistic],
         },
-        form: { ...statistic, statisticIndex: 0 },
+        form: { ...statistic },
       },
     });
 
@@ -49,6 +50,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       irsDeficiencyAmount: '3',
       irsTotalPenalties: '4',
       lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
+      statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: null,
       yearOrPeriod: 'Period',
     };
@@ -62,7 +64,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
           caseId: '123',
           statistics: [statistic],
         },
-        form: { ...statistic, statisticIndex: 0 },
+        form: { ...statistic },
       },
     });
 
@@ -87,6 +89,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
       irsDeficiencyAmount: '3',
       irsTotalPenalties: '4',
       lastDateOfPeriod: null,
+      statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: '2019',
       yearOrPeriod: 'Year',
     };
@@ -100,7 +103,7 @@ describe('deleteDeficiencyStatisticsAction', () => {
           caseId: '123',
           statistics: [statistic],
         },
-        form: { ...statistic, statisticIndex: 0 },
+        form: { ...statistic },
       },
     });
 

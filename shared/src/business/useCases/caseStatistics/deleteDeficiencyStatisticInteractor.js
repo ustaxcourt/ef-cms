@@ -11,13 +11,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to delete statistics
- * @param {number} providers.statisticIndex index of the statistic on the case to delete
+ * @param {string} providers.statisticId id of the statistic on the case to delete
  * @returns {object} the updated case
  */
 exports.deleteDeficiencyStatisticInteractor = async ({
   applicationContext,
   caseId,
-  statisticIndex,
+  statisticId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -30,7 +30,7 @@ exports.deleteDeficiencyStatisticInteractor = async ({
     .getCaseByCaseId({ applicationContext, caseId });
 
   const newCase = new Case(oldCase, { applicationContext });
-  newCase.deleteStatistic(statisticIndex);
+  newCase.deleteStatistic(statisticId);
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()

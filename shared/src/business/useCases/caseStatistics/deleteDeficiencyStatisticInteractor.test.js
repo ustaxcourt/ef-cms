@@ -8,11 +8,14 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 describe('deleteDeficiencyStatisticInteractor', () => {
-  let statistic = {
+  const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
+
+  const statistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,
     irsTotalPenalties: 1.1,
+    statisticId,
     year: 2012,
     yearOrPeriod: 'Year',
   };
@@ -26,7 +29,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(
-        Promise.resolve({ ...MOCK_CASE, statistics: [statistic, statistic] }),
+        Promise.resolve({ ...MOCK_CASE, statistics: [statistic] }),
       );
   });
 
@@ -45,21 +48,21 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     const result = await deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticIndex: 0,
+      statisticId,
     });
     expect(result).toMatchObject({
-      statistics: [statistic],
+      statistics: [],
     });
   });
 
-  it('should call updateCase with the original case statistics and return the original case if statisticIndex is not present on the case', async () => {
+  it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
     const result = await deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticIndex: 2,
+      statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
     });
     expect(result).toMatchObject({
-      statistics: [statistic, statistic],
+      statistics: [statistic],
     });
   });
 });

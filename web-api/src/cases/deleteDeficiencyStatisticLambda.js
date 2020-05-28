@@ -13,6 +13,6 @@ exports.deleteDeficiencyStatisticLambda = event =>
       .deleteDeficiencyStatisticInteractor({
         applicationContext,
         caseId: event.pathParameters.caseId,
-        statisticIndex: event.pathParameters.statisticIndex,
+        statisticId: event.pathParameters.statisticId,
       });
   });
