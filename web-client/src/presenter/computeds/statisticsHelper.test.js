@@ -59,6 +59,39 @@ describe('statisticsHelper', () => {
     });
   });
 
+  it('sorts formatted statistics by year / lastDateOfPeriod', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          statistics: [
+            { year: 2012, yearOrPeriod: 'Year' },
+            { year: 2011, yearOrPeriod: 'Year' },
+            { year: 2010, yearOrPeriod: 'Year' },
+            {
+              lastDateOfPeriod: '2019-12-02T12:00:00.000Z',
+              yearOrPeriod: 'Period',
+            },
+            { year: 2013, yearOrPeriod: 'Year' },
+            {
+              lastDateOfPeriod: '2011-11-01T12:00:00.000Z',
+              yearOrPeriod: 'Period',
+            },
+          ],
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.formattedStatistics).toMatchObject([
+      { formattedDate: 2010 },
+      { formattedDate: '11/01/11' },
+      { formattedDate: 2011 },
+      { formattedDate: 2012 },
+      { formattedDate: 2013 },
+      { formattedDate: '12/02/19' },
+    ]);
+  });
+
   it('returns undefined formattedStatistics if caseDetail.statistics is length 0', () => {
     const result = runCompute(statisticsHelper, {
       state: {
