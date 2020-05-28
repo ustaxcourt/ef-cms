@@ -1,9 +1,11 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   getCaseForPublicDocketSearchInteractor,
 } = require('./getCaseForPublicDocketSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { MOCK_CASE } = require('../../test/mockCase');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('Get case for public docket record search', () => {
   it('should search for a case by case id', async () => {
