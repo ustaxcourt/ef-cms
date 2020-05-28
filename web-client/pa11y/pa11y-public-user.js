@@ -9,7 +9,7 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced order search',
-    url: 'http://localhost:5678',
+    url: 'http://localhost:5678/',
   },
   {
     actions: [
@@ -21,7 +21,7 @@ module.exports = [
       'wait for #no-search-results to be visible',
     ],
     notes: 'checks a11y of advanced order search with no results',
-    url: 'http://localhost:5678?info=no-results',
+    url: 'http://localhost:5678/',
   },
   {
     actions: [
@@ -33,6 +33,6 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced opinion search with results',
-    url: 'http://localhost:5678?info=no-results',
+    url: 'http://localhost:5678/',
   },
 ];
