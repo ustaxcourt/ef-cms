@@ -1810,5 +1810,20 @@ Case.prototype.addStatistic = function (statisticEntity) {
   return this;
 };
 
+/**
+ * updates the statistic with the given index on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to update on the case
+ * @param {number} statisticIndex the index of the statistic to update
+ * @returns {Case} this case entity
+ */
+Case.prototype.updateStatistic = function (statisticEntity, statisticIndex) {
+  if (this.statistics[statisticIndex]) {
+    this.statistics[statisticIndex] = statisticEntity;
+  }
+
+  return this;
+};
+
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;

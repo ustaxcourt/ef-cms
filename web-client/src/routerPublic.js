@@ -35,9 +35,16 @@ const router = {
       });
     });
 
-    route('/..', () => {
+    route('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();
+    });
+
+    route('..', () => {
+      setPageTitle('Error');
+      return app.getSequence('notFoundErrorSequence')({
+        error: {},
+      });
     });
 
     route.start(true);
