@@ -28,18 +28,18 @@ function Statistic(rawStatistic) {
 Statistic.validationName = 'Statistic';
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
-  determinationDeficiencyAmount: 'Enter deficiency on Determination',
-  determinationTotalPenalties: 'Enter total penalties on Determination',
+  determinationDeficiencyAmount: 'Enter deficiency as determined by Court',
+  determinationTotalPenalties: 'Enter total penalties as determined by Court',
   irsDeficiencyAmount: 'Enter deficiency on IRS Notice',
   irsTotalPenalties: 'Enter total penalties on IRS Notice',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
-      message: 'Enter a valid last date of period',
+      message: 'Enter valid last date of period',
     },
-    'Last date of period is required',
+    'Enter last date of period',
   ],
-  year: 'Enter year',
+  year: 'Enter a valid year',
 };
 
 joiValidationDecorator(

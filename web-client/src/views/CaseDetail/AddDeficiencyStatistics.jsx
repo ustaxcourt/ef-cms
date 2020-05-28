@@ -12,6 +12,7 @@ export const AddDeficiencyStatistics = connect(
   {
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
+    cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     showModal: state.modal.showModal,
     submitAddDeficiencyStatisticsSequence:
       sequences.submitAddDeficiencyStatisticsSequence,
@@ -20,6 +21,7 @@ export const AddDeficiencyStatistics = connect(
   },
   function AddDeficiencyStatistics({
     calculatePenaltiesForAddSequence,
+    cancelAddStatisticSequence,
     showModal,
     submitAddDeficiencyStatisticsSequence,
     validateAddDeficiencyStatisticsSequence,
@@ -32,7 +34,7 @@ export const AddDeficiencyStatistics = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <h1>Add Deficiency Statistics</h1>
+          <h1>Add Year/Period</h1>
 
           <DeficiencyStatisticsForm />
 
@@ -45,7 +47,7 @@ export const AddDeficiencyStatistics = connect(
               Save
             </Button>
 
-            <Button link onClick={() => {}}>
+            <Button link onClick={() => cancelAddStatisticSequence()}>
               Cancel
             </Button>
           </div>
