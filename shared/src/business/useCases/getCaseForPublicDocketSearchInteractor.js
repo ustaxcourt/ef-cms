@@ -1,5 +1,7 @@
+const {
+  getDocumentContentsForDocuments,
+} = require('../useCaseHelper/case/getDocumentContentsForDocuments');
 const { Case } = require('../entities/cases/Case');
-const { getDocumentContentsForDocuments } = require('./getCaseInteractor');
 const { NotFoundError } = require('../../errors/errors');
 
 /**
