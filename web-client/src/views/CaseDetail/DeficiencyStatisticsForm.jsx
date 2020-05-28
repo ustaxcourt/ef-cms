@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DollarsInput } from '../../ustc-ui/DollarsInput/DollarsInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -7,16 +6,11 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const DeficiencyStatistics = connect(
+export const DeficiencyStatisticsForm = connect(
   {
-    calculatePenaltiesForAddSequence:
-      sequences.calculatePenaltiesForAddSequence,
     form: state.form,
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
-    showModal: state.modal.showModal,
-    submitAddDeficiencyStatisticsSequence:
-      sequences.submitAddDeficiencyStatisticsSequence,
     updateAddDeficiencyFormValueSequence:
       sequences.updateAddDeficiencyFormValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -24,12 +18,9 @@ export const DeficiencyStatistics = connect(
       sequences.validateAddDeficiencyStatisticsSequence,
     validationErrors: state.validationErrors,
   },
-  function DeficiencyStatistics({
-    calculatePenaltiesForAddSequence,
+  function DeficiencyStatisticsForm({
     form,
     showCalculatePenaltiesModalSequence,
-    showModal,
-    submitAddDeficiencyStatisticsSequence,
     updateAddDeficiencyFormValueSequence,
     updateFormValueSequence,
     validateAddDeficiencyStatisticsSequence,
@@ -37,7 +28,7 @@ export const DeficiencyStatistics = connect(
   }) {
     return (
       <>
-        <div className="blue-container margin-bottom-5">
+        <div className="blue-container margin-bottom-5 add-deficiency-statistics-form">
           <div className="margin-bottom-0">
             <label className="usa-label" htmlFor="name">
               Select Year or period
@@ -254,28 +245,6 @@ export const DeficiencyStatistics = connect(
             </div>
           </div>
         </div>
-
-        <div className="margin-top-3">
-          <Button
-            onClick={() => {
-              submitAddDeficiencyStatisticsSequence();
-            }}
-          >
-            Save
-          </Button>
-
-          <Button link onClick={() => {}}>
-            Cancel
-          </Button>
-        </div>
-        {showModal === 'CalculatePenaltiesModal' && (
-          <CalculatePenaltiesModal
-            confirmSequenceOverride={async () => {
-              await calculatePenaltiesForAddSequence();
-              await validateAddDeficiencyStatisticsSequence();
-            }}
-          />
-        )}
       </>
     );
   },
