@@ -13,7 +13,7 @@ export const EditDeficiencyStatistic = connect(
   {
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
-    form: state.form,
+    editStatisticFormHelper: state.editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence:
       sequences.openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal: state.modal.showModal,
@@ -24,7 +24,7 @@ export const EditDeficiencyStatistic = connect(
   },
   function EditDeficiencyStatistic({
     calculatePenaltiesForAddSequence,
-    form,
+    editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal,
     submitEditDeficiencyStatisticSequence,
@@ -38,22 +38,26 @@ export const EditDeficiencyStatistic = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <h1>Edit Year/Period - {form.year}</h1>
+          <h1>
+            Edit Year/Period - {editStatisticFormHelper.headerDateDisplay}
+          </h1>
 
           <div className="blue-container margin-bottom-5 add-deficiency-statistics-form">
             <DeficiencyStatisticsForm />
-            <div className="text-align-right">
-              <Button
-                link
-                className="red-warning"
-                icon="trash"
-                onClick={() =>
-                  openConfirmDeleteDeficiencyStatisticsModalSequence()
-                }
-              >
-                Delete Year/Period
-              </Button>
-            </div>
+            {editStatisticFormHelper.showDelete && (
+              <div className="text-align-right">
+                <Button
+                  link
+                  className="red-warning"
+                  icon="trash"
+                  onClick={() =>
+                    openConfirmDeleteDeficiencyStatisticsModalSequence()
+                  }
+                >
+                  Delete Year/Period
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="margin-top-3">
