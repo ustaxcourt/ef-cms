@@ -1831,5 +1831,23 @@ Case.prototype.updateStatistic = function (statisticEntity, statisticId) {
   return this;
 };
 
+/**
+ * deletes the statistic with the given index from the case
+ *
+ * @param {string} statisticId the id of the statistic to delete
+ * @returns {Case} this case entity
+ */
+Case.prototype.deleteStatistic = function (statisticId) {
+  const statisticIndexToDelete = this.statistics.findIndex(
+    statistic => statistic.statisticId === statisticId,
+  );
+
+  if (statisticIndexToDelete !== -1) {
+    this.statistics.splice(statisticIndexToDelete, 1);
+  }
+
+  return this;
+};
+
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
