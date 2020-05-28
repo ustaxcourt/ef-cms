@@ -14,6 +14,6 @@ exports.getCaseForPublicDocketSearchInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/public-api/cases/publicstuff/${docketNumber}`,
+    endpoint: `/public-api/docket-number-search/${docketNumber}`,
   });
 };
