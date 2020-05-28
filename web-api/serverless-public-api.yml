@@ -144,7 +144,7 @@ functions:
     handler: web-api/${self:provider.dir}/publicApiHandlers.getCaseForPublicDocketSearch
     events:
       - http:
-          path: /cases/publicstuff/{docketNumber}
+          path: /docket-number-search/{docketNumber}
           method: get
           cors: ui-public-${self:provider.stage}.ef-cms.${opt:domain}
 
