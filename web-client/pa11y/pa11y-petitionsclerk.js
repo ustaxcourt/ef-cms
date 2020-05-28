@@ -321,6 +321,16 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/add-other-statistics',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20/add-deficiency-statistics',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics',
+  {
+    actions: [
+      'wait for button#red-warning to be visible',
+      'click element button#red-warning',
+    ],
+    notes: 'checks the delete modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics',
+  },
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
