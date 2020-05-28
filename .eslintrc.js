@@ -10,7 +10,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    // 'plugin:cypress/recommended', // wait for a fix reported on https://github.com/cypress-io/eslint-plugin-cypress/issues/63
+    'plugin:cypress/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:jest/recommended',
