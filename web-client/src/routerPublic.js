@@ -23,11 +23,6 @@ const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
 
-    route('/..', () => {
-      setPageTitle('Dashboard');
-      app.getSequence('gotoPublicSearchSequence')();
-    });
-
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
@@ -38,6 +33,11 @@ const router = {
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({
         docketNumber,
       });
+    });
+
+    route('/..', () => {
+      setPageTitle('Dashboard');
+      app.getSequence('gotoPublicSearchSequence')();
     });
 
     route.start(true);
