@@ -1,0 +1,17 @@
+S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
+DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
+DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
+MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+ELASTICSEARCH_ENDPOINT: ${self:custom.vars.elasticsearchEndpoint, self:provider.elasticsearchEndpoint}
+MASTER_REGION: ${self:provider.masterRegion}
+STAGE: ${self:custom.stage}
+USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
+NODE_ENV: ${self:custom.vars.nodeEnv}
+EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
+EMAIL_DOCUMENT_SERVED_TEMPLATE: document_served_${opt:stage}
+EMAIL_SERVED_PETITION_TEMPLATE: petition_served_${opt:stage}
+EFCMS_DOMAIN: ${opt:domain}
+CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
+IRS_SUPERUSER_EMAIL: ${opt:irsSuperuserEmail, self:custom.vars.irsSuperuserEmail}

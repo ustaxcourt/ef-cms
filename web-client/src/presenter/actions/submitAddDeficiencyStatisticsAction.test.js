@@ -35,7 +35,7 @@ describe('submitAddDeficiencyStatisticsAction', () => {
       applicationContext.getUseCases().addDeficiencyStatisticInteractor,
     ).toHaveBeenCalled();
     expect(presenter.providers.path.success).toHaveBeenCalledWith({
-      alertSuccess: { message: 'Statistics updated.' },
+      alertSuccess: { message: 'Year/Period added.' },
     });
   });
 
