@@ -3065,7 +3065,7 @@ describe('Case entity', () => {
 
       expect(error).toBeDefined();
       expect(error.toString()).toEqual(
-        'Error: maxium number of statistics reached',
+        'Error: maximum number of statistics reached',
       );
       expect(caseEntity.statistics.length).toEqual(12);
     });
