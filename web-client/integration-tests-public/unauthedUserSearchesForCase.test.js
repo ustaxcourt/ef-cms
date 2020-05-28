@@ -21,7 +21,6 @@ import { docketClerkServesOrder } from '../integration-tests/journey/docketClerk
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
-import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unauthedUserSearchesForSealedCasesByDocketNumber';
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
@@ -88,9 +87,4 @@ describe('Unauthed user searches for a case and views a case detail page', () =>
   unauthedUserSearchesByDocketNumber(test, testClient);
   unauthedUserViewsCaseDetail(test);
   unauthedUserViewsPrintableDocketRecord(test);
-});
-
-describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCasesByDocketNumber(test);
 });
