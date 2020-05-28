@@ -7,7 +7,7 @@ exports.searchForCaseByDocketNumber = docketNumber => {
   cy.get('button#docket-search-button').click();
 };
 
-exports.searchForCaseByPeitionerName = name => {
+exports.searchForCaseByPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
   cy.get('button#advanced-search-button').click();
 };
