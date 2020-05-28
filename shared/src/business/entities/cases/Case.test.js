@@ -3019,7 +3019,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addStatistic', () => {
+  describe('statistics', () => {
     it('should successfully add a statistic', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
@@ -3068,6 +3068,72 @@ describe('Case entity', () => {
         'Error: maxium number of statistics reached',
       );
       expect(caseEntity.statistics.length).toEqual(12);
+    });
+
+    it('should successfully update a statistic', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              determinationDeficiencyAmount: 567,
+              determinationTotalPenalties: 789,
+              irsDeficiencyAmount: 11.2,
+              irsTotalPenalties: 66.87,
+              year: 2012,
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic({
+        determinationDeficiencyAmount: 1,
+        determinationTotalPenalties: 1,
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        year: 2012,
+        yearOrPeriod: 'Year',
+      });
+
+      caseEntity.updateStatistic(statisticToUpdate, 0);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toEqual(statisticToUpdate);
+    });
+
+    it('should not update a statistic if its index is not present on the case', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              determinationDeficiencyAmount: 567,
+              determinationTotalPenalties: 789,
+              irsDeficiencyAmount: 11.2,
+              irsTotalPenalties: 66.87,
+              year: 2012,
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic({
+        determinationDeficiencyAmount: 1,
+        determinationTotalPenalties: 1,
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        year: 2012,
+        yearOrPeriod: 'Year',
+      });
+
+      caseEntity.updateStatistic(statisticToUpdate, 1);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[1]).toBeUndefined();
     });
   });
 });

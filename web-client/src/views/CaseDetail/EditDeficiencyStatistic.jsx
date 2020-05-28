@@ -8,22 +8,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddDeficiencyStatistics = connect(
+export const EditDeficiencyStatistic = connect(
   {
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
-    cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
+    form: state.form,
     showModal: state.modal.showModal,
-    submitAddDeficiencyStatisticsSequence:
-      sequences.submitAddDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticsSequence:
+      sequences.submitEditDeficiencyStatisticsSequence,
     validateAddDeficiencyStatisticsSequence:
       sequences.validateAddDeficiencyStatisticsSequence,
   },
-  function AddDeficiencyStatistics({
+  function EditDeficiencyStatistic({
     calculatePenaltiesForAddSequence,
-    cancelAddStatisticSequence,
+    form,
     showModal,
-    submitAddDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticsSequence,
     validateAddDeficiencyStatisticsSequence,
   }) {
     return (
@@ -34,20 +34,20 @@ export const AddDeficiencyStatistics = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <h1>Add Year/Period</h1>
+          <h1>Edit Year/Period - {form.year}</h1>
 
           <DeficiencyStatisticsForm />
 
           <div className="margin-top-3">
             <Button
               onClick={() => {
-                submitAddDeficiencyStatisticsSequence();
+                submitEditDeficiencyStatisticsSequence();
               }}
             >
               Save
             </Button>
 
-            <Button link onClick={() => cancelAddStatisticSequence()}>
+            <Button link onClick={() => {}}>
               Cancel
             </Button>
           </div>
