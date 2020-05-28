@@ -2948,7 +2948,7 @@ describe('Case entity', () => {
   });
 
   describe('Statistics', () => {
-    it('should be required for deficiency cases', () => {
+    it('should be required for deficiency cases when hasVerifiedIrsNotice is true', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -2969,7 +2969,7 @@ describe('Case entity', () => {
       });
     });
 
-    it('should be required for deficiency cases', () => {
+    it('should not be required for deficiency cases when hasVerifiedIrsNotice is false', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -3101,6 +3101,40 @@ describe('Case entity', () => {
 
       expect(caseEntity.statistics.length).toEqual(1);
       expect(caseEntity.statistics[1]).toBeUndefined();
+    });
+
+    it('should successfully delete a statistic', () => {
+      const originalStatistics = [
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          year: 2013,
+          yearOrPeriod: 'Year',
+        },
+      ];
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [...originalStatistics],
+        },
+        { applicationContext },
+      );
+
+      caseEntity.deleteStatistic(1);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toMatchObject(originalStatistics[0]);
     });
   });
 });
