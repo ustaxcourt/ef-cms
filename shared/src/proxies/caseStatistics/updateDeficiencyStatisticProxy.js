@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+const { put } = require('../requests');
 
 /**
  * updateDeficiencyStatisticInteractor
@@ -28,7 +28,7 @@ exports.updateDeficiencyStatisticInteractor = ({
   year,
   yearOrPeriod,
 }) => {
-  return post({
+  return put({
     applicationContext,
     body: {
       determinationDeficiencyAmount,

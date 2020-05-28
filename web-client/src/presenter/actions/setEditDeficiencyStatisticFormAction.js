@@ -14,5 +14,6 @@ export const setEditDeficiencyStatisticFormAction = ({ get, props, store }) => {
 
   store.set(state.form, {
     ...statistics[statisticIndex],
+    statisticIndex,
   });
 };
