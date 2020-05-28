@@ -66,7 +66,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
           },
           size: 5000,
         },
-        index: 'efcms',
+        index: 'efcms-user',
       },
     })
   ).results;
@@ -88,7 +88,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
           },
           size: 5000,
         },
-        index: 'efcms',
+        index: 'efcms-user',
       },
     })
   ).results;

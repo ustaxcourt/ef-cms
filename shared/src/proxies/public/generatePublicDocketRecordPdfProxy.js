@@ -18,9 +18,5 @@ exports.generatePublicDocketRecordPdfInteractor = ({
       caseId,
     },
     endpoint: `/public-api/cases/${caseId}/generate-docket-record`,
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

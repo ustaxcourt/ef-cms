@@ -96,6 +96,7 @@ describe('Document entity', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
+      expect(myDoc.entityName).toEqual('Document');
     });
 
     it('Creates an invalid document with no document type', () => {
@@ -134,9 +135,9 @@ describe('Document entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -177,7 +178,7 @@ describe('Document entity', () => {
         error = err;
       }
 
-      expect(document.documentContents).toBeDefined();
+      expect(document.documentContents).not.toBeDefined();
       expect(error).not.toBeDefined();
     });
 
@@ -853,9 +854,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bill',
               assigneeName: 'bill',
-              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: false,
@@ -873,9 +874,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bob',
               assigneeName: 'bob',
-              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: true,
@@ -908,9 +909,9 @@ describe('Document entity', () => {
             {
               assigneeId: 'bill',
               assigneeName: 'bill',
-              caseCaptionNames: 'testing',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
+              caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               document: {},
               isQC: false,
@@ -997,7 +998,6 @@ describe('Document entity', () => {
       );
       document.setAsServed();
 
-      expect(document.status).toEqual('served');
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
     });
@@ -1019,7 +1019,6 @@ describe('Document entity', () => {
         },
       ]);
 
-      expect(document.status).toEqual('served');
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);

@@ -4,9 +4,10 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CHIEF_JUDGE } = require('./cases/CaseConstants');
 const { createISODateString } = require('../utilities/DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Message } = require('./Message');
 const { omit, orderBy } = require('lodash');
-
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -17,13 +18,15 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'WorkItem';
+
   this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
-  this.caseCaptionNames = rawWorkItem.caseCaptionNames;
   this.caseId = rawWorkItem.caseId;
   this.caseIsInProgress = rawWorkItem.caseIsInProgress;
   this.caseStatus = rawWorkItem.caseStatus;
+  this.caseTitle = rawWorkItem.caseTitle;
   this.completedAt = rawWorkItem.completedAt;
   this.completedBy = rawWorkItem.completedBy;
   this.completedByUserId = rawWorkItem.completedByUserId;
@@ -58,7 +61,6 @@ joiValidationDecorator(
     assigneeId: joi.string().allow(null).optional(),
     assigneeName: joi.string().allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().required(),
-    caseCaptionNames: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
@@ -67,7 +69,8 @@ joiValidationDecorator(
       .required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
-    completedAt: joi.date().iso().optional(),
+    caseTitle: joi.string().optional(),
+    completedAt: joiStrictTimestamp.optional(),
     completedBy: joi.string().optional().allow(null),
     completedByUserId: joi
       .string()
@@ -77,10 +80,11 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     completedMessage: joi.string().optional().allow(null),
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
     docketNumber: joi.string().required(),
     docketNumberSuffix: joi.string().allow(null).optional(),
     document: joi.object().required(),
+    entityName: joi.string().valid('WorkItem').required(),
     hideFromPendingMessages: joi.boolean().optional(),
     highPriority: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
@@ -97,8 +101,8 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    trialDate: joi.date().iso().optional().allow(null),
-    updatedAt: joi.date().iso().required(),
+    trialDate: joiStrictTimestamp.optional().allow(null),
+    updatedAt: joiStrictTimestamp.required(),
     workItemId: joi
       .string()
       .uuid({
@@ -106,9 +110,6 @@ joiValidationDecorator(
       })
       .required(),
   }),
-  function () {
-    return Message.validateCollection(this.messages);
-  },
 );
 
 /**

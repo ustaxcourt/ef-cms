@@ -43,12 +43,11 @@ import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
-import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
+import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
-import { ReviewPetitionFromPaper } from './StartCaseInternal/ReviewPetitionFromPaper';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -111,12 +110,11 @@ const pages = {
   PendingReport,
   PractitionerDetail,
   PrimaryContactEdit,
-  PrintPreview,
+  PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
-  ReviewPetitionFromPaper,
   ReviewSavedPetition,
   SecondaryContactEdit,
   SelectDocumentType,
@@ -148,7 +146,7 @@ export const AppComponent = connect(
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
       if (header) header.focus();
-      return false;
+      return;
     };
 
     useEffect(() => {

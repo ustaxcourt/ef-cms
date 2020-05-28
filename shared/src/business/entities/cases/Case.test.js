@@ -157,6 +157,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.entityName).toEqual('Case');
     });
 
     it('Creates a valid case from an already existing case json', () => {
@@ -164,6 +165,19 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates an invalid case with an invalid nested contact object', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with a document', () => {
@@ -734,26 +748,24 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseCaptionNames', () => {
+  describe('getCaseTitle', () => {
     it('party type Petitioner', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
-        'Test Petitioner, Petitioner',
-      );
-      expect(caseCaptionNames).toEqual('Test Petitioner');
+      const caseTitle = Case.getCaseTitle('Test Petitioner, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Test Petitioner & Test Petitioner 2, Petitioners',
       );
-      expect(caseCaptionNames).toEqual('Test Petitioner & Test Petitioner 2');
+      expect(caseTitle).toEqual('Test Petitioner & Test Petitioner 2');
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor, Petitioner(s)',
       );
-      expect(caseCaptionNames).toEqual(
+      expect(caseTitle).toEqual(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor',
       );
     });
@@ -880,37 +892,6 @@ describe('Case entity', () => {
         error = err;
       }
       expect(error).toBeTruthy();
-    });
-  });
-  describe('validateWithError', () => {
-    it('passes back an error passed in if invalid', () => {
-      let error = null;
-      const caseRecord = new Case(
-        {},
-        {
-          applicationContext,
-        },
-      );
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).toBeDefined();
-      expect(error.message).toContain("I'm a real error");
-    });
-
-    it('does not pass back an error passed in if valid', () => {
-      let error;
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeDefined();
     });
   });
 
@@ -1191,9 +1172,9 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -1208,9 +1189,9 @@ describe('Case entity', () => {
         {
           assigneeId: 'bob',
           assigneeName: 'bob',
-          caseCaptionNames: 'testing',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -1275,7 +1256,7 @@ describe('Case entity', () => {
     it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
       // eslint-disable-next-line spellcheck/spell-checker
       /*
-      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
+      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to
       leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
       at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
       */

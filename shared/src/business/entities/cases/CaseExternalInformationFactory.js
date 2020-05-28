@@ -7,7 +7,7 @@ const { CaseExternal } = require('./CaseExternal');
 
 /**
  * CaseExternalInformationFactory Entity
- * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition wizard.
+ * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition (now Create a Case) wizard.
  * Required fields are based on the user's current step in the wizard.
  *
  * @param {object} rawCase the raw case data
@@ -82,9 +82,6 @@ const schema = {
 joiValidationDecorator(
   CaseExternalInformationFactory,
   joi.object().keys(schema),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES,
 );
 

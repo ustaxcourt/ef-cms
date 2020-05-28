@@ -1,3 +1,7 @@
+const {
+  CaseAssociationRequestFactory,
+} = require('../../entities/CaseAssociationRequestFactory');
+
 /**
  * generateCaseAssociationDocumentTitleInteractor
  *
@@ -14,9 +18,10 @@ exports.generateCaseAssociationDocumentTitleInteractor = ({
   contactPrimaryName,
   contactSecondaryName,
 }) => {
-  const caseAssociation = applicationContext
-    .getEntityConstructors()
-    .CaseAssociationRequestFactory(caseAssociationRequest);
+  const caseAssociation = CaseAssociationRequestFactory(
+    caseAssociationRequest,
+    { applicationContext },
+  );
   return caseAssociation.getDocumentTitle(
     contactPrimaryName,
     contactSecondaryName,

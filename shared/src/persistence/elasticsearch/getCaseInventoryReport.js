@@ -49,7 +49,7 @@ exports.getCaseInventoryReport = async ({
       size,
       sort: [{ 'sortableDocketNumber.N.keyword': { order: 'asc' } }],
     },
-    index: 'efcms',
+    index: 'efcms-case',
   };
 
   if (associatedJudge) {

@@ -19,7 +19,7 @@ const generateTrialCalendarTemplate = async ({
       <td style="width: 13%;" class="valign-top">
         ${item.docketNumberWithSuffix}
       </td>
-      <td class="line-height-13">${item.caseName}</td>
+      <td class="line-height-13">${item.caseTitle}</td>
       <td style="width: 25%;" class="line-height-13">
         ${item.privatePractitioners
           .map(practitioner => practitioner.name)

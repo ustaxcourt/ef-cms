@@ -27,7 +27,7 @@ const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
   getConstants: () =>
     deepFreeze({

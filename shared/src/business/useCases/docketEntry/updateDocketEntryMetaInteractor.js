@@ -54,6 +54,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     attachments,
     certificateOfService,
     certificateOfServiceDate,
+    date,
     description,
     documentTitle,
     documentType,
@@ -97,6 +98,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     attachments ||
     certificateOfServiceDate ||
     certificateOfService ||
+    date ||
     documentType ||
     eventCode ||
     newFiledBy ||
@@ -145,6 +147,7 @@ exports.updateDocketEntryMetaInteractor = async ({
               ? certificateOfService
               : documentDetail.certificateOfService,
           certificateOfServiceDate: newCertificateOfServiceDate,
+          date: date || documentDetail.date,
           documentTitle: documentTitle || documentDetail.documentTitle, // setting to null will regenerate it for the coversheet
           documentType: documentType || documentDetail.documentType,
           eventCode: eventCode || documentDetail.eventCode,

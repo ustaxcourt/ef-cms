@@ -53,7 +53,7 @@ const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 
-exports.generateJsonFromSchema = (schema, entityName) => {
+const generateJsonFromSchema = (schema, entityName) => {
   let described = schema.describe ? schema.describe().keys : schema;
   const fields = Object.keys(described);
 
@@ -98,7 +98,6 @@ exports.generateJsonFromSchema = (schema, entityName) => {
     });
 
     switch (type) {
-      default:
       case 'date':
       case 'boolean':
       case 'number':
@@ -108,10 +107,21 @@ exports.generateJsonFromSchema = (schema, entityName) => {
       case 'string':
         if (rules && rules.length) {
           rules.forEach(({ args, name }) => {
+            let key, value;
             switch (name) {
               case 'pattern':
                 result.push({ h5: 'Regex Pattern' });
                 result.push({ p: `\`${args.regex}\`` });
+                break;
+              case 'min':
+                [key, value] = Object.entries(args)[0];
+                result.push({ h5: `Minimum ${key}` });
+                result.push({ p: `\`${value}\`` });
+                break;
+              case 'max':
+                [key, value] = Object.entries(args)[0];
+                result.push({ h5: `Maximum ${key}` });
+                result.push({ p: `\`${value}\`` });
                 break;
             }
           });
@@ -186,6 +196,8 @@ exports.generateJsonFromSchema = (schema, entityName) => {
           });
         });
         break;
+      default:
+        console.warn(`generateMarkdown: Unrecognized type "${type}"`);
     }
 
     return result;
@@ -198,13 +210,15 @@ exports.generateJsonFromSchema = (schema, entityName) => {
   return jsonResult;
 };
 
-exports.generateMarkdownSchema = (entity, entityName) => {
-  const json = exports.generateJsonFromSchema(entity.getSchema(), entityName);
+const generateMarkdownSchema = (entity, entityName) => {
+  const json = generateJsonFromSchema(entity.getSchema(), entityName);
 
   fs.writeFileSync(`./docs/entities/${entityName}.md`, json2md(json));
 };
 
-exports.generateMarkdownSchema(
+module.exports = { generateJsonFromSchema, generateMarkdownSchema };
+
+generateMarkdownSchema(
   getNextFriendForIncompetentPersonContact({
     countryType: 'domestic',
     isPaper: true,
@@ -212,7 +226,7 @@ exports.generateMarkdownSchema(
   'contacts/NextFriendForIncompetentPersonContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getNextFriendForMinorContact({
     countryType: 'domestic',
     isPaper: true,
@@ -220,7 +234,7 @@ exports.generateMarkdownSchema(
   'contacts/NextFriendForMinorContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPartnershipAsTaxMattersPartnerPrimaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -228,7 +242,7 @@ exports.generateMarkdownSchema(
   'contacts/PartnershipAsTaxMattersPartnerContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPartnershipBBAPrimaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -236,7 +250,7 @@ exports.generateMarkdownSchema(
   'contacts/PartnershipBBAPrimaryContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPartnershipOtherThanTaxMattersPrimaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -244,7 +258,7 @@ exports.generateMarkdownSchema(
   'contacts/PartnershipOtherThanTaxMattersPrimaryContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerConservatorContact({
     countryType: 'domestic',
     isPaper: true,
@@ -252,7 +266,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerConservatorContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerCorporationContact({
     countryType: 'domestic',
     isPaper: true,
@@ -260,7 +274,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerCorporationContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerCustodianContact({
     countryType: 'domestic',
     isPaper: true,
@@ -268,7 +282,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerCustodianContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerDeceasedSpouseContact({
     countryType: 'domestic',
     isPaper: true,
@@ -276,7 +290,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerDeceasedSpouseContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerEstateWithExecutorPrimaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -284,7 +298,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerEstateWithExecutorPrimaryContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerGuardianContact({
     countryType: 'domestic',
     isPaper: true,
@@ -292,7 +306,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerGuardianContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerIntermediaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -300,7 +314,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerIntermediaryContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerPrimaryContact({
     countryType: 'domestic',
     isPaper: true,
@@ -308,7 +322,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerPrimaryContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerSpouseContact({
     countryType: 'domestic',
     isPaper: true,
@@ -316,7 +330,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerSpouseContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getPetitionerTrustContact({
     countryType: 'domestic',
     isPaper: true,
@@ -324,7 +338,7 @@ exports.generateMarkdownSchema(
   'contacts/PetitionerTrustContact',
 );
 
-exports.generateMarkdownSchema(
+generateMarkdownSchema(
   getSurvivingSpouseContact({
     countryType: 'domestic',
     isPaper: true,
@@ -332,7 +346,7 @@ exports.generateMarkdownSchema(
   'contacts/SurvivingSpouseContact',
 );
 
-exports.generateMarkdownSchema(Case, 'Case');
-exports.generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
-exports.generateMarkdownSchema(DocketRecord, 'DocketRecord');
-exports.generateMarkdownSchema(Document, 'Document');
+generateMarkdownSchema(Case, 'Case');
+generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
+generateMarkdownSchema(DocketRecord, 'DocketRecord');
+generateMarkdownSchema(Document, 'Document');

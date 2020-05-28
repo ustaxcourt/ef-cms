@@ -14,7 +14,7 @@ export const MultiDocumentPartiesFilingReview = connect(
         key={selectedCase.caseId}
       >
         <label className="usa-label" htmlFor="filing-parties">
-          {selectedCase.docketNumber} {selectedCase.caseName}
+          {selectedCase.docketNumber} {selectedCase.caseTitle}
         </label>
         <ul className="ustc-unstyled-list without-margins">
           {!isEmpty(selectedCase.contactPrimary) && (

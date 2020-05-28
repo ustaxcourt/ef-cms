@@ -38,7 +38,7 @@ export const BaseModal = connect(
 
     const blurDialog = event => {
       if (preventCancelOnBlur) {
-        return false;
+        return;
       }
       return runBlurSequence(event);
     };

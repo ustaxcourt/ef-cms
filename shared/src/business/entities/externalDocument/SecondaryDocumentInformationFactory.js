@@ -2,9 +2,11 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
+const joiStrictTimestamp = getTimestampSchema();
 /**
  *
  * @constructor
@@ -36,7 +38,7 @@ SecondaryDocumentInformationFactory.get = (
   let schemaOptionalItems = {
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    certificateOfServiceDate: joi.date().iso().max('now'),
+    certificateOfServiceDate: joiStrictTimestamp.max('now'),
     objections: joi.string(),
   };
 
@@ -71,12 +73,7 @@ SecondaryDocumentInformationFactory.get = (
     }
   }
 
-  joiValidationDecorator(
-    entityConstructor,
-    schema,
-    undefined,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new entityConstructor(documentMetadata);
 };

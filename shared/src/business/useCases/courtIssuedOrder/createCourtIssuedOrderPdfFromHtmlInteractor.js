@@ -71,5 +71,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
     }
   }
 
-  return result;
+  return await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({ applicationContext, file: result });
 };

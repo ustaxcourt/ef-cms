@@ -25,6 +25,12 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
 
   const caseEntity = new Case(caseToCheck, { applicationContext });
 
+  if (caseEntity.isSealed) {
+    throw new UnauthorizedError(
+      'Unauthorized to access documents in a sealed case',
+    );
+  }
+
   const documentEntity = caseEntity.getDocumentById({ documentId });
 
   const isPrivate = isPrivateDocument(documentEntity, caseEntity.docketRecord);

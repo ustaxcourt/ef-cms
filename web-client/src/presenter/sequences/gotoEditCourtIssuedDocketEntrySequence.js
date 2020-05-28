@@ -1,5 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -23,6 +25,8 @@ export const gotoEditCourtIssuedDocketEntry = [
   getCaseAction,
   setCaseAction,
   setDocketEntryFormForDocketEditAction,
+  computeFormDateAction,
+  generateCourtIssuedDocumentTitleAction,
   setDocumentIdAction,
   set(state.isEditingDocketEntry, true),
   setCurrentPageAction('CourtIssuedDocketEntry'),

@@ -57,19 +57,26 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     expect(practitioner).toEqual({
+      additionalPhone: undefined,
       admissionsDate: '2019-03-01T21:42:29.073Z',
       admissionsStatus: 'Active',
+      alternateEmail: undefined,
       barNumber: 'PP1234',
       birthYear: '1983',
+      email: undefined,
       employer: 'Private',
+      entityName: 'Practitioner', // we return all practitioner search results as a Practitioner user.
       firmName: 'GW Law Offices',
       firstName: 'Private',
       lastName: 'Practitioner',
+      middleName: undefined,
       name: 'Private Practitioner',
       originalBarState: 'Oklahoma',
       practitionerType: 'Attorney',
       role: User.ROLES.privatePractitioner,
       section: 'privatePractitioner',
+      suffix: undefined,
+      token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
@@ -115,14 +122,17 @@ describe('getPractitionerByBarNumberInteractor', () => {
       birthYear: '1983',
       email: undefined,
       employer: 'Private',
+      entityName: 'Practitioner',
       firmName: 'GW Law Offices',
       firstName: 'IRS',
       lastName: 'Practitioner',
+      middleName: undefined,
       name: 'IRS Practitioner',
       originalBarState: 'Oklahoma',
       practitionerType: 'Attorney',
       role: 'privatePractitioner',
       section: 'privatePractitioner',
+      suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
