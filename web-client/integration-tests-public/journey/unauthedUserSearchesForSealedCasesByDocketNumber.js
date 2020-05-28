@@ -1,10 +1,10 @@
-export const unauthedUserSearchesByDocketNumber = (test, params) => {
-  return it('Search for cases by docket number', async () => {
+export const unauthedUserSearchesForSealedCasesByDocketNumber = test => {
+  return it('Search for a sealed case by docket number', async () => {
     let searchResults;
     const queryParams = {
-      docketNumber: params.docketNumber,
+      docketNumber: '105-20',
     };
-    test.docketNumber = params.docketNumber;
+    test.docketNumber = queryParams.docketNumber;
 
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
@@ -30,8 +30,7 @@ export const unauthedUserSearchesByDocketNumber = (test, params) => {
       value: queryParams.docketNumber,
     });
     await test.runSequence('submitPublicCaseDocketNumberSearchSequence', {});
-    searchResults = test.getState('searchResults');
-    expect(test.getState('caseId')).toEqual(params.docketNumber);
-    expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(0);
+    expect(test.getState('searchResults')).toEqual([]);
+    expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
   });
 };
