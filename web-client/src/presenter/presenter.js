@@ -287,6 +287,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
+import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
@@ -704,6 +705,7 @@ export const presenter = {
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
+    submitEditDeficiencyStatisticSequence,
     submitEditDocketEntryMetaSequence,
     submitEditIrsPractitionersModalSequence,
     submitEditOrderTitleModalSequence,

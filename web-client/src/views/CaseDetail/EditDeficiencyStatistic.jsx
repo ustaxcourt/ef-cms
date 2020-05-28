@@ -14,8 +14,8 @@ export const EditDeficiencyStatistic = connect(
       sequences.calculatePenaltiesForAddSequence,
     form: state.form,
     showModal: state.modal.showModal,
-    submitEditDeficiencyStatisticsSequence:
-      sequences.submitEditDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticSequence:
+      sequences.submitEditDeficiencyStatisticSequence,
     validateAddDeficiencyStatisticsSequence:
       sequences.validateAddDeficiencyStatisticsSequence,
   },
@@ -23,7 +23,7 @@ export const EditDeficiencyStatistic = connect(
     calculatePenaltiesForAddSequence,
     form,
     showModal,
-    submitEditDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticSequence,
     validateAddDeficiencyStatisticsSequence,
   }) {
     return (
@@ -41,7 +41,7 @@ export const EditDeficiencyStatistic = connect(
           <div className="margin-top-3">
             <Button
               onClick={() => {
-                submitEditDeficiencyStatisticsSequence();
+                submitEditDeficiencyStatisticSequence();
               }}
             >
               Save
