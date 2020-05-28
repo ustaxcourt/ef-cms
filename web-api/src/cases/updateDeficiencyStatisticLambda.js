@@ -13,7 +13,7 @@ exports.updateDeficiencyStatisticLambda = event =>
       .updateDeficiencyStatisticInteractor({
         applicationContext,
         caseId: event.pathParameters.caseId,
-        statisticIndex: event.pathParameters.statisticIndex,
+        statisticId: event.pathParameters.statisticId,
         ...JSON.parse(event.body),
       });
   });

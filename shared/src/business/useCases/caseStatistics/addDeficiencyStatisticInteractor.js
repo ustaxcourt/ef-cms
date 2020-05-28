@@ -42,15 +42,18 @@ exports.addDeficiencyStatisticInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const statisticEntity = new Statistic({
-    determinationDeficiencyAmount,
-    determinationTotalPenalties,
-    irsDeficiencyAmount,
-    irsTotalPenalties,
-    lastDateOfPeriod,
-    year,
-    yearOrPeriod,
-  }).validate();
+  const statisticEntity = new Statistic(
+    {
+      determinationDeficiencyAmount,
+      determinationTotalPenalties,
+      irsDeficiencyAmount,
+      irsTotalPenalties,
+      lastDateOfPeriod,
+      year,
+      yearOrPeriod,
+    },
+    { applicationContext },
+  ).validate();
 
   const newCase = new Case(oldCase, { applicationContext });
   newCase.addStatistic(statisticEntity);

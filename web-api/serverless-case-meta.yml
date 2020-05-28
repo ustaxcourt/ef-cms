@@ -290,7 +290,7 @@ functions:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateDeficiencyStatisticLambda
     events:
       - http:
-          path: /{caseId}/statistics/{statisticIndex}
+          path: /{caseId}/statistics/{statisticId}
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

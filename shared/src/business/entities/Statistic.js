@@ -12,7 +12,10 @@ const joiStrictTimestamp = getTimestampSchema();
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic) {
+function Statistic(rawStatistic, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.entityName = 'Statistic';
 
   this.determinationDeficiencyAmount =
@@ -23,6 +26,8 @@ function Statistic(rawStatistic) {
   this.lastDateOfPeriod = rawStatistic.lastDateOfPeriod;
   this.year = rawStatistic.year;
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
+  this.statisticId =
+    rawStatistic.statisticId || applicationContext.getUniqueId();
 }
 
 Statistic.validationName = 'Statistic';
@@ -64,6 +69,10 @@ joiValidationDecorator(
         'The total amount of penalties for the period or year determined by the Court.',
       ),
     entityName: joi.string().valid('Statistic').required(),
+    index: joi
+      .number()
+      .optional()
+      .description('The array index of the statistic on the case.'),
     irsDeficiencyAmount: joi
       .number()
       .required()
@@ -81,6 +90,13 @@ joiValidationDecorator(
         then: joiStrictTimestamp.max('now').required(),
       })
       .description('Last date of the statistics period.'),
+    statisticId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .required()
+      .description('Unique statistic ID only used by the system.'),
     year: joi
       .when('yearOrPeriod', {
         is: 'Year',
