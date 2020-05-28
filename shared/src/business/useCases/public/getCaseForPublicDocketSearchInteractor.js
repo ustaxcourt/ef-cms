@@ -1,6 +1,3 @@
-const {
-  getDocumentContentsForDocuments,
-} = require('../../useCaseHelper/case/getDocumentContentsForDocuments');
 const { Case } = require('../../entities/cases/Case');
 const { NotAuthorizedError, NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
@@ -17,7 +14,6 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
   applicationContext,
   docketNumber,
 }) => {
-  console.log('CASE ID/DOCKET', docketNumber);
   let caseRecord;
 
   if (Case.isValidCaseId(docketNumber)) {
@@ -54,11 +50,6 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
     })
       .validate()
       .toRawObject();
-
-    caseDetailRaw.documents = await getDocumentContentsForDocuments({
-      applicationContext,
-      documents: caseDetailRaw.documents,
-    });
   }
-  return null;
+  return caseDetailRaw;
 };
