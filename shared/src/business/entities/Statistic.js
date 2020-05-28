@@ -69,10 +69,6 @@ joiValidationDecorator(
         'The total amount of penalties for the period or year determined by the Court.',
       ),
     entityName: joi.string().valid('Statistic').required(),
-    index: joi
-      .number()
-      .optional()
-      .description('The array index of the statistic on the case.'),
     irsDeficiencyAmount: joi
       .number()
       .required()
