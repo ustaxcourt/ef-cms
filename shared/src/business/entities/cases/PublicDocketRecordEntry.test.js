@@ -6,16 +6,16 @@ describe('PublicDocketRecordEntry', () => {
       description: 'testing',
       documentId: 'testing',
       filedBy: 'testing',
-      filingDate: 'testing',
-      index: 'testing',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      index: 1,
     });
 
-    expect(entity.toRawObject()).toEqual({
+    expect(entity.validate().toRawObject()).toEqual({
       description: 'testing',
       documentId: 'testing',
       filedBy: 'testing',
-      filingDate: 'testing',
-      index: 'testing',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      index: 1,
     });
   });
 });

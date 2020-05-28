@@ -26,8 +26,10 @@ import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
+import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
+import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
@@ -103,8 +105,10 @@ const pages = {
   DashboardRespondent,
   DocumentDetail,
   EditCorrespondenceDocument,
+  EditDeficiencyStatistic,
   EditDocketEntry,
   EditDocketEntryMeta,
+  EditOtherStatistics,
   EditPetitionDetails,
   EditPetitionerInformation,
   EditPractitionerUser,
