@@ -177,12 +177,12 @@
     "sk": "docket-record|f15a6532-9805-479b-ae45-e8f112153d2a"
   },
   {
-    "sk": "case|77d8449a-ffe1-48e5-b056-a6112a819a4b",
-    "pk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3"
+    "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
+    "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
   },
   {
-    "sk": "work-item|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "case|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "role": "irsPractitioner",
