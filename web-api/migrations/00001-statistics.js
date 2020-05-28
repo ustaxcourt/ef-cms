@@ -12,12 +12,15 @@ const mutateRecord = item => {
   ) {
     let { statistics } = item;
     if (!statistics || statistics.length === 0) {
-      const defaultStatistic = new Statistic({
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        year: '2012',
-        yearOrPeriod: 'Year',
-      });
+      const defaultStatistic = new Statistic(
+        {
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          year: '2012',
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
       statistics = [defaultStatistic];
     } else {
       statistics.map(statistic => {
