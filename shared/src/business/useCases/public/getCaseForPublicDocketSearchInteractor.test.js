@@ -4,7 +4,6 @@ const {
 const {
   getCaseForPublicDocketSearchInteractor,
 } = require('./getCaseForPublicDocketSearchInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('Get case for public docket record search', () => {
