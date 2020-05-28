@@ -1,5 +1,5 @@
 export const petitionsClerkEditOtherStatisticToCase = test => {
-  return it('petitions clerk edits deficiency statistic', async () => {
+  return it('petitions clerk edits other statistic on the case', async () => {
     await test.runSequence('gotoEditOtherStatisticsSequence', {
       docketNumber: test.docketNumber,
     });
