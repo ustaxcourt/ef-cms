@@ -69,8 +69,13 @@ export const statisticsHelper = (get, applicationContext) => {
   const showLitigationCosts = !!formattedLitigationCosts;
   const showOtherStatistics = showDamages || showLitigationCosts;
 
+  const hasMaxDeficiencyStatistics = statistics && statistics.length === 12;
+
   const showAddDeficiencyStatisticsButton =
-    permissions.ADD_EDIT_STATISTICS && caseType === CASE_TYPES_MAP.deficiency;
+    permissions.ADD_EDIT_STATISTICS &&
+    caseType === CASE_TYPES_MAP.deficiency &&
+    hasMaxDeficiencyStatistics;
+
   const showAddOtherStatisticsButton =
     permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
 

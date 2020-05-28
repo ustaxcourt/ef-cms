@@ -141,6 +141,27 @@ describe('statisticsHelper', () => {
     });
   });
 
+  it('returns showAddDeficiencyStatisticsButton false if the maximum number of statistics for a case has been reached', () => {
+    const statisticsWithMaxLength = new Array(12); // 12 is the maximum number of statistics
+
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          caseType: Case.CASE_TYPES_MAP.deficiency,
+          statistics: statisticsWithMaxLength,
+        },
+        permissions: {
+          ADD_EDIT_STATISTICS: true,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      showAddButtons: true,
+      showAddDeficiencyStatisticsButton: false,
+    });
+  });
+
   it('returns showAddOtherStatisticsButton true if permissions.ADD_EDIT_STATISTICS is true and other statistics are not already added', () => {
     const result = runCompute(statisticsHelper, {
       state: {
