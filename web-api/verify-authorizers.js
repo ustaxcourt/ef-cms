@@ -11,7 +11,9 @@ axios.interceptors.request.use(function (config) {
 const main = async () => {
   const serverlessYmlFiles = process.argv
     .slice(2)
-    .filter(path => !path.includes('public-api'));
+    .filter(
+      path => !path.includes('public-api') && path.includes('serverless'),
+    );
 
   const serverlessConfigs = serverlessYmlFiles.map(path =>
     yaml.safeLoad(fs.readFileSync(path, 'utf8')),

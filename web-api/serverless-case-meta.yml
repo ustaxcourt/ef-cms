@@ -285,3 +285,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  updateDeficiencyStatistic:
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.updateDeficiencyStatisticLambda
+    events:
+      - http:
+          path: /{caseId}/statistics/{statisticId}
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteDeficiencyStatistic:
+    handler: web-api/${self:provider.dir}/caseMetaHandlers.deleteDeficiencyStatisticLambda
+    events:
+      - http:
+          path: /{caseId}/statistics/{statisticId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

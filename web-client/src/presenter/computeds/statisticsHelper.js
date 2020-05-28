@@ -53,10 +53,29 @@ export const statisticsHelper = (get, applicationContext) => {
 
   let formattedStatistics;
 
+  const formatStatisticDateForSort = statistic => {
+    let date;
+    if (statistic.yearOrPeriod === 'Year') {
+      date = `${statistic.year}-12-31`;
+    } else {
+      date = applicationContext
+        .getUtilities()
+        .formatDateString(statistic.lastDateOfPeriod, 'YYYYMMDD');
+    }
+    return date;
+  };
+
   if (statistics && statistics.length > 0) {
-    formattedStatistics = statistics.map(statistic =>
-      formatStatistic({ applicationContext, statistic }),
-    );
+    formattedStatistics = statistics
+      .map(statistic => formatStatistic({ applicationContext, statistic }))
+      .sort((a, b) =>
+        applicationContext
+          .getUtilities()
+          .dateStringsCompared(
+            formatStatisticDateForSort(a),
+            formatStatisticDateForSort(b),
+          ),
+      );
   }
 
   const formattedDamages =
@@ -65,10 +84,17 @@ export const statisticsHelper = (get, applicationContext) => {
     litigationCosts &&
     applicationContext.getUtilities().formatDollars(litigationCosts);
 
-  const showOtherStatistics = !!formattedDamages || !!formattedLitigationCosts;
+  const showDamages = !!formattedDamages;
+  const showLitigationCosts = !!formattedLitigationCosts;
+  const showOtherStatistics = showDamages || showLitigationCosts;
+
+  const hasMaxDeficiencyStatistics = statistics && statistics.length === 12;
 
   const showAddDeficiencyStatisticsButton =
-    permissions.ADD_EDIT_STATISTICS && caseType === CASE_TYPES_MAP.deficiency;
+    permissions.ADD_EDIT_STATISTICS &&
+    caseType === CASE_TYPES_MAP.deficiency &&
+    !hasMaxDeficiencyStatistics;
+
   const showAddOtherStatisticsButton =
     permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
 
@@ -80,7 +106,9 @@ export const statisticsHelper = (get, applicationContext) => {
       showAddDeficiencyStatisticsButton || showAddOtherStatisticsButton,
     showAddDeficiencyStatisticsButton,
     showAddOtherStatisticsButton,
+    showDamages,
     showEditButtons: permissions.ADD_EDIT_STATISTICS,
+    showLitigationCosts,
     showNoStatistics: !formattedStatistics && !showOtherStatistics,
     showOtherStatistics,
   };
