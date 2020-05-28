@@ -7,7 +7,8 @@ const {
 const { User } = require('../../entities/User');
 
 describe('updateCourtIssuedOrderInteractor', () => {
-  let mockUser;
+  let mockCurrentUser;
+  let mockUserById;
 
   let caseRecord = {
     caseCaption: 'Caption',
@@ -64,26 +65,31 @@ describe('updateCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.environment.stage = 'local';
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    mockCurrentUser = new User({
+      name: 'Olivia Jade',
+      role: User.ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
+
+    mockUserById = {
+      name: 'bob',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUserById);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
-    mockUser = new User({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.privatePractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockResolvedValue(caseRecord);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue({ name: 'bob' });
+    mockCurrentUser.role = User.ROLES.privatePractitioner;
+    mockUserById = { name: 'bob' };
 
     await expect(
       updateCourtIssuedOrderInteractor({
@@ -98,16 +104,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if document is not found', async () => {
-    mockUser = new User({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'bob',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue();
 
     await expect(
       updateCourtIssuedOrderInteractor({
@@ -122,17 +119,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('update existing document within case', async () => {
-    mockUser = new User({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'bob',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await updateCourtIssuedOrderInteractor({
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -151,18 +137,33 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toEqual(3);
   });
 
+  it('should update the number of pages in the document', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockReturnValue(45);
+
+    await updateCourtIssuedOrderInteractor({
+      applicationContext,
+      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        documentType: 'Order to Show Cause',
+      },
+    });
+
+    const updatedDocument = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
+        x => x.documentType === 'Order to Show Cause',
+      );
+
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toBeCalled();
+    expect(updatedDocument.numberOfPages).toEqual(45);
+  });
+
   it('stores documentContents in S3 if present', async () => {
-    mockUser = new User({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'bob',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await updateCourtIssuedOrderInteractor({
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -193,17 +194,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('does not update non-editable fields on document', async () => {
-    mockUser = new User({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitionsClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'bob',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await updateCourtIssuedOrderInteractor({
       applicationContext,
       documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

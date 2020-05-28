@@ -61,6 +61,7 @@ import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequen
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
+import { deleteOtherStatisticsSequence } from './sequences/deleteOtherStatisticsSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
@@ -101,9 +102,11 @@ import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
 import { gotoEditCorrespondenceDocumentSequence } from './sequences/gotoEditCorrespondenceDocumentSequence';
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
+import { gotoEditDeficiencyStatisticSequence } from './sequences/gotoEditDeficiencyStatisticSequence';
 import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
+import { gotoEditOtherStatisticsSequence } from './sequences/gotoEditOtherStatisticsSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
 import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
 import { gotoEditPractitionerUserSequence } from './sequences/gotoEditPractitionerUserSequence';
@@ -175,6 +178,7 @@ import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
+import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openConfirmDeleteOtherStatisticsModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
@@ -286,6 +290,7 @@ import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
+import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditPrivatePractitionersModalSequence } from './sequences/submitEditPrivatePractitionersModalSequence';
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
@@ -316,6 +321,7 @@ import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSe
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
+import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
@@ -359,6 +365,7 @@ import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserC
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { uploadCorrespondenceDocumentSequence } from './sequences/uploadCorrespondenceDocumentSequence';
 import { uploadCourtIssuedDocumentSequence } from './sequences/uploadCourtIssuedDocumentSequence';
+import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
 import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
@@ -473,6 +480,7 @@ export const presenter = {
     deleteCaseNoteSequence,
     deleteCorrespondenceDocumentSequence,
     deleteJudgesCaseNoteFromCaseDetailSequence,
+    deleteOtherStatisticsSequence,
     deleteTrialSessionSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
@@ -513,9 +521,11 @@ export const presenter = {
     gotoDocumentDetailSequence,
     gotoEditCorrespondenceDocumentSequence,
     gotoEditCourtIssuedDocketEntrySequence,
+    gotoEditDeficiencyStatisticSequence,
     gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
+    gotoEditOtherStatisticsSequence,
     gotoEditPetitionDetailsSequence,
     gotoEditPetitionerInformationSequence,
     gotoEditPractitionerUserSequence,
@@ -587,6 +597,7 @@ export const presenter = {
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeleteCorrespondenceModalSequence,
+    openConfirmDeleteOtherStatisticsModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
@@ -696,6 +707,7 @@ export const presenter = {
     submitEditDocketEntryMetaSequence,
     submitEditIrsPractitionersModalSequence,
     submitEditOrderTitleModalSequence,
+    submitEditOtherStatisticsSequence,
     submitEditPrimaryContactSequence,
     submitEditPrivatePractitionersModalSequence,
     submitEditSecondaryContactSequence,
@@ -726,6 +738,7 @@ export const presenter = {
     unidentifiedUserErrorSequence,
     unprioritizeCaseSequence,
     unsetWorkQueueIsInternalSequence,
+    updateAddDeficiencyFormValueSequence,
     updateAdvancedOpinionSearchFormValueSequence,
     updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
@@ -769,6 +782,7 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     uploadCorrespondenceDocumentSequence,
     uploadCourtIssuedDocumentSequence,
+    validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
     validateAddPractitionerSequence,
     validateAddPrivatePractitionerSequence,

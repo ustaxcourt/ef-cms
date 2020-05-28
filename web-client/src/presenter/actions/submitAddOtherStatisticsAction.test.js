@@ -30,7 +30,7 @@ describe('submitAddOtherStatisticsAction', () => {
       applicationContext.getUseCases().updateOtherStatisticsInteractor,
     ).toHaveBeenCalled();
     expect(presenter.providers.path.success).toHaveBeenCalledWith({
-      alertSuccess: { message: 'Statistics updated.' },
+      alertSuccess: { message: 'Other statistics added.' },
     });
   });
 
