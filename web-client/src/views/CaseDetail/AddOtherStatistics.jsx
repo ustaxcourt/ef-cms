@@ -9,10 +9,14 @@ import React from 'react';
 
 export const AddOtherStatistics = connect(
   {
+    cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     submitAddOtherStatisticsSequence:
       sequences.submitAddOtherStatisticsSequence,
   },
-  function AddOtherStatistics({ submitAddOtherStatisticsSequence }) {
+  function AddOtherStatistics({
+    cancelAddStatisticSequence,
+    submitAddOtherStatisticsSequence,
+  }) {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-1" />
@@ -36,7 +40,7 @@ export const AddOtherStatistics = connect(
               Save
             </Button>
 
-            <Button link onClick={() => {}}>
+            <Button link onClick={() => cancelAddStatisticSequence()}>
               Cancel
             </Button>
           </div>

@@ -2,18 +2,20 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  updateDeficiencyStatisticInteractor,
-} = require('./updateDeficiencyStatisticInteractor');
+  deleteDeficiencyStatisticInteractor,
+} = require('./deleteDeficiencyStatisticInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
-describe('updateDeficiencyStatisticInteractor', () => {
-  let statistic = {
+describe('deleteDeficiencyStatisticInteractor', () => {
+  const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
+
+  const statistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,
     irsTotalPenalties: 1.1,
-    statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
+    statisticId,
     year: 2012,
     yearOrPeriod: 'Year',
   };
@@ -35,42 +37,29 @@ describe('updateDeficiencyStatisticInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateDeficiencyStatisticInteractor({
+      deleteDeficiencyStatisticInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const statisticToUpdate = {
-      ...statistic,
-      determinationDeficiencyAmount: 1,
-    };
-
-    const result = await updateDeficiencyStatisticInteractor({
+  it('should call updateCase with the removed case statistics and return the updated case', async () => {
+    const result = await deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
-      ...statisticToUpdate,
+      statisticId,
     });
     expect(result).toMatchObject({
-      statistics: [statisticToUpdate],
+      statistics: [],
     });
   });
 
   it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
-    const statisticToUpdate = {
-      ...statistic,
-      determinationDeficiencyAmount: 1,
-      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
-    };
-
-    const result = await updateDeficiencyStatisticInteractor({
+    const result = await deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
-      ...statisticToUpdate,
+      statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
     });
     expect(result).toMatchObject({
       statistics: [statistic],
