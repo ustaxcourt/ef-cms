@@ -244,4 +244,43 @@ describe('statisticsHelper', () => {
 
     expect(result.showNoStatistics).toEqual(false);
   });
+
+  it('returns showOtherStatistics false if there are no damages or litigationCosts on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {},
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(false);
+  });
+
+  it('returns showDamages and showOtherStatistics true if there are damages on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          damages: 1234,
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(true);
+    expect(result.showDamages).toEqual(true);
+  });
+
+  it('returns showLitigationCosts showOtherStatistics true if there are damages on the case', () => {
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          litigationCosts: 1234,
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result.showOtherStatistics).toEqual(true);
+    expect(result.showLitigationCosts).toEqual(true);
+  });
 });
