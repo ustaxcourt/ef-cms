@@ -16,18 +16,22 @@ describe('TabsComponent', () => {
       },
     };
     const app = App(testModule);
-    const testRenderer = TestRenderer.create(
-      <Container app={app}>
-        <Tabs bind="tab" className="yeah">
-          <Tab id="tab-work-queue" tabName="section" title="Section Queue">
-            <div id="tab-section-panel">Section</div>
-          </Tab>
-          <Tab id="tab-my-queue" tabName="my" title="My Queue">
-            <div id="tab-individual-panel">Indy</div>
-          </Tab>
-        </Tabs>
-      </Container>,
-    );
+
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <Container app={app}>
+          <Tabs bind="tab" className="yeah">
+            <Tab id="tab-work-queue" tabName="section" title="Section Queue">
+              <div id="tab-section-panel">Section</div>
+            </Tab>
+            <Tab id="tab-my-queue" tabName="my" title="My Queue">
+              <div id="tab-individual-panel">Indy</div>
+            </Tab>
+          </Tabs>
+        </Container>,
+      );
+    });
 
     const testInstance = testRenderer.root;
 
@@ -50,18 +54,21 @@ describe('TabsComponent', () => {
       },
     };
     const app = App(testModule);
-    const testRenderer = TestRenderer.create(
-      <Container app={app}>
-        <Tabs bind="tab" className="yeah">
-          <Tab id="tab-work-queue" tabName="section" title="Section Queue">
-            <div id="tab-section-panel">Section</div>
-          </Tab>
-          <Tab id="tab-my-queue" tabName="my" title="My Queue">
-            <div id="tab-individual-panel">Indy</div>
-          </Tab>
-        </Tabs>
-      </Container>,
-    );
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <Container app={app}>
+          <Tabs bind="tab" className="yeah">
+            <Tab id="tab-work-queue" tabName="section" title="Section Queue">
+              <div id="tab-section-panel">Section</div>
+            </Tab>
+            <Tab id="tab-my-queue" tabName="my" title="My Queue">
+              <div id="tab-individual-panel">Indy</div>
+            </Tab>
+          </Tabs>
+        </Container>,
+      );
+    });
 
     const testInstance = testRenderer.root;
 
@@ -92,18 +99,21 @@ describe('TabsComponent', () => {
       },
     };
     const app = App(testModule);
-    const testRenderer = TestRenderer.create(
-      <Container app={app}>
-        <Tabs asSwitch bind="tab" className="yeah">
-          <Tab id="tab-work-queue" tabName="section" title="something">
-            <div id="tab-section-panel">Section</div>
-          </Tab>
-          <Tab id="tab-my-queue" tabName="my">
-            <div id="tab-individual-panel">Indy</div>
-          </Tab>
-        </Tabs>
-      </Container>,
-    );
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <Container app={app}>
+          <Tabs asSwitch bind="tab" className="yeah">
+            <Tab id="tab-work-queue" tabName="section" title="something">
+              <div id="tab-section-panel">Section</div>
+            </Tab>
+            <Tab id="tab-my-queue" tabName="my">
+              <div id="tab-individual-panel">Indy</div>
+            </Tab>
+          </Tabs>
+        </Container>,
+      );
+    });
 
     const testInstance = testRenderer.root;
 

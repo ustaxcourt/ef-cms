@@ -9,7 +9,6 @@ const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
-
 /**
  * getCaseInteractor
  *
