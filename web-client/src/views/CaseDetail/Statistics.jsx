@@ -121,7 +121,6 @@ export const Statistics = connect(
                     <td>{statisticsHelper.formattedLitigationCosts}</td>
                     <td>{statisticsHelper.formattedDamages}</td>
                     <td>
-                      {' '}
                       {statisticsHelper.showEditButtons && (
                         <Button
                           link
