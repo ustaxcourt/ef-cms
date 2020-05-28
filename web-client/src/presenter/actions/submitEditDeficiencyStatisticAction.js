@@ -1,11 +1,11 @@
 import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from 'cerebral';
 /**
- * submits the add deficiency statistics form
+ * submits the edit deficiency statistics form
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
  * @param {object} providers.applicationContext the applicationContext
+ * @param {object} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
