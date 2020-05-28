@@ -4,7 +4,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setEditOtherFormAction } from '../actions/setEditOtherFormAction';
+import { setEditOtherStatisticsFormAction } from '../actions/setEditOtherStatisticsFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditOtherStatisticsSequence = [
@@ -16,7 +16,7 @@ export const gotoEditOtherStatisticsSequence = [
       clearFormAction,
       getCaseAction,
       setCaseAction,
-      setEditOtherFormAction,
+      setEditOtherStatisticsFormAction,
       setCurrentPageAction('EditOtherStatistics'),
     ],
     unauthorized: [redirectToCognitoAction],
