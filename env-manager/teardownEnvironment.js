@@ -1,7 +1,7 @@
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { deleteStacks } = require('./deleteStacks');
 
-const environmentName = 'eric';
+const environmentName = 'exp1';
 
 const environmentEast = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -20,11 +20,15 @@ const environmentWest = {
 };
 
 const teardownEnvironment = async () => {
-  await deleteCustomDomains({ environment: environmentEast });
-  await deleteCustomDomains({ environment: environmentWest });
+  await Promise.all([
+    deleteCustomDomains({ environment: environmentEast }),
+    deleteCustomDomains({ environment: environmentWest }),
+  ]);
 
-  await deleteStacks({ environment: environmentEast });
-  await deleteStacks({ environment: environmentWest });
+  await Promise.all([
+    deleteStacks({ environment: environmentEast }),
+    deleteStacks({ environment: environmentWest }),
+  ]);
 };
 
 teardownEnvironment();

@@ -23,8 +23,8 @@ exports.deleteStacks = async ({ environment }) => {
       environment,
     });
     console.log(
-      'Waiting for stacks to be deleted:',
-      Date(),
+      'Remaining stacks:',
+      environment.region,
       refreshedStacks.length,
     );
     resourceCount = refreshedStacks.length;
