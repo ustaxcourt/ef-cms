@@ -1805,7 +1805,46 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
  * @returns {Case} this case entity
  */
 Case.prototype.addStatistic = function (statisticEntity) {
+  if (this.statistics.length === 12) {
+    throw new Error('maximum number of statistics reached');
+  }
+
   this.statistics = [...this.statistics, statisticEntity];
+
+  return this;
+};
+
+/**
+ * updates the statistic with the given index on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to update on the case
+ * @param {string} statisticId the id of the statistic to update
+ * @returns {Case} this case entity
+ */
+Case.prototype.updateStatistic = function (statisticEntity, statisticId) {
+  const statisticToUpdate = this.statistics.find(
+    statistic => statistic.statisticId === statisticId,
+  );
+
+  if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
+
+  return this;
+};
+
+/**
+ * deletes the statistic with the given index from the case
+ *
+ * @param {string} statisticId the id of the statistic to delete
+ * @returns {Case} this case entity
+ */
+Case.prototype.deleteStatistic = function (statisticId) {
+  const statisticIndexToDelete = this.statistics.findIndex(
+    statistic => statistic.statisticId === statisticId,
+  );
+
+  if (statisticIndexToDelete !== -1) {
+    this.statistics.splice(statisticIndexToDelete, 1);
+  }
 
   return this;
 };

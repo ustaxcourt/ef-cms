@@ -3,6 +3,8 @@ import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkC
 // import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
+import { petitionsClerkDeletesOtherStatisticToCase } from './journey/petitionsClerkDeletesOtherStatisticToCase';
+import { petitionsClerkEditOtherStatisticToCase } from './journey/petitionsClerkEditOtherStatisticToCase';
 import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
 import { petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox } from './journey/petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox';
 import { petitionsClerkVerifiesOrderForOdsCheckbox } from './journey/petitionsClerkVerifiesOrderForOdsCheckbox';
@@ -46,4 +48,7 @@ describe('Petitions clerk case journey', () => {
   loginAs(test, 'petitionsclerk');
   petitionsClerkAddsDeficiencyStatisticToCase(test);
   petitionsClerkAddsOtherStatisticsToCase(test);
+
+  petitionsClerkEditOtherStatisticToCase(test);
+  petitionsClerkDeletesOtherStatisticToCase(test);
 });
