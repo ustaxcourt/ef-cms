@@ -1,4 +1,7 @@
-const moment = require('moment');
+const {
+  calculateISODate,
+  createISODateString,
+} = require('../../utilities/DateHandler');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -37,12 +40,12 @@ describe('DocketEntryFactory', () => {
       expect(errors().dateReceived).toEqual(
         VALIDATION_ERROR_MESSAGES.dateReceived[1],
       );
-      rawEntity.dateReceived = moment().format();
+      rawEntity.dateReceived = createISODateString();
       expect(errors().dateReceived).toEqual(undefined);
     });
 
     it('should not allow received date be in the future', () => {
-      rawEntity.dateReceived = moment().add(1, 'days').format();
+      rawEntity.dateReceived = calculateISODate({ howMuch: 1, unit: 'days' });
       expect(errors().dateReceived).toEqual(
         VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       );
@@ -106,12 +109,15 @@ describe('DocketEntryFactory', () => {
           expect(errors().certificateOfServiceDate).toEqual(
             VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
           );
-          rawEntity.certificateOfServiceDate = moment().format();
+          rawEntity.certificateOfServiceDate = createISODateString();
           expect(errors().certificateOfServiceDate).toEqual(undefined);
         });
 
         it('should not allow certificate of service date be in the future', () => {
-          rawEntity.certificateOfServiceDate = moment().add(1, 'days').format();
+          rawEntity.certificateOfServiceDate = calculateISODate({
+            howMuch: 1,
+            unit: 'days',
+          });
           expect(errors().certificateOfServiceDate).toEqual(
             VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
           );

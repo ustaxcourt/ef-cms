@@ -2,6 +2,7 @@
   margin-right: 0.5em;
   color: color($theme-color-base-darkest);
 }
+
 button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: $color-white;
 }
@@ -35,6 +36,13 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 
 .iconStatusBatched {
   color: color($theme-color-warning);
+}
+
+.iconSealed {
+  margin-top: 4px;
+  margin-right: -22px;
+  color: color($theme-color-secondary-dark);
+  float: right;
 }
 
 .iconStatusUnassigned {
@@ -84,17 +92,17 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   .bullet-icon-circle {
     width: 40px;
     height: 40px;
-    border: 2px solid color($theme-color-primary-dark);
-    background-color: color($theme-color-primary-dark);
+    border: 2px solid color($theme-color-accent-cool);
+    background-color: color($theme-color-accent-cool);
     border-radius: 25px;
-    color: color($theme-color-primary-dark);
+    color: color($theme-color-accent-cool);
   }
 
   .bullet-icon-wrapper {
     display: table-cell;
-    padding: 0 15px 30px 0;
+    padding: 15px 15px 30px 0;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: top;
   }
 
   .description-wrapper {
@@ -107,4 +115,7 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 
 .icon-consolidated {
   color: color($theme-color-warning);
+}
+.icon-upload {
+  color: $color-green;
 }

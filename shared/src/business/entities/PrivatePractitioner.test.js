@@ -21,6 +21,7 @@ describe('PrivatePractitioner', () => {
       userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
+    expect(user.entityName).toEqual('PrivatePractitioner');
   });
 
   it('Creates an invalid', () => {

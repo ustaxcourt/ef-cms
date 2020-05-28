@@ -9,9 +9,13 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   #warmup:
   #enabled: true
 
@@ -213,9 +217,8 @@ functions:
                 caseId: true
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   caseAdvancedSearch:
     handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
@@ -225,9 +228,8 @@ functions:
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda

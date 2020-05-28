@@ -1,4 +1,6 @@
 const DateHandler = require('./DateHandler');
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 
 describe('DateHandler', () => {
   describe('prepareDateFromString', () => {
@@ -114,6 +116,43 @@ describe('DateHandler', () => {
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
     });
   });
+
+  describe('createStartOfDayISO', () => {
+    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
+      const startOfDay = DateHandler.createStartOfDayISO({
+        day: '7',
+        month: '4',
+        year: '2020',
+      });
+      expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+
+      // now confirm it converts "back" to originally desired time
+      const formattedInEastern = DateHandler.formatDateString(
+        startOfDay,
+        DateHandler.FORMATS.DATE_TIME,
+      );
+      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
+    });
+  });
+
+  describe('createEndOfDayISO', () => {
+    it('creates a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone', () => {
+      const endOfDay = DateHandler.createEndOfDayISO({
+        day: '7',
+        month: '4',
+        year: '2020',
+      });
+      expect(endOfDay).toEqual('2020-04-08T03:59:59.999Z');
+
+      // now confirm it converts "back" to originally desired time
+      const formattedInEastern = DateHandler.formatDateString(
+        endOfDay,
+        DateHandler.FORMATS.DATE_TIME,
+      );
+      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    });
+  });
+
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();
@@ -140,6 +179,11 @@ describe('DateHandler', () => {
         '2001-01-01T00:00:00.000Z',
       ); // Jan 1, 2001 at the stroke of midnight, GMT
       expect(myDate).toBe('2001-01-01T00:00:00.000Z');
+    });
+
+    it('creates timestamps that strictly adhere to Joi formatting rules', () => {
+      const thisDate = DateHandler.createISODateString();
+      expect(joiStrictTimestamp.validate(thisDate).error).toBeUndefined();
     });
   });
 
@@ -213,6 +257,29 @@ describe('DateHandler', () => {
 
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
+    });
+  });
+
+  describe('calendarDatesCompared', () => {
+    const pastDate = '2001-01-01';
+    const futureDate = '2061-01-02';
+
+    it('should return -1 when the first date is occurs before the second', () => {
+      const result = DateHandler.calendarDatesCompared(pastDate, futureDate);
+
+      expect(result).toEqual(-1);
+    });
+
+    it('should return 1 when the first date occurs after the second', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, pastDate);
+
+      expect(result).toEqual(1);
+    });
+
+    it('should return 0 when the two dates are the same calendar date', () => {
+      const result = DateHandler.calendarDatesCompared(futureDate, futureDate);
+
+      expect(result).toEqual(0);
     });
   });
 

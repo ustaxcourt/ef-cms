@@ -2,6 +2,9 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * PublicDocument
@@ -38,7 +41,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
     documentId: joi
       .string()
       .uuid({
@@ -51,12 +54,11 @@ joiValidationDecorator(
     filedBy: joi.string().optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
-    receivedAt: joi.date().iso().optional(),
-    servedAt: joi.date().iso().optional(),
+    receivedAt: joiStrictTimestamp.optional(),
+    servedAt: joiStrictTimestamp.optional(),
     servedParties: joi.array().optional(),
     status: joi.string().optional(),
   }),
-  undefined,
   {},
 );
 
