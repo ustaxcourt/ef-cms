@@ -8,20 +8,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddDeficiencyStatistics = connect(
+export const EditDeficiencyStatistic = connect(
   {
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
+    form: state.form,
     showModal: state.modal.showModal,
-    submitAddDeficiencyStatisticsSequence:
-      sequences.submitAddDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticsSequence:
+      sequences.submitEditDeficiencyStatisticsSequence,
     validateAddDeficiencyStatisticsSequence:
       sequences.validateAddDeficiencyStatisticsSequence,
   },
-  function AddDeficiencyStatistics({
+  function EditDeficiencyStatistic({
     calculatePenaltiesForAddSequence,
+    form,
     showModal,
-    submitAddDeficiencyStatisticsSequence,
+    submitEditDeficiencyStatisticsSequence,
     validateAddDeficiencyStatisticsSequence,
   }) {
     return (
@@ -32,14 +34,14 @@ export const AddDeficiencyStatistics = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <h1>Add Deficiency Statistics</h1>
+          <h1>Edit Year/Period - {form.year}</h1>
 
           <DeficiencyStatisticsForm />
 
           <div className="margin-top-3">
             <Button
               onClick={() => {
-                submitAddDeficiencyStatisticsSequence();
+                submitEditDeficiencyStatisticsSequence();
               }}
             >
               Save
