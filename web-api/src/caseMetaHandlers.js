@@ -18,6 +18,8 @@ module.exports = {
     .updateCaseContextLambda,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .updateCaseTrialSortTagsLambda,
+  updateDeficiencyStatisticLambda: require('./cases/updateDeficiencyStatisticLambda')
+    .updateDeficiencyStatisticLambda,
   updateOtherStatisticsLambda: require('./cases/updateOtherStatisticsLambda')
     .updateOtherStatisticsLambda,
   updateQcCompleteForTrialLambda: require('./cases/updateQcCompleteForTrialLambda')

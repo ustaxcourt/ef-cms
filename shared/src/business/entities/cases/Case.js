@@ -1805,7 +1805,26 @@ Case.prototype.fileCorrespondence = function (correspondenceEntity) {
  * @returns {Case} this case entity
  */
 Case.prototype.addStatistic = function (statisticEntity) {
+  if (this.statistics.length === 12) {
+    throw new Error('maximum number of statistics reached');
+  }
+
   this.statistics = [...this.statistics, statisticEntity];
+
+  return this;
+};
+
+/**
+ * updates the statistic with the given index on the case
+ *
+ * @param {Statistic} statisticEntity the statistic to update on the case
+ * @param {number} statisticIndex the index of the statistic to update
+ * @returns {Case} this case entity
+ */
+Case.prototype.updateStatistic = function (statisticEntity, statisticIndex) {
+  if (this.statistics[statisticIndex]) {
+    this.statistics[statisticIndex] = statisticEntity;
+  }
 
   return this;
 };
