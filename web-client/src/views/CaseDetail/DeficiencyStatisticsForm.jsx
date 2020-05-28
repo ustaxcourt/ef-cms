@@ -35,33 +35,31 @@ export const DeficiencyStatisticsForm = connect(
             </label>
 
             <FormGroup id="year-or-period">
-              <fieldset className="usa-fieldset">
-                {['Year', 'Period'].map(option => (
-                  <div className="usa-radio usa-radio__inline" key={option}>
-                    <input
-                      checked={form.yearOrPeriod === option}
-                      className="usa-radio__input"
-                      id={`year-or-period-${option}`}
-                      name="yearOrPeriod"
-                      type="radio"
-                      value={option}
-                      onChange={e => {
-                        updateAddDeficiencyFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateAddDeficiencyStatisticsSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      htmlFor={`year-or-period-${option}`}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ))}
-              </fieldset>
+              {['Year', 'Period'].map(option => (
+                <div className="usa-radio usa-radio__inline" key={option}>
+                  <input
+                    checked={form.yearOrPeriod === option}
+                    className="usa-radio__input"
+                    id={`year-or-period-${option}`}
+                    name="yearOrPeriod"
+                    type="radio"
+                    value={option}
+                    onChange={e => {
+                      updateAddDeficiencyFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateAddDeficiencyStatisticsSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor={`year-or-period-${option}`}
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
             </FormGroup>
 
             <div className="grid-row grid-gap-4">
