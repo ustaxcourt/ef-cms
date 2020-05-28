@@ -3,7 +3,7 @@ const {
   navigateTo: navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
-  searchForCaseByPeitionerName,
+  searchForCaseByPetitionerName,
   searchResultsTable,
 } = require('../../support/pages/public/advanced-search');
 
@@ -15,7 +15,7 @@ describe('Advanced search', () => {
   describe('case - by name', () => {
     it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
       navigateToDashboard();
-      searchForCaseByPeitionerName('103-20');
+      searchForCaseByPetitionerName('103-20');
       expect(searchResultsTable).to.exist;
     });
   });
