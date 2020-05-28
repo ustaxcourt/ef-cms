@@ -7,7 +7,7 @@ const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 
-const getDocumentContentsForDocuments = async ({
+export const getDocumentContentsForDocuments = async ({
   applicationContext,
   documents,
 }) => {
