@@ -176,6 +176,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
+    dateStringsCompared: jest
+      .fn()
+      .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest
