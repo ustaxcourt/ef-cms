@@ -1818,13 +1818,15 @@ Case.prototype.addStatistic = function (statisticEntity) {
  * updates the statistic with the given index on the case
  *
  * @param {Statistic} statisticEntity the statistic to update on the case
- * @param {number} statisticIndex the index of the statistic to update
+ * @param {string} statisticId the id of the statistic to update
  * @returns {Case} this case entity
  */
-Case.prototype.updateStatistic = function (statisticEntity, statisticIndex) {
-  if (this.statistics[statisticIndex]) {
-    this.statistics[statisticIndex] = statisticEntity;
-  }
+Case.prototype.updateStatistic = function (statisticEntity, statisticId) {
+  const statisticToUpdate = this.statistics.find(
+    statistic => statistic.statisticId === statisticId,
+  );
+
+  if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
 
   return this;
 };
