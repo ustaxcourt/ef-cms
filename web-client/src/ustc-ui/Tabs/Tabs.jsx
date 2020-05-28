@@ -7,7 +7,7 @@ import {
 import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import classNames from 'classnames';
 
