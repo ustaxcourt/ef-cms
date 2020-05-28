@@ -12,9 +12,9 @@ export const archiveDraftDocumentAction = async ({
   get,
   store,
 }) => {
-  const { caseId, documentId, redirectToCaseDetail } = get(
-    state.archiveDraftDocument,
-  );
+  const { documentId, redirectToCaseDetail } = get(state.archiveDraftDocument);
+  const caseId = get(state.caseDetail.caseId);
+
   await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({ applicationContext, caseId, documentId });

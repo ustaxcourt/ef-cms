@@ -48,54 +48,52 @@ export const AddDeficiencyStatistics = connect(
 
           <h1>Add Deficiency Statistics</h1>
 
-          <div className="blue-container margin-bottom-5">
+          <div className="blue-container margin-bottom-5 add-deficiency-statistics-form">
             <div className="margin-bottom-0">
-              <label className="usa-label" htmlFor="name">
+              <label className="usa-label" htmlFor="year-or-period">
                 Select Year or period
               </label>
 
-              <FormGroup>
-                <fieldset className="usa-fieldset">
-                  {['Year', 'Period'].map(option => (
-                    <div className="usa-radio usa-radio__inline" key={option}>
-                      <input
-                        checked={form.yearOrPeriod === option}
-                        className="usa-radio__input"
-                        id={`year-or-period-${option}`}
-                        name="yearOrPeriod"
-                        type="radio"
-                        value={option}
-                        onChange={async e => {
-                          await updateAddDeficiencyFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                          await validateAddDeficiencyStatisticsSequence();
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor={`year-or-period-${option}`}
-                      >
-                        {option}
-                      </label>
-                    </div>
-                  ))}
-                </fieldset>
+              <FormGroup id="year-or-period">
+                {['Year', 'Period'].map(option => (
+                  <div className="usa-radio usa-radio__inline" key={option}>
+                    <input
+                      checked={form.yearOrPeriod === option}
+                      className="usa-radio__input"
+                      id={`year-or-period-${option}`}
+                      name="yearOrPeriod"
+                      type="radio"
+                      value={option}
+                      onChange={e => {
+                        updateAddDeficiencyFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateAddDeficiencyStatisticsSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      htmlFor={`year-or-period-${option}`}
+                    >
+                      {option}
+                    </label>
+                  </div>
+                ))}
               </FormGroup>
 
               <div className="grid-row grid-gap-4">
                 <div className="grid-col-3">
                   {form.yearOrPeriod === 'Year' && (
                     <FormGroup errorText={validationErrors.year}>
-                      <label className="usa-label" htmlFor={'year'}>
+                      <label className="usa-label" htmlFor="year">
                         Year
                       </label>
                       <input
                         className="usa-input usa-input-inline year-small"
-                        id={'year'}
+                        id="year"
                         maxLength="4"
-                        name={'year'}
+                        name="year"
                         placeholder="YYYY"
                         value={form.year || ''}
                         onBlur={() => validateAddDeficiencyStatisticsSequence()}
@@ -112,7 +110,7 @@ export const AddDeficiencyStatistics = connect(
                   {form.yearOrPeriod === 'Period' && (
                     <FormGroup errorText={validationErrors.lastDateOfPeriod}>
                       <DateInput
-                        id={'last-date-of-period'}
+                        id="last-date-of-period"
                         label="Last date of period"
                         names={{
                           day: 'lastDateOfPeriodDay',
@@ -142,14 +140,14 @@ export const AddDeficiencyStatistics = connect(
                   <FormGroup errorText={validationErrors.irsDeficiencyAmount}>
                     <label
                       className="usa-label"
-                      htmlFor={'irs-deficiency-amount'}
+                      htmlFor="irs-deficiency-amount"
                     >
                       Deficiency (IRS Notice)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline input-medium"
-                      id={'irs-deficiency-amount'}
-                      name={'irsDeficiencyAmount'}
+                      id="irs-deficiency-amount"
+                      name="irsDeficiencyAmount"
                       value={form.irsDeficiencyAmount || ''}
                       onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
@@ -164,16 +162,13 @@ export const AddDeficiencyStatistics = connect(
 
                 <div className="grid-col-3">
                   <FormGroup errorText={validationErrors.irsTotalPenalties}>
-                    <label
-                      className="usa-label"
-                      htmlFor={'irs-total-penalties'}
-                    >
+                    <label className="usa-label" htmlFor="irs-total-penalties">
                       Total penalties (IRS Notice)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline input-medium"
-                      id={'irs-deficiency-amount'}
-                      name={'irsTotalPenalties'}
+                      id="irs-total-penalties"
+                      name="irsTotalPenalties"
                       value={form.irsTotalPenalties || ''}
                       onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
@@ -207,14 +202,14 @@ export const AddDeficiencyStatistics = connect(
                   >
                     <label
                       className="usa-label"
-                      htmlFor={'determination-deficiency-amount'}
+                      htmlFor="determination-deficiency-amount"
                     >
                       Deficiency (Determination)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline input-medium"
-                      id={'determination-deficiency-amount'}
-                      name={'determinationDeficiencyAmount'}
+                      id="determination-deficiency-amount"
+                      name="determinationDeficiencyAmount"
                       value={form.determinationDeficiencyAmount || ''}
                       onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
@@ -233,14 +228,14 @@ export const AddDeficiencyStatistics = connect(
                   >
                     <label
                       className="usa-label"
-                      htmlFor={'deficiency-total-penalties'}
+                      htmlFor="determination-total-penalties"
                     >
                       Total penalties (Determination)
                     </label>
                     <DollarsInput
                       className="usa-input usa-input-inline input-medium"
-                      id={'deficiency-total-penalties'}
-                      name={'determinationTotalPenalties'}
+                      id="determination-total-penalties"
+                      name="determinationTotalPenalties"
                       value={form.determinationTotalPenalties || ''}
                       onBlur={() => validateAddDeficiencyStatisticsSequence()}
                       onValueChange={values => {
