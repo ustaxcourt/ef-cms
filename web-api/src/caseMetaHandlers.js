@@ -5,6 +5,8 @@ module.exports = {
     .addDeficiencyStatisticLambda,
   blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda')
     .blockCaseFromTrialLambda,
+  deleteDeficiencyStatisticLambda: require('./cases/deleteDeficiencyStatisticLambda')
+    .deleteDeficiencyStatisticLambda,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda')
     .prioritizeCaseLambda,
   removeConsolidatedCasesLambda: require('./cases/removeConsolidatedCasesLambda')

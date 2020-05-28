@@ -34,7 +34,9 @@ export const AddDeficiencyStatistics = connect(
 
           <h1>Add Deficiency Statistics</h1>
 
-          <DeficiencyStatisticsForm />
+          <div className="blue-container margin-bottom-5 add-deficiency-statistics-form">
+            <DeficiencyStatisticsForm />
+          </div>
 
           <div className="margin-top-3">
             <Button

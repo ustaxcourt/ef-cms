@@ -60,6 +60,7 @@ import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
+import { deleteDeficiencyStatisticsSequence } from './sequences/deleteDeficiencyStatisticsSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteOtherStatisticsSequence } from './sequences/deleteOtherStatisticsSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
@@ -178,6 +179,7 @@ import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
+import { openConfirmDeleteDeficiencyStatisticsModalSequence } from './sequences/openConfirmDeleteDeficiencyStatisticsModalSequence';
 import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openConfirmDeleteOtherStatisticsModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
@@ -480,6 +482,7 @@ export const presenter = {
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
     deleteCorrespondenceDocumentSequence,
+    deleteDeficiencyStatisticsSequence,
     deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteOtherStatisticsSequence,
     deleteTrialSessionSequence,
@@ -598,6 +601,7 @@ export const presenter = {
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeleteCorrespondenceModalSequence,
+    openConfirmDeleteDeficiencyStatisticsModalSequence,
     openConfirmDeleteOtherStatisticsModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
