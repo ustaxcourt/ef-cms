@@ -53,10 +53,29 @@ export const statisticsHelper = (get, applicationContext) => {
 
   let formattedStatistics;
 
+  const formatStatisticDateForSort = statistic => {
+    let date;
+    if (statistic.yearOrPeriod === 'Year') {
+      date = `${statistic.year}-12-31`;
+    } else {
+      date = applicationContext
+        .getUtilities()
+        .formatDateString(statistic.lastDateOfPeriod, 'YYYYMMDD');
+    }
+    return date;
+  };
+
   if (statistics && statistics.length > 0) {
-    formattedStatistics = statistics.map(statistic =>
-      formatStatistic({ applicationContext, statistic }),
-    );
+    formattedStatistics = statistics
+      .map(statistic => formatStatistic({ applicationContext, statistic }))
+      .sort((a, b) =>
+        applicationContext
+          .getUtilities()
+          .dateStringsCompared(
+            formatStatisticDateForSort(a),
+            formatStatisticDateForSort(b),
+          ),
+      );
   }
 
   const formattedDamages =
@@ -74,7 +93,7 @@ export const statisticsHelper = (get, applicationContext) => {
   const showAddDeficiencyStatisticsButton =
     permissions.ADD_EDIT_STATISTICS &&
     caseType === CASE_TYPES_MAP.deficiency &&
-    hasMaxDeficiencyStatistics;
+    !hasMaxDeficiencyStatistics;
 
   const showAddOtherStatisticsButton =
     permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
