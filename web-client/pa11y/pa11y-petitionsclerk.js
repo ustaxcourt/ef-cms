@@ -324,12 +324,13 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics',
   {
     actions: [
-      'wait for button#red-warning to be visible',
-      'click element button#red-warning',
+      'wait for button.red-warning to be visible',
+      'click element button.red-warning',
+      'wait for #modal-root to be visible',
     ],
     notes: 'checks the delete modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics&info=delete-other-statistics-modal',
   },
 
   /* petition qc */
