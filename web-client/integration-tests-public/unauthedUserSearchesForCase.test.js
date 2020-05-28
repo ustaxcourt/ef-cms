@@ -25,12 +25,13 @@ import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unau
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const test = setupTest({
+let test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
-const testClient = setupTestClient({
+
+let testClient = setupTestClient({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
@@ -85,7 +86,11 @@ describe('Unauthed user searches for a case and views a case detail page', () =>
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesByMeta(test);
   unauthedUserSearchesByDocketNumber(test, testClient);
-  unauthedUserSearchesForSealedCasesByDocketNumber(test);
   unauthedUserViewsCaseDetail(test);
   unauthedUserViewsPrintableDocketRecord(test);
+});
+
+describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
+  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserSearchesForSealedCasesByDocketNumber(test);
 });

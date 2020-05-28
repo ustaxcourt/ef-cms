@@ -1,8 +1,9 @@
 const {
   getDocumentContentsForDocuments,
-} = require('../useCaseHelper/case/getDocumentContentsForDocuments');
-const { Case } = require('../entities/cases/Case');
-const { NotFoundError } = require('../../errors/errors');
+} = require('../../useCaseHelper/case/getDocumentContentsForDocuments');
+const { Case } = require('../../entities/cases/Case');
+const { NotAuthorizedError, NotFoundError } = require('../../../errors/errors');
+const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * getCaseForPublicDocketSearchInteractor
@@ -14,38 +15,41 @@ const { NotFoundError } = require('../../errors/errors');
  */
 exports.getCaseForPublicDocketSearchInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
+  console.log('CASE ID/DOCKET', docketNumber);
   let caseRecord;
 
-  if (Case.isValidCaseId(caseId)) {
+  if (Case.isValidCaseId(docketNumber)) {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
         applicationContext,
-        caseId,
+        docketNumber,
       });
-  } else if (Case.isValidDocketNumber(caseId)) {
+  } else if (Case.isValidDocketNumber(docketNumber)) {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
-        docketNumber: Case.stripLeadingZeros(caseId),
+        docketNumber: Case.stripLeadingZeros(docketNumber),
       });
   }
 
   if (!caseRecord) {
-    const error = new NotFoundError(`Case ${caseId} was not found.`);
+    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;
   }
 
   let caseDetailRaw;
 
-  if (caseRecord.sealedDate) {
-    return null;
+  if (caseRecord.sealedDate || caseRecord.isSealed) {
+    const error = new NotAuthorizedError(`Case ${docketNumber} is sealed.`);
+    error.skipLogging = true;
+    throw error;
   } else {
-    caseDetailRaw = new Case(caseRecord, {
+    caseDetailRaw = new PublicCase(caseRecord, {
       applicationContext,
     })
       .validate()
@@ -56,5 +60,5 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
       documents: caseDetailRaw.documents,
     });
   }
-  return caseDetailRaw;
+  return null;
 };

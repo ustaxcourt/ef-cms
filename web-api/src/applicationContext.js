@@ -349,6 +349,9 @@ const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
 const {
+  getCaseForPublicDocketSearchInteractor,
+} = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
+const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -1301,6 +1304,7 @@ module.exports = (appContextUser = {}) => {
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
+        getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
         getCasesByUserInteractor,
