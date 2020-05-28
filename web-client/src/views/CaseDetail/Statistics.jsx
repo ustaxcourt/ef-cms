@@ -104,7 +104,12 @@ export const Statistics = connect(
               <h4>
                 Other
                 {statisticsHelper.showEditButtons && (
-                  <Button link className="padding-0 margin-left-2" icon="edit">
+                  <Button
+                    link
+                    className="padding-0 margin-left-2"
+                    href={`/case-detail/${caseDetail.docketNumber}/edit-other-statistics`}
+                    icon="edit"
+                  >
                     Edit
                   </Button>
                 )}
