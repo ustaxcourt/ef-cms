@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
  * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
  * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
- * @param {number} providers.statisticIndex index of the statistic on the case to update
+ * @param {string} providers.statisticId id of the statistic on the case to update
  * @param {number} providers.year year for the statistic
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
@@ -30,7 +30,7 @@ exports.updateDeficiencyStatisticInteractor = async ({
   irsDeficiencyAmount,
   irsTotalPenalties,
   lastDateOfPeriod,
-  statisticIndex,
+  statisticId,
   year,
   yearOrPeriod,
 }) => {
@@ -44,18 +44,22 @@ exports.updateDeficiencyStatisticInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const statisticEntity = new Statistic({
-    determinationDeficiencyAmount,
-    determinationTotalPenalties,
-    irsDeficiencyAmount,
-    irsTotalPenalties,
-    lastDateOfPeriod,
-    year,
-    yearOrPeriod,
-  }).validate();
+  const statisticEntity = new Statistic(
+    {
+      determinationDeficiencyAmount,
+      determinationTotalPenalties,
+      irsDeficiencyAmount,
+      irsTotalPenalties,
+      lastDateOfPeriod,
+      statisticId,
+      year,
+      yearOrPeriod,
+    },
+    { applicationContext },
+  ).validate();
 
   const newCase = new Case(oldCase, { applicationContext });
-  newCase.updateStatistic(statisticEntity, statisticIndex);
+  newCase.updateStatistic(statisticEntity, statisticId);
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()

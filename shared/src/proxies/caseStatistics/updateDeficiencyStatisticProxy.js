@@ -11,7 +11,7 @@ const { put } = require('../requests');
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
  * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
  * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
- * @param {number} providers.statisticIndex the index of the statistic to update
+ * @param {string} providers.statisticId the id of the statistic to update
  * @param {number} providers.year year for the statistic
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {Promise<*>} the promise of the api call
@@ -24,7 +24,7 @@ exports.updateDeficiencyStatisticInteractor = ({
   irsDeficiencyAmount,
   irsTotalPenalties,
   lastDateOfPeriod,
-  statisticIndex,
+  statisticId,
   year,
   yearOrPeriod,
 }) => {
@@ -39,6 +39,6 @@ exports.updateDeficiencyStatisticInteractor = ({
       year,
       yearOrPeriod,
     },
-    endpoint: `/case-meta/${caseId}/statistics/${statisticIndex}`,
+    endpoint: `/case-meta/${caseId}/statistics/${statisticId}`,
   });
 };
