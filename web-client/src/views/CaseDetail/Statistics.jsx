@@ -111,15 +111,23 @@ export const Statistics = connect(
               <table className="usa-table docket-record responsive-table row-border-only">
                 <thead>
                   <tr>
-                    <th>Litigation costs</th>
-                    <th>Damages (IRC §6673)</th>
+                    {statisticsHelper.showLitigationCosts && (
+                      <th>Litigation costs</th>
+                    )}
+                    {statisticsHelper.showDamages && (
+                      <th>Damages (IRC §6673)</th>
+                    )}
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{statisticsHelper.formattedLitigationCosts}</td>
-                    <td>{statisticsHelper.formattedDamages}</td>
+                    {statisticsHelper.showLitigationCosts && (
+                      <td>{statisticsHelper.formattedLitigationCosts}</td>
+                    )}
+                    {statisticsHelper.showDamages && (
+                      <td>{statisticsHelper.formattedDamages}</td>
+                    )}
                     <td>
                       {statisticsHelper.showEditButtons && (
                         <Button
