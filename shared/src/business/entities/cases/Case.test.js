@@ -3023,14 +3023,17 @@ describe('Case entity', () => {
     it('should successfully add a statistic', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-      const statisticToAdd = new Statistic({
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      });
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
 
       caseEntity.addStatistic(statisticToAdd);
 
@@ -3047,14 +3050,17 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const statisticToAdd = new Statistic({
-        determinationDeficiencyAmount: 567,
-        determinationTotalPenalties: 789,
-        irsDeficiencyAmount: 11.2,
-        irsTotalPenalties: 66.87,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      });
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
 
       let error;
       try {
@@ -3071,6 +3077,8 @@ describe('Case entity', () => {
     });
 
     it('should successfully update a statistic', () => {
+      const statisticId = '2db9f2b6-d65b-4f71-8ddc-c218d0787e15';
+
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -3080,6 +3088,7 @@ describe('Case entity', () => {
               determinationTotalPenalties: 789,
               irsDeficiencyAmount: 11.2,
               irsTotalPenalties: 66.87,
+              statisticId,
               year: 2012,
               yearOrPeriod: 'Year',
             },
@@ -3088,52 +3097,64 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const statisticToUpdate = new Statistic({
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      });
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
 
-      caseEntity.updateStatistic(statisticToUpdate, 0);
+      caseEntity.updateStatistic(statisticToUpdate, statisticId);
 
       expect(caseEntity.statistics.length).toEqual(1);
       expect(caseEntity.statistics[0]).toEqual(statisticToUpdate);
     });
 
-    it('should not update a statistic if its index is not present on the case', () => {
+    it('should not update a statistic if its id is not present on the case', () => {
+      const originalStatistic = {
+        determinationDeficiencyAmount: 567,
+        determinationTotalPenalties: 789,
+        irsDeficiencyAmount: 11.2,
+        irsTotalPenalties: 66.87,
+        statisticId: '2db9f2b6-d65b-4f71-8ddc-c218d0787e15',
+        year: 2012,
+        yearOrPeriod: 'Year',
+      };
+
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          statistics: [
-            {
-              determinationDeficiencyAmount: 567,
-              determinationTotalPenalties: 789,
-              irsDeficiencyAmount: 11.2,
-              irsTotalPenalties: 66.87,
-              year: 2012,
-              yearOrPeriod: 'Year',
-            },
-          ],
+          statistics: [originalStatistic],
         },
         { applicationContext },
       );
 
-      const statisticToUpdate = new Statistic({
-        determinationDeficiencyAmount: 1,
-        determinationTotalPenalties: 1,
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        year: 2012,
-        yearOrPeriod: 'Year',
-      });
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
 
-      caseEntity.updateStatistic(statisticToUpdate, 1);
+      caseEntity.updateStatistic(
+        statisticToUpdate,
+        '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+      );
 
       expect(caseEntity.statistics.length).toEqual(1);
-      expect(caseEntity.statistics[1]).toBeUndefined();
+      expect(caseEntity.statistics[0]).toMatchObject(originalStatistic);
     });
   });
 });
