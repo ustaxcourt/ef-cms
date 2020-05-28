@@ -4,6 +4,7 @@ const {
 const {
   deleteDeficiencyStatisticInteractor,
 } = require('./deleteDeficiencyStatisticInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -53,6 +54,11 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [],
     });
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({ statistics: [] });
   });
 
   it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
@@ -64,5 +70,32 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [statistic],
     });
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({ statistics: [statistic] });
+  });
+
+  it('should throw an error and not update the case if attempting to delete the only statistic from a deficiency case with hasVerifiedIrsNotice true (at least one statistic is required)', async () => {
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        caseType: Case.CASE_TYPES_MAP.deficiency,
+        hasVerifiedIrsNotice: true,
+        statistics: [statistic],
+      }),
+    );
+
+    await expect(
+      deleteDeficiencyStatisticInteractor({
+        applicationContext,
+        caseId: MOCK_CASE.caseId,
+        statisticId: statistic.statisticId,
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
   });
 });
