@@ -10,10 +10,13 @@ import { state } from 'cerebral';
  */
 export const setEditDeficiencyStatisticFormAction = ({ get, props, store }) => {
   const { statistics } = get(state.caseDetail);
-  const { statisticIndex } = props;
+  const { statisticId } = props;
+
+  const statisticToEdit = statistics.find(
+    statistic => statistic.statisticId === statisticId,
+  );
 
   store.set(state.form, {
-    ...statistics[statisticIndex],
-    statisticIndex,
+    ...statisticToEdit,
   });
 };
