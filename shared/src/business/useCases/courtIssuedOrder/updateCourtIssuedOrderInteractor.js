@@ -75,12 +75,17 @@ exports.updateCourtIssuedOrderInteractor = async ({
     freeText: documentMetadata.freeText,
   };
 
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({ applicationContext, documentId: documentIdToEdit });
+
   const documentEntity = new Document(
     {
       ...currentDocument,
       ...editableFields,
       documentId: documentIdToEdit,
       filedBy: user.name,
+      numberOfPages,
       relationship: 'primaryDocument',
       userId: user.userId,
     },

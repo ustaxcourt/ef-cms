@@ -18,6 +18,7 @@ function PublicDocketRecordEntry(rawDocketEntry) {
   this.filedBy = rawDocketEntry.filedBy;
   this.index = rawDocketEntry.index;
   this.filingDate = rawDocketEntry.filingDate;
+  this.numberOfPages = rawDocketEntry.numberOfPages;
 }
 
 joiValidationDecorator(
@@ -28,6 +29,7 @@ joiValidationDecorator(
     filedBy: joi.string().optional(),
     filingDate: joiStrictTimestamp.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
+    numberOfPages: joi.number().integer().optional(),
   }),
   {},
 );
