@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setEditOtherStatisticsFormAction } from './setEditOtherStatisticsFormAction';
 
 describe('setEditOtherStatisticsFormAction', () => {
-  it('adds the props.field key to state.fieldOrder', async () => {
+  it('sets the damages and litigationCosts onto the form from the state.caseDetail', async () => {
     const result = await runAction(setEditOtherStatisticsFormAction, {
       state: {
         caseDetail: {
