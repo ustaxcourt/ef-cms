@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
  */
-export const setEditOtherFormAction = ({ get, store }) => {
+export const setEditOtherStatisticsFormAction = ({ get, store }) => {
   const { damages, litigationCosts } = get(state.caseDetail);
 
   store.set(state.form, {
