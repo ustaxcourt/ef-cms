@@ -31,6 +31,7 @@ import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
+import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -111,6 +112,7 @@ const helpers = {
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
+  editStatisticFormHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
