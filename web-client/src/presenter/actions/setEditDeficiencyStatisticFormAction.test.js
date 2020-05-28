@@ -13,6 +13,7 @@ describe('setEditDeficiencyStatisticFormAction', () => {
     });
     expect(result.state.form).toEqual({
       irsTotalPenalties: 1,
+      statisticIndex: 0,
     });
   });
 });
