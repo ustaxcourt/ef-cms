@@ -4,11 +4,11 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
-import { submitEditOtherStatisticsAction } from '../actions/submitEditOtherStatisticsAction';
+import { submitOtherStatisticsAction } from '../actions/submitOtherStatisticsAction';
 
 export const submitEditOtherStatisticsSequence = [
   showProgressSequenceDecorator([
-    submitEditOtherStatisticsAction,
+    submitOtherStatisticsAction,
     {
       error: [],
       success: [
