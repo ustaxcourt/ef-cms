@@ -764,8 +764,8 @@ describe('formatted work queue computed', () => {
     const baseWorkItemEditLink =
       '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
 
-    it('should return editLink as default document detail page if document is petition and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
-      const permissions = getBaseState(petitionsClerkUser);
+    it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
+      const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
         applicationContext,
@@ -789,7 +789,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual('/case-detail/114-19/petition-qc');
     });
 
     it('should return /edit-court-issued if document is court-issued and not served and user is docketclerk', () => {
