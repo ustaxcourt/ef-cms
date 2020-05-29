@@ -62,6 +62,240 @@ describe('fileExternalDocumentInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
+    applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
+      Buffer.from(
+        JSON.stringify({
+          documentContents: 'the contents!',
+          richText: '<b>the contents!</b>',
+        }),
+      ),
+    );
+    applicationContext
+      .getUseCaseHelpers()
+      .getDocumentContentsForDocuments.mockReturnValue([
+        {
+          documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
+          documentType: 'Petition',
+          filedBy: 'Petr. Test Petitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseId,
+              caseStatus: Case.STATUS_TYPES.new,
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19S',
+              document: {
+                documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
+                documentType: 'Petition',
+                filedBy: 'Petr. Test Petitioner',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              isInitializeCase: true,
+              messages: [
+                {
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                  message:
+                    'Petition filed by Test Petitioner is ready for review.',
+                },
+              ],
+              section: 'petitions',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2019-03-01T22:54:06.000Z',
+            },
+          ],
+        },
+        {
+          documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
+          documentType: 'Statement of Taxpayer Identification',
+          filedBy: 'Petr. Test Petitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [],
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          docketNumber: '201-19',
+          documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle:
+            'Motion for Leave to File Brief in Support of Petition',
+          documentType: 'Motion for Leave to File',
+          hasSupportingDocuments: true,
+          partyPrimary: true,
+          scenario: 'Nonstandard H',
+          supportingDocument: 'Brief in Support',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseId,
+              caseStatus: Case.STATUS_TYPES.new,
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19S',
+              document: {
+                attachments: false,
+                certificateOfService: false,
+                certificateOfServiceDate: 'undefined-undefined-undefined',
+                docketNumber: '201-19',
+                documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
+                documentTitle:
+                  'Motion for Leave to File Brief in Support of Petition',
+                documentType: 'Motion for Leave to File',
+                hasSupportingDocuments: true,
+                partyPrimary: true,
+                scenario: 'Nonstandard H',
+                supportingDocument: 'Brief in Support',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              messages: [
+                {
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                  message:
+                    'Motion for Leave to File filed by Petitioner is ready for review.',
+                },
+              ],
+              section: 'docket',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        },
+        {
+          documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle: 'Brief in Support of Amended Answer',
+          documentType: 'Brief in Support',
+          partyPrimary: true,
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
+          scenario: 'Nonstandard A',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseId,
+              caseStatus: Case.STATUS_TYPES.new,
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19S',
+              document: {
+                documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
+                documentTitle: 'Brief in Support of Amended Answer',
+                documentType: 'Brief in Support',
+                partyPrimary: true,
+                previousDocument: {
+                  documentTitle: 'Amended Answer',
+                  documentType: 'Amended',
+                },
+                scenario: 'Nonstandard A',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              messages: [
+                {
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                  message:
+                    'Brief in Support filed by Petitioner is ready for review.',
+                },
+              ],
+              section: 'docket',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2019-03-01T22:54:06.000Z',
+            },
+          ],
+        },
+        {
+          documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle: 'Brief in Support of Petition',
+          documentType: 'Brief in Support',
+          lodged: true,
+          partyPrimary: true,
+          previousDocument: { documentType: 'Petition' },
+          scenario: 'Nonstandard A',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseStatus: Case.STATUS_TYPES.new,
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19S',
+              document: {
+                documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
+                documentTitle: 'Brief in Support of Petition',
+                documentType: 'Brief in Support',
+                lodged: true,
+                partyPrimary: true,
+                previousDocument: { documentType: 'Petition' },
+                scenario: 'Nonstandard A',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              messages: [
+                {
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                  message:
+                    'Brief in Support filed by Petitioner is ready for review.',
+                },
+              ],
+              section: 'docket',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2019-03-01T22:54:06.000Z',
+            },
+          ],
+        },
+        {
+          documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+          documentTitle: 'Brief in Support of Amended Answer',
+          documentType: 'Brief in Support',
+          lodged: true,
+          partyPrimary: true,
+          previousDocument: {
+            documentTitle: 'Amended Answer',
+            documentType: 'Amended',
+          },
+          scenario: 'Nonstandard A',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          workItems: [
+            {
+              assigneeId: null,
+              assigneeName: null,
+              caseStatus: Case.STATUS_TYPES.new,
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19S',
+              document: {
+                documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
+                documentTitle: 'Brief in Support of Amended Answer',
+                documentType: 'Brief in Support',
+                lodged: true,
+                partyPrimary: true,
+                previousDocument: {
+                  documentTitle: 'Amended Answer',
+                  documentType: 'Amended',
+                },
+                scenario: 'Nonstandard A',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              },
+              messages: [
+                {
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                  message:
+                    'Brief in Support filed by Petitioner is ready for review.',
+                },
+              ],
+              section: 'docket',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              updatedAt: '2019-03-01T22:54:06.000Z',
+            },
+          ],
+        },
+      ]);
+
     await fileExternalDocumentInteractor({
       applicationContext,
       documentIds: [
