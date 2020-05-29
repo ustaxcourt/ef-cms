@@ -52,6 +52,7 @@ const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
+const { Statistic } = require('../business/entities/Statistic');
 
 const generateMarkdownSchema = (entity, entityName) => {
   const json = entity.getSchema().describe();
@@ -194,3 +195,4 @@ generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
+generateMarkdownSchema(Statistic, 'Statistic');
