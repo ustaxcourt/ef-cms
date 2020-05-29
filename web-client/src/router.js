@@ -94,11 +94,11 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-deficiency-statistic/*',
-      ifHasAccess((docketNumber, statisticIndex) => {
+      ifHasAccess((docketNumber, statisticId) => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoEditDeficiencyStatisticSequence')({
           docketNumber,
-          statisticIndex,
+          statisticId,
         });
       }),
     );
