@@ -133,8 +133,8 @@ exports.addCoverToPdf = async ({
   const numberOfPages = pdfDoc.getPages().length;
 
   return {
-    newPdfData,
     numberOfPages,
+    pdfData: newPdfData,
   };
 };
 
@@ -178,7 +178,7 @@ exports.addCoversheetInteractor = async ({
     throw err;
   }
 
-  const { newPdfData, numberOfPages } = await exports.addCoverToPdf({
+  const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
     documentEntity,
@@ -205,14 +205,6 @@ exports.addCoversheetInteractor = async ({
       docketRecordId: docketRecordEntity.docketRecordId,
     });
   }
-
-  // await applicationContext
-  //   .getPersistenceGateway()
-  //   .updateDocumentProcessingStatus({
-  //     applicationContext,
-  //     caseId,
-  //     documentId,
-  //   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
