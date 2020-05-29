@@ -178,10 +178,10 @@ export const CaseInfo = connect(
         {!form.isPaper && (
           <>
             <FormGroup>
-              <label className="usa-label" htmlFor="case-caption">
+              <label className="usa-label" htmlFor="trial-location-text">
                 Trial location
               </label>
-              <span className="display-inline-block">
+              <span className="display-inline-block" id="trial-location-text">
                 {form.preferredTrialCity}
               </span>
             </FormGroup>
