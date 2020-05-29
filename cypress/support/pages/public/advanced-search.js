@@ -2,13 +2,32 @@ exports.navigateTo = () => {
   cy.visit('/');
 };
 
+exports.clickOnSearchTab = tabName => {
+  cy.get(`button#tab-${tabName}`).click();
+};
+
 exports.searchForCaseByDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
   cy.get('button#docket-search-button').click();
 };
 
-exports.searchForCaseByPetitionerName = name => {
+exports.enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
+};
+
+exports.enterDocumentKeywordForOpinionSearch = keyword => {
+  cy.get('input#opinion-search').type(keyword);
+};
+
+exports.enterDocumentDocketNumber = docketNumber => {
+  cy.get('input#docket-number').type(docketNumber);
+};
+
+exports.searchForCaseByPetitionerInformation = () => {
+  cy.get('button#advanced-search-button').click();
+};
+
+exports.searchForDocuments = () => {
   cy.get('button#advanced-search-button').click();
 };
 
