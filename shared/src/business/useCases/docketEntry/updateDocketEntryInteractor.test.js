@@ -172,31 +172,6 @@ describe('updateDocketEntryInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
-  it('should update the numberOfPages on the document and docketRecordEntry when a file is attached', async () => {
-    const mockNumberOfPages = 5;
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
-
-    const result = await updateDocketEntryInteractor({
-      applicationContext,
-      documentMetadata: {
-        caseId: caseRecord.caseId,
-        documentTitle: 'My Document',
-        documentType: 'Memorandum in Support',
-        eventCode: 'P',
-        isFileAttached: true,
-      },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    const updatedDocument = result.documents.find(
-      x => x.documentId === 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
-    expect(updatedDocument.numberOfPages).toBe(mockNumberOfPages);
-    expect(result.docketRecord[0].numberOfPages).toBe(mockNumberOfPages);
-  });
-
   it('add documents but not workitems for paper filed documents', async () => {
     await expect(
       updateDocketEntryInteractor({

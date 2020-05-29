@@ -170,9 +170,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().createSectionInboxRecord,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalled();
   });
 
   it('should call updateCase and set the case as automatic blocked if the document is a tracked document', async () => {
