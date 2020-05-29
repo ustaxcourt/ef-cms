@@ -20,7 +20,7 @@ export const submitEditDeficiencyStatisticAction = async ({
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
-    statisticIndex,
+    statisticId,
     year,
     yearOrPeriod,
   } = combineLastDateOfPeriodFields({
@@ -39,7 +39,7 @@ export const submitEditDeficiencyStatisticAction = async ({
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,
-      statisticIndex,
+      statisticId,
       year,
       yearOrPeriod,
     });

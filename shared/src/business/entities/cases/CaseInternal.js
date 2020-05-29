@@ -20,7 +20,11 @@ CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseInternal(rawCase) {
+function CaseInternal(rawCase, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
+
   this.applicationForWaiverOfFilingFeeFile =
     rawCase.applicationForWaiverOfFilingFeeFile;
   this.applicationForWaiverOfFilingFeeFileSize =
@@ -64,7 +68,9 @@ function CaseInternal(rawCase) {
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   this.statistics = Array.isArray(rawCase.statistics)
-    ? rawCase.statistics.map(statistic => new Statistic(statistic))
+    ? rawCase.statistics.map(
+        statistic => new Statistic(statistic, { applicationContext }),
+      )
     : [];
 
   const contacts = ContactFactory.createContacts({

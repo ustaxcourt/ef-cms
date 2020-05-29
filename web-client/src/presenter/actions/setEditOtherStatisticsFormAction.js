@@ -12,6 +12,7 @@ export const setEditOtherStatisticsFormAction = ({ get, store }) => {
 
   store.set(state.form, {
     damages,
+    isEditing: true,
     litigationCosts,
   });
 };

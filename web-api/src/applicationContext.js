@@ -196,6 +196,9 @@ const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
 const {
+  deleteDeficiencyStatisticInteractor,
+} = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
+const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
@@ -348,6 +351,9 @@ const {
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
+const {
+  getCaseForPublicDocketSearchInteractor,
+} = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -1277,6 +1283,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNoteInteractor,
         deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
+        deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
@@ -1301,6 +1308,7 @@ module.exports = (appContextUser = {}) => {
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
+        getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
         getCasesByUserInteractor,

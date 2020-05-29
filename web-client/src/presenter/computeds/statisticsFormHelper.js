@@ -3,11 +3,9 @@ import { state } from 'cerebral';
 /**
  * gets the statistics form helper fields
  *
- * @param {Function} get the cerebral get function used
- * for getting state.form.partyType and state.constants
+ * @param {Function} get the cerebral get function
  * @param {object} applicationContext the application context
- * @returns {object} partyTypes constant, showPrimary/SecondaryContact,
- * showOwnershipDisclosureStatement, and ownershipDisclosureStatementDocumentId
+ * @returns {object} statistics form helper fields
  */
 export const statisticsFormHelper = (get, applicationContext) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
