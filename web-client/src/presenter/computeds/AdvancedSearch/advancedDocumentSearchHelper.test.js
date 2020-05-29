@@ -19,17 +19,42 @@ describe('advancedDocumentSearchHelper', () => {
     },
   );
 
-  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty', () => {
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
-        advancedSearchTab: 'opinion',
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         isPublic: true,
       },
     });
 
     expect(result).toEqual({
-      documentTypeVerbiage: 'Opinion',
+      documentTypeVerbiage: 'Opinion type',
+      isPublic: true,
+    });
+  });
+
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is order', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchForm: {},
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        isPublic: true,
+      },
+    });
+
+    expect(result).toEqual({
+      documentTypeVerbiage: 'Order',
       isPublic: true,
     });
   });
@@ -38,6 +63,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [],
       },
     });
@@ -53,6 +82,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [],
       },
     });
@@ -64,6 +97,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         isPublic: true,
         searchResults: [],
       },
@@ -76,6 +113,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             docketNumber: '101-19',
@@ -102,6 +143,12 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -162,6 +209,12 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -196,7 +249,7 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: 'Z',
         docketNumberWithSuffix: '101-19Z',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'My Opinion',
+        documentTitle: 'T.C. Opinion',
         documentType: 'TCOP - T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'T.C. Opinion',
@@ -209,7 +262,7 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: 'P',
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'Opinion for Stuff',
+        documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Summary Opinion',
