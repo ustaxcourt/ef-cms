@@ -1,7 +1,4 @@
 const {
-  getDocumentContentsForDocuments,
-} = require('../useCaseHelper/case/getDocumentContentsForDocuments');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -71,10 +68,12 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         .validate()
         .toRawObject();
 
-      caseDetailRaw.documents = await getDocumentContentsForDocuments({
-        applicationContext,
-        documents: caseDetailRaw.documents,
-      });
+      caseDetailRaw.documents = await applicationContext
+        .getUseCaseHelpers()
+        .etDocumentContentsForDocuments({
+          applicationContext,
+          documents: caseDetailRaw.documents,
+        });
     } else {
       caseRecord = caseSealedFormatter(caseRecord);
       caseDetailRaw = new PublicCase(caseRecord, {
@@ -90,10 +89,12 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
       .validate()
       .toRawObject();
 
-    caseDetailRaw.documents = await getDocumentContentsForDocuments({
-      applicationContext,
-      documents: caseDetailRaw.documents,
-    });
+    caseDetailRaw.documents = await applicationContext
+      .getUseCaseHelpers()
+      .getDocumentContentsForDocuments({
+        applicationContext,
+        documents: caseDetailRaw.documents,
+      });
   }
   return caseDetailRaw;
 };

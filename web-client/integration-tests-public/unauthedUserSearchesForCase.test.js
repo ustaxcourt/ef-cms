@@ -24,13 +24,13 @@ import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
-let test = setupTest({
+const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
 
-let testClient = setupTestClient({
+const testClient = setupTestClient({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },

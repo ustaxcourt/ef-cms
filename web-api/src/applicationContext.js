@@ -385,6 +385,9 @@ const {
   getConsolidatedCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
 const {
+  getDocumentContentsForDocuments,
+} = require('../../shared/src/business/useCaseHelper/case/getDocumentContentsForDocuments');
+const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -1248,6 +1251,7 @@ module.exports = (appContextUser = {}) => {
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
         getCaseInventoryReport,
+        getDocumentContentsForDocuments,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,

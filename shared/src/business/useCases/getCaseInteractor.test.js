@@ -6,7 +6,6 @@ const { User } = require('../entities/User');
 const { documents } = MOCK_CASE;
 
 const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
-const petitionerId = '273f5d19-3707-41c0-bccc-449c52dfe54e';
 const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
 const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
 const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
@@ -27,63 +26,6 @@ describe('Get case', () => {
     });
 
     expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
-  });
-
-  it('successfully retrieves a case with documents that have documentContents', async () => {
-    const mockCaseWithDocumentContents = {
-      ...MOCK_CASE,
-      documents: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketNumber: '101-18',
-          documentContentsId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-          documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          draftState: {},
-          eventCode: 'P',
-          processingStatus: 'pending',
-          userId: petitionerId,
-          workItems: [],
-        },
-      ],
-    };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
-      userId: petitionsclerkId,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCaseWithDocumentContents);
-    applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
-      Buffer.from(
-        JSON.stringify({
-          documentContents: 'the contents!',
-          richText: '<b>the contents!</b>',
-        }),
-      ),
-    );
-
-    const caseRecord = await getCaseInteractor({
-      applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      documentId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-      protocol: 'S3',
-      useTempBucket: false,
-    });
-    expect(caseRecord.documents[0]).toMatchObject({
-      documentContents: 'the contents!',
-      draftState: {
-        documentContents: 'the contents!',
-        richText: '<b>the contents!</b>',
-      },
-    });
   });
 
   it('failure case by case id', async () => {
@@ -163,6 +105,22 @@ describe('Get case', () => {
         caseId: '00101-00',
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should retrieve document contents for all documents in a case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: User.ROLES.petitionsClerk,
+      userId: petitionsclerkId,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+
+    await getCaseInteractor({ applicationContext, caseId: '00101-00' });
+
+    expect(
+      applicationContext.getUseCaseHelpers().getDocumentContentsForDocuments,
+    ).toHaveBeenCalled();
   });
 
   describe('permissions-filtered access', () => {
