@@ -8,7 +8,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
-  const searchTabs = get(state.constants.ADVANCED_SEARCH_TABS);
+  const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
   if (advancedSearchTab === searchTabs.OPINION) {
@@ -50,7 +50,7 @@ export const formatDocumentSearchResultRecord = (
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
   result.formattedDocumentType = Document.getFormattedType(result.documentType);
 
-  const searchTabs = get(state.constants.ADVANCED_SEARCH_TABS);
+  const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {
     result.documentTitle = result.formattedDocumentType;
   }
