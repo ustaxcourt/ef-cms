@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { submitAddOtherStatisticsAction } from './submitAddOtherStatisticsAction';
+import { submitOtherStatisticsAction } from './submitOtherStatisticsAction';
 
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.path = {
@@ -9,9 +9,9 @@ presenter.providers.path = {
   success: jest.fn(),
 };
 
-describe('submitAddOtherStatisticsAction', () => {
+describe('submitOtherStatisticsAction', () => {
   it('calls the other statistics submit interactor, returning the success path', async () => {
-    await runAction(submitAddOtherStatisticsAction, {
+    await runAction(submitOtherStatisticsAction, {
       modules: {
         presenter,
       },
@@ -34,6 +34,31 @@ describe('submitAddOtherStatisticsAction', () => {
     });
   });
 
+  it('calls the other statistics submit interactor, returning the success path with the isEditing success message', async () => {
+    await runAction(submitOtherStatisticsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          caseId: '123',
+        },
+        form: {
+          damages: '1',
+          isEditing: true,
+          litigationCosts: '5',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().updateOtherStatisticsInteractor,
+    ).toHaveBeenCalled();
+    expect(presenter.providers.path.success).toHaveBeenCalledWith({
+      alertSuccess: { message: 'Other statistics edited.' },
+    });
+  });
+
   it('returns the error path if an error is encountered when calling the interactor', async () => {
     presenter.providers.applicationContext
       .getUseCases()
@@ -41,7 +66,7 @@ describe('submitAddOtherStatisticsAction', () => {
         throw new Error('error');
       });
 
-    await runAction(submitAddOtherStatisticsAction, {
+    await runAction(submitOtherStatisticsAction, {
       modules: {
         presenter,
       },
