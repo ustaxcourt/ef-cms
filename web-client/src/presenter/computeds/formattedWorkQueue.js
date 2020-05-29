@@ -210,7 +210,7 @@ export const getWorkItemDocumentLink = ({
       if (result.caseIsInProgress) {
         editLink += '/review';
       } else {
-        editLink = '/petition-qc';
+        editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
       }
     }
   }
