@@ -196,6 +196,9 @@ const {
   deleteCounselFromCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
 const {
+  deleteDeficiencyStatisticInteractor,
+} = require('../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor');
+const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
@@ -1285,6 +1288,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNoteInteractor,
         deleteCorrespondenceDocumentInteractor,
         deleteCounselFromCaseInteractor,
+        deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,

@@ -321,6 +321,28 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/add-other-statistics',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20/add-deficiency-statistics',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+  {
+    actions: [
+      'wait for button.red-warning to be visible',
+      'click element button.red-warning',
+      'wait for #modal-root to be visible',
+    ],
+    notes: 'checks the delete deficiency modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20/edit-deficiency-statistic/cb557361-50ee-4440-aaff-0a9f1bfa30ed&info=delete-deficiency-modal',
+  },
+  {
+    actions: [
+      'wait for button.red-warning to be visible',
+      'click element button.red-warning',
+      'wait for #modal-root to be visible',
+    ],
+    notes: 'checks the delete modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-other-statistics&info=delete-other-statistics-modal',
+  },
 
   /* petition qc */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
