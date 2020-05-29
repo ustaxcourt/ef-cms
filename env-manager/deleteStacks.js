@@ -9,9 +9,12 @@ exports.deleteStacks = async ({ environment }) => {
     environment,
   });
   for (const stack of stacks) {
-    console.log('Delete CloudFormation Stack:', stack.StackName);
+    console.log(
+      'Delete CloudFormation Stack:',
+      environment.region,
+      stack.StackName,
+    );
     await cloudFormation.deleteStack({ StackName: stack.StackName }).promise();
-    await sleep(100);
   }
 
   let resourceCount = stacks.length;
