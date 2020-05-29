@@ -10,6 +10,7 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
+import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
@@ -51,6 +52,7 @@ const applicationContextPublic = {
   getUseCases: () => ({
     casePublicSearchInteractor,
     generatePublicDocketRecordPdfInteractor,
+    getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getPublicJudgesInteractor,
     opinionPublicSearchInteractor,

@@ -29,6 +29,7 @@ const test = setupTest({
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
+
 const testClient = setupTestClient({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),

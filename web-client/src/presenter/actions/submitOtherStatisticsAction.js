@@ -27,7 +27,7 @@ export const submitOtherStatisticsAction = async ({
 
     let successMessage = 'Other statistics added.';
     if (isEditing) {
-      successMessage = 'Other statistics edited.';
+      successMessage = 'Other statistics updated.';
     }
     return path.success({
       alertSuccess: {

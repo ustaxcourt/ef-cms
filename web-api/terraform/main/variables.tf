@@ -25,4 +25,5 @@ variable "es_instance_count" {
 
 variable "honeybadger_key" {
   type = "string"
+  default = "default_key"
 }
