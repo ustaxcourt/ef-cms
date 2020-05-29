@@ -168,13 +168,13 @@ export const getWorkItemDocumentLink = ({
     (!formattedDocument.isInProgress ||
       (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
 
-  let editLink; //defaults to doc detail
-  if (
-    showDocumentEditLink &&
-    permissions.DOCKET_ENTRY &&
-    formattedDocument &&
-    !workQueueIsInternal
-  ) {
+  const getDocketEntryEditLink = ({
+    formattedDocument,
+    isInProgress,
+    qcWorkItemsUntouched,
+    result,
+  }) => {
+    let editLink;
     if (
       formattedDocument.isCourtIssuedDocument &&
       !formattedDocument.servedAt
@@ -190,16 +190,25 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
-  } else if (
-    showDocumentEditLink &&
-    permissions.UPDATE_CASE &&
-    formattedDocument &&
-    !workQueueIsInternal &&
-    formattedDocument.isPetition &&
-    result.caseIsInProgress &&
-    !formattedDocument.servedAt
-  ) {
-    editLink = '/review';
+    return editLink;
+  };
+
+  let editLink; //defaults to doc detail
+  if (showDocumentEditLink && !workQueueIsInternal) {
+    if (permissions.DOCKET_ENTRY) {
+      editLink = getDocketEntryEditLink({
+        formattedDocument,
+        isInProgress,
+        qcWorkItemsUntouched,
+        result,
+      });
+    } else if (
+      formattedDocument.isPetition &&
+      result.caseIsInProgress &&
+      !formattedDocument.servedAt
+    ) {
+      editLink = '/review';
+    }
   }
   if (!editLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
