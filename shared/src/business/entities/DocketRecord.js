@@ -102,4 +102,8 @@ joiValidationDecorator(
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 
+DocketRecord.prototype.setNumberOfPages = function (numberOfPages) {
+  this.numberOfPages = numberOfPages;
+};
+
 module.exports = { DocketRecord };
