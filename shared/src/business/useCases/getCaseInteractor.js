@@ -70,7 +70,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
 
       caseDetailRaw.documents = await applicationContext
         .getUseCaseHelpers()
-        .etDocumentContentsForDocuments({
+        .getDocumentContentsForDocuments({
           applicationContext,
           documents: caseDetailRaw.documents,
         });
