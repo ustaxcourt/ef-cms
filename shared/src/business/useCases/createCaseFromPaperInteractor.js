@@ -137,10 +137,6 @@ exports.createCaseFromPaperInteractor = async ({
     partySecondary = true;
   }
 
-  const petitionNumberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId: petitionFileId });
-
   const petitionDocumentEntity = new Document(
     {
       createdAt: caseToAdd.receivedAt,
@@ -158,7 +154,6 @@ exports.createCaseFromPaperInteractor = async ({
         contactPrimary: true,
         contactSecondary: true,
       }),
-      numberOfPages: petitionNumberOfPages,
     },
     { applicationContext },
   );
@@ -178,13 +173,6 @@ exports.createCaseFromPaperInteractor = async ({
       documentTitle,
     } = Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: applicationForWaiverOfFilingFeeFileId,
-      });
-
     const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -199,7 +187,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -228,13 +215,6 @@ exports.createCaseFromPaperInteractor = async ({
       );
     }
 
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: requestForPlaceOfTrialFileId,
-      });
-
     const requestForPlaceOfTrialDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -255,7 +235,6 @@ exports.createCaseFromPaperInteractor = async ({
           contactPrimary: true,
           contactSecondary: true,
         }),
-        numberOfPages,
       },
       { applicationContext },
     );
@@ -266,13 +245,6 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (stinFileId) {
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: stinFileId,
-      });
-
     const stinDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -282,7 +254,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -301,13 +272,6 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (ownershipDisclosureFileId) {
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: ownershipDisclosureFileId,
-      });
-
     const odsDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -319,7 +283,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
