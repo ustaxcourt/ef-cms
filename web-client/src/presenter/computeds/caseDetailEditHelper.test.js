@@ -357,4 +357,15 @@ describe('case detail edit computed', () => {
     });
     expect(result.showOrderForFilingFee).toBeFalsy();
   });
+
+  it('sets receivedAtFormatted to formatted string', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        form: {
+          receivedAt: '2001-12-01T20:00:00.000Z',
+        },
+      },
+    });
+    expect(result.receivedAtFormatted).toEqual('12/01/2001');
+  });
 });
