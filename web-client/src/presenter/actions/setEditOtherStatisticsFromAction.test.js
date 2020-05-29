@@ -13,6 +13,7 @@ describe('setEditOtherStatisticsFormAction', () => {
     });
     expect(result.state.form).toEqual({
       damages: 1,
+      isEditing: true,
       litigationCosts: 1,
     });
   });
