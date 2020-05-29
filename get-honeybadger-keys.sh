@@ -4,7 +4,7 @@ BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
   echo "${CIRCLE_HONEYBADGER_API_KEY_DEV}"
-elif [[ $BRANCH == 'experimental' ]] ; then
+elif [[ $BRANCH == 'experimental1' ]] ; then
   echo ""
 elif [[ $BRANCH == 'master' ]] ; then
   echo ""

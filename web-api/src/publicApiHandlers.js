@@ -3,6 +3,8 @@ module.exports = {
     .casePublicSearchLambda,
   generatePublicDocketRecordPdfLambda: require('./public-api/generatePublicDocketRecordPdfLambda')
     .generatePublicDocketRecordPdfLambda,
+  getCaseForPublicDocketSearch: require('./public-api/getCaseForPublicDocketSearchLambda')
+    .getCaseForPublicDocketSearch,
   getPublicCaseLambda: require('./public-api/getPublicCaseLambda')
     .getPublicCaseLambda,
   getPublicDocumentDownloadUrlLambda: require('./public-api/getPublicDocumentDownloadUrlLambda')
