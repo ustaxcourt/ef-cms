@@ -79,19 +79,21 @@ export const CaseInfo = connect(
         {!form.isPaper && (
           <>
             <FormGroup>
-              <label className="usa-label" htmlFor="case-caption">
+              <label className="usa-label" htmlFor="received-at-text">
                 Date received
               </label>
-              <span className="display-inline-block">
+              <span className="display-inline-block" id="received-at-text">
                 {caseDetailEditHelper.receivedAtFormatted}
               </span>
             </FormGroup>
 
             <FormGroup>
-              <label className="usa-label" htmlFor="case-caption">
+              <label className="usa-label" htmlFor="mailing-date-text">
                 Mailing date
               </label>
-              <span className="display-inline-block">Electronically filed</span>
+              <span className="display-inline-block" id="mailing-date-text">
+                Electronically filed
+              </span>
             </FormGroup>
           </>
         )}
@@ -152,7 +154,7 @@ export const CaseInfo = connect(
           </div>
         </FormGroup>
 
-        {form.isPaperr && (
+        {form.isPaper && (
           <TrialCity
             label="Trial location"
             showDefaultOption={true}
@@ -173,7 +175,7 @@ export const CaseInfo = connect(
           />
         )}
 
-        {!form.isPaperr && (
+        {!form.isPaper && (
           <>
             <FormGroup>
               <label className="usa-label" htmlFor="case-caption">
@@ -186,7 +188,7 @@ export const CaseInfo = connect(
           </>
         )}
 
-        {form.isPaperr && (
+        {form.isPaper && (
           <FormGroup>
             <div className="order-checkbox">
               <input
