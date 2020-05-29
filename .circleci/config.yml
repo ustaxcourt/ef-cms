@@ -142,8 +142,8 @@ jobs:
           command: |
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
-            TESTFILES=$(circleci tests glob "web-client/public-integration-tests/*.test.js" | circleci tests split --split-by=timings)
-            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-public-integration --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+            TESTFILES=$(circleci tests glob "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
+            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-integration-public --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -168,7 +168,7 @@ jobs:
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-integration-2/coverage-final.json \
             ./web-client/coverage-integration-3/coverage-final.json \
-            ./web-client/coverage-public-integration/coverage-final.json \
+            ./web-client/coverage-integration-public/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
           name: Check Coverage
