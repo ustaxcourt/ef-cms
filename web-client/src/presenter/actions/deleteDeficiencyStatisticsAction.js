@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
+
 /**
- * submits the add other statistics form
+ * deletes the statistic from the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
@@ -8,24 +9,34 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const submitAddOtherStatisticsAction = async ({
+export const deleteDeficiencyStatisticsAction = async ({
   applicationContext,
   get,
   path,
 }) => {
-  const { damages, litigationCosts } = get(state.form);
   const { caseId } = get(state.caseDetail);
+  const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().updateOtherStatisticsInteractor({
+    await applicationContext.getUseCases().deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId,
-      damages,
-      litigationCosts,
+      statisticId,
     });
+
+    let successMessageDate;
+
+    if (yearOrPeriod === 'Year') {
+      successMessageDate = year;
+    } else {
+      successMessageDate = applicationContext
+        .getUtilities()
+        .formatDateString(lastDateOfPeriod, 'MMDDYY');
+    }
+
     return path.success({
       alertSuccess: {
-        message: 'Other statistics added.',
+        message: `${successMessageDate} statistics deleted.`,
       },
     });
   } catch (e) {

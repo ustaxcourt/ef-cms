@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
+
 /**
- * submits the edit other statistics form
+ * submits the add/edit other statistics form
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
@@ -8,12 +9,12 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const submitEditOtherStatisticsAction = async ({
+export const submitOtherStatisticsAction = async ({
   applicationContext,
   get,
   path,
 }) => {
-  const { damages, litigationCosts } = get(state.form);
+  const { damages, isEditing, litigationCosts } = get(state.form);
   const { caseId } = get(state.caseDetail);
 
   try {
@@ -23,9 +24,14 @@ export const submitEditOtherStatisticsAction = async ({
       damages,
       litigationCosts,
     });
+
+    let successMessage = 'Other statistics added.';
+    if (isEditing) {
+      successMessage = 'Other statistics updated.';
+    }
     return path.success({
       alertSuccess: {
-        message: 'Other statistics updated.',
+        message: successMessage,
       },
     });
   } catch (e) {

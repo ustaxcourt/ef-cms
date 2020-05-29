@@ -10,12 +10,14 @@ describe('clearAddDeficiencyFormValuesAction', () => {
       },
       state: {
         form: {
+          statisticId: '810d832d-329e-4b78-92d0-2d4e0709d1d0',
           yearOrPeriod: 'Period',
         },
       },
     });
 
     expect(result.state.form).toEqual({
+      statisticId: '810d832d-329e-4b78-92d0-2d4e0709d1d0',
       yearOrPeriod: 'Year',
     });
   });
