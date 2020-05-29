@@ -1,4 +1,5 @@
 # contacts/SurvivingSpouseContact
+ ```
 ---
   type: "object"
   keys: 
@@ -71,3 +72,5 @@
           name: "pattern"
           args: 
             regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
+
+ ```

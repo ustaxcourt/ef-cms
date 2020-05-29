@@ -58,7 +58,7 @@ const generateMarkdownSchema = (entity, entityName) => {
 
   fs.writeFileSync(
     `./docs/entities/${entityName}.md`,
-    '# ' + entityName + '\n' + json2yaml.stringify(json),
+    '# ' + entityName + '\n ```\n' + json2yaml.stringify(json) + '\n ```\n',
   );
 };
 

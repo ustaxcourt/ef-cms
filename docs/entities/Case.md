@@ -1,4 +1,5 @@
 # Case
+ ```
 ---
   type: "object"
   keys: 
@@ -1085,3 +1086,5 @@
         - 
           tags: 
             - "Restricted"
+
+ ```

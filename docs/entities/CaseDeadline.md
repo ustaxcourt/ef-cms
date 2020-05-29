@@ -1,4 +1,5 @@
 # CaseDeadline
+ ```
 ---
   type: "object"
   keys: 
@@ -63,3 +64,5 @@
         presence: "required"
       allow: 
         - "CaseDeadline"
+
+ ```
