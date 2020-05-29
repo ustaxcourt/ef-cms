@@ -695,7 +695,7 @@ workflows:
                 - staging
                 - test
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - deploy-api-east:
           requires:
@@ -706,7 +706,7 @@ workflows:
                 - staging
                 - test
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - deploy-api-west:
           requires:
@@ -717,7 +717,7 @@ workflows:
                 - staging
                 - test
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - switch-and-deploy-ui:
           requires:
@@ -729,7 +729,7 @@ workflows:
                 - staging
                 - test
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - post-deploy:
           requires:
@@ -740,5 +740,5 @@ workflows:
                 - staging
                 - test
                 - master
-                - experimental
+                - experimental1
                 - experimental2
