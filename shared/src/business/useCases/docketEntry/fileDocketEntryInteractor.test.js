@@ -114,9 +114,6 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalledTimes(1);
   });
 
   it('sets the eventCode to MISL when the document is lodged', async () => {
@@ -179,9 +176,6 @@ describe('fileDocketEntryInteractor', () => {
       eventCode: 'MISL',
       lodged: true,
     });
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalledTimes(3);
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
