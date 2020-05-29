@@ -38,10 +38,7 @@ export const MessagesInProgress = connect(
                   </td>
                   <td className="padding-extra">
                     <p className="margin-y-0">
-                      <a
-                        className="case-link"
-                        href={`/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}${workItem.editLink}`}
-                      >
+                      <a className="case-link" href={workItem.editLink}>
                         {workItem.document.documentTitle ||
                           workItem.document.documentType}
                       </a>
