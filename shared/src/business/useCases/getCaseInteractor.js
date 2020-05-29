@@ -6,6 +6,43 @@ const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
+
+const getDocumentContentsForDocuments = async ({
+  applicationContext,
+  documents,
+}) => {
+  for (const document of documents) {
+    if (document.documentContentsId) {
+      try {
+        const documentContentsFile = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            documentId: document.documentContentsId,
+            protocol: 'S3',
+            useTempBucket: false,
+          });
+
+        const documentContentsData = JSON.parse(
+          documentContentsFile.toString(),
+        );
+        document.documentContents = documentContentsData.documentContents;
+        document.draftState = {
+          ...document.draftState,
+          documentContents: documentContentsData.documentContents,
+          richText: documentContentsData.richText,
+        };
+      } catch (e) {
+        applicationContext.logger.error(
+          `Document contents ${document.documentContentsId} could not be found in the S3 bucket.`,
+        );
+      }
+    }
+  }
+
+  return documents;
+};
+
 /**
  * getCaseInteractor
  *
@@ -68,12 +105,10 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         .validate()
         .toRawObject();
 
-      caseDetailRaw.documents = await applicationContext
-        .getUseCaseHelpers()
-        .getDocumentContentsForDocuments({
-          applicationContext,
-          documents: caseDetailRaw.documents,
-        });
+      caseDetailRaw.documents = await getDocumentContentsForDocuments({
+        applicationContext,
+        documents: caseDetailRaw.documents,
+      });
     } else {
       caseRecord = caseSealedFormatter(caseRecord);
       caseDetailRaw = new PublicCase(caseRecord, {
@@ -89,12 +124,10 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
       .validate()
       .toRawObject();
 
-    caseDetailRaw.documents = await applicationContext
-      .getUseCaseHelpers()
-      .getDocumentContentsForDocuments({
-        applicationContext,
-        documents: caseDetailRaw.documents,
-      });
+    caseDetailRaw.documents = await getDocumentContentsForDocuments({
+      applicationContext,
+      documents: caseDetailRaw.documents,
+    });
   }
   return caseDetailRaw;
 };
