@@ -171,7 +171,7 @@ exports.updateSecondaryContactInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-    const docketRecordPdfWithCover = await addCoverToPdf({
+    const { pdfData: docketRecordPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,

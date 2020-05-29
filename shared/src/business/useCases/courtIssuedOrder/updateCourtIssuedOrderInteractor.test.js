@@ -137,32 +137,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ).toEqual(3);
   });
 
-  it('should update the number of pages in the document', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(45);
-
-    await updateCourtIssuedOrderInteractor({
-      applicationContext,
-      documentIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      documentMetadata: {
-        caseId: caseRecord.caseId,
-        documentType: 'Order to Show Cause',
-      },
-    });
-
-    const updatedDocument = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
-        x => x.documentType === 'Order to Show Cause',
-      );
-
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toBeCalled();
-    expect(updatedDocument.numberOfPages).toEqual(45);
-  });
-
   it('stores documentContents in S3 if present', async () => {
     await updateCourtIssuedOrderInteractor({
       applicationContext,
