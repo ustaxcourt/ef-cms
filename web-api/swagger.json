@@ -1263,8 +1263,8 @@
       ],
       "put": {
         "tags": ["cases"],
-        "summary": "removes a pending item from a case",
-        "description": "removes a pending item from a case.\n",
+        "summary": "updates statistics on a case",
+        "description": "updates statistics on a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1282,8 +1282,8 @@
       },
       "delete": {
         "tags": ["cases"],
-        "summary": "removes a pending item from a case",
-        "description": "removes a pending item from a case.\n",
+        "summary": "removes a statistics entry off a case",
+        "description": "removes a statistics entry off a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
