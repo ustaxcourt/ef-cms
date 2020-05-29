@@ -8,7 +8,12 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
-  const documentTypeVerbiage = capitalize(advancedSearchTab);
+  const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
+  let documentTypeVerbiage = capitalize(advancedSearchTab);
+
+  if (advancedSearchTab === searchTabs.OPINION) {
+    documentTypeVerbiage = `${documentTypeVerbiage} type`;
+  }
 
   if (searchResults) {
     paginatedResults = paginationHelper(
@@ -19,7 +24,9 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatDocumentSearchResultRecord(searchResult, { applicationContext }),
+        formatDocumentSearchResultRecord(get, searchResult, advancedSearchTab, {
+          applicationContext,
+        }),
     );
   }
 
@@ -31,7 +38,9 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 };
 
 export const formatDocumentSearchResultRecord = (
+  get,
   result,
+  advancedSearchTab,
   { applicationContext },
 ) => {
   result.formattedFiledDate = applicationContext
@@ -40,6 +49,11 @@ export const formatDocumentSearchResultRecord = (
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
   result.formattedDocumentType = Document.getFormattedType(result.documentType);
+
+  const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
+  if (advancedSearchTab === searchTabs.OPINION) {
+    result.documentTitle = result.formattedDocumentType;
+  }
 
   if (Document.OPINION_DOCUMENT_TYPES.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge

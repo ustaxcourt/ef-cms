@@ -25,6 +25,12 @@ import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
+const ADVANCED_SEARCH_TABS = {
+  CASE: 'case',
+  OPINION: 'opinion',
+  ORDER: 'order',
+};
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
@@ -33,6 +39,7 @@ const applicationContextPublic = {
   getCognitoLoginUrl,
   getConstants: () =>
     deepFreeze({
+      ADVANCED_SEARCH_TABS,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
