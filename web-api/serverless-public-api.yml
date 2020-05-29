@@ -140,6 +140,14 @@ functions:
           method: get
           cors: ui-public-${self:provider.stage}.ef-cms.${opt:domain}
 
+  getCaseForPublicDocketSearch:
+    handler: web-api/${self:provider.dir}/publicApiHandlers.getCaseForPublicDocketSearch
+    events:
+      - http:
+          path: /docket-number-search/{docketNumber}
+          method: get
+          cors: ui-public-${self:provider.stage}.ef-cms.${opt:domain}
+
   getPublicDocumentDownloadUrl:
     handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicDocumentDownloadUrlLambda
     events:

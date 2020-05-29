@@ -1,14 +1,14 @@
-const { deleteCognitoPools } = require('./deleteCognitoPools');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
-const { deleteDynamoDBTables } = require('./deleteDynamoDBTables');
 const { deleteS3Buckets } = require('./deleteS3Buckets');
 const { deleteStacks } = require('./deleteStacks');
+const { exec } = require('child_process');
 
-// TODO: get all values from ENV variables and validate that they exist
+const environmentName = process.argv[2] || 'exp1';
+
 const environmentEast = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
-  name: 'exp',
+  name: environmentName,
   region: 'us-east-1',
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
@@ -16,25 +16,64 @@ const environmentEast = {
 const environmentWest = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
-  name: 'exp',
+  name: environmentName,
   region: 'us-west-1',
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
 const teardownEnvironment = async () => {
-  await deleteCustomDomains({ environment: environmentEast });
-  await deleteCustomDomains({ environment: environmentWest });
+  await Promise.all([
+    deleteCustomDomains({ environment: environmentEast }),
+    deleteCustomDomains({ environment: environmentWest }),
+  ]);
 
-  await deleteStacks({ environment: environmentEast });
-  await deleteStacks({ environment: environmentWest });
+  await Promise.all([
+    deleteStacks({ environment: environmentEast }),
+    deleteStacks({ environment: environmentWest }),
+  ]);
 
-  await deleteDynamoDBTables({ environment: environmentEast });
-  await deleteDynamoDBTables({ environment: environmentWest });
+  await Promise.all([
+    deleteS3Buckets({ environment: environmentEast }),
+    deleteS3Buckets({ environment: environmentWest }),
+  ]);
 
-  await deleteCognitoPools({ environment: environmentEast });
+  const webClientTerraformDestroy = exec(
+    `cd web-client/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
+  );
 
-  await deleteS3Buckets({ environment: environmentEast });
-  await deleteS3Buckets({ environment: environmentWest });
+  webClientTerraformDestroy.stdout.on('data', function (data) {
+    console.log('Web Client Terraform stdout: ', data.toString());
+  });
+
+  webClientTerraformDestroy.stderr.on('data', function (data) {
+    console.log('Web Client Terraform stderr: ', data.toString());
+  });
+
+  webClientTerraformDestroy.on('exit', function (code) {
+    console.log(
+      'Web Client Terraform child process exited with code ',
+      code.toString(),
+    );
+  });
+
+  const webApiTerraformDestroy = exec(
+    `cd web-api/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
+  );
+
+  webApiTerraformDestroy.stdout.on('data', function (data) {
+    console.log('Web API Terraform stdout: ', data.toString());
+  });
+
+  webApiTerraformDestroy.stderr.on('data', function (data) {
+    console.log('Web API Terraform stderr: ', data.toString());
+  });
+
+  webApiTerraformDestroy.on('exit', function (code) {
+    console.log(
+      'Web Client API child process exited with code ',
+      code.toString(),
+    );
+  });
 };
 
 teardownEnvironment();

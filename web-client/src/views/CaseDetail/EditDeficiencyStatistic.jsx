@@ -13,6 +13,7 @@ export const EditDeficiencyStatistic = connect(
   {
     calculatePenaltiesForAddSequence:
       sequences.calculatePenaltiesForAddSequence,
+    cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     editStatisticFormHelper: state.editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence:
       sequences.openConfirmDeleteDeficiencyStatisticsModalSequence,
@@ -24,6 +25,7 @@ export const EditDeficiencyStatistic = connect(
   },
   function EditDeficiencyStatistic({
     calculatePenaltiesForAddSequence,
+    cancelAddStatisticSequence,
     editStatisticFormHelper,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     showModal,
@@ -69,7 +71,7 @@ export const EditDeficiencyStatistic = connect(
               Save
             </Button>
 
-            <Button link onClick={() => {}}>
+            <Button link onClick={() => cancelAddStatisticSequence()}>
               Cancel
             </Button>
           </div>
