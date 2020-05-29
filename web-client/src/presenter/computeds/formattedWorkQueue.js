@@ -193,24 +193,28 @@ export const getWorkItemDocumentLink = ({
     return editLink;
   };
 
-  let editLink; //defaults to doc detail
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
+  let editLink = documentDetailLink;
   if (showDocumentEditLink && !workQueueIsInternal) {
     if (permissions.DOCKET_ENTRY) {
-      editLink = getDocketEntryEditLink({
+      const editLinkExtension = getDocketEntryEditLink({
         formattedDocument,
         isInProgress,
         qcWorkItemsUntouched,
         result,
       });
-    } else if (
-      formattedDocument.isPetition &&
-      result.caseIsInProgress &&
-      !formattedDocument.servedAt
-    ) {
-      editLink = '/review';
+      if (editLinkExtension) {
+        editLink += editLinkExtension;
+      }
+    } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
+      if (result.caseIsInProgress) {
+        editLink += '/review';
+      } else {
+        editLink = '/petition-qc';
+      }
     }
   }
-  if (!editLink) {
+  if (editLink === documentDetailLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
 
     const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
@@ -222,7 +226,7 @@ export const getWorkItemDocumentLink = ({
 
     if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
       editLink = `/messages/${messageId}${markReadPath}`;
-    } else {
+    } else if (markReadPath) {
       editLink = `${markReadPath}`;
     }
   }
