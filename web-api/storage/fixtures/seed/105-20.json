@@ -641,7 +641,15 @@
         "yearOrPeriod": "Year",
         "year": "2018",
         "irsTotalPenalties": 1234,
-        "irsDeficiencyAmount": 5678
+        "irsDeficiencyAmount": 5678,
+        "statisticId": "cb557361-50ee-4440-aaff-0a9f1bfa30ed"
+      },
+      {
+        "yearOrPeriod": "Year",
+        "year": "2019",
+        "irsTotalPenalties": 99,
+        "irsDeficiencyAmount": 55,
+        "statisticId": "ab557361-50ee-4440-aaff-0a9f1bfa30ed"
       }
     ],
     "damages": 9999,

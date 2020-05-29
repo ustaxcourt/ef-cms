@@ -1,3 +1,6 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { Case } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { CaseInternal } = require('../cases/CaseInternal');
@@ -560,39 +563,42 @@ describe('Petition', () => {
   });
 
   it('does not require phone number for internal cases', () => {
-    const caseInternal = new CaseInternal({
-      caseCaption: 'Sisqo',
-      caseType: 'Other',
-      contactPrimary: {
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        country: 'USA',
-        countryType: 'domestic',
-        email: 'someone@example.com',
-        name: 'Jimmy Dean',
-        postalCode: '05198',
-        state: 'AK',
+    const caseInternal = new CaseInternal(
+      {
+        caseCaption: 'Sisqo',
+        caseType: 'Other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: ContactFactory.PARTY_TYPES.transferee,
+        petitionFile: {},
+        petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        preferredTrialCity: 'Chattanooga, Tennessee',
+        procedureType: 'Small',
+        receivedAt: '2009-10-13T08:06:07.539Z',
+        requestForPlaceOfTrialFile: new File(
+          [],
+          'requestForPlaceOfTrialFile.pdf',
+        ),
+        requestForPlaceOfTrialFileSize: 1,
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
       },
-      filingType: 'Myself',
-      hasIrsNotice: true,
-      irsNoticeDate: '2009-10-13T08:06:07.539Z',
-      mailingDate: 'testing',
-      partyType: ContactFactory.PARTY_TYPES.transferee,
-      petitionFile: {},
-      petitionFileSize: 1,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
-      preferredTrialCity: 'Chattanooga, Tennessee',
-      procedureType: 'Small',
-      receivedAt: '2009-10-13T08:06:07.539Z',
-      requestForPlaceOfTrialFile: new File(
-        [],
-        'requestForPlaceOfTrialFile.pdf',
-      ),
-      requestForPlaceOfTrialFileSize: 1,
-      signature: true,
-      stinFile: {},
-      stinFileSize: 1,
-    });
+      { applicationContext },
+    );
 
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });

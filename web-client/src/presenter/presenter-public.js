@@ -12,8 +12,8 @@ import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
-import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
+import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -42,8 +42,8 @@ export const presenter = {
     navigateToPublicSiteSequence,
     notFoundErrorSequence,
     showMoreResultsSequence,
-    submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
     toggleBetaBarSequence,

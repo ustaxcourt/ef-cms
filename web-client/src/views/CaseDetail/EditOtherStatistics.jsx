@@ -10,6 +10,7 @@ import React from 'react';
 
 export const EditOtherStatistics = connect(
   {
+    cancelAddStatisticSequence: sequences.cancelAddStatisticSequence,
     openConfirmDeleteOtherStatisticsModalSequence:
       sequences.openConfirmDeleteOtherStatisticsModalSequence,
     showModal: state.modal.showModal,
@@ -17,6 +18,7 @@ export const EditOtherStatistics = connect(
       sequences.submitEditOtherStatisticsSequence,
   },
   function EditOtherStatistics({
+    cancelAddStatisticSequence,
     openConfirmDeleteOtherStatisticsModalSequence,
     showModal,
     submitEditOtherStatisticsSequence,
@@ -54,12 +56,7 @@ export const EditOtherStatistics = connect(
               Save
             </Button>
 
-            <Button
-              link
-              onClick={() => {
-                history.back();
-              }}
-            >
+            <Button link onClick={() => cancelAddStatisticSequence()}>
               Cancel
             </Button>
           </div>
