@@ -13,6 +13,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     determinationTotalPenalties: 456,
     irsDeficiencyAmount: 789,
     irsTotalPenalties: 1.1,
+    statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
     year: 2012,
     yearOrPeriod: 'Year',
   };
@@ -50,7 +51,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     const result = await updateDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticIndex: 0,
+      statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
       ...statisticToUpdate,
     });
     expect(result).toMatchObject({
@@ -58,16 +59,17 @@ describe('updateDeficiencyStatisticInteractor', () => {
     });
   });
 
-  it('should call updateCase with the original case statistics and return the original case if statisticIndex is not present on the case', async () => {
+  it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
     const statisticToUpdate = {
       ...statistic,
       determinationDeficiencyAmount: 1,
+      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
     };
 
     const result = await updateDeficiencyStatisticInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      statisticIndex: 1,
+      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
       ...statisticToUpdate,
     });
     expect(result).toMatchObject({

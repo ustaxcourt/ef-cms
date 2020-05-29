@@ -254,6 +254,45 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress
 
+  e2e-cypress-public:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+      - image: elastic/elasticsearch:7.5.2
+        environment:
+          discovery.type: single-node
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+    resource_class: xlarge
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          command: |
+            npm run build:all &&
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+
+            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run cypress:public
+      - store_artifacts:
+          path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
+
   pre-deploy:
     machine:
       docker_layer_caching: true
@@ -543,6 +582,9 @@ workflows:
       - e2e-cypress:
           requires:
             - bundle
+      - e2e-cypress-public:
+          requires:
+            - bundle
       - build-client-coverage:
           requires:
             - build-shared
@@ -551,6 +593,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-cypress
+            - e2e-cypress-public
       - pre-deploy:
           requires:
             - build-client-coverage
@@ -623,6 +666,13 @@ workflows:
             branches:
               ignore:
                 - develop
+      - e2e-cypress-public:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
       - build-client-coverage:
           requires:
             - build-shared
@@ -631,6 +681,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-cypress
+            - e2e-cypress-public
           filters:
             branches:
               ignore:

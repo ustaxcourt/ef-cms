@@ -1,47 +1,27 @@
-import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from 'cerebral';
+
 /**
- * submits the edit deficiency statistics form
+ * deletes the statistic from the case
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
+ * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const submitEditDeficiencyStatisticAction = async ({
+export const deleteDeficiencyStatisticsAction = async ({
   applicationContext,
   get,
   path,
 }) => {
-  const {
-    determinationDeficiencyAmount,
-    determinationTotalPenalties,
-    irsDeficiencyAmount,
-    irsTotalPenalties,
-    lastDateOfPeriod,
-    statisticId,
-    year,
-    yearOrPeriod,
-  } = combineLastDateOfPeriodFields({
-    applicationContext,
-    form: get(state.form),
-  });
-
   const { caseId } = get(state.caseDetail);
+  const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().updateDeficiencyStatisticInteractor({
+    await applicationContext.getUseCases().deleteDeficiencyStatisticInteractor({
       applicationContext,
       caseId,
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
       statisticId,
-      year,
-      yearOrPeriod,
     });
 
     let successMessageDate;
@@ -56,7 +36,7 @@ export const submitEditDeficiencyStatisticAction = async ({
 
     return path.success({
       alertSuccess: {
-        message: `${successMessageDate} statistics updated.`,
+        message: `${successMessageDate} statistics deleted.`,
       },
     });
   } catch (e) {
