@@ -485,7 +485,7 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editLink: '/review',
+        editLink: '',
         showDocumentEditLink: true,
       },
       {

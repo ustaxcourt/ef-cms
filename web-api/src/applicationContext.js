@@ -776,6 +776,12 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
+  updateDocketRecord,
+} = require('../../shared/src/persistence/dynamo/docketRecord/updateDocketRecord');
+const {
+  updateDocument,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocument');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
@@ -1166,6 +1172,8 @@ module.exports = (appContextUser = {}) => {
         updateCase,
         updateCaseDeadline,
         updateCaseTrialSortMappingRecords,
+        updateDocketRecord,
+        updateDocument,
         updateDocumentProcessingStatus,
         updateHighPriorityCaseTrialSortMappingRecords,
         updatePractitionerUser,
