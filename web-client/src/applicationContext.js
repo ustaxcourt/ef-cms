@@ -460,6 +460,10 @@ const applicationContext = {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
   },
+  getPdfLib: () => {
+    const pdfLib = import('pdf-lib');
+    return pdfLib;
+  },
   getPersistenceGateway: () => {
     return {
       getDocument,

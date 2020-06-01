@@ -2,7 +2,6 @@ const {
   generateCoverPagePdf,
 } = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -110,6 +109,8 @@ exports.addCoverToPdf = async ({
     caseEntity,
     documentEntity,
   });
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData);
 
