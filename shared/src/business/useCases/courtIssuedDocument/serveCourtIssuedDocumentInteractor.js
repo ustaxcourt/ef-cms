@@ -129,6 +129,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   );
 
   const newPdfData = await addServedStampToDocument({
+    applicationContext,
     pdfData,
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });

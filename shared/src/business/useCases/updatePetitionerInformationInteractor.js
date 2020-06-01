@@ -225,6 +225,7 @@ exports.updatePetitionerInformationInteractor = async ({
     if (primaryPdf) {
       await copyToNewPdf({
         addressPages,
+        applicationContext,
         newPdfDoc: fullDocument,
         noticeDoc: await PDFDocument.load(primaryPdf),
       });
@@ -232,6 +233,7 @@ exports.updatePetitionerInformationInteractor = async ({
     if (secondaryPdf) {
       await copyToNewPdf({
         addressPages,
+        applicationContext,
         newPdfDoc: fullDocument,
         noticeDoc: await PDFDocument.load(secondaryPdf),
       });

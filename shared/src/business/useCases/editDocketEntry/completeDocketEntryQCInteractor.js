@@ -324,6 +324,7 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     const newPdfData = await addServedStampToDocument({
+      applicationContext,
       pdfData,
       serviceStampText: `Served ${serviceStampDate}`,
     });
