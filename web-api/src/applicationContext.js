@@ -469,6 +469,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getOpenCasesInteractor,
+} = require('../../shared/src/business/useCases/getOpenCasesInteractor');
+const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
 const {
@@ -1335,6 +1338,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
+        getOpenCasesInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
