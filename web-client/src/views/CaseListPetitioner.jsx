@@ -23,6 +23,7 @@ export const CaseListPetitioner = connect(
               <div className="grid-column-auto">
                 <Tabs
                   className="classic-horizontal-header3 no-border-bottom"
+                  createCaseButtonLink="/before-filing-a-petition"
                   createCaseButtonText="Create a Case"
                   showCreateCaseButton={true}
                 >

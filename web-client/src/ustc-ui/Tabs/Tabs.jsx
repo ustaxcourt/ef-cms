@@ -39,6 +39,7 @@ export function TabsComponent({
   boxed,
   children,
   className,
+  createCaseButtonLink,
   createCaseButtonText,
   defaultActiveTab,
   id,
@@ -162,7 +163,7 @@ export function TabsComponent({
               <li className="file-a-petition-wrapper">
                 <Button
                   className="new-case"
-                  href="/before-filing-a-petition"
+                  href={createCaseButtonLink}
                   icon="file"
                   id="file-a-petition"
                 >
