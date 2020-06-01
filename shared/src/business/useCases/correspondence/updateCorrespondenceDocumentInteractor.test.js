@@ -18,10 +18,10 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
   const mockCorrespondence = new Correspondence({
-    documentId: 'abc-123',
+    documentId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
     documentTitle: 'old document title',
     filedBy: 'docket clerk',
-    userId: '123-abc',
+    userId: '5980d666-641d-455a-8386-18908d50c98e',
   });
   const mockCase = {
     caseCaption: 'Caption',
@@ -93,7 +93,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     await expect(
       updateCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '123' },
+        documentMetadata: { caseId: '2368f6c6-e91f-4df3-98fd-43e55c00f6f1' },
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -102,7 +102,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '123',
+        caseId: '2e528c9c-70f5-4b3e-81c6-1a2f715261b4',
         documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },
@@ -112,7 +112,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      caseId: '2e528c9c-70f5-4b3e-81c6-1a2f715261b4',
       correspondence: {
         ...mockCorrespondence,
         documentTitle: 'A title that has been updated',
@@ -124,7 +124,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     const result = await updateCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '123',
+        caseId: '2368f6c6-e91f-4df3-98fd-43e55c00f6f1',
         documentId: mockCorrespondence.documentId,
         documentTitle: 'A title that has been updated',
       },
