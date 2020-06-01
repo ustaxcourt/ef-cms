@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-import { SECTIONS } from './WorkQueue';
+const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 
 ForwardMessage.VALIDATION_ERROR_MESSAGES = {
   assigneeId: 'Select a recipient',
@@ -33,7 +33,7 @@ joiValidationDecorator(
     forwardMessage: joi.string().max(500).required(),
     section: joi
       .string()
-      .valid(...SECTIONS)
+      .valid(...SECTIONS, ...CHAMBERS_SECTIONS)
       .required(),
   }),
   ForwardMessage.VALIDATION_ERROR_MESSAGES,
