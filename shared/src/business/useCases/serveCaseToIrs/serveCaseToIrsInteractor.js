@@ -60,6 +60,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case
+ * @returns {Buffer} paper service pdf if the case is a paper case
  */
 exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
@@ -183,6 +184,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       applicationContext,
       caseId: caseEntity.caseId,
       documentId: doc.documentId,
+      replaceCoversheet: !caseEntity.isPaper,
     });
   }
 
