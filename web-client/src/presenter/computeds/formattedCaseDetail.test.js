@@ -556,13 +556,13 @@ describe('formattedCaseDetail', () => {
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Petition',
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentEditLink: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
       },
       {
         description: 'Request for Place of Trial at Boise, Idaho',
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentEditLink: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
       },
     ]);
   });
