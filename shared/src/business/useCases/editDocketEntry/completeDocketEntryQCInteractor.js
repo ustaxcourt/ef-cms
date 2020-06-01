@@ -22,7 +22,6 @@ const { Document } = require('../../entities/Document');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { omit } = require('lodash');
-const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -39,6 +38,8 @@ exports.completeDocketEntryQCInteractor = async ({
   entryMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');

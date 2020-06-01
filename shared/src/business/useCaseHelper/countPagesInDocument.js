@@ -1,6 +1,5 @@
-const { PDFDocument } = require('pdf-lib');
-
 exports.countPagesInDocument = async ({ applicationContext, documentId }) => {
+  const { PDFDocument } = await applicationContext.getPdfLib();
   const bytes = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
     documentId,
