@@ -150,7 +150,8 @@ exports.updateSecondaryContactInteractor = async ({
         },
         isQC: true,
         section: DOCKET_SECTION,
-        sentBy: user.userId,
+        sentBy: user.name,
+        sentByUserId: user.userId,
       },
       { applicationContext },
     );
