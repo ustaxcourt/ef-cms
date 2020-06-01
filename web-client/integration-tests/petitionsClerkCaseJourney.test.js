@@ -1,8 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
-// import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
+import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkDeleteDeficiencyStatistic } from './journey/petitionsClerkDeleteDeficiencyStatistic';
 import { petitionsClerkDeletesOtherStatisticToCase } from './journey/petitionsClerkDeletesOtherStatisticToCase';
 import { petitionsClerkEditOtherStatisticToCase } from './journey/petitionsClerkEditOtherStatisticToCase';
@@ -32,7 +31,6 @@ describe('Petitions clerk case journey', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  // petitionsClerkEditsAnExistingCaseAndServesCase(test);
   petitionsClerkEditsPetitionInQCIRSNotice(test);
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
