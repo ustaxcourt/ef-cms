@@ -36,6 +36,7 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Opinion type',
       isPublic: true,
+      showSealedIcon: false,
     });
   });
 
@@ -56,6 +57,7 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Order',
       isPublic: true,
+      showSealedIcon: true,
     });
   });
 
@@ -270,5 +272,36 @@ describe('advancedDocumentSearchHelper', () => {
         judge: 'Judge Cohen',
       },
     ]);
+  });
+
+  it('does not show sealed case icon for public opinion search', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        isPublic: true,
+        searchResults: [
+          {
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'O - Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            isSealed: true,
+            judge: 'Judge Buch',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject({
+      searchResultsCount: 1,
+      showSealedIcon: false,
+    });
   });
 });

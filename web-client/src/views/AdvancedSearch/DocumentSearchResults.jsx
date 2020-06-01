@@ -49,14 +49,15 @@ export const DocumentSearchResults = connect(
                         {idx + 1}
                       </td>
                       <td aria-hidden="true" className="small-column">
-                        {result.isSealed && (
-                          <Icon
-                            aria-label="sealed"
-                            className="iconSealed"
-                            icon={['fa', 'lock']}
-                            size="1x"
-                          />
-                        )}
+                        {advancedDocumentSearchHelper.showSealedIcon &&
+                          result.isSealed && (
+                            <Icon
+                              aria-label="sealed"
+                              className="iconSealed"
+                              icon={['fa', 'lock']}
+                              size="1x"
+                            />
+                          )}
                       </td>
                       <td>
                         <CaseLink formattedCase={result} />
