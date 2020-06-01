@@ -99,14 +99,6 @@ exports.fileDocketEntryInteractor = async ({
     const [documentId, metadata, relationship] = document;
 
     if (documentId && metadata) {
-      let numberOfPages = null;
-
-      if (metadata.isFileAttached) {
-        numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({ applicationContext, documentId });
-      }
-
       const documentEntity = new Document(
         {
           ...baseMetadata,
@@ -114,7 +106,6 @@ exports.fileDocketEntryInteractor = async ({
           documentId,
           documentType: metadata.documentType,
           mailingDate: metadata.mailingDate,
-          numberOfPages,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
@@ -194,7 +185,6 @@ exports.fileDocketEntryInteractor = async ({
             editState: JSON.stringify(docketRecordEditState),
             eventCode: documentEntity.eventCode,
             filingDate: documentEntity.receivedAt,
-            numberOfPages,
           },
           { applicationContext },
         ),

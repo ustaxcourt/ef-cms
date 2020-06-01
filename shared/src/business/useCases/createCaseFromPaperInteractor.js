@@ -33,7 +33,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      isInitializeCase: documentEntity.isPetitionDocument(),
+      isInitializeCase: true,
       isQC: true,
       section: user.section,
       sentBy: user.name,
@@ -60,7 +60,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {
-    message: newMessage,
     workItem: workItemEntity,
   };
 };
@@ -137,10 +136,6 @@ exports.createCaseFromPaperInteractor = async ({
     partySecondary = true;
   }
 
-  const petitionNumberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, documentId: petitionFileId });
-
   const petitionDocumentEntity = new Document(
     {
       createdAt: caseToAdd.receivedAt,
@@ -158,15 +153,11 @@ exports.createCaseFromPaperInteractor = async ({
         contactPrimary: true,
         contactSecondary: true,
       }),
-      numberOfPages: petitionNumberOfPages,
     },
     { applicationContext },
   );
 
-  const {
-    message: newMessage,
-    workItem: newWorkItem,
-  } = addPetitionDocumentWithWorkItemToCase({
+  const { workItem: newWorkItem } = addPetitionDocumentWithWorkItemToCase({
     applicationContext,
     caseToAdd,
     documentEntity: petitionDocumentEntity,
@@ -177,13 +168,6 @@ exports.createCaseFromPaperInteractor = async ({
     let {
       documentTitle,
     } = Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
-
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: applicationForWaiverOfFilingFeeFileId,
-      });
 
     const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
       {
@@ -199,7 +183,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -228,13 +211,6 @@ exports.createCaseFromPaperInteractor = async ({
       );
     }
 
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: requestForPlaceOfTrialFileId,
-      });
-
     const requestForPlaceOfTrialDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -255,7 +231,6 @@ exports.createCaseFromPaperInteractor = async ({
           contactPrimary: true,
           contactSecondary: true,
         }),
-        numberOfPages,
       },
       { applicationContext },
     );
@@ -266,13 +241,6 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (stinFileId) {
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: stinFileId,
-      });
-
     const stinDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -282,7 +250,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -301,13 +268,6 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (ownershipDisclosureFileId) {
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: ownershipDisclosureFileId,
-      });
-
     const odsDocumentEntity = new Document(
       {
         createdAt: caseToAdd.receivedAt,
@@ -319,7 +279,6 @@ exports.createCaseFromPaperInteractor = async ({
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        numberOfPages,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -342,7 +301,6 @@ exports.createCaseFromPaperInteractor = async ({
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
-      messageId: newMessage.messageId,
       workItem: newWorkItem.validate().toRawObject(),
     }),
   ]);

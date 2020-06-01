@@ -167,7 +167,7 @@ exports.updatePetitionerInformationInteractor = async ({
         headerHtml: null,
       });
 
-    const changeOfAddressPdfWithCover = await addCoverToPdf({
+    const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,

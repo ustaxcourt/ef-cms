@@ -168,13 +168,13 @@ export const getWorkItemDocumentLink = ({
     (!formattedDocument.isInProgress ||
       (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
 
-  let editLink; //defaults to doc detail
-  if (
-    showDocumentEditLink &&
-    permissions.DOCKET_ENTRY &&
-    formattedDocument &&
-    !workQueueIsInternal
-  ) {
+  const getDocketEntryEditLink = ({
+    formattedDocument,
+    isInProgress,
+    qcWorkItemsUntouched,
+    result,
+  }) => {
+    let editLink;
     if (
       formattedDocument.isCourtIssuedDocument &&
       !formattedDocument.servedAt
@@ -190,18 +190,31 @@ export const getWorkItemDocumentLink = ({
     ) {
       editLink = '/edit';
     }
-  } else if (
-    showDocumentEditLink &&
-    permissions.UPDATE_CASE &&
-    formattedDocument &&
-    !workQueueIsInternal &&
-    formattedDocument.isPetition &&
-    result.caseIsInProgress &&
-    !formattedDocument.servedAt
-  ) {
-    editLink = '/review';
+    return editLink;
+  };
+
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
+  let editLink = documentDetailLink;
+  if (showDocumentEditLink && !workQueueIsInternal) {
+    if (permissions.DOCKET_ENTRY) {
+      const editLinkExtension = getDocketEntryEditLink({
+        formattedDocument,
+        isInProgress,
+        qcWorkItemsUntouched,
+        result,
+      });
+      if (editLinkExtension) {
+        editLink += editLinkExtension;
+      }
+    } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
+      if (result.caseIsInProgress) {
+        editLink += '/review';
+      } else {
+        editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
+      }
+    }
   }
-  if (!editLink) {
+  if (editLink === documentDetailLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
 
     const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
@@ -213,7 +226,7 @@ export const getWorkItemDocumentLink = ({
 
     if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
       editLink = `/messages/${messageId}${markReadPath}`;
-    } else {
+    } else if (markReadPath) {
       editLink = `${markReadPath}`;
     }
   }

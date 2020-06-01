@@ -79,6 +79,7 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+    applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -235,5 +236,12 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateWorkItem,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateWorkItem.mock.calls[0][0]
+        .workItemToUpdate.document.servedAt,
+    ).toBeDefined();
   });
 });

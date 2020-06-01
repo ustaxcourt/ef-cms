@@ -34,4 +34,34 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
       },
     });
   });
+
+  it('should remove the docketNumberSuffix when a docket number is present', async () => {
+    await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            docketNumber: '105-20L',
+            keyword: 'a',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().opinionPublicSearchInteractor.mock.calls
+        .length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().opinionPublicSearchInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      searchParams: {
+        docketNumber: '105-20',
+        keyword: 'a',
+      },
+    });
+  });
 });

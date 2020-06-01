@@ -671,6 +671,10 @@ Document.prototype.isAutoServed = function () {
   );
 };
 
+Document.prototype.setNumberOfPages = function (numberOfPages) {
+  this.numberOfPages = numberOfPages;
+};
+
 /**
  * retrieves formatted document type (stripped eventCode, without the dash).
  * if it's TCOP - TC Opinion, it retrieves TC Opinion.

@@ -72,22 +72,11 @@ exports.updateDocketEntryInteractor = async ({
     serviceDate: documentMetadata.serviceDate,
   };
 
-  let numberOfPages = null;
-  if (documentMetadata.isFileAttached) {
-    numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        documentId: primaryDocumentFileId,
-      });
-  }
-
   const documentEntity = new Document(
     {
       ...currentDocument,
       ...editableFields,
       documentId: primaryDocumentFileId,
-      numberOfPages,
       relationship: 'primaryDocument',
       userId: user.userId,
       ...caseEntity.getCaseContacts({
@@ -111,7 +100,6 @@ exports.updateDocketEntryInteractor = async ({
       editState: JSON.stringify(editableFields),
       eventCode: documentEntity.eventCode,
       filingDate: documentEntity.receivedAt,
-      numberOfPages,
     },
     { applicationContext },
   );
