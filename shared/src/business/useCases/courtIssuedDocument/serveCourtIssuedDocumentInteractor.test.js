@@ -33,6 +33,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   const mockUser = {
+    name: 'Docket Clerk',
     role: User.ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
@@ -42,7 +43,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     docketNumber: '123-45',
     isQC: true,
     section: DOCKET_SECTION,
-    sentBy: mockUser.userId,
+    sentBy: mockUser.name,
+    sentByUserId: mockUser.userId,
     workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
   };
 
