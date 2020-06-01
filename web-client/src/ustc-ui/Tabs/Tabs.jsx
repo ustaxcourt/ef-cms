@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { camelCase } from 'lodash';
 import { connect } from '@cerebral/react';
 import {
@@ -39,12 +38,9 @@ export function TabsComponent({
   boxed,
   children,
   className,
-  createCaseButtonLink,
-  createCaseButtonText,
   defaultActiveTab,
   id,
   onSelect,
-  showCreateCaseButton = false,
   simpleSetter,
   value,
 }) {
@@ -159,18 +155,6 @@ export function TabsComponent({
             role="tablist"
           >
             {map(children, renderTab)}
-            {showCreateCaseButton && (
-              <li className="file-a-petition-wrapper">
-                <Button
-                  className="new-case"
-                  href={createCaseButtonLink}
-                  icon="file"
-                  id="file-a-petition"
-                >
-                  {createCaseButtonText}
-                </Button>
-              </li>
-            )}
           </ul>
         </nav>
       )}
