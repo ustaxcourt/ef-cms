@@ -402,6 +402,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
+    getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
       compile: () => {
