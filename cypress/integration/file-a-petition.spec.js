@@ -219,4 +219,8 @@ describe('can view case detail', () => {
   it('shows docket record table and data', () => {
     cy.get('table.case-detail.docket-record tbody tr').should('exist');
   });
+
+  it('displays page count of the petition document', () => {
+    cy.get('td.number-of-pages').should('contain.text', '2');
+  });
 });

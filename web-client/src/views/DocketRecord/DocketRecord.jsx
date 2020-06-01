@@ -98,7 +98,9 @@ export const DocketRecord = connect(
                         entry={entry}
                       />
                     </td>
-                    <td className="hide-on-mobile">{entry.numberOfPages}</td>
+                    <td className="hide-on-mobile number-of-pages">
+                      {entry.numberOfPages}
+                    </td>
                     <td className="hide-on-mobile">{entry.filedBy}</td>
                     <td className="hide-on-mobile">{entry.action}</td>
                     <td>
