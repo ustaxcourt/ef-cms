@@ -145,6 +145,7 @@ exports.createCaseInteractor = async ({
   );
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  caseToAdd.initialCaption = caseToAdd.caseCaption;
 
   const petitionDocumentEntity = new Document(
     {

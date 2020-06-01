@@ -17,7 +17,7 @@ const statisticsFormHelper = withAppContextDecorator(
 );
 
 export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
-  return it('Petitioner edits Petition IRS Notice', async () => {
+  return it('Petitions clerk edits Petition IRS Notice', async () => {
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
       tab: 'IrsNotice',
