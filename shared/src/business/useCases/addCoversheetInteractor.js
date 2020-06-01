@@ -104,6 +104,7 @@ exports.addCoverToPdf = async ({
   caseEntity,
   documentEntity,
   pdfData,
+  replaceCoversheet = false,
 }) => {
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
@@ -127,7 +128,12 @@ exports.addCoverToPdf = async ({
     coverPageDocument.getPageIndices(),
   );
 
-  pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  if (replaceCoversheet) {
+    pdfDoc.removePage(0);
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  } else {
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  }
 
   const newPdfData = await pdfDoc.save();
   const numberOfPages = pdfDoc.getPages().length;
@@ -150,6 +156,7 @@ exports.addCoversheetInteractor = async ({
   applicationContext,
   caseId,
   documentId,
+  replaceCoversheet = false,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -183,6 +190,7 @@ exports.addCoversheetInteractor = async ({
     caseEntity,
     documentEntity,
     pdfData,
+    replaceCoversheet,
   });
 
   documentEntity.setAsProcessingStatusAsCompleted();
