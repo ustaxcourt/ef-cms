@@ -62,6 +62,7 @@ export const CaseListPractitioner = connect(
                 <Tabs
                   buttonLink=""
                   className="classic-horizontal-header3 no-border-bottom"
+                  createCaseButtonLink="/file-a-petition/step-1"
                   createCaseButtonText="File a Case"
                   showCreateCaseButton={true}
                 >
