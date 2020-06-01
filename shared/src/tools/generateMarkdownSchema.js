@@ -48,8 +48,10 @@ const {
 const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
+const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
+const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 const { Statistic } = require('../business/entities/Statistic');
@@ -196,3 +198,5 @@ generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
 generateMarkdownSchema(Statistic, 'Statistic');
+generateMarkdownSchema(Batch, 'Batch');
+generateMarkdownSchema(Correspondence, 'Correspondence');
