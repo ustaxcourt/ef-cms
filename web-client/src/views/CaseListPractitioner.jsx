@@ -7,7 +7,6 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CaseListPractitioner = connect(
   {
@@ -41,15 +40,12 @@ export const CaseListPractitioner = connect(
 
     const renderStartButton = () => (
       <Button
-        className={classNames(
-          'tablet-full-width margin-right-0',
-          dashboardExternalHelper.showCaseList && 'new-case',
-        )}
+        className="margin-top-1 margin-right-0"
         href="/file-a-petition/step-1"
         icon="file"
         id="file-a-petition"
       >
-        Create a Case
+        File a Case
       </Button>
     );
 
@@ -62,12 +58,12 @@ export const CaseListPractitioner = connect(
                 <Tabs
                   buttonLink=""
                   className="classic-horizontal-header3 no-border-bottom"
-                  createCaseButtonLink="/file-a-petition/step-1"
-                  createCaseButtonText="File a Case"
-                  showCreateCaseButton={true}
                 >
                   <Tab id="tab-open" tabName="open" title="Open"></Tab>
                   <Tab id="tab-closed" tabName="closed" title="Closed"></Tab>
+                  <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+                    {renderStartButton()}
+                  </div>
                 </Tabs>
               </div>
             </div>

@@ -12,6 +12,18 @@ export const CaseListPetitioner = connect(
     formattedCases: state.formattedCases,
   },
   function CaseListPetitioner({ formattedCases }) {
+    const renderStartButton = () => (
+      <Button
+        aria-describedby=""
+        className="margin-top-1 margin-right-0"
+        href="/before-filing-a-petition"
+        icon="file"
+        id="file-a-petition"
+      >
+        Create a Case
+      </Button>
+    );
+
     return (
       <>
         <WarningNotification
@@ -21,12 +33,7 @@ export const CaseListPetitioner = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row">
               <div className="grid-column-auto">
-                <Tabs
-                  className="classic-horizontal-header3 no-border-bottom"
-                  createCaseButtonLink="/before-filing-a-petition"
-                  createCaseButtonText="Create a Case"
-                  showCreateCaseButton={true}
-                >
+                <Tabs className="classic-horizontal-header3 no-border-bottom">
                   <Tab id="tab-open" tabName="open" title="Open">
                     <div className="margin-top-2">
                       <table
@@ -58,6 +65,9 @@ export const CaseListPetitioner = connect(
                     </div>
                   </Tab>
                   <Tab id="tab-closed" tabName="closed" title="Closed"></Tab>
+                  <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+                    {renderStartButton()}
+                  </div>
                 </Tabs>
               </div>
             </div>
@@ -66,16 +76,7 @@ export const CaseListPetitioner = connect(
 
         <Mobile>
           <div className="grid-container padding-x-0">
-            <div className="grid-row">
-              <Button
-                className="new-case margin-right-0"
-                href="/before-filing-a-petition"
-                icon="file"
-                id="file-a-petition"
-              >
-                Create a Case
-              </Button>
-            </div>
+            <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
               <Tabs className="classic-horizontal-header3 no-border-bottom">
                 <Tab id="tab-open" tabName="open" title="Open">
