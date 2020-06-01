@@ -84,7 +84,7 @@ export const SectionWorkQueueOutbox = connect(
                     </div>
                   )}
                 </td>
-                <td className="message-queue-row">{item.sentBy}</td>
+                <td className="message-queue-row">{item.completedBy}</td>
                 {!workQueueHelper.hideFiledByColumn && (
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}
