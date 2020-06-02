@@ -247,7 +247,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
   const mockGetChromiumBrowserReturnValue = {
