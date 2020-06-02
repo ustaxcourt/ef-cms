@@ -124,7 +124,6 @@
     "serverless-offline-dynamodb-streams": "^3.0.2",
     "serverless-offline": "^5.12.1",
     "serverless-plugin-aws-alerts": "^1.5.0",
-    "serverless-plugin-bind-deployment-id": "^1.2.0",
     "serverless-plugin-git-variables": "^4.0.0",
     "serverless-plugin-split-stacks": "^1.9.3",
     "serverless-plugin-tracing": "^2.0.0",
