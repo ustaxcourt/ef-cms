@@ -14,7 +14,7 @@ describe('getConsolidatedCasesByUserInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUser.mockImplementation(({ userId }) => {
+      .getUserDashboardCases.mockImplementation(({ userId }) => {
         const casesByUserId = {
           '74fa8ba9-4f05-45db-9e2d-260a306d0b5e': [
             {
