@@ -51,9 +51,9 @@ export SLS_DEBUG="*"
 # temp fix until serverless-domain-manager issue is resolved
 NEW_COLOR="green"
 
-handlerCkSum=$(cksum "./web-api/src/${handler}")
-configCkSum=$(cksum "./web-api/${config}")
-lockCkSum=$(cksum package-lock.json)
+handlerCkSum=$(cksum "./web-api/src/${handler}" | awk '{print $1}')
+configCkSum=$(cksum "./web-api/${config}" | awk '{print $1}')
+lockCkSum=$(cksum package-lock.json | awk '{print $1}')
 ckSum="${handlerCkSum} ${lockCkSum} ${configCkSum}"
 deployedCkSum=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"check-sum-'"${handler}"'"},"sk":{"S":"check-sum-'"${handler}"'"}}' | jq -r ".Item.cksum.S")
 
