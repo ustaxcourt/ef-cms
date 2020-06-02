@@ -48,15 +48,9 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 
-    await test.runSequence('editSelectedDocumentSequence');
-
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Motion',
-    });
-
-    await test.runSequence('clearWizardDataSequence', {
-      key: 'category',
     });
 
     await test.runSequence('selectDocumentSequence');
