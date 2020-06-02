@@ -258,7 +258,8 @@
   "staticFiles": {
     "staticPath": [
       "node_modules/pdfjs-dist/build",
-      "node_modules/react-quill/dist"
+      "node_modules/react-quill/dist",
+      "node_modules/pdf-lib/dist"
     ],
     "watcherGlob": false
   },

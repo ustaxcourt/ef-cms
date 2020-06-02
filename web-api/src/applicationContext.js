@@ -469,6 +469,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getOpenCasesInteractor,
+} = require('../../shared/src/business/useCases/getOpenCasesInteractor');
+const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
 const {
@@ -869,6 +872,8 @@ const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 
+const pdfLib = require('pdf-lib');
+
 const { v4: uuidv4 } = require('uuid');
 
 // increase the timeout for zip uploads to S3
@@ -1075,6 +1080,9 @@ module.exports = (appContextUser = {}) => {
       const pdfjsLib = require('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
       return pdfjsLib;
+    },
+    getPdfLib: () => {
+      return pdfLib;
     },
     getPersistenceGateway: () => {
       return {
@@ -1335,6 +1343,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
+        getOpenCasesInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
