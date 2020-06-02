@@ -397,6 +397,18 @@ th {
   background-size: 12px 12px;
 }
 
+#address-label-cover-sheet {
+  .docket {
+    padding-left: 0.5in;
+  }
+
+  .address {
+    position: absolute;
+    bottom: 0in;
+    left: 0.5in;
+  }
+}
+
 @font-face {
   font-family: 'nimbus_roman';
   font-style: normal;
