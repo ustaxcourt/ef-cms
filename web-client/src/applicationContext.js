@@ -121,6 +121,7 @@ import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxi
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getOpenCasesInteractor } from '../../shared/src/proxies/getOpenCasesProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
@@ -318,6 +319,7 @@ const allUseCases = {
   getItemInteractor,
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
+  getOpenCasesInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,
@@ -459,6 +461,10 @@ const applicationContext = {
     const pdfjsLib = await import('pdfjs-dist');
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
+  },
+  getPdfLib: () => {
+    const pdfLib = import('pdf-lib');
+    return pdfLib;
   },
   getPersistenceGateway: () => {
     return {

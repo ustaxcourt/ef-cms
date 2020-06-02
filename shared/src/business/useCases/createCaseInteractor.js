@@ -38,7 +38,8 @@ const addPetitionDocumentToCase = ({
       isInitializeCase: true,
       isQC: true,
       section: PETITIONS_SECTION,
-      sentBy: user.userId,
+      sentBy: user.name,
+      sentByUserId: user.userId,
     },
     { applicationContext },
   );
@@ -144,6 +145,7 @@ exports.createCaseInteractor = async ({
   );
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  caseToAdd.initialCaption = caseToAdd.caseCaption;
 
   const petitionDocumentEntity = new Document(
     {

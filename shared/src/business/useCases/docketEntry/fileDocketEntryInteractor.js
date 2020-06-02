@@ -134,7 +134,8 @@ exports.fileDocketEntryInteractor = async ({
           isQC: true,
           isRead: user.role !== User.ROLES.privatePractitioner,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
         },
         { applicationContext },
       );
