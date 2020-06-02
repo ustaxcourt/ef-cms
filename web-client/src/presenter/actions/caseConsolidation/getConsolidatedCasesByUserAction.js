@@ -15,7 +15,7 @@ export const getConsolidatedCasesByUserAction = async ({
   get,
 }) => {
   const { userId } = applicationContext.getCurrentUser();
-  const status = get(state.currentViewMetadata.caseListPetitioner.tab);
+  const status = get(state.currentViewMetadata.caseList.tab);
 
   let caseList;
   if (status !== Case.STATUS_TYPES.closed) {
