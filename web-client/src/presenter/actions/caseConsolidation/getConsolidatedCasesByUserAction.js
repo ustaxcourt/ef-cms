@@ -24,6 +24,7 @@ export const getConsolidatedCasesByUserAction = async ({
       userId,
     });
   } else {
+    //TODO implement this when working on displaying closed cases
     // caseList = await applicationContext
     //   .getUseCases()
     //   .getClosedConsolidatedCasesByUserInteractor({
