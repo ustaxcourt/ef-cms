@@ -1,6 +1,6 @@
 const { getApiGateway } = require('./getApiGateway');
 const { getCustomDomains } = require('./getCustomDomains');
-const { sleep } = require('./sleep');
+const { sleepForMilliseconds } = require('./sleep');
 
 exports.deleteCustomDomains = async ({ environment }) => {
   const apiGateway = getApiGateway({ environment });
@@ -15,6 +15,6 @@ exports.deleteCustomDomains = async ({ environment }) => {
     await apiGateway
       .deleteDomainName({ DomainName: domain.DomainName })
       .promise();
-    await sleep(100);
+    await sleepForMilliseconds(100);
   }
 };

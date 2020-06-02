@@ -1,6 +1,6 @@
 const { getCloudFormation } = require('./getCloudFormation');
 const { getStacks } = require('./getStacks');
-const { sleep } = require('./sleep');
+const { sleepForMilliseconds } = require('./sleep');
 
 exports.deleteStacks = async ({ environment }) => {
   const cloudFormation = getCloudFormation({ environment });
@@ -20,7 +20,7 @@ exports.deleteStacks = async ({ environment }) => {
   let resourceCount = stacks.length;
 
   while (resourceCount > 0) {
-    await sleep(1000);
+    await sleepForMilliseconds(1000);
     const refreshedStacks = await getStacks({
       cloudFormation,
       environment,
