@@ -1,8 +1,8 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
-// import { petitionsClerkEditsAnExistingCaseAndServesCase } from './journey/petitionsClerkEditsAnExistingCaseAndServesCase';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
+import { petitionsClerkChangesCaseCaptionDuringQC } from './journey/petitionsClerkChangesCaseCaptionDuringQC';
+import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkDeleteDeficiencyStatistic } from './journey/petitionsClerkDeleteDeficiencyStatistic';
 import { petitionsClerkDeletesOtherStatisticToCase } from './journey/petitionsClerkDeletesOtherStatisticToCase';
 import { petitionsClerkEditOtherStatisticToCase } from './journey/petitionsClerkEditOtherStatisticToCase';
@@ -21,6 +21,9 @@ describe('Petitions clerk case journey', () => {
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
+  petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
+  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
+  petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
 
   loginAs(test, 'petitioner');
   it('Create case #1', async () => {
@@ -32,11 +35,8 @@ describe('Petitions clerk case journey', () => {
   });
 
   loginAs(test, 'petitionsclerk');
-  // petitionsClerkEditsAnExistingCaseAndServesCase(test);
   petitionsClerkEditsPetitionInQCIRSNotice(test);
-  petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
-  petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
-  petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
+  petitionsClerkChangesCaseCaptionDuringQC(test);
 
   loginAs(test, 'petitioner');
   it('Create case #2', async () => {
