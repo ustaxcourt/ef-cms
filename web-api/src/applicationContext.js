@@ -80,6 +80,7 @@ const {
   standingPretrialNotice,
   standingPretrialOrder,
   trialCalendar,
+  trialSessionPlanningReport,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
   casePublicSearch: casePublicSearchPersistence,
@@ -988,6 +989,7 @@ module.exports = (appContextUser = {}) => {
       standingPretrialNotice,
       standingPretrialOrder,
       trialCalendar,
+      trialSessionPlanningReport,
     }),
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
