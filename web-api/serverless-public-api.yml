@@ -2,8 +2,6 @@ service: ef-cms-public-${opt:stageColor}
 
 plugins:
   - serverless-domain-manager
-  - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -94,7 +92,7 @@ provider:
       - 'application/pdf'
   clamavDefDir: /opt/var/lib/clamav
 
-  environment: ${file(./web-api/environment-variables.yml)}
+  environment: ${file(./web-api/serverless-config/environment-variables.yml)}
 
 package:
   exclude:
@@ -103,25 +101,7 @@ package:
     - web-api/${self:provider.dir}/publicApiHandlers.js
   excludeDevDependencies: true
 
-resources:
-  Resources:
-    #####
-    # Begin Stage for API Gateway Logging
-    #####
-    ApiGatewayStage:
-      Type: AWS::ApiGateway::Stage
-      Properties:
-        DeploymentId:
-          Ref: __deployment__
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        StageName: ${opt:stage}
-        MethodSettings:
-          - DataTraceEnabled: true
-            HttpMethod: '*'
-            LoggingLevel: INFO
-            ResourcePath: '/*'
-            MetricsEnabled: true
+resources: ${file(./web-api/serverless-config/resources.yml)}
 
 functions:
   casePublicSearch:
