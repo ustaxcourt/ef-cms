@@ -46,7 +46,13 @@
   },
   {
     "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728"
+    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "createdAt": "2020-01-21T16:41:39.474Z",
+    "caseCaption": "Eve Brewer, Petitioner",
+    "docketNumber": "102-20",
+    "docketNumberWithSuffix": "102-20S",
+    "status": "New"
   },
   {
     "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
@@ -59,7 +65,13 @@
   },
   {
     "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "createdAt": "2020-01-21T16:41:39.474Z",
+    "caseCaption": "Eve Brewer, Petitioner",
+    "docketNumber": "102-20",
+    "docketNumberWithSuffix": "102-20S",
+    "status": "New"
   },
   {
     "docketNumberWithSuffix": "102-20S",
@@ -182,7 +194,13 @@
   },
   {
     "sk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
+    "createdAt": "2020-01-21T16:41:39.474Z",
+    "caseCaption": "Eve Brewer, Petitioner",
+    "docketNumber": "102-20",
+    "docketNumberWithSuffix": "102-20S",
+    "status": "New"
   },
   {
     "role": "irsPractitioner",

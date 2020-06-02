@@ -22,11 +22,23 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)"
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)"
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
@@ -251,7 +263,13 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)"
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
