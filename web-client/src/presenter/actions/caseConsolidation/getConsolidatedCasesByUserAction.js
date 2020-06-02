@@ -13,12 +13,11 @@ import { state } from 'cerebral';
 export const getConsolidatedCasesByUserAction = async ({
   applicationContext,
   get,
-  props,
 }) => {
   const { userId } = applicationContext.getCurrentUser();
-  const { status } = props;
-  let caseList;
+  const status = get(state.currentViewMetadata.caseListPetitioner.tab);
 
+  let caseList;
   if (status !== Case.STATUS_TYPES.closed) {
     caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
       applicationContext,
