@@ -8,21 +8,26 @@ export const practitionerFilesDocumentForOwnedCase = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'category',
-      value: 'Miscellaneous',
-    });
+    const documentToSelect = {
+      category: 'Miscellaneous',
+      documentTitle: 'Civil Penalty Approval Form',
+      documentType: 'Civil Penalty Approval Form',
+      eventCode: 'CIVP',
+      scenario: 'Standard',
+    };
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentType',
-      value: 'Civil Penalty Approval Form',
-    });
+    for (const key of Object.keys(documentToSelect)) {
+      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+        key,
+        value: documentToSelect[key],
+      });
+    }
 
     await test.runSequence('validateSelectDocumentTypeSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('form.documentType')).toEqual(
       'Civil Penalty Approval Form',
