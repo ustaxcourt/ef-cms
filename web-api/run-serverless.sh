@@ -55,7 +55,7 @@ handlerCkSum=$(cksum "./web-api/src/${handler}" | awk '{print $1}')
 configCkSum=$(cksum "./web-api/${config}" | awk '{print $1}')
 lockCkSum=$(cksum package-lock.json | awk '{print $1}')
 ckSum="${handlerCkSum} ${lockCkSum} ${configCkSum}"
-deployedCkSum=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"check-sum-'"${handler}"'"},"sk":{"S":"check-sum-'"${handler}"'"}}' | jq -r ".Item.cksum.S")
+deployedCkSum=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"check-sum-'"${region}"'-'"${config}"'"},"sk":{"S":"check-sum-'"${region}"'-'"${config}"'"}}' | jq -r ".Item.cksum.S")
 
 if [ "${deployedCkSum}" == "${ckSum}" ] ; then
   echo "check sums were equal, skipping the stack deploy"
@@ -92,4 +92,4 @@ echo "region: ${region}"
 
 cp "/tmp/${handler}" src
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --item '{"pk":{"S":"check-sum-'"${handler}"'"},"sk":{"S":"check-sum-'"${handler}"'"},"cksum":{"S":"'"${ckSum}"'"}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --item '{"pk":{"S":"check-sum-'"${region}"'-'"${config}"'"},"sk":{"S":"check-sum-'"${region}"'-'"${config}"'"},"cksum":{"S":"'"${ckSum}"'"}}'
