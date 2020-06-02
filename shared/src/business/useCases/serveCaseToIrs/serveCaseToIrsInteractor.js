@@ -60,6 +60,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case
+ * @returns {Buffer} paper service pdf if the case is a paper case
  */
 exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
@@ -150,6 +151,9 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   );
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+  initializeCaseWorkItem.docketNumberWithSuffix =
+    caseEntity.docketNumberWithSuffix;
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
@@ -183,6 +187,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       applicationContext,
       caseId: caseEntity.caseId,
       documentId: doc.documentId,
+      replaceCoversheet: !caseEntity.isPaper,
     });
   }
 
