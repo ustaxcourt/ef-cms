@@ -3,6 +3,7 @@ const {
 } = require('../../entities/cases/CaseConstants');
 const { Case } = require('../../entities/cases/Case');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
+const { UserCase } = require('../../entities/UserCase');
 
 /**
  * associatePrivatePractitionerToCase
@@ -35,18 +36,21 @@ exports.associatePrivatePractitionerToCase = async ({
     });
 
   if (!isAssociated) {
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      caseId: caseId,
-      userId: user.userId,
-    });
-
     const caseToUpdate = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
         applicationContext,
         caseId,
       });
+
+    const userCaseEntity = new UserCase(caseToUpdate);
+
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      caseId: caseId,
+      userCase: userCaseEntity.toRawObject(),
+      userId: user.userId,
+    });
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
