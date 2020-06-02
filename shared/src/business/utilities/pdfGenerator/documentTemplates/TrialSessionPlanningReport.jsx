@@ -11,16 +11,16 @@ const getTermHeaders = (termData, idx) => {
   );
 };
 
-const getRowContent = data => {
+const parseTermData = data =>
   data && data.map((datum, idx) => <div key={`datum-${idx}`}>{datum}</div>);
-};
 
-const getLocationData = parentIndex => (location, idx) => {
-  const content = getRowContent(location);
+const getLocationData = parentIndex => (termData, idx) => {
+  const hasData = Array.isArray(termData) && termData.length > 0;
+
   return (
     <td key={`${parentIndex}-${idx}`}>
-      {content}
-      {!content && <div className="calendar-icon"></div>}
+      {hasData && parseTermData(termData)}
+      {!hasData && <div className="calendar-icon"></div>}
     </td>
   );
 };
@@ -43,7 +43,6 @@ export const TrialSessionPlanningReport = ({
             <th>All</th>
             <th>Small</th>
             <th>Regular</th>
-            <th>State</th>
             {previousTerms.map(getTermHeaders)}
           </tr>
         </thead>
@@ -57,7 +56,6 @@ export const TrialSessionPlanningReport = ({
                   <td>{location.allCaseCount}</td>
                   <td>{location.smallCaseCount}</td>
                   <td>{location.regularCaseCount}</td>
-                  <td>{location.stateAbbreviation}</td>
                   {location.previousTermsData &&
                     location.previousTermsData.map(getLocationData(idx))}
                 </tr>
