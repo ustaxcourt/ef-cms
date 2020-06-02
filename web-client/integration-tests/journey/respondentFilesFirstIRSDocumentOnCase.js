@@ -8,21 +8,26 @@ export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'category',
-      value: 'Answer (filed by respondent only)',
-    });
+    const documentToSelect = {
+      category: 'Answer (filed by respondent only)',
+      documentTitle: 'Answer',
+      documentType: 'Answer',
+      eventCode: 'A',
+      scenario: 'Standard',
+    };
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentType',
-      value: 'Answer',
-    });
+    for (const key of Object.keys(documentToSelect)) {
+      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+        key,
+        value: documentToSelect[key],
+      });
+    }
 
     await test.runSequence('validateSelectDocumentTypeSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 
