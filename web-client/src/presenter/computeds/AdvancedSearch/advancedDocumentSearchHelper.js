@@ -9,9 +9,12 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
+
+  let showSealedIcon = true;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
   if (advancedSearchTab === searchTabs.OPINION) {
+    showSealedIcon = false;
     documentTypeVerbiage = `${documentTypeVerbiage} type`;
   }
 
@@ -34,6 +37,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
+    showSealedIcon,
   };
 };
 

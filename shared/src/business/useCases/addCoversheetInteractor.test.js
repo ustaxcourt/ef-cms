@@ -102,6 +102,25 @@ describe('addCoversheetInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('replaces the cover page on a document', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(testingCaseData);
+
+    const params = {
+      applicationContext,
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      replaceCoversheet: true,
+    };
+
+    await addCoversheetInteractor(params);
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
   it("updates the document's page numbers", async () => {
     applicationContext
       .getPersistenceGateway()

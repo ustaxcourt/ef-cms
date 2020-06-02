@@ -101,7 +101,7 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                <td className="message-queue-row">{item.sentBy}</td>
+                <td className="message-queue-row">{item.completedBy}</td>
                 {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}

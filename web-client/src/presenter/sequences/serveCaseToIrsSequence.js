@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -19,7 +19,7 @@ export const serveCaseToIrsSequence = [
         getServeToIrsAlertSuccessAction,
         setAlertSuccessAction,
         setSaveAlertsForNavigationAction,
-        navigateToCaseDetailAction,
+        navigateToDocumentQCAction,
       ],
       paper: [
         clearModalAction,
