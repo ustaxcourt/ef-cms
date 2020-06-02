@@ -235,7 +235,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   }
 
   let setLeadCase = caseToUpdate.leadCaseId
-    ? { gsi1pk: caseToUpdate.leadCaseId }
+    ? { gsi1pk: `case|${caseToUpdate.leadCaseId}` }
     : {};
 
   await Promise.all([
