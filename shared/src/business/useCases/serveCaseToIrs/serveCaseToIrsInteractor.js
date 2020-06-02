@@ -151,6 +151,9 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   );
 
   initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+  initializeCaseWorkItem.docketNumberWithSuffix =
+    caseEntity.docketNumberWithSuffix;
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
