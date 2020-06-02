@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-
 const { getCaseByCaseId } = require('./getCaseByCaseId');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
