@@ -6,6 +6,8 @@ if  [[ $BRANCH == 'develop' ]] ; then
   echo 'dev'
 elif [[ $BRANCH == 'experimental' ]] ; then
   echo 'exp'
+elif [[ $BRANCH == 'experimental2' ]] ; then
+  echo 'exp2'
 elif [[ $BRANCH == 'irs' ]] ; then
   echo 'irs'
 elif [[ $BRANCH == 'test' ]] ; then
