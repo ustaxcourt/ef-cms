@@ -93,7 +93,7 @@ provider:
       - 'application/pdf'
   clamavDefDir: /opt/var/lib/clamav
 
-  environment: ${file(./web-api/serverless-config/environment-variables.yml)}
+  environment: ${file(./web-api/config/environment-variables.yml)}
 
 package:
   exclude:
@@ -103,7 +103,7 @@ package:
 
   excludeDevDependencies: true
 
-resources: ${file(./web-api/serverless-config/resources.yml)}
+resources: ${file(./web-api/config/resources.yml)}
 
 functions:
   getUserCaseNoteForCases:
