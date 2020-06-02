@@ -51,6 +51,17 @@ export SLS_DEBUG="*"
 # temp fix until serverless-domain-manager issue is resolved
 NEW_COLOR="green"
 
+handlerCkSum=$(cksum "./web-api/src/${handler}" | awk '{print $1}')
+configCkSum=$(cksum "./web-api/${config}" | awk '{print $1}')
+lockCkSum=$(cksum package-lock.json | awk '{print $1}')
+ckSum="${handlerCkSum} ${lockCkSum} ${configCkSum}"
+deployedCkSum=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"check-sum-'"${region}"'-'"${config}"'-'"${NEW_COLOR}"'"},"sk":{"S":"check-sum-'"${region}"'-'"${config}"'-'"${NEW_COLOR}"'"}}' | jq -r ".Item.cksum.S")
+
+if [ "${deployedCkSum}" == "${ckSum}" ] ; then
+  echo "check sums were equal, skipping the stack deploy"
+  exit 0;
+fi
+
 set -- \
   --accountId "${ACCOUNT_ID}" \
   --config "./web-api/${config}" \
@@ -80,3 +91,5 @@ echo "slsStage: ${slsStage}"
 echo "region: ${region}"
 
 cp "/tmp/${handler}" src
+
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --item '{"pk":{"S":"check-sum-'"${region}"'-'"${config}"'-'"${NEW_COLOR}"'"},"sk":{"S":"check-sum-'"${region}"'-'"${config}"'-'"${NEW_COLOR}"'"},"cksum":{"S":"'"${ckSum}"'"}}'
