@@ -9,9 +9,10 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
+    defaultTab: state.screenMetadata.caseListPetitioner.tabName,
     formattedCases: state.formattedCases,
   },
-  function CaseListPetitioner({ formattedCases }) {
+  function CaseListPetitioner({ defaultTab, formattedCases }) {
     const renderStartButton = () => (
       <Button
         aria-describedby=""
@@ -33,7 +34,11 @@ export const CaseListPetitioner = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row">
               <div className="grid-column-auto">
-                <Tabs className="classic-horizontal-header3 no-border-bottom">
+                <Tabs
+                  bind="currentViewMetadata.caseListPetitioner.tabName"
+                  className="classic-horizontal-header3 no-border-bottom"
+                  defaultActiveTab="open"
+                >
                   <Tab id="tab-open" tabName="open" title="Open">
                     <div className="margin-top-2">
                       <table
@@ -48,6 +53,7 @@ export const CaseListPetitioner = connect(
                               </span>
                             </th>
                             <th>Docket number</th>
+
                             <th>Case title</th>
                             <th>Date filed</th>
                           </tr>
