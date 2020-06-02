@@ -140,6 +140,28 @@ export const formatWorkItem = ({
   return result;
 };
 
+const getDocketEntryEditLink = ({
+  formattedDocument,
+  isInProgress,
+  qcWorkItemsUntouched,
+  result,
+}) => {
+  let editLink;
+  if (formattedDocument.isCourtIssuedDocument && !formattedDocument.servedAt) {
+    editLink = '/edit-court-issued';
+  } else if (isInProgress) {
+    editLink = '/complete';
+  } else if (
+    !result.isCourtIssuedDocument &&
+    !result.isOrder &&
+    !formattedDocument.isPetition &&
+    qcWorkItemsUntouched
+  ) {
+    editLink = '/edit';
+  }
+  return editLink;
+};
+
 export const getWorkItemDocumentLink = ({
   applicationContext,
   permissions,
@@ -167,31 +189,6 @@ export const getWorkItemDocumentLink = ({
     permissions.UPDATE_CASE &&
     (!formattedDocument.isInProgress ||
       (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
-
-  const getDocketEntryEditLink = ({
-    formattedDocument,
-    isInProgress,
-    qcWorkItemsUntouched,
-    result,
-  }) => {
-    let editLink;
-    if (
-      formattedDocument.isCourtIssuedDocument &&
-      !formattedDocument.servedAt
-    ) {
-      editLink = '/edit-court-issued';
-    } else if (isInProgress) {
-      editLink = '/complete';
-    } else if (
-      !result.isCourtIssuedDocument &&
-      !result.isOrder &&
-      !formattedDocument.isPetition &&
-      qcWorkItemsUntouched
-    ) {
-      editLink = '/edit';
-    }
-    return editLink;
-  };
 
   const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
   let editLink = documentDetailLink;

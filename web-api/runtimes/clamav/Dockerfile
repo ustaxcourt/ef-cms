@@ -40,6 +40,15 @@ RUN rpm2cpio bzip2-libs*.rpm | cpio -vimd
 RUN yumdownloader -x \*i686 --archlist=x86_64 xz-libs
 RUN rpm2cpio xz-libs*.rpm | cpio -vimd
 
+RUN yumdownloader -x \*i686 --archlist=x86_64 libprelude
+RUN rpm2cpio libprelude*.rpm | cpio -vimd
+
+RUN yumdownloader -x \*i686 --archlist=x86_64 gnutls
+RUN rpm2cpio gnutls*.rpm | cpio -vimd
+
+RUN yumdownloader -x \*i686 --archlist=x86_64 nettle
+RUN rpm2cpio nettle*.rpm | cpio -vimd
+
 RUN mkdir -p bin
 RUN mkdir -p lib
 RUN mkdir -p var/lib/clamav

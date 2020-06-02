@@ -1,5 +1,3 @@
-const { PDFDocument } = require('pdf-lib');
-
 /**
  * takes an array of JPG images (each a byte array) and combines
  * them into one PDF file
@@ -8,7 +6,9 @@ const { PDFDocument } = require('pdf-lib');
  * @returns {Uint8Array} byte array of PDF
  */
 
-exports.generatePDFFromJPGs = async imgData => {
+exports.generatePDFFromJPGs = async (imgData, applicationContext) => {
+  const { PDFDocument } = await applicationContext.getPdfLib();
+
   const pdfDoc = await PDFDocument.create();
   const addImageToPage = async img => {
     const imgRef = await pdfDoc.embedJpg(img);
