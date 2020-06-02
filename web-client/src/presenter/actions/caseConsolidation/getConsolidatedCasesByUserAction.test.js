@@ -5,9 +5,9 @@ import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByUserAction', () => {
   beforeAll(() => {
-    applicationContext.getUseCases().getConsolidatedCasesByUserInteractor = jest
-      .fn()
-      .mockReturnValue([
+    applicationContext
+      .getUseCases()
+      .getConsolidatedCasesByUserInteractor.mockReturnValue([
         {
           caseId: 'case-id-234',
           createdAt: '2019-07-20T20:20:15.680Z',
@@ -31,6 +31,9 @@ describe('getConsolidatedCasesByUserAction', () => {
   it('gets the consolidated cases by userId', async () => {
     const { output } = await runAction(getConsolidatedCasesByUserAction, {
       modules: { presenter },
+      props: {
+        status: 'New',
+      },
     });
 
     expect(output).toMatchObject({
@@ -40,5 +43,18 @@ describe('getConsolidatedCasesByUserAction', () => {
         { caseId: 'case-id-123', createdAt: '2019-07-19T20:20:15.680Z' },
       ],
     });
+  });
+
+  it('should retrieve all open cases when props.status is not Closed', async () => {
+    await runAction(getConsolidatedCasesByUserAction, {
+      modules: { presenter },
+      props: {
+        status: 'New',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getConsolidatedCasesByUserInteractor,
+    ).toHaveBeenCalled();
   });
 });
