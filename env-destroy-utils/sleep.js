@@ -1,3 +1,3 @@
-exports.sleep = ms => {
+exports.sleepForMilliseconds = ms => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
