@@ -4,15 +4,18 @@ import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    defaultTab: state.screenMetadata.caseListPetitioner.tabName,
     formattedCases: state.formattedCases,
+    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
   },
-  function CaseListPetitioner({ defaultTab, formattedCases }) {
+  function CaseListPetitioner({
+    formattedCases,
+    getCasesByStatusForUserSequence,
+  }) {
     const renderStartButton = () => (
       <Button
         aria-describedby=""
@@ -25,6 +28,32 @@ export const CaseListPetitioner = connect(
       </Button>
     );
 
+    const renderCaseListTable = () => (
+      <div className="margin-top-2">
+        <table className="usa-table responsive-table dashboard" id="case-list">
+          <thead>
+            <tr>
+              <th>
+                <span className="usa-sr-only">Lead Case Indicator</span>
+              </th>
+              <th>Docket number</th>
+              <th>Case title</th>
+              <th>Date filed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formattedCases.map(item => (
+              <CaseListRowExternal
+                onlyLinkIfRequestedUserAssociated
+                formattedCase={item}
+                key={item.caseId}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
     return (
       <>
         <WarningNotification
@@ -35,42 +64,19 @@ export const CaseListPetitioner = connect(
             <div className="grid-row">
               <div className="grid-column-auto">
                 <Tabs
-                  bind="currentViewMetadata.caseListPetitioner.tabName"
+                  bind="currentViewMetadata.caseListPetitioner.tab"
                   className="classic-horizontal-header3 no-border-bottom"
-                  defaultActiveTab="open"
+                  defaultActiveTab="Open"
+                  onSelect={() => {
+                    getCasesByStatusForUserSequence();
+                  }}
                 >
-                  <Tab id="tab-open" tabName="open" title="Open">
-                    <div className="margin-top-2">
-                      <table
-                        className="usa-table responsive-table dashboard"
-                        id="case-list"
-                      >
-                        <thead>
-                          <tr>
-                            <th>
-                              <span className="usa-sr-only">
-                                Lead Case Indicator
-                              </span>
-                            </th>
-                            <th>Docket number</th>
-
-                            <th>Case title</th>
-                            <th>Date filed</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {formattedCases.map(item => (
-                            <CaseListRowExternal
-                              onlyLinkIfRequestedUserAssociated
-                              formattedCase={item}
-                              key={item.caseId}
-                            />
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                  <Tab id="tab-open" tabName="Open" title="Open">
+                    {renderCaseListTable()}
                   </Tab>
-                  <Tab id="tab-closed" tabName="closed" title="Closed"></Tab>
+                  <Tab id="tab-closed" tabName="Closed" title="Closed">
+                    {renderCaseListTable()}
+                  </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
                   </div>
@@ -84,38 +90,20 @@ export const CaseListPetitioner = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
-              <Tabs className="classic-horizontal-header3 no-border-bottom">
+              <Tabs
+                bind="currentViewMetadata.caseListPetitioner.tab"
+                className="classic-horizontal-header3 no-border-bottom"
+                defaultActiveTab="Open"
+                onSelect={() => {
+                  getCasesByStatusForUserSequence();
+                }}
+              >
                 <Tab id="tab-open" tabName="open" title="Open">
-                  <div className="margin-top-2">
-                    <table
-                      className="usa-table responsive-table dashboard"
-                      id="case-list"
-                    >
-                      <thead>
-                        <tr>
-                          <th>
-                            <span className="usa-sr-only">
-                              Lead Case Indicator
-                            </span>
-                          </th>
-                          <th>Docket number</th>
-                          <th>Case title</th>
-                          <th>Date filed</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {formattedCases.map(item => (
-                          <CaseListRowExternal
-                            onlyLinkIfRequestedUserAssociated
-                            formattedCase={item}
-                            key={item.caseId}
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  {renderCaseListTable()}
                 </Tab>
-                <Tab id="tab-closed" tabName="closed" title="Closed"></Tab>
+                <Tab id="tab-closed" tabName="closed" title="Closed">
+                  {renderCaseListTable()}
+                </Tab>
               </Tabs>
             </div>
           </div>
