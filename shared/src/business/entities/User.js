@@ -109,7 +109,12 @@ const userValidation = {
     .required(),
   section: joi.string().optional(),
   token: joi.string().optional(),
-  userId: joi.string().required(),
+  userId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
 };
 
 const VALIDATION_ERROR_MESSAGES = {
