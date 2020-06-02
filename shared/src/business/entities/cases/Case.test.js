@@ -259,6 +259,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates an invalid case with an invalid trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '91:30',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
       const myCase = new Case(
         {
@@ -321,6 +334,19 @@ describe('Case entity', () => {
           blocked: true,
           blockedDate: '2019-03-01T21:42:29.073Z',
           blockedReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with a trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '9:30',
         },
         {
           applicationContext,
