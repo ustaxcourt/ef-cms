@@ -26,7 +26,7 @@ describe('generateChangeOfAddress', () => {
               postalCode: '61234',
               state: 'IL',
             },
-            email: 'privatePractitioner1',
+            email: 'privatePractitioner1@example.com',
             name: 'Test Private Practitioner',
             representingPrimary: true,
             role: 'privatePractitioner',

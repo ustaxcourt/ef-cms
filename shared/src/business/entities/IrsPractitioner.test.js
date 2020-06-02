@@ -18,7 +18,7 @@ describe('IrsPractitioner', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.irsPractitioner,
-      userId: 'petitioner',
+      userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
     });
 
     expect(user.isValid()).toBeTruthy();

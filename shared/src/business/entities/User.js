@@ -90,7 +90,7 @@ const userValidation = {
       }),
     })
     .optional(),
-  email: joi.string().optional(),
+  email: joi.string().email().optional(),
   entityName: joi.string().valid('User').required(),
   judgeFullName: joi.when('role', {
     is: User.ROLES.judge,
@@ -109,7 +109,12 @@ const userValidation = {
     .required(),
   section: joi.string().optional(),
   token: joi.string().optional(),
-  userId: joi.string().required(),
+  userId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
 };
 
 const VALIDATION_ERROR_MESSAGES = {

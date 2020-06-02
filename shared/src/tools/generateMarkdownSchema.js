@@ -54,6 +54,7 @@ const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
+const { ForwardMessage } = require('../business/entities/ForwardMessage');
 const { Statistic } = require('../business/entities/Statistic');
 
 const generateMarkdownSchema = (entity, entityName) => {
@@ -193,10 +194,11 @@ generateMarkdownSchema(
   'contacts/SurvivingSpouseContact',
 );
 
+generateMarkdownSchema(Batch, 'Batch');
 generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
+generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
+generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
 generateMarkdownSchema(Statistic, 'Statistic');
-generateMarkdownSchema(Batch, 'Batch');
-generateMarkdownSchema(Correspondence, 'Correspondence');

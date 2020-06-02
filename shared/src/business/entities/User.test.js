@@ -17,7 +17,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -37,7 +37,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -55,7 +55,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -65,7 +65,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'Tester',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
     expect(user.entityName).toEqual('User');
@@ -78,7 +78,7 @@ describe('User entity', () => {
       lastName: 'bob',
       role: User.ROLES.privatePractitioner,
       token: 'abc',
-      userId: 'Tester',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -86,7 +86,7 @@ describe('User entity', () => {
   it('Creates a valid irsPractitioner user', () => {
     const user = new User({
       role: User.ROLES.irsPractitioner,
-      userId: 'irsPractitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -96,7 +96,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: undefined,
-      userId: 'bobbymcgee',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.role).toBe(User.ROLES.petitioner);
   });
