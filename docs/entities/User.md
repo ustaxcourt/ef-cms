@@ -303,6 +303,7 @@
         - "laubersChambers"
         - "leydensChambers"
         - "marvelsChambers"
+        - "morrisonsChambers"
         - "negasChambers"
         - "panuthosChambers"
         - "parisChambers"
