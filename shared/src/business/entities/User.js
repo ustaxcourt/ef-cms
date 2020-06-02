@@ -90,7 +90,7 @@ const userValidation = {
       }),
     })
     .optional(),
-  email: joi.string().email().optional(),
+  email: joi.string().optional(),
   entityName: joi.string().valid('User').required(),
   judgeFullName: joi.when('role', {
     is: User.ROLES.judge,
