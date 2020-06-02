@@ -18,7 +18,7 @@ describe('PrivatePractitioner', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.privatePractitioner,
-      userId: 'petitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
 
     expect(user.isValid()).toBeTruthy();
