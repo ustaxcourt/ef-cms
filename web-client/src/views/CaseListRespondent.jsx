@@ -56,10 +56,10 @@ export const CaseListRespondent = connect(
                     getCasesByStatusForUserSequence();
                   }}
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open">
+                  <Tab id="tab-open" tabName="Open" title="Open Cases">
                     {renderTable()}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                     {renderTable()}
                   </Tab>
                 </Tabs>
@@ -82,10 +82,10 @@ export const CaseListRespondent = connect(
                   getCasesByStatusForUserSequence();
                 }}
               >
-                <Tab id="tab-open" tabName="Open" title="Open">
+                <Tab id="tab-open" tabName="Open" title="Open Cases">
                   {renderTable()}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed">
+                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                   {renderTable()}
                 </Tab>
               </Tabs>
