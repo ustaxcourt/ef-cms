@@ -188,6 +188,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       caseId: caseEntity.caseId,
       documentId: doc.documentId,
       replaceCoversheet: !caseEntity.isPaper,
+      useInitialData: true,
     });
   }
 

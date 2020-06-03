@@ -526,7 +526,6 @@ describe('addCoversheetInteractor', () => {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
           docketNumberSuffix: 'S',
-          initialDocketNumberSuffix: 'S',
         },
         documentEntity: {
           ...testingCaseData.documents[0],
@@ -707,7 +706,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseCaptionExtension).toEqual('');
     });
 
-    it('preserves the original case caption and docket number', () => {
+    it('preserves the original case caption and docket number when the useInitialData is true', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -728,6 +727,7 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
           lodged: true,
         },
+        useInitialData: true,
       });
 
       expect(result.docketNumber).toEqual('Docket Number: 102-19Z');
