@@ -10,6 +10,11 @@ Restricted
 
 > `string` | optional
 
+##### Maximum limit
+
+
+`50`
+
 ### automaticBlocked
 
 
@@ -80,6 +85,11 @@ The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mar
 
 > `string` | required
 
+##### Maximum limit
+
+
+`500`
+
 ### caseId
 
 
@@ -93,6 +103,11 @@ Unique case ID only used by the system.
 Restricted
 
 > `string` | optional
+
+##### Maximum limit
+
+
+`500`
 
 ### caseType
 
@@ -232,6 +247,20 @@ If `highPriority` = `true`, then this field is `string` and is `required.`
 
 Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
+### initialCaption
+
+
+Case caption before modification.
+
+> `string` | optional
+
+##### Maximum limit
+
+
+`500`
+
+##### Can be null.
+
 ### initialDocketNumberSuffix
 
 
@@ -239,14 +268,10 @@ Case docket number suffix before modification.
 
 > `string` | optional
 
-##### Can be null.
-
-### initialTitle
+##### Maximum limit
 
 
-Case title before modification.
-
-> `string` | optional
+`2`
 
 ##### Can be null.
 
@@ -256,6 +281,11 @@ Case title before modification.
 Last date that the petitioner is allowed to file before.
 
 > `date` | optional
+
+##### Maximum date
+
+
+`now`
 
 ##### Can be null.
 
@@ -310,6 +340,13 @@ Reminder for clerks to review the notice of attachments.
 Reminder for clerks to review the notice of trial date.
 
 > `date` | optional
+
+### orderDesignatingPlaceOfTrial
+
+
+Reminder for clerks to review the Order Designating Place of Trial.
+
+> `boolean` | optional
 
 ### orderForAmendedPetition
 
@@ -406,7 +443,7 @@ Status of the case fee payment.
 ### petitionPaymentDate
 
 
-When the petitioner payed the case fee.
+When the petitioner paid the case fee.
 
 > `any`
 
@@ -419,7 +456,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### petitionPaymentMethod
 
 
-How the petitioner payed the case fee.
+How the petitioner paid the case fee.
 
 > `any`
 
@@ -761,7 +798,7 @@ Time of day when this case goes to trial.
 ##### Regex Pattern
 
 
-`/^[0-9]+:([0-5][0-9])$/`
+`/^[0-9]{1,2}:([0-5][0-9])$/`
 
 ### userId
 
@@ -772,6 +809,11 @@ The unique ID of the User who added the case to the system.
 Restricted
 
 > `string` | optional
+
+##### Maximum limit
+
+
+`50`
 
 ### workItems
 

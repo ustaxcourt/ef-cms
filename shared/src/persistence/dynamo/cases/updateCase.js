@@ -18,6 +18,7 @@ const {
 const {
   updateWorkItemTrialDate,
 } = require('../workitems/updateWorkItemTrialDate');
+const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
 const { omit } = require('lodash');
@@ -189,7 +190,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         requests.push(
           updateWorkItemCaseTitle({
             applicationContext,
-            caseTitle: caseToUpdate.caseCaption,
+            caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
             workItemId,
           }),
         );

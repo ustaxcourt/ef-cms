@@ -10,7 +10,7 @@ export default (test, overrides = {}) => {
 
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
 
-    await test.runSequence('submitPublicAdvancedSearchSequence', {});
+    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
     const searchResults = test.getState('searchResults');
     expect(searchResults.length).toBeGreaterThan(0);

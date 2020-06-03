@@ -1,12 +1,11 @@
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-
 const createApplicationContext = require('../../../../../web-api/src/applicationContext');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 const applicationContext = createApplicationContext({});
+const { Case } = require('../../entities/cases/Case');
 
 describe('generateHTMLTemplateForPDF', () => {
   const content = {
-    caption: 'Test Case Caption',
-    captionPostfix: 'Test Caption Postfix',
+    caseCaptionWithPostfix: `Test Case Caption ${Case.CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix: '123-45S',
     main: '<div>Test Main Content</div>',
   };
@@ -25,8 +24,9 @@ describe('generateHTMLTemplateForPDF', () => {
     });
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('U.S. Tax Court')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(
+      result.indexOf(`Test Case Caption ${Case.CASE_CAPTION_POSTFIX}`),
+    ).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(result.indexOf('<div>Test Main Content</div>')).toBeGreaterThan(-1);
   });

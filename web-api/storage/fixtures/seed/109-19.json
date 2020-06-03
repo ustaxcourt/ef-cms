@@ -31,8 +31,7 @@
     "blockedDate": "2019-03-01T21:40:46.415Z",
     "blockedReason": "petitioner is in jail",
     "caseCaption": "Brett Osborne, Petitioner",
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Brett Osborne, Petitioner",
     "filingType": "Myself",
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "hasIrsNotice": false,
@@ -71,8 +70,6 @@
     "sk": "docket-record|42649425-7325-41b8-a927-82a46e071663"
   },
   {
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "docketNumber": "109-19",
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
@@ -96,6 +93,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "workItems": [
       {
@@ -155,6 +153,7 @@
       "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
     },
     "documentType": "Order of Dismissal for Lack of Jurisdiction",
+    "entityName": "Document",
     "filingDate": "2019-10-07T14:29:30.288Z",
     "workItems": [],
     "pending": false,
@@ -176,6 +175,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "pending": false,

@@ -16,15 +16,14 @@ export const StartCaseInternal = connect(
   {
     documentSelectedForScan: state.currentViewMetadata.documentSelectedForScan,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateToReviewPetitionFromPaperSequence:
-      sequences.navigateToReviewPetitionFromPaperSequence,
     showModal: state.modal.showModal,
+    submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
   },
   function StartCaseInternal({
     documentSelectedForScan,
     formCancelToggleCancelSequence,
-    navigateToReviewPetitionFromPaperSequence,
     showModal,
+    submitPetitionFromPaperSequence,
   }) {
     return (
       <>
@@ -96,10 +95,10 @@ export const StartCaseInternal = connect(
                   id="submit-case"
                   type="button"
                   onClick={() => {
-                    navigateToReviewPetitionFromPaperSequence();
+                    submitPetitionFromPaperSequence();
                   }}
                 >
-                  Review Petition
+                  Create Case
                 </Button>
                 <Button
                   link

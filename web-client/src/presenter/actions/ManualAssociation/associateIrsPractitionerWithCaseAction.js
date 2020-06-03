@@ -29,8 +29,7 @@ export const associateIrsPractitionerWithCaseAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view Respondent details below.',
-      title: 'Respondent has been added to this case.',
+      message: 'Respondent counsel added to case.',
     },
   });
 };

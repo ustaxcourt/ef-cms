@@ -1,12 +1,16 @@
 import { menuHelper } from './computeds/menuHelper';
 
-import { advancedSearchHelper } from './computeds/advancedSearchHelper';
+import {
+  advancedOrderSearchHelper,
+  advancedSearchHelper,
+} from './computeds/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
 const helpers = {
+  advancedOrderSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   loadingHelper,
@@ -24,6 +28,7 @@ export const state = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  isPublic: true,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,

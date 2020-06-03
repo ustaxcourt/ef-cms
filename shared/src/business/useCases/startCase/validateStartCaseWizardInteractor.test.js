@@ -1,6 +1,6 @@
 const {
-  CaseExternalInformationFactory,
-} = require('../../entities/cases/CaseExternalInformationFactory');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   validateStartCaseWizardInteractor,
 } = require('./validateStartCaseWizardInteractor');
@@ -9,11 +9,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 describe('validateStartCaseWizardInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validateStartCaseWizardInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseExternalInformationFactory,
-        }),
-      },
+      applicationContext,
       petition: {},
     });
 
@@ -31,11 +27,7 @@ describe('validateStartCaseWizardInteractor', () => {
 
   it('returns null for a valid petition', () => {
     const errors = validateStartCaseWizardInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          CaseExternalInformationFactory,
-        }),
-      },
+      applicationContext,
       petition: {
         ...MOCK_CASE,
         contactPrimary: {

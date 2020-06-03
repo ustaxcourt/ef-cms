@@ -1,4 +1,5 @@
 const joi = require('@hapi/joi');
+const { isEmpty } = require('lodash');
 
 /**
  *
@@ -102,13 +103,11 @@ function getFormattedValidationErrors(entity) {
  *
  * @param {Function} entityConstructor the entity constructor
  * @param {object} schema the joi validation schema
- * @param {Function} customValidate a custom validation function
  * @param {object} errorToMessageMap the map of error fields and messages
  */
 exports.joiValidationDecorator = function (
   entityConstructor,
   schema,
-  customValidate,
   errorToMessageMap = {},
 ) {
   if (!schema.validate && typeof schema === 'object') {
@@ -128,14 +127,8 @@ exports.joiValidationDecorator = function (
   };
 
   entityConstructor.prototype.isValid = function isValid() {
-    return (
-      !!schema.validate(this, { allowUnknown: true }).error === false &&
-      (customValidate ? customValidate.call(this) : true)
-    );
-  };
-
-  entityConstructor.prototype.getValidationError = function getValidationError() {
-    return schema.validate(this, { allowUnknown: true }).error;
+    const validationErrors = this.getFormattedValidationErrors();
+    return isEmpty(validationErrors);
   };
 
   entityConstructor.prototype.validate = function validate() {
@@ -143,7 +136,9 @@ exports.joiValidationDecorator = function (
       throw new Error(
         `The ${
           entityConstructor.validationName || ''
-        } entity was invalid ${this.getValidationError()}`,
+        } entity was invalid ${JSON.stringify(
+          this.getFormattedValidationErrors(),
+        )}`,
       );
     }
     return this;
@@ -162,20 +157,12 @@ exports.joiValidationDecorator = function (
     const errors = {};
     error.details.forEach(detail => {
       if (!Number.isInteger(detail.context.key)) {
-        errors[detail.context.key] = detail.message;
+        errors[detail.context.key || detail.type] = detail.message;
       } else {
         errors[detail.context.label] = detail.message;
       }
     });
     return errors;
-  };
-
-  entityConstructor.prototype.validateWithError = function validate(error) {
-    if (!this.isValid()) {
-      error.message = `${error.message} ${this.getValidationError()}`;
-      throw error;
-    }
-    return this;
   };
 
   const toRawObjectPrototype = function () {

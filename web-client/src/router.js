@@ -1,4 +1,4 @@
-import { forEach, isEmpty, set } from 'lodash';
+import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -135,32 +135,6 @@ const router = {
           docketNumber,
           documentId,
         });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/edit-saved..',
-      ifHasAccess((docketNumber, documentId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(
-            docketNumber,
-          )} Edit saved document details`,
-        );
-
-        if (!isEmpty(app.getState('form'))) {
-          const { tab } = route.query();
-
-          return app.getSequence('gotoEditSavedPetitionSequence')({
-            docketNumber,
-            documentId,
-            tab,
-          });
-        } else {
-          return app.getSequence('gotoDocumentDetailSequence')({
-            docketNumber,
-            documentId,
-          });
-        }
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
@@ -566,9 +540,11 @@ const router = {
 
     registerRoute(
       '/users/edit-practitioner/*',
-      ifHasAccess(userId => {
+      ifHasAccess(barNumber => {
         setPageTitle('EF-CMS User Management - Edit Practitioner User');
-        return app.getSequence('gotoEditPractitionerUserSequence')({ userId });
+        return app.getSequence('gotoEditPractitionerUserSequence')({
+          barNumber,
+        });
       }),
     );
 
@@ -691,14 +667,13 @@ const router = {
     );
 
     registerRoute(
-      '/print-preview/*',
+      '/print-paper-service/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        return app.getSequence('gotoPrintPreviewSequence')({
+        return app.getSequence('gotoPrintPaperServiceSequence')({
           alertWarning: {
             message:
-              'This case has parties receiving paper service. Print and mail all paper service documents below.',
-            title: 'This document has been electronically served',
+              'Document electronically served. Print and mail all paper service documents now.',
           },
           docketNumber,
         });
@@ -792,14 +767,6 @@ const router = {
             }
           }
         }
-      }),
-    );
-
-    registerRoute(
-      'file-a-petition/review-petition',
-      ifHasAccess(() => {
-        setPageTitle('Review Petition');
-        return app.getSequence('gotoReviewPetitionFromPaperSequence')();
       }),
     );
 

@@ -23,11 +23,6 @@ Note.schema = joi.object().keys({
   notes: joi.string().required(),
 });
 
-joiValidationDecorator(
-  Note,
-  Note.schema,
-  undefined,
-  Note.VALIDATION_ERROR_MESSAGES,
-);
+joiValidationDecorator(Note, Note.schema, Note.VALIDATION_ERROR_MESSAGES);
 
 module.exports = { Note };

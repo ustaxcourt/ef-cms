@@ -11,24 +11,14 @@ describe('zipDocuments', () => {
     return fs.readFileSync(testAssetsPath + name);
   };
 
-  const s3ClientMock = {
-    getObject: () => {
-      return {
-        createReadStream: () => {
-          return {
-            on: () => null,
-            pipe: () => null,
-            promise: async () => ({
-              Body: testAsset('sample.pdf'),
-            }),
-          };
-        },
-      };
-    },
-    upload: () => null,
-  };
-
-  applicationContext.getStorageClient.mockImplementation(s3ClientMock);
+  beforeAll(() => {
+    const s3ClientMock = {
+      upload: (params, cb) => {
+        return cb(true);
+      },
+    };
+    applicationContext.getStorageClient.mockReturnValue(s3ClientMock);
+  });
 
   it('calls the s3 archive returning a promise', async () => {
     const zipProcess = zipDocuments({

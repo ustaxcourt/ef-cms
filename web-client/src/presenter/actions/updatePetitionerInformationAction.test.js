@@ -35,7 +35,7 @@ describe('updatePetitionerInformationAction', () => {
 
     expect(result.output).toEqual({
       alertSuccess: {
-        title: 'Your changes have been saved.',
+        message: 'Changes saved.',
       },
       caseDetail: { caseId: '123', docketNumber: 'ayy' },
       caseId: 'ayy',

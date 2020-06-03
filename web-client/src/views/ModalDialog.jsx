@@ -69,7 +69,7 @@ export const ModalDialog = ({
 
   const blurDialog = event => {
     if (preventCancelOnBlur) {
-      return false;
+      return;
     }
     return runCancelSequence(event);
   };

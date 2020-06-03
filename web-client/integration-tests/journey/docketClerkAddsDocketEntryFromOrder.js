@@ -5,7 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
-  return it('Docket Clerk adds a docket entry from the given order', async () => {
+  return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
     let caseDetailFormatted;
     let nonstandardHelperComputed;
     let addCourtIssuedDocketEntryHelperComputed;
@@ -191,8 +191,8 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Entry added to Docket Record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {

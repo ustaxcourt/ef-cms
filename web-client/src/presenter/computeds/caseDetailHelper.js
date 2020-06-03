@@ -3,8 +3,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const { Case } = applicationContext.getEntityConstructors();
-  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -50,11 +49,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  const showCaseNameForPrimary = ![
-    PARTY_TYPES.petitioner,
-    PARTY_TYPES.petitionerDeceasedSpouse,
-  ].includes(caseDetail.partyType);
-
   let showEditContacts = false;
 
   if (user.role === USER_ROLES.petitioner) {
@@ -98,7 +92,6 @@ export const caseDetailHelper = (get, applicationContext) => {
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
   return {
-    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
     hasConsolidatedCases,
@@ -116,7 +109,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
-    showCaseNameForPrimary,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,

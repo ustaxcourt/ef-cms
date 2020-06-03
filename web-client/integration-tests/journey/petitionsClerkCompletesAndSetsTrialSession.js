@@ -11,9 +11,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('openSetCalendarModalSequence');
 
     expect(test.getState('alertWarning')).toEqual({
-      message:
-        'You must provide an address and a judge to be able to set this trial session ',
-      title: 'This trial session requires additional information',
+      message: 'Provide an address and a judge to set this trial session.',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -54,16 +52,14 @@ export default (test, overrides = {}) => {
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(test.getState('currentPage')).toEqual('SimplePdfPreviewPage');
+      expect(test.getState('currentPage')).toEqual('PrintPaperService');
       expect(test.getState('alertWarning')).toEqual({
-        message:
-          'These cases have parties receiving paper service. Print and mail all paper service documents below.',
+        message: 'Print and mail all paper service documents now.',
       });
     } else {
       expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
       expect(test.getState('alertSuccess')).toEqual({
-        message: 'You can view all cases set for this trial session below.',
-        title: 'Eligible cases have been set for this trial session.',
+        message: 'Eligible cases set for trial.',
       });
     }
   });

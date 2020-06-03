@@ -7,6 +7,7 @@ import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequ
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
+import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
@@ -17,9 +18,10 @@ export const setDocumentForUploadSequence = [
     valid: [
       getFormValueDocumentAction,
       updateFormValueSequence,
+      updateOrderForDesignatingPlaceOfTrialAction,
+      updateOrderForOdsAction,
       getFormValueDocumentSizeAction,
       updateFormValueSequence,
-      updateOrderForDesignatingPlaceOfTrialAction,
       validatePetitionFromPaperSequence,
       selectDocumentForPreviewSequence,
       setDocumentUploadModeSequence,

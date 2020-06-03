@@ -28,11 +28,11 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
       caseId,
     }) || {};
 
-  const caseCaptionNames = applicationContext.getCaseCaptionNames(
+  const caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
   );
 
-  store.set(state.modal.caseCaptionNames, caseCaptionNames);
+  store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.caseId, caseId);
   store.set(state.modal.notes, notes);
 };

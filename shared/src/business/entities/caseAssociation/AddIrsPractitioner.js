@@ -25,7 +25,6 @@ AddIrsPractitioner.schema = joi.object().keys({
 joiValidationDecorator(
   AddIrsPractitioner,
   AddIrsPractitioner.schema,
-  undefined,
   AddIrsPractitioner.VALIDATION_ERROR_MESSAGES,
 );
 

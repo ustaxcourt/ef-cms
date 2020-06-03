@@ -3,7 +3,10 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import { advancedSearchHelper } from './computeds/advancedSearchHelper';
+import {
+  advancedOrderSearchHelper,
+  advancedSearchHelper,
+} from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
@@ -54,7 +57,6 @@ import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
-import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -81,6 +83,7 @@ const helpers = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
+  advancedOrderSearchHelper,
   advancedSearchHelper,
   alertHelper,
   batchDownloadHelper,
@@ -130,7 +133,6 @@ const helpers = {
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   requestAccessHelper,
-  reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
