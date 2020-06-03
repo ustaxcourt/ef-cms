@@ -2,13 +2,13 @@ const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
 /**
- * getOpenCasesInteractor
+ * getOpenConsolidatedCasesInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @returns {object} the open cases data
  */
-exports.getOpenCasesInteractor = async ({ applicationContext }) => {
+exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   let foundCases = [];
   let userCaseIdsMap = {};
 

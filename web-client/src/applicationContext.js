@@ -122,7 +122,7 @@ import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxi
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
-import { getOpenCasesInteractor } from '../../shared/src/proxies/getOpenCasesProxy';
+import { getOpenConsolidatedCasesInteractor } from '../../shared/src/proxies/getOpenConsolidatedCasesProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
@@ -321,7 +321,7 @@ const allUseCases = {
   getItemInteractor,
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
-  getOpenCasesInteractor,
+  getOpenConsolidatedCasesInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,

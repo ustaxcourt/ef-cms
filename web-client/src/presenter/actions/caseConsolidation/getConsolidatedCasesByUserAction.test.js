@@ -5,20 +5,22 @@ import { runAction } from 'cerebral/test';
 
 describe('getConsolidatedCasesByUserAction', () => {
   beforeAll(() => {
-    applicationContext.getUseCases().getOpenCasesInteractor.mockReturnValue([
-      {
-        caseId: 'case-id-234',
-        createdAt: '2019-07-20T20:20:15.680Z',
-      },
-      {
-        caseId: 'case-id-123',
-        createdAt: '2019-07-19T20:20:15.680Z',
-      },
-      {
-        caseId: 'case-id-345',
-        createdAt: '2019-07-21T20:20:15.680Z',
-      },
-    ]);
+    applicationContext
+      .getUseCases()
+      .getOpenConsolidatedCasesInteractor.mockReturnValue([
+        {
+          caseId: 'case-id-234',
+          createdAt: '2019-07-20T20:20:15.680Z',
+        },
+        {
+          caseId: 'case-id-123',
+          createdAt: '2019-07-19T20:20:15.680Z',
+        },
+        {
+          caseId: 'case-id-345',
+          createdAt: '2019-07-21T20:20:15.680Z',
+        },
+      ]);
     applicationContext.getCurrentUser.mockReturnValue({
       userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
     });
@@ -60,7 +62,7 @@ describe('getConsolidatedCasesByUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getOpenCasesInteractor,
+      applicationContext.getUseCases().getOpenConsolidatedCasesInteractor,
     ).toHaveBeenCalled();
   });
 
