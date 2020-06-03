@@ -1,18 +1,16 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
-import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
+import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
 export const validateCreateCaseMessageInModalSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      updateWorkItemFromPropsOrModalOrFormAction,
-      validateInitialWorkItemMessageAction,
+      validateCreateCaseMessageAction,
       {
-        error: [setValidationErrorsByFlagAction],
+        error: [setValidationErrorsAction],
         success: [clearAlertsAction],
       },
     ],

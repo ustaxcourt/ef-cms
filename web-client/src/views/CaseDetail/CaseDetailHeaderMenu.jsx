@@ -238,7 +238,9 @@ export const CaseDetailHeaderMenu = connect(
           <CreateOrderChooseTypeModal />
         )}
         {showModal === 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
-        {showModal === 'CreateCaseModal' && <CreateCaseMessageModalDialog />}
+        {showModal === 'CreateCaseMessageModal' && (
+          <CreateCaseMessageModalDialog />
+        )}
       </div>
     );
   },

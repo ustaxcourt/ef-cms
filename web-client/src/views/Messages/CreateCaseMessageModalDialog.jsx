@@ -9,20 +9,20 @@ export const CreateCaseMessageModalDialog = connect(
     constants: state.constants,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateMessageValueInModalSequence:
-      sequences.updateMessageValueInModalSequence,
+    updateCreateCaseMessageValueInModalSequence:
+      sequences.updateCreateCaseMessageValueInModalSequence,
     users: state.users,
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
-    validationErrors: state.modal.validationErrors,
+    validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   function CreateMessageModalDialog({
     constants,
     form,
-    onConfirmSequence = 'createWorkItemSequence',
+    onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
-    updateMessageValueInModalSequence,
+    updateCreateCaseMessageValueInModalSequence,
     users,
     validateCreateCaseMessageInModalSequence,
     validationErrors,
@@ -41,17 +41,19 @@ export const CreateCaseMessageModalDialog = connect(
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
-        <FormGroup errorText={!showChambersSelect && validationErrors.section}>
-          <label className="usa-label" htmlFor="section">
+        <FormGroup
+          errorText={!showChambersSelect && validationErrors.toSection}
+        >
+          <label className="usa-label" htmlFor="toSection">
             Select a section
           </label>
 
           <select
             className="usa-select"
-            id="section"
-            name="section"
-            onChange={e => {
-              updateMessageValueInModalSequence({
+            id="toSection"
+            name="toSection"
+            onChange={async e => {
+              await updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -68,7 +70,9 @@ export const CreateCaseMessageModalDialog = connect(
         </FormGroup>
 
         {showChambersSelect && (
-          <FormGroup errorText={validationErrors.section && 'Select a chamber'}>
+          <FormGroup
+            errorText={validationErrors.toSection && 'Select a chamber'}
+          >
             <label className="usa-label" htmlFor="chambers">
               Select chambers
             </label>
@@ -77,7 +81,7 @@ export const CreateCaseMessageModalDialog = connect(
               id="chambers"
               name="chambers"
               onChange={e => {
-                updateMessageValueInModalSequence({
+                updateCreateCaseMessageValueInModalSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -94,18 +98,18 @@ export const CreateCaseMessageModalDialog = connect(
           </FormGroup>
         )}
 
-        <FormGroup errorText={validationErrors.assigneeId}>
-          <label className="usa-label" htmlFor="assigneeId">
+        <FormGroup errorText={validationErrors.toUserId}>
+          <label className="usa-label" htmlFor="toUserId">
             Select recipient
           </label>
           <select
-            aria-disabled={!form.section ? 'true' : 'false'}
+            aria-disabled={!form.toSection ? 'true' : 'false'}
             className="usa-select"
-            disabled={!form.section}
-            id="assigneeId"
-            name="assigneeId"
+            disabled={!form.toSection}
+            id="toUserId"
+            name="toUserId"
             onChange={e => {
-              updateMessageValueInModalSequence({
+              updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -131,7 +135,7 @@ export const CreateCaseMessageModalDialog = connect(
             name="subject"
             type="text"
             onChange={e => {
-              updateMessageValueInModalSequence({
+              updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -149,7 +153,7 @@ export const CreateCaseMessageModalDialog = connect(
             id="message"
             name="message"
             onChange={e => {
-              updateMessageValueInModalSequence({
+              updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });

@@ -10,6 +10,7 @@ export const getUsersInSelectedSectionAction = async ({
   applicationContext,
   props,
 }) => {
+  console.log(props);
   if (!props.section) {
     return {
       users: [],
