@@ -111,8 +111,8 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
-  getOpenCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.getOpenCasesLambda
+  getOpenConsolidatedCases:
+    handler: web-api/${self:provider.dir}/casesHandlers.getOpenConsolidatedCasesLambda
     events:
       - http:
           path: /open
