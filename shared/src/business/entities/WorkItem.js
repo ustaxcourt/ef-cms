@@ -58,7 +58,13 @@ WorkItem.validationName = 'WorkItem';
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
-    assigneeId: joi.string().allow(null).optional(),
+    assigneeId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .allow(null)
+      .optional(),
     assigneeName: joi.string().allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().required(),
     caseId: joi
