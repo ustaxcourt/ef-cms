@@ -181,6 +181,7 @@ import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServeToIrsModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
+import { openCreateCaseMessageModalSequence } from './sequences/openCreateCaseMessageModalSequence';
 import { openCreateMessageAlongsideDocketRecordQCModalSequence } from './sequences/openCreateMessageAlongsideDocketRecordQCModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
@@ -362,6 +363,7 @@ import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequen
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
+import { validateCreateCaseMessageInModalSequence } from './sequences/validateCreateCaseMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
 import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
@@ -584,6 +586,7 @@ export const presenter = {
     openConfirmRescanBatchModalSequence,
     openConfirmServeToIrsModalSequence,
     openCreateCaseDeadlineModalSequence,
+    openCreateCaseMessageModalSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
@@ -763,6 +766,7 @@ export const presenter = {
     validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
     validateCourtIssuedDocketEntrySequence,
+    validateCreateCaseMessageInModalSequence,
     validateDocketEntrySequence,
     validateDocketRecordSequence,
     validateEditIrsPractitionersSequence,
