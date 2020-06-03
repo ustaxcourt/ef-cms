@@ -3,6 +3,7 @@ const {
   calculateDifferenceInDays,
   createISODateString,
   formatDateString,
+  PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
@@ -749,7 +750,7 @@ Case.validationRules = {
     ),
   trialTime: joi
     .string()
-    .pattern(/^[0-9]{1,2}:([0-5][0-9])$/)
+    .pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
   useSameAsPrimary: joi

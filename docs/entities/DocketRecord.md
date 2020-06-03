@@ -8,6 +8,11 @@
       flags: 
         presence: "optional"
         description: "Action taken in response to this Docket Record item."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     description: 
@@ -15,6 +20,11 @@
       flags: 
         presence: "required"
         description: "Text that describes this Docket Record item, which may be part of the Filings and Proceedings value."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
     documentId: 
       type: "string"
       flags: 
@@ -34,6 +44,11 @@
       flags: 
         presence: "optional"
         description: "JSON representation of the in-progress edit of this item."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 1000
       allow: 
         - null
       metas: 
@@ -399,7 +414,12 @@
       type: "string"
       flags: 
         presence: "optional"
-        description: "ID of the user that filed this Docket Record item."
+        description: "User that filed this Docket Record item."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
       allow: 
         - null
       metas: 
@@ -436,9 +456,13 @@
     servedPartiesCode: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
         description: "Served parties code to override system-computed code."
       allow: 
+        - "R"
+        - "B"
+        - ""
         - null
 
  ```

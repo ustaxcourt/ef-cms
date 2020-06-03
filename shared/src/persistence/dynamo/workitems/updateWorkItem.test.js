@@ -14,7 +14,7 @@ describe('updateWorkItem', () => {
     await updateWorkItem({
       applicationContext,
       workItemToUpdate: {
-        assigneeId: 'bob',
+        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         workItemId: '123',
       },
     });
@@ -23,7 +23,7 @@ describe('updateWorkItem', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        assigneeId: 'bob',
+        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         pk: 'work-item|123',
         sk: 'work-item|123',
         workItemId: '123',
