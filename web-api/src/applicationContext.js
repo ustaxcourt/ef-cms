@@ -28,6 +28,20 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addressLabelCoverSheet,
+  caseInventoryReport,
+  changeOfAddress,
+  docketRecord,
+  noticeOfDocketChange,
+  order,
+  pendingReport,
+  receiptOfFiling,
+  standingPretrialNotice,
+  standingPretrialOrder,
+  trialCalendar,
+  trialSessionPlanningReport,
+} = require('../../shared/src/business/utilities/documentGenerators');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -69,19 +83,6 @@ const {
 const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
-const {
-  caseInventoryReport,
-  changeOfAddress,
-  docketRecord,
-  noticeOfDocketChange,
-  order,
-  pendingReport,
-  receiptOfFiling,
-  standingPretrialNotice,
-  standingPretrialOrder,
-  trialCalendar,
-  trialSessionPlanningReport,
-} = require('../../shared/src/business/utilities/documentGenerators');
 const {
   casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
@@ -291,9 +292,6 @@ const {
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
-const {
-  generatePaperServiceAddressPagePdf,
-} = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -998,6 +996,7 @@ module.exports = (appContextUser = {}) => {
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
+      addressLabelCoverSheet,
       caseInventoryReport,
       changeOfAddress,
       docketRecord,
@@ -1262,7 +1261,6 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
-        generatePaperServiceAddressPagePdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
