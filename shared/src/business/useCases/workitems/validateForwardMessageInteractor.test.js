@@ -51,12 +51,12 @@ describe('validateForwardMessageInteractor', () => {
       applicationContext,
       message: {
         assigneeId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        section: VALIDATION_ERROR_MESSAGES.section,
       },
     });
 
     expect(errors).toEqual({
       forwardMessage: VALIDATION_ERROR_MESSAGES.forwardMessage,
+      section: VALIDATION_ERROR_MESSAGES.section,
     });
   });
 

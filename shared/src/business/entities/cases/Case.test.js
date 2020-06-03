@@ -259,6 +259,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates an invalid case with an invalid trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '91:30',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
       const myCase = new Case(
         {
@@ -321,6 +334,19 @@ describe('Case entity', () => {
           blocked: true,
           blockedDate: '2019-03-01T21:42:29.073Z',
           blockedReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with a trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '9:30',
         },
         {
           applicationContext,
@@ -1188,7 +1214,7 @@ describe('Case entity', () => {
       );
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
@@ -1205,7 +1231,7 @@ describe('Case entity', () => {
       expect(workItems.length).toEqual(1);
       expect(workItems).toMatchObject([
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
