@@ -293,9 +293,6 @@ const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
-  generatePaperServiceAddressPagePdf,
-} = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
-const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -1264,7 +1261,6 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
-        generatePaperServiceAddressPagePdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
