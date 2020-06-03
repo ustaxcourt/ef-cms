@@ -467,6 +467,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getOpenCasesByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
+const {
   getOpenCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenCasesInteractor');
 const {
@@ -1149,6 +1152,7 @@ module.exports = (appContextUser = {}) => {
         getIndexMappingFields,
         getIndexMappingLimit,
         getInternalUsers,
+        getOpenCasesByUser,
         getPractitionerByBarNumber,
         getPractitionersByName,
         getPublicDownloadPolicyUrl,
