@@ -4,8 +4,8 @@ import { state } from 'cerebral';
  * validates the create case message modal
  *
  * @param {object} providers the providers object
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or failure)
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.path the path to take if validation fails or not
  * @param {object} providers.applicationContext the application context needed for getting the validateForwardMessage use case
  * @returns {object} path.success or path.error
  */
