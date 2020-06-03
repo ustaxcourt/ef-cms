@@ -83,9 +83,7 @@ exports.updateSecondaryContactInteractor = async ({
         content: {
           caseCaptionExtension,
           caseTitle,
-          docketNumberWithSuffix: `${caseEntity.docketNumber}${
-            caseEntity.docketNumberSuffix || ''
-          }`,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
           name: caseToUpdate.contactSecondary.name,
           newData: editableFields,
@@ -145,7 +143,7 @@ exports.updateSecondaryContactInteractor = async ({
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
         docketNumber: caseEntity.docketNumber,
-        docketNumberSuffix: caseEntity.docketNumberSuffix,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         document: {
           ...changeOfAddressDocument.toRawObject(),
           createdAt: changeOfAddressDocument.createdAt,

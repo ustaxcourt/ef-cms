@@ -79,9 +79,8 @@ describe('getDocument', () => {
       protocol: 'S3',
     });
 
-    // expect(
-    //   applicationContext.getStorageClient().getObject,
-    // ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName' });
-    expect();
+    expect(
+      applicationContext.getStorageClient().getObject,
+    ).toHaveBeenCalledWith({ Bucket: 'DocumentBucketName' });
   });
 });

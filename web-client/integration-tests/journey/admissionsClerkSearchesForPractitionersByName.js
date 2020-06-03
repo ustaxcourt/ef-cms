@@ -1,4 +1,4 @@
-import { advancedSearchHelper } from '../../src/presenter/computeds/advancedSearchHelper';
+import { advancedSearchHelper } from '../../src/presenter/computeds/AdvancedSearch/advancedSearchHelper';
 import { formatNow } from '../../../shared/src/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';

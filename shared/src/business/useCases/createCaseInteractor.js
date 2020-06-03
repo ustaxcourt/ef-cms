@@ -30,7 +30,7 @@ const addPetitionDocumentToCase = ({
       caseStatus: caseToAdd.status,
       caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
-      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
@@ -96,7 +96,6 @@ exports.createCaseInteractor = async ({
     petitionMetadata,
   ).validate();
 
-  // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,

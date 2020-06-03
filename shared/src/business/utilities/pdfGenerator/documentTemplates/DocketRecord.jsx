@@ -1,8 +1,9 @@
 const React = require('react');
 
-const CompressedDocketHeader = require('../components/CompressedDocketHeader.jsx')
-  .default;
-const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
+const {
+  CompressedDocketHeader,
+} = require('../components/CompressedDocketHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const RenderAddress = ({ contact, countryTypes }) => {
   const isInternational = contact.countryType === countryTypes.INTERNATIONAL;
@@ -75,7 +76,49 @@ const RenderPractitioner = ({
   );
 };
 
-const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
+const RecordDescription = ({ document, record }) => {
+  let additionalDescription = record.filingsAndProceedings
+    ? ` ${record.filingsAndProceedings}`
+    : '';
+
+  if (document && document.additionalInfo2) {
+    additionalDescription += ` ${document.additionalInfo2}`;
+  }
+
+  return (
+    <>
+      <strong>{record.description}</strong>
+      {additionalDescription}
+    </>
+  );
+};
+
+const ServedDate = ({ document }) => {
+  const documentDateServed =
+    document && document.isStatusServed ? document.servedAtFormatted : '';
+
+  if (documentDateServed) {
+    const arrDateServed = documentDateServed.split(' ');
+
+    return (
+      <>
+        {arrDateServed[0]}{' '}
+        <span className="no-wrap">{arrDateServed.slice(1).join(' ')}</span>
+      </>
+    );
+  } else if (document && document.isNotServedCourtIssuedDocument) {
+    return 'Not served';
+  } else {
+    return '';
+  }
+};
+
+export const DocketRecord = ({
+  caseDetail,
+  countryTypes,
+  entries,
+  options,
+}) => {
   return (
     <div id="document-docket-record">
       <PrimaryHeader />
@@ -158,28 +201,19 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
         <tbody>
           {entries &&
             entries.map(({ document, index, record }) => {
-              const servedAtFormatted =
-                document && document.isStatusServed
-                  ? document.servedAtFormatted || ''
-                  : '';
-              const documentDateServed =
-                document && document.isNotServedCourtIssuedDocument
-                  ? 'Not Served'
-                  : servedAtFormatted;
-
               return (
                 <tr key={index}>
                   <td>{index}</td>
                   <td>{record.createdAtFormatted || ''}</td>
                   <td>{record.eventCode || ''}</td>
-                  <td>
-                    <strong>{record.description}</strong>{' '}
-                    {record.filingsAndProceedings &&
-                      record.filingsAndProceedings}
+                  <td className="filings-and-proceedings">
+                    <RecordDescription document={document} record={record} />
                   </td>
                   <td>{(document && document.filedBy) || ''}</td>
                   <td>{record.action || ''}</td>
-                  <td>{documentDateServed}</td>
+                  <td>
+                    <ServedDate document={document} />
+                  </td>
                   <td>{(document && document.servedPartiesCode) || ''}</td>
                 </tr>
               );
@@ -189,5 +223,3 @@ const DocketRecord = ({ caseDetail, countryTypes, entries, options }) => {
     </div>
   );
 };
-
-export default DocketRecord;

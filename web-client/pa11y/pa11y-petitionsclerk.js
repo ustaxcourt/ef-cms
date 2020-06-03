@@ -280,7 +280,9 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
   },
 
-  /* document detail */
+  /* petition qc */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=partyInfo',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/petition-qc?tab=caseInfo',
   {
     actions: [
       'wait for button#tab-irs-notice to be visible',
@@ -291,29 +293,13 @@ module.exports = [
     ],
     notes: 'checks a11y of editable fields exposed when Yes notice attached',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=reveal-notice-options',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/petition-qc?tab=irsNotice&info=reveal-notice-options',
   },
-  // Feel free to uncomment this once html-sniffer is back to a stable version
-  // {
-  //   actions: [
-  //     'wait for #tab-parties to be visible',
-  //     'click element #tab-parties',
-  //     'wait for #tabContent-partyInfo to be visible',
-  //   ],
-  //   notes: 'check a11y of content within parties tab of document detail',
-  //   url:
-  //     'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=tab-parties',
-  // },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #tabContent-caseInfo to be visible',
-    ],
-    notes: 'check a11y of content within case info tab of document detail',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b&info=tab-case-info',
-  },
+
+  /* review petition */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b/review',
+
+  /* document detail */
   {
     actions: [
       'wait for #tab-pending-messages to be visible',
@@ -388,12 +374,19 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
   {
     actions: [
-      'wait for #submit-case to be visible',
-      'click element #submit-case',
-      'wait for .usa-alert--warning to be visible',
+      'wait for #tab-irs-notice to be visible',
+      'click element #tab-irs-notice',
+      'wait for #irs-verified-notice-radios to be visible',
+      'click element #has-irs-verified-notice-yes',
+      'wait for #date-of-notice-legend to be visible',
+      'set field #case-type to Deficiency',
+      'check field #case-type',
+      'wait for .calculate-penalties to be visible',
+      'click element .calculate-penalties',
+      'wait for .modal-screen to be visible',
     ],
-    notes: 'checks the review paper case screen',
+    notes: 'checks the Calculate Penalties on IRS Notice modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/documents/c63be3f2-2240-451e-b6bd-8206d52a070b',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=penalties-modal',
   },
 ];

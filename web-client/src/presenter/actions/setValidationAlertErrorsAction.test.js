@@ -70,10 +70,7 @@ describe('setValidationAlertErrors', () => {
       state: {},
     });
     expect(state.alertError).toMatchObject({
-      messages: [
-        'blues #2 - cobalt field - cobalt is incorrect',
-        'green is incorrect',
-      ],
+      messages: ['blues #2 - cobalt is incorrect', 'green is incorrect'],
     });
   });
 
@@ -92,6 +89,33 @@ describe('setValidationAlertErrors', () => {
     });
     expect(state.alertError).toMatchObject({
       messages: ['Second issue occurred', 'First issue occurred'],
+    });
+  });
+
+  it('maps nested error message text using errorDisplayMap', async () => {
+    const { state } = await runAction(setValidationAlertErrorsAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        errorDisplayMap: { something: 'Nicer Something' },
+        errorDisplayOrder: ['nested2', 'nested1'],
+        errors: {
+          something: [
+            {
+              index: 0,
+              nested1: 'first nested',
+              nested2: 'second nested',
+            },
+          ],
+        },
+      },
+    });
+    expect(state.alertError).toMatchObject({
+      messages: [
+        'Nicer Something #1 - second nested',
+        'Nicer Something #1 - first nested',
+      ],
     });
   });
 

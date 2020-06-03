@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 Court's Glossary of USTC Terminology: https://www.ustaxcourt.gov/taxpayer_info_glossary.htm
 
 ## A
@@ -13,7 +15,7 @@ Court's Glossary of USTC Terminology: https://www.ustaxcourt.gov/taxpayer_info_g
 
 * **Automatic Block** - Case is temporarily blocked from trial due to a pending item or due date.
 
-* **Audit Log** - Cumulative log of all activity in a case, including user and system generated changes, filings, message forwarding, edits, status changes. 
+* **Audit Log** - Cumulative log of all activity in a case, including user and system generated changes, filings, message forwarding, edits, status changes.
 
 ## B
 * **Bar number** - A unique identifier comprising of the practitioner initials, date, and series number

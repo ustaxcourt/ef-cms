@@ -1,5 +1,5 @@
-const DocketHeader = require('./DocketHeader.jsx').default;
 const React = require('react');
+const { DocketHeader } = require('./DocketHeader.jsx');
 const { shallow } = require('enzyme');
 
 describe('DocketHeader', () => {

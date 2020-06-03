@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
-export default test => {
+export const petitionsClerkAssignsWorkItemToSelf = test => {
   return it('Petitions clerk assigns work item to self', async () => {
     test.setState('workQueueToDisplay.workQueueIsInternal', false);
     // find the work item that is part of an Petition upload

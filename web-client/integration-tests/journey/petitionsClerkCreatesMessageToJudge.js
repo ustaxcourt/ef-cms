@@ -1,6 +1,10 @@
 import { getPetitionDocumentForCase } from '../helpers';
 
-export default (test, message, createdCases) => {
+export const petitionsClerkCreatesMessageToJudge = (
+  test,
+  message,
+  createdCases,
+) => {
   return it('Petitions clerk sends message to judgeArmen', async () => {
     const petitionDocument = getPetitionDocumentForCase(createdCases[0]);
     const workItem = petitionDocument.workItems[0];

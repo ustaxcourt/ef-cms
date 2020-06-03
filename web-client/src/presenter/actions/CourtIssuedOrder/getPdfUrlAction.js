@@ -16,9 +16,7 @@ export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
     throw new Error('No markup found in documentHtml');
   }
 
-  let docketNumberWithSuffix = applicationContext
-    .getUtilities()
-    .formatDocketNumberWithSuffix(caseDetail);
+  const { docketNumberWithSuffix } = caseDetail;
 
   const {
     url,

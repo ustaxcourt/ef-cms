@@ -32,10 +32,23 @@ exports.generatePrintablePendingReportInteractor = async ({
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
 
-  let reportTitle = 'Pending Report All Judges';
+  const formattedPendingItems = pendingItems.map(pendingItem => ({
+    ...pendingItem,
+    associatedJudgeFormatted: pendingItem.associatedJudge.replace(
+      /^Judge\s+/,
+      '',
+    ),
+    caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
+    formattedFiledDate: applicationContext
+      .getUtilities()
+      .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
+    formattedName: pendingItem.documentTitle || pendingItem.documentType,
+  }));
+
+  let reportTitle = 'All Judges';
 
   if (judge) {
-    reportTitle = `Pending Report Judge ${judge}`;
+    reportTitle = `Judge ${judge}`;
   } else if (caseId) {
     const caseResult = await applicationContext
       .getPersistenceGateway()
@@ -43,12 +56,43 @@ exports.generatePrintablePendingReportInteractor = async ({
         applicationContext,
         caseId,
       });
-    reportTitle = `Pending Report for Docket ${caseResult.docketNumber}`;
+    reportTitle = `Docket ${caseResult.docketNumber}`;
   }
 
-  return await applicationContext.getUseCaseHelpers().generatePendingReportPdf({
+  const pdf = await applicationContext.getDocumentGenerators().pendingReport({
     applicationContext,
-    pendingItems,
-    reportTitle,
+    data: {
+      pendingItems: formattedPendingItems,
+      subtitle: reportTitle,
+    },
   });
+
+  const documentId = `pending-report-${applicationContext.getUniqueId()}.pdf`;
+
+  await new Promise(resolve => {
+    const documentsBucket =
+      applicationContext.environment.tempDocumentsBucketName;
+    const s3Client = applicationContext.getStorageClient();
+
+    const params = {
+      Body: pdf,
+      Bucket: documentsBucket,
+      ContentType: 'application/pdf',
+      Key: documentId,
+    };
+
+    s3Client.upload(params, function () {
+      resolve();
+    });
+  });
+
+  const {
+    url,
+  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    documentId,
+    useTempBucket: true,
+  });
+
+  return url;
 };
