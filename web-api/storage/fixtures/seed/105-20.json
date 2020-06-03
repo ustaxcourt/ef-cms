@@ -573,6 +573,7 @@
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "caseCaption": "Astra Santiago, Petitioner",
@@ -587,6 +588,7 @@
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
     "caseCaption": "Astra Santiago, Petitioner",

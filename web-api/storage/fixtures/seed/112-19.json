@@ -74,6 +74,7 @@
   },
   {
     "sk": "case|459925e4-db20-46e0-8348-47a98537edeb",
+    "gsi1pk": "user-case|459925e4-db20-46e0-8348-47a98537edeb",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-12-11T15:25:55.006Z",
     "caseCaption": "Brian Earl Spilner, Petitioner",
