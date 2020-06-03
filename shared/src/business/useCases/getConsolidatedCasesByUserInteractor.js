@@ -25,7 +25,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
     const leadCaseIdsToGet = [];
 
     userCases.forEach(caseRecord => {
-      const userCaseEntity = new UserCase(caseRecord).toRawObject();
+      const userCaseEntity = new UserCase(caseRecord).validate().toRawObject();
       const { caseId, leadCaseId } = userCaseEntity;
 
       userCaseEntity.isRequestingUserAssociated = true;
