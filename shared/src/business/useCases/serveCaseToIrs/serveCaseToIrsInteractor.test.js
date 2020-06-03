@@ -41,7 +41,7 @@ describe('serveCaseToIrsInteractor', () => {
           to: null,
         },
       ],
-      section: 'irsBatchSection',
+      section: 'docket',
       sentBy: 'petitioner',
       updatedAt: '2018-12-27T18:06:02.968Z',
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',

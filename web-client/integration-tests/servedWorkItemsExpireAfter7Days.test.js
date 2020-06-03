@@ -77,7 +77,7 @@ describe('verify old served work items do not show up in the outbox', () => {
           toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
-      section: 'irsBatchSection',
+      section: 'irsSystem',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',
       sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',

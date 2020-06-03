@@ -9,6 +9,7 @@ const {
 const {
   CHIEF_JUDGE,
   DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
   TRIAL_LOCATION_MATCHER,
 } = require('./CaseConstants');
 const {
@@ -144,8 +145,6 @@ Case.AUTOMATIC_BLOCKED_REASONS = {
 };
 
 Case.CHIEF_JUDGE = CHIEF_JUDGE;
-
-Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -493,7 +492,7 @@ Case.validationRules = {
   docketNumberSuffix: joi
     .string()
     .allow(null)
-    .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
   docketNumberWithSuffix: joi
     .string()
