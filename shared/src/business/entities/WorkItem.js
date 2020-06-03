@@ -10,10 +10,14 @@ const { omit, orderBy } = require('lodash');
 const { User } = require('./User');
 const joiStrictTimestamp = getTimestampSchema();
 const {
+  CHAMBERS_SECTIONS,
+  IRS_SYSTEM_SECTION,
+  SECTIONS,
+} = require('./WorkQueue');
+const {
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
 } = require('./cases/CaseConstants');
-const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 
 /**
  * constructor
@@ -111,7 +115,12 @@ joiValidationDecorator(
     messages: joi.array().items(joi.object()).required(),
     section: joi
       .string()
-      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+      .valid(
+        ...SECTIONS,
+        ...CHAMBERS_SECTIONS,
+        ...Object.values(User.ROLES),
+        IRS_SYSTEM_SECTION,
+      )
       .required(),
     sentBy: joi.string().max(100).required(),
     sentBySection: joi

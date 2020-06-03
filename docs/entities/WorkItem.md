@@ -233,6 +233,7 @@
         - "petitionsclerk"
         - "privatePractitioner"
         - "trialclerk"
+        - "irsSystem"
     sentBy: 
       type: "string"
       flags: 
