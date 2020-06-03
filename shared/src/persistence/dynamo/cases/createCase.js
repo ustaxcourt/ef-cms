@@ -65,22 +65,6 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         applicationContext,
       }),
     ),
-    // case:user mapping record (for dashboard)
-    client.put({
-      Item: {
-        caseCaption: caseToCreate.caseCaption,
-        caseId: caseToCreate.caseId,
-        createdAt: caseToCreate.createdAt,
-        docketNumber: caseToCreate.docketNumber,
-        docketNumberWithSuffix: caseToCreate.docketNumberWithSuffix,
-        gsi1pk: `user-case|${caseToCreate.caseId}`,
-        leadCaseId: caseToCreate.leadCaseId,
-        pk: `user|${caseToCreate.userId}`,
-        sk: `case|${caseToCreate.caseId}`,
-        status: caseToCreate.status,
-      },
-      applicationContext,
-    }),
     client.put({
       Item: {
         pk: `case-by-docket-number|${caseToCreate.docketNumber}`,
