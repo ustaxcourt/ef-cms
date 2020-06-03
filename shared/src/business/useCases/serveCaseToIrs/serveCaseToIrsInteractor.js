@@ -191,11 +191,30 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
+  const {
+    caseCaption,
+    caseCaptionExtension,
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    receivedAt,
+  } = caseEntity;
+
   const pdfData = await applicationContext
-    .getUseCaseHelpers()
-    .generateCaseConfirmationPdf({
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
       applicationContext,
-      caseEntity,
+      data: {
+        caseCaptionExtension,
+        caseTitle: Case.getCaseTitle(caseCaption),
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
     });
 
   if (caseEntity.isPaper) {
