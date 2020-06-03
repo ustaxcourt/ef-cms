@@ -79,7 +79,7 @@ describe('getConsolidatedCasesByUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getClosedConsolidatedCasesInteractor,
+      applicationContext.getUseCases().getClosedCasesInteractor,
     ).toHaveBeenCalled();
   });
 });

@@ -5,8 +5,8 @@ module.exports = {
     .createCaseFromPaperLambda,
   createCaseLambda: require('./cases/createCaseLambda').createCaseLambda,
   getCaseLambda: require('./cases/getCaseLambda').getCaseLambda,
-  getClosedConsolidatedCasesLambda: require('./cases/getClosedConsolidatedCasesLambda')
-    .getClosedConsolidatedCasesLambda,
+  getClosedCasesLambda: require('./cases/getClosedCasesLambda')
+    .getClosedCasesLambda,
   getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
     .getConsolidatedCasesByCaseLambda,
   getOpenConsolidatedCasesLambda: require('./cases/getOpenConsolidatedCasesLambda')

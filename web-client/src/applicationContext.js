@@ -107,7 +107,7 @@ import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/case
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
-import { getClosedConsolidatedCasesInteractor } from '../../shared/src/proxies/getClosedConsolidatedCasesProxy';
+import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
@@ -309,7 +309,7 @@ const allUseCases = {
   getCaseInteractor,
   getCaseInventoryReportInteractor,
   getCasesByUserInteractor,
-  getClosedConsolidatedCasesInteractor,
+  getClosedCasesInteractor,
   getConsolidatedCasesByCaseInteractor,
   getConsolidatedCasesByUserInteractor,
   getDocumentQCInboxForSectionInteractor,
