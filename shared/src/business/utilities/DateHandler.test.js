@@ -1,8 +1,26 @@
 const DateHandler = require('./DateHandler');
+const { FORMATS, PATTERNS } = DateHandler;
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
 
 describe('DateHandler', () => {
+  describe('pattern matcher', () => {
+    describe('H:MM', () => {
+      it('matches valid times', () => {
+        expect(PATTERNS['H:MM'].test('00:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('9:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('09:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('10:30')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('23:59')).toBeTruthy();
+      });
+      it('rejects invalid times', () => {
+        expect(PATTERNS['H:MM'].test('7:60')).toBeFalsy();
+        expect(PATTERNS['H:MM'].test('29:59')).toBeFalsy();
+        expect(PATTERNS['H:MM'].test('30:00')).toBeFalsy();
+      });
+    });
+  });
+
   describe('prepareDateFromString', () => {
     it("Creates a new moment object for 'now' when given no inputs'", () => {
       const myMoment = DateHandler.prepareDateFromString();
@@ -129,7 +147,7 @@ describe('DateHandler', () => {
       // now confirm it converts "back" to originally desired time
       const formattedInEastern = DateHandler.formatDateString(
         startOfDay,
-        DateHandler.FORMATS.DATE_TIME,
+        FORMATS.DATE_TIME,
       );
       expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
     });
@@ -147,7 +165,7 @@ describe('DateHandler', () => {
       // now confirm it converts "back" to originally desired time
       const formattedInEastern = DateHandler.formatDateString(
         endOfDay,
-        DateHandler.FORMATS.DATE_TIME,
+        FORMATS.DATE_TIME,
       );
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
     });

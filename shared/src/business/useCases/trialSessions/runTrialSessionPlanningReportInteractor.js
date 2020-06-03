@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { capitalize } = require('lodash');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { invert } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -154,44 +155,22 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     year,
   });
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateTrialSessionPlanningReportTemplate({
+  const trialSessionPlanningReport = await applicationContext
+    .getDocumentGenerators()
+    .trialSessionPlanningReport({
       applicationContext,
-      content: {
+      data: {
+        locationData: reportData.trialLocationData,
         previousTerms: reportData.previousTerms,
-        rows: reportData.trialLocationData,
-        selectedTerm: term,
-        selectedYear: year,
+        term: `${capitalize(term)} ${year}`,
       },
     });
 
-  const pdf = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
-      contentHtml,
-      headerHtml: ' ',
-    });
-
-  const trialSessionPlanningReportPdfId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    document: pdf,
-    documentId: trialSessionPlanningReportPdfId,
+    file: trialSessionPlanningReport,
     useTempBucket: true,
   });
-
-  const trialSessionPlanningReportPdfUrl = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      documentId: trialSessionPlanningReportPdfId,
-      useTempBucket: true,
-    });
-
-  return trialSessionPlanningReportPdfUrl;
 };
 
 exports.getPreviousTerm = getPreviousTerm;

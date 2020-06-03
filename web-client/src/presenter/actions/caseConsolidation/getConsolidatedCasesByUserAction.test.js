@@ -32,7 +32,7 @@ describe('getConsolidatedCasesByUserAction', () => {
       state: {
         currentViewMetadata: {
           caseList: {
-            tab: 'New',
+            tab: 'Open',
           },
         },
       },
@@ -47,13 +47,13 @@ describe('getConsolidatedCasesByUserAction', () => {
     });
   });
 
-  it('should retrieve all open cases when props.status is not Closed', async () => {
+  it('should retrieve all open cases when props.currentViewMetadata.caseList.tab is not Closed', async () => {
     await runAction(getConsolidatedCasesByUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {
           caseList: {
-            tab: 'New',
+            tab: 'Open',
           },
         },
       },

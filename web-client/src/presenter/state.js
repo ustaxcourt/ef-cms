@@ -32,7 +32,6 @@ import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
-import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
@@ -59,7 +58,6 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
-import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -113,7 +111,6 @@ const helpers = {
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
-  extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
   fileUploadStatusHelper,
@@ -138,7 +135,6 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  selectDocumentSelectHelper,
   selectDocumentTypeHelper,
   showAppTimeoutModalHelper,
   startCaseHelper,

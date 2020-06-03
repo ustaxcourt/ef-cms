@@ -18,9 +18,8 @@ All of our endpoints are split into multiple AWS CloudFormation stacks and hoste
 - [ ] create a new `*Handlers.js` file, your functions for your new `serverless-*.yml` must point to this handlers
 - [ ] create a new `serverless-*.yml` file in the `./web-api` directory (copy an existing one and modify as needed)
   - [ ] change the service name to something unique
-  - [ ] change the `customDomain.basePath` to be something unique
-  - [ ] change `serverless-offline.port` to be a new unique port
   - [ ] update the `package.include` to use the new handlers file you cretaed
+  - [ ] add a section to `web-api/config/custom.yml` for the new stack with a unique port and basePath
 - [ ] update `./web-api/proxy.js` to include your new path and map it to your new port
 - [ ] create a new `./web-api/run-serverless*.sh` script (chmod 755 or copy an existing script) and modify it to use the new `*Handlers.js` file
 - [ ] update `./web-api/run-local.sh` to include your new serverless service

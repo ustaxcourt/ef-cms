@@ -222,7 +222,14 @@
   },
   {
     "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "docketNumberWithSuffix": "108-19",
+    "status": "Calendared"
   },
   {
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",

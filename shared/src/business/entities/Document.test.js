@@ -133,7 +133,7 @@ describe('Document entity', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
@@ -857,7 +857,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -877,7 +877,7 @@ describe('Document entity', () => {
               workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
             },
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -912,7 +912,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',

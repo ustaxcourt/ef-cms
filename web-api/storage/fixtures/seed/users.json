@@ -153,7 +153,7 @@
     "entityName": "PrivatePractitioner",
     "email": "privatePractitioner",
     "firmName": "GW Law Offices",
-    "alternateEmail": "privatePractitioner@example.com",
+    "alternateEmail": "privatePractitioner",
     "additionalPhone": "111-111-1111",
     "originalBarState": "Maryland",
     "barNumber": "PT1234",

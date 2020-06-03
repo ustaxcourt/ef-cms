@@ -433,7 +433,7 @@ joiValidationDecorator(
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(),
-    filedBy: joi.string().allow('').optional(),
+    filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()

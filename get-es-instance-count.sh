@@ -8,9 +8,13 @@ elif [[ $BRANCH == 'experimental1' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "1"
+elif [[ $BRANCH == 'irs' ]] ; then
+  echo "1"
 elif [[ $BRANCH == 'staging' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'test' ]] ; then
+  echo "1"
+elif [[ $BRANCH == 'migration' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "2"

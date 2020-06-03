@@ -5,6 +5,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
@@ -58,10 +59,10 @@ const userValidation = {
   contact: joi
     .object()
     .keys({
-      address1: joi.string().required(),
-      address2: joi.string().optional().allow(null),
-      address3: joi.string().optional().allow(null),
-      city: joi.string().required(),
+      address1: joi.string().max(100).required(),
+      address2: joi.string().max(100).optional().allow(null),
+      address3: joi.string().max(100).optional().allow(null),
+      city: joi.string().max(100).required(),
       country: joi.when('countryType', {
         is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().optional().allow(null),
@@ -75,41 +76,49 @@ const userValidation = {
         )
         .required(),
 
-      phone: joi.string().required(),
+      phone: joi.string().max(100).required(),
 
       postalCode: joi.when('countryType', {
         is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
-        then: joi.string().required(),
+        then: joi.string().max(100).required(),
       }),
 
       state: joi.when('countryType', {
         is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().required(),
+        otherwise: joi.string().max(100).required(),
         then: joi.string().optional().allow(null),
       }),
     })
     .optional(),
-  email: joi.string().optional(),
+  email: joi.string().max(100).optional(),
   entityName: joi.string().valid('User').required(),
   judgeFullName: joi.when('role', {
     is: User.ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.string().optional(),
+    then: joi.string().max(100).optional(),
   }),
   judgeTitle: joi.when('role', {
     is: User.ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.string().optional(),
+    then: joi.string().max(100).optional(),
   }),
-  name: joi.string().optional(),
+  name: joi.string().max(100).optional(),
   role: joi
     .string()
     .valid(...Object.values(User.ROLES))
     .required(),
-  section: joi.string().optional(),
+  section: joi
+    .string()
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+    .optional(),
   token: joi.string().optional(),
-  userId: joi.string().required(),
+  userId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
 };
 
 const VALIDATION_ERROR_MESSAGES = {
