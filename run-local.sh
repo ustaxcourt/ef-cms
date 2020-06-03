@@ -68,6 +68,7 @@ set -- \
   --stage local \
   --stageColor "blue" \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
+  --circleHoneybadgerApiKey noop \
   --elasticsearch_endpoint "http://localhost:9200"
 
 echo "starting public api service"

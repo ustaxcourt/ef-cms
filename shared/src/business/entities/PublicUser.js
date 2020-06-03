@@ -19,14 +19,14 @@ const userValidation = {
   judgeFullName: joi.when('role', {
     is: User.ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.string().optional(),
+    then: joi.string().max(100).optional(),
   }),
   judgeTitle: joi.when('role', {
     is: User.ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.string().optional(),
+    then: joi.string().max(100).optional(),
   }),
-  name: joi.string().optional(),
+  name: joi.string().max(100).optional(),
   role: joi
     .string()
     .valid(...Object.values(User.ROLES))
