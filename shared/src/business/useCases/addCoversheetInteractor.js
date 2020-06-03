@@ -53,7 +53,10 @@ exports.generateCoverSheetData = ({
         .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
     '';
 
-  const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
+  const caseCaption =
+    caseEntity.initialCaption ||
+    caseEntity.caseCaption ||
+    Case.getCaseCaption(caseEntity);
   let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {
@@ -68,7 +71,7 @@ exports.generateCoverSheetData = ({
   }
 
   const docketNumberWithSuffix =
-    caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
+    caseEntity.docketNumber + (caseEntity.initialDocketNumberSuffix || '');
 
   const coverSheetData = {
     caseCaptionExtension,
