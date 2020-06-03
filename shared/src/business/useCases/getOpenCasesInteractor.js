@@ -18,7 +18,7 @@ exports.getOpenCasesInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
-  if (openCases.length) {
+  if (openCases && openCases.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 

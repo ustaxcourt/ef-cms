@@ -4,16 +4,22 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getOpenCasesInteractor', () => {
+  let mockCase;
+
   beforeEach(() => {
+    mockCase = [MOCK_CASE];
+
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(
         MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
       );
-
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
     );
+    applicationContext
+      .getPersistenceGateway()
+      .getOpenCasesByUser.mockImplementation(() => mockCase);
   });
 
   it('should retrieve the current user information', async () => {
@@ -38,9 +44,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should return an empty list when no open cases are found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getOpenCasesByUser.mockResolvedValue(null);
+    mockCase = null;
 
     const result = await getOpenCasesInteractor({
       applicationContext,
@@ -50,10 +54,6 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should return a list of open cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getOpenCasesByUser.mockResolvedValue([MOCK_CASE]);
-
     const result = await getOpenCasesInteractor({
       applicationContext,
     });
