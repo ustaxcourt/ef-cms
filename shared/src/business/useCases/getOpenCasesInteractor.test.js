@@ -58,6 +58,14 @@ describe('getOpenCasesInteractor', () => {
       applicationContext,
     });
 
-    expect(result).toMatchObject([MOCK_CASE]);
+    expect(result).toMatchObject([
+      {
+        caseCaption: MOCK_CASE.caseCaption,
+        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
+        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+        leadCaseId: MOCK_CASE.leadCaseId,
+      },
+    ]);
   });
 });
