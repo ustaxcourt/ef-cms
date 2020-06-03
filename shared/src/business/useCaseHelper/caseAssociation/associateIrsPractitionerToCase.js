@@ -39,7 +39,7 @@ exports.associateIrsPractitionerToCase = async ({
     await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
       caseId: caseId,
-      userCase: userCaseEntity.toRawObject(),
+      userCase: userCaseEntity.validate().toRawObject(),
       userId: user.userId,
     });
 
