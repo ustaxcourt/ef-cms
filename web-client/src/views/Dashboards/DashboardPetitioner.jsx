@@ -25,7 +25,7 @@ export const DashboardPetitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
-              {/* TODO need to implement different views for diff combinations of no opne/closed cases */}
+              {/* TODO need to implement different views for different combinations of no open/closed cases */}
               {dashboardExternalHelper.showWhatToExpect && <WhatToExpect />}
               {dashboardExternalHelper.showCaseList && <CaseListPetitioner />}
             </div>

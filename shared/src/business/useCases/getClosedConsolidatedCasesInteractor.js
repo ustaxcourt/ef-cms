@@ -5,21 +5,21 @@ const { Case } = require('../entities/cases/Case');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {object} the open cases data
+ * @returns {object} the closed cases data
  */
 exports.getClosedConsolidatedCasesInteractor = async ({
   applicationContext,
 }) => {
-  let openCases;
+  let closedCases;
   let foundCases = [];
 
   const { userId } = await applicationContext.getCurrentUser();
 
-  openCases = await applicationContext
+  closedCases = await applicationContext
     .getPersistenceGateway()
     .getClosedCasesByUser({ applicationContext, userId });
 
-  foundCases = Case.validateRawCollection(openCases, {
+  foundCases = Case.validateRawCollection(closedCases, {
     applicationContext,
   });
 
