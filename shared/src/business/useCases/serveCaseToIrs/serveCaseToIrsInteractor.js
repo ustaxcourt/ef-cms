@@ -199,11 +199,20 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     receivedAt,
   } = caseEntity;
 
+  const address = {
+    ...caseEntity.contactPrimary,
+    countryName:
+      caseEntity.contactPrimary.countryType !== 'domestic'
+        ? caseEntity.contactPrimary.country
+        : '',
+  };
+
   const pdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
+        address,
         caseCaptionExtension,
         caseTitle: Case.getCaseTitle(caseCaption),
         docketNumberWithSuffix,
