@@ -9,6 +9,7 @@ const { UserCase } = require('../entities/UserCase');
  * @param {string} providers.userId id of the user to get cases for
  * @returns {Array<object>} the cases the user is associated with
  */
+// TODO - delete after implementing closed case endpoint
 exports.getConsolidatedCasesByUserInteractor = async ({
   applicationContext,
   userId,
