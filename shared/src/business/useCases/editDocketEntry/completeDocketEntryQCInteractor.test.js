@@ -111,9 +111,6 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(caseRecord);
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockReturnValue(testPdfDoc);
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );

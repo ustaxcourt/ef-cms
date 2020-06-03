@@ -10,6 +10,34 @@ const {
   generatePrintableDocketRecordTemplate,
 } = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
 
+const addressLabelCoverSheet = async ({ applicationContext, data }) => {
+  const addressLabelCoverSheetTemplate = reactTemplateGenerator({
+    componentName: 'AddressLabelCoverSheet',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: addressLabelCoverSheetTemplate },
+    options: {
+      overwriteMain: true,
+      title: '',
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const changeOfAddress = async ({ applicationContext, content }) => {
   const pdfContentHtml = await generateChangeOfAddressTemplate({
     applicationContext,
@@ -543,6 +571,7 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
 };
 
 module.exports = {
+  addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
   docketRecord,
