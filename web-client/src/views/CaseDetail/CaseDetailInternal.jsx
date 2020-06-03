@@ -4,6 +4,7 @@ import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
+import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
@@ -24,6 +25,8 @@ export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
+    caseDetailInternalTabs:
+      state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
@@ -33,8 +36,8 @@ export const CaseDetailInternal = connect(
   function CaseDetailInternal({
     baseUrl,
     caseDetail,
+    caseDetailInternalTabs,
     formattedCaseDetail,
-    primaryTab,
     showEditPetition,
     showModal,
     token,
@@ -50,7 +53,7 @@ export const CaseDetailInternal = connect(
         >
           <SuccessNotification />
           <ErrorNotification />
-          {primaryTab === 'docketRecord' && (
+          {caseDetailInternalTabs.docketRecord && (
             <>
               <div className="title">
                 <h1>Docket Record</h1>
@@ -58,7 +61,7 @@ export const CaseDetailInternal = connect(
               <DocketRecord />
             </>
           )}
-          {primaryTab === 'deadlines' && (
+          {caseDetailInternalTabs.deadlines && (
             <>
               <div className="title">
                 <h1>Deadlines</h1>
@@ -66,7 +69,7 @@ export const CaseDetailInternal = connect(
               <CaseDeadlinesInternal />
             </>
           )}
-          {primaryTab === 'inProgress' && (
+          {caseDetailInternalTabs.inProgress && (
             <Tabs
               bind="currentViewMetadata.caseDetail.inProgressTab"
               className="classic-horizontal-header3 tab-border"
@@ -90,10 +93,15 @@ export const CaseDetailInternal = connect(
               </Tab>
             </Tabs>
           )}
-          {primaryTab === 'caseInformation' && showEditPetition && (
+          {caseDetailInternalTabs.correspondence && (
+            <>
+              <Correspondence />
+            </>
+          )}
+          {caseDetailInternalTabs.caseInformation && showEditPetition && (
             <EditPetitionDetails />
           )}
-          {primaryTab === 'caseInformation' && !showEditPetition && (
+          {caseDetailInternalTabs.caseInformation && !showEditPetition && (
             <Tabs
               bind="currentViewMetadata.caseDetail.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
@@ -109,7 +117,7 @@ export const CaseDetailInternal = connect(
               </Tab>
             </Tabs>
           )}
-          {primaryTab === 'notes' && (
+          {caseDetailInternalTabs.notes && (
             <>
               <div className="title">
                 <h1>Notes</h1>

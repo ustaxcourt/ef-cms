@@ -2,7 +2,7 @@ import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
 import { wait } from '../helpers';
 
-export default test => {
+export const petitionsClerkCreateOrder = test => {
   return it('Petitions clerk adds Order to case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

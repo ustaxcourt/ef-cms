@@ -27,7 +27,6 @@ function PublicDocument(rawDocument) {
   this.receivedAt = rawDocument.receivedAt;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
-  this.status = rawDocument.status;
 }
 
 joiValidationDecorator(
@@ -57,7 +56,6 @@ joiValidationDecorator(
     receivedAt: joiStrictTimestamp.optional(),
     servedAt: joiStrictTimestamp.optional(),
     servedParties: joi.array().optional(),
-    status: joi.string().optional(),
   }),
   {},
 );

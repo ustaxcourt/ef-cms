@@ -8,6 +8,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
   const MOCK_CASE = {
     caseId: 'foo-bar-baz',
     docketNumber: '105-15',
+    documents: [{ documentId: '123', documentType: 'Petition' }],
     partyType: 'Petitioner',
   };
   beforeAll(() => {

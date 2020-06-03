@@ -34,6 +34,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   loginAs(test, 'petitioner');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
   petitionerFilesADocumentForCase(test, fakeFile);

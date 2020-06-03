@@ -20,11 +20,23 @@ describe('defaultAdvancedSearchFormAction', () => {
       caseSearchByName: {
         countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       },
+      opinionSearch: {},
       orderSearch: {},
       practitionerSearchByBarNumber: {},
       practitionerSearchByName: {},
       searchMode: 'byName',
     });
+  });
+
+  it('sets defaults on state.opinionDocumentTypes if state.advancedSearchForm is empty', async () => {
+    const result = await runAction(defaultAdvancedSearchFormAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+
+    expect(result.state.opinionDocumentTypes).toEqual([]);
   });
 
   it('does not overwrite values for form data if they are present on state.advancedSearchForm', async () => {
@@ -37,6 +49,7 @@ describe('defaultAdvancedSearchFormAction', () => {
             countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
             no: false,
           },
+          opinionSearch: {},
           orderSearch: { taco: 'tuesday' },
           practitionerSearchByBarNumber: { red: 'blue' },
           practitionerSearchByName: { one: 'two' },
@@ -51,6 +64,7 @@ describe('defaultAdvancedSearchFormAction', () => {
         countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         no: false,
       },
+      opinionSearch: {},
       orderSearch: { taco: 'tuesday' },
       practitionerSearchByBarNumber: { red: 'blue' },
       practitionerSearchByName: { one: 'two' },

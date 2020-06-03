@@ -89,6 +89,10 @@
       width: 305px;
     }
   }
+
+  &.usa-button--outline {
+    background-color: $color-white;
+  }
 }
 
 .button-switch-box {

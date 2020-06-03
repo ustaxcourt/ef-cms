@@ -1,7 +1,7 @@
 [
   {
     "completedAt": "2019-08-16T19:22:13.925Z",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "108-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
@@ -53,7 +53,6 @@
     "orderForFilingFee": false,
     "partyType": "Trust",
     "associatedJudge": "Judge Armen",
-    "irsSendDate": "2019-08-16T19:22:13.919Z",
     "caseType": "Worker Classification",
     "sortableDocketNumber": 19000108,
     "entityName": "Case",
@@ -81,7 +80,6 @@
     "filingType": "Other",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": false,
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
@@ -93,6 +91,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "docketNumber": "108-19",
+    "docketNumberWithSuffix": "108-19",
     "status": "Calendared"
   },
   {

@@ -42,14 +42,14 @@ export const CaseInformation = connect(
           id="date-received"
           label="Date received"
           names={{
-            day: 'dateReceivedDay',
-            month: 'dateReceivedMonth',
-            year: 'dateReceivedYear',
+            day: 'receivedAtDay',
+            month: 'receivedAtMonth',
+            year: 'receivedAtYear',
           }}
           values={{
-            day: form.dateReceivedDay,
-            month: form.dateReceivedMonth,
-            year: form.dateReceivedYear,
+            day: form.receivedAtDay,
+            month: form.receivedAtMonth,
+            year: form.receivedAtYear,
           }}
           onBlur={validatePetitionFromPaperSequence}
           onChange={updateFormValueSequence}

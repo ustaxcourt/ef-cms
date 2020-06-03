@@ -1,14 +1,12 @@
 const React = require('react');
 
-const ReportsHeader = ({ subtitle, title }) => {
+export const ReportsHeader = ({ subtitle, title }) => {
   return (
     <>
       <div id="reports-header">
-        <h1>{title}</h1>
-        <h2>{subtitle}</h2>
+        <h2>{title}</h2>
+        <h3>{subtitle}</h3>
       </div>
     </>
   );
 };
-
-export default ReportsHeader;

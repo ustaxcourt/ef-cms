@@ -8,7 +8,7 @@ describe('publicCaseDetailHeaderHelper', () => {
       caseDetail: {
         caseCaption: 'Test Caption',
         docketNumber: '123-45',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '123-45S',
         docketRecord: [],
       },
     };

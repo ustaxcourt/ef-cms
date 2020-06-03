@@ -13,10 +13,6 @@ resource "aws_cognito_user_pool" "pool" {
 
   sms_authentication_message = "{####}"
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   lambda_config {
     post_confirmation = "${aws_lambda_function.cognito_post_confirmation_lambda.arn}"
   }
@@ -126,10 +122,6 @@ resource "aws_cognito_user_pool" "irs_pool" {
   }
 
   sms_authentication_message = "{####}"
-
-  lifecycle {
-    prevent_destroy = true
-  }
 
   lambda_config {
     post_confirmation = "${aws_lambda_function.cognito_post_confirmation_lambda.arn}"

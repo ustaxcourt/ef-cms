@@ -84,7 +84,7 @@ const goToDashboard = [
 export const gotoDashboardSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: goToDashboard,
+    isLoggedIn: [goToDashboard],
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -1,6 +1,6 @@
 const React = require('react');
 
-const DocketHeader = ({
+export const DocketHeader = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
@@ -23,5 +23,3 @@ const DocketHeader = ({
     </>
   );
 };
-
-export default DocketHeader;

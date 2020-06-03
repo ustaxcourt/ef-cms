@@ -71,7 +71,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       caseCaption: 'Bob Jones2, Petitioner',
       createdAt: RECEIVED_DATE,
       docketNumber: '101-19',
-      docketNumberSuffix: null,
+      docketNumberWithSuffix: '101-19',
       docketRecord: [
         {
           description: 'Petition',
@@ -147,7 +147,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
-        docketNumberSuffix: null,
+        docketNumberWithSuffix: '101-19',
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
@@ -176,7 +176,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
-        docketNumberSuffix: null,
+        docketNumberWithSuffix: '101-19',
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',

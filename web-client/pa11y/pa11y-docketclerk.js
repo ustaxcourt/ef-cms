@@ -133,6 +133,19 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-opinion to be visible',
+      'click element #tab-opinion',
+      'wait for #opinion-search to be visible',
+      'set field #opinion-search to opinion',
+      'click element button#advanced-search-button',
+      'wait for table.search-results to be visible',
+    ],
+    notes: 'checks a11y of advanced opinion search',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result',
+  },
+  {
+    actions: [
       'wait for #tab-order to be visible',
       'click element #tab-order',
       'wait for #order-search to be visible',
@@ -143,6 +156,19 @@ module.exports = [
     notes: 'checks a11y of advanced order search of a sealed case',
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=sealed-case-order-search-result',
+  },
+  {
+    actions: [
+      'wait for #tab-order to be visible',
+      'click element #tab-opinion',
+      'wait for #opinion-search to be visible',
+      'set field #opinion-search to sunglasses',
+      'click element button#advanced-search-button',
+      'wait for table.search-results to be visible',
+    ],
+    notes: 'checks a11y of opinion search',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',

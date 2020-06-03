@@ -14,65 +14,84 @@ export const setFormForCaseAction = async ({
   store,
 }) => {
   const caseDetail = props.caseDetail || get(state.caseDetail);
-  const irsNoticeDate = applicationContext
+
+  const deconstructedIrsNoticeDate = applicationContext
     .getUtilities()
-    .prepareDateFromString(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
-  if (
-    irsNoticeDate &&
-    irsNoticeDate.toDate() instanceof Date &&
-    !isNaN(irsNoticeDate.toDate())
-  ) {
-    store.set(state.form.irsMonth, irsNoticeDate.format('M'));
-    store.set(state.form.irsDay, irsNoticeDate.format('D'));
-    store.set(state.form.irsYear, irsNoticeDate.format('YYYY'));
+    .deconstructDate(caseDetail.irsNoticeDate);
+
+  if (deconstructedIrsNoticeDate) {
+    store.set(state.form.irsMonth, deconstructedIrsNoticeDate.month);
+    store.set(state.form.irsDay, deconstructedIrsNoticeDate.day);
+    store.set(state.form.irsYear, deconstructedIrsNoticeDate.year);
   }
 
-  const receivedAt = applicationContext
+  const deconstructedReceivedAt = applicationContext
     .getUtilities()
-    .prepareDateFromString(caseDetail.receivedAt, 'YYYY/MM/DD');
-  if (
-    caseDetail.isPaper &&
-    receivedAt &&
-    receivedAt.toDate() instanceof Date &&
-    !isNaN(receivedAt.toDate())
-  ) {
-    store.set(state.form.receivedAtMonth, receivedAt.format('M'));
-    store.set(state.form.receivedAtDay, receivedAt.format('D'));
-    store.set(state.form.receivedAtYear, receivedAt.format('YYYY'));
+    .deconstructDate(caseDetail.receivedAt);
+
+  if (caseDetail.isPaper && deconstructedReceivedAt) {
+    store.set(state.form.receivedAtMonth, deconstructedReceivedAt.month);
+    store.set(state.form.receivedAtDay, deconstructedReceivedAt.day);
+    store.set(state.form.receivedAtYear, deconstructedReceivedAt.year);
   }
 
-  const petitionPaymentDate = applicationContext
+  const deconstructedPetitionPaymentDate = applicationContext
     .getUtilities()
-    .prepareDateFromString(caseDetail.petitionPaymentDate, 'YYYY/MM/DD');
-  if (
-    petitionPaymentDate &&
-    petitionPaymentDate.toDate() instanceof Date &&
-    !isNaN(petitionPaymentDate.toDate())
-  ) {
-    store.set(state.form.paymentDateMonth, petitionPaymentDate.format('M'));
-    store.set(state.form.paymentDateDay, petitionPaymentDate.format('D'));
-    store.set(state.form.paymentDateYear, petitionPaymentDate.format('YYYY'));
+    .deconstructDate(caseDetail.petitionPaymentDate);
+
+  if (deconstructedPetitionPaymentDate) {
+    store.set(
+      state.form.paymentDateMonth,
+      deconstructedPetitionPaymentDate.month,
+    );
+    store.set(state.form.paymentDateDay, deconstructedPetitionPaymentDate.day);
+    store.set(
+      state.form.paymentDateYear,
+      deconstructedPetitionPaymentDate.year,
+    );
   }
 
-  const petitionPaymentWaivedDate = applicationContext
+  const deconstructedPetitionPaymentWaivedDate = applicationContext
     .getUtilities()
-    .prepareDateFromString(caseDetail.petitionPaymentWaivedDate, 'YYYY/MM/DD');
-  if (
-    petitionPaymentWaivedDate &&
-    petitionPaymentWaivedDate.toDate() instanceof Date &&
-    !isNaN(petitionPaymentWaivedDate.toDate())
-  ) {
+    .deconstructDate(caseDetail.petitionPaymentWaivedDate);
+
+  if (deconstructedPetitionPaymentWaivedDate) {
     store.set(
       state.form.paymentDateWaivedMonth,
-      petitionPaymentWaivedDate.format('M'),
+      deconstructedPetitionPaymentWaivedDate.month,
     );
     store.set(
       state.form.paymentDateWaivedDay,
-      petitionPaymentWaivedDate.format('D'),
+      deconstructedPetitionPaymentWaivedDate.day,
     );
     store.set(
       state.form.paymentDateWaivedYear,
-      petitionPaymentWaivedDate.format('YYYY'),
+      deconstructedPetitionPaymentWaivedDate.year,
     );
+  }
+
+  if (caseDetail.statistics) {
+    caseDetail.statistics.forEach((statistic, index) => {
+      if (statistic.lastDateOfPeriod) {
+        const deconstructedLastDateOfPeriod = applicationContext
+          .getUtilities()
+          .deconstructDate(statistic.lastDateOfPeriod);
+
+        if (deconstructedLastDateOfPeriod) {
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodMonth,
+            deconstructedLastDateOfPeriod.month,
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodDay,
+            deconstructedLastDateOfPeriod.day,
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodYear,
+            deconstructedLastDateOfPeriod.year,
+          );
+        }
+      }
+    });
   }
 };

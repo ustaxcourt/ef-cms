@@ -9,8 +9,8 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
-import petitionsClerkManuallyAddsCaseToCalendaredTrialSession from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const test = setupTest();
 
@@ -43,6 +43,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   for (let index = 0; index <= 2; index++) {
     it(`Create case ${index}`, async () => {
       let caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       test.createdCases.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
     });

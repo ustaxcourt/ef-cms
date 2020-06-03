@@ -1,6 +1,6 @@
 const React = require('react');
-const StandingPretrialOrder = require('./StandingPretrialOrder.jsx').default;
 const { mount, shallow } = require('enzyme');
+const { StandingPretrialOrder } = require('./StandingPretrialOrder.jsx');
 
 describe('StandingPretrialOrder', () => {
   let options;

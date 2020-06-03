@@ -1,20 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export const CaseDifferenceExplained = () => {
-  useEffect(() => {
-    const element = document.querySelector('.which-procedure-header');
-    if (element) element.scrollIntoView();
-  });
-
   return (
     <div className="subsection case-difference">
       <h2 className="which-procedure-header">
         Which Case Procedure Should I Choose?
       </h2>
-      <h3 className="margin-bottom-4">
-        Do I Qualify for a Small Tax Case Procedure?
-      </h3>
+      <h3 className="margin-bottom-4">Do I Qualify for a Small Tax Case?</h3>
       <p>
         For specific case types, the amount of the tax owed will affect whether
         or not you qualify to select a small tax case procedure. And if you do
@@ -27,7 +20,7 @@ export const CaseDifferenceExplained = () => {
         <thead>
           <tr>
             <th>Case Type</th>
-            <th>Dollar Limit to Qualify for Small Tax Case Procedure</th>
+            <th>Dollar Limit to Qualify for Small Tax Case</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +64,7 @@ export const CaseDifferenceExplained = () => {
           ].map(caseType => (
             <tr key={caseType}>
               <td>{caseType}</td>
-              <td>Not eligible for small tax case procedure</td>
+              <td>Not eligible for Small tax case type</td>
             </tr>
           ))}
         </tbody>

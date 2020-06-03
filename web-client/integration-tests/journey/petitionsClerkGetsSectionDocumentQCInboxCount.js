@@ -4,7 +4,10 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
-export default (test, adjustExpectedCountBy = 0) => {
+export const petitionsClerkGetsSectionDocumentQCInboxCount = (
+  test,
+  adjustExpectedCountBy = 0,
+) => {
   return it('Petitions clerk gets Section Document QC Inbox case count', async () => {
     const helper = await runCompute(workQueueHelper, {
       state: test.getState(),

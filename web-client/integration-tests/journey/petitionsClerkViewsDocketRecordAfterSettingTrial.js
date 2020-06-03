@@ -1,4 +1,7 @@
-export default (test, overrides = {}) => {
+export const petitionsClerkViewsDocketRecordAfterSettingTrial = (
+  test,
+  overrides = {},
+) => {
   return it('Petitions clerk views docket record for a case after calendaring', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

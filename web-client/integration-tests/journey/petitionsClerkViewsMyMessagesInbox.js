@@ -4,7 +4,7 @@ import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/
 
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
-export default (test, storeCount) => {
+export const petitionsClerkViewsMyMessagesInbox = (test, storeCount) => {
   return it('Petitions clerk views My Messages Inbox', async () => {
     await test.runSequence('navigateToPathSequence', {
       path: '/messages/my/inbox',

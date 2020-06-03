@@ -1,6 +1,6 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
-import petitionsClerkAdvancedSearchForCase from './journey/petitionsClerkAdvancedSearchForCase';
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkAdvancedSearchForCase } from './journey/petitionsClerkAdvancedSearchForCase';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const test = setupTest();
 
