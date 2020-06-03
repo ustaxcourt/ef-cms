@@ -1,23 +1,25 @@
-# Service email
+[Return to Directory](./README.md)
+
+## Service email
 * Petitioners and practitioners are electronically served to the email they used during their CMS account creation
 
-# Service preferences / indicator
+## Service preferences / indicator
 * each party on a case has a service preference, including counsel: electronic, paper, or none
 
-#### Service indicator defaults
+### Service indicator defaults
 * When a Petitioner starts a case in paper, their service indicator should default to Paper
 * When a Petitioner starts a case electronically, their service indicator should default to Electronic.
 * When a Practitioner starts a case electronically, their service indicator should default to Electronic and the Taxpayer's service indicator should default to None.
 * When a Practitioner starts a case in paper, their service indicator should default to Electronic (if they have an account) and Paper (if not) and the Taxpayer's service indicator should default to None.
 * The service indicator for IRS attorneys should always default to Electronic.
 
-#### Editing service indicators 
+### Editing service indicators
 * Docket clerks are able to edit service indicators for parties
 * Party service can be modified from electronic to paper, electronic to none, paper to none, or none to paper
 * Party service cannot be modified from paper or none to electronic
 * User will receive error message when trying to modify service to electronic from another method  
 
-# Service of documents
+## Service of documents
 
 ### Externally Filed documents
 * documents filed by a party should be served on the opposing party

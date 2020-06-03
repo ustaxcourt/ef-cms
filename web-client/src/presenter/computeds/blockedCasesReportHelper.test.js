@@ -46,6 +46,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Brett Osborne, Petitioner',
             caseId: '1',
             docketNumber: '105-19',
+            docketNumberWithSuffix: '105-19',
           },
           {
             automaticBlocked: true,
@@ -55,6 +56,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
             caseId: '2',
             docketNumber: '102-19',
+            docketNumberWithSuffix: '102-19',
           },
           {
             automaticBlocked: true,
@@ -66,6 +68,7 @@ describe('blockedCasesReportHelper', () => {
             caseId: '3',
             docketNumber: '103-18',
             docketNumberSuffix: 'S',
+            docketNumberWithSuffix: '103-18S',
           },
           {
             automaticBlocked: true,
@@ -73,6 +76,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Bob Barker, Petitioner',
             caseId: '4',
             docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
           },
         ],
       },

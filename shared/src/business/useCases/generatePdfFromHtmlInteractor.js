@@ -1,6 +1,5 @@
 /**
  * generatePdfFromHtmlInteractor
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -53,9 +52,9 @@ exports.generatePdfFromHtmlInteractor = async ({
 
     result = await page.pdf({
       displayHeaderFooter,
-      footerTemplate: footerTemplate,
+      footerTemplate,
       format: 'Letter',
-      headerTemplate: headerTemplate,
+      headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',

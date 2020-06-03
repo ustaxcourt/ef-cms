@@ -176,6 +176,25 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(true);
   });
 
+  it('should set showRequestAccessToCaseButton to false when the current page is FilePetitionSuccess', () => {
+    const user = {
+      role: User.ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'FilePetitionSuccess',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+    expect(result.showRequestAccessToCaseButton).toEqual(false);
+  });
+
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is not owned by user and the case is sealed', () => {
     const user = {
       role: User.ROLES.privatePractitioner,

@@ -52,29 +52,6 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  it('formats the irs date', () => {
-    const result = runCompute(formattedCaseDetail, {
-      state: {
-        caseDetail: {
-          caseCaption: 'Brett Osborne, Petitioner',
-          docketRecord: [],
-          documents: [
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              documentType: 'Petition',
-              status: 'served',
-            },
-          ],
-          irsSendDate: '2018-11-21T20:49:28.192Z',
-          petitioners: [{ name: 'bob' }],
-        },
-        form: {},
-      },
-    });
-    expect(result.irsDateFormatted).toContain('11/21/18');
-    expect(result.documents[0].isPetition).toEqual(true);
-  });
-
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
@@ -85,7 +62,6 @@ describe('formattedCaseDetail', () => {
           filingDate: '2019-02-28T21:14:39.488Z',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -119,7 +95,6 @@ describe('formattedCaseDetail', () => {
           status: 'served',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
@@ -258,7 +233,6 @@ describe('formattedCaseDetail', () => {
           scenario: 'Nonstandard C',
         },
       ],
-      hasIrsNotice: false,
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner' }],
@@ -506,7 +480,7 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editLink: '',
+        editLink: '/review',
         showDocumentEditLink: true,
       },
       {
@@ -520,6 +494,69 @@ describe('formattedCaseDetail', () => {
       {
         editLink: '',
         showDocumentEditLink: true,
+      },
+    ]);
+  });
+
+  it("should return correct editLink for a case that is paper and hasn't been served", () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      docketRecord: [
+        {
+          description: 'Petition',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
+          filingDate: '2019-04-19T15:29:13.120Z',
+        },
+        {
+          description: 'Request for Place of Trial at Boise, Idaho',
+          documentId: '934248df-9cd2-412f-82ee-b4dce2a2fc31',
+          filingDate: '2019-04-19T15:29:13.120Z',
+        },
+      ],
+      documents: [
+        {
+          attachments: false,
+          certificateOfService: false,
+          createdAt: '2019-04-19T15:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
+          documentTitle: 'Petition',
+          documentType: 'Petition',
+          eventCode: 'P',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          createdAt: '2019-04-19T15:29:13.120Z',
+          documentId: '934248df-9cd2-412f-82ee-b4dce2a2fc31',
+          documentTitle: 'Request for Place of Trial at Boise, Idaho',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+        },
+      ],
+      isPaper: true,
+      status: Case.STATUS_TYPES.new,
+    };
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        description: 'Petition',
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentEditLink: false,
+      },
+      {
+        description: 'Request for Place of Trial at Boise, Idaho',
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentEditLink: false,
       },
     ]);
   });
@@ -583,7 +620,6 @@ describe('formattedCaseDetail', () => {
             status: 'served',
           },
         ],
-        hasIrsNotice: false,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };
@@ -982,7 +1018,6 @@ describe('formattedCaseDetail', () => {
             documentType: 'Stipulated Decision',
           },
         ],
-        hasIrsNotice: false,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };

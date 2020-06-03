@@ -153,6 +153,20 @@ export const CaseDetailHeaderMenu = connect(
                     </Button>
                   </li>
                 )}
+                {caseDetailHeaderHelper.showAddCorrespondenceButton && (
+                  <li className="usa-nav__submenu-item">
+                    <Button
+                      link
+                      className="fa-icon-blue"
+                      href={`/case-detail/${caseDetail.docketNumber}/upload-correspondence`}
+                      icon="envelope-open"
+                      iconColor="blue"
+                      id="menu-button-upload-pdf"
+                    >
+                      Add Correspondence
+                    </Button>
+                  </li>
+                )}
                 {caseDetailHeaderHelper.showEditCaseButton && (
                   <li className="usa-nav__submenu-item">
                     <Button

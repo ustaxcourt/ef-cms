@@ -1,16 +1,14 @@
 import { menuHelper } from './computeds/menuHelper';
 
-import {
-  advancedOrderSearchHelper,
-  advancedSearchHelper,
-} from './computeds/advancedSearchHelper';
+import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
+import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 
 const helpers = {
-  advancedOrderSearchHelper,
+  advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   loadingHelper,

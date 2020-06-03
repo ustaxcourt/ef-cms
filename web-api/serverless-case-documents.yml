@@ -109,10 +109,11 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
-    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_DOCUMENT_SERVED_TEMPLATE: document_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
+    IRS_SUPERUSER_EMAIL: ${opt:irsSuperuserEmail, self:custom.vars.irsSuperuserEmail}
 
 package:
   exclude:
@@ -289,18 +290,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  saveIntermediateDocketEntry:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
-    events:
-      - http:
-          path: /{caseId}/docket-entry-in-progress
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   completeDocketEntryQC:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
     layers:
@@ -394,6 +383,42 @@ functions:
       - http:
           path: /order-search
           method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  opinionAdvancedSearch:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.opinionAdvancedSearchLambda
+    events:
+      - http:
+          path: /opinion-search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCorrespondenceDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/correspondence
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocument
+    events:
+      - http:
+          path: /{caseId}/correspondence/{documentIdToEdit}
+          method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

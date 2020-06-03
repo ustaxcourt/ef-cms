@@ -119,7 +119,7 @@ export const SignStipDecision = connect(
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        var renderContext = {
+        const renderContext = {
           canvasContext: context,
           viewport: viewport,
         };
