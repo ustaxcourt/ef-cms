@@ -8,13 +8,12 @@ const { Case } = require('../entities/cases/Case');
  * @returns {object} the open cases data
  */
 exports.getOpenCasesInteractor = async ({ applicationContext }) => {
-  let openCases;
   let foundCases = [];
   let userCaseIdsMap = {};
 
   const { userId } = await applicationContext.getCurrentUser();
 
-  openCases = await applicationContext
+  const openCases = await applicationContext
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
