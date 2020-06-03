@@ -12,7 +12,7 @@ describe('validateCreateCaseMessageInteractor', () => {
       message: {
         message: 'yup',
         subject: 'hi',
-        toSection: 'yup',
+        toSection: 'petitions',
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });
@@ -25,7 +25,7 @@ describe('validateCreateCaseMessageInteractor', () => {
       applicationContext,
       message: {
         message: 'yup',
-        toSection: 'yup',
+        toSection: 'petitions',
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });
