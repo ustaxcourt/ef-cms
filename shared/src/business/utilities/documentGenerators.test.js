@@ -258,7 +258,7 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfDocketChange', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates a Notice of Docket Change document', async () => {
       const pdf = await noticeOfDocketChange({
         applicationContext,
         data: {
@@ -288,10 +288,18 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfReceiptOfPetition', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates a Notice of Receipt of Petition document', async () => {
       const pdf = await noticeOfReceiptOfPetition({
         applicationContext,
         data: {
+          address: {
+            address1: '123 Some St.',
+            city: 'Somecity',
+            countryName: '',
+            name: 'Test Petitioner',
+            postalCode: '80008',
+            state: 'ZZ',
+          },
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',

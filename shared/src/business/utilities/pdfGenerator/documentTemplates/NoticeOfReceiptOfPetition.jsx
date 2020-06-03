@@ -6,6 +6,7 @@ const {
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const NoticeOfReceiptOfPetition = ({
+  address,
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
@@ -77,6 +78,19 @@ export const NoticeOfReceiptOfPetition = ({
         <br />
         Clerk of the Court
       </p>
+
+      <div id="address-label-cover-sheet">
+        <div className="address">
+          <div>{address.name}</div>
+          <div>{address.address1}</div>
+          {address.address2 && <div>{address.address2}</div>}
+          {address.address3 && <div>{address.address3}</div>}
+          <div>
+            {address.city}, {address.state} {address.postalCode}
+          </div>
+          {!address.address3 && <div>{address.countryName}</div>}
+        </div>
+      </div>
     </>
   );
 };
