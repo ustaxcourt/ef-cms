@@ -20,12 +20,22 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     associatedJudge: 
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     caseId: 
       type: "string"
       flags: 
@@ -49,6 +59,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     completedAt: 
       type: "date"
       flags: 
@@ -60,6 +75,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     completedByUserId: 
@@ -79,6 +99,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
     createdAt: 
@@ -92,11 +117,24 @@
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^(\\d{3,5}-\\d{2})$/"
     docketNumberSuffix: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
       allow: 
+        - "W"
+        - "P"
+        - "X"
+        - "R"
+        - "SL"
+        - "L"
+        - "S"
         - null
     document: 
       type: "object"
@@ -143,15 +181,122 @@
     section: 
       type: "string"
       flags: 
+        only: true
         presence: "required"
+      allow: 
+        - "adc"
+        - "admissions"
+        - "chambers"
+        - "clerkofcourt"
+        - "docket"
+        - "petitions"
+        - "trialClerks"
+        - "armensChambers"
+        - "ashfordsChambers"
+        - "buchsChambers"
+        - "carluzzosChambers"
+        - "cohensChambers"
+        - "colvinsChambers"
+        - "copelandsChambers"
+        - "foleysChambers"
+        - "galesChambers"
+        - "gerbersChambers"
+        - "goekesChambers"
+        - "gustafsonsChambers"
+        - "guysChambers"
+        - "halpernsChambers"
+        - "holmesChambers"
+        - "jacobsChambers"
+        - "kerrigansChambers"
+        - "laubersChambers"
+        - "leydensChambers"
+        - "marvelsChambers"
+        - "morrisonsChambers"
+        - "negasChambers"
+        - "panuthosChambers"
+        - "parisChambers"
+        - "pughsChambers"
+        - "ruwesChambers"
+        - "thorntonsChambers"
+        - "urdasChambers"
+        - "vasquezsChambers"
+        - "wellsChambers"
+        - "admin"
+        - "admissionsclerk"
+        - "docketclerk"
+        - "floater"
+        - "inactivePractitioner"
+        - "irsPractitioner"
+        - "irsSuperuser"
+        - "judge"
+        - "petitioner"
+        - "petitionsclerk"
+        - "privatePractitioner"
+        - "trialclerk"
     sentBy: 
       type: "string"
       flags: 
         presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     sentBySection: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "adc"
+        - "admissions"
+        - "chambers"
+        - "clerkofcourt"
+        - "docket"
+        - "petitions"
+        - "trialClerks"
+        - "armensChambers"
+        - "ashfordsChambers"
+        - "buchsChambers"
+        - "carluzzosChambers"
+        - "cohensChambers"
+        - "colvinsChambers"
+        - "copelandsChambers"
+        - "foleysChambers"
+        - "galesChambers"
+        - "gerbersChambers"
+        - "goekesChambers"
+        - "gustafsonsChambers"
+        - "guysChambers"
+        - "halpernsChambers"
+        - "holmesChambers"
+        - "jacobsChambers"
+        - "kerrigansChambers"
+        - "laubersChambers"
+        - "leydensChambers"
+        - "marvelsChambers"
+        - "morrisonsChambers"
+        - "negasChambers"
+        - "panuthosChambers"
+        - "parisChambers"
+        - "pughsChambers"
+        - "ruwesChambers"
+        - "thorntonsChambers"
+        - "urdasChambers"
+        - "vasquezsChambers"
+        - "wellsChambers"
+        - "admin"
+        - "admissionsclerk"
+        - "docketclerk"
+        - "floater"
+        - "inactivePractitioner"
+        - "irsPractitioner"
+        - "irsSuperuser"
+        - "judge"
+        - "petitioner"
+        - "petitionsclerk"
+        - "privatePractitioner"
+        - "trialclerk"
     sentByUserId: 
       type: "string"
       flags: 
