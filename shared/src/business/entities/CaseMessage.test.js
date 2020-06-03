@@ -16,6 +16,9 @@ describe('CaseMessage', () => {
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'hello world',
           subject: 'hey!',
+          to: 'bob',
+          toSection: 'petitions',
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
       );
