@@ -1,6 +1,8 @@
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { Case } = require('./cases/Case');
 
 UserCase.validationName = 'UserCase';
 
@@ -20,6 +22,16 @@ function UserCase(rawUserCase) {
   this.leadCaseId = rawUserCase.leadCaseId;
 }
 
-joiValidationDecorator(UserCase, {}, null);
+joiValidationDecorator(
+  UserCase,
+  joi.object().keys({
+    caseCaption: Case.validationRules.caseCaption,
+    caseId: Case.validationRules.caseId,
+    docketNumber: Case.validationRules.docketNumber,
+    docketNumberWithSuffix: Case.validationRules.docketNumberWithSuffix,
+    leadCaseId: Case.validationRules.leadCaseId,
+  }),
+  Case.VALIDATION_ERROR_MESSAGES,
+);
 
 exports.UserCase = UserCase;
