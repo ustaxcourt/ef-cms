@@ -29,11 +29,6 @@ export const getConsolidatedCasesByUserAction = async ({
       .getClosedConsolidatedCasesInteractor({
         applicationContext,
       });
-    caseList = await applicationContext
-      .getUseCases()
-      .getClosedConsolidatedCasesInteractor({
-        applicationContext,
-      });
   }
   caseList = orderBy(caseList, 'createdAt', 'desc');
   return { caseList };
