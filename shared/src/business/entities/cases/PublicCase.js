@@ -57,7 +57,7 @@ const publicCaseSchema = {
       version: ['uuidv4'],
     })
     .optional(),
-  createdAt: joiStrictTimestamp.optional(),
+  createdAt: joiStrictTimestamp.required(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
   isSealed: joi.boolean(),
