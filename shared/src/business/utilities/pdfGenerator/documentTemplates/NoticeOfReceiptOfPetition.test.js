@@ -57,7 +57,7 @@ describe('NoticeOfReceiptOfPetition', () => {
   });
 
   it('renders the the petitioner mailing address', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <NoticeOfReceiptOfPetition
         address={address}
         caseCaptionExtension={caseCaptionExtension}
