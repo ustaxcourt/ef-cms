@@ -1,12 +1,12 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearFormAction } from '../actions/clearFormAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const openCreateCaseMessageModalSequence = showProgressSequenceDecorator(
   [
-    clearFormAction,
-    clearAlertsAction,
-    setShowModalFactoryAction('CreateCaseModal'),
+    clearModalStateAction,
+    setCreateMessageModalDialogModalStateAction,
+    setShowModalFactoryAction('CreateCaseMessageModal'),
   ],
 );

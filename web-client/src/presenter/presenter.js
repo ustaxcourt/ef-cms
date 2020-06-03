@@ -54,6 +54,7 @@ import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
+import { createCaseMessageSequence } from './sequences/createCaseMessageSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
@@ -318,6 +319,7 @@ import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
+import { updateCreateCaseMessageValueInModalSequence } from './sequences/updateCreateCaseMessageValueInModalSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
@@ -459,6 +461,7 @@ export const presenter = {
     copyPrimaryContactSequence,
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
+    createCaseMessageSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
@@ -721,6 +724,7 @@ export const presenter = {
     updateCasePartyTypeSequence,
     updateCompleteFormValueSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
+    updateCreateCaseMessageValueInModalSequence,
     updateCreateOrderModalFormValueSequence,
     updateDocketEntryFormValueSequence,
     updateDocketEntryMetaDocumentFormValueSequence,
