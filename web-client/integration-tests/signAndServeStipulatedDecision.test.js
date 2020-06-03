@@ -132,7 +132,7 @@ describe('a user signs and serves a stipulated decision', () => {
     const signedDocument = caseDetail.documents.find(
       d => d.documentId === signedDocumentId,
     );
-    expect(signedDocument.status).toEqual('served');
+    expect(signedDocument.servedAt).toBeDefined();
     expect(caseDetail.status).toEqual(Case.STATUS_TYPES.closed);
   });
 });

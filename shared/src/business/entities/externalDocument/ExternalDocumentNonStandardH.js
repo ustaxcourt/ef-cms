@@ -43,9 +43,6 @@ ExternalDocumentNonStandardH.schema = {
 joiValidationDecorator(
   ExternalDocumentNonStandardH,
   ExternalDocumentNonStandardH.schema,
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES,
 );
 

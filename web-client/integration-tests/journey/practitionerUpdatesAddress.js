@@ -1,4 +1,4 @@
-export default test => {
+export const practitionerUpdatesAddress = test => {
   return it('practitioner updates address', async () => {
     await test.runSequence('gotoUserContactEditSequence');
 

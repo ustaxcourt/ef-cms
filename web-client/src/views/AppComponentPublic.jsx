@@ -31,7 +31,7 @@ export const AppComponentPublic = connect(
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
       if (header) header.focus();
-      return false;
+      return;
     };
 
     useEffect(() => {

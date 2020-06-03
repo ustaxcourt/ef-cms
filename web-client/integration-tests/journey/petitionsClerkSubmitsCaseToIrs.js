@@ -5,6 +5,10 @@ const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk submits case to IRS', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );

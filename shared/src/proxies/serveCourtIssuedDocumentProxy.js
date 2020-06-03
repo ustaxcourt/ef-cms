@@ -18,9 +18,5 @@ exports.serveCourtIssuedDocumentInteractor = ({
     applicationContext,
     body: {},
     endpoint: `/case-documents/${caseId}/${documentId}/serve-court-issued`,
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

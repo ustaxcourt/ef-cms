@@ -42,11 +42,13 @@ import {
   faDollarSign,
   faEdit as faEditSolid,
   faEnvelope as faEnvelopeSolid,
+  faExclamation,
   faExclamationCircle,
   faExclamationTriangle,
   faFile,
   faFileAlt as faFileAltSolid,
   faFilePdf,
+  faFingerprint,
   faFlag,
   faGavel,
   faHandPaper,
@@ -105,6 +107,7 @@ const app = {
       .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
+    presenter.state.baseUrl = applicationContext.getBaseUrl();
 
     const user =
       (await applicationContext
@@ -146,7 +149,9 @@ const app = {
       faCalendarCheck,
       faCalendarPlus,
       faCaretDown,
+      faFingerprint,
       faExclamationCircle,
+      faExclamation,
       faCaretLeft,
       faCaretRight,
       faCaretUp,

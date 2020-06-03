@@ -1,5 +1,7 @@
+const { CaseInternal } = require('../entities/cases/CaseInternal');
+
 /**
- * validatePetition
+ * validatePetitionFromPaper
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,8 +12,8 @@ exports.validatePetitionFromPaperInteractor = ({
   applicationContext,
   petition,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().CaseInternal)(
-    petition,
-  ).getFormattedValidationErrors();
+  const errors = new CaseInternal(petition, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   return errors || null;
 };

@@ -31,6 +31,7 @@ export const setFormForCaseAction = async ({
     .getUtilities()
     .prepareDateFromString(caseDetail.receivedAt, 'YYYY/MM/DD');
   if (
+    caseDetail.isPaper &&
     receivedAt &&
     receivedAt.toDate() instanceof Date &&
     !isNaN(receivedAt.toDate())

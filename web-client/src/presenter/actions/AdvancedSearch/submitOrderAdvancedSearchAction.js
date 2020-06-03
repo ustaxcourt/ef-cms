@@ -12,7 +12,7 @@ export const submitOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
-  const searchParams = get(state.advancedSearchForm.orderSearch.orderKeyword);
+  const searchParams = get(state.advancedSearchForm.orderSearch);
 
   const searchResults = await applicationContext
     .getUseCases()

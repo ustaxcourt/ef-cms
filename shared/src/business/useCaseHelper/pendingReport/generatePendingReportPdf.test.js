@@ -214,7 +214,7 @@ describe('generatePendingReportPdf', () => {
         environment: {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCaseTitle: Case.getCaseTitle,
         getChromiumBrowser: () => {
           throw new Error('bad!');
         },
@@ -257,7 +257,7 @@ describe('generatePendingReportPdf', () => {
         environment: {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
-        getCaseCaptionNames: Case.getCaseCaptionNames,
+        getCaseTitle: Case.getCaseTitle,
         getChromiumBrowser: () => chromiumBrowserMock,
         getCurrentUser: () => {
           return { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
@@ -299,7 +299,7 @@ describe('generatePendingReportPdf', () => {
           environment: {
             tempDocumentsBucketName: 'MockDocumentBucketName',
           },
-          getCaseCaptionNames: Case.getCaseCaptionNames,
+          getCaseTitle: Case.getCaseTitle,
           getChromiumBrowser: () => {
             throw new Error('bad!');
           },

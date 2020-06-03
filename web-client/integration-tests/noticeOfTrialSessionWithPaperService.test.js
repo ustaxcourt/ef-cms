@@ -1,14 +1,11 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 import petitionsClerkCompletesAndSetsTrialSession from './journey/petitionsClerkCompletesAndSetsTrialSession';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -46,16 +43,17 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
 
   test.casesReadyForTrial = [];
 
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
-      await uploadPetition(test, caseOverrides);
+      const caseDetail = await uploadPetition(test, caseOverrides);
+      createdCaseIds.push(caseDetail.caseId);
+      createdDocketNumbers.push(caseDetail.docketNumber);
+      test.docketNumber = caseDetail.docketNumber;
     });
-    petitionerViewsDashboard(test);
-    captureCreatedCase(test, createdCases, createdDocketNumbers);
 
     loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);
@@ -75,7 +73,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
 
   loginAs(test, 'petitionsclerk');
   markAllCasesAsQCed(test, () => {
-    return [createdCases[0], createdCases[1]];
+    return [createdCaseIds[0], createdCaseIds[1]];
   });
   petitionsClerkCompletesAndSetsTrialSession(test, overrides);
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {

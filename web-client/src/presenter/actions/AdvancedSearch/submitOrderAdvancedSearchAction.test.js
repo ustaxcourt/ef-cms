@@ -20,11 +20,6 @@ describe('submitOrderAdvancedSearchAction', () => {
       },
     });
 
-    console.log(
-      applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
-        .calls[0][0],
-    );
-
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock.calls
         .length,
@@ -33,7 +28,9 @@ describe('submitOrderAdvancedSearchAction', () => {
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      searchParams: 'a',
+      searchParams: {
+        orderKeyword: 'a',
+      },
     });
   });
 });

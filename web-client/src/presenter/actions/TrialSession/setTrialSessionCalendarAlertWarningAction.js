@@ -6,8 +6,7 @@
 export const setTrialSessionCalendarAlertWarningAction = () => {
   return {
     alertWarning: {
-      message:
-        'These cases have parties receiving paper service. Print and mail all paper service documents below.',
+      message: 'Print and mail all paper service documents now.',
     },
   };
 };

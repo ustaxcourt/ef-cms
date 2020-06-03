@@ -21,9 +21,7 @@ describe('getDocketEntryAlertSuccessAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message:
-          'You can view the document by clicking on the docket entry below.',
-        title: 'Your document has been saved to the entry.',
+        message: 'Entry updated.',
       },
     });
   });

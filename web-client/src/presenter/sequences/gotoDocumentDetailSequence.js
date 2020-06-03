@@ -7,7 +7,6 @@ import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -35,7 +34,6 @@ export const gotoDocumentDetailSequence = [
   setCaseOnFormAction,
   setFormForCaseAction,
   setDefaultDocumentDetailTabAction,
-  setBaseUrlAction,
   setMessageIdAndCurrentTabFromUrlAction,
   getInternalUsersAction,
   setInternalUsersAction,

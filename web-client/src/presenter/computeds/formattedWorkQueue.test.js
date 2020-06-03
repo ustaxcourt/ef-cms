@@ -730,9 +730,9 @@ describe('formatted work queue computed', () => {
     const baseWorkItem = {
       assigneeId: null,
       assigneeName: null,
+      caseCaption: 'Ori Petersen',
       caseId: 'fa73b4ed-4b3d-43b3-b704-8b2af5bdecc1',
       caseStatus: 'New',
-      caseTitle: 'Ori Petersen',
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
       docketNumberSuffix: 'S',

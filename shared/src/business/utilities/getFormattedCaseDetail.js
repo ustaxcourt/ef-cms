@@ -1,7 +1,7 @@
 const {
   calculateISODate,
+  calendarDatesCompared,
   createISODateString,
-  dateStringsCompared,
 } = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
@@ -10,6 +10,9 @@ const { Document } = require('../entities/Document');
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
+
+const formatDocketNumberWithSuffix = caseDetail =>
+  `${caseDetail.docketNumber}${caseDetail.docketNumberSuffix || ''}`;
 
 const formatDocument = (applicationContext, document) => {
   const result = cloneDeep(document);
@@ -290,9 +293,7 @@ const formatCase = (applicationContext, caseDetail) => {
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix || ''
-  }`;
+  result.docketNumberWithSuffix = formatDocketNumberWithSuffix(caseDetail);
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? applicationContext
@@ -308,8 +309,12 @@ const formatCase = (applicationContext, caseDetail) => {
       result.hasVerifiedIrsNotice === undefined) &&
       result.hasIrsNotice);
 
-  result.caseName = applicationContext.getCaseCaptionNames(
+  result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
+  );
+
+  result.showCaseTitleForPrimary = !(
+    caseDetail.contactSecondary && caseDetail.contactSecondary.name
   );
 
   result.formattedPreferredTrialCity =
@@ -403,7 +408,7 @@ const formatCase = (applicationContext, caseDetail) => {
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) => {
-    const compared = dateStringsCompared(
+    const compared = calendarDatesCompared(
       a.record.filingDate,
       b.record.filingDate,
     );
@@ -461,6 +466,7 @@ module.exports = {
   documentMeetsAgeRequirements,
   formatCase,
   formatCaseDeadlines,
+  formatDocketNumberWithSuffix,
   formatDocketRecord,
   formatDocketRecordWithDocument,
   formatDocument,

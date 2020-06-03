@@ -15,7 +15,7 @@ resource "aws_lambda_permission" "allow_trigger" {
 resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   filename      = "${data.archive_file.zip_triggers.output_path}"
   function_name = "cognito_post_confirmation_lambda_${var.environment}"
-  role          = "${var.post_confirmation_role_arn}"
+  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_confirmation_lambda_role_${var.environment}"
   handler       = "index.handler"
   source_code_hash = "${data.archive_file.zip_triggers.output_base64sha256}"
   

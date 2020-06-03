@@ -9,7 +9,10 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams({}, {});
 
     expect(result).toMatchObject({
-      commonQuery: [],
+      commonQuery: [
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
+      ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
     });
@@ -24,7 +27,10 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams(queryParams);
 
     expect(result).toMatchObject({
-      commonQuery: [],
+      commonQuery: [
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
+      ],
       exactMatchesQuery: [
         {
           bool: {
@@ -86,24 +92,13 @@ describe('aggregateCommonQueryParams', () => {
       ],
       nonExactMatchesQuery: [
         {
-          bool: {
-            should: [
-              {
-                match: {
-                  'contactPrimary.M.name.S': 'Test Search',
-                },
-              },
-              {
-                match: {
-                  'contactPrimary.M.secondaryName.S': 'Test Search',
-                },
-              },
-              {
-                match: {
-                  'contactSecondary.M.name.S': 'Test Search',
-                },
-              },
+          query_string: {
+            fields: [
+              'contactPrimary.M.name.S',
+              'contactPrimary.M.secondaryName.S',
+              'contactSecondary.M.name.S',
             ],
+            query: '*Test Search*',
           },
         },
       ],
@@ -138,6 +133,8 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -170,6 +167,8 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -195,6 +194,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -219,6 +220,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -243,6 +246,8 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'case|' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],

@@ -3,7 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-
+const { getTimestampSchema } = require('../../utilities/dateSchema');
+const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -14,6 +15,8 @@ function Message(rawMessage, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.entityName = 'Message';
+
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.from = rawMessage.from;
   this.fromUserId = rawMessage.fromUserId;
@@ -28,7 +31,8 @@ Message.validationName = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
-    createdAt: joi.date().iso().optional(),
+    createdAt: joiStrictTimestamp.optional(),
+    entityName: joi.string().valid('Message').required(),
     from: joi.string().required(),
     fromUserId: joi
       .string()

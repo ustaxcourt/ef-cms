@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
 import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
@@ -52,9 +51,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '01',
           irsMonth: '01',
@@ -85,9 +81,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
       modules,
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '01',
           irsMonth: '01',
@@ -119,9 +112,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
       modules,
 
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '24',
           irsMonth: '12',
@@ -157,9 +147,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
       modules,
 
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '24',
           irsMonth: '',
@@ -195,9 +182,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
       modules,
 
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           irsDay: '',
           irsMonth: '',
@@ -233,9 +217,6 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
       modules,
 
       state: {
-        constants: {
-          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-        },
         form: {
           // irsNoticeDate: '2018-12-24T05:00:00.000Z',
           irsDay: '12',

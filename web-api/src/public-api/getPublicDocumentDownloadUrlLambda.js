@@ -10,7 +10,6 @@ const { redirect } = require('../middleware/apiGatewayHelper');
 exports.getPublicDocumentDownloadUrlLambda = event =>
   redirect(event, async () => {
     const applicationContext = createApplicationContext({});
-    const honeybadger = applicationContext.initHoneybadger();
     try {
       const results = await applicationContext
         .getUseCases()
@@ -23,7 +22,7 @@ exports.getPublicDocumentDownloadUrlLambda = event =>
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
-      honeybadger && honeybadger.notify(e);
+      await applicationContext.notifyHoneybadger(e);
       throw e;
     }
   });

@@ -1,14 +1,11 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import trialClerkAddsNotesFromWorkingCopyCaseList from './journey/trialClerkAddsNotesFromWorkingCopyCaseList';
 import trialClerkViewsNotesFromCaseDetail from './journey/trialClerkViewsNotesFromCaseDetail';
 import trialClerkViewsTrialSessionWorkingCopy from './journey/trialClerkViewsTrialSessionWorkingCopy';
@@ -32,7 +29,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     },
     trialLocation,
   };
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   loginAs(test, 'docketclerk');
@@ -50,20 +47,20 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   };
   loginAs(test, 'petitioner');
   it('Create case', async () => {
-    await uploadPetition(test, caseOverrides);
+    const caseDetail = await uploadPetition(test, caseOverrides);
+    createdCaseIds.push(caseDetail.caseId);
+    createdDocketNumbers.push(caseDetail.docketNumber);
+    test.docketNumber = caseDetail.docketNumber;
   });
-  petitionerViewsDashboard(test);
-  captureCreatedCase(test, createdCases, createdDocketNumbers);
 
   loginAs(test, 'petitionsclerk');
-  petitionsClerkUpdatesFiledBy(test, caseOverrides);
   petitionsClerkSubmitsCaseToIrs(test);
 
   loginAs(test, 'docketclerk');
   docketClerkSetsCaseReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk');
-  markAllCasesAsQCed(test, () => createdCases);
+  markAllCasesAsQCed(test, () => createdCaseIds);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'trialclerk');

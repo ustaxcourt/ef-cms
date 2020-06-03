@@ -1,4 +1,7 @@
-export default (test, createdDocketNumberIndex) => {
+export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
+  test,
+  createdDocketNumberIndex,
+) => {
   return it('practitioner views case detail notice of change of address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],

@@ -1,10 +1,14 @@
+const {
+  saveFileAndGenerateUrl,
+} = require('../../useCaseHelper/saveFileAndGenerateUrl');
+
 /**
  * generateTrialCalendarPdfInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id for the trial session
- * @returns {Uint8Array} docket record pdf
+ * @returns {string} trial session calendar pdf url
  */
 exports.generateTrialCalendarPdfInteractor = async ({
   applicationContext,
@@ -48,8 +52,12 @@ exports.generateTrialCalendarPdfInteractor = async ({
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
-    applicationContext,
-    contentHtml,
-  });
+  const file = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml,
+    });
+
+  return await saveFileAndGenerateUrl({ applicationContext, file });
 };

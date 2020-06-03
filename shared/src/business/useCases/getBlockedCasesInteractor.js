@@ -1,9 +1,7 @@
-const AWS = require('aws-sdk');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { get } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -24,44 +22,12 @@ exports.getBlockedCasesInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const body = await applicationContext.getSearchClient().search({
-    body: {
-      _source: [
-        'automaticBlocked',
-        'automaticBlockedDate',
-        'automaticBlockedReason',
-        'blocked',
-        'blockedDate',
-        'blockedReason',
-        'caseCaption',
-        'docketNumber',
-        'docketNumberSuffix',
-        'status',
-      ],
-      query: {
-        bool: {
-          must: [
-            { match: { 'preferredTrialCity.S': trialLocation } },
-            {
-              bool: {
-                should: [
-                  { match: { 'automaticBlocked.BOOL': true } },
-                  { match: { 'blocked.BOOL': true } },
-                ],
-              },
-            },
-          ],
-        },
-      },
-      size: 5000,
-    },
-    index: 'efcms',
-  });
-
-  const hits = get(body, 'hits.hits', []);
-  const foundCases = hits.map(hit =>
-    AWS.DynamoDB.Converter.unmarshall(hit['_source']),
-  );
+  const foundCases = await applicationContext
+    .getPersistenceGateway()
+    .getBlockedCases({
+      applicationContext,
+      trialLocation,
+    });
 
   return foundCases;
 };

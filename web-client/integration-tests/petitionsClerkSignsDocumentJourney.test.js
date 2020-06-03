@@ -8,7 +8,7 @@ import petitionsClerkAppliesSignatureToDraftDocument from './journey/petitionsCl
 import petitionsClerkClearsSignatureFromDraftDocument from './journey/petitionsClerkClearsSignatureFromDraftDocument';
 import petitionsClerkRemovesSignatureFromDraftDocument from './journey/petitionsClerkRemovesSignatureFromDraftDocument';
 import petitionsClerkSavesSignatureForDraftDocument from './journey/petitionsClerkSavesSignatureForDraftDocument';
-import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
 import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocumentDetail';
 import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';

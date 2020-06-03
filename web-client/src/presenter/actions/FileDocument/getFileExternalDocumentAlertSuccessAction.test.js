@@ -10,9 +10,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message:
-          'You can access your documents at any time from the docket record below.',
-        title: 'Your filing has been successfully submitted.',
+        message: 'Document filed and is accessible from the Docket Record.',
       },
     });
   });
@@ -28,8 +26,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
     expect(result.output).toMatchObject({
       alertSuccess: {
         message:
-          'If approved, you will gain full access to this case. Please check your dashboard for updates.',
-        title: 'Your filing has been successfully submitted.',
+          'Document filed and pending approval. Please check your dashboard for updates.',
       },
     });
   });
@@ -46,9 +43,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
       alertSuccess: {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
-        message:
-          'You can access your documents at any time from the docket record below.',
-        title: 'Your filing has been successfully submitted.',
+        message: 'Document filed and is accessible from the Docket Record.',
       },
     });
   });

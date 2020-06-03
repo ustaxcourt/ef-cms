@@ -3,6 +3,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
+import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { getSaveCaseForLaterAlertSuccessAction } from '../actions/StartCaseInternal/getSaveCaseForLaterAlertSuccessAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
@@ -19,6 +20,7 @@ export const saveInternalCaseForLaterSequence = [
   clearAlertsAction,
   computeDateReceivedAction,
   computeIrsNoticeDateAction,
+  computePetitionFeeDatesAction,
   setCaseInProgressAction,
   showProgressSequenceDecorator([
     createCaseFromPaperAction,

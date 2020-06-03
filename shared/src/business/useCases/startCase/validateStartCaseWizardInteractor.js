@@ -1,3 +1,7 @@
+const {
+  CaseExternalInformationFactory,
+} = require('../../entities/cases/CaseExternalInformationFactory');
+
 /**
  * validateStartCaseWizardInteractor
  *
@@ -10,8 +14,8 @@ exports.validateStartCaseWizardInteractor = ({
   applicationContext,
   petition,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().CaseExternalInformationFactory)(
-    petition,
-  ).getFormattedValidationErrors();
+  const errors = new CaseExternalInformationFactory(petition, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   return errors || null;
 };

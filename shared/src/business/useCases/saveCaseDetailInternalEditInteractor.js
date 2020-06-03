@@ -34,22 +34,61 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     throw new UnprocessableEntityError();
   }
 
-  if (!isEmpty(caseToUpdate.contactPrimary)) {
-    caseToUpdate.contactPrimary = ContactFactory.createContacts({
-      contactInfo: { primary: caseToUpdate.contactPrimary },
-      partyType: caseToUpdate.partyType,
+  const editableFields = {
+    caseCaption: caseToUpdate.caseCaption,
+    caseType: caseToUpdate.caseType,
+    contactPrimary: caseToUpdate.contactPrimary,
+    contactSecondary: caseToUpdate.contactSecondary,
+    docketNumber: caseToUpdate.docketNumber,
+    docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    filingType: caseToUpdate.filingType,
+    hasIrsNotice: caseToUpdate.hasIrsNotice,
+    hasVerifiedIrsNotice: caseToUpdate.hasVerifiedIrsNotice,
+    irsNoticeDate: caseToUpdate.irsNoticeDate,
+    noticeOfAttachments: caseToUpdate.noticeOfAttachments,
+    orderForAmendedPetition: caseToUpdate.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      caseToUpdate.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: caseToUpdate.orderForFilingFee,
+    orderForOds: caseToUpdate.orderForOds,
+    orderForRatification: caseToUpdate.orderForRatification,
+    orderToShowCause: caseToUpdate.orderToShowCause,
+    partyType: caseToUpdate.partyType,
+    petitionPaymentDate: caseToUpdate.petitionPaymentDate,
+    petitionPaymentMethod: caseToUpdate.petitionPaymentMethod,
+    petitionPaymentStatus: caseToUpdate.petitionPaymentStatus,
+    petitionPaymentWaivedDate: caseToUpdate.petitionPaymentWaivedDate,
+    procedureType: caseToUpdate.procedureType,
+  };
+
+  const theCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
+
+  const fullCase = {
+    ...theCase,
+    ...editableFields,
+  };
+
+  if (!isEmpty(fullCase.contactPrimary)) {
+    fullCase.contactPrimary = ContactFactory.createContacts({
+      contactInfo: { primary: fullCase.contactPrimary },
+      partyType: fullCase.partyType,
     }).primary.toRawObject();
   }
 
-  if (!isEmpty(caseToUpdate.contactSecondary)) {
-    caseToUpdate.contactSecondary = ContactFactory.createContacts({
-      contactInfo: { secondary: caseToUpdate.contactSecondary },
-      partyType: caseToUpdate.partyType,
+  if (!isEmpty(fullCase.contactSecondary)) {
+    fullCase.contactSecondary = ContactFactory.createContacts({
+      contactInfo: { secondary: fullCase.contactSecondary },
+      partyType: fullCase.partyType,
     }).secondary.toRawObject();
   }
 
-  const updatedCase = new Case(caseToUpdate, { applicationContext })
-    .setRequestForTrialDocketRecord(caseToUpdate.preferredTrialCity, {
+  const updatedCase = new Case(fullCase, { applicationContext })
+    .setRequestForTrialDocketRecord(fullCase.preferredTrialCity, {
       applicationContext,
     })
     .validate()

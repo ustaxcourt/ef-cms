@@ -95,8 +95,6 @@ describe('Update case trial sort tags', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',
       }),
-    ).rejects.toThrow(
-      'The Case entity was invalid ValidationError: "docketNumber" is required',
-    );
+    ).rejects.toThrow('The Case entity was invalid');
   });
 });

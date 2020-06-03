@@ -28,7 +28,7 @@ export const AddEditCaseNoteModal = connect(
         onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">
-          {`Docket ${modal.docketNumber}: ${modal.caseCaptionNames}`}
+          {`Docket ${modal.docketNumber}: ${modal.caseTitle}`}
         </h5>
         <FormGroup
           className="margin-bottom-2"

@@ -8,12 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.generatePrintableFilingReceiptLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { documents } = JSON.parse(event.body);
-
     return await applicationContext
       .getUseCases()
       .generatePrintableFilingReceiptInteractor({
         applicationContext,
-        documents,
+        ...JSON.parse(event.body),
       });
   });

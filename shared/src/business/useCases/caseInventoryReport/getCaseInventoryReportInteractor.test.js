@@ -38,7 +38,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
   it('calls getCaseInventoryReport useCaseHelper with appropriate params and returns its result', async () => {
     applicationContext
-      .getUseCaseHelpers()
+      .getPersistenceGateway()
       .getCaseInventoryReport.mockReturnValue([
         {
           associatedJudge: 'Chief Judge',
@@ -56,7 +56,7 @@ describe('getCaseInventoryReportInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().getCaseInventoryReport,
+      applicationContext.getPersistenceGateway().getCaseInventoryReport,
     ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',

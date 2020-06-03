@@ -41,14 +41,14 @@ exports.zipDocuments = ({
         Bucket: destinationBucket,
         Key: zipName,
       };
-      s3Client.upload(params, function () {
-        resolve();
-      });
+      s3Client.upload(params, () => resolve());
 
       pass.on('error', reject);
 
       return pass;
     };
+
+    const passThrough = uploadFromStream(s3Client);
 
     s3Zip
       .setArchiverOptions({ gzip: false })
@@ -67,6 +67,6 @@ exports.zipDocuments = ({
         extraFiles,
         extraFileNames,
       )
-      .pipe(uploadFromStream(s3Client));
+      .pipe(passThrough);
   });
 };

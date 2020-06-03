@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   NewTrialSession,
 } = require('../../entities/trialSessions/NewTrialSession');
 const {
@@ -11,12 +14,7 @@ const { formatNow } = require('../../utilities/DateHandler');
 describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {
     const errors = validateTrialSessionInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          NewTrialSession,
-        }),
-        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
+      applicationContext,
       trialSession: {},
     });
 
@@ -43,12 +41,7 @@ describe('validateTrialSessionInteractor', () => {
     };
 
     const errors = validateTrialSessionInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          NewTrialSession,
-        }),
-        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
+      applicationContext,
       trialSession: { ...MOCK_TRIAL },
     });
 

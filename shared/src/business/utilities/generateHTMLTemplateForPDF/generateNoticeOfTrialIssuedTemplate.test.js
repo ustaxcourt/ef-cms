@@ -7,8 +7,7 @@ const applicationContext = createApplicationContext({});
 
 describe('generateNoticeOfTrialIssuedTemplate', () => {
   const caseDetail = {
-    caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
+    caseCaption: 'Test Case Caption, Petitioner',
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
   };
@@ -17,8 +16,7 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
     const result = await generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
+        caseCaption: caseDetail.caseCaption,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {

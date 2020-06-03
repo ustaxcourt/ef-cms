@@ -13,7 +13,9 @@ const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
 const { Document } = require('../Document');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
+const joiStrictTimestamp = getTimestampSchema();
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
   dateReceived: [
@@ -77,7 +79,7 @@ function DocketEntryFactory(rawProps) {
     additionalInfo2: joi.string(),
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    dateReceived: joi.date().iso().max('now').required(),
+    dateReceived: joiStrictTimestamp.max('now').required(),
     documentType: joi.string().optional(),
     eventCode: joi.string().required(),
     freeText: joi.string().optional(),
@@ -91,20 +93,18 @@ function DocketEntryFactory(rawProps) {
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    serviceDate: joi.date().iso().max('now').optional(),
+    serviceDate: joiStrictTimestamp.max('now').optional(),
     trialLocation: joi.string().optional(),
   });
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi.date().iso().max('now').required(),
+    certificateOfServiceDate: joiStrictTimestamp.max('now').required(),
     objections: joi.string().required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrimary: joi.boolean().invalid(false).required(),
     partySecondary: joi.boolean().required(),
     secondaryDocumentFile: joi.object().optional(),
   };
-
-  let customValidate;
 
   const addToSchema = itemName => {
     schema = schema.keys({
@@ -160,7 +160,6 @@ function DocketEntryFactory(rawProps) {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    customValidate,
     DocketEntryFactory.VALIDATION_ERROR_MESSAGES,
   );
 

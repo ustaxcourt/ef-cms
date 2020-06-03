@@ -3,22 +3,15 @@ import { generateDocketRecordPdfUrlAction } from './generateDocketRecordPdfUrlAc
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const mockCreateObjectUrl = jest.fn();
-
 describe('generateDocketRecordPdfUrlAction', () => {
+  const mockPdfUrl = { url: 'www.example.com' };
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    applicationContext
+      .getUseCases()
+      .generateDocketRecordPdfInteractor.mockResolvedValue(mockPdfUrl);
 
     global.window = global;
-
-    global.Blob = () => {};
-
-    presenter.providers.router = {
-      createObjectURL: () => {
-        mockCreateObjectUrl();
-        return '123456-abcdef';
-      },
-    };
   });
 
   it('creates a pdf and returns an object URL', async () => {
@@ -43,10 +36,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
         },
       },
     });
-    expect(
-      applicationContext.getUseCases().generateDocketRecordPdfInteractor,
-    ).toHaveBeenCalled();
-    expect(mockCreateObjectUrl).toHaveBeenCalled();
-    expect(result.output).toHaveProperty('pdfUrl');
+
+    expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
   });
 });

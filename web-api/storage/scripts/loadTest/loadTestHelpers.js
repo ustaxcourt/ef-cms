@@ -1,8 +1,11 @@
 const faker = require('faker');
+const {
+  TrialSession,
+} = require('../../../../shared/src/business/entities/trialSessions/TrialSession');
+const { Case } = require('../../../../shared/src/business/entities/cases/Case');
+const { User } = require('../../../../shared/src/business/entities/User');
 
 const createTrialSession = async ({ applicationContext }) => {
-  const { TrialSession } = applicationContext.getEntityConstructors();
-
   let startDate = faker.date.future(1);
   let startDateObj = new Date(startDate);
   let selectedMonth = startDate.getMonth() + 1;
@@ -104,12 +107,6 @@ const createCase = async ({
     }
   }
 
-  const {
-    Case,
-    TrialSession,
-    User,
-  } = applicationContext.getEntityConstructors();
-
   const petitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 
   const caseDetail = await applicationContext
@@ -153,7 +150,6 @@ const createCase = async ({
     });
   };
 
-  let idx = 0;
   for (const document of caseDetail.documents) {
     if (shouldUpload) {
       await addCoversheet(document);
@@ -166,8 +162,6 @@ const createCase = async ({
         caseId: caseDetail.caseId,
         documentId: document.documentId,
       });
-
-    idx++;
   }
 
   return { caseDetail, petitionFileId, stinFileId };

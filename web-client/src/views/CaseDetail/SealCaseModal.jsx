@@ -24,7 +24,7 @@ export const SealCaseModal = connect(
       >
         <div>
           {formattedCaseDetail.docketNumberWithSuffix}{' '}
-          {formattedCaseDetail.caseName}
+          {formattedCaseDetail.caseTitle}
         </div>
       </ModalDialog>
     );

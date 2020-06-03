@@ -1,20 +1,16 @@
+const {
+  CourtIssuedDocumentFactory,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+const { Document } = require('../../entities/Document');
+
 /**
  * generateCourtIssuedDocumentTitleInteractor
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-exports.generateCourtIssuedDocumentTitleInteractor = ({
-  applicationContext,
-  documentMetadata,
-}) => {
-  const {
-    CourtIssuedDocumentFactory,
-    Document,
-  } = applicationContext.getEntityConstructors();
-
+exports.generateCourtIssuedDocumentTitleInteractor = ({ documentMetadata }) => {
   const filingEvent = Document.COURT_ISSUED_EVENT_CODES.find(
     document => documentMetadata.eventCode === document.eventCode,
   );

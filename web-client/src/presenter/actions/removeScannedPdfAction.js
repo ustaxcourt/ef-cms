@@ -20,6 +20,7 @@ export const removeScannedPdfAction = async ({ get, store }) => {
   store.set(state.scanner.selectedBatchIndex, 0);
 
   return {
+    documentType: documentSelectedForScan,
     documentUploadMode: 'scan',
   };
 };

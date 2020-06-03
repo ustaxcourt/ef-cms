@@ -91,6 +91,8 @@ export const createCaseFromPaperAction = async ({
   const form = omit(
     {
       ...get(state.form),
+      petitionPaymentDate: props.petitionPaymentDate,
+      petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
       receivedAt,
     },
     ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],

@@ -14,6 +14,7 @@ export const prepareCreatePractitionerUserFormAction = ({
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   store.set(state.form, {
+    admissionsStatus: 'Active',
     contact: {
       countryType: COUNTRY_TYPES.DOMESTIC,
     },

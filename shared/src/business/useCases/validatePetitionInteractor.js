@@ -1,3 +1,5 @@
+const { CaseExternal } = require('../entities/cases/CaseExternal');
+
 /**
  * validatePetitionInteractor
  *
@@ -7,8 +9,8 @@
  * @returns {object} errors (null if no errors)
  */
 exports.validatePetitionInteractor = ({ applicationContext, petition }) => {
-  const errors = new (applicationContext.getEntityConstructors().CaseExternal)(
-    petition,
-  ).getFormattedValidationErrors();
+  const errors = new CaseExternal(petition, {
+    applicationContext,
+  }).getFormattedValidationErrors();
   return errors || null;
 };

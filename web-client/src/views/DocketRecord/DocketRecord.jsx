@@ -4,33 +4,21 @@ import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React, { useEffect } from 'react';
+import { state } from 'cerebral';
+import React from 'react';
 import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.modal.showModal,
   },
   function DocketRecord({
     docketRecordHelper,
     formattedCaseDetail,
-    refreshCaseSequence,
     showModal,
   }) {
-    useEffect(() => {
-      const interval = setInterval(() => {
-        refreshCaseSequence();
-      }, 30 * 1000);
-
-      return () => {
-        clearInterval(interval);
-      };
-    }, []);
-
     return (
       <>
         <DocketRecordHeader />

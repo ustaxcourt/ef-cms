@@ -41,22 +41,18 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
         expect.objectContaining({
           eventCode: 'M014',
           servedAt: expect.anything(),
-          status: 'served',
         }),
         expect.objectContaining({
           eventCode: 'AFF',
           servedAt: expect.anything(),
-          status: 'served',
         }),
         expect.objectContaining({
           eventCode: 'MISL',
           servedAt: expect.anything(),
-          status: 'served',
         }),
         expect.objectContaining({
           eventCode: 'MISL',
           servedAt: expect.anything(),
-          status: 'served',
         }),
       ]),
     );

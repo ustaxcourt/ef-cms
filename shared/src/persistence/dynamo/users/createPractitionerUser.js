@@ -91,6 +91,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
         userId = response.User.Username;
       }
     } catch (err) {
+      applicationContext.logger.error(err);
       // the user already exists
       const response = await applicationContext
         .getCognito()

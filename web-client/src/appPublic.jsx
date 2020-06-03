@@ -61,6 +61,7 @@ const appPublic = {
     );
 
     presenter.providers.applicationContext = applicationContext;
+    presenter.state.baseUrl = applicationContext.getBaseUrl();
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     presenter.state.constants = applicationContext.getConstants();

@@ -17,7 +17,10 @@ const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
 const { Document } = require('../Document');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -177,7 +180,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi.date().iso().max('now'),
+    certificateOfServiceDate: joiStrictTimestamp.max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
     partyIrsPractitioner: joi.boolean(),
@@ -236,7 +239,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('objections');
   }
 
-  if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
+  if (
+    documentMetadata.scenario &&
+    documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
+  ) {
     if (
       includes(
         documentMetadata.documentType,
@@ -285,12 +291,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  joiValidationDecorator(
-    entityConstructor,
-    schema,
-    undefined,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new entityConstructor(documentMetadata);
 };

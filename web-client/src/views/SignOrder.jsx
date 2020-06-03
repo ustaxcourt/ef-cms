@@ -124,16 +124,14 @@ export const SignOrder = connect(
       sigEl.onmousedown = canvasEl.onmousedown;
     };
 
+    let hasStarted = false;
     useEffect(() => {
       renderPDFPage(currentPageNumber);
-      start();
-    }, []);
-
-    useEffect(() => {
-      if (!signatureData) {
-        renderPDFPage(currentPageNumber);
+      if (!hasStarted) {
+        start();
+        hasStarted = true;
       }
-    });
+    }, []);
 
     return (
       <>

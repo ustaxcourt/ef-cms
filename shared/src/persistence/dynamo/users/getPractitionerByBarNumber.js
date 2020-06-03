@@ -16,6 +16,11 @@ exports.getPractitionerByBarNumber = async ({
       pk: `privatePractitioner|${upperCaseBarNumber}`,
       prefix: 'user',
     })),
+    ...(await getRecordsViaMapping({
+      applicationContext,
+      pk: `inactivePractitioner|${upperCaseBarNumber}`,
+      prefix: 'user',
+    })),
   ];
 
   return users.pop();
