@@ -129,6 +129,9 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseMessage,
+} = require('../../shared/src/persistence/dynamo/messages/createCaseMessage');
+const {
   createCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createCaseMessageInteractor');
 const {
@@ -1105,6 +1108,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
+        createCaseMessage,
         createCaseTrialSortMappingRecords,
         createElasticsearchReindexRecord,
         createPractitionerUser,
@@ -1451,7 +1455,7 @@ module.exports = (appContextUser = {}) => {
     logger: {
       error: value => {
         // eslint-disable-next-line no-console
-        console.error(JSON.stringify(value));
+        console.error(value);
       },
       info: (key, value) => {
         // eslint-disable-next-line no-console
