@@ -7,7 +7,14 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Message } = require('./Message');
 const { omit, orderBy } = require('lodash');
+const { User } = require('./User');
 const joiStrictTimestamp = getTimestampSchema();
+const {
+  DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
+} = require('./cases/CaseConstants');
+const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
+
 /**
  * constructor
  *
@@ -18,11 +25,9 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.entityName = 'WorkItem';
-
-  this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
+  this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
   this.caseId = rawWorkItem.caseId;
   this.caseIsInProgress = rawWorkItem.caseIsInProgress;
   this.caseStatus = rawWorkItem.caseStatus;
@@ -35,6 +40,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.document = omit(rawWorkItem.document, 'workItems');
+  this.entityName = 'WorkItem';
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority = rawWorkItem.highPriority;
   this.inProgress = rawWorkItem.inProgress;
@@ -48,6 +54,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
+
   this.messages = (rawWorkItem.messages || []).map(
     message => new Message(message, { applicationContext }),
   );
@@ -65,8 +72,8 @@ joiValidationDecorator(
       })
       .allow(null)
       .optional(),
-    assigneeName: joi.string().allow(null).optional(), // should be a Message entity at some point
-    associatedJudge: joi.string().required(),
+    assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
+    associatedJudge: joi.string().max(100).required(),
     caseId: joi
       .string()
       .uuid({
@@ -75,9 +82,9 @@ joiValidationDecorator(
       .required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
-    caseTitle: joi.string().optional(),
+    caseTitle: joi.string().max(100).optional(),
     completedAt: joiStrictTimestamp.optional(),
-    completedBy: joi.string().optional().allow(null),
+    completedBy: joi.string().max(100).optional().allow(null),
     completedByUserId: joi
       .string()
       .uuid({
@@ -85,10 +92,14 @@ joiValidationDecorator(
       })
       .optional()
       .allow(null),
-    completedMessage: joi.string().optional().allow(null),
+    completedMessage: joi.string().max(100).optional().allow(null),
     createdAt: joiStrictTimestamp.optional(),
-    docketNumber: joi.string().required(),
-    docketNumberSuffix: joi.string().allow(null).optional(),
+    docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+    docketNumberSuffix: joi
+      .string()
+      .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+      .allow(null)
+      .optional(),
     document: joi.object().required(),
     entityName: joi.string().valid('WorkItem').required(),
     hideFromPendingMessages: joi.boolean().optional(),
@@ -98,9 +109,15 @@ joiValidationDecorator(
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
     messages: joi.array().items(joi.object()).required(),
-    section: joi.string().required(),
-    sentBy: joi.string().required(),
-    sentBySection: joi.string().optional(),
+    section: joi
+      .string()
+      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+      .required(),
+    sentBy: joi.string().max(100).required(),
+    sentBySection: joi
+      .string()
+      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+      .optional(),
     sentByUserId: joi
       .string()
       .uuid({
