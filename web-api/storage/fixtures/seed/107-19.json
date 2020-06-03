@@ -22,6 +22,7 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
@@ -32,6 +33,7 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
@@ -263,6 +265,7 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
