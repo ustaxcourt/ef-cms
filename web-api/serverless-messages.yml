@@ -53,7 +53,7 @@ functions:
     events:
       - http:
           path: /{caseId}
-          method: put
+          method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
