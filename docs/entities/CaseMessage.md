@@ -127,11 +127,11 @@
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 250
     to: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
         description: "The name of the user who is the recipient of the message."
       rules: 
         - 
@@ -144,7 +144,7 @@
       type: "string"
       flags: 
         only: true
-        presence: "optional"
+        presence: "required"
         description: "The section of the user who is the recipient of the message."
       allow: 
         - "adc"
@@ -187,7 +187,7 @@
     toUserId: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
         description: "The ID of the user who is the recipient of the message."
       rules: 
         - 
