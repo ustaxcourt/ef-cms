@@ -24,12 +24,12 @@ export const getConsolidatedCasesByUserAction = async ({
       userId,
     });
   } else {
-    // caseList = await applicationContext
-    //   .getUseCases()
-    //   .getClosedConsolidatedCasesByUserInteractor({
-    //     applicationContext,
-    //     userId,
-    //   });
+    caseList = await applicationContext
+      .getUseCases()
+      .getClosedConsolidatedCasesInteractor({
+        applicationContext,
+        userId,
+      });
   }
   caseList = orderBy(caseList, 'createdAt', 'desc');
   return { caseList };

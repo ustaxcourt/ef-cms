@@ -98,10 +98,10 @@ export const CaseListPetitioner = connect(
                   getCasesByStatusForUserSequence();
                 }}
               >
-                <Tab id="tab-open" tabName="open" title="Open">
+                <Tab id="tab-open" tabName="Open" title="Open">
                   {renderCaseListTable()}
                 </Tab>
-                <Tab id="tab-closed" tabName="closed" title="Closed">
+                <Tab id="tab-closed" tabName="Closed" title="Closed">
                   {renderCaseListTable()}
                 </Tab>
               </Tabs>
