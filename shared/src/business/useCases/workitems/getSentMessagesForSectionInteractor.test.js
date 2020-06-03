@@ -26,7 +26,7 @@ describe('getSentMessagesForSectionInteractor', () => {
       document: { sentBy: 'petitioner' },
       isQC: false,
       messages: [],
-      section: 'irsBatchSection',
+      section: 'docket',
       sentBy: 'docketclerk',
     },
   ];
@@ -55,7 +55,7 @@ describe('getSentMessagesForSectionInteractor', () => {
   it('successfully returns the work item for a docket clerk', async () => {
     const mockDocketClerkUser = {
       role: User.ROLES.docketClerk,
-      userId: 'docketClerk',
+      userId: 'bf143814-1354-4c4c-be9e-ca8144a15117',
     };
     applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
 

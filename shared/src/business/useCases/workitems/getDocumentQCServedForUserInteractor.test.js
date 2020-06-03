@@ -35,7 +35,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
         document: { sentBy: 'petitioner' },
         isQC: true,
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ];
@@ -83,7 +83,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ]);
@@ -118,7 +118,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
         docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ]);

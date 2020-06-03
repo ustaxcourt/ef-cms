@@ -33,6 +33,13 @@ function CaseMessage(rawMessage, { applicationContext }) {
 
 CaseMessage.validationName = 'CaseMessage';
 
+CaseMessage.VALIDATION_ERROR_MESSAGES = {
+  message: 'Enter a message',
+  subject: 'Enter a subject line',
+  toSection: 'Select a section',
+  toUserId: 'Select a recipient',
+};
+
 joiValidationDecorator(
   CaseMessage,
   joi.object().keys({
@@ -59,17 +66,18 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .required(),
-    subject: joi.string().max(100).required(),
-    to: joi.string().max(100).optional().allow(null),
-    toSection: joi.string().max(100).optional(), //todo valid sections
+    subject: joi.string().max(250).required(),
+    to: joi.string().max(100).required().allow(null),
+    toSection: joi.string().max(100).required(), //todo valid sections
     toUserId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional()
+      .required()
       .allow(null),
   }),
+  CaseMessage.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseMessage };
