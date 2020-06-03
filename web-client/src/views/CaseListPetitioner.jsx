@@ -64,7 +64,7 @@ export const CaseListPetitioner = connect(
             <div className="grid-row">
               <div className="grid-column-auto">
                 <Tabs
-                  bind="currentViewMetadata.caseListPetitioner.tab"
+                  bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
                   onSelect={() => {
@@ -91,7 +91,7 @@ export const CaseListPetitioner = connect(
             <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
               <Tabs
-                bind="currentViewMetadata.caseListPetitioner.tab"
+                bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
                 onSelect={() => {
