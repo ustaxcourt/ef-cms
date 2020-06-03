@@ -37,7 +37,7 @@ exports.getOpenCasesInteractor = async ({ applicationContext }) => {
         caseMapping[caseId] = userCaseEntity;
       }
 
-      if (leadCaseId) {
+      if (leadCaseId && leadCaseIdsToGet.includes(leadCaseId)) {
         if (leadCaseIdsToGet.indexOf(leadCaseId) === -1) {
           leadCaseIdsToGet.push(leadCaseId);
         }
