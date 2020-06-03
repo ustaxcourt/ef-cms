@@ -225,6 +225,15 @@ practitioners:
     <<: *customDomainDefault
     basePath: 'practitioners'
 
+messages:
+  <<: *customDefault
+  serverless-offline:
+    <<: *serverless-offline-default
+    port: 3018
+  customDomain:
+    <<: *customDomainDefault
+    basePath: 'messages'
+
 migrate:
   <<: *customDefault
   serverless-offline:
