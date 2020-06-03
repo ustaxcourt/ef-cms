@@ -86,7 +86,7 @@ joiValidationDecorator(
       .required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi.string().optional(),
-    caseTitle: joi.string().max(100).optional(),
+    caseTitle: joi.string().max(500).optional(),
     completedAt: joiStrictTimestamp.optional(),
     completedBy: joi.string().max(100).optional().allow(null),
     completedByUserId: joi
