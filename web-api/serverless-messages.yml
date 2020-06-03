@@ -59,3 +59,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getCaseMessage:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getCaseMessageLambda
+    events:
+      - http:
+          path: /{caseId}/{messageId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
