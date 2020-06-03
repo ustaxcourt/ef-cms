@@ -209,7 +209,7 @@ TrialSession.validationRules = {
     city: joi.string().allow('').optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().allow('').optional(),
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: joiStrictTimestamp.required(),
     entityName: joi.string().valid('TrialSession').required(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
