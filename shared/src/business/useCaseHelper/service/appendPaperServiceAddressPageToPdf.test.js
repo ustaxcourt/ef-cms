@@ -16,8 +16,8 @@ const testPdfDoc = testPdfDocBytes();
 
 describe('appendPaperServiceAddressPageToPdf', () => {
   applicationContext
-    .getUseCaseHelpers()
-    .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+    .getDocumentGenerators()
+    .addressLabelCoverSheet.mockResolvedValue(testPdfDoc);
 
   it('should generate address page for each paper service party and combine into single pdf', async () => {
     const newPdfDoc = await PDFDocument.create();

@@ -27,15 +27,13 @@ exports.getAddressPages = async ({
   const addressPages = [];
   for (let party of servedParties.paper) {
     addressPages.push(
-      await applicationContext
-        .getUseCaseHelpers()
-        .generatePaperServiceAddressPagePdf({
-          applicationContext,
-          contactData: party,
-          docketNumberWithSuffix: `${caseEntity.docketNumber}${
-            caseEntity.docketNumberSuffix || ''
-          }`,
-        }),
+      await applicationContext.getDocumentGenerators().addressLabelCoverSheet({
+        applicationContext,
+        data: {
+          ...party,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+        },
+      }),
     );
   }
   return addressPages;

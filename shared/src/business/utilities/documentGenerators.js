@@ -11,7 +11,7 @@ const {
 } = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
 
 const addressLabelCoverSheet = async ({ applicationContext, data }) => {
-  const trialSessionPlanningReportTemplate = reactTemplateGenerator({
+  const addressLabelCoverSheetTemplate = reactTemplateGenerator({
     componentName: 'AddressLabelCoverSheet',
     data,
   });
@@ -19,7 +19,7 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
-    content: { main: trialSessionPlanningReportTemplate },
+    content: { main: addressLabelCoverSheetTemplate },
     options: {
       overwriteMain: true,
       title: '',

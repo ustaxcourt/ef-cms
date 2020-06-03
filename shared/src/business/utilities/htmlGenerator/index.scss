@@ -267,12 +267,12 @@ th {
 }
 
 @page {
-  margin-top: 100px;
-  margin-bottom: 55px;
+  margin: 2cm 1cm;
+  size: 8.5in 11in;
 }
-
 @page :first {
-  margin-top: 0;
+  margin-top: 1cm;
+  margin-bottom: 2cm;
 }
 
 .margin-top-0 {
@@ -398,6 +398,16 @@ th {
 }
 
 #address-label-cover-sheet {
+  font-family: sans-serif;
+  font-size: 12px;
+
+  .docket {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: 0.6in;
+  }
+
   .address {
     position: absolute;
     bottom: 0in;
