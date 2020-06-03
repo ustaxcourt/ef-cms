@@ -10,6 +10,6 @@ const { get } = require('./requests');
 exports.getOpenCasesInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/cases/open-cases',
+    endpoint: '/cases/open',
   });
 };
