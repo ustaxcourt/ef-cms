@@ -9,6 +9,7 @@ exports.associateUserWithCase = async ({
   return client.put({
     Item: {
       ...userCase,
+      gsi1pk: `user-case|${caseId}`,
       pk: `user|${userId}`,
       sk: `case|${caseId}`,
     },

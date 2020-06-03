@@ -234,6 +234,42 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     }
   }
 
+  // update user-case mappings
+  if (
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.leadCaseId !== caseToUpdate.leadCaseId
+  ) {
+    const userCaseMappings = await client.query({
+      ExpressionAttributeNames: {
+        '#gsi1pk': 'gsi1pk',
+      },
+      ExpressionAttributeValues: {
+        ':gsi1pk': `user-case|${caseToUpdate.caseId}`,
+      },
+      IndexName: 'gsi1',
+      KeyConditionExpression: '#gsi1pk = :gsi1pk',
+      applicationContext,
+    });
+
+    for (let userCaseItem of userCaseMappings) {
+      requests.push(
+        client.put({
+          Item: {
+            ...userCaseItem,
+            caseCaption: caseToUpdate.caseCaption,
+            docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+            gsi1pk: caseToUpdate.caseId,
+            leadCaseId: caseToUpdate.leadCaseId,
+            status: caseToUpdate.status,
+          },
+          applicationContext,
+        }),
+      );
+    }
+  }
+
   let setLeadCase = caseToUpdate.leadCaseId
     ? { gsi1pk: `case|${caseToUpdate.leadCaseId}` }
     : {};
