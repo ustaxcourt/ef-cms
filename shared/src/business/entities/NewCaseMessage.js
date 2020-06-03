@@ -2,9 +2,11 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CaseMessage } = require('./CaseMessage');
 
 /**
- * constructor
+ * NewCaseMessage entity - used for validating
+ * the Create Case Message modal form
  *
  * @param {object} rawMessage the raw message data
  * @constructor
@@ -34,16 +36,10 @@ joiValidationDecorator(
   NewCaseMessage,
   joi.object().keys({
     entityName: joi.string().valid('NewCaseMessage').required(),
-    message: joi.string().max(500).required(),
-    subject: joi.string().max(250).required(),
-    toSection: joi.string().max(100).required(), //todo valid sections
-    toUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required()
-      .allow(null),
+    message: CaseMessage.validationRules.message,
+    subject: CaseMessage.validationRules.subject,
+    toSection: CaseMessage.validationRules.toSection,
+    toUserId: CaseMessage.validationRules.toUserId,
   }),
   NewCaseMessage.VALIDATION_ERROR_MESSAGES,
 );
