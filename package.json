@@ -88,7 +88,7 @@
     "pa11y-ci": "^2.3.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
-    "parcel-plugin-static-files-copy": "^2.3.1",
+    "parcel-plugin-static-files-copy": "^2.4.1",
     "pdf-lib": "^1.7.0",
     "pdfjs-dist": "^2.3.200",
     "pixelmatch": "^5.2.0",
