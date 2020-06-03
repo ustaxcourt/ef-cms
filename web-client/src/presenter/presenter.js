@@ -229,7 +229,6 @@ import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRange
 import { selectDocumentForPetitionQcPreviewSequence } from './sequences/selectDocumentForPetitionQcPreviewSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
-import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
@@ -633,7 +632,6 @@ export const presenter = {
     selectDocumentForPetitionQcPreviewSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
-    selectDocumentSequence,
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
