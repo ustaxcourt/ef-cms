@@ -551,6 +551,9 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
+  getUserDashboardCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserDashboardCases');
+const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
 const {
@@ -1159,6 +1162,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUserCaseNote,
         getUserCaseNoteForCases,
+        getUserDashboardCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
