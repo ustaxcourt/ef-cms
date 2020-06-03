@@ -28,7 +28,7 @@ describe('getSentMessagesForUserInteractor', () => {
       document: { sentBy: 'petitioner' },
       isQC: false,
       messages: [],
-      section: 'irsBatchSection',
+      section: 'docket',
       sentBy: 'docketclerk',
     },
   ];

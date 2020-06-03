@@ -51,6 +51,7 @@ import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/c
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
+import { createCaseMessageInteractor } from '../../shared/src/proxies/messages/createCaseMessageProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import {
   createISODateString,
@@ -205,6 +206,7 @@ import { validateCaseAssociationRequestInteractor } from '../../shared/src/busin
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
+import { validateCreateCaseMessageInteractor } from '../../shared/src/business/useCases/messages/validateCreateCaseMessageInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateEditPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPrivatePractitionerInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -268,6 +270,7 @@ const allUseCases = {
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
+  createCaseMessageInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
@@ -397,6 +400,7 @@ const allUseCases = {
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
   validateCourtIssuedDocketEntryInteractor,
+  validateCreateCaseMessageInteractor,
   validateDocketEntryInteractor,
   validateDocketRecordInteractor,
   validateEditPrivatePractitionerInteractor,

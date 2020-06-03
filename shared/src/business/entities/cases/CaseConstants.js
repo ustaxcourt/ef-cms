@@ -11,3 +11,5 @@ exports.DOCKET_NUMBER_MATCHER = /^(\d{3,5}-\d{2})$/;
 exports.TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 exports.CHIEF_JUDGE = 'Chief Judge';
+
+exports.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
