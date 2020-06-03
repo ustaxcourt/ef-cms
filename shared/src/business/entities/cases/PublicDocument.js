@@ -40,7 +40,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    createdAt: joiStrictTimestamp.required(),
+    createdAt: joiStrictTimestamp.optional(),
     documentId: joi
       .string()
       .uuid({

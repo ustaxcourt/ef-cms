@@ -31,7 +31,7 @@ Message.validationName = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
-    createdAt: joiStrictTimestamp.required(),
+    createdAt: joiStrictTimestamp.optional(),
     entityName: joi.string().valid('Message').required(),
     from: joi.string().max(100).required(),
     fromUserId: joi
