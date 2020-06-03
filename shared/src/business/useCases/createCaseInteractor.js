@@ -136,6 +136,7 @@ exports.createCaseInteractor = async ({
     {
       docketNumber,
       isPaper: false,
+      orderForFilingFee: true,
       ...petitionEntity.toRawObject(),
       privatePractitioners,
       userId: user.userId,
