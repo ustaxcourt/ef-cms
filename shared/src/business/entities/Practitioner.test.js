@@ -27,7 +27,7 @@ describe('Practitioner', () => {
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
-      userId: 'practitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -62,7 +62,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
-      userId: 'practitioner',
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -91,7 +91,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
-      userId: 'practitioner',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -120,7 +120,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       practitionerType: 'Purple',
       role: User.ROLES.Practitioner,
-      userId: 'practitioner',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -160,7 +160,7 @@ describe('Practitioner', () => {
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.inactivePractitioner,
-      userId: 'practitioner',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
     expect(user.isValid()).toBeTruthy();
@@ -191,7 +191,7 @@ describe('Practitioner', () => {
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
       role: User.ROLES.privatePractitioner,
-      userId: 'practitioner',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
     expect(user.isValid()).toBeTruthy();
@@ -255,7 +255,7 @@ describe('Practitioner', () => {
       practitionerType: 'Attorney',
       role: User.ROLES.Practitioner,
       suffix: 'Sfx',
-      userId: 'practitioner',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.name).toEqual('Test Middle Practitioner Sfx');
   });
@@ -287,7 +287,7 @@ describe('Practitioner', () => {
         originalBarState: 'Illinois',
         practitionerType: 'Attorney',
         role: User.ROLES.Practitioner,
-        userId: 'practitioner',
+        userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
       };
     });
 

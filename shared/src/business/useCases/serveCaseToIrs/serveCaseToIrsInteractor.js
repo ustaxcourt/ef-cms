@@ -78,6 +78,8 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
+  caseEntity.markAsSentToIRS();
+
   for (const initialDocumentTypeKey of Object.keys(
     Document.INITIAL_DOCUMENT_TYPES,
   )) {
@@ -137,8 +139,6 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   // caseEntity.documents = caseEntity.documents.filter(
   //   item => item.documentId !== deletedStinDocumentId,
   // );
-
-  caseEntity.markAsSentToIRS();
 
   const petitionDocument = caseEntity.documents.find(
     document =>

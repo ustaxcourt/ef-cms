@@ -1,10 +1,3 @@
-import { runCompute } from 'cerebral/test';
-
-import { extractedDocument as extractedDocumentComputed } from '../../src/presenter/computeds/extractDocument';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
-
 export const docketClerkViewsDocument = test => {
   return it('Docket clerk views document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
@@ -32,12 +25,5 @@ export const docketClerkViewsDocument = test => {
       fromUserId: test.selectedWorkItem.messages[0].fromUserId,
       message: test.selectedWorkItem.messages[0].message,
     });
-
-    const documentResult = runCompute(extractedDocument, {
-      state: test.getState(),
-    });
-    expect(documentResult).toBeDefined();
-
-    expect(documentResult.workItems[0].createdAtFormatted).toBeDefined();
   });
 };
