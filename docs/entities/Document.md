@@ -506,6 +506,11 @@
       type: "string"
       flags: 
         presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
       allow: 
         - ""
     filingDate: 

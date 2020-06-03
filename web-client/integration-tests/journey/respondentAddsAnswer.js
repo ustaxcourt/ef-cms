@@ -6,7 +6,7 @@ export const respondentAddsAnswer = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
@@ -23,16 +23,26 @@ export const respondentAddsAnswer = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentType',
-      value: 'Answer',
-    });
+    const documentToSelect = {
+      category: 'Answer (filed by respondent only)',
+      documentTitle: 'Answer',
+      documentType: 'Answer',
+      eventCode: 'A',
+      scenario: 'Standard',
+    };
+
+    for (const key of Object.keys(documentToSelect)) {
+      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+        key,
+        value: documentToSelect[key],
+      });
+    }
 
     await test.runSequence('validateSelectDocumentTypeSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('form.documentType')).toEqual('Answer');
 

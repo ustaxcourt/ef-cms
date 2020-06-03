@@ -62,7 +62,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: Case.STATUS_TYPES.new,
@@ -86,7 +86,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: Case.STATUS_TYPES.new,
