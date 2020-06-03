@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { UserCase } = require('../entities/UserCase');
 
 /**
  * getConsolidatedCasesByUserInteractor
@@ -17,24 +18,21 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
   const userCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUser({ applicationContext, userId });
+    .getUserDashboardCases({ applicationContext, userId });
 
-  const userCasesValidated = Case.validateRawCollection(userCases, {
-    applicationContext,
-  });
-
-  if (userCasesValidated.length) {
+  if (userCases.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    userCasesValidated.forEach(caseRecord => {
-      const { caseId, leadCaseId } = caseRecord;
+    userCases.forEach(caseRecord => {
+      const userCaseEntity = new UserCase(caseRecord).validate().toRawObject();
+      const { caseId, leadCaseId } = userCaseEntity;
 
-      caseRecord.isRequestingUserAssociated = true;
+      userCaseEntity.isRequestingUserAssociated = true;
       userCaseIdsMap[caseId] = true;
 
       if (!leadCaseId || leadCaseId === caseId) {
-        caseMapping[caseId] = caseRecord;
+        caseMapping[caseId] = userCaseEntity;
       }
 
       if (leadCaseId) {
