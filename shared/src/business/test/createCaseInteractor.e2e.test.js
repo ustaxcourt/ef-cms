@@ -106,7 +106,7 @@ describe('createCase integration test', () => {
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: false,
+      orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
