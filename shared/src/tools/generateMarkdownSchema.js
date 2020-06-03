@@ -62,6 +62,7 @@ const { Practitioner } = require('../business/entities/Practitioner');
 const { PublicUser } = require('../business/entities/PublicUser');
 const { Statistic } = require('../business/entities/Statistic');
 const { User } = require('../business/entities/User');
+const { WorkItem } = require('../business/entities/WorkItem');
 
 const generateMarkdownSchema = (entity, entityName) => {
   const json = entity.getSchema().describe();
@@ -212,3 +213,4 @@ generateMarkdownSchema(PrivatePractitioner, 'PrivatePractitioner');
 generateMarkdownSchema(PublicUser, 'PublicUser');
 generateMarkdownSchema(Statistic, 'Statistic');
 generateMarkdownSchema(User, 'User');
+generateMarkdownSchema(WorkItem, 'WorkItem');
