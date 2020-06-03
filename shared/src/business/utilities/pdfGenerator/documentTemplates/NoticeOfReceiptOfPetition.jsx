@@ -1,8 +1,8 @@
 const React = require('react');
-
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
+const { AddressLabel } = require('../components/AddressLabel.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const NoticeOfReceiptOfPetition = ({
@@ -80,16 +80,16 @@ export const NoticeOfReceiptOfPetition = ({
       </p>
 
       <div id="address-label-cover-sheet">
-        <div className="address">
-          <div>{address.name}</div>
-          <div>{address.address1}</div>
-          {address.address2 && <div>{address.address2}</div>}
-          {address.address3 && <div>{address.address3}</div>}
-          <div>
-            {address.city}, {address.state} {address.postalCode}
-          </div>
-          {!address.address3 && <div>{address.countryName}</div>}
-        </div>
+        <AddressLabel
+          address1={address.address1}
+          address2={address.address2}
+          address3={address.address3}
+          city={address.city}
+          countryName={address.countryName}
+          name={address.name}
+          postalCode={address.postalCode}
+          state={address.state}
+        />
       </div>
     </>
   );
