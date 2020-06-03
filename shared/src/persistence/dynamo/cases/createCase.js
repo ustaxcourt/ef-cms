@@ -73,6 +73,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
         createdAt: caseToCreate.createdAt,
         docketNumber: caseToCreate.docketNumber,
         docketNumberWithSuffix: caseToCreate.docketNumberWithSuffix,
+        gsi1pk: `user-case|${caseToCreate.caseId}`,
         leadCaseId: caseToCreate.leadCaseId,
         pk: `user|${caseToCreate.userId}`,
         sk: `case|${caseToCreate.caseId}`,
