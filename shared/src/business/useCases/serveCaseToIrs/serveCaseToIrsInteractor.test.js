@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
@@ -50,14 +48,6 @@ describe('serveCaseToIrsInteractor', () => {
     },
   ];
 
-  const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
-  const testPdfDocBytes = () => {
-    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-  };
-
-  const testPdfDoc = testPdfDocBytes();
-
   const MOCK_PDF_DATA =
     'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbm' +
     'd0aCAxMDQKPj4Kc3RyZWFtCniccwrhMlAAwaJ0Ln2P1Jyy1JLM5ERdc0MjCwUjE4WQNC4Q' +
@@ -79,9 +69,6 @@ describe('serveCaseToIrsInteractor', () => {
   beforeAll(() => {
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
   });
 
