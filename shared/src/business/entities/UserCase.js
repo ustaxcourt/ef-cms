@@ -12,7 +12,6 @@ UserCase.validationName = 'UserCase';
  * @constructor
  */
 function UserCase(rawUserCase) {
-  this.entityName = 'UserCase';
   this.caseId = rawUserCase.caseId;
   this.caseCaption = rawUserCase.caseCaption;
   this.createdAt = rawUserCase.createdAt;
