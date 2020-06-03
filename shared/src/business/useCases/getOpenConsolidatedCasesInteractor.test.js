@@ -1,9 +1,11 @@
+const {
+  getOpenConsolidatedCasesInteractor,
+} = require('./getOpenConsolidatedCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getOpenCasesInteractor } = require('./getOpenCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
-describe('getOpenCasesInteractor', () => {
+describe('getOpenConsolidatedCasesInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -17,7 +19,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should retrieve the current user information', async () => {
-    await getOpenCasesInteractor({
+    await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -25,7 +27,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should make a call to retrieve open cases by user', async () => {
-    await getOpenCasesInteractor({
+    await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -42,7 +44,7 @@ describe('getOpenCasesInteractor', () => {
       .getPersistenceGateway()
       .getOpenCasesByUser.mockResolvedValue(null);
 
-    const result = await getOpenCasesInteractor({
+    const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -54,7 +56,7 @@ describe('getOpenCasesInteractor', () => {
       .getPersistenceGateway()
       .getOpenCasesByUser.mockResolvedValue([MOCK_CASE]);
 
-    const result = await getOpenCasesInteractor({
+    const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 

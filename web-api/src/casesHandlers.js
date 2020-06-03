@@ -9,7 +9,8 @@ module.exports = {
     .getClosedConsolidatedCasesLambda,
   getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
     .getConsolidatedCasesByCaseLambda,
-  getOpenCasesLambda: require('./cases/getOpenCasesLambda').getOpenCasesLambda,
+  getOpenConsolidatedCasesLambda: require('./cases/getOpenConsolidatedCasesLambda')
+    .getOpenConsolidatedCasesLambda,
   removeCasePendingItemLambda: require('./cases/removeCasePendingItemLambda')
     .removeCasePendingItemLambda,
   saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')

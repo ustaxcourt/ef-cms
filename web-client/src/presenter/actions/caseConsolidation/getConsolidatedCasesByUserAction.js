@@ -18,9 +18,11 @@ export const getConsolidatedCasesByUserAction = async ({
 
   let caseList;
   if (status !== Case.STATUS_TYPES.closed) {
-    caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
-      applicationContext,
-    });
+    caseList = await applicationContext
+      .getUseCases()
+      .getOpenConsolidatedCasesInteractor({
+        applicationContext,
+      });
   } else {
     caseList = await applicationContext
       .getUseCases()
