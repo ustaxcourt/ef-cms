@@ -18,15 +18,11 @@ exports.getOpenCasesInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
-  const openCasesValidated = Case.validateRawCollection(openCases, {
-    applicationContext,
-  });
-
-  if (openCasesValidated.length) {
+  if (openCases.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    openCasesValidated.forEach(caseRecord => {
+    openCases.forEach(caseRecord => {
       const userCaseEntity = new UserCase(caseRecord).validate().toRawObject();
       const { caseId, leadCaseId } = userCaseEntity;
 
@@ -37,10 +33,8 @@ exports.getOpenCasesInteractor = async ({ applicationContext }) => {
         caseMapping[caseId] = userCaseEntity;
       }
 
-      if (leadCaseId && leadCaseIdsToGet.includes(leadCaseId)) {
-        if (leadCaseIdsToGet.indexOf(leadCaseId) === -1) {
-          leadCaseIdsToGet.push(leadCaseId);
-        }
+      if (leadCaseId && !leadCaseIdsToGet.includes(leadCaseId)) {
+        leadCaseIdsToGet.push(leadCaseId);
       }
     });
 

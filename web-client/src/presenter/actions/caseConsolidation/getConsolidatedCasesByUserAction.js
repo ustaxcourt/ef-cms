@@ -14,14 +14,12 @@ export const getConsolidatedCasesByUserAction = async ({
   applicationContext,
   get,
 }) => {
-  const { userId } = applicationContext.getCurrentUser();
   const status = get(state.currentViewMetadata.caseList.tab);
 
   let caseList;
   if (status !== Case.STATUS_TYPES.closed) {
     caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
       applicationContext,
-      userId,
     });
   } else {
     //TODO implement this when working on displaying closed cases
