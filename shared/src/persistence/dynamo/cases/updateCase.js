@@ -259,6 +259,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           Item: {
             ...userCaseItem,
             caseCaption: caseToUpdate.caseCaption,
+            docketNumberSuffix: caseToUpdate.docketNumberSuffix,
             docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
             gsi1pk: caseToUpdate.caseId,
             leadCaseId: caseToUpdate.leadCaseId,
