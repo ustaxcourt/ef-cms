@@ -63,7 +63,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     completedAt: 
       type: "date"
       flags: 
@@ -112,7 +112,7 @@
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
-        presence: "required"
+        presence: "optional"
     docketNumber: 
       type: "string"
       flags: 

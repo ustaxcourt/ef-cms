@@ -97,7 +97,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
-    createdAt: joiStrictTimestamp.required(),
+    createdAt: joiStrictTimestamp.optional(),
     docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
     docketNumberSuffix: joi
       .string()
