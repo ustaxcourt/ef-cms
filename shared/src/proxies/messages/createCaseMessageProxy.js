@@ -1,12 +1,7 @@
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { CaseMessage } = require('../../entities/CaseMessage');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { post } = require('./requests');
 
 /**
- * creates a message on a case
+ * createCaseMessageInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -19,9 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.to the name of the user receiving the message
  * @param {string} providers.toSection the section of the user receiving the message
  * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} the created message
+ * @returns {Promise<*>} the promise of the api call
  */
-exports.createCaseMessageInteractor = async ({
+exports.createCaseMessageInteractor = ({
   applicationContext,
   caseId,
   from,
@@ -33,15 +28,9 @@ exports.createCaseMessageInteractor = async ({
   toSection,
   toUserId,
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const caseMessage = new CaseMessage(
-    {
-      caseId,
+  return post({
+    applicationContext,
+    body: {
       from,
       fromSection,
       fromUserId,
@@ -51,12 +40,6 @@ exports.createCaseMessageInteractor = async ({
       toSection,
       toUserId,
     },
-    { applicationContext },
-  )
-    .validate()
-    .toRawObject();
-
-  //TODO call persistence
-
-  return caseMessage;
+    endpoint: `/messages/${caseId}`,
+  });
 };
