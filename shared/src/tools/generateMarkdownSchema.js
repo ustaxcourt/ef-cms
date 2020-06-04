@@ -54,6 +54,7 @@ const {
 const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
+const { CaseMessage } = require('../business/entities/CaseMessage');
 const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
@@ -205,6 +206,7 @@ generateMarkdownSchema(
 generateMarkdownSchema(Batch, 'Batch');
 generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
+generateMarkdownSchema(CaseMessage, 'CaseMessage');
 generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');

@@ -10,14 +10,9 @@ describe('validateCreateCaseMessageInteractor', () => {
     const errors = validateCreateCaseMessageInteractor({
       applicationContext,
       message: {
-        caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-        from: 'yup',
-        fromSection: 'yup',
-        fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
         message: 'yup',
         subject: 'hi',
-        to: 'yup',
-        toSection: 'yup',
+        toSection: 'petitions',
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });
@@ -29,13 +24,8 @@ describe('validateCreateCaseMessageInteractor', () => {
     const errors = validateCreateCaseMessageInteractor({
       applicationContext,
       message: {
-        caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-        from: 'yup',
-        fromSection: 'yup',
-        fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
         message: 'yup',
-        to: 'yup',
-        toSection: 'yup',
+        toSection: 'petitions',
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
       },
     });
