@@ -2,39 +2,44 @@ const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
 /**
- * getOpenCasesInteractor
+ * getOpenConsolidatedCasesInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @returns {object} the open cases data
  */
-exports.getOpenCasesInteractor = async ({ applicationContext }) => {
+exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   let foundCases = [];
   let userCaseIdsMap = {};
 
   const { userId } = await applicationContext.getCurrentUser();
 
-  const openCases = await applicationContext
+  const openUserCases = await applicationContext
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
-  if (openCases && openCases.length) {
+  const openUserCasesValidated = UserCase.validateRawCollection(openUserCases, {
+    applicationContext,
+  });
+
+  if (openUserCasesValidated.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    openCases.forEach(caseRecord => {
-      const userCaseEntity = new UserCase(caseRecord).validate().toRawObject();
-      const { caseId, leadCaseId } = userCaseEntity;
+    openUserCasesValidated.forEach(caseRecord => {
+      const { caseId, leadCaseId } = caseRecord;
 
-      userCaseEntity.isRequestingUserAssociated = true;
+      caseRecord.isRequestingUserAssociated = true;
       userCaseIdsMap[caseId] = true;
 
       if (!leadCaseId || leadCaseId === caseId) {
-        caseMapping[caseId] = userCaseEntity;
+        caseMapping[caseId] = caseRecord;
       }
 
-      if (leadCaseId && !leadCaseIdsToGet.includes(leadCaseId)) {
-        leadCaseIdsToGet.push(leadCaseId);
+      if (leadCaseId) {
+        if (leadCaseIdsToGet.indexOf(leadCaseId) === -1) {
+          leadCaseIdsToGet.push(leadCaseId);
+        }
       }
     });
 

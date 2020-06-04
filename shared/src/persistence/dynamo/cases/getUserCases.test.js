@@ -1,5 +1,5 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const { getUserDashboardCases } = require('./getUserDashboardCases');
+const client = require('../../dynamodbClientService');
+const { getUserCases } = require('./getUserCases');
 const { User } = require('../../../business/entities/User');
 
 const {
@@ -21,7 +21,7 @@ const user = {
   userId: '522573b0-dc40-47f7-96fd-64758da315f5',
 };
 
-describe('getUserDashboardCases', () => {
+describe('getUserCases', () => {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValueOnce([
       {
@@ -35,7 +35,7 @@ describe('getUserDashboardCases', () => {
   });
 
   it('should return data with stripped internal keys from persistence', async () => {
-    const result = await getUserDashboardCases({
+    const result = await getUserCases({
       applicationContext,
       user,
     });

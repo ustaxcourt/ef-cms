@@ -1,5 +1,7 @@
+const {
+  getOpenConsolidatedCasesInteractor,
+} = require('./getOpenConsolidatedCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getOpenCasesInteractor } = require('./getOpenCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -23,7 +25,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should retrieve the current user information', async () => {
-    await getOpenCasesInteractor({
+    await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -31,7 +33,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should make a call to retrieve open cases by user', async () => {
-    await getOpenCasesInteractor({
+    await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -46,7 +48,7 @@ describe('getOpenCasesInteractor', () => {
   it('should return an empty list when no open cases are found', async () => {
     mockCase = null;
 
-    const result = await getOpenCasesInteractor({
+    const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 
@@ -54,7 +56,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should return a list of open cases', async () => {
-    const result = await getOpenCasesInteractor({
+    const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
 

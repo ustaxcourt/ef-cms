@@ -71,10 +71,10 @@ export const CaseListPetitioner = connect(
                     getCasesByStatusForUserSequence();
                   }}
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open">
+                  <Tab id="tab-open" tabName="Open" title="Open Cases">
                     {renderCaseListTable()}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  <Tab id="tab-closed" tabName="Closed" title="Closed Clases">
                     {renderCaseListTable()}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
@@ -98,10 +98,10 @@ export const CaseListPetitioner = connect(
                   getCasesByStatusForUserSequence();
                 }}
               >
-                <Tab id="tab-open" tabName="Open" title="Open">
+                <Tab id="tab-open" tabName="Open" title="Open Cases">
                   {renderCaseListTable()}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed">
+                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                   {renderCaseListTable()}
                 </Tab>
               </Tabs>
