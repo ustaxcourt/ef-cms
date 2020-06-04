@@ -23,7 +23,7 @@ describe('updateCase', () => {
     secondQueryStub = [
       {
         gsi1pk: 'user-case|123',
-        leadCaseId: 'case|123',
+        leadCaseId: '123',
         pk: 'user|123',
         sk: 'case|123',
         status: Case.STATUS_TYPES.generalDocket,

@@ -9,14 +9,20 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    formattedCases: state.formattedCases,
+    externalUserClosedCasesHelper: state.externalUserClosedCasesHelper,
+    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
     getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPetitioner({
-    formattedCases,
+    externalUserClosedCasesHelper,
+    externalUserOpenCasesHelper,
     getCasesByStatusForUserSequence,
     pageSize,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
     const renderStartButton = () => (
       <Button
@@ -30,7 +36,11 @@ export const CaseListPetitioner = connect(
       </Button>
     );
 
-    const renderCaseListTable = () => (
+    const renderCaseListTable = (
+      cases,
+      externalUserCasesHelper,
+      showMoreResultsSequence,
+    ) => (
       <div className="margin-top-2">
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
@@ -44,7 +54,7 @@ export const CaseListPetitioner = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCases.map(item => (
+            {cases.map(item => (
               <CaseListRowExternal
                 onlyLinkIfRequestedUserAssociated
                 formattedCase={item}
@@ -53,9 +63,16 @@ export const CaseListPetitioner = connect(
             ))}
           </tbody>
         </table>
-        <Button secondary onClick={() => {}}>
-          Load {pageSize} more
-        </Button>
+        {externalUserCasesHelper.showLoadMore && (
+          <Button
+            secondary
+            onClick={() => {
+              showMoreResultsSequence();
+            }}
+          >
+            Load {pageSize} more
+          </Button>
+        )}
       </div>
     );
 
@@ -72,15 +89,20 @@ export const CaseListPetitioner = connect(
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
                 >
                   <Tab id="tab-open" tabName="Open" title="Open">
-                    {renderCaseListTable()}
+                    {renderCaseListTable(
+                      externalUserOpenCasesHelper.caseResults,
+                      externalUserOpenCasesHelper,
+                      showMoreOpenCasesSequence,
+                    )}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed">
-                    {renderCaseListTable()}
+                    {renderCaseListTable(
+                      externalUserClosedCasesHelper.caseResults,
+                      externalUserClosedCasesHelper,
+                      showMoreClosedCasesSequence,
+                    )}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -104,10 +126,18 @@ export const CaseListPetitioner = connect(
                 }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open">
-                  {renderCaseListTable()}
+                  {renderCaseListTable(
+                    externalUserOpenCasesHelper.caseResults,
+                    externalUserOpenCasesHelper,
+                    showMoreOpenCasesSequence,
+                  )}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed">
-                  {renderCaseListTable()}
+                  {renderCaseListTable(
+                    externalUserClosedCasesHelper.caseResults,
+                    externalUserClosedCasesHelper,
+                    showMoreClosedCasesSequence,
+                  )}
                 </Tab>
               </Tabs>
             </div>
