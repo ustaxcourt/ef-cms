@@ -227,6 +227,22 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       },
     });
 
+  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
+
+  await new Promise(resolve => {
+    const documentsBucket = applicationContext.getDocumentsBucketName();
+    const s3Client = applicationContext.getStorageClient();
+
+    const params = {
+      Body: pdfData,
+      Bucket: documentsBucket,
+      ContentType: 'application/pdf',
+      Key: caseConfirmationPdfName,
+    };
+
+    s3Client.upload(params, resolve);
+  });
+
   if (caseEntity.isPaper) {
     const paperServicePdfBuffer = Buffer.from(pdfData);
 

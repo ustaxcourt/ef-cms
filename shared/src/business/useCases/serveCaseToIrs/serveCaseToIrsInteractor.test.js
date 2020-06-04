@@ -54,6 +54,12 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
+
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, cb) => {
+        return cb(true);
+      },
+    });
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -139,9 +145,6 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getUseCaseHelpers()
-      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -157,6 +160,33 @@ describe('serveCaseToIrsInteractor', () => {
       replaceCoversheet: true,
       useInitialData: true,
     });
+  });
+
+  it('should generate a notice of receipt of petition document and upload it to s3', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalled();
+    expect(applicationContext.getStorageClient).toHaveBeenCalled();
   });
 
   it('should not return a paper service pdf when the case is electronic', async () => {
