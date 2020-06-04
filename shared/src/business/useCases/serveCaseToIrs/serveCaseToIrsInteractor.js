@@ -5,6 +5,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -192,13 +193,8 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
-  const {
-    caseCaption,
-    caseCaptionExtension,
-    docketNumberWithSuffix,
-    preferredTrialCity,
-    receivedAt,
-  } = caseEntity;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
 
   const address = {
     ...caseEntity.contactPrimary,
@@ -215,7 +211,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       data: {
         address,
         caseCaptionExtension,
-        caseTitle: Case.getCaseTitle(caseCaption),
+        caseTitle,
         docketNumberWithSuffix,
         preferredTrialCity,
         receivedAtFormatted: applicationContext
