@@ -46,7 +46,6 @@ describe('getCaseMessageInteractor', () => {
 
     const returnedMessage = await getCaseMessageInteractor({
       applicationContext,
-      caseId: caseMessageData.caseId,
       messageId: caseMessageData.messageId,
     });
 

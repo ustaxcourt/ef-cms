@@ -33,7 +33,7 @@ describe('createCaseMessage', () => {
 
     expect(
       applicationContext.getDocumentClient().put.mock.calls.length,
-    ).toEqual(5);
+    ).toEqual(6);
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
@@ -44,8 +44,7 @@ describe('createCaseMessage', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[1][0].Item,
     ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
-      pk: `user-inbox|${mockCaseMessage.toUserId}`,
+      pk: `message|${mockCaseMessage.messageId}`,
       sk: `message|${mockCaseMessage.messageId}`,
       ...mockCaseMessage,
     });
@@ -53,12 +52,20 @@ describe('createCaseMessage', () => {
       applicationContext.getDocumentClient().put.mock.calls[2][0].Item,
     ).toMatchObject({
       gsi1pk: `message|${mockCaseMessage.messageId}`,
+      pk: `user-inbox|${mockCaseMessage.toUserId}`,
+      sk: `message|${mockCaseMessage.messageId}`,
+      ...mockCaseMessage,
+    });
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[3][0].Item,
+    ).toMatchObject({
+      gsi1pk: `message|${mockCaseMessage.messageId}`,
       pk: `user-outbox|${mockCaseMessage.fromUserId}`,
       sk: mockCaseMessage.createdAt,
       ...mockCaseMessage,
     });
     expect(
-      applicationContext.getDocumentClient().put.mock.calls[3][0].Item,
+      applicationContext.getDocumentClient().put.mock.calls[4][0].Item,
     ).toMatchObject({
       gsi1pk: `message|${mockCaseMessage.messageId}`,
       pk: `section-inbox|${mockCaseMessage.toSection}`,
@@ -66,7 +73,7 @@ describe('createCaseMessage', () => {
       ...mockCaseMessage,
     });
     expect(
-      applicationContext.getDocumentClient().put.mock.calls[4][0].Item,
+      applicationContext.getDocumentClient().put.mock.calls[5][0].Item,
     ).toMatchObject({
       gsi1pk: `message|${mockCaseMessage.messageId}`,
       pk: `section-outbox|${mockCaseMessage.fromSection}`,

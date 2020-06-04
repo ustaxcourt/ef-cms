@@ -52,7 +52,7 @@ functions:
     handler: web-api/${self:provider.dir}/messagesHandlers.createCaseMessageLambda
     events:
       - http:
-          path: /{caseId}
+          path: /
           method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -64,7 +64,7 @@ functions:
     handler: web-api/${self:provider.dir}/messagesHandlers.getCaseMessageLambda
     events:
       - http:
-          path: /{caseId}/{messageId}
+          path: /{messageId}
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

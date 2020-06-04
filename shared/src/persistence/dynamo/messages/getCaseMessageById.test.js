@@ -28,7 +28,6 @@ describe('getCaseMessageById', () => {
   it('retrieves the case message from persistence', async () => {
     const retrievedMessage = await getCaseMessageById({
       applicationContext,
-      caseId: mockCaseMessage.caseId,
       messageId: mockCaseMessage.messageId,
     });
 

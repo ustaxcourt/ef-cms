@@ -10,7 +10,6 @@ exports.getCaseMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().getCaseMessageInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
       messageId: event.pathParameters.messageId,
     });
   });
