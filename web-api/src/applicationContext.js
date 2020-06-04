@@ -387,6 +387,12 @@ const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
+  getClosedCasesByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
+const {
+  getClosedCasesInteractor,
+} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
+const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
@@ -480,8 +486,8 @@ const {
   getOpenCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
 const {
-  getOpenCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenCasesInteractor');
+  getOpenConsolidatedCasesInteractor,
+} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
@@ -564,8 +570,8 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
-  getUserDashboardCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserDashboardCases');
+  getUserCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
@@ -1151,6 +1157,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getClosedCasesByUser,
         getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
@@ -1179,7 +1186,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUserCaseNote,
         getUserCaseNoteForCases,
-        getUserDashboardCases,
+        getUserCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1348,6 +1355,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInventoryReportInteractor,
         getCaseMessageInteractor,
         getCasesByUserInteractor,
+        getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
         getDocumentQCInboxForSectionInteractor,
@@ -1363,7 +1371,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
-        getOpenCasesInteractor,
+        getOpenConsolidatedCasesInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
