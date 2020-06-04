@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const externalUserCasesHelper = get => {
+export const externalUserOpenCasesHelper = get => {
   const openCases = get(state.formattedOpenCases);
   const closedCases = get(state.formattedClosedCases);
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
@@ -8,8 +8,8 @@ export const externalUserCasesHelper = get => {
   const pageSize = get(state.constants.CASE_SEARCH_PAGE_SIZE);
 
   return {
-    closedCaseResults: closedCases.slice(0, closedCurrentPage * pageSize),
-    openCaseResults: openCases.slice(0, openCurrentPage * pageSize),
+    closedCaseResults: closedCases.slice(0, closedCurrentPage * pageSize) || [],
+    openCaseResults: openCases.slice(0, openCurrentPage * pageSize) || [],
     showLoadMoreClosedCases: closedCases.length > closedCurrentPage * pageSize,
     showLoadMoreOpenCases: openCases.length > openCurrentPage * pageSize,
   };
