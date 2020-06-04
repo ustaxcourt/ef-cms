@@ -38,17 +38,17 @@ const BetaBar = toggleBetaBarSequence => {
 };
 
 const NavigationItems = (
-  helper,
+  headerHelper,
   { isReportsMenuOpen, signOutSequence, toggleMobileMenuSequence },
 ) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
-      {helper.showHomeIcon && (
+      {headerHelper.showHomeIcon && (
         <li className="usa-nav__primary-item">
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsHome && 'usa-current',
+              headerHelper.pageIsHome && 'usa-current',
             )}
             href="/"
             onClick={() => toggleMobileMenuSequence()}
@@ -57,18 +57,18 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {helper.showMessages && (
+      {headerHelper.showMessages && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsMessages && 'usa-current',
+              headerHelper.pageIsCaseMessages && 'usa-current',
             )}
-            href="/messages/my/inbox"
+            href="/case-messages/my/inbox"
             onClick={() => toggleMobileMenuSequence()}
           >
-            Messages{' '}
-            {helper.showMessagesIcon && (
+            Case Messages{' '}
+            {headerHelper.showMessagesIcon && (
               <FontAwesomeIcon
                 aria-hidden="false"
                 aria-label="unread message"
@@ -80,26 +80,49 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {helper.showDocumentQC && (
+      {headerHelper.showMessages && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsDocumentQC && 'usa-current',
+              headerHelper.pageIsMessages && 'usa-current',
             )}
-            href={helper.defaultQCBoxPath}
+            href="/messages/my/inbox"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            Messages{' '}
+            {headerHelper.showMessagesIcon && (
+              <FontAwesomeIcon
+                aria-hidden="false"
+                aria-label="unread message"
+                className="iconStatusUnread"
+                icon={['fas', 'envelope']}
+                size="sm"
+              />
+            )}
+          </a>
+        </li>
+      )}
+      {headerHelper.showDocumentQC && (
+        <li className={classNames('usa-nav__primary-item')}>
+          <a
+            className={classNames(
+              'usa-nav__link',
+              headerHelper.pageIsDocumentQC && 'usa-current',
+            )}
+            href={headerHelper.defaultQCBoxPath}
             onClick={() => toggleMobileMenuSequence()}
           >
             Document QC
           </a>
         </li>
       )}
-      {helper.showMyCases && (
+      {headerHelper.showMyCases && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsMyCases && 'usa-current',
+              headerHelper.pageIsMyCases && 'usa-current',
             )}
             href="/"
             onClick={() => toggleMobileMenuSequence()}
@@ -108,12 +131,12 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {helper.showSearchNavItem && (
+      {headerHelper.showSearchNavItem && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsDashboard && 'usa-current',
+              headerHelper.pageIsDashboard && 'usa-current',
             )}
             href="/"
             onClick={() => toggleMobileMenuSequence()}
@@ -122,12 +145,12 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {helper.showTrialSessions && (
+      {headerHelper.showTrialSessions && (
         <li className={classNames('usa-nav__primary-item')}>
           <a
             className={classNames(
               'usa-nav__link',
-              helper.pageIsTrialSessions && 'usa-current',
+              headerHelper.pageIsTrialSessions && 'usa-current',
             )}
             href="/trial-sessions"
             onClick={() => toggleMobileMenuSequence()}
@@ -136,7 +159,7 @@ const NavigationItems = (
           </a>
         </li>
       )}
-      {helper.showReports && (
+      {headerHelper.showReports && (
         <li
           className={classNames(
             'usa-nav__primary-item',
