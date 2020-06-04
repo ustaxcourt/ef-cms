@@ -25,7 +25,7 @@ describe('createCaseMessage', () => {
     });
   });
 
-  it('attempts to persist the case message records', async () => {
+  it('attempts to persist the case message record', async () => {
     await createCaseMessage({
       applicationContext,
       caseMessage: mockCaseMessage,
@@ -33,44 +33,13 @@ describe('createCaseMessage', () => {
 
     expect(
       applicationContext.getDocumentClient().put.mock.calls.length,
-    ).toEqual(5);
+    ).toEqual(1);
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
+      gsi1pk: `message|${mockCaseMessage.messageId}`,
       pk: `case|${mockCaseMessage.caseId}`,
       sk: `message|${mockCaseMessage.messageId}`,
-      ...mockCaseMessage,
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0].Item,
-    ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
-      pk: `user-inbox|${mockCaseMessage.toUserId}`,
-      sk: `message|${mockCaseMessage.messageId}`,
-      ...mockCaseMessage,
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[2][0].Item,
-    ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
-      pk: `user-outbox|${mockCaseMessage.fromUserId}`,
-      sk: mockCaseMessage.createdAt,
-      ...mockCaseMessage,
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[3][0].Item,
-    ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
-      pk: `section-inbox|${mockCaseMessage.toSection}`,
-      sk: `message|${mockCaseMessage.messageId}`,
-      ...mockCaseMessage,
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[4][0].Item,
-    ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
-      pk: `section-outbox|${mockCaseMessage.fromSection}`,
-      sk: mockCaseMessage.createdAt,
       ...mockCaseMessage,
     });
   });

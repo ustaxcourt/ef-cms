@@ -13,6 +13,7 @@ import { CaseDetail } from './CaseDetail/CaseDetail';
 import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
+import { CaseMessages } from './Messages/CaseMessages';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -92,6 +93,7 @@ const pages = {
   CaseDetail,
   CaseDetailInternal,
   CaseInventoryReport,
+  CaseMessages,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
   CreateOrder,
