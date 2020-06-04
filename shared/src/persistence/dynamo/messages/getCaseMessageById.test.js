@@ -20,8 +20,8 @@ const mockCaseMessage = {
 describe('getCaseMessageById', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: () => Promise.resolve({ Item: mockCaseMessage }),
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: () => Promise.resolve({ Items: [mockCaseMessage] }),
     });
   });
 
