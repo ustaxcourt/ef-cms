@@ -18,17 +18,15 @@ export const getConsolidatedCasesByUserAction = async ({
 
   let caseList;
   if (status !== Case.STATUS_TYPES.closed) {
-    caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
+    caseList = await applicationContext
+      .getUseCases()
+      .getOpenConsolidatedCasesInteractor({
+        applicationContext,
+      });
+  } else {
+    caseList = await applicationContext.getUseCases().getClosedCasesInteractor({
       applicationContext,
     });
-  } else {
-    //TODO implement this when working on displaying closed cases
-    // caseList = await applicationContext
-    //   .getUseCases()
-    //   .getClosedConsolidatedCasesByUserInteractor({
-    //     applicationContext,
-    //     userId,
-    //   });
   }
   caseList = orderBy(caseList, 'createdAt', 'desc');
   return { caseList };

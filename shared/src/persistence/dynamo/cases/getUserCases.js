@@ -1,7 +1,7 @@
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 
-exports.getUserDashboardCases = async ({ applicationContext, userId }) => {
+exports.getUserCases = async ({ applicationContext, userId }) => {
   const userCases = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
