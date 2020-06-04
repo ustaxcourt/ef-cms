@@ -11,12 +11,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case
- * @param {string} providers.from the name of the user sending the message
- * @param {string} providers.fromSection the section of the user sending the message
- * @param {string} providers.fromUserId the user id of the user sending the message
  * @param {string} providers.message the message text
  * @param {string} providers.subject the message subject
- * @param {string} providers.to the name of the user receiving the message
  * @param {string} providers.toSection the section of the user receiving the message
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the created message
@@ -24,12 +20,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.createCaseMessageInteractor = async ({
   applicationContext,
   caseId,
-  from,
-  fromSection,
-  fromUserId,
   message,
   subject,
-  to,
   toSection,
   toUserId,
 }) => {
@@ -39,15 +31,23 @@ exports.createCaseMessageInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const fromUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const toUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: toUserId });
+
   const caseMessage = new CaseMessage(
     {
       caseId,
-      from,
-      fromSection,
-      fromUserId,
+      from: fromUser.name,
+      fromSection: fromUser.section,
+      fromUserId: fromUser.userId,
       message,
       subject,
-      to,
+      to: toUser.name,
       toSection,
       toUserId,
     },
@@ -56,7 +56,10 @@ exports.createCaseMessageInteractor = async ({
     .validate()
     .toRawObject();
 
-  //TODO call persistence
+  await applicationContext.getPersistenceGateway().createCaseMessage({
+    applicationContext,
+    caseMessage,
+  });
 
   return caseMessage;
 };
