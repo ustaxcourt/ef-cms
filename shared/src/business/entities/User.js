@@ -5,7 +5,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
+// const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
@@ -110,7 +110,8 @@ const userValidation = {
     .required(),
   section: joi
     .string()
-    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+    // Removed temporarily: Eric will re-add
+    // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
     .optional(),
   token: joi.string().optional(),
   userId: joi
