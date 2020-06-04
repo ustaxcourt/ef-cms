@@ -23,11 +23,12 @@ exports.createCaseMessageInteractor = ({
   return post({
     applicationContext,
     body: {
+      caseId,
       message,
       subject,
       toSection,
       toUserId,
     },
-    endpoint: `/messages/${caseId}`,
+    endpoint: '/messages/',
   });
 };
