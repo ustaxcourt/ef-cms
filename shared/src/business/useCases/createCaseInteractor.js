@@ -12,6 +12,7 @@ const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
+const { UserCase } = require('../entities/UserCase');
 const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentToCase = ({
@@ -135,6 +136,7 @@ exports.createCaseInteractor = async ({
     {
       docketNumber,
       isPaper: false,
+      orderForFilingFee: true,
       ...petitionEntity.toRawObject(),
       privatePractitioners,
       userId: user.userId,
@@ -231,6 +233,15 @@ exports.createCaseInteractor = async ({
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  const userCaseEntity = new UserCase(caseToAdd);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    caseId: caseToAdd.caseId,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
   });
 
   await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({

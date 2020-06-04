@@ -130,6 +130,9 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/createCaseMessageInteractor');
+const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -465,6 +468,9 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getOpenCasesByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
+const {
   getOpenCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenCasesInteractor');
 const {
@@ -548,6 +554,9 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
+const {
+  getUserDashboardCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserDashboardCases');
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
@@ -1145,6 +1154,7 @@ module.exports = (appContextUser = {}) => {
         getIndexMappingFields,
         getIndexMappingLimit,
         getInternalUsers,
+        getOpenCasesByUser,
         getPractitionerByBarNumber,
         getPractitionersByName,
         getPublicDownloadPolicyUrl,
@@ -1158,6 +1168,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUserCaseNote,
         getUserCaseNoteForCases,
+        getUserDashboardCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1286,6 +1297,7 @@ module.exports = (appContextUser = {}) => {
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
+        createCaseMessageInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createPractitionerUserInteractor,
         createTrialSessionInteractor,

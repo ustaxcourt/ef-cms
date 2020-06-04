@@ -36,7 +36,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         document: { sentBy: 'petitioner' },
         isQC: true,
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ];
@@ -87,7 +87,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           sentBy: 'petitioner',
         },
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ]);
@@ -123,7 +123,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           sentBy: 'petitioner',
         },
         messages: [],
-        section: 'irsBatchSection',
+        section: 'docket',
         sentBy: 'docketclerk',
       },
     ]);

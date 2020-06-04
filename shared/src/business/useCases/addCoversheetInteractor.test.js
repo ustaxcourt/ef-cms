@@ -705,5 +705,33 @@ describe('addCoversheetInteractor', () => {
 
       expect(result.caseCaptionExtension).toEqual('');
     });
+
+    it('preserves the original case caption and docket number when the useInitialData is true', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+          docketNumberSuffix: 'S',
+          initialCaption: 'Janie and Jackie Petitioner, Petitioners',
+          initialDocketNumberSuffix: 'Z',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          isPaper: false,
+          lodged: true,
+        },
+        useInitialData: true,
+      });
+
+      expect(result.docketNumber).toEqual('Docket Number: 102-19Z');
+      expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
+    });
   });
 });
