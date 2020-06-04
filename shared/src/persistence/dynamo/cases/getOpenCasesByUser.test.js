@@ -3,8 +3,8 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { getOpenCasesByUser } = require('./getOpenCasesByUser');
 const { User } = require('../../../business/entities/User');
-jest.mock('./getCasesByUser', () => ({
-  getCasesByUser: jest.fn().mockReturnValue([
+jest.mock('./getUserCases', () => ({
+  getUserCases: jest.fn().mockReturnValue([
     {
       caseId: '123',
       pk: 'case|123',
