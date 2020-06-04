@@ -150,6 +150,37 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
+  it('should preserve original case caption and docket number on the coversheet if the case is not paper', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCaseHelpers()
+      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      replaceCoversheet: true,
+      useInitialData: true,
+    });
+  });
+
   it('should not return a paper service pdf when the case is electronic', async () => {
     mockCase = {
       ...MOCK_CASE,
