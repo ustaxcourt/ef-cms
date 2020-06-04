@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSessionWorkingCopy } from '../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
@@ -363,22 +364,22 @@ describe('trial session working copy computed', () => {
               {
                 ...MOCK_CASE,
                 docketNumber: '102-19',
-                status: Case.STATUS_TYPES.closed,
+                status: CASE_STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
                 docketNumber: '5000-17',
-                status: Case.STATUS_TYPES.closed,
+                status: CASE_STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
                 docketNumber: '500-17',
-                status: Case.STATUS_TYPES.closed,
+                status: CASE_STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
                 docketNumber: '90-07',
-                status: Case.STATUS_TYPES.closed,
+                status: CASE_STATUS_TYPES.closed,
               },
             ],
           },

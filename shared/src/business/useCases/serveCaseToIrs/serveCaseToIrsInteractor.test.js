@@ -6,6 +6,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
@@ -16,7 +17,7 @@ describe('serveCaseToIrsInteractor', () => {
       assigneeId: null,
       assigneeName: 'IRSBatchSystem',
       caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2018-12-27T18:06:02.968Z',
       completedBy: 'Petitioner',
       completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
