@@ -36,55 +36,55 @@ export const CaseListPetitioner = connect(
       </Button>
     );
 
-    const renderCaseListTable = (
+    const renderCaseListTable = ({
       cases,
       showLoadMore,
       showMoreResultsSequence,
       tabName,
-    ) => {
-      {
-        externalUserOpenCasesHelper.openCaseResults && <div>HIHIHIHIHIHIH</div>;
-      }
-      {
-        !externalUserOpenCasesHelper.openCaseResults && (
-          <div className="margin-top-2">
-            <table
-              className="usa-table responsive-table dashboard"
-              id="case-list"
-            >
-              <thead>
-                <tr>
-                  <th>
-                    <span className="usa-sr-only">Lead Case Indicator</span>
-                  </th>
-                  <th>Docket number</th>
-                  <th>Case title</th>
-                  <th>Date filed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {externalUserOpenCasesHelper.openCaseResults.map(item => (
-                  <CaseListRowExternal
-                    onlyLinkIfRequestedUserAssociated
-                    formattedCase={item}
-                    key={item.caseId}
-                  />
-                ))}
-              </tbody>
-            </table>
-            {showLoadMore && (
-              <Button
-                secondary
-                onClick={() => {
-                  showMoreResultsSequence();
-                }}
+    }) => {
+      return (
+        <>
+          {!cases?.length && <p>You have no {tabName} cases.</p>}
+          {cases?.length && (
+            <div className="margin-top-2">
+              <table
+                className="usa-table responsive-table dashboard"
+                id="case-list"
               >
-                Load {pageSize} more
-              </Button>
-            )}
-          </div>
-        );
-      }
+                <thead>
+                  <tr>
+                    <th>
+                      <span className="usa-sr-only">Lead Case Indicator</span>
+                    </th>
+                    <th>Docket number</th>
+                    <th>Case title</th>
+                    <th>Date filed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {externalUserOpenCasesHelper.openCaseResults.map(item => (
+                    <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      key={item.caseId}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              {showLoadMore && (
+                <Button
+                  secondary
+                  onClick={() => {
+                    showMoreResultsSequence();
+                  }}
+                >
+                  Load {pageSize} more
+                </Button>
+              )}
+            </div>
+          )}
+        </>
+      );
     };
 
     return (
@@ -141,18 +141,22 @@ export const CaseListPetitioner = connect(
                 }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open">
-                  {renderCaseListTable(
-                    externalUserOpenCasesHelper.caseResults,
-                    externalUserOpenCasesHelper,
-                    showMoreOpenCasesSequence,
-                  )}
+                  {renderCaseListTable({
+                    cases: externalUserOpenCasesHelper.openCaseResults,
+                    showLoadMore:
+                      externalUserOpenCasesHelper.showLoadMoreOpenCases,
+                    showMoreResultsSequence: showMoreOpenCasesSequence,
+                    tabName: 'open',
+                  })}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed">
-                  {renderCaseListTable(
-                    externalUserClosedCasesHelper.caseResults,
-                    externalUserClosedCasesHelper,
-                    showMoreClosedCasesSequence,
-                  )}
+                  {renderCaseListTable({
+                    cases: externalUserClosedCasesHelper.closedCaseResults,
+                    showLoadMore:
+                      externalUserClosedCasesHelper.showLoadMoreClosedCases,
+                    showMoreResultsSequence: showMoreClosedCasesSequence,
+                    tabName: 'closed',
+                  })}
                 </Tab>
               </Tabs>
             </div>
