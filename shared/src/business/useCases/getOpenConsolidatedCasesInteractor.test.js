@@ -56,8 +56,6 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should return a list of open cases', async () => {
-    mockCase = MOCK_CASE;
-
     const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
