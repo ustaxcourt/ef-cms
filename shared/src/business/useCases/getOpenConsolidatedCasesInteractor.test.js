@@ -56,9 +56,7 @@ describe('getOpenCasesInteractor', () => {
   });
 
   it('should return a list of open cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getOpenCasesByUser.mockResolvedValue([MOCK_CASE]);
+    mockCase = MOCK_CASE;
 
     const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
