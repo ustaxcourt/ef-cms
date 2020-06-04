@@ -10,14 +10,12 @@ import React from 'react';
 export const CaseListPetitioner = connect(
   {
     externalUserCasesHelper: state.externalUserCasesHelper,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPetitioner({
     externalUserCasesHelper,
-    getCasesByStatusForUserSequence,
     pageSize,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
@@ -119,9 +117,6 @@ export const CaseListPetitioner = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open Cases">
                   {renderCaseListTable(

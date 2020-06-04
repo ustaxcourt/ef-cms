@@ -11,19 +11,19 @@ import React from 'react';
 export const CaseListRespondent = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
-    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
-    formattedCases: state.formattedCases,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListRespondent({
     dashboardExternalHelper,
-    externalUserOpenCasesHelper,
-    formattedCases,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
     pageSize,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
-    const renderTable = () => (
+    const renderTable = (cases, showLoadMore, showMoreResultsSequence) => (
       <>
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
@@ -37,7 +37,7 @@ export const CaseListRespondent = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCases.map(item => (
+            {cases.map(item => (
               <CaseListRowExternal
                 onlyLinkIfRequestedUserAssociated
                 formattedCase={item}
@@ -46,8 +46,13 @@ export const CaseListRespondent = connect(
             ))}
           </tbody>
         </table>
-        {externalUserOpenCasesHelper.showLoadMore && (
-          <Button secondary onClick={() => {}}>
+        {showLoadMore && (
+          <Button
+            secondary
+            onClick={() => {
+              showMoreResultsSequence();
+            }}
+          >
             Load {pageSize} more
           </Button>
         )}
@@ -64,15 +69,20 @@ export const CaseListRespondent = connect(
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.openCaseResults,
+                      externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreOpenCasesSequence,
+                    )}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.closedCaseResults,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreClosedCasesSequence,
+                    )}
                   </Tab>
                 </Tabs>
               </div>
@@ -90,15 +100,20 @@ export const CaseListRespondent = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.openCaseResults,
+                    externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreOpenCasesSequence,
+                  )}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.closedCaseResults,
+                    externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreClosedCasesSequence,
+                  )}
                 </Tab>
               </Tabs>
             </div>

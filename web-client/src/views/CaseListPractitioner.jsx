@@ -11,19 +11,19 @@ import React from 'react';
 export const CaseListPractitioner = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
-    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
-    formattedCases: state.formattedCases,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPractitioner({
     dashboardExternalHelper,
-    externalUserOpenCasesHelper,
-    formattedCases,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
     pageSize,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
-    const renderTable = () => (
+    const renderTable = (cases, showLoadMore, showMoreResultsSequence) => (
       <>
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
@@ -37,7 +37,7 @@ export const CaseListPractitioner = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCases.map(item => (
+            {cases.map(item => (
               <CaseListRowExternal
                 onlyLinkIfRequestedUserAssociated
                 formattedCase={item}
@@ -46,8 +46,13 @@ export const CaseListPractitioner = connect(
             ))}
           </tbody>
         </table>
-        {externalUserOpenCasesHelper.showLoadMore && (
-          <Button secondary onClick={() => {}}>
+        {showLoadMore && (
+          <Button
+            secondary
+            onClick={() => {
+              showMoreResultsSequence();
+            }}
+          >
             Load {pageSize} more
           </Button>
         )}
@@ -75,15 +80,20 @@ export const CaseListPractitioner = connect(
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.openCaseResults,
+                      externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreOpenCasesSequence,
+                    )}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.closedCaseResults,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreClosedCasesSequence,
+                    )}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -105,15 +115,20 @@ export const CaseListPractitioner = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.openCaseResults,
+                    externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreOpenCasesSequence,
+                  )}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.closedCaseResults,
+                    externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreClosedCasesSequence,
+                  )}
                 </Tab>
               </Tabs>
             </div>
