@@ -24,6 +24,9 @@ const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
 const {
+  NoticeOfReceiptOfPetition,
+} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.jsx');
+const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
 const {
@@ -68,6 +71,7 @@ const components = {
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  NoticeOfReceiptOfPetition,
   Order,
   PageMetaHeaderDocket,
   PendingReport,

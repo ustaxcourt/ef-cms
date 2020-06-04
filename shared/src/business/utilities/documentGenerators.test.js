@@ -13,6 +13,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
   order,
   pendingReport,
   receiptOfFiling,
@@ -257,7 +258,7 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfDocketChange', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates a Notice of Docket Change document', async () => {
       const pdf = await noticeOfDocketChange({
         applicationContext,
         data: {
@@ -275,6 +276,42 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Of_Docket_Change', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('noticeOfReceiptOfPetition', () => {
+    it('generates a Notice of Receipt of Petition document', async () => {
+      const pdf = await noticeOfReceiptOfPetition({
+        applicationContext,
+        data: {
+          address: {
+            address1: '123 Some St.',
+            city: 'Somecity',
+            countryName: '',
+            name: 'Test Petitioner',
+            postalCode: '80008',
+            state: 'ZZ',
+          },
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          preferredTrialCity: 'Birmingham, AL',
+          receivedAtFormatted: 'December 1, 2019',
+          servedDate: 'June 3, 2020',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Receipt_Petition', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
