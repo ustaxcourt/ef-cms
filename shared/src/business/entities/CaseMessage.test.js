@@ -11,6 +11,9 @@ describe('CaseMessage', () => {
       const message = new CaseMessage(
         {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+          caseStatus: 'General Docket - Not at Issue',
+          docketNumber: '123-45',
+          docketNumberSuffix: 'S',
           from: 'gg',
           fromSection: 'petitions',
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
