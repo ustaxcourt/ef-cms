@@ -11,10 +11,12 @@ export const CaseListPetitioner = connect(
   {
     formattedCases: state.formattedCases,
     getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
   },
   function CaseListPetitioner({
     formattedCases,
     getCasesByStatusForUserSequence,
+    pageSize,
   }) {
     const renderStartButton = () => (
       <Button
@@ -51,6 +53,9 @@ export const CaseListPetitioner = connect(
             ))}
           </tbody>
         </table>
+        <Button secondary onClick={() => {}}>
+          Load {pageSize} more
+        </Button>
       </div>
     );
 
