@@ -5,7 +5,6 @@ import React from 'react';
 export const CaseMessagesIndividualInbox = connect(
   { formattedMessages: state.formattedMessages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
-    console.log('messages', formattedMessages);
     return (
       <>
         <table className="usa-table work-queue subsection">
