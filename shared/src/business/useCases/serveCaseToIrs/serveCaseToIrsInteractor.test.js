@@ -41,7 +41,7 @@ describe('serveCaseToIrsInteractor', () => {
           to: null,
         },
       ],
-      section: 'irsBatchSection',
+      section: 'docket',
       sentBy: 'petitioner',
       updatedAt: '2018-12-27T18:06:02.968Z',
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
@@ -125,6 +125,37 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
     ).toMatchObject({
       replaceCoversheet: true,
+    });
+  });
+
+  it('should preserve original case caption and docket number on the coversheet if the case is not paper', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCaseHelpers()
+      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      replaceCoversheet: true,
+      useInitialData: true,
     });
   });
 
