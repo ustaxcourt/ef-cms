@@ -67,7 +67,7 @@ function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
   const obj = {};
   let errors = null;
-  if (entity && entity.getFormattedValidationErrors) {
+  if (entity.getFormattedValidationErrors) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
   if (errors) {
