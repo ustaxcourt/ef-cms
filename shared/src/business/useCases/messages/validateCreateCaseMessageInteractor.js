@@ -1,4 +1,4 @@
-const { CaseMessage } = require('../../entities/CaseMessage');
+const { NewCaseMessage } = require('../../entities/NewCaseMessage');
 
 /**
  * validateCreateCaseMessageInteractor
@@ -12,7 +12,7 @@ exports.validateCreateCaseMessageInteractor = ({
   applicationContext,
   message,
 }) => {
-  return new CaseMessage(message, {
+  return new NewCaseMessage(message, {
     applicationContext,
   }).getFormattedValidationErrors();
 };
