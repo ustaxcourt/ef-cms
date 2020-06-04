@@ -34,7 +34,7 @@ describe('admissions clerk practitioner journey', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
-
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

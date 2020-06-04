@@ -1,6 +1,6 @@
 const React = require('react');
 
-const CompressedDocketHeader = ({
+export const CompressedDocketHeader = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
@@ -22,5 +22,3 @@ const CompressedDocketHeader = ({
     </>
   );
 };
-
-export default CompressedDocketHeader;

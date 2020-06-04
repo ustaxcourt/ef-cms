@@ -10,6 +10,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
+import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setPrimaryDocumentFileIdPropAction } from '../actions/editUploadCourtIssuedDocument/setPrimaryDocumentFileIdPropAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -32,6 +33,7 @@ const onSuccess = [
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   setCaseDetailPageTabAction,
+  setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,
 ];

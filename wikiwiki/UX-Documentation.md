@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 # Initial onsite user research
 
 We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
@@ -8,7 +10,7 @@ https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
-## [Create a New Case (Paper Petition)](https://www.lucidchart.com/invitations/accept/fe5aa2db-f488-4709-a282-9e66614ab58d)
+## [Create a New Case (Paper Petition)](https://app.lucidchart.com/invitations/accept/fe5aa2db-f488-4709-a282-9e66614ab58d)
 
 ## [Create and Save Order/Notice](https://www.lucidchart.com/invitations/accept/aff34e34-75ad-487f-8993-db7791a47698)
 

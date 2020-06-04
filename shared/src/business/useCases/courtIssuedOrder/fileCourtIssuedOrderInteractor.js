@@ -37,38 +37,16 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
+  const shouldScrapePDFContents = !documentMetadata.documentContents;
+
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
 
-  if (documentMetadata.documentContents) {
-    const documentContentsId = applicationContext.getUniqueId();
-
-    const contentToStore = {
-      documentContents: documentMetadata.documentContents,
-      richText: documentMetadata.draftState.richText,
-    };
-
-    applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: Buffer.from(JSON.stringify(contentToStore)),
-      documentId: documentContentsId,
-      useTempBucket: true,
-    });
-
-    delete documentMetadata.documentContents;
-    delete documentMetadata.draftState.documentContents;
-    delete documentMetadata.draftState.richText;
-    delete documentMetadata.draftState.editorDelta;
-    documentMetadata.documentContentsId = documentContentsId;
-  }
-
-  /* eslint-disable spellcheck/spell-checker */
-  /* POC for #4814 - leaving here for future work
-  if (!documentMetadata.documentContents) {
-    const { Body: pdfData } = await applicationContext
+  if (shouldScrapePDFContents) {
+    const { Body: pdfBuffer } = await applicationContext
       .getStorageClient()
       .getObject({
         Bucket: applicationContext.environment.documentsBucketName,
@@ -76,17 +54,53 @@ exports.fileCourtIssuedOrderInteractor = async ({
       })
       .promise();
 
-    try {
-      const parsedDocument = await pdfParse(pdfData);
+    const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < pdfBuffer.length; ++i) {
+      view[i] = pdfBuffer[i];
+    }
 
-      if (parsedDocument.text) {
-        documentMetadata.documentContents = parsedDocument.text;
+    // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
+    try {
+      const contents = await applicationContext
+        .getUtilities()
+        .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
+
+      if (contents) {
+        documentMetadata.documentContents = contents;
       }
     } catch (e) {
-      applicationContext.logger.info('Failed to parse PDF');
+      applicationContext.logger.info('Failed to parse PDF', e);
+      throw e;
     }
-  } */
-  /* eslint-enable spellcheck/spell-checker */
+  }
+
+  if (documentMetadata.documentContents) {
+    const documentContentsId = applicationContext.getUniqueId();
+
+    const contentToStore = {
+      documentContents: documentMetadata.documentContents,
+      richText: documentMetadata.draftState
+        ? documentMetadata.draftState.richText
+        : undefined,
+    };
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(JSON.stringify(contentToStore)),
+      documentId: documentContentsId,
+      useTempBucket: true,
+    });
+
+    if (documentMetadata.draftState) {
+      delete documentMetadata.draftState.documentContents;
+      delete documentMetadata.draftState.richText;
+      delete documentMetadata.draftState.editorDelta;
+    }
+
+    delete documentMetadata.documentContents;
+    documentMetadata.documentContentsId = documentContentsId;
+  }
 
   const documentEntity = new Document(
     {

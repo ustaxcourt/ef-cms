@@ -17,6 +17,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
@@ -25,6 +26,7 @@ const { IrsPractitioner } = require('../IrsPractitioner');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
+const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const joiStrictTimestamp = getTimestampSchema();
@@ -160,6 +162,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
+  hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
@@ -249,6 +252,14 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.status = rawCase.status || Case.STATUS_TYPES.new;
     this.userId = rawCase.userId;
+
+    if (Array.isArray(rawCase.statistics)) {
+      this.statistics = rawCase.statistics.map(
+        statistic => new Statistic(statistic, { applicationContext }),
+      );
+    } else {
+      this.statistics = [];
+    }
   }
 
   this.caseCaption = rawCase.caseCaption;
@@ -259,10 +270,8 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
-  this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
   this.leadCaseId = rawCase.leadCaseId;
@@ -283,6 +292,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   if (applicationContext.getCurrentUser().userId === rawCase.userId) {
     this.userId = rawCase.userId;
@@ -293,6 +303,17 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   if (rawCase.caseCaption) {
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
+  }
+
+  if (Array.isArray(rawCase.correspondence)) {
+    this.correspondence = rawCase.correspondence
+      .map(
+        correspondence =>
+          new Correspondence(correspondence, { applicationContext }),
+      )
+      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+  } else {
+    this.correspondence = [];
   }
 
   if (Array.isArray(rawCase.documents)) {
@@ -348,6 +369,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.orderToShowCause = rawCase.orderToShowCause || false;
   this.orderToChangeDesignatedPlaceOfTrial =
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
+
+  this.docketNumberWithSuffix =
+    this.docketNumber + (this.docketNumberSuffix || '');
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -443,6 +467,10 @@ Case.validationRules = {
   }),
   contactPrimary: joi.object().required(),
   contactSecondary: joi.object().optional().allow(null),
+  correspondence: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'Correspondence' }))
+    .description('List of Correspondence documents for the case.'),
   createdAt: joiStrictTimestamp
     .required()
     .description(
@@ -458,6 +486,10 @@ Case.validationRules = {
     .allow(null)
     .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  docketNumberWithSuffix: joi
+    .string()
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
   docketRecord: joi
     .array()
     .items(joi.object().meta({ entityName: 'DocketRecord' }))
@@ -477,8 +509,13 @@ Case.validationRules = {
       ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
     )
     .optional(),
-  hasIrsNotice: joi.boolean().optional(),
-  hasVerifiedIrsNotice: joi.boolean().optional().allow(null),
+  hasVerifiedIrsNotice: joi
+    .boolean()
+    .optional()
+    .allow(null)
+    .description(
+      'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+    ),
   highPriority: joi
     .boolean()
     .optional()
@@ -498,7 +535,7 @@ Case.validationRules = {
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
-    .max(2) // TODO: add enum
+    .max(2) // TODO: add enumerator
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -513,9 +550,6 @@ Case.validationRules = {
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
     ),
-  irsSendDate: joiStrictTimestamp
-    .optional()
-    .description('When the case was sent to the IRS by the court.'),
   isPaper: joi.boolean().optional(),
   leadCaseId: joi
     .string()
@@ -650,6 +684,27 @@ Case.validationRules = {
     .description(
       'A sortable representation of the docket number (auto-generated by constructor).',
     ),
+  statistics: joi
+    .when('hasVerifiedIrsNotice', {
+      is: true,
+      otherwise: joi
+        .array()
+        .items(joi.object().meta({ entityName: 'Statistic' }))
+        .optional(),
+      then: joi.when('caseType', {
+        is: Case.CASE_TYPES_MAP.deficiency,
+        otherwise: joi
+          .array()
+          .items(joi.object().meta({ entityName: 'Statistic' }))
+          .optional(),
+        then: joi
+          .array()
+          .min(1)
+          .items(joi.object().meta({ entityName: 'Statistic' }))
+          .required(),
+      }),
+    })
+    .description('List of Statistic Entities for the case.'),
   status: joi
     .string()
     .valid(...Object.values(Case.STATUS_TYPES))
@@ -684,6 +739,12 @@ Case.validationRules = {
     .pattern(/^[0-9]{1,2}:([0-5][0-9])$/)
     .optional()
     .description('Time of day when this case goes to trial.'),
+  useSameAsPrimary: joi
+    .boolean()
+    .optional()
+    .description(
+      'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
+    ),
   userId: joi
     .string()
     .max(50)
@@ -877,7 +938,6 @@ Case.prototype.addDocument = function (document, { applicationContext }) {
         eventCode: document.eventCode,
         filedBy: document.filedBy,
         filingDate: document.receivedAt || document.createdAt,
-        status: document.status,
       },
       { applicationContext },
     ),
@@ -906,19 +966,8 @@ Case.prototype.closeCase = function () {
  * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
-Case.prototype.markAsSentToIRS = function (sendDate) {
-  this.irsSendDate = sendDate;
+Case.prototype.markAsSentToIRS = function () {
   this.status = Case.STATUS_TYPES.generalDocket;
-  this.documents.forEach(document => {
-    document.status = 'served';
-  });
-  const dateServed = prepareDateFromString(undefined, 'L LT');
-  const status = `R served on ${dateServed}`;
-  this.docketRecord.forEach(docketRecord => {
-    if (docketRecord.documentId) {
-      docketRecord.status = status;
-    }
-  });
 
   return this;
 };
@@ -1004,6 +1053,21 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 
 Case.prototype.getDocumentById = function ({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return this.documents.find(
+    document =>
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+};
+
+Case.prototype.getIrsSendDate = function () {
+  const petitionDocument = this.getPetitionDocument();
+  if (petitionDocument) {
+    return petitionDocument.servedAt;
+  }
 };
 
 /**
@@ -1701,6 +1765,18 @@ Case.prototype.setAsSealed = function () {
  */
 Case.prototype.getCaseConfirmationGeneratedPdfFileName = function () {
   return `case-${this.docketNumber}-confirmation.pdf`;
+};
+
+/**
+ * adds the correspondence document to the list of correspondences on the case
+ *
+ * @param {Correspondence} correspondenceEntity the correspondence document to add to the case
+ * @returns {Case} this case entity
+ */
+Case.prototype.fileCorrespondence = function (correspondenceEntity) {
+  this.correspondence = [...this.correspondence, correspondenceEntity];
+
+  return this;
 };
 
 exports.Case = Case;

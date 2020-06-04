@@ -1,56 +1,39 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
+import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseInfo = connect(
   {
-    baseUrl: state.baseUrl,
     caseDetailEditHelper: state.caseDetailEditHelper,
     constants: state.constants,
     form: state.form,
-    token: state.token,
+    trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence:
+      sequences.updateOrderForDesignatingPlaceOfTrialSequence,
+    updatePetitionPaymentFormValueSequence:
+      sequences.updatePetitionPaymentFormValueSequence,
     validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validationErrors: state.validationErrors,
   },
   function CaseInfo({
-    baseUrl,
     caseDetailEditHelper,
     constants,
     form,
-    token,
+    trialCitiesHelper,
     updateFormValueSequence,
+    updateOrderForDesignatingPlaceOfTrialSequence,
+    updatePetitionPaymentFormValueSequence,
     validateCaseDetailSequence,
     validationErrors,
   }) {
     return (
       <div className="blue-container">
-        <div className="subsection">
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="case-caption">
-              Case caption
-            </label>
-            <textarea
-              className="usa-textarea"
-              id="case-caption"
-              name="caseCaption"
-              value={form.caseCaption}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-            <span className="display-inline-block margin-top-1">
-              {constants.CASE_CAPTION_POSTFIX}
-            </span>
-          </div>
-        </div>
         {form.isPaper && (
           <>
             <DateInput
@@ -71,14 +54,50 @@ export const CaseInfo = connect(
               onChange={updateFormValueSequence}
             />
 
-            <div className="usa-form-group read-only">
-              <div className="label">Mailing date</div>
-              <p>{form.mailingDate}</p>
-            </div>
+            <FormGroup errorText={validationErrors.mailingDate}>
+              <label className="usa-label" htmlFor="mailing-date">
+                Mailing date
+              </label>
+              <input
+                className="usa-input usa-input-inline"
+                id="mailing-date"
+                maxLength="25"
+                name="mailingDate"
+                value={form.mailingDate || ''}
+                onBlur={() => validateCaseDetailSequence()}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
           </>
         )}
 
-        <div className="usa-form-group">
+        <FormGroup errorText={validationErrors.caseCaption}>
+          <label className="usa-label" htmlFor="case-caption">
+            Case caption
+          </label>
+          <textarea
+            className="usa-textarea"
+            id="case-caption"
+            name="caseCaption"
+            value={form.caseCaption}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+          <span className="display-inline-block margin-top-1">
+            {constants.CASE_CAPTION_POSTFIX}
+          </span>
+        </FormGroup>
+
+        <FormGroup>
           <ProcedureType
             legend="Case procedure"
             value={form.procedureType}
@@ -111,86 +130,55 @@ export const CaseInfo = connect(
               Order to Show Cause
             </label>
           </div>
-        </div>
+        </FormGroup>
 
-        <div className="usa-form-group">
-          <label
-            className="usa-label margin-bottom-0"
-            htmlFor="preferred-trial-city"
-          >
-            Trial location
-          </label>
-          <div id="preferred-trial-city">
-            {caseDetailEditHelper.showNoTrialLocationSelected && (
-              <>
-                <p className="margin-top-0">No trial location selected</p>
-                <div className="order-checkbox">
-                  <input
-                    checked={form.orderDesignatingPlaceOfTrial}
-                    className="usa-checkbox__input"
-                    id="order-designating-place-of-trial"
-                    name="orderDesignatingPlaceOfTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="order-designating-place-of-trial"
-                  >
-                    Order Designating Place of Trial
-                  </label>
-                </div>
-              </>
-            )}
-            {caseDetailEditHelper.showRQTDocumentLink && (
-              <>
-                <a
-                  aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/case-documents/${form.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <FontAwesomeIcon className="fa-icon-blue" icon="file-pdf" />
-                  {caseDetailEditHelper.requestForPlaceOfTrialDocumentTitle}
-                </a>
-                <div className="order-checkbox">
-                  <input
-                    checked={form.orderToChangeDesignatedPlaceOfTrial}
-                    className="usa-checkbox__input"
-                    id="order-to-change-designated-place-of-trial"
-                    name="orderToChangeDesignatedPlaceOfTrial"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="order-to-change-designated-place-of-trial"
-                  >
-                    Order to Change Designated Place of Trial
-                  </label>
-                </div>
-              </>
-            )}
-            {caseDetailEditHelper.showReadOnlyTrialLocation &&
-              `Request for Place of Trial at ${form.preferredTrialCity}`}
+        <TrialCity
+          label="Trial location"
+          showDefaultOption={true}
+          showHint={false}
+          showRegularTrialCitiesHint={false}
+          showSmallTrialCitiesHint={false}
+          trialCitiesByState={
+            trialCitiesHelper(form.procedureType).trialCitiesByState
+          }
+          value={form.preferredTrialCity}
+          onChange={e => {
+            updateOrderForDesignatingPlaceOfTrialSequence({
+              key: e.target.name,
+              value: e.target.value || null,
+            });
+            validateCaseDetailSequence();
+          }}
+        />
+        <FormGroup>
+          <div className="order-checkbox">
+            <input
+              checked={form.orderDesignatingPlaceOfTrial}
+              className="usa-checkbox__input"
+              id="order-designating-place-of-trial"
+              name="orderDesignatingPlaceOfTrial"
+              type="checkbox"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label inline-block"
+              htmlFor="order-designating-place-of-trial"
+            >
+              Order Designating Place of Trial
+            </label>
           </div>
-        </div>
+        </FormGroup>
 
         <PetitionPaymentForm
           bind="form"
           dateBind="form"
           updateDateSequence={updateFormValueSequence}
-          updateSequence={updateFormValueSequence}
+          updateSequence={updatePetitionPaymentFormValueSequence}
           validateSequence={validateCaseDetailSequence}
           validationErrorsBind="validationErrors"
         />
@@ -227,7 +215,7 @@ export const CaseInfo = connect(
           className="orders-needed"
           role="list"
         >
-          <div className="usa-form-group" role="listitem">
+          <FormGroup role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.orderForRatification}
@@ -248,8 +236,8 @@ export const CaseInfo = connect(
             >
               Order for Ratification of Petition
             </label>
-          </div>
-          <div className="usa-form-group" role="listitem">
+          </FormGroup>
+          <FormGroup role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.noticeOfAttachments}
@@ -270,8 +258,8 @@ export const CaseInfo = connect(
             >
               Notice of Attachments in the Nature of Evidence
             </label>
-          </div>
-          <div className="usa-form-group" role="listitem">
+          </FormGroup>
+          <FormGroup role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={form.orderForAmendedPetition}
@@ -292,7 +280,7 @@ export const CaseInfo = connect(
             >
               Order for Amended Petition
             </label>
-          </div>
+          </FormGroup>
           <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"

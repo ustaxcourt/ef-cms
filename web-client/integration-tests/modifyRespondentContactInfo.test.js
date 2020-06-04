@@ -1,7 +1,7 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
-import respondentUpdatesAddress from './journey/respondentUpdatesAddress';
-import respondentViewsCaseDetailNoticeOfChangeOfAddress from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
+import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
+import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
 const test = setupTest();
 
@@ -18,6 +18,7 @@ describe('Modify Respondent Contact Information', () => {
 
     it(`create case #${i} and associate a respondent`, async () => {
       caseDetail = await uploadPetition(test);
+      expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 

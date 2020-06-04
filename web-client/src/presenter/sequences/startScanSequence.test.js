@@ -31,7 +31,7 @@ describe('startScanSequence', () => {
     await test.runSequence('startScanSequence', {});
 
     expect(applicationContext.getScanner().startScanSession).toHaveBeenCalled();
-    expect(test.getState('scanner.isScanning')).toBeTruthy;
+    expect(test.getState('scanner.isScanning')).toBeTruthy();
   });
 
   it('provides a flow for setting a scan source if one is not cached', async () => {

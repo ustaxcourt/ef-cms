@@ -7,7 +7,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default (
+export const petitionsClerkEditsDraftOrder = (
   test,
   {
     currentRichText = '<p>This is a test order.</p>',

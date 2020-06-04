@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 # Docket Record
 * Default sort for docket record is oldest activity to newest (chronological)
 * A new docket entry is created upon submission of an external document
@@ -10,4 +12,4 @@
 
 
 ## Document Title (Docket Record)
-* Order of docket entry information: [Concatenated Document Title] [Additional Line 1 (C/S 04/17/19)(Attachment(s)) (Objection) (Lodged) Additional Line 2 
+* Order of docket entry information: [Concatenated Document Title] [Additional Line 1 (C/S 04/17/19)(Attachment(s)) (Objection) (Lodged) Additional Line 2

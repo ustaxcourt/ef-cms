@@ -4,7 +4,9 @@ BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_DEV}"
-elif [[ $BRANCH == 'experimental' ]] ; then
+elif [[ $BRANCH == 'experimental1' ]] ; then
+  echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
+elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_EXP}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${DYNAMSOFT_PRODUCT_KEYS_IRS}"

@@ -6,9 +6,9 @@ import {
   viewDocumentDetailMessage,
 } from './helpers';
 import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
+import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import petitionsClerkCreateOrder from './journey/petitionsClerkCreateOrder';
 
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractedPendingMessagesFromCaseDetailComputed,
@@ -28,6 +28,7 @@ describe('a docket clerk views case detail messages in progress with a message o
   loginAs(test, 'petitioner');
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 

@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
-const { userDecorator, userValidation } = require('./User');
+const { User, userDecorator, userValidation } = require('./User');
 
 /**
  * constructor
@@ -27,6 +27,7 @@ joiValidationDecorator(
     entityName: joi.string().valid('PrivatePractitioner').required(),
     representingPrimary: joi.boolean().optional(),
     representingSecondary: joi.boolean().optional(),
+    role: joi.string().required().valid(User.ROLES.privatePractitioner),
     serviceIndicator: joi
       .string()
       .valid(...Object.values(SERVICE_INDICATOR_TYPES))

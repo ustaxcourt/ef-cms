@@ -21,6 +21,7 @@ exports.viewSectionOutbox = () => {
 
 exports.viewDocumentQCMyInbox = () => {
   cy.visit('/document-qc/my/inbox');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
 };
 

@@ -20,6 +20,7 @@ const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { omit } = require('lodash');
 const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
@@ -43,7 +44,7 @@ exports.completeDocketEntryQCInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId, documentType } = entryMetadata;
+  const { caseId, documentId } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -65,15 +66,38 @@ exports.completeDocketEntryQCInteractor = async ({
     documentId,
   });
 
+  const editableFields = {
+    addToCoversheet: entryMetadata.addToCoversheet,
+    additionalInfo: entryMetadata.additionalInfo,
+    additionalInfo2: entryMetadata.additionalInfo2,
+    attachments: entryMetadata.attachments,
+    certificateOfService: entryMetadata.certificateOfService,
+    certificateOfServiceDate: entryMetadata.certificateOfServiceDate,
+    documentTitle: entryMetadata.documentTitle,
+    documentType: entryMetadata.documentType,
+    eventCode: entryMetadata.eventCode,
+    freeText: entryMetadata.freeText,
+    freeText2: entryMetadata.freeText2,
+    isFileAttached: entryMetadata.isFileAttached,
+    lodged: entryMetadata.lodged,
+    mailingDate: entryMetadata.mailingDate,
+    objections: entryMetadata.objections,
+    ordinalValue: entryMetadata.ordinalValue,
+    partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
+    partyPrimary: entryMetadata.partyPrimary,
+    partySecondary: entryMetadata.partySecondary,
+    pending: entryMetadata.pending,
+    receivedAt: entryMetadata.receivedAt,
+    scenario: entryMetadata.scenario,
+    serviceDate: entryMetadata.serviceDate,
+  };
+
   const updatedDocument = new Document(
     {
-      ...entryMetadata,
-      createdAt: currentDocument.createdAt,
-      documentId,
-      documentType,
+      ...currentDocument,
+      ...editableFields,
       relationship: 'primaryDocument',
       userId: user.userId,
-      workItems: currentDocument.workItems,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
@@ -115,8 +139,12 @@ exports.completeDocketEntryQCInteractor = async ({
     updatedDocument.filedBy !== currentDocument.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
 
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
   const docketChangeInfo = {
+    caseCaptionExtension,
     caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
+    caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
       caseToUpdate.docketNumberSuffix || ''

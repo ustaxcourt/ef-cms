@@ -13,13 +13,16 @@ import { navigateToPublicSiteSequence } from './sequences/public/navigateToPubli
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
+import { submitPublicOpinionAdvancedSearchSequence } from './sequences/public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
+import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
+import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
 export const presenter = {
@@ -38,13 +41,16 @@ export const presenter = {
     showMoreResultsSequence,
     submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
     toggleBetaBarSequence,
     toggleUsaBannerDetailsSequence,
+    updateAdvancedOpinionSearchFormValueSequence,
     updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
     updateDocketNumberSearchFormSequence,
     validateCaseAdvancedSearchFormSequence,
+    validateOpinionSearchSequence,
     validateOrderSearchSequence,
   },
   state,

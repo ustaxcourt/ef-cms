@@ -130,7 +130,7 @@ describe('forwardWorkItemInteractor integration test', () => {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
         docketNumber: '101-19',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-19S',
         document: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
