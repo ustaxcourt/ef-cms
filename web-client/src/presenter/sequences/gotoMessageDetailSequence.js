@@ -7,8 +7,9 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageAction } from '../actions/setMessageAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-const gotoMessageDetail = [
+const gotoMessageDetail = showProgressSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
@@ -17,7 +18,7 @@ const gotoMessageDetail = [
   getMessageAction,
   setMessageAction,
   setCurrentPageAction('MessageDetail'),
-];
+]);
 
 export const gotoMessageDetailSequence = [
   isLoggedInAction,
