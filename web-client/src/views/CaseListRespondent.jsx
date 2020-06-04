@@ -11,12 +11,14 @@ import React from 'react';
 export const CaseListRespondent = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
+    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
     formattedCases: state.formattedCases,
     getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
   },
   function CaseListRespondent({
     dashboardExternalHelper,
+    externalUserOpenCasesHelper,
     formattedCases,
     getCasesByStatusForUserSequence,
     pageSize,
@@ -44,9 +46,11 @@ export const CaseListRespondent = connect(
             ))}
           </tbody>
         </table>
-        <Button secondary onClick={() => {}}>
-          Load {pageSize} more
-        </Button>
+        {externalUserOpenCasesHelper.showLoadMore && (
+          <Button secondary onClick={() => {}}>
+            Load {pageSize} more
+          </Button>
+        )}
       </>
     );
 

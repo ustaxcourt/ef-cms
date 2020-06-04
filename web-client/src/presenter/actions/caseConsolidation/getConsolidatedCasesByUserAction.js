@@ -1,6 +1,4 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { orderBy } from 'lodash';
-import { state } from 'cerebral';
 
 /**
  * Fetches the cases (including consolidated) associated with the petitioner who created them or the respondent who is associated with them.
@@ -12,24 +10,14 @@ import { state } from 'cerebral';
  */
 export const getConsolidatedCasesByUserAction = async ({
   applicationContext,
-  get,
 }) => {
-  const status = get(state.currentViewMetadata.caseList.tab);
-
-  let caseList;
-  if (status !== Case.STATUS_TYPES.closed) {
-    caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
+  let openCaseList = await applicationContext
+    .getUseCases()
+    .getOpenCasesInteractor({
       applicationContext,
     });
-  } else {
-    //TODO implement this when working on displaying closed cases
-    // caseList = await applicationContext
-    //   .getUseCases()
-    //   .getClosedConsolidatedCasesByUserInteractor({
-    //     applicationContext,
-    //     userId,
-    //   });
-  }
-  caseList = orderBy(caseList, 'createdAt', 'desc');
-  return { caseList };
+  let closedCaseList = [...openCaseList];
+
+  openCaseList = orderBy(openCaseList, 'createdAt', 'desc');
+  return { closedCaseList, openCaseList };
 };

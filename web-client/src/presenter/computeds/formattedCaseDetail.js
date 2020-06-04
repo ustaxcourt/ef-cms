@@ -1,10 +1,17 @@
 /* eslint-disable complexity */
 import { state } from 'cerebral';
 
-export const formattedCases = (get, applicationContext) => {
+export const formattedOpenCases = (get, applicationContext) => {
   const { formatCase } = applicationContext.getUtilities();
 
-  const cases = get(state.cases);
+  const cases = get(state.openCases);
+  return cases.map(myCase => formatCase(applicationContext, myCase));
+};
+
+export const formattedClosedCases = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
+
+  const cases = get(state.closedCases);
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 

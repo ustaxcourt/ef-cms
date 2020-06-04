@@ -11,10 +11,11 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
-import { setCasesAction } from '../actions/setCasesAction';
+import { setClosedCasesAction } from '../actions/setClosedCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
+import { setOpenCasesAction } from '../actions/setOpenCasesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { state } from 'cerebral';
@@ -57,7 +58,8 @@ const goToDashboard = [
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
       getConsolidatedCasesByUserAction,
-      setCasesAction,
+      setClosedCasesAction,
+      setOpenCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
     irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
@@ -70,12 +72,14 @@ const goToDashboard = [
     ],
     petitioner: [
       getConsolidatedCasesByUserAction,
-      setCasesAction,
+      setClosedCasesAction,
+      setOpenCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
       getConsolidatedCasesByUserAction,
-      setCasesAction,
+      setClosedCasesAction,
+      setOpenCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
     ],
   },
