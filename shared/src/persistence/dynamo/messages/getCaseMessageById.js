@@ -1,4 +1,4 @@
-const { get } = require('../../dynamodbClientService');
+const { query } = require('../../dynamodbClientService');
 
 /**
  * getCaseMessageById
@@ -9,11 +9,17 @@ const { get } = require('../../dynamodbClientService');
  * @returns {object} the created case message
  */
 exports.getCaseMessageById = async ({ applicationContext, messageId }) => {
-  return get({
-    Key: {
-      pk: `message|${messageId}`,
-      sk: `message|${messageId}`,
+  const messages = await query({
+    ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
     },
+    ExpressionAttributeValues: {
+      ':gsi1pk': `messsage|${messageId}`,
+    },
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
+
+  return messages[0];
 };
