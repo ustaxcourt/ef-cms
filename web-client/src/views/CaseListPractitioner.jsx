@@ -13,34 +13,41 @@ export const CaseListPractitioner = connect(
     dashboardExternalHelper: state.dashboardExternalHelper,
     formattedCases: state.formattedCases,
     getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
   },
   function CaseListPractitioner({
     dashboardExternalHelper,
     formattedCases,
     getCasesByStatusForUserSequence,
+    pageSize,
   }) {
     const renderTable = () => (
-      <table className="usa-table responsive-table dashboard" id="case-list">
-        <thead>
-          <tr>
-            <th>
-              <span className="usa-sr-only">Lead Case Indicator</span>
-            </th>
-            <th>Docket number</th>
-            <th>Case title</th>
-            <th>Date filed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formattedCases.map(item => (
-            <CaseListRowExternal
-              onlyLinkIfRequestedUserAssociated
-              formattedCase={item}
-              key={item.caseId}
-            />
-          ))}
-        </tbody>
-      </table>
+      <>
+        <table className="usa-table responsive-table dashboard" id="case-list">
+          <thead>
+            <tr>
+              <th>
+                <span className="usa-sr-only">Lead Case Indicator</span>
+              </th>
+              <th>Docket number</th>
+              <th>Case title</th>
+              <th>Date filed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {formattedCases.map(item => (
+              <CaseListRowExternal
+                onlyLinkIfRequestedUserAssociated
+                formattedCase={item}
+                key={item.caseId}
+              />
+            ))}
+          </tbody>
+        </table>
+        <Button secondary onClick={() => {}}>
+          Load {pageSize} more
+        </Button>
+      </>
     );
 
     const renderStartButton = () => (
