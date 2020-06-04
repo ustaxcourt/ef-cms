@@ -23,6 +23,7 @@ exports.getCaseInventoryReport = async ({
     'caseCaption',
     'docketNumber',
     'docketNumberSuffix',
+    'docketNumberWithSuffix',
     'status',
   ];
   const { CASE_INVENTORY_MAX_PAGE_SIZE } = applicationContext.getConstants();

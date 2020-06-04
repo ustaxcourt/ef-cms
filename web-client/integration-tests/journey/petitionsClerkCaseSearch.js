@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkCaseSearch = test => {
   return it('Petitions clerk searches for case', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('updateSearchTermSequence', {

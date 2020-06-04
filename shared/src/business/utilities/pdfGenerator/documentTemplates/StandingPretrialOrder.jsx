@@ -1,9 +1,9 @@
 const React = require('react');
 
-const DocketHeader = require('../components/DocketHeader.jsx').default;
-const PrimaryHeader = require('../components/PrimaryHeader.jsx').default;
+const { DocketHeader } = require('../components/DocketHeader.jsx');
+const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
+export const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
   return (
     <>
       <PrimaryHeader />
@@ -352,5 +352,3 @@ const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
     </>
   );
 };
-
-export default StandingPretrialOrder;

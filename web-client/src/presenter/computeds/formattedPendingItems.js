@@ -1,4 +1,4 @@
-import { formatSearchResultRecord } from './advancedSearchHelper';
+import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
 import { state } from 'cerebral';
 
 export const formatPendingItem = (item, { applicationContext }) => {

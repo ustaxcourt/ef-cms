@@ -4,7 +4,7 @@ import { irsSuperuserAdvancedSearchForCaseDocketNumber } from './journey/irsSupe
 import { irsSuperuserSearchForCase } from './journey/irsSuperuserSearchForCase';
 import { irsSuperuserSearchForUnservedCase } from './journey/irsSuperuserSearchForUnservedCase';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const test = setupTest();
 

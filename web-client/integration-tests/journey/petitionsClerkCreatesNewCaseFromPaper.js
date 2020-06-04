@@ -21,15 +21,15 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
   const formValues = [
     {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     },
     {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     },
     {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     },
     {

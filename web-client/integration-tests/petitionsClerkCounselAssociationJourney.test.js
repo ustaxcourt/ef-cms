@@ -1,12 +1,11 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
+import { petitionsClerkEditsPractitionerOnCase } from './journey/petitionsClerkEditsPractitionerOnCase';
+import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
+import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsClerkRemovesRespondentFromCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { uploadPetition } from './helpers';
-import petitionsClerkEditsPractitionerOnCase from './journey/petitionsClerkEditsPractitionerOnCase';
-import petitionsClerkRemovesPractitionerFromCase from './journey/petitionsClerkRemovesPractitionerFromCase';
-import petitionsClerkRemovesRespondentFromCase from './journey/petitionsClerkRemovesRespondentFromCase';
 
 const test = setupTest();
 
@@ -29,6 +28,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
