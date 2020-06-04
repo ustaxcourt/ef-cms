@@ -13,11 +13,17 @@ export const getConsolidatedCasesByUserAction = async ({
 }) => {
   let openCaseList = await applicationContext
     .getUseCases()
-    .getOpenCasesInteractor({
+    .getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
-  let closedCaseList = [...openCaseList];
+
+  let closedCaseList = await applicationContext
+    .getUseCases()
+    .getClosedCasesInteractor({
+      applicationContext,
+    });
 
   openCaseList = orderBy(openCaseList, 'createdAt', 'desc');
+  closedCaseList = orderBy(closedCaseList, 'createdAt', 'desc');
   return { closedCaseList, openCaseList };
 };

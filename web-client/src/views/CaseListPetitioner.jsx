@@ -90,14 +90,14 @@ export const CaseListPetitioner = connect(
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open">
+                  <Tab id="tab-open" tabName="Open" title="Open Cases">
                     {renderCaseListTable(
                       externalUserOpenCasesHelper.caseResults,
                       externalUserOpenCasesHelper,
                       showMoreOpenCasesSequence,
                     )}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                     {renderCaseListTable(
                       externalUserClosedCasesHelper.caseResults,
                       externalUserClosedCasesHelper,
