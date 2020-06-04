@@ -111,11 +111,22 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
-  getOpenCases:
-    handler: web-api/${self:provider.dir}/casesHandlers.getOpenCasesLambda
+  getOpenConsolidatedCases:
+    handler: web-api/${self:provider.dir}/casesHandlers.getOpenConsolidatedCasesLambda
     events:
       - http:
-          path: /open-cases
+          path: /open
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+
+  getClosedCases:
+    handler: web-api/${self:provider.dir}/casesHandlers.getClosedCasesLambda
+    events:
+      - http:
+          path: /closed
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

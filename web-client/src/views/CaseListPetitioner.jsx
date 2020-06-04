@@ -9,16 +9,14 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    externalUserClosedCasesHelper: state.externalUserClosedCasesHelper,
-    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
+    externalUserCasesHelper: state.externalUserCasesHelper,
     getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPetitioner({
-    externalUserClosedCasesHelper,
-    externalUserOpenCasesHelper,
+    externalUserCasesHelper,
     getCasesByStatusForUserSequence,
     pageSize,
     showMoreClosedCasesSequence,
@@ -38,7 +36,7 @@ export const CaseListPetitioner = connect(
 
     const renderCaseListTable = (
       cases,
-      externalUserCasesHelper,
+      showLoadMore,
       showMoreResultsSequence,
     ) => (
       <div className="margin-top-2">
@@ -63,7 +61,7 @@ export const CaseListPetitioner = connect(
             ))}
           </tbody>
         </table>
-        {externalUserCasesHelper.showLoadMore && (
+        {showLoadMore && (
           <Button
             secondary
             onClick={() => {
@@ -90,17 +88,17 @@ export const CaseListPetitioner = connect(
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open">
+                  <Tab id="tab-open" tabName="Open" title="Open Cases">
                     {renderCaseListTable(
-                      externalUserOpenCasesHelper.caseResults,
-                      externalUserOpenCasesHelper,
+                      externalUserCasesHelper.openCaseResults,
+                      externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreOpenCasesSequence,
                     )}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                     {renderCaseListTable(
-                      externalUserClosedCasesHelper.caseResults,
-                      externalUserClosedCasesHelper,
+                      externalUserCasesHelper.closedCaseResults,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreClosedCasesSequence,
                     )}
                   </Tab>
@@ -125,17 +123,17 @@ export const CaseListPetitioner = connect(
                   getCasesByStatusForUserSequence();
                 }}
               >
-                <Tab id="tab-open" tabName="Open" title="Open">
+                <Tab id="tab-open" tabName="Open" title="Open Cases">
                   {renderCaseListTable(
-                    externalUserOpenCasesHelper.caseResults,
-                    externalUserOpenCasesHelper,
+                    externalUserCasesHelper.openCaseResults,
+                    externalUserCasesHelper.showLoadMoreOpenCases,
                     showMoreOpenCasesSequence,
                   )}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed">
+                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                   {renderCaseListTable(
-                    externalUserClosedCasesHelper.caseResults,
-                    externalUserClosedCasesHelper,
+                    externalUserCasesHelper.closedCaseResults,
+                    externalUserCasesHelper.showLoadMoreClosedCases,
                     showMoreClosedCasesSequence,
                   )}
                 </Tab>

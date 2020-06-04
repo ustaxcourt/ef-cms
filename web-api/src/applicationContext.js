@@ -129,6 +129,9 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseMessage,
+} = require('../../shared/src/persistence/dynamo/messages/createCaseMessage');
+const {
   createCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createCaseMessageInteractor');
 const {
@@ -380,6 +383,12 @@ const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
+  getClosedCasesByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
+const {
+  getClosedCasesInteractor,
+} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
+const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
@@ -473,8 +482,8 @@ const {
   getOpenCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
 const {
-  getOpenCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenCasesInteractor');
+  getOpenConsolidatedCasesInteractor,
+} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
@@ -557,8 +566,8 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
-  getUserDashboardCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserDashboardCases');
+  getUserCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
@@ -1105,6 +1114,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
+        createCaseMessage,
         createCaseTrialSortMappingRecords,
         createElasticsearchReindexRecord,
         createPractitionerUser,
@@ -1141,6 +1151,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getClosedCasesByUser,
         getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
@@ -1169,7 +1180,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUserCaseNote,
         getUserCaseNoteForCases,
-        getUserDashboardCases,
+        getUserCases,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1338,6 +1349,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInteractor,
         getCaseInventoryReportInteractor,
         getCasesByUserInteractor,
+        getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
         getDocumentQCInboxForSectionInteractor,
@@ -1353,7 +1365,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
-        getOpenCasesInteractor,
+        getOpenConsolidatedCasesInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
@@ -1451,7 +1463,7 @@ module.exports = (appContextUser = {}) => {
     logger: {
       error: value => {
         // eslint-disable-next-line no-console
-        console.error(JSON.stringify(value));
+        console.error(value);
       },
       info: (key, value) => {
         // eslint-disable-next-line no-console
