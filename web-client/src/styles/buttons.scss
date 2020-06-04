@@ -103,6 +103,10 @@
   svg {
     margin-right: 5px;
   }
+
+  &.usa-button--unstyled:visited {
+    color: $color-white;
+  }
 }
 
 .recall-button-box {
