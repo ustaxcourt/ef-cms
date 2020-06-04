@@ -40,6 +40,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
@@ -118,6 +119,7 @@ const helpers = {
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
+  formattedMessages,
   formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
