@@ -26,12 +26,8 @@ describe('createCaseMessageInteractor', () => {
   it('creates the case message', async () => {
     const caseMessageData = {
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
-      from: 'Test Petitionsclerk',
-      fromSection: 'petitions',
-      fromUserId: 'a1638ae0-be78-4185-b751-c19cc5775135',
       message: "How's it going?",
       subject: 'Hey!',
-      to: 'Test Petitionsclerk1',
       toSection: 'petitions',
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
@@ -39,11 +35,38 @@ describe('createCaseMessageInteractor', () => {
       role: User.ROLES.petitionsClerk,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValueOnce({
+        name: 'Test Petitionsclerk',
+        role: User.ROLES.petitionsClerk,
+        section: 'petitions',
+        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      })
+      .mockReturnValueOnce({
+        name: 'Test Petitionsclerk2',
+        role: User.ROLES.petitionsClerk,
+        section: 'petitions',
+        userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
+      });
 
-    const caseMessage = await createCaseMessageInteractor({
+    await createCaseMessageInteractor({
       applicationContext,
       ...caseMessageData,
     });
-    expect(caseMessage).toBeDefined();
+
+    expect(
+      applicationContext.getPersistenceGateway().createCaseMessage,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().createCaseMessage.mock
+        .calls[0][0].caseMessage,
+    ).toMatchObject({
+      ...caseMessageData,
+      from: 'Test Petitionsclerk',
+      fromSection: 'petitions',
+      fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
+      to: 'Test Petitionsclerk2',
+    });
   });
 });
