@@ -6,10 +6,10 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.createCaseMessageLambda = event =>
+exports.getCaseMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createCaseMessageInteractor({
-      ...JSON.parse(event.body),
+    return await applicationContext.getUseCases().getCaseMessageInteractor({
       applicationContext,
+      messageId: event.pathParameters.messageId,
     });
   });

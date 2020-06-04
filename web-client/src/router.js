@@ -980,6 +980,17 @@ const router = {
     );
 
     registerRoute(
+      '/case-messages/*/*',
+      ifHasAccess((queue, box) => {
+        setPageTitle('Messages');
+        return app.getSequence('gotoCaseMessagesSequence')({
+          box,
+          queue,
+        });
+      }),
+    );
+
+    registerRoute(
       '/pdf-preview',
       ifHasAccess(() => {
         setPageTitle('PDF Preview');

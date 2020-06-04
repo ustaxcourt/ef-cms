@@ -142,6 +142,42 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
+  const reactNoticeReceiptPetitionTemplate = reactTemplateGenerator({
+    componentName: 'NoticeOfReceiptOfPetition',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactNoticeReceiptPetitionTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Notice of Docket Change',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: data.docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: data.docketNumberWithSuffix,
+      headerHtml,
+    });
+
+  return pdf;
+};
+
 const order = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -576,6 +612,7 @@ module.exports = {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
   order,
   pendingReport,
   receiptOfFiling,

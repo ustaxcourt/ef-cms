@@ -5,6 +5,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -192,12 +193,51 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+
+  const address = {
+    ...caseEntity.contactPrimary,
+    countryName:
+      caseEntity.contactPrimary.countryType !== 'domestic'
+        ? caseEntity.contactPrimary.country
+        : '',
+  };
+
   const pdfData = await applicationContext
-    .getUseCaseHelpers()
-    .generateCaseConfirmationPdf({
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
       applicationContext,
-      caseEntity,
+      data: {
+        address,
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
     });
+
+  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
+
+  await new Promise(resolve => {
+    const documentsBucket = applicationContext.getDocumentsBucketName();
+    const s3Client = applicationContext.getStorageClient();
+
+    const params = {
+      Body: pdfData,
+      Bucket: documentsBucket,
+      ContentType: 'application/pdf',
+      Key: caseConfirmationPdfName,
+    };
+
+    s3Client.upload(params, resolve);
+  });
 
   if (caseEntity.isPaper) {
     const paperServicePdfBuffer = Buffer.from(pdfData);
