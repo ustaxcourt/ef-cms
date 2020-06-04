@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Used for changing the message queue (myself, section) and box (inbox, outbox, completed) from props
+ * Used for changing the message queue (my, section) and box (inbox, outbox, completed) from props
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
