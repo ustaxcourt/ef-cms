@@ -55,7 +55,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
       richText: documentMetadata.draftState.richText,
     };
 
-    applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
       documentId: documentContentsId,
