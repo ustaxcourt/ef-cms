@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { UserCase } = require('../entities/UserCase');
 
 /**
  * getOpenConsolidatedCasesInteractor
@@ -13,19 +14,19 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
 
   const { userId } = await applicationContext.getCurrentUser();
 
-  const openCases = await applicationContext
+  const openUserCases = await applicationContext
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
-  const userCasesValidated = Case.validateRawCollection(openCases, {
+  const openUserCasesValidated = UserCase.validateRawCollection(openUserCases, {
     applicationContext,
   });
 
-  if (userCasesValidated.length) {
+  if (openUserCasesValidated.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    userCasesValidated.forEach(caseRecord => {
+    openUserCasesValidated.forEach(caseRecord => {
       const { caseId, leadCaseId } = caseRecord;
 
       caseRecord.isRequestingUserAssociated = true;
