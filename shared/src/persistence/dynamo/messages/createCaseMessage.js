@@ -18,6 +18,15 @@ exports.createCaseMessage = async ({ applicationContext, caseMessage }) => {
     applicationContext,
   });
 
+  await put({
+    Item: {
+      pk: `message|${caseMessage.messageId}`,
+      sk: `message|${caseMessage.messageId}`,
+      ...caseMessage,
+    },
+    applicationContext,
+  });
+
   // create user inbox record
   await put({
     Item: {
