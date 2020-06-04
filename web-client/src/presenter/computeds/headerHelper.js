@@ -18,6 +18,7 @@ export const headerHelper = (get, applicationContext) => {
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isMessages = currentPage.startsWith('Messages');
+  const isCaseMessages = currentPage.startsWith('CaseMessages');
 
   const pageIsHome =
     isDashboard ||
@@ -34,6 +35,7 @@ export const headerHelper = (get, applicationContext) => {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
+    pageIsCaseMessages: isCaseMessages && workQueueIsInternal,
     pageIsDashboard:
       isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsDocumentQC: isMessages && !workQueueIsInternal,

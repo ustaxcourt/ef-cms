@@ -106,6 +106,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/pr
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
+import { getCaseMessageInteractor } from '../../shared/src/proxies/messages/getCaseMessageProxy';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
@@ -308,6 +309,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCaseMessageInteractor,
   getCasesByUserInteractor,
   getClosedCasesInteractor,
   getConsolidatedCasesByCaseInteractor,

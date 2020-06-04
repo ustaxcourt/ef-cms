@@ -92,6 +92,7 @@ import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFile
 import { gotoBlockedCasesReportSequence } from './sequences/gotoBlockedCasesReportSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
+import { gotoCaseMessagesSequence } from './sequences/gotoCaseMessagesSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
@@ -502,6 +503,7 @@ export const presenter = {
     gotoBlockedCasesReportSequence,
     gotoCaseDetailSequence,
     gotoCaseInventoryReportSequence,
+    gotoCaseMessagesSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoCompleteDocketEntrySequence,
     gotoCreateOrderSequence,

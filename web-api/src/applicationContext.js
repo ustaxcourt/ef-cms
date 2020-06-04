@@ -33,6 +33,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
   order,
   pendingReport,
   receiptOfFiling,
@@ -282,9 +283,6 @@ const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generateCaseConfirmationPdf,
-} = require('../../shared/src/business/useCaseHelper/caseConfirmation/generateCaseConfirmationPdf');
-const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -367,6 +365,12 @@ const {
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
+const {
+  getCaseMessageById,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageById');
+const {
+  getCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/getCaseMessageInteractor');
 const {
   getCasesByCaseIds,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
@@ -1019,6 +1023,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      noticeOfReceiptOfPetition,
       order,
       pendingReport,
       receiptOfFiling,
@@ -1148,6 +1153,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
+        getCaseMessageById,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -1281,7 +1287,6 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
-        generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
@@ -1348,6 +1353,7 @@ module.exports = (appContextUser = {}) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
+        getCaseMessageInteractor,
         getCasesByUserInteractor,
         getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
