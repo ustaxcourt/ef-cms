@@ -23,29 +23,40 @@ export const CaseListPractitioner = connect(
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
   }) {
-    const renderTable = (cases, showLoadMore, showMoreResultsSequence) => (
+    const renderTable = (
+      cases,
+      showLoadMore,
+      showMoreResultsSequence,
+      tabName,
+    ) => (
       <>
-        <table className="usa-table responsive-table dashboard" id="case-list">
-          <thead>
-            <tr>
-              <th>
-                <span className="usa-sr-only">Lead Case Indicator</span>
-              </th>
-              <th>Docket number</th>
-              <th>Case title</th>
-              <th>Date filed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cases.map(item => (
-              <CaseListRowExternal
-                onlyLinkIfRequestedUserAssociated
-                formattedCase={item}
-                key={item.caseId}
-              />
-            ))}
-          </tbody>
-        </table>
+        {!cases?.length && <p>You have no {tabName} cases.</p>}
+        {cases.length > 0 && (
+          <table
+            className="usa-table responsive-table dashboard"
+            id="case-list"
+          >
+            <thead>
+              <tr>
+                <th>
+                  <span className="usa-sr-only">Lead Case Indicator</span>
+                </th>
+                <th>Docket number</th>
+                <th>Case title</th>
+                <th>Date filed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cases.map(item => (
+                <CaseListRowExternal
+                  onlyLinkIfRequestedUserAssociated
+                  formattedCase={item}
+                  key={item.caseId}
+                />
+              ))}
+            </tbody>
+          </table>
+        )}
         {showLoadMore && (
           <Button
             secondary
@@ -86,6 +97,7 @@ export const CaseListPractitioner = connect(
                       externalUserCasesHelper.openCaseResults,
                       externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreOpenCasesSequence,
+                      'open',
                     )}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
@@ -93,6 +105,7 @@ export const CaseListPractitioner = connect(
                       externalUserCasesHelper.closedCaseResults,
                       externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreClosedCasesSequence,
+                      'closed',
                     )}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
@@ -121,6 +134,7 @@ export const CaseListPractitioner = connect(
                     externalUserCasesHelper.openCaseResults,
                     externalUserCasesHelper.showLoadMoreOpenCases,
                     showMoreOpenCasesSequence,
+                    'open',
                   )}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
@@ -128,6 +142,7 @@ export const CaseListPractitioner = connect(
                     externalUserCasesHelper.closedCaseResults,
                     externalUserCasesHelper.showLoadMoreClosedCases,
                     showMoreClosedCasesSequence,
+                    'closed',
                   )}
                 </Tab>
               </Tabs>
