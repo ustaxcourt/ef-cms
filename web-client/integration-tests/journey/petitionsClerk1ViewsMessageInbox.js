@@ -12,5 +12,7 @@ export const petitionsClerk1ViewsMessageInbox = test => {
     );
 
     expect(foundMessage).toBeDefined();
+
+    test.messageId = foundMessage.messageId;
   });
 };
