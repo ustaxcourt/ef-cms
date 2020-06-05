@@ -1,14 +1,15 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for fetching all open cases
+ * lambda which is used for creating a new case message
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getOpenCasesLambda = event =>
+exports.getCaseMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getOpenCasesInteractor({
+    return await applicationContext.getUseCases().getCaseMessageInteractor({
       applicationContext,
+      messageId: event.pathParameters.messageId,
     });
   });

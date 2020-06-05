@@ -31,6 +31,15 @@ exports.createCaseMessageInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // TODO: Would it be better to just pass this in since case detail is already loaded in the action?
+  const {
+    docketNumber,
+    docketNumberWithSuffix,
+    status,
+  } = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({ applicationContext, caseId });
+
   const fromUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -42,6 +51,9 @@ exports.createCaseMessageInteractor = async ({
   const caseMessage = new CaseMessage(
     {
       caseId,
+      caseStatus: status,
+      docketNumber,
+      docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
       fromUserId: fromUser.userId,

@@ -40,6 +40,8 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedMessageDetail } from './computeds/formattedMessageDetail';
+import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
@@ -49,6 +51,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
@@ -117,6 +120,8 @@ const helpers = {
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
+  formattedMessageDetail,
+  formattedMessages,
   formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
@@ -126,6 +131,7 @@ const helpers = {
   internalTypesHelper,
   loadingHelper,
   menuHelper,
+  messagesHelper,
   orderTypesHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
