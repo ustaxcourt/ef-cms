@@ -1,5 +1,5 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
@@ -106,7 +106,7 @@ const generateWorkItem = (data, document) => {
     assigneeId: null,
     assigneeName: null,
     caseId: '123',
-    caseStatus: Case.STATUS_TYPES.new,
+    caseStatus: CASE_STATUS_TYPES.new,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '100-01',
     document: {
@@ -268,7 +268,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsMyDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
-      caseStatus: Case.STATUS_TYPES.calendared,
+      caseStatus: CASE_STATUS_TYPES.calendared,
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
@@ -286,7 +286,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsSectionDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
-      caseStatus: Case.STATUS_TYPES.calendared,
+      caseStatus: CASE_STATUS_TYPES.calendared,
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',

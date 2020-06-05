@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -15,7 +16,7 @@ describe('updateCaseModalHelper', () => {
   beforeEach(() => {
     mockCase = {
       caseId: '123',
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
     };
   });
 
@@ -24,7 +25,7 @@ describe('updateCaseModalHelper', () => {
       state: {
         caseDetail: mockCase,
         modal: {
-          caseStatus: Case.STATUS_TYPES.submitted,
+          caseStatus: CASE_STATUS_TYPES.submitted,
         },
       },
     });
@@ -36,7 +37,7 @@ describe('updateCaseModalHelper', () => {
       state: {
         caseDetail: mockCase,
         modal: {
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
         },
       },
     });
@@ -46,7 +47,7 @@ describe('updateCaseModalHelper', () => {
   it('returns showCalendaredAlert true if the case is currently calendared', () => {
     const result = runCompute(updateCaseModalHelper, {
       state: {
-        caseDetail: { ...mockCase, status: Case.STATUS_TYPES.calendared },
+        caseDetail: { ...mockCase, status: CASE_STATUS_TYPES.calendared },
       },
     });
     expect(result.showCalendaredAlert).toBeTruthy();

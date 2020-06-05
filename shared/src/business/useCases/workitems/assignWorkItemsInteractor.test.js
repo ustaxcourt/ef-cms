@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { omit } = require('lodash');
 const { User } = require('../../entities/User');
 
@@ -10,7 +10,7 @@ const MOCK_WORK_ITEM = {
   assigneeId: null,
   assigneeName: 'bob',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: Case.STATUS_TYPES.generalDocket,
+  caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAt: '2018-12-27T18:06:02.971Z',
   docketNumber: '101-18',
   docketNumberSuffix: 'S',

@@ -3,6 +3,7 @@ const {
 } = require('./updateCaseContextInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -27,7 +28,7 @@ describe('updateCaseContextInteractor', () => {
       updateCaseContextInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        caseStatus: Case.STATUS_TYPES.cav,
+        caseStatus: CASE_STATUS_TYPES.cav,
       }),
     ).rejects.toThrow('Unauthorized for update case');
   });
@@ -44,9 +45,9 @@ describe('updateCaseContextInteractor', () => {
     const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.cav,
+      caseStatus: CASE_STATUS_TYPES.cav,
     });
-    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
   });
 
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
@@ -54,10 +55,10 @@ describe('updateCaseContextInteractor', () => {
       applicationContext,
       associatedJudge: 'Judge Rachael',
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.cav,
+      caseStatus: CASE_STATUS_TYPES.cav,
     });
 
-    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
     expect(result.associatedJudge).toEqual('Judge Rachael');
     expect(result.trialSessionId).toBeUndefined();
   });
@@ -66,10 +67,10 @@ describe('updateCaseContextInteractor', () => {
     const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.generalDocket,
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
     });
 
-    expect(result.status).toEqual(Case.STATUS_TYPES.generalDocket);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(result.associatedJudge).toEqual(Case.CHIEF_JUDGE);
     expect(result.trialSessionId).toBeUndefined();
   });
@@ -77,16 +78,16 @@ describe('updateCaseContextInteractor', () => {
   it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...MOCK_CASE,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
     const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.generalDocket,
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
     });
 
-    expect(result.status).toEqual(Case.STATUS_TYPES.generalDocket);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
@@ -97,10 +98,10 @@ describe('updateCaseContextInteractor', () => {
     const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    expect(result.status).toEqual(Case.STATUS_TYPES.generalDocketReadyForTrial);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
@@ -115,7 +116,7 @@ describe('updateCaseContextInteractor', () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...MOCK_CASE,
       associatedJudge: 'Judge Buch',
-      status: Case.STATUS_TYPES.submitted,
+      status: CASE_STATUS_TYPES.submitted,
     });
 
     const result = await updateCaseContextInteractor({
@@ -123,7 +124,7 @@ describe('updateCaseContextInteractor', () => {
       associatedJudge: 'Judge Carluzzo',
       caseId: MOCK_CASE.caseId,
     });
-    expect(result.status).toEqual(Case.STATUS_TYPES.submitted);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
     expect(result.associatedJudge).toEqual('Judge Carluzzo');
   });
 
@@ -132,10 +133,10 @@ describe('updateCaseContextInteractor', () => {
       applicationContext,
       associatedJudge: 'Judge Carluzzo',
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.submitted,
+      caseStatus: CASE_STATUS_TYPES.submitted,
     });
 
-    expect(result.status).toEqual(Case.STATUS_TYPES.submitted);
+    expect(result.status).toEqual(CASE_STATUS_TYPES.submitted);
     expect(result.associatedJudge).toEqual('Judge Carluzzo');
   });
 

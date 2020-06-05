@@ -5,7 +5,7 @@ const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -178,7 +178,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -227,7 +227,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -274,7 +274,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -316,7 +316,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -359,7 +359,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -405,7 +405,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       preferredTrialCity: 'Aberdeen, South Dakota',
       privatePractitioners: [],
       procedureType: 'Small',
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -428,7 +428,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -459,7 +459,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -489,7 +489,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -517,7 +517,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {

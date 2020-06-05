@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
@@ -34,7 +34,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { status: Case.STATUS_TYPES.new },
+        caseDetail: { status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(true);
@@ -48,7 +48,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { status: Case.STATUS_TYPES.new },
+        caseDetail: { status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(false);
