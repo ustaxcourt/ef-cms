@@ -3,4 +3,6 @@ module.exports = {
     .createCaseMessageLambda,
   getCaseMessageLambda: require('./messages/getCaseMessageLambda')
     .getCaseMessageLambda,
+  getInboxCaseMessagesForUserLambda: require('./messages/getInboxCaseMessagesForUserLambda')
+    .getInboxCaseMessagesForUserLambda,
 };
