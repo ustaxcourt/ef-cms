@@ -6,10 +6,6 @@ const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const {
-  DOCKET_NUMBER_MATCHER,
-  DOCKET_NUMBER_SUFFIXES,
-} = require('./cases/CaseConstants');
 
 /**
  * constructor
@@ -25,8 +21,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.createdAt = rawMessage.createdAt || createISODateString();
-  this.docketNumber = rawMessage.docketNumber;
-  this.docketNumberSuffix = rawMessage.docketNumberSuffix;
+  this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
   this.entityName = 'CaseMessage';
   this.from = rawMessage.from;
   this.fromSection = rawMessage.fromSection;
@@ -63,17 +58,11 @@ CaseMessage.validationRules = {
   createdAt: joiStrictTimestamp
     .required()
     .description('When the message was created.'),
-  docketNumber: joi
+  docketNumberWithSuffix: joi
     .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('The docket number for the associated case.'),
-  docketNumberSuffix: joi
-    .string()
-    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .allow(null)
     .optional()
-    .description('The docket number suffix for the associated case.'),
+    .description('The docket number and suffix for the associated case.'),
   entityName: joi.string().valid('CaseMessage').required(),
   from: joi
     .string()

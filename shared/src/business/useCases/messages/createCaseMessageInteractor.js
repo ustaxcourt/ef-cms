@@ -33,8 +33,7 @@ exports.createCaseMessageInteractor = async ({
 
   // TODO: Would it be better to just pass this in since case detail is already loaded in the action?
   const {
-    docketNumber,
-    docketNumberSuffix,
+    docketNumberWithSuffix,
     status,
   } = await applicationContext
     .getPersistenceGateway()
@@ -52,8 +51,7 @@ exports.createCaseMessageInteractor = async ({
     {
       caseId,
       caseStatus: status,
-      docketNumber,
-      docketNumberSuffix,
+      docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
       fromUserId: fromUser.userId,
