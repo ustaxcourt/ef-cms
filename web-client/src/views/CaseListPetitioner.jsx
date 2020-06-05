@@ -32,45 +32,56 @@ export const CaseListPetitioner = connect(
       </Button>
     );
 
-    const renderCaseListTable = (
+    const renderCaseListTable = ({
       cases,
       showLoadMore,
       showMoreResultsSequence,
-    ) => (
-      <div className="margin-top-2">
-        <table className="usa-table responsive-table dashboard" id="case-list">
-          <thead>
-            <tr>
-              <th>
-                <span className="usa-sr-only">Lead Case Indicator</span>
-              </th>
-              <th>Docket number</th>
-              <th>Case title</th>
-              <th>Date filed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cases.map(item => (
-              <CaseListRowExternal
-                onlyLinkIfRequestedUserAssociated
-                formattedCase={item}
-                key={item.caseId}
-              />
-            ))}
-          </tbody>
-        </table>
-        {showLoadMore && (
-          <Button
-            secondary
-            onClick={() => {
-              showMoreResultsSequence();
-            }}
-          >
-            Load {pageSize} more
-          </Button>
-        )}
-      </div>
-    );
+      tabName,
+    }) => {
+      return (
+        <>
+          {!cases?.length && <p>You have no {tabName} cases.</p>}
+          {cases.length > 0 && (
+            <div className="margin-top-2">
+              <table
+                className="usa-table responsive-table dashboard"
+                id="case-list"
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <span className="usa-sr-only">Lead Case Indicator</span>
+                    </th>
+                    <th>Docket number</th>
+                    <th>Case title</th>
+                    <th>Date filed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cases.map(item => (
+                    <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      key={item.caseId}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              {showLoadMore && (
+                <Button
+                  secondary
+                  onClick={() => {
+                    showMoreResultsSequence();
+                  }}
+                >
+                  Load {pageSize} more
+                </Button>
+              )}
+            </div>
+          )}
+        </>
+      );
+    };
 
     return (
       <>
@@ -87,18 +98,22 @@ export const CaseListPetitioner = connect(
                   defaultActiveTab="Open"
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
-                    {renderCaseListTable(
-                      externalUserCasesHelper.openCaseResults,
-                      externalUserCasesHelper.showLoadMoreOpenCases,
-                      showMoreOpenCasesSequence,
-                    )}
+                    {renderCaseListTable({
+                      cases: externalUserCasesHelper.openCaseResults,
+                      showLoadMore:
+                        externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreResultsSequence: showMoreOpenCasesSequence,
+                      tabName: 'open',
+                    })}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                    {renderCaseListTable(
-                      externalUserCasesHelper.closedCaseResults,
-                      externalUserCasesHelper.showLoadMoreClosedCases,
-                      showMoreClosedCasesSequence,
-                    )}
+                    {renderCaseListTable({
+                      cases: externalUserCasesHelper.closedCaseResults,
+                      showLoadMore:
+                        externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreResultsSequence: showMoreClosedCasesSequence,
+                      tabName: 'closed',
+                    })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -118,19 +133,22 @@ export const CaseListPetitioner = connect(
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
               >
-                <Tab id="tab-open" tabName="Open" title="Open Cases">
-                  {renderCaseListTable(
-                    externalUserCasesHelper.openCaseResults,
-                    externalUserCasesHelper.showLoadMoreOpenCases,
-                    showMoreOpenCasesSequence,
-                  )}
+                <Tab id="tab-open" tabName="Open" title="Open">
+                  {renderCaseListTable({
+                    cases: externalUserCasesHelper.openCaseResults,
+                    showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreResultsSequence: showMoreOpenCasesSequence,
+                    tabName: 'open',
+                  })}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                  {renderCaseListTable(
-                    externalUserCasesHelper.closedCaseResults,
-                    externalUserCasesHelper.showLoadMoreClosedCases,
-                    showMoreClosedCasesSequence,
-                  )}
+                <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  {renderCaseListTable({
+                    cases: externalUserCasesHelper.closedCaseResults,
+                    showLoadMore:
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreResultsSequence: showMoreClosedCasesSequence,
+                    tabName: 'closed',
+                  })}
                 </Tab>
               </Tabs>
             </div>
