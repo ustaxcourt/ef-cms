@@ -8,15 +8,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessages = connect(
   {
     inboxCount: state.inboxCount || 0,
     messagesHelper: state.messagesHelper,
+    navigateToPathSequence: sequences.navigateToPathSequence,
+    queue: state.messageBoxToDisplay.queue,
   },
-  function CaseMessages({ inboxCount, messagesHelper }) {
+  function CaseMessages({
+    inboxCount,
+    messagesHelper,
+    navigateToPathSequence,
+    queue,
+  }) {
     return (
       <>
         <div className="big-blue-header">
@@ -54,7 +61,14 @@ export const CaseMessages = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs bind="messageBoxToDisplay.box">
+          <Tabs
+            bind="messageBoxToDisplay.box"
+            onSelect={box => {
+              navigateToPathSequence({
+                path: `/case-messages/${queue}/${box}`,
+              });
+            }}
+          >
             <Tab id="inbox-tab" tabName="inbox" title="Inbox">
               <div id="inbox-tab-content">
                 {messagesHelper.showIndividualMessages && (
