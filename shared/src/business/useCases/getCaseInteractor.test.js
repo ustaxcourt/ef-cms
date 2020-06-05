@@ -128,6 +128,9 @@ describe('Get case', () => {
   });
 
   it('failure case by docket number', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(undefined);
     await expect(
       getCaseInteractor({
         applicationContext,
