@@ -1,9 +1,9 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { getConsolidatedCasesByUserAction } from '../actions/caseConsolidation/getConsolidatedCasesByUserAction';
 import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
+import { getOpenAndClosedCasesByUserAction } from '../actions/caseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -56,7 +56,7 @@ const goToDashboard = [
     ],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
-      getConsolidatedCasesByUserAction,
+      getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
@@ -69,12 +69,12 @@ const goToDashboard = [
       setCurrentPageAction('DashboardJudge'),
     ],
     petitioner: [
-      getConsolidatedCasesByUserAction,
+      getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
-      getConsolidatedCasesByUserAction,
+      getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
     ],

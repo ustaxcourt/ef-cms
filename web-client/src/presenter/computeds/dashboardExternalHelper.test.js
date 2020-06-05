@@ -10,26 +10,28 @@ const dashboardExternalHelper = withAppContextDecorator(
 );
 
 describe('petitioner dashboard helper', () => {
-  it('shows "what to expect" but not case list when there are no cases', () => {
+  it('shows "what to expect" but not case list when there are no open or closed cases', () => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [],
+        closedCases: [],
+        openCases: [],
       },
     });
     expect(result.showCaseList).toEqual(false);
     expect(result.showWhatToExpect).toEqual(true);
     expect(result.showCaseSearch).toEqual(false);
   });
-  it('shows case list but not "what to expect" when there is a case', () => {
+  it('shows case list but not "what to expect" when there is an open or closed case case', () => {
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -42,7 +44,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -56,7 +59,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -70,7 +74,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);

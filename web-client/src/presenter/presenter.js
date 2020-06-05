@@ -259,6 +259,8 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
+import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
@@ -668,6 +670,8 @@ export const presenter = {
     setWorkQueueIsInternalSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
     showMoreResultsSequence,
     signOutSequence,
     startScanSequence,
