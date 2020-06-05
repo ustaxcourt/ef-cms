@@ -76,7 +76,7 @@ functions:
     handler: web-api/${self:provider.dir}/messagesHandlers.getInboxCaseMessagesForUserLambda
     events:
       - http:
-          path: /{userId}/inbox
+          path: /inbox/{userId}
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
