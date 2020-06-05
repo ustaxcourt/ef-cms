@@ -4,7 +4,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesIndividualInbox = connect(
+export const CaseMessagesSectionInbox = connect(
   { formattedMessages: state.formattedMessages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
@@ -16,9 +16,9 @@ export const CaseMessagesIndividualInbox = connect(
               <th>Received</th>
               <th>Message</th>
               <th>Case Status</th>
+              <th>To</th>
               <th>From</th>
               <th>Section</th>
-              <th>Attachments</th>
             </tr>
           </thead>
           <tbody>
@@ -39,9 +39,9 @@ export const CaseMessagesIndividualInbox = connect(
                     <div>{message.message}</div>
                   </td>
                   <td>{message.caseStatus}</td>
+                  <td>{message.to}</td>
                   <td>{message.from}</td>
                   <td>{message.fromSection}</td>
-                  <td></td>
                 </tr>
               );
             })}
