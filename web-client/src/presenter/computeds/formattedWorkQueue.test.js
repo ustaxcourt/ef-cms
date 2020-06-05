@@ -3,6 +3,7 @@ import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
+  formatDateIfToday,
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
@@ -1455,6 +1456,44 @@ describe('formatted work queue computed', () => {
       expect(result.document.descriptionDisplay).toEqual(
         'Document Title with Additional Info',
       );
+    });
+  });
+
+  describe('formatDateIfToday', () => {
+    it('returns a time if the date is today', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const result = formatDateIfToday(currentTime, applicationContext);
+
+      expect(result).toContain(':');
+      expect(result).toContain('ET');
+      expect(result).not.toContain('/');
+    });
+
+    it('returns "Yesterday" if the date is yesterday', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const yesterday = applicationContext
+        .getUtilities()
+        .calculateISODate({ dateString: currentTime, howMuch: -1 });
+
+      const result = formatDateIfToday(yesterday, applicationContext);
+
+      expect(result).toEqual('Yesterday');
+    });
+
+    it('returns the formatted date if older than one day', () => {
+      const date = applicationContext
+        .getUtilities()
+        .formatDateString('2019-01-01T17:29:13.122Z');
+
+      const result = formatDateIfToday(date, applicationContext);
+
+      expect(result).toContain('01/01/19');
     });
   });
 });
