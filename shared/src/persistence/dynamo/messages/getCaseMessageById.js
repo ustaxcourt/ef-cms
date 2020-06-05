@@ -14,7 +14,7 @@ exports.getCaseMessageById = async ({ applicationContext, messageId }) => {
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `messsage|${messageId}`,
+      ':gsi1pk': `message|${messageId}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
