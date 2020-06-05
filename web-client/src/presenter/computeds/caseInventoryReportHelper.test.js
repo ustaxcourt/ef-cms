@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
@@ -32,7 +32,7 @@ describe('caseInventoryReportHelper', () => {
       },
     });
 
-    expect(result.caseStatuses).toEqual(Object.values(Case.STATUS_TYPES));
+    expect(result.caseStatuses).toEqual(Object.values(CASE_STATUS_TYPES));
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {

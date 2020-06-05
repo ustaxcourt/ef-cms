@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { Correspondence } from '../../../../shared/src/business/entities/Correspondence';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -27,7 +27,7 @@ const documentDetailHelper = withAppContextDecorator(
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
+    constants: { STATUS_TYPES: CASE_STATUS_TYPES, USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
@@ -42,7 +42,7 @@ describe('document detail helper', () => {
       const workItems = [
         {
           assigneeId: user.userId,
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           completedAt: '2018-12-21T20:49:28.192Z',
           createdAt: '2018-11-21T20:49:28.192Z',
           document: {
@@ -60,7 +60,7 @@ describe('document detail helper', () => {
         },
         {
           assigneeId: user.userId,
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2018-11-22T20:49:28.192Z',
           document: {
             documentId: 'abc',
@@ -77,7 +77,7 @@ describe('document detail helper', () => {
         },
         {
           assigneeId: user.userId,
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2018-11-23T20:49:28.192Z',
           document: {
             documentId: 'abc',
@@ -126,7 +126,7 @@ describe('document detail helper', () => {
         caseDetail: {
           docketRecord: [],
           documents: [{ documentId: 'abc' }],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -154,7 +154,7 @@ describe('document detail helper', () => {
               workItems: [
                 {
                   assigneeId: user.userId,
-                  caseStatus: Case.STATUS_TYPES.new,
+                  caseStatus: CASE_STATUS_TYPES.new,
                   document: {
                     documentId: 'abc',
                     documentType: 'Proposed Stipulated Decision',
@@ -170,7 +170,7 @@ describe('document detail helper', () => {
               ],
             },
           ],
-          status: Case.STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
         documentId: 'abc',
         permissions: {
@@ -199,7 +199,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -227,7 +227,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -257,7 +257,7 @@ describe('document detail helper', () => {
                 documentType: 'Answer',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -285,7 +285,7 @@ describe('document detail helper', () => {
                 documentType: 'Order',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -313,7 +313,7 @@ describe('document detail helper', () => {
                 documentType: 'Order',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -343,7 +343,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -373,7 +373,7 @@ describe('document detail helper', () => {
                 signedAt: getDateISO(),
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -402,7 +402,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -432,7 +432,7 @@ describe('document detail helper', () => {
                 servedAt: getDateISO(),
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -461,7 +461,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: false },
@@ -490,7 +490,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -526,7 +526,7 @@ describe('document detail helper', () => {
                 signedAt: getDateISO(),
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -556,7 +556,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -586,7 +586,7 @@ describe('document detail helper', () => {
                 servedAt: getDateISO(),
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
                     },
@@ -605,7 +605,7 @@ describe('document detail helper', () => {
                 ],
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -635,7 +635,7 @@ describe('document detail helper', () => {
                 servedAt: getDateISO(),
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -655,7 +655,7 @@ describe('document detail helper', () => {
                 ],
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -684,7 +684,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -713,7 +713,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: Case.STATUS_TYPES.new,
+            status: CASE_STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -753,7 +753,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -773,7 +773,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -823,7 +823,7 @@ describe('document detail helper', () => {
         userId: 'petitioner',
         workItems: [
           {
-            caseStatus: Case.STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.new,
             completedAt: '2018-11-21T20:49:28.192Z',
             completedBy: 'William T. Riker',
             document: {
@@ -843,7 +843,7 @@ describe('document detail helper', () => {
           },
           {
             assigneeId: 'abc',
-            caseStatus: Case.STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.new,
             document: {
               documentType: 'Proposed Stipulated Decision',
               receivedAt: '2018-11-21T20:49:28.192Z',
@@ -901,7 +901,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -921,7 +921,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -978,7 +978,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -998,7 +998,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -1050,7 +1050,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -1069,7 +1069,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: Case.STATUS_TYPES.new,
+                    caseStatus: CASE_STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',

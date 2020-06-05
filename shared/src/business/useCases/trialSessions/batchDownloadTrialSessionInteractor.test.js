@@ -2,7 +2,7 @@ import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSession
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -105,7 +105,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .getCalendaredCasesForTrialSession.mockReturnValue([
         {
           ...MOCK_CASE,
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
       ]);
 

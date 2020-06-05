@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
@@ -52,7 +53,7 @@ const FORMATTED_WORK_ITEM = {
   assigneeId: 'abc',
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: Case.STATUS_TYPES.generalDocket,
+  caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAtFormatted: '12/27/18',
   currentMessage: {
     createdAtFormatted: '12/27/18',
@@ -112,7 +113,7 @@ describe('formatted work queue computed', () => {
     assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.generalDocket,
+    caseStatus: CASE_STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -550,7 +551,7 @@ describe('formatted work queue computed', () => {
             ...qcWorkItem,
             associatedJudge: Case.CHIEF_JUDGE,
             caseIsInProgress: true,
-            caseStatus: Case.STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.new,
             document: {
               ...qcWorkItem.document,
               status: 'processing',
