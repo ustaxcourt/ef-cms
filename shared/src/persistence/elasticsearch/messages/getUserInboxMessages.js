@@ -22,9 +22,5 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
     searchParameters: query,
   });
 
-  console.log('userId here is', userId);
-
-  console.log('results', results);
-
   return results;
 };
