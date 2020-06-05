@@ -11,6 +11,5 @@ exports.createCaseMessageLambda = event =>
     return await applicationContext.getUseCases().createCaseMessageInteractor({
       ...JSON.parse(event.body),
       applicationContext,
-      caseId: event.pathParameters.caseId,
     });
   });

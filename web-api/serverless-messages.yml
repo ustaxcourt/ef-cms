@@ -52,8 +52,32 @@ functions:
     handler: web-api/${self:provider.dir}/messagesHandlers.createCaseMessageLambda
     events:
       - http:
-          path: /{caseId}
+          path: /
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseMessage:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getCaseMessageLambda
+    events:
+      - http:
+          path: /{messageId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getInboxCaseMessagesForUser:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getInboxCaseMessagesForUserLambda
+    events:
+      - http:
+          path: /inbox/{userId}
+          method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

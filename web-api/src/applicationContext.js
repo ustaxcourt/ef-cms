@@ -33,6 +33,7 @@ const {
   changeOfAddress,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
   order,
   pendingReport,
   receiptOfFiling,
@@ -282,9 +283,6 @@ const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generateCaseConfirmationPdf,
-} = require('../../shared/src/business/useCaseHelper/caseConfirmation/generateCaseConfirmationPdf');
-const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -368,6 +366,12 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCaseMessageById,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageById');
+const {
+  getCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/getCaseMessageInteractor');
+const {
   getCasesByCaseIds,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
 const {
@@ -382,6 +386,12 @@ const {
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
+const {
+  getClosedCasesByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getClosedCasesByUser');
+const {
+  getClosedCasesInteractor,
+} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
@@ -437,6 +447,9 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
+  getInboxCaseMessagesForUserInteractor,
+} = require('../../shared/src/business/useCases/messages/getInboxCaseMessagesForUserInteractor');
+const {
   getInboxMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -476,8 +489,8 @@ const {
   getOpenCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getOpenCasesByUser');
 const {
-  getOpenCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenCasesInteractor');
+  getOpenConsolidatedCasesInteractor,
+} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
@@ -560,8 +573,11 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
-  getUserDashboardCases,
-} = require('../../shared/src/persistence/dynamo/cases/getUserDashboardCases');
+  getUserCases,
+} = require('../../shared/src/persistence/dynamo/cases/getUserCases');
+const {
+  getUserInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
@@ -1013,6 +1029,7 @@ module.exports = (appContextUser = {}) => {
       changeOfAddress,
       docketRecord,
       noticeOfDocketChange,
+      noticeOfReceiptOfPetition,
       order,
       pendingReport,
       receiptOfFiling,
@@ -1142,9 +1159,11 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
+        getCaseMessageById,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
+        getClosedCasesByUser,
         getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
@@ -1173,7 +1192,8 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUserCaseNote,
         getUserCaseNoteForCases,
-        getUserDashboardCases,
+        getUserCases,
+        getUserInboxMessages,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1274,7 +1294,6 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
-        generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
@@ -1341,7 +1360,9 @@ module.exports = (appContextUser = {}) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
+        getCaseMessageInteractor,
         getCasesByUserInteractor,
+        getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
         getDocumentQCInboxForSectionInteractor,
@@ -1350,6 +1371,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getInboxCaseMessagesForUserInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
@@ -1357,7 +1379,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
-        getOpenCasesInteractor,
+        getOpenConsolidatedCasesInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,
