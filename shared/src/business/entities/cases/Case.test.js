@@ -573,7 +573,7 @@ describe('Case entity', () => {
     });
 
     it('returns true if a valid docketNumber', () => {
-      expect(Case.isValidDocketNumber('00101-00')).toBeFalsy();
+      expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
     });
 
     it('returns false if an invalid docket number', () => {
