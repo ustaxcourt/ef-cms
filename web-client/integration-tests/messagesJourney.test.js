@@ -1,4 +1,5 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewMessageOnCase } from './journey/petitionsClerkCreatesNewMessageOnCase';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
@@ -25,4 +26,5 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk1');
   petitionsClerk1ViewsMessageInbox(test);
+  petitionsClerk1ViewsMessageDetail(test);
 });
