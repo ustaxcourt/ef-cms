@@ -6,7 +6,6 @@ import { orderBy } from 'lodash';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
- * @param {object} providers.get the cerebral get method
  * @returns {object} contains the caseList returned from the
  *  getOpenConsolidatedCasesInteractor and getClosedCasesInteractor use cases
  */

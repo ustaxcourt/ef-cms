@@ -117,6 +117,7 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
+import { getInboxCaseMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxCaseMessagesForSectionProxy';
 import { getInboxCaseMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxCaseMessagesForUserProxy';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
@@ -126,6 +127,8 @@ import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getOpenConsolidatedCasesInteractor } from '../../shared/src/proxies/getOpenConsolidatedCasesProxy';
+import { getOutboxCaseMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxCaseMessagesForSectionProxy';
+import { getOutboxCaseMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxCaseMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
@@ -319,6 +322,7 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getInboxCaseMessagesForSectionInteractor,
   getInboxCaseMessagesForUserInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
@@ -328,6 +332,8 @@ const allUseCases = {
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
   getOpenConsolidatedCasesInteractor,
+  getOutboxCaseMessagesForSectionInteractor,
+  getOutboxCaseMessagesForUserInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,

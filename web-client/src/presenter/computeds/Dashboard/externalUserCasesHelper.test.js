@@ -1,3 +1,4 @@
+import { applicationContext } from '../../../applicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -5,18 +6,21 @@ import { withAppContextDecorator } from '../../../withAppContext';
 const externalUserCasesHelper = withAppContextDecorator(
   externalUserCasesHelperComputed,
   {
-    getCurrentUser: () => ({
-      userId: '123',
+    ...applicationContext,
+    getUtilities: () => ({
+      formatCase: () => ({
+        caseId: 'case-id-123',
+      }),
     }),
   },
 );
 
 const baseState = {
+  closedCases: [...Array(10).keys()],
   constants: {
     CASE_LIST_PAGE_SIZE: 5,
   },
-  formattedClosedCases: [...Array(10).keys()],
-  formattedOpenCases: [...Array(10).keys()],
+  openCases: [...Array(10).keys()],
 };
 
 describe('externalUserCasesHelper', () => {
@@ -37,7 +41,7 @@ describe('externalUserCasesHelper', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        formattedClosedCases: [0],
+        closedCases: [0],
       },
     });
 
@@ -51,12 +55,27 @@ describe('externalUserCasesHelper', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        formattedOpenCases: [0],
+        openCases: [0],
       },
     });
 
     expect(result).toMatchObject({
       showLoadMoreClosedCases: true,
+      showLoadMoreOpenCases: false,
+    });
+  });
+
+  it('uses current pages in state', () => {
+    const result = runCompute(externalUserCasesHelper, {
+      state: {
+        ...baseState,
+        closedCasesCurrentPage: 2,
+        openCasesCurrentPage: 2,
+      },
+    });
+
+    expect(result).toMatchObject({
+      showLoadMoreClosedCases: false,
       showLoadMoreOpenCases: false,
     });
   });

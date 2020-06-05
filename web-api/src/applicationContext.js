@@ -444,6 +444,9 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
+  getInboxCaseMessagesForSectionInteractor,
+} = require('../../shared/src/business/useCases/messages/getInboxCaseMessagesForSectionInteractor');
+const {
   getInboxCaseMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxCaseMessagesForUserInteractor');
 const {
@@ -489,6 +492,12 @@ const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
+  getOutboxCaseMessagesForSectionInteractor,
+} = require('../../shared/src/business/useCases/messages/getOutboxCaseMessagesForSectionInteractor');
+const {
+  getOutboxCaseMessagesForUserInteractor,
+} = require('../../shared/src/business/useCases/messages/getOutboxCaseMessagesForUserInteractor');
+const {
   getPractitionerByBarNumber,
 } = require('../../shared/src/persistence/dynamo/users/getPractitionerByBarNumber');
 const {
@@ -515,6 +524,12 @@ const {
 const {
   getRecord,
 } = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
+const {
+  getSectionInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
+const {
+  getSectionOutboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages');
 const {
   getSentMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
@@ -578,6 +593,9 @@ const {
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
+const {
+  getUserOutboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getUserOutboxMessages');
 const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
@@ -1180,6 +1198,8 @@ module.exports = (appContextUser = {}) => {
         getPractitionersByName,
         getPublicDownloadPolicyUrl,
         getRecord,
+        getSectionInboxMessages,
+        getSectionOutboxMessages,
         getSentMessagesForSection,
         getSentMessagesForUser,
         getTrialSessionById,
@@ -1191,6 +1211,7 @@ module.exports = (appContextUser = {}) => {
         getUserCaseNoteForCases,
         getUserCases,
         getUserInboxMessages,
+        getUserOutboxMessages,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1367,6 +1388,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getInboxCaseMessagesForSectionInteractor,
         getInboxCaseMessagesForUserInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
@@ -1376,6 +1398,8 @@ module.exports = (appContextUser = {}) => {
         getJudgesForPublicSearchInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
+        getOutboxCaseMessagesForSectionInteractor,
+        getOutboxCaseMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
         getPractitionersByNameInteractor,
         getPrivatePractitionersBySearchKeyInteractor,

@@ -7,6 +7,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -127,7 +128,7 @@ exports.fileExternalDocumentInteractor = async ({
       );
 
       const highPriorityWorkItem =
-        caseEntity.status === Case.STATUS_TYPES.calendared;
+        caseEntity.status === CASE_STATUS_TYPES.calendared;
 
       const workItem = new WorkItem(
         {

@@ -5,7 +5,7 @@ export const captureCreatedCase = (
 ) => {
   return it('Capture Created Case', async () => {
     await test.runSequence('gotoDashboardSequence');
-    createdCases.push(`${test.getState('cases.0.caseId')}`);
-    createdDocketNumbers.push(`${test.getState('cases.0.docketNumber')}`);
+    createdCases.push(`${test.getState('openCases.0.caseId')}`);
+    createdDocketNumbers.push(`${test.getState('openCases.0.docketNumber')}`);
   });
 };

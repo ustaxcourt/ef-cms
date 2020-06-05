@@ -5,6 +5,7 @@ const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
@@ -223,7 +224,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = Case.STATUS_TYPES.calendared;
+    caseRecord.status = CASE_STATUS_TYPES.calendared;
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileExternalDocumentInteractor({
@@ -250,7 +251,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = Case.STATUS_TYPES.new;
+    caseRecord.status = CASE_STATUS_TYPES.new;
 
     await fileExternalDocumentInteractor({
       applicationContext,
