@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseMessagesIndividualInbox } from './CaseMessagesIndividualInbox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
@@ -52,7 +53,11 @@ export const CaseMessages = connect(
           <ErrorNotification />
           <Tabs bind="messageBoxToDisplay.box">
             <Tab id="inbox-tab" tabName="inbox" title="Inbox">
-              <div id="inbox-tab-content"></div>
+              <div id="inbox-tab-content">
+                {messagesHelper.showIndividualMessages && (
+                  <CaseMessagesIndividualInbox />
+                )}
+              </div>
             </Tab>
             <Tab id="sent-tab" tabName="outbox" title="Sent">
               <div id="sent-tab-content"></div>
