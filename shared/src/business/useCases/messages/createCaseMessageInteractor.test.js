@@ -51,6 +51,7 @@ describe('createCaseMessageInteractor', () => {
       });
 
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       status: 'General Docket - Not at Issue',
     });
@@ -69,6 +70,7 @@ describe('createCaseMessageInteractor', () => {
     ).toMatchObject({
       ...caseMessageData,
       caseStatus: 'General Docket - Not at Issue',
+      docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
       fromSection: 'petitions',

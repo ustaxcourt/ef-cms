@@ -26,6 +26,7 @@ describe('getCaseMessageInteractor', () => {
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: 'General Docket - Not at Issue',
       createdAt: '2019-03-01T21:40:46.415Z',
+      docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
       entityName: 'CaseMessage',
       from: 'Test Petitionsclerk2',

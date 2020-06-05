@@ -6,6 +6,7 @@ const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
+const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
 
 /**
  * constructor
@@ -21,6 +22,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.createdAt = rawMessage.createdAt || createISODateString();
+  this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
   this.entityName = 'CaseMessage';
   this.from = rawMessage.from;
@@ -58,6 +60,7 @@ CaseMessage.validationRules = {
   createdAt: joiStrictTimestamp
     .required()
     .description('When the message was created.'),
+  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
   docketNumberWithSuffix: joi
     .string()
     .allow(null)
