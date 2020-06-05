@@ -7,7 +7,7 @@ exports.getUserOutboxMessages = async ({ applicationContext, userId }) => {
         bool: {
           must: {
             match: {
-              'fromUserId.S': userId,
+              'fromUserId.S': { operator: 'and', query: userId },
             },
           },
         },

@@ -7,7 +7,7 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
         bool: {
           must: {
             match: {
-              'toSection.S': section,
+              'toSection.S': { operator: 'and', query: section },
             },
           },
         },

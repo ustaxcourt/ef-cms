@@ -7,7 +7,7 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
         bool: {
           must: {
             match: {
-              'toUserId.S': userId,
+              'toUserId.S': { operator: 'and', query: userId },
             },
           },
         },
@@ -21,6 +21,10 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
     applicationContext,
     searchParameters: query,
   });
+
+  console.log('userId here is', userId);
+
+  console.log('results', results);
 
   return results;
 };
