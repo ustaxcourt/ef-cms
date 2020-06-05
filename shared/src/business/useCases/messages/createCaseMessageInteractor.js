@@ -33,6 +33,7 @@ exports.createCaseMessageInteractor = async ({
 
   // TODO: Would it be better to just pass this in since case detail is already loaded in the action?
   const {
+    docketNumber,
     docketNumberWithSuffix,
     status,
   } = await applicationContext
@@ -51,6 +52,7 @@ exports.createCaseMessageInteractor = async ({
     {
       caseId,
       caseStatus: status,
+      docketNumber,
       docketNumberWithSuffix,
       from: fromUser.name,
       fromSection: fromUser.section,
