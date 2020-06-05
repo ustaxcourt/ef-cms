@@ -5,7 +5,7 @@ import { formatDateIfToday } from './formattedWorkQueue';
 export const formattedMessages = (get, applicationContext) => {
   const messages = get(state.messages) || [];
 
-  const formattedMessages = messages.map(message => ({
+  const result = messages.map(message => ({
     ...message,
     createdAtFormatted: formatDateIfToday(
       message.createdAt,
@@ -13,5 +13,5 @@ export const formattedMessages = (get, applicationContext) => {
     ),
   }));
 
-  return formattedMessages;
+  return result;
 };
