@@ -4,6 +4,7 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
@@ -316,8 +317,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 
-  if (result.trialSessionId && result.status !== Case.STATUS_TYPES.closed) {
-    if (result.status === Case.STATUS_TYPES.calendared) {
+  if (result.trialSessionId && result.status !== CASE_STATUS_TYPES.closed) {
+    if (result.status === CASE_STATUS_TYPES.calendared) {
       result.showTrialCalendared = true;
     } else {
       result.showScheduled = true;
