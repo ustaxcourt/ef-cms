@@ -13,6 +13,7 @@ describe('CaseMessage', () => {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
           caseStatus: 'General Docket - Not at Issue',
           createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
           docketNumberWithSuffix: '123-45S',
           from: 'gg',
           fromSection: 'petitions',

@@ -5,8 +5,8 @@ exports.ADMISSIONS_SECTION = 'admissions';
 exports.CHAMBERS_SECTION = 'chambers';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.DOCKET_SECTION = 'docket';
-exports.PETITIONS_SECTION = 'petitions';
 exports.IRS_SYSTEM_SECTION = 'irsSystem';
+exports.PETITIONS_SECTION = 'petitions';
 exports.TRIAL_CLERKS_SECTION = 'trialClerks';
 
 exports.ARMENS_CHAMBERS_SECTION = 'armensChambers';
@@ -25,6 +25,7 @@ exports.GUYS_CHAMBERS_SECTION = 'guysChambers';
 exports.HALPERNS_CHAMBERS_SECTION = 'halpernsChambers';
 exports.HOLMES_CHAMBERS_SECTION = 'holmesChambers';
 exports.JACOBS_CHAMBERS_SECTION = 'jacobsChambers';
+exports.JONES_CHAMBERS_SECTION = 'jonesChambers';
 exports.KERRIGANS_CHAMBERS_SECTION = 'kerrigansChambers';
 exports.LAUBERS_CHAMBERS_SECTION = 'laubersChambers';
 exports.LEYDENS_CHAMBERS_SECTION = 'leydensChambers';
@@ -67,6 +68,7 @@ exports.CHAMBERS_SECTIONS = sortBy([
   exports.HALPERNS_CHAMBERS_SECTION,
   exports.HOLMES_CHAMBERS_SECTION,
   exports.JACOBS_CHAMBERS_SECTION,
+  exports.JONES_CHAMBERS_SECTION,
   exports.KERRIGANS_CHAMBERS_SECTION,
   exports.LAUBERS_CHAMBERS_SECTION,
   exports.LEYDENS_CHAMBERS_SECTION,
