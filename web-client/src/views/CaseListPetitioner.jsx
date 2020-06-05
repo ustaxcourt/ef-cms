@@ -9,17 +9,13 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    externalUserClosedCasesHelper: state.externalUserClosedCasesHelper,
-    externalUserOpenCasesHelper: state.externalUserOpenCasesHelper,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
     pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPetitioner({
-    externalUserClosedCasesHelper,
-    externalUserOpenCasesHelper,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
     pageSize,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
@@ -45,7 +41,7 @@ export const CaseListPetitioner = connect(
       return (
         <>
           {!cases?.length && <p>You have no {tabName} cases.</p>}
-          {cases?.length && (
+          {cases.length > 0 && (
             <div className="margin-top-2">
               <table
                 className="usa-table responsive-table dashboard"
@@ -62,7 +58,7 @@ export const CaseListPetitioner = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {externalUserOpenCasesHelper.openCaseResults.map(item => (
+                  {cases.map(item => (
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
@@ -103,18 +99,18 @@ export const CaseListPetitioner = connect(
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
                     {renderCaseListTable({
-                      cases: externalUserOpenCasesHelper.openCaseResults,
+                      cases: externalUserCasesHelper.openCaseResults,
                       showLoadMore:
-                        externalUserOpenCasesHelper.showLoadMoreOpenCases,
+                        externalUserCasesHelper.showLoadMoreOpenCases,
                       showMoreResultsSequence: showMoreOpenCasesSequence,
                       tabName: 'open',
                     })}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
                     {renderCaseListTable({
-                      cases: externalUserClosedCasesHelper.closedCaseResults,
+                      cases: externalUserCasesHelper.closedCaseResults,
                       showLoadMore:
-                        externalUserClosedCasesHelper.showLoadMoreClosedCases,
+                        externalUserCasesHelper.showLoadMoreClosedCases,
                       showMoreResultsSequence: showMoreClosedCasesSequence,
                       tabName: 'closed',
                     })}
@@ -136,24 +132,20 @@ export const CaseListPetitioner = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open">
                   {renderCaseListTable({
-                    cases: externalUserOpenCasesHelper.openCaseResults,
-                    showLoadMore:
-                      externalUserOpenCasesHelper.showLoadMoreOpenCases,
+                    cases: externalUserCasesHelper.openCaseResults,
+                    showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
                     showMoreResultsSequence: showMoreOpenCasesSequence,
                     tabName: 'open',
                   })}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed">
                   {renderCaseListTable({
-                    cases: externalUserClosedCasesHelper.closedCaseResults,
+                    cases: externalUserCasesHelper.closedCaseResults,
                     showLoadMore:
-                      externalUserClosedCasesHelper.showLoadMoreClosedCases,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
                     showMoreResultsSequence: showMoreClosedCasesSequence,
                     tabName: 'closed',
                   })}
