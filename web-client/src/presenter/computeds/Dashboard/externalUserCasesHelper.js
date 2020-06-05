@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const externalUserOpenCasesHelper = get => {
+export const externalUserCasesHelper = get => {
   const openCases = get(state.formattedOpenCases);
   const closedCases = get(state.formattedClosedCases);
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
