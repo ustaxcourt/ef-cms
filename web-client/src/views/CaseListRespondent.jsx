@@ -81,7 +81,11 @@ export const CaseListRespondent = connect(
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open Cases">
+                  <Tab
+                    id="tab-open"
+                    tabName="Open"
+                    title={`Open Cases (${externalUserCasesHelper.openCaseResults.length})`}
+                  >
                     {renderTable(
                       externalUserCasesHelper.openCaseResults,
                       externalUserCasesHelper.showLoadMoreOpenCases,
@@ -89,7 +93,11 @@ export const CaseListRespondent = connect(
                       'open',
                     )}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
+                  <Tab
+                    id="tab-closed"
+                    tabName="Closed"
+                    title={`Closed Cases (${externalUserCasesHelper.closedCaseResults.length})`}
+                  >
                     {renderTable(
                       externalUserCasesHelper.closedCaseResults,
                       externalUserCasesHelper.showLoadMoreClosedCases,
@@ -114,7 +122,11 @@ export const CaseListRespondent = connect(
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
               >
-                <Tab id="tab-open" tabName="Open" title="Open Cases">
+                <Tab
+                  id="tab-open"
+                  tabName="Open"
+                  title={`Open Cases (${externalUserCasesHelper.openCaseResults.length})`}
+                >
                   {renderTable(
                     externalUserCasesHelper.openCaseResults,
                     externalUserCasesHelper.showLoadMoreOpenCases,
@@ -122,7 +134,11 @@ export const CaseListRespondent = connect(
                     'open',
                   )}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
+                <Tab
+                  id="tab-closed"
+                  tabName="Closed"
+                  title={`Closed Cases (${externalUserCasesHelper.closedCaseResults.length})`}
+                >
                   {renderTable(
                     externalUserCasesHelper.closedCaseResults,
                     externalUserCasesHelper.showLoadMoreClosedCases,
