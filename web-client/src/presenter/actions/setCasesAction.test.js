@@ -23,7 +23,7 @@ describe('setCasesAction', () => {
         ],
       },
       state: {
-        closedeCases: [],
+        closedCases: [],
         openCases: [],
       },
     });
