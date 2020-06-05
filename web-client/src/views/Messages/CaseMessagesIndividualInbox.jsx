@@ -24,15 +24,20 @@ export const CaseMessagesIndividualInbox = connect(
             {formattedMessages.map((message, idx) => {
               return (
                 <tr key={idx}>
-                  <td>{message.docketNumberWithSuffix}</td>
+                  <td>
+                    <Button link href={`/case-detail/${message.docketNumber}`}>
+                      {message.docketNumberWithSuffix}
+                    </Button>
+                  </td>
                   <td>{message.createdAtFormatted}</td>
                   <td>
                     <Button
                       link
                       href={`/case-messages/${message.docketNumber}/message-detail/${message.messageId}`}
                     >
-                      {message.message}
+                      {message.subject}
                     </Button>
+                    <div>{message.message}</div>
                   </td>
                   <td>{message.caseStatus}</td>
                   <td>{message.from}</td>
