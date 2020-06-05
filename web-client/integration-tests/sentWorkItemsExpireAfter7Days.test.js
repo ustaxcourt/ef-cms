@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
 import { User } from '../../shared/src/business/entities/User';
 import {
   getFormattedMyOutbox,
@@ -52,7 +52,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
       caseId: 'd481929a-fb22-4800-900e-50b15ac55934',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
       createdAt: CREATED_8_DAYS_AGO.toISOString(),
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,

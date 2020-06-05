@@ -12,6 +12,7 @@ import {
 import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -429,7 +430,7 @@ describe('formatCase', () => {
   it('should format trial details if case status is calendared', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.calendared,
+      status: CASE_STATUS_TYPES.calendared,
       trialDate: '2011-11-11',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
@@ -469,7 +470,7 @@ describe('formatCase', () => {
   it('should format trial details with incomplete trial information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.calendared,
+      status: CASE_STATUS_TYPES.calendared,
       trialDate: undefined,
       trialLocation: undefined,
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
@@ -494,7 +495,7 @@ describe('formatCase', () => {
   it('should show not scheduled section if case status is closed', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.closed,
+      status: CASE_STATUS_TYPES.closed,
     });
 
     expect(result).toMatchObject({

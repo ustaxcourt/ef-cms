@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -28,7 +28,7 @@ const mockCase = {
           assigneeId: null,
           assigneeName: null,
           caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
           docketNumberSuffix: null,
@@ -66,7 +66,7 @@ const mockCase = {
           assigneeId: null,
           assigneeName: null,
           caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
           docketNumberSuffix: null,

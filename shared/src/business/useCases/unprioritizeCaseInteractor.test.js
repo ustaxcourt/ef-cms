@@ -1,5 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
 const { User } = require('../entities/User');
@@ -18,7 +18,7 @@ describe('unprioritizeCaseInteractor', () => {
         ...MOCK_CASE,
         highPriority: true,
         highPriorityReason: 'because',
-        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       }),
     );
 
@@ -51,7 +51,7 @@ describe('unprioritizeCaseInteractor', () => {
         ...MOCK_CASE,
         highPriority: true,
         highPriorityReason: 'because',
-        status: Case.STATUS_TYPES.new,
+        status: CASE_STATUS_TYPES.new,
       }),
     );
 

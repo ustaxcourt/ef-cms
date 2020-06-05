@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 export const chambersUserViewsCaseDetail = (
@@ -13,7 +14,7 @@ export const chambersUserViewsCaseDetail = (
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
+    expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
     expect(test.getState('caseDetail.documents').length).toEqual(
       expectedDocumentCount,
     );

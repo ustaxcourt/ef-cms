@@ -1,5 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseMessagesIndividualInbox } from './CaseMessagesIndividualInbox';
+import { CaseMessagesIndividualOutbox } from './CaseMessagesIndividualOutbox';
+import { CaseMessagesSectionInbox } from './CaseMessagesSectionInbox';
+import { CaseMessagesSectionOutbox } from './CaseMessagesSectionOutbox';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
@@ -57,10 +60,22 @@ export const CaseMessages = connect(
                 {messagesHelper.showIndividualMessages && (
                   <CaseMessagesIndividualInbox />
                 )}
+
+                {messagesHelper.showSectionMessages && (
+                  <CaseMessagesSectionInbox />
+                )}
               </div>
             </Tab>
             <Tab id="sent-tab" tabName="outbox" title="Sent">
-              <div id="sent-tab-content"></div>
+              <div id="sent-tab-content">
+                {messagesHelper.showIndividualMessages && (
+                  <CaseMessagesIndividualOutbox />
+                )}
+
+                {messagesHelper.showSectionMessages && (
+                  <CaseMessagesSectionOutbox />
+                )}
+              </div>
             </Tab>
             <Tab id="completed-tab" tabName="completed" title="Completed">
               <div id="completed-tab-content"></div>
