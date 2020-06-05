@@ -46,6 +46,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -123,6 +124,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  MessageDetail,
   Messages,
   PendingReport,
   PetitionQc,
