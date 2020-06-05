@@ -6,6 +6,7 @@ const {
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
+const { CASE_STATUS_TYPES } = require('./CaseConstants');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
@@ -416,7 +417,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           applicationContext,
@@ -433,7 +434,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           closedDate: '2019-03-01T21:40:46.415Z',
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           applicationContext,
@@ -589,7 +590,7 @@ describe('Case entity', () => {
         },
       );
       caseRecord.markAsSentToIRS();
-      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseRecord.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
   });
 
@@ -1010,7 +1011,7 @@ describe('Case entity', () => {
         {
           docketNumber: '123-19',
           isPaper: false,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1029,7 +1030,7 @@ describe('Case entity', () => {
         {
           docketNumber: '123-19',
           isPaper: true,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1070,7 +1071,7 @@ describe('Case entity', () => {
                 "Docket Number is amended from '123-19B' to '123-19P'",
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1135,7 +1136,7 @@ describe('Case entity', () => {
         {
           caseCaption: 'A New Caption',
           initialCaption: 'Caption',
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1187,7 +1188,7 @@ describe('Case entity', () => {
             },
           ],
           initialCaption: 'Caption',
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1217,7 +1218,7 @@ describe('Case entity', () => {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
@@ -1234,7 +1235,7 @@ describe('Case entity', () => {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
@@ -1250,13 +1251,13 @@ describe('Case entity', () => {
       const caseToCheck = new Case(
         {
           documents: [],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if an answer document has been filed, but the cutoff has not elapsed', () => {
@@ -1268,13 +1269,13 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if a non answer document has been filed before the cutoff', () => {
@@ -1288,13 +1289,13 @@ describe('Case entity', () => {
               eventCode: 'ZZZs',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
@@ -1317,7 +1318,7 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1325,7 +1326,7 @@ describe('Case entity', () => {
       ).checkForReadyForTrial();
 
       expect(caseToCheck.status).not.toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
     });
 
@@ -1345,14 +1346,14 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
 
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.new);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.new);
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
@@ -1371,7 +1372,7 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1379,7 +1380,7 @@ describe('Case entity', () => {
       ).checkForReadyForTrial();
 
       expect(caseToCheck.status).toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
     });
   });
@@ -1544,7 +1545,7 @@ describe('Case entity', () => {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
       expect(myCase.trialSessionId).toBeTruthy();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
     });
 
     it('should set case as calendared with all trial session fields if the trial session is calendared', () => {
@@ -1571,7 +1572,7 @@ describe('Case entity', () => {
       );
       myCase.setAsCalendared(trialSession);
 
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(myCase.trialDate).toBeTruthy();
       expect(myCase.associatedJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
@@ -1603,7 +1604,7 @@ describe('Case entity', () => {
       );
       myCase.setAsCalendared(trialSession);
 
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
       expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
@@ -1635,7 +1636,7 @@ describe('Case entity', () => {
         closedDate: expect.anything(),
         highPriority: false,
         highPriorityReason: undefined,
-        status: Case.STATUS_TYPES.closed,
+        status: CASE_STATUS_TYPES.closed,
       });
     });
   });
@@ -2074,7 +2075,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2084,7 +2085,7 @@ describe('Case entity', () => {
       caseToUpdate.removeFromTrial();
 
       expect(caseToUpdate.status).toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
       expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
@@ -2119,7 +2120,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2159,7 +2160,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2217,9 +2218,9 @@ describe('Case entity', () => {
         },
       );
 
-      updatedCase.setCaseStatus(Case.STATUS_TYPES.generalDocket);
+      updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
 
-      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
       expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
     });
 
@@ -2236,9 +2237,9 @@ describe('Case entity', () => {
         },
       );
 
-      updatedCase.setCaseStatus(Case.STATUS_TYPES.closed);
+      updatedCase.setCaseStatus(CASE_STATUS_TYPES.closed);
 
-      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(updatedCase.associatedJudge).toEqual('Judge Buch');
       expect(closeCaseSpy).toBeCalled();
       closeCaseSpy.mockRestore();
