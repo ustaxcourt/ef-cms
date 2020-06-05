@@ -41,7 +41,7 @@ export const CaseListPetitioner = connect(
       return (
         <>
           {!cases?.length && <p>You have no {tabName} cases.</p>}
-          {cases?.length && (
+          {cases.length > 0 && (
             <div className="margin-top-2">
               <table
                 className="usa-table responsive-table dashboard"
@@ -58,7 +58,7 @@ export const CaseListPetitioner = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {externalUserCasesHelper.openCaseResults.map(item => (
+                  {cases.map(item => (
                     <CaseListRowExternal
                       onlyLinkIfRequestedUserAssociated
                       formattedCase={item}
