@@ -173,6 +173,27 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     }
   }
 
+  ordered_cache_behavior {
+    path_pattern     = "/index.html"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "group-public-${var.environment}.${var.dns_domain}"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
   aliases = ["ui-public-${var.environment}.${var.dns_domain}"]
 
   restrictions {
