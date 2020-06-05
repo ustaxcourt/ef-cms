@@ -1,17 +1,17 @@
 /**
- * fetches the inbox case messages for the user
+ * fetches the outbox case messages for the section
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{CaseMessage: Array}>} a list of messages
  */
-export const getInboxCaseMessagesForUserAction = async ({
+export const getOutboxCaseMessagesForSectionAction = async ({
   applicationContext,
 }) => {
   const messages = await applicationContext
     .getUseCases()
-    .getInboxCaseMessagesForUserInteractor({
+    .getOutboxCaseMessagesForSectionInteractor({
       applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
+      section: applicationContext.getCurrentUser().section,
     });
 
   return { messages };
