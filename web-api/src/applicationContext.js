@@ -447,6 +447,9 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
+  getInboxCaseMessagesForUserInteractor,
+} = require('../../shared/src/business/useCases/messages/getInboxCaseMessagesForUserInteractor');
+const {
   getInboxMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -572,6 +575,9 @@ const {
 const {
   getUserCases,
 } = require('../../shared/src/persistence/dynamo/cases/getUserCases');
+const {
+  getUserInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
@@ -1187,6 +1193,7 @@ module.exports = (appContextUser = {}) => {
         getUserCaseNote,
         getUserCaseNoteForCases,
         getUserCases,
+        getUserInboxMessages,
         getUsersBySearchKey,
         getUsersInSection,
         getWebSocketConnectionByConnectionId,
@@ -1364,6 +1371,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getInboxCaseMessagesForUserInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,

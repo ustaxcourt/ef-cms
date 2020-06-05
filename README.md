@@ -50,11 +50,6 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 <a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
-## Dependency diagrams
-
-- <a href="docs/images/client-dependencies.jpg">Client</a>
-- <a href="docs/images/server-dependencies.jpg">Server</a>
-
 ## Backlog
 
 The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
