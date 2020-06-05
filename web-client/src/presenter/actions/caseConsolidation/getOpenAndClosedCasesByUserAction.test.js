@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getConsolidatedCasesByUserAction } from './getConsolidatedCasesByUserAction';
+import { getOpenAndClosedCasesByUserAction } from './getOpenAndClosedCasesByUserAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getConsolidatedCasesByUserAction', () => {
+describe('getOpenAndClosedCasesByUserAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -43,7 +43,7 @@ describe('getConsolidatedCasesByUserAction', () => {
   });
 
   it('gets the consolidated cases by userId', async () => {
-    const { output } = await runAction(getConsolidatedCasesByUserAction, {
+    const { output } = await runAction(getOpenAndClosedCasesByUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {
