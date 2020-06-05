@@ -16,7 +16,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [],
+        closedCases: [],
+        openCases: [],
       },
     });
     expect(result.showCaseList).toEqual(false);
@@ -29,7 +30,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -42,7 +44,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -56,7 +59,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -70,7 +74,8 @@ describe('petitioner dashboard helper', () => {
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
-        cases: [{ something: true }],
+        closedCases: [{ something: true }],
+        openCases: [{ something: true }],
       },
     });
     expect(result.showCaseList).toEqual(true);
