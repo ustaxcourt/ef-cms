@@ -1,13 +1,11 @@
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('./getOpenConsolidatedCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getClosedCasesInteractor } = require('./getClosedCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 jest.mock('../entities/UserCase');
 const { UserCase } = require('../entities/UserCase');
 
-describe('getOpenConsolidatedCasesInteractor', () => {
+describe('getClosedCasesInteractor', () => {
   let mockFoundCasesList;
 
   beforeEach(() => {
@@ -23,12 +21,14 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getOpenCasesByUser.mockImplementation(() => mockFoundCasesList);
-    UserCase.validateRawCollection.mockImplementation(foundCases => foundCases);
+      .getClosedCasesByUser.mockImplementation(() => mockFoundCasesList);
+    UserCase.validateRawCollection.mockImplementation(
+      foundCases => foundCases || [],
+    );
   });
 
   it('should retrieve the current user information', async () => {
-    await getOpenConsolidatedCasesInteractor({
+    await getClosedCasesInteractor({
       applicationContext,
     });
 
@@ -36,38 +36,38 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   });
 
   it('should make a call to retrieve open cases by user', async () => {
-    await getOpenConsolidatedCasesInteractor({
+    await getClosedCasesInteractor({
       applicationContext,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getOpenCasesByUser,
+      applicationContext.getPersistenceGateway().getClosedCasesByUser,
     ).toHaveBeenCalledWith({
       applicationContext,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
 
-  it('should validate the list of found open cases', async () => {
-    await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+  it('should return an empty list when no closed cases are found', async () => {
+    mockFoundCasesList = null;
 
-    expect(UserCase.validateRawCollection).toBeCalled();
-  });
-
-  it('should return an empty list when no open cases are found', async () => {
-    mockFoundCasesList = [];
-
-    const result = await getOpenConsolidatedCasesInteractor({
+    const result = await getClosedCasesInteractor({
       applicationContext,
     });
 
     expect(result).toEqual([]);
   });
 
-  it('should return a list of open cases', async () => {
-    const result = await getOpenConsolidatedCasesInteractor({
+  it('should validate the found closed cases', async () => {
+    await getClosedCasesInteractor({
+      applicationContext,
+    });
+
+    expect(UserCase.validateRawCollection).toBeCalled();
+  });
+
+  it('should return a list of closed cases', async () => {
+    const result = await getClosedCasesInteractor({
       applicationContext,
     });
 

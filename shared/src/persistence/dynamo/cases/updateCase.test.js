@@ -489,7 +489,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        gsi1pk: '123',
+        gsi1pk: 'user-case|123',
         pk: 'user|123',
         sk: 'case|123',
         status: Case.STATUS_TYPES.calendared,
@@ -515,7 +515,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         docketNumberSuffix: 'W',
-        gsi1pk: '123',
+        gsi1pk: 'user-case|123',
         pk: 'user|123',
         sk: 'case|123',
       });
@@ -541,7 +541,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         caseCaption: 'Guy Fieri, Petitioner',
-        gsi1pk: '123',
+        gsi1pk: 'user-case|123',
         pk: 'user|123',
         sk: 'case|123',
       });
@@ -566,7 +566,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        gsi1pk: '123',
+        gsi1pk: 'user-case|123',
         leadCaseId: 'case|321',
         pk: 'user|123',
         sk: 'case|123',

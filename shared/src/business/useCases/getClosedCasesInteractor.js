@@ -1,4 +1,4 @@
-const { Case } = require('../entities/cases/Case');
+const { UserCase } = require('../entities/UserCase');
 
 /**
  * getClosedCasesInteractor
@@ -17,7 +17,7 @@ exports.getClosedCasesInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getClosedCasesByUser({ applicationContext, userId });
 
-  foundCases = Case.validateRawCollection(closedCases, {
+  foundCases = UserCase.validateRawCollection(closedCases, {
     applicationContext,
   });
 
