@@ -30,6 +30,10 @@ pushd ../template/log-forwarder
 npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
 
+pushd ../template/api
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
+
 
 # exit on any failure
 set -eo pipefail
