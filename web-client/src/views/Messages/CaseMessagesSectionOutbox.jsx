@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -25,9 +26,7 @@ export const CaseMessagesSectionOutbox = connect(
               return (
                 <tr key={idx}>
                   <td>
-                    <Button link href={`/case-detail/${message.docketNumber}`}>
-                      {message.docketNumberWithSuffix}
-                    </Button>
+                    <CaseLink formattedCase={message} />
                   </td>
                   <td>{message.createdAtFormatted}</td>
                   <td>
