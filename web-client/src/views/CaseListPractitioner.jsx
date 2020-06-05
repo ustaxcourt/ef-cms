@@ -11,36 +11,63 @@ import React from 'react';
 export const CaseListPractitioner = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
-    formattedCases: state.formattedCases,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
+    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPractitioner({
     dashboardExternalHelper,
-    formattedCases,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
+    pageSize,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
-    const renderTable = () => (
-      <table className="usa-table responsive-table dashboard" id="case-list">
-        <thead>
-          <tr>
-            <th>
-              <span className="usa-sr-only">Lead Case Indicator</span>
-            </th>
-            <th>Docket number</th>
-            <th>Case title</th>
-            <th>Date filed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formattedCases.map(item => (
-            <CaseListRowExternal
-              onlyLinkIfRequestedUserAssociated
-              formattedCase={item}
-              key={item.caseId}
-            />
-          ))}
-        </tbody>
-      </table>
+    const renderTable = (
+      cases,
+      showLoadMore,
+      showMoreResultsSequence,
+      tabName,
+    ) => (
+      <>
+        {!cases?.length && <p>You have no {tabName} cases.</p>}
+        {cases.length > 0 && (
+          <table
+            className="usa-table responsive-table dashboard"
+            id="case-list"
+          >
+            <thead>
+              <tr>
+                <th>
+                  <span className="usa-sr-only">Lead Case Indicator</span>
+                </th>
+                <th>Docket number</th>
+                <th>Case title</th>
+                <th>Date filed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cases.map(item => (
+                <CaseListRowExternal
+                  onlyLinkIfRequestedUserAssociated
+                  formattedCase={item}
+                  key={item.caseId}
+                />
+              ))}
+            </tbody>
+          </table>
+        )}
+        {showLoadMore && (
+          <Button
+            secondary
+            onClick={() => {
+              showMoreResultsSequence();
+            }}
+          >
+            Load {pageSize} more
+          </Button>
+        )}
+      </>
     );
 
     const renderStartButton = () => (
@@ -64,15 +91,22 @@ export const CaseListPractitioner = connect(
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.openCaseResults,
+                      externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreOpenCasesSequence,
+                      'open',
+                    )}
                   </Tab>
                   <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                    {renderTable()}
+                    {renderTable(
+                      externalUserCasesHelper.closedCaseResults,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreClosedCasesSequence,
+                      'closed',
+                    )}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -94,15 +128,22 @@ export const CaseListPractitioner = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
                 <Tab id="tab-open" tabName="Open" title="Open Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.openCaseResults,
+                    externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreOpenCasesSequence,
+                    'open',
+                  )}
                 </Tab>
                 <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                  {renderTable()}
+                  {renderTable(
+                    externalUserCasesHelper.closedCaseResults,
+                    externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreClosedCasesSequence,
+                    'closed',
+                  )}
                 </Tab>
               </Tabs>
             </div>
