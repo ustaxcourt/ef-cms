@@ -14,7 +14,7 @@ const isDateToday = (date, applicationContext) => {
   return now === then;
 };
 
-const formatDateIfToday = (date, applicationContext) => {
+export const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
     .getUtilities()
