@@ -4,7 +4,7 @@ import { state } from 'cerebral';
 export const formattedMessageDetail = (get, applicationContext) => {
   const messageDetail = get(state.messageDetail);
 
-  const formattedMessageDetail = {
+  const result = {
     ...messageDetail,
     createdAtFormatted: formatDateIfToday(
       messageDetail.createdAt,
@@ -12,5 +12,5 @@ export const formattedMessageDetail = (get, applicationContext) => {
     ),
   };
 
-  return formattedMessageDetail;
+  return result;
 };
