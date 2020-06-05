@@ -2,12 +2,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  getInboxCaseMessagesForUserInteractor,
+} = require('./getInboxCaseMessagesForUserInteractor');
+const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-const { getCaseMessageInteractor } = require('./getCaseMessageInteractor');
+const { omit } = require('lodash');
 const { User } = require('../../entities/User');
 
-describe('getCaseMessageInteractor', () => {
+describe('getInboxCaseMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: User.ROLES.petitioner,
@@ -15,16 +18,15 @@ describe('getCaseMessageInteractor', () => {
     });
 
     await expect(
-      getCaseMessageInteractor({
+      getInboxCaseMessagesForUserInteractor({
         applicationContext,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the case message from persistence and returns it', async () => {
+  it('retrieves the case messages from persistence and returns them', async () => {
     const caseMessageData = {
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
-      caseStatus: 'General Docket - Not at Issue',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
@@ -34,6 +36,8 @@ describe('getCaseMessageInteractor', () => {
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
+      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
+      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: 'petitions',
@@ -45,16 +49,16 @@ describe('getCaseMessageInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageById.mockReturnValue(caseMessageData);
+      .getUserInboxMessages.mockReturnValue([caseMessageData]);
 
-    const returnedMessage = await getCaseMessageInteractor({
+    const returnedMessages = await getInboxCaseMessagesForUserInteractor({
       applicationContext,
       messageId: caseMessageData.messageId,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseMessageById,
+      applicationContext.getPersistenceGateway().getUserInboxMessages,
     ).toBeCalled();
-    expect(returnedMessage).toEqual(caseMessageData);
+    expect(returnedMessages).toEqual([omit(caseMessageData, 'pk', 'sk')]);
   });
 });
