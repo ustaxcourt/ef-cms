@@ -1,6 +1,29 @@
 const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
+const garbage = ({ openUserCases }) => {
+  let caseMapping = {};
+  let userCaseIdsMap = {};
+  let leadCaseIdsToGet = [];
+
+  openUserCases.forEach(caseRecord => {
+    const { caseId, leadCaseId } = caseRecord;
+
+    caseRecord.isRequestingUserAssociated = true;
+    userCaseIdsMap[caseId] = true;
+
+    if (!leadCaseId || leadCaseId === caseId) {
+      caseMapping[caseId] = caseRecord;
+    }
+
+    if (leadCaseId && !leadCaseIdsToGet.includes(leadCaseId)) {
+      leadCaseIdsToGet.push(leadCaseId);
+    }
+  });
+
+  return { caseMapping, leadCaseIdsToGet, userCaseIdsMap };
+};
+
 /**
  * getOpenConsolidatedCasesInteractor
  *
@@ -10,7 +33,6 @@ const { UserCase } = require('../entities/UserCase');
  */
 exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   let foundCases = [];
-  let userCaseIdsMap = {};
 
   const { userId } = await applicationContext.getCurrentUser();
 
@@ -23,24 +45,8 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   });
 
   if (openUserCasesValidated.length) {
-    const caseMapping = {};
-    const leadCaseIdsToGet = [];
-
-    openUserCasesValidated.forEach(caseRecord => {
-      const { caseId, leadCaseId } = caseRecord;
-
-      caseRecord.isRequestingUserAssociated = true;
-      userCaseIdsMap[caseId] = true;
-
-      if (!leadCaseId || leadCaseId === caseId) {
-        caseMapping[caseId] = caseRecord;
-      }
-
-      if (leadCaseId) {
-        if (leadCaseIdsToGet.indexOf(leadCaseId) === -1) {
-          leadCaseIdsToGet.push(leadCaseId);
-        }
-      }
+    const { caseMapping, leadCaseIdsToGet, userCaseIdsMap } = garbage({
+      openUserCasesValidated,
     });
 
     for (const leadCaseId of leadCaseIdsToGet) {
