@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
@@ -18,7 +19,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
 
     await test.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
-      value: Case.STATUS_TYPES.generalDocket,
+      value: CASE_STATUS_TYPES.generalDocket,
     });
 
     await test.runSequence('clearModalSequence');
@@ -33,13 +34,13 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
 
     await test.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
-      value: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      value: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
     await test.runSequence('submitUpdateCaseModalSequence');
 
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.generalDocketReadyForTrial,
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual(
       Case.CHIEF_JUDGE,

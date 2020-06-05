@@ -9,7 +9,7 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -484,7 +484,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       const updatedCase = applicationContext.getPersistenceGateway().updateCase
         .mock.calls[0][0].caseToUpdate;
 
-      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(
         applicationContext.getPersistenceGateway()
           .deleteCaseTrialSortMappingRecords,

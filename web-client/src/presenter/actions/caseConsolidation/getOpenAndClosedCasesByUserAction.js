@@ -6,7 +6,8 @@ import { orderBy } from 'lodash';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
- * @returns {object} contains the caseList returned from the getCasesByUser use case
+ * @returns {object} contains the caseList returned from the
+ *  getOpenConsolidatedCasesInteractor and getClosedCasesInteractor use cases
  */
 export const getOpenAndClosedCasesByUserAction = async ({
   applicationContext,

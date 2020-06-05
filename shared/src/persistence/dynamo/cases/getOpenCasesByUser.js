@@ -1,4 +1,6 @@
-const { Case } = require('../../../business/entities/cases/Case');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/cases/CaseConstants');
 const { getUserCases } = require('./getUserCases');
 
 /**
@@ -13,7 +15,7 @@ exports.getOpenCasesByUser = async ({ applicationContext, userId }) => {
   const userCases = await getUserCases({ applicationContext, userId });
 
   const openCases = userCases.filter(
-    x => x.status !== Case.STATUS_TYPES.closed,
+    x => x.status !== CASE_STATUS_TYPES.closed,
   );
 
   return openCases;

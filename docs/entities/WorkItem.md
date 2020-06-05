@@ -54,7 +54,21 @@
     caseStatus: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "Assigned - Case"
+        - "Assigned - Motion"
+        - "Calendared"
+        - "CAV"
+        - "Closed"
+        - "General Docket - Not at Issue"
+        - "General Docket - At Issue (Ready for Trial)"
+        - "Jurisdiction Retained"
+        - "New"
+        - "On Appeal"
+        - "Rule 155"
+        - "Submitted"
     caseTitle: 
       type: "string"
       flags: 
@@ -63,7 +77,7 @@
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 500
     completedAt: 
       type: "date"
       flags: 

@@ -5,6 +5,7 @@ const {
   removeCaseFromTrialInteractor,
 } = require('./removeCaseFromTrialInteractor');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -122,7 +123,7 @@ describe('remove case from trial session', () => {
     ).toMatchObject({
       associatedJudge: Case.CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
     });
@@ -177,7 +178,7 @@ describe('remove case from trial session', () => {
     ).toMatchObject({
       associatedJudge: Case.CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
     });
