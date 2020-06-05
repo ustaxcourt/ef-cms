@@ -23,7 +23,7 @@ export const CaseMessagesIndividualInbox = connect(
             {formattedMessages.map((message, idx) => {
               return (
                 <tr key={idx}>
-                  <td>Docket</td>
+                  <td>{message.docketNumberWithSuffix}</td>
                   <td>{message.createdAtFormatted}</td>
                   <td>{message.message}</td>
                   <td>{message.caseStatus}</td>
