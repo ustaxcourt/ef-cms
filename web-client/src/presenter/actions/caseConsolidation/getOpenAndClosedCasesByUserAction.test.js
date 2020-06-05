@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getConsolidatedCasesByUserAction } from './getConsolidatedCasesByUserAction';
+import { getOpenAndClosedCasesByUserAction } from './getOpenAndClosedCasesByUserAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getConsolidatedCasesByUserAction', () => {
+describe('getOpenAndClosedCasesByUserAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -29,7 +29,7 @@ describe('getConsolidatedCasesByUserAction', () => {
   });
 
   it('gets the consolidated cases by userId', async () => {
-    const { output } = await runAction(getConsolidatedCasesByUserAction, {
+    const { output } = await runAction(getOpenAndClosedCasesByUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {
@@ -41,7 +41,8 @@ describe('getConsolidatedCasesByUserAction', () => {
     });
 
     expect(output).toMatchObject({
-      caseList: [
+      closedCaseList: [],
+      openCaseList: [
         { caseId: 'case-id-345', createdAt: '2019-07-21T20:20:15.680Z' },
         { caseId: 'case-id-234', createdAt: '2019-07-20T20:20:15.680Z' },
         { caseId: 'case-id-123', createdAt: '2019-07-19T20:20:15.680Z' },
@@ -50,7 +51,7 @@ describe('getConsolidatedCasesByUserAction', () => {
   });
 
   it('should retrieve all open cases when props.currentViewMetadata.caseList.tab is not Closed', async () => {
-    await runAction(getConsolidatedCasesByUserAction, {
+    await runAction(getOpenAndClosedCasesByUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {
@@ -67,7 +68,7 @@ describe('getConsolidatedCasesByUserAction', () => {
   });
 
   it('should retrieve all closed cases when props.status is Closed', async () => {
-    await runAction(getConsolidatedCasesByUserAction, {
+    await runAction(getOpenAndClosedCasesByUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {
