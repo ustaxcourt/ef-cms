@@ -9,12 +9,16 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    formattedCases: state.formattedCases,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
+    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPetitioner({
-    formattedCases,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
+    pageSize,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
     const renderStartButton = () => (
       <Button
@@ -28,31 +32,56 @@ export const CaseListPetitioner = connect(
       </Button>
     );
 
-    const renderCaseListTable = () => (
-      <div className="margin-top-2">
-        <table className="usa-table responsive-table dashboard" id="case-list">
-          <thead>
-            <tr>
-              <th>
-                <span className="usa-sr-only">Lead Case Indicator</span>
-              </th>
-              <th>Docket number</th>
-              <th>Case title</th>
-              <th>Date filed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {formattedCases.map(item => (
-              <CaseListRowExternal
-                onlyLinkIfRequestedUserAssociated
-                formattedCase={item}
-                key={item.caseId}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
+    const renderCaseListTable = ({
+      cases,
+      showLoadMore,
+      showMoreResultsSequence,
+      tabName,
+    }) => {
+      return (
+        <>
+          {!cases?.length && <p>You have no {tabName} cases.</p>}
+          {cases.length > 0 && (
+            <div className="margin-top-2">
+              <table
+                className="usa-table responsive-table dashboard"
+                id="case-list"
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      <span className="usa-sr-only">Lead Case Indicator</span>
+                    </th>
+                    <th>Docket number</th>
+                    <th>Case title</th>
+                    <th>Date filed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cases.map(item => (
+                    <CaseListRowExternal
+                      onlyLinkIfRequestedUserAssociated
+                      formattedCase={item}
+                      key={item.caseId}
+                    />
+                  ))}
+                </tbody>
+              </table>
+              {showLoadMore && (
+                <Button
+                  secondary
+                  onClick={() => {
+                    showMoreResultsSequence();
+                  }}
+                >
+                  Load {pageSize} more
+                </Button>
+              )}
+            </div>
+          )}
+        </>
+      );
+    };
 
     return (
       <>
@@ -67,15 +96,24 @@ export const CaseListPetitioner = connect(
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
                   defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
                 >
                   <Tab id="tab-open" tabName="Open" title="Open Cases">
-                    {renderCaseListTable()}
+                    {renderCaseListTable({
+                      cases: externalUserCasesHelper.openCaseResults,
+                      showLoadMore:
+                        externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreResultsSequence: showMoreOpenCasesSequence,
+                      tabName: 'open',
+                    })}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed Clases">
-                    {renderCaseListTable()}
+                  <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
+                    {renderCaseListTable({
+                      cases: externalUserCasesHelper.closedCaseResults,
+                      showLoadMore:
+                        externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreResultsSequence: showMoreClosedCasesSequence,
+                      tabName: 'closed',
+                    })}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -94,15 +132,23 @@ export const CaseListPetitioner = connect(
                 bind="currentViewMetadata.caseList.tab"
                 className="classic-horizontal-header3 no-border-bottom"
                 defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
-                }}
               >
-                <Tab id="tab-open" tabName="Open" title="Open Cases">
-                  {renderCaseListTable()}
+                <Tab id="tab-open" tabName="Open" title="Open">
+                  {renderCaseListTable({
+                    cases: externalUserCasesHelper.openCaseResults,
+                    showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreResultsSequence: showMoreOpenCasesSequence,
+                    tabName: 'open',
+                  })}
                 </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed Cases">
-                  {renderCaseListTable()}
+                <Tab id="tab-closed" tabName="Closed" title="Closed">
+                  {renderCaseListTable({
+                    cases: externalUserCasesHelper.closedCaseResults,
+                    showLoadMore:
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreResultsSequence: showMoreClosedCasesSequence,
+                    tabName: 'closed',
+                  })}
                 </Tab>
               </Tabs>
             </div>
