@@ -256,7 +256,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.docketNumber = rawCase.docketNumber;
+  if (rawCase.docketNumber) {
+    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+  }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
