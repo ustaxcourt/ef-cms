@@ -73,4 +73,15 @@ describe('getIndexNameForRecord', () => {
     const result = getIndexNameForRecord(record);
     expect(result).toEqual('efcms-user');
   });
+
+  it('returns efcms-message for CaseMessage records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseMessage',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+    expect(result).toEqual('efcms-message');
+  });
 });
