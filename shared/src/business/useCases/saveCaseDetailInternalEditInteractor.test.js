@@ -2,7 +2,7 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
@@ -58,7 +58,7 @@ describe('updateCase', () => {
     petitioners: [{ name: 'Test Petitioner' }],
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
-    status: Case.STATUS_TYPES.new,
+    status: CASE_STATUS_TYPES.new,
     userId: 'userId',
   };
 

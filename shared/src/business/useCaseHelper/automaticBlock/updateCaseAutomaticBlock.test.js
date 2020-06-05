@@ -6,6 +6,7 @@ const {
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
 
@@ -118,7 +119,7 @@ describe('updateCaseAutomaticBlock', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
-        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       {
         applicationContext,

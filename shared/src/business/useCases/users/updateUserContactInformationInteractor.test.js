@@ -8,7 +8,7 @@ const {
 const {
   updateUserContactInformationInteractor,
 } = require('./updateUserContactInformationInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -174,7 +174,7 @@ describe('updateUserContactInformationInteractor', () => {
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
-        status: Case.STATUS_TYPES.closed,
+        status: CASE_STATUS_TYPES.closed,
       },
       {
         ...MOCK_CASE,
@@ -186,7 +186,7 @@ describe('updateUserContactInformationInteractor', () => {
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           },
         ],
-        status: Case.STATUS_TYPES.closed,
+        status: CASE_STATUS_TYPES.closed,
       },
     ];
 

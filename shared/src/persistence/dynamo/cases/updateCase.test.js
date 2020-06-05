@@ -2,7 +2,9 @@ const client = require('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { Case } = require('../../../business/entities/cases/Case');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/cases/CaseConstants');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
@@ -16,7 +18,7 @@ describe('updateCase', () => {
         inProgress: false,
         pk: 'case|123',
         sk: 'case|123',
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -26,7 +28,7 @@ describe('updateCase', () => {
         leadCaseId: 'case|123',
         pk: 'user|123',
         sk: 'case|123',
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -76,7 +78,7 @@ describe('updateCase', () => {
         caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
         userId: 'petitioner',
       },
     });
@@ -99,7 +101,7 @@ describe('updateCase', () => {
         docketNumber: '101-18',
         docketNumberSuffix: 'W',
         inProgress: true,
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
         userId: 'petitioner',
       },
@@ -115,7 +117,7 @@ describe('updateCase', () => {
       applicationContext.getDocumentClient().update.mock.calls[0][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':caseStatus': Case.STATUS_TYPES.calendared,
+        ':caseStatus': CASE_STATUS_TYPES.calendared,
       },
     });
     expect(
@@ -162,7 +164,7 @@ describe('updateCase', () => {
         associatedJudge: 'Judge Buch',
         caseId: '123',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     });
 
@@ -181,7 +183,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         caseId: '123',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     });
 
@@ -204,7 +206,7 @@ describe('updateCase', () => {
           irsPractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -235,7 +237,7 @@ describe('updateCase', () => {
             { name: 'Guy Fieri', userId: 'user-id-existing-123' },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -279,7 +281,7 @@ describe('updateCase', () => {
             },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
       expect(
@@ -321,7 +323,7 @@ describe('updateCase', () => {
               userId: 'user-id-existing-234',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -348,7 +350,7 @@ describe('updateCase', () => {
           privatePractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -381,7 +383,7 @@ describe('updateCase', () => {
             { name: 'Guy Fieri', userId: 'user-id-existing-123' },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -414,7 +416,7 @@ describe('updateCase', () => {
             },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -443,7 +445,7 @@ describe('updateCase', () => {
           privatePractitioners: [
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -480,7 +482,7 @@ describe('updateCase', () => {
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
-          status: Case.STATUS_TYPES.calendared,
+          status: CASE_STATUS_TYPES.calendared,
           trialDate: '2019-03-01T21:40:46.415Z',
           userId: 'petitioner',
         },
@@ -492,7 +494,7 @@ describe('updateCase', () => {
         gsi1pk: '123',
         pk: 'user|123',
         sk: 'case|123',
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
       });
     });
 
@@ -505,7 +507,7 @@ describe('updateCase', () => {
           docketNumber: '101-18',
           docketNumberSuffix: 'W',
           inProgress: true,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
           trialDate: '2019-03-01T21:40:46.415Z',
           userId: 'petitioner',
         },
@@ -531,7 +533,7 @@ describe('updateCase', () => {
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
           trialDate: '2019-03-01T21:40:46.415Z',
           userId: 'petitioner',
         },
@@ -557,7 +559,7 @@ describe('updateCase', () => {
           docketNumberSuffix: null,
           inProgress: true,
           leadCaseId: 'case|321',
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
           trialDate: '2019-03-01T21:40:46.415Z',
           userId: 'petitioner',
         },

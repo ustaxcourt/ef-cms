@@ -1,4 +1,4 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -17,7 +17,7 @@ export const getConsolidatedCasesByUserAction = async ({
   const status = get(state.currentViewMetadata.caseList.tab);
 
   let caseList;
-  if (status !== Case.STATUS_TYPES.closed) {
+  if (status !== CASE_STATUS_TYPES.closed) {
     caseList = await applicationContext
       .getUseCases()
       .getOpenConsolidatedCasesInteractor({
