@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
-export const externalUserOpenCasesHelper = get => {
+export const externalUserCasesHelper = get => {
   const openCases = get(state.formattedOpenCases);
   const closedCases = get(state.formattedClosedCases);
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
-  const pageSize = get(state.constants.CASE_SEARCH_PAGE_SIZE);
+  const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE);
 
   return {
     closedCaseResults: closedCases.slice(0, closedCurrentPage * pageSize) || [],
