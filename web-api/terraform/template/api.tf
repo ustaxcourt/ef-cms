@@ -4,6 +4,11 @@ data "archive_file" "zip_api" {
   source_file = "${path.module}/api/dist/index.js"
 }
 
+# resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
+#   name              = "/aws/lambda/api_${var.environment}"
+#   retention_in_days = 14
+# }
+
 resource "aws_lambda_function" "api_lambda" {
   filename      = "${data.archive_file.zip_api.output_path}"
   function_name = "api_${var.environment}"
@@ -12,6 +17,8 @@ resource "aws_lambda_function" "api_lambda" {
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
   
   runtime = "nodejs12.x"
+
+  # depends_on = ["aws_cloudwatch_log_group.api_lambda_log_group"]
 
   environment {
     variables = {
@@ -53,20 +60,46 @@ resource "aws_api_gateway_method" "api_method" {
   authorization = "NONE"
 }
 
+# resource "aws_api_gateway_method" "proxy_root" {
+#   rest_api_id   = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+#   resource_id   = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
+#   http_method   = "ANY"
+#   authorization = "NONE"
+# }
+
+# resource "aws_api_gateway_integration" "lambda_root" {
+#   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+#   resource_id = "${aws_api_gateway_method.proxy_root.resource_id}"
+#   http_method = "${aws_api_gateway_method.proxy_root.http_method}"
+
+#   integration_http_method = "POST"
+#   type                    = "AWS_PROXY"
+#   uri                     = "${aws_lambda_function.api_lambda.invoke_arn}"
+# }
+
 resource "aws_api_gateway_integration" "api_integration" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
-  resource_id = "${aws_api_gateway_resource.api_resource.id}"
+  resource_id = "${aws_api_gateway_method.api_method.resource_id}"
   http_method = "${aws_api_gateway_method.api_method.http_method}"
+
+  integration_http_method = "POST"
   type = "AWS_PROXY"
-  uri = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:${aws_lambda_function.api_lambda.function_name}/invocations"
-  integration_http_method = "ANY"
+  uri = "${aws_lambda_function.api_lambda.invoke_arn}"
+}
+
+resource "aws_lambda_permission" "apigw_lambda" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.api_lambda.function_name}"
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    "aws_api_gateway_method.api_method",
-    "aws_api_gateway_integration.api_integration"
+    "aws_api_gateway_method.api_method"
   ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   stage_name = "${var.environment}"
+  description = "Deployed at ${timestamp()}"
 }
