@@ -567,20 +567,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isValidDocketNumber', () => {
-    it('returns true if a valid docketNumber', () => {
-      expect(Case.isValidDocketNumber('101-00')).toBeTruthy();
-    });
-
-    it('returns false if an invalid docketNumber', () => {
-      expect(Case.isValidDocketNumber('00101-00')).toBeFalsy();
-    });
-
-    it('returns false if an invalid docket number', () => {
-      expect(Case.isValidDocketNumber('00')).toBeFalsy();
-    });
-  });
-
   describe('markAsSentToIRS', () => {
     it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(
