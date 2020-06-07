@@ -15,6 +15,8 @@ resource "aws_lambda_function" "api_lambda" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler       = "index.handler"
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
+  timeout = "10"
+  memory_size = "768"
   
   runtime = "nodejs12.x"
 
@@ -45,6 +47,10 @@ resource "aws_lambda_function" "api_lambda" {
 
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
   name = "gateway_api_${var.environment}"
+
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_resource" "api_resource" {
@@ -102,4 +108,60 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   stage_name = "${var.environment}"
   description = "Deployed at ${timestamp()}"
+}
+
+resource "aws_acm_certificate" "api_gateway_east_cert" {
+  domain_name       = "efcms-api-${var.environment}.${var.dns_domain}"
+  validation_method = "DNS"
+
+  tags = {
+    Name          = "efcms-api-${var.environment}.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = "${var.environment}"
+    Description   = "Certificate for efcms-api-${var.environment}.${var.dns_domain}"
+    ManagedBy     = "terraform"
+  }
+}
+
+resource "aws_acm_certificate_validation" "validate_api_gateway_east_cert" {
+  certificate_arn         = "${aws_acm_certificate.api_gateway_east_cert.arn}"
+  validation_record_fqdns = ["${aws_route53_record.api_route53_east_record.fqdn}"]
+}
+
+resource "aws_route53_record" "api_route53_east_record" {
+  name    = "${aws_acm_certificate.api_gateway_east_cert.domain_validation_options.0.resource_record_name}"
+  type    = "${aws_acm_certificate.api_gateway_east_cert.domain_validation_options.0.resource_record_type}"
+  zone_id = "${data.aws_route53_zone.zone.id}"
+  records = [
+    "${aws_acm_certificate.api_gateway_east_cert.domain_validation_options.0.resource_record_value}",
+  ]
+  ttl     = 60
+}
+
+resource "aws_api_gateway_domain_name" "api_custom" {
+  regional_certificate_arn = "${aws_acm_certificate_validation.validate_api_gateway_east_cert.certificate_arn}"
+  domain_name     = "efcms-api-${var.environment}.${var.dns_domain}"
+  security_policy = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+
+resource "aws_route53_record" "api_route53_east_regional_record" {
+  name    = "${aws_api_gateway_domain_name.api_custom.domain_name}"
+  type    = "A"
+  zone_id = "${data.aws_route53_zone.zone.id}"
+
+  alias {
+    evaluate_target_health = true
+    name                   = "${aws_api_gateway_domain_name.api_custom.regional_domain_name}"
+    zone_id                = "${aws_api_gateway_domain_name.api_custom.regional_zone_id}"
+  }
+}
+
+resource "aws_api_gateway_base_path_mapping" "api_mapping" {
+  api_id      = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  stage_name  = "${aws_api_gateway_deployment.api_deployment.stage_name}"
+  domain_name = "${aws_api_gateway_domain_name.api_custom.domain_name}"
 }
