@@ -11,21 +11,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-app.post('/', (req, res) => {
-  console.log(req.apiGateway);
-  console.log(req.body);
-  res.json({
-    message: 'hi',
-  });
+const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
+const { swaggerLambda } = require('./swagger/swaggerLambda');
+
+app.get('/api/swagger', async (req, res) => {
+  const { body, headers } = await swaggerLambda();
+  res.set(headers);
+  res.send(body);
 });
 
-app.get('/test', (req, res) => {
-  console.log('testing');
-  console.log(req.apiGateway);
-  console.log(req.body);
-  res.json({
-    message: 'hi',
-  });
+app.get('/api/swagger.json', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {};
+  const response = await swaggerJsonLambda(event);
+  res.json(JSON.parse(response.body));
 });
 
 exports.app = app;
