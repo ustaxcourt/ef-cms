@@ -204,23 +204,23 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     // TODO - Refactor Case constants into their own file.
     //  Test currently fails when trying to mock out Case.validateRawCollection
     //  due to circular dependency issue, UserCase pulls in Case validation text
-    it.skip('should validate the retrieved cases', async () => {
-      const mockCaseId = '123';
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByLeadCaseId.mockResolvedValue([MOCK_CASE]);
+    // it('should validate the retrieved cases', async () => {
+    //   const mockCaseId = '123';
+    //   applicationContext
+    //     .getPersistenceGateway()
+    //     .getCasesByLeadCaseId.mockResolvedValue([MOCK_CASE]);
 
-      getConsolidatedCasesForLeadCase({
-        applicationContext,
-        casesAssociatedWithUserOrLeadCaseMap: {
-          '123': MOCK_CASE,
-        },
-        leadCaseId: mockCaseId,
-        userAssociatedCaseIdsMap: {},
-      });
+    //   getConsolidatedCasesForLeadCase({
+    //     applicationContext,
+    //     casesAssociatedWithUserOrLeadCaseMap: {
+    //       '123': MOCK_CASE,
+    //     },
+    //     leadCaseId: mockCaseId,
+    //     userAssociatedCaseIdsMap: {},
+    //   });
 
-      expect(Case.validateRawCollection).toBeCalled();
-    });
+    //   expect(Case.validateRawCollection).toBeCalled();
+    // });
 
     it('should retrieve the lead case when it is not associated with the current user', async () => {
       applicationContext
@@ -286,7 +286,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
       expect(result[0].caseId).toBe(MOCK_CASE.caseId);
     });
 
-    it.only('should return the list of consolidatedCases sorted by docketNumber', async () => {
+    it('should return the list of consolidatedCases sorted by docketNumber', async () => {
       const mockOtherCaseId = applicationContext.getUniqueId();
       const mockOtherCaseDocketNumber = '999-99';
       applicationContext
