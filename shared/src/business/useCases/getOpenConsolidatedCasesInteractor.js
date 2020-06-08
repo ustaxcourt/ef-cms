@@ -1,11 +1,7 @@
 const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
-const addCaseToMap = ({ caseRecord, casesAssociatedWithUserOrLeadCaseMap }) => {
-  casesAssociatedWithUserOrLeadCaseMap[caseRecord.caseId] = caseRecord;
-};
-
-const processUserAssociatedCases = openUserCases => {
+export const processUserAssociatedCases = openUserCases => {
   let casesAssociatedWithUserOrLeadCaseMap = {};
   let userAssociatedCaseIdsMap = {};
   let leadCaseIdsAssociatedWithUser = [];
@@ -17,20 +13,9 @@ const processUserAssociatedCases = openUserCases => {
     caseRecord.isRequestingUserAssociated = true;
     userAssociatedCaseIdsMap[caseId] = true;
 
-    if (!leadCaseId) {
-      addCaseToMap({
-        caseRecord,
-        casesAssociatedWithUserOrLeadCaseMap,
-      });
+    if (!leadCaseId || caseIsALeadCase) {
+      casesAssociatedWithUserOrLeadCaseMap[caseId] = caseRecord;
     }
-
-    if (caseIsALeadCase) {
-      addCaseToMap({
-        caseRecord,
-        casesAssociatedWithUserOrLeadCaseMap,
-      });
-    }
-
     if (leadCaseId && !leadCaseIdsAssociatedWithUser.includes(leadCaseId)) {
       leadCaseIdsAssociatedWithUser.push(leadCaseId);
     }
@@ -68,7 +53,6 @@ const getConsolidatedCasesForLeadCase = async ({
       leadCaseId,
     });
 
-  // USERCASE????
   consolidatedCases = Case.validateRawCollection(consolidatedCases, {
     applicationContext,
     filtered: true,
