@@ -47,6 +47,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   createCaseDeadline:
     handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.createCaseDeadlineLambda
     events:
@@ -59,6 +60,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getCaseDeadlinesForCase:
     handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
     events:
@@ -71,6 +73,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCaseDeadline:
     handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.updateCaseDeadlineLambda
     events:
@@ -83,6 +86,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   deleteCaseDeadline:
     handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.deleteCaseDeadlineLambda
     events:
@@ -95,6 +99,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getAllCaseDeadlines:
     handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
     events:
