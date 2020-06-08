@@ -24,18 +24,18 @@
 * If High Priority and Unread - Red exclamation point and bold (not implemented yet)
 
 ## Create New Message
-*  "Create New Message" to the actions dropdown on Case Detail header
+*  "Create New Message" is displayed in the actions dropdown on Case Detail header for all internal users
 * On click of Create New Message, the Create New Message modal displays
 
 **Select section/ recipient**
 * Required fields
 
 **Subject line**
-* is required
+* Is required
 * Free text field
 
 **Add message**
-* is required
+* Is required
 * Free text field
 
 **On Save**
