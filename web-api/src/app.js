@@ -4,8 +4,6 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
-console.log('we are here');
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -63,6 +61,12 @@ const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
+  removeCasePendingItemLambda,
+} = require('./cases/removeCasePendingItemLambda');
+const {
+  saveCaseDetailInternalEditLambda,
+} = require('./cases/saveCaseDetailInternalEditLambda');
+const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
 const {
@@ -84,6 +88,7 @@ const {
   updateDocketEntryOnCaseLambda,
 } = require('./documents/updateDocketEntryOnCaseLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
+const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
@@ -133,6 +138,18 @@ app.post('/api/court-issued-order', async (req, res) => {
   res.json(JSON.parse(response.body));
 });
 
+app.put('/cases/:caseId/', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await saveCaseDetailInternalEditLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
 app.post('/api/docket-record-pdf', async (req, res) => {
   const event = (req.apiGateway && req.apiGateway.event) || {
     headers: req.headers,
@@ -140,6 +157,17 @@ app.post('/api/docket-record-pdf', async (req, res) => {
   const response = await generateDocketRecordPdfLambda({
     ...event,
     body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/cases/:caseId/remove-pending/:documentId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await removeCasePendingItemLambda({
+    ...event,
   });
   res.json(JSON.parse(response.body));
 });
@@ -152,6 +180,18 @@ app.post('/case-deadlines/:caseId', async (req, res) => {
     },
   };
   const response = await createCaseDeadlineLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/cases', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await createCaseLambda({
     ...event,
     body: JSON.stringify(req.body),
   });

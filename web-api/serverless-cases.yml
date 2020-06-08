@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  # done
   saveCaseDetailInternalEdit:
     handler: web-api/${self:provider.dir}/casesHandlers.saveCaseDetailInternalEditLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  # done
   removeCasePendingItem:
     handler: web-api/${self:provider.dir}/casesHandlers.removeCasePendingItemLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  # done
   createCase:
     handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
     events:
