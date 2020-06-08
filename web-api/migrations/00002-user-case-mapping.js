@@ -33,6 +33,7 @@ const mutateRecord = async (item, documentClient, tableName) => {
       return {
         ...item,
         ...userCaseEntity,
+        entityName: 'UserCase',
         gsi1pk: `user-case|${caseId}`,
       };
     }
