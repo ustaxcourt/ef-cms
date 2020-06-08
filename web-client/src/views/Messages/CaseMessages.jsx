@@ -28,7 +28,7 @@ export const CaseMessages = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1 tabIndex="-1">Messages</h1>
+            <h1 tabIndex="-1">{messagesHelper.messagesTitle}</h1>
             <span
               aria-label="unread messages count"
               className="unread margin-right-2"
