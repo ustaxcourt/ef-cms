@@ -2,6 +2,7 @@ const {
   forAllRecords,
   isCaseRecord,
   isTrialSessionRecord,
+  isUserCaseMappingRecord,
   upGenerator,
 } = require('./utilities');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
@@ -41,6 +42,34 @@ describe('utilities', () => {
         caseType: Case.CASE_TYPES_MAP.cdp,
       });
 
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isUserCaseMappingRecord', () => {
+    it('should return true if the item is a user case mapping record', () => {
+      const result = isUserCaseMappingRecord({
+        pk: 'user|',
+        sk: 'case|',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the item is not a user case mapping record (pk,sk = case|)', () => {
+      const result = isUserCaseMappingRecord({
+        pk: 'case|',
+        sk: 'case|',
+      });
+
+      expect(result).toEqual(false);
+    });
+
+    it('should return false if the item is not a user case mapping record (pk,sk = user|)', () => {
+      const result = isUserCaseMappingRecord({
+        pk: 'user|',
+        sk: 'user|',
+      });
       expect(result).toEqual(false);
     });
   });

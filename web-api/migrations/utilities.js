@@ -1,6 +1,8 @@
 const isCaseRecord = item => !!item.caseType;
 const isTrialSessionRecord = item =>
   !!item.caseOrder && !!item.trialSessionId && !!item.maxCases;
+const isUserCaseMappingRecord = item =>
+  item.pk.startsWith('user|') && item.sk.startsWith('case|');
 
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
@@ -49,5 +51,6 @@ module.exports = {
   forAllRecords,
   isCaseRecord,
   isTrialSessionRecord,
+  isUserCaseMappingRecord,
   upGenerator,
 };
