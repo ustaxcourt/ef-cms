@@ -8,6 +8,7 @@ const {
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
@@ -63,7 +64,7 @@ exports.generateChangeOfAddress = async ({
     };
 
     let closedMoreThan6Months;
-    if (caseEntity.status === Case.STATUS_TYPES.closed) {
+    if (caseEntity.status === CASE_STATUS_TYPES.closed) {
       const maxClosedDate = calculateISODate({
         dateString: caseEntity.closedDate,
         howMuch: 6,
@@ -73,9 +74,9 @@ exports.generateChangeOfAddress = async ({
       closedMoreThan6Months = maxClosedDate <= rightNow;
     }
 
-    const shouldGenerateNotice = caseEntity.status !== Case.STATUS_TYPES.closed;
+    const shouldGenerateNotice = caseEntity.status !== CASE_STATUS_TYPES.closed;
     const shouldUpdateCase =
-      !closedMoreThan6Months || caseEntity.status !== Case.STATUS_TYPES.closed;
+      !closedMoreThan6Months || caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldGenerateNotice) {
       const documentType = applicationContext

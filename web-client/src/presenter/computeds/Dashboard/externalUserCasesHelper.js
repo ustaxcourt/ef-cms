@@ -1,16 +1,31 @@
 import { state } from 'cerebral';
 
-export const externalUserCasesHelper = get => {
-  const openCases = get(state.formattedOpenCases);
-  const closedCases = get(state.formattedClosedCases);
+export const externalUserCasesHelper = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
+
+  const openCases = get(state.openCases);
+  const closedCases = get(state.closedCases);
+
+  const formattedOpenCases = openCases.map(openCase =>
+    formatCase(applicationContext, openCase),
+  );
+  const formattedClosedCases = closedCases.map(closedCase =>
+    formatCase(applicationContext, closedCase),
+  );
+
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
   const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE);
 
   return {
-    closedCaseResults: closedCases.slice(0, closedCurrentPage * pageSize) || [],
-    openCaseResults: openCases.slice(0, openCurrentPage * pageSize) || [],
-    showLoadMoreClosedCases: closedCases.length > closedCurrentPage * pageSize,
-    showLoadMoreOpenCases: openCases.length > openCurrentPage * pageSize,
+    closedCaseResults: formattedClosedCases.slice(
+      0,
+      closedCurrentPage * pageSize,
+    ),
+    openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
+    showLoadMoreClosedCases:
+      formattedClosedCases.length > closedCurrentPage * pageSize,
+    showLoadMoreOpenCases:
+      formattedOpenCases.length > openCurrentPage * pageSize,
   };
 };

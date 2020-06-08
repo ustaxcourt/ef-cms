@@ -1,5 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { prioritizeCaseInteractor } = require('./prioritizeCaseInteractor');
 const { User } = require('../entities/User');
@@ -53,7 +53,7 @@ describe('prioritizeCaseInteractor', () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue(
       Promise.resolve({
         ...MOCK_CASE,
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
       }),
     );
 
