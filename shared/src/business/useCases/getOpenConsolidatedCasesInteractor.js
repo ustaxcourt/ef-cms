@@ -28,7 +28,7 @@ export const processUserAssociatedCases = openUserCases => {
   };
 };
 
-const setUnassociatedLeadCase = ({
+export const setUnassociatedLeadCase = ({
   casesAssociatedWithUserOrLeadCaseMap,
   consolidatedCases,
   leadCaseId,
@@ -36,11 +36,12 @@ const setUnassociatedLeadCase = ({
   const leadCase = consolidatedCases.find(
     consolidatedCase => consolidatedCase.caseId === leadCaseId,
   );
+
   leadCase.isRequestingUserAssociated = false;
   casesAssociatedWithUserOrLeadCaseMap[leadCaseId] = leadCase;
 };
 
-const getConsolidatedCasesForLeadCase = async ({
+export const getConsolidatedCasesForLeadCase = async ({
   applicationContext,
   casesAssociatedWithUserOrLeadCaseMap,
   leadCaseId,
