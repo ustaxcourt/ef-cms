@@ -93,7 +93,8 @@
     "caseCaption": "Samson Workman, Petitioner",
     "docketNumber": "102-20",
     "docketNumberWithSuffix": "103-19S",
-    "status": "New"
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -108,7 +109,8 @@
     "caseCaption": "Samson Workman, Petitioner",
     "docketNumber": "102-20",
     "docketNumberWithSuffix": "103-19S",
-    "status": "New"
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "work-item|9055257a-0a95-4b80-a728-5bb754c60e59",
