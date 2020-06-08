@@ -396,6 +396,9 @@ const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
+  getConsolidatedCasesByUserInteractor,
+} = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
+const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
@@ -1386,6 +1389,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUserInteractor,
         getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
+        getConsolidatedCasesByUserInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
