@@ -52,10 +52,12 @@ app.get('/api/notifications', async (req, res) => {
 
 app.post('/api/court-issued-order', async (req, res) => {
   const event = (req.apiGateway && req.apiGateway.event) || {
-    body: JSON.stringify(req.body),
     headers: req.headers,
   };
-  const response = await createCourtIssuedOrderPdfFromHtmlLambda(event);
+  const response = await createCourtIssuedOrderPdfFromHtmlLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
   res.json(JSON.parse(response.body));
 });
 

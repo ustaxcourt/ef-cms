@@ -4,6 +4,10 @@ data "archive_file" "zip_api" {
   source_file = "${path.module}/api/dist/index.js"
 }
 
+data "aws_lambda_layer_version" "puppeteer_existing" {
+  layer_name = "${var.environment}-puppeteer"
+}
+
 # resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
 #   name              = "/aws/lambda/api_${var.environment}"
 #   retention_in_days = 14
@@ -17,7 +21,7 @@ resource "aws_lambda_function" "api_lambda" {
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
   timeout = "10"
   memory_size = "3008"
-  layers = ["arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:layer:${var.environment}-puppeteer:latest"]
+  layers = ["${data.aws_lambda_layer_version.puppeteer_existing.arn}"]
 
   runtime = "nodejs12.x"
 
@@ -104,7 +108,8 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    "aws_api_gateway_method.api_method"
+    "aws_api_gateway_method.api_method",
+    "aws_api_gateway_integration.api_integration"
   ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   stage_name = "${var.environment}"
