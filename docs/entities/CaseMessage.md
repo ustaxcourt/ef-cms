@@ -15,6 +15,11 @@
             options: 
               version: 
                 - "uuidv4"
+    caseStatus: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The status of the associated case."
     createdAt: 
       type: "date"
       flags: 
@@ -23,6 +28,22 @@
           - "YYYY-MM-DD"
         presence: "required"
         description: "When the message was created."
+    docketNumber: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
+    docketNumberWithSuffix: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The docket number and suffix for the associated case."
+      allow: 
+        - null
     entityName: 
       type: "string"
       flags: 
@@ -70,6 +91,7 @@
         - "halpernsChambers"
         - "holmesChambers"
         - "jacobsChambers"
+        - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
         - "leydensChambers"
@@ -170,6 +192,7 @@
         - "halpernsChambers"
         - "holmesChambers"
         - "jacobsChambers"
+        - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
         - "leydensChambers"

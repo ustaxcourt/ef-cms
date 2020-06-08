@@ -50,6 +50,12 @@ describe('createCaseMessageInteractor', () => {
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });
 
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45S',
+      status: 'General Docket - Not at Issue',
+    });
+
     await createCaseMessageInteractor({
       applicationContext,
       ...caseMessageData,
@@ -63,6 +69,9 @@ describe('createCaseMessageInteractor', () => {
         .calls[0][0].caseMessage,
     ).toMatchObject({
       ...caseMessageData,
+      caseStatus: 'General Docket - Not at Issue',
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45S',
       from: 'Test Petitionsclerk',
       fromSection: 'petitions',
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',

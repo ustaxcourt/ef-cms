@@ -47,6 +47,10 @@ describe('Get case for public docket record search', () => {
   });
 
   it('should throw an error when unable to find a case by docket number', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(undefined);
+
     await expect(
       getCaseForPublicDocketSearchInteractor({
         applicationContext,

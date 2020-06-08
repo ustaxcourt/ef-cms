@@ -49,6 +49,9 @@ const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
 const {
+  OrderWithoutBody,
+} = require('../business/entities/orders/OrderWithoutBody');
+const {
   PrivatePractitioner,
 } = require('../business/entities/PrivatePractitioner');
 const { Batch } = require('../business/entities/Batch');
@@ -59,10 +62,14 @@ const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 const { ForwardMessage } = require('../business/entities/ForwardMessage');
+const { Note } = require('../business/entities/notes/Note');
+const { Order } = require('../business/entities/orders/Order');
 const { Practitioner } = require('../business/entities/Practitioner');
 const { PublicUser } = require('../business/entities/PublicUser');
 const { Statistic } = require('../business/entities/Statistic');
 const { User } = require('../business/entities/User');
+const { UserCase } = require('../business/entities/UserCase');
+const { UserCaseNote } = require('../business/entities/notes/UserCaseNote');
 const { WorkItem } = require('../business/entities/WorkItem');
 
 const generateMarkdownSchema = (entity, entityName) => {
@@ -210,9 +217,14 @@ generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
 generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
+generateMarkdownSchema(Note, 'Note');
+generateMarkdownSchema(Order, 'Order');
+generateMarkdownSchema(OrderWithoutBody, 'OrderWithoutBody');
 generateMarkdownSchema(Practitioner, 'Practitioner');
 generateMarkdownSchema(PrivatePractitioner, 'PrivatePractitioner');
 generateMarkdownSchema(PublicUser, 'PublicUser');
 generateMarkdownSchema(Statistic, 'Statistic');
 generateMarkdownSchema(User, 'User');
+generateMarkdownSchema(UserCase, 'UserCase');
+generateMarkdownSchema(UserCaseNote, 'UserCaseNote');
 generateMarkdownSchema(WorkItem, 'WorkItem');

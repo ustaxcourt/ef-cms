@@ -1,8 +1,10 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
+  formatDateIfToday,
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
@@ -51,7 +53,7 @@ const FORMATTED_WORK_ITEM = {
   assigneeId: 'abc',
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: Case.STATUS_TYPES.generalDocket,
+  caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAtFormatted: '12/27/18',
   currentMessage: {
     createdAtFormatted: '12/27/18',
@@ -111,7 +113,7 @@ describe('formatted work queue computed', () => {
     assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.generalDocket,
+    caseStatus: CASE_STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -549,7 +551,7 @@ describe('formatted work queue computed', () => {
             ...qcWorkItem,
             associatedJudge: Case.CHIEF_JUDGE,
             caseIsInProgress: true,
-            caseStatus: Case.STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.new,
             document: {
               ...qcWorkItem.document,
               status: 'processing',
@@ -1455,6 +1457,44 @@ describe('formatted work queue computed', () => {
       expect(result.document.descriptionDisplay).toEqual(
         'Document Title with Additional Info',
       );
+    });
+  });
+
+  describe('formatDateIfToday', () => {
+    it('returns a time if the date is today', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const result = formatDateIfToday(currentTime, applicationContext);
+
+      expect(result).toContain(':');
+      expect(result).toContain('ET');
+      expect(result).not.toContain('/');
+    });
+
+    it('returns "Yesterday" if the date is yesterday', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const yesterday = applicationContext
+        .getUtilities()
+        .calculateISODate({ dateString: currentTime, howMuch: -1 });
+
+      const result = formatDateIfToday(yesterday, applicationContext);
+
+      expect(result).toEqual('Yesterday');
+    });
+
+    it('returns the formatted date if older than one day', () => {
+      const date = applicationContext
+        .getUtilities()
+        .formatDateString('2019-01-01T17:29:13.122Z');
+
+      const result = formatDateIfToday(date, applicationContext);
+
+      expect(result).toContain('01/01/19');
     });
   });
 });

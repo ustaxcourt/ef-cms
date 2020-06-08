@@ -4,12 +4,14 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
+jest.mock('../entities/UserCase');
+const { UserCase } = require('../entities/UserCase');
 
-describe('getOpenCasesInteractor', () => {
-  let mockCase;
+describe('getOpenConsolidatedCasesInteractor', () => {
+  let mockFoundCasesList;
 
   beforeEach(() => {
-    mockCase = [MOCK_CASE];
+    mockFoundCasesList = [MOCK_CASE];
 
     applicationContext
       .getPersistenceGateway()
@@ -21,7 +23,8 @@ describe('getOpenCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getOpenCasesByUser.mockImplementation(() => mockCase);
+      .getOpenCasesByUser.mockImplementation(() => mockFoundCasesList);
+    UserCase.validateRawCollection.mockImplementation(foundCases => foundCases);
   });
 
   it('should retrieve the current user information', async () => {
@@ -45,8 +48,16 @@ describe('getOpenCasesInteractor', () => {
     });
   });
 
+  it('should validate the list of found open cases', async () => {
+    await getOpenConsolidatedCasesInteractor({
+      applicationContext,
+    });
+
+    expect(UserCase.validateRawCollection).toBeCalled();
+  });
+
   it('should return an empty list when no open cases are found', async () => {
-    mockCase = null;
+    mockFoundCasesList = [];
 
     const result = await getOpenConsolidatedCasesInteractor({
       applicationContext,
@@ -66,7 +77,6 @@ describe('getOpenCasesInteractor', () => {
         caseId: MOCK_CASE.caseId,
         docketNumber: MOCK_CASE.docketNumber,
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
-        leadCaseId: MOCK_CASE.leadCaseId,
       },
     ]);
   });

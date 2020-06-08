@@ -1,4 +1,8 @@
 import {
+  CASE_STATUS_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../shared/src/business/entities/cases/CaseConstants';
+import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
   SECTIONS,
@@ -16,7 +20,6 @@ import {
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { Scan } from '../../shared/src/business/entities/Scan';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -38,6 +41,7 @@ export const getConstants = () => ({
   BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
+  CASE_LIST_PAGE_SIZE: 20,
   CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
   CASE_TYPES: Case.CASE_TYPES,
   CASE_TYPES_MAP: Case.CASE_TYPES_MAP,
@@ -78,7 +82,7 @@ export const getConstants = () => ({
     (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
     55 * MINUTES,
   SIGNED_DOCUMENT_TYPES: Document.SIGNED_DOCUMENT_TYPES,
-  STATUS_TYPES: Case.STATUS_TYPES,
+  STATUS_TYPES: CASE_STATUS_TYPES,
   STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE: Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES: Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
