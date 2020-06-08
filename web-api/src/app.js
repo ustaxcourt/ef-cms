@@ -10,8 +10,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
 const {
+  addConsolidatedCaseLambda,
+} = require('./cases/addConsolidatedCaseLambda');
+const {
+  addDeficiencyStatisticLambda,
+} = require('./cases/addDeficiencyStatisticLambda');
+const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
+const {
+  blockCaseFromTrialLambda,
+} = require('./cases/blockCaseFromTrialLambda');
 const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
@@ -27,6 +36,9 @@ const {
 const {
   deleteCorrespondenceDocumentLambda,
 } = require('./correspondence/deleteCorrespondenceDocumentLambda');
+const {
+  deleteDeficiencyStatisticLambda,
+} = require('./cases/deleteDeficiencyStatisticLambda');
 const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
@@ -70,8 +82,14 @@ const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
 const {
+  unblockCaseFromTrialLambda,
+} = require('./cases/unblockCaseFromTrialLambda');
+const {
   updateCaseDeadlineLambda,
 } = require('./caseDeadline/updateCaseDeadlineLambda');
+const {
+  updateCaseTrialSortTagsLambda,
+} = require('./cases/updateCaseTrialSortTagsLambda');
 const {
   updateCorrespondenceDocumentLambda,
 } = require('./correspondence/updateCorrespondenceDocumentLambda');
@@ -82,19 +100,32 @@ const {
   updateCourtIssuedOrderToCaseLambda,
 } = require('./documents/updateCourtIssuedOrderToCaseLambda');
 const {
+  updateDeficiencyStatisticLambda,
+} = require('./cases/updateDeficiencyStatisticLambda');
+const {
   updateDocketEntryMetaLambda,
 } = require('./documents/updateDocketEntryMetaLambda');
 const {
   updateDocketEntryOnCaseLambda,
 } = require('./documents/updateDocketEntryOnCaseLambda');
+const {
+  updateOtherStatisticsLambda,
+} = require('./cases/updateOtherStatisticsLambda');
+const {
+  updateQcCompleteForTrialLambda,
+} = require('./cases/updateQcCompleteForTrialLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
+const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { signDocumentLambda } = require('./documents/signDocumentLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
+const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
+const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 
 app.get('/api/swagger', async (req, res) => {
   const { body, headers } = await swaggerLambda();
@@ -560,5 +591,184 @@ app.delete(
     res.json(JSON.parse(response.body));
   },
 );
+
+app.put('/case-meta/:caseId/update-case-trial-sort-tags', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await updateCaseTrialSortTagsLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/case-meta/:caseId/block', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await blockCaseFromTrialLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/case-meta/:caseId/block', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await unblockCaseFromTrialLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/case-meta/:caseId/high-priority', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await prioritizeCaseLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/case-meta/:caseId/high-priority', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await unprioritizeCaseLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-meta/:caseId/case-context', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await updateCaseContextLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-meta/:caseId/consolidate-case', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await addConsolidatedCaseLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-meta/:caseId/qc-complete', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await updateQcCompleteForTrialLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-meta/:caseId/seal', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await sealCaseLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/case-meta/:caseId/other-statistics', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await updateOtherStatisticsLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/case-meta/:caseId/statistics', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await addDeficiencyStatisticLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-meta/:caseId/statistics/:statisticId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+      statisticId: req.params.statisticId,
+    },
+  };
+  const response = await updateDeficiencyStatisticLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/case-meta/:caseId/statistics/:statisticId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+      statisticId: req.params.statisticId,
+    },
+  };
+  const response = await deleteDeficiencyStatisticLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
 
 exports.app = app;
