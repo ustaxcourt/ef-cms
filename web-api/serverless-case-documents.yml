@@ -49,6 +49,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
     layers:
@@ -65,6 +66,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   createWorkItem:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.createWorkItemLambda
     events:
@@ -77,6 +79,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   addCoversheet:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.addCoversheetLambda
     layers:
@@ -94,6 +97,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   signDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.signDocumentLambda
     events:
@@ -106,6 +110,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   archiveDraftDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.archiveDraftDocumentLambda
     events:
@@ -117,6 +122,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  #done
   fileExternalDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
     events:
@@ -129,6 +135,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fileExternalDocumentToConsolidated:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToConsolidatedCasesLambda
     events:
@@ -141,6 +148,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fileDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileDocketEntryToCaseLambda
     events:
@@ -153,6 +161,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryOnCaseLambda
     events:
@@ -165,6 +174,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateDocketEntryMeta:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
     layers:
@@ -181,6 +191,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   completeDocketEntryQC:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
     layers:
@@ -195,6 +206,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fileCourtIssuedDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedDocketEntryLambda
     events:
@@ -207,6 +219,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCourtIssuedDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
     events:
@@ -219,6 +232,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fileCourtIssuedOrder:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedOrderToCaseLambda
     events:
@@ -231,6 +245,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCourtIssuedOrder:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedOrderToCaseLambda
     events:
@@ -243,6 +258,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDownloadPolicyUrl:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.downloadPolicyUrlLambda
     events:
@@ -255,6 +271,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDocumentDownloadUrl:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.getDocumentDownloadUrlLambda
     events:
@@ -292,6 +309,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fileCorrespondenceDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCorrespondenceDocumentLambda
     events:
@@ -304,6 +322,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCorrespondenceDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocumentLambda
     events:
@@ -316,6 +335,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   deleteCorrespondenceDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.deleteCorrespondenceDocumentLambda
     events:
