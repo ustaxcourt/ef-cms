@@ -87,6 +87,8 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
 
   let caseDetailRaw;
 
+  console.log('a');
+
   if (caseRecord.sealedDate) {
     let isAuthorizedUser =
       isAuthorized(
@@ -118,16 +120,19 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         .toRawObject();
     }
   } else {
+    console.log('b');
     caseDetailRaw = new Case(caseRecord, {
       applicationContext,
     })
       .validate()
       .toRawObject();
+    console.log('c');
 
     caseDetailRaw.documents = await getDocumentContentsForDocuments({
       applicationContext,
       documents: caseDetailRaw.documents,
     });
+    console.log('d');
   }
   return caseDetailRaw;
 };

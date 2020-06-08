@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
+const { getCaseLambda } = require('./cases/getCaseLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 
@@ -23,6 +24,17 @@ app.get('/api/swagger', async (req, res) => {
 app.get('/api/swagger.json', async (req, res) => {
   const event = (req.apiGateway && req.apiGateway.event) || {};
   const response = await swaggerJsonLambda(event);
+  res.json(JSON.parse(response.body));
+});
+
+app.get('/cases/:caseId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await getCaseLambda(event);
   res.json(JSON.parse(response.body));
 });
 
