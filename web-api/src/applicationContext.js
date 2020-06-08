@@ -465,6 +465,9 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
 const {
+  getIndexedCasesForUser,
+} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
+const {
   getIndexMappingFields,
 } = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
 const {
@@ -1195,6 +1198,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUser,
         getIndexMappingFields,
         getIndexMappingLimit,
+        getIndexedCasesForUser,
         getInternalUsers,
         getOpenCasesByUser,
         getPractitionerByBarNumber,

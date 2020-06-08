@@ -3,4 +3,5 @@ exports.elasticsearchIndexes = [
   'efcms-document',
   'efcms-user',
   'efcms-message',
+  'efcms-user-case',
 ];
