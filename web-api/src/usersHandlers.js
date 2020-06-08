@@ -2,6 +2,8 @@ module.exports = {
   createUserLambda: require('./users/createUserLambda').createUserLambda,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda')
     .getCasesByUserLambda,
+  getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
+    .getConsolidatedCasesByUserLambda,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')
     .getDocumentQCInboxForUserLambda,
   getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda')

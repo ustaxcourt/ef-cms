@@ -2,38 +2,38 @@ const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
 /**
- * getOpenConsolidatedCasesInteractor
+ * getConsolidatedCasesByUserInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {object} the open cases data
+ * @param {string} providers.userId id of the user to get cases for
+ * @returns {Array<object>} the cases the user is associated with
  */
-exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
+// TODO - delete after implementing closed case endpoint
+exports.getConsolidatedCasesByUserInteractor = async ({
+  applicationContext,
+  userId,
+}) => {
   let foundCases = [];
   let userCaseIdsMap = {};
 
-  const { userId } = await applicationContext.getCurrentUser();
-
-  const openUserCases = await applicationContext
+  const userCases = await applicationContext
     .getPersistenceGateway()
-    .getOpenCasesByUser({ applicationContext, userId });
+    .getUserDashboardCases({ applicationContext, userId });
 
-  const openUserCasesValidated = UserCase.validateRawCollection(openUserCases, {
-    applicationContext,
-  });
-
-  if (openUserCasesValidated.length) {
+  if (userCases.length) {
     const caseMapping = {};
     const leadCaseIdsToGet = [];
 
-    openUserCasesValidated.forEach(caseRecord => {
-      const { caseId, leadCaseId } = caseRecord;
+    userCases.forEach(caseRecord => {
+      const userCaseEntity = new UserCase(caseRecord).validate().toRawObject();
+      const { caseId, leadCaseId } = userCaseEntity;
 
-      caseRecord.isRequestingUserAssociated = true;
+      userCaseEntity.isRequestingUserAssociated = true;
       userCaseIdsMap[caseId] = true;
 
       if (!leadCaseId || leadCaseId === caseId) {
-        caseMapping[caseId] = caseRecord;
+        caseMapping[caseId] = userCaseEntity;
       }
 
       if (leadCaseId) {

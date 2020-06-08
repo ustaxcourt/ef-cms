@@ -111,6 +111,7 @@ import { getCaseMessageInteractor } from '../../shared/src/proxies/messages/getC
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
+import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
@@ -317,6 +318,7 @@ const allUseCases = {
   getCasesByUserInteractor,
   getClosedCasesInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getConsolidatedCasesByUserInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
