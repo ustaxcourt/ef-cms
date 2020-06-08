@@ -12,8 +12,26 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
 const {
+  createCaseDeadlineLambda,
+} = require('./caseDeadline/createCaseDeadlineLambda');
+const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
+const {
+  deleteCaseDeadlineLambda,
+} = require('./caseDeadline/deleteCaseDeadlineLambda');
+const {
+  generateDocketRecordPdfLambda,
+} = require('./cases/generateDocketRecordPdfLambda');
+const {
+  getAllCaseDeadlinesLambda,
+} = require('./caseDeadline/getAllCaseDeadlinesLambda');
+const {
+  getCaseDeadlinesForCaseLambda,
+} = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
+const {
+  updateCaseDeadlineLambda,
+} = require('./caseDeadline/updateCaseDeadlineLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
@@ -57,6 +75,83 @@ app.post('/api/court-issued-order', async (req, res) => {
   const response = await createCourtIssuedOrderPdfFromHtmlLambda({
     ...event,
     body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/api/docket-record-pdf', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+  };
+  const response = await generateDocketRecordPdfLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/case-deadlines/:caseId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await createCaseDeadlineLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.get('/case-deadlines/:caseId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await getCaseDeadlinesForCaseLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/case-deadlines/:caseId/:caseDeadlineId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseDeadlineId: req.params.caseDeadlineId,
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await updateCaseDeadlineLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/case-deadlines/:caseId/:caseDeadlineId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: {
+      caseDeadlineId: req.params.caseDeadlineId,
+      caseId: req.params.caseId,
+    },
+  };
+  const response = await deleteCaseDeadlineLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.get('/case-deadlines', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+  };
+  const response = await getAllCaseDeadlinesLambda({
+    ...event,
   });
   res.json(JSON.parse(response.body));
 });
