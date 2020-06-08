@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   updateCaseTrialSortTags:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateCaseTrialSortTagsLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   blockCaseFromTrial:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.blockCaseFromTrialLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   unblockCaseFromTrial:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.unblockCaseFromTrialLambda
     events:
@@ -84,6 +87,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   prioritizeCase:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.prioritizeCaseLambda
     events:
@@ -96,6 +100,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   unprioritizeCase:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.unprioritizeCaseLambda
     events:
@@ -108,6 +113,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCaseContext:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateCaseContextLambda
     events:
@@ -120,6 +126,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   addConsolidatedCase:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.addConsolidatedCaseLambda
     events:
@@ -144,6 +151,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateQcCompleteForTrial:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateQcCompleteForTrialLambda
     events:
@@ -156,6 +164,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   sealCase:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.sealCaseLambda
     events:
@@ -168,6 +177,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateOtherStatistics:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateOtherStatisticsLambda
     events:
@@ -180,6 +190,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   addDeficiencyStatistic:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.addDeficiencyStatisticLambda
     events:
@@ -192,6 +203,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateDeficiencyStatistic:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.updateDeficiencyStatisticLambda
     events:
@@ -204,6 +216,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   deleteDeficiencyStatistic:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.deleteDeficiencyStatisticLambda
     events:
