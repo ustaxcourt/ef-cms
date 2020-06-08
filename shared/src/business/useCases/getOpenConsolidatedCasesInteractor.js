@@ -1,17 +1,12 @@
 const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
-const addCaseToMap = ({
-  caseRecord,
-  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
-}) => {
-  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
-    caseRecord.caseId
-  ] = caseRecord;
+const addCaseToMap = ({ caseRecord, casesAssociatedWithUserOrLeadCaseMap }) => {
+  casesAssociatedWithUserOrLeadCaseMap[caseRecord.caseId] = caseRecord;
 };
 
-const garbage = openUserCases => {
-  let casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap = {};
+const processUserAssociatedCases = openUserCases => {
+  let casesAssociatedWithUserOrLeadCaseMap = {};
   let userAssociatedCaseIdsMap = {};
   let leadCaseIdsAssociatedWithUser = [];
 
@@ -25,14 +20,14 @@ const garbage = openUserCases => {
     if (!leadCaseId) {
       addCaseToMap({
         caseRecord,
-        casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+        casesAssociatedWithUserOrLeadCaseMap,
       });
     }
 
     if (caseIsALeadCase) {
       addCaseToMap({
         caseRecord,
-        casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+        casesAssociatedWithUserOrLeadCaseMap,
       });
     }
 
@@ -42,14 +37,14 @@ const garbage = openUserCases => {
   });
 
   return {
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+    casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
   };
 };
 
-const literallyAnythingElse = ({
-  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+const setUnassociatedLeadCase = ({
+  casesAssociatedWithUserOrLeadCaseMap,
   consolidatedCases,
   leadCaseId,
 }) => {
@@ -57,14 +52,12 @@ const literallyAnythingElse = ({
     consolidatedCase => consolidatedCase.caseId === leadCaseId,
   );
   leadCase.isRequestingUserAssociated = false;
-  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
-    leadCaseId
-  ] = leadCase;
+  casesAssociatedWithUserOrLeadCaseMap[leadCaseId] = leadCase;
 };
 
 const getConsolidatedCasesForLeadCase = async ({
   applicationContext,
-  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+  casesAssociatedWithUserOrLeadCaseMap,
   leadCaseId,
   userAssociatedCaseIdsMap,
 }) => {
@@ -81,9 +74,9 @@ const getConsolidatedCasesForLeadCase = async ({
     filtered: true,
   });
 
-  if (!casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[leadCaseId]) {
-    literallyAnythingElse({
-      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+  if (!casesAssociatedWithUserOrLeadCaseMap[leadCaseId]) {
+    setUnassociatedLeadCase({
+      casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases,
       leadCaseId,
     });
@@ -126,25 +119,23 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   }
 
   const {
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+    casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
-  } = garbage(openUserCases);
+  } = processUserAssociatedCases(openUserCases);
 
   for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
+    casesAssociatedWithUserOrLeadCaseMap[
       leadCaseId
     ].consolidatedCases = await getConsolidatedCasesForLeadCase({
       applicationContext,
-      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+      casesAssociatedWithUserOrLeadCaseMap,
       leadCaseId,
       userAssociatedCaseIdsMap,
     });
   }
 
-  const foundCases = Object.values(
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
-  );
+  const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);
 
   return foundCases;
 };
