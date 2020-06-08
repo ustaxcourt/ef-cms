@@ -11,7 +11,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
+const {
+  createCourtIssuedOrderPdfFromHtmlLambda,
+} = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
+const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 
@@ -35,6 +39,23 @@ app.get('/cases/:caseId', async (req, res) => {
     },
   };
   const response = await getCaseLambda(event);
+  res.json(JSON.parse(response.body));
+});
+
+app.get('/api/notifications', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+  };
+  const response = await getNotificationsLambda(event);
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/api/court-issued-order', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    body: JSON.stringify(req.body),
+    headers: req.headers,
+  };
+  const response = await createCourtIssuedOrderPdfFromHtmlLambda(event);
   res.json(JSON.parse(response.body));
 });
 
