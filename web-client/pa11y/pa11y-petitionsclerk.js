@@ -157,6 +157,20 @@ module.exports = [
       'wait for #case-detail-menu-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #case-detail-menu-button',
+      'wait for #menu-button-add-new-message to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #menu-button-add-new-message',
+      'wait for .ustc-create-message-modal to be visible',
+    ],
+    notes: 'checks a11y of create message modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=create-message-modal',
+  },
+  {
+    actions: [
+      'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #case-detail-menu-button',
       'wait for #menu-button-create-order to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-button-create-order',
@@ -468,4 +482,10 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=practitioner-search-results',
   },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/practitioner-detail/PT1234',
+  /* case messages */
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/inbox&info=case-messages-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/my/outbox&info=case-messages-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/inbox&info=case-messages-section-inbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/outbox&info=case-messages-section-outbox',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
 ];

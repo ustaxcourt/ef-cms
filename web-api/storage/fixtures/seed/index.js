@@ -17,6 +17,7 @@ module.exports = [
   ...require('./103-20.json'),
   ...require('./104-20.json'),
   ...require('./105-20.json'),
+  ...require('./case-messages.json'),
   ...require('./trial-sessions.json'),
   ...require('./trial-sessions-past.json'),
   ...require('./misc.json'),

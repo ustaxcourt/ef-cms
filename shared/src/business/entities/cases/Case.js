@@ -7,6 +7,7 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
+  CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -46,41 +47,26 @@ Case.PAYMENT_STATUS = {
   WAIVED: 'Waived',
 };
 
-Case.STATUS_TYPES = {
-  assignedCase: 'Assigned - Case', // Case has been assigned to a judge
-  assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
-  calendared: 'Calendared', // Case has been scheduled for trial
-  cav: 'CAV', // Core alternative valuation
-  closed: 'Closed', // Judge has made a ruling to close the case
-  generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
-  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
-  jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
-  new: 'New', // Case has not been QCed
-  onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
-  rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
-  submitted: 'Submitted', // Submitted to the judge for decision
-};
-
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  Case.STATUS_TYPES.assignedCase,
-  Case.STATUS_TYPES.assignedMotion,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.jurisdictionRetained,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.jurisdictionRetained,
+  CASE_STATUS_TYPES.rule155,
+  CASE_STATUS_TYPES.submitted,
 ];
 
 Case.STATUS_TYPES_MANUAL_UPDATE = [
-  Case.STATUS_TYPES.assignedCase,
-  Case.STATUS_TYPES.assignedMotion,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.closed,
-  Case.STATUS_TYPES.generalDocket,
-  Case.STATUS_TYPES.generalDocketReadyForTrial,
-  Case.STATUS_TYPES.jurisdictionRetained,
-  Case.STATUS_TYPES.onAppeal,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.jurisdictionRetained,
+  CASE_STATUS_TYPES.onAppeal,
+  CASE_STATUS_TYPES.rule155,
+  CASE_STATUS_TYPES.submitted,
 ];
 
 Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
@@ -253,7 +239,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriorityReason = rawCase.highPriorityReason;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.status = rawCase.status || Case.STATUS_TYPES.new;
+    this.status = rawCase.status || CASE_STATUS_TYPES.new;
     this.userId = rawCase.userId;
 
     if (Array.isArray(rawCase.statistics)) {
@@ -270,7 +256,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.docketNumber = rawCase.docketNumber;
+  if (rawCase.docketNumber) {
+    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+  }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
@@ -388,7 +376,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.contactSecondary = contacts.secondary;
 }
 
-Case.validationRules = {
+Case.VALIDATION_RULES = {
   associatedJudge: joi
     .string()
     .max(50)
@@ -464,7 +452,7 @@ Case.validationRules = {
     .valid(...Case.CASE_TYPES)
     .required(),
   closedDate: joi.when('status', {
-    is: Case.STATUS_TYPES.closed,
+    is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
     then: joiStrictTimestamp.required(),
   }),
@@ -720,7 +708,7 @@ Case.validationRules = {
     .description('List of Statistic Entities for the case.'),
   status: joi
     .string()
-    .valid(...Object.values(Case.STATUS_TYPES))
+    .valid(...Object.values(CASE_STATUS_TYPES))
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
@@ -773,7 +761,7 @@ Case.validationRules = {
 
 joiValidationDecorator(
   Case,
-  joi.object().keys(Case.validationRules),
+  joi.object().keys(Case.VALIDATION_RULES),
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
@@ -969,7 +957,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function (document) {
 
 Case.prototype.closeCase = function () {
   this.closedDate = createISODateString();
-  this.status = Case.STATUS_TYPES.closed;
+  this.status = CASE_STATUS_TYPES.closed;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
   return this;
@@ -981,7 +969,7 @@ Case.prototype.closeCase = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
-  this.status = Case.STATUS_TYPES.generalDocket;
+  this.status = CASE_STATUS_TYPES.generalDocket;
 
   return this;
 };
@@ -1204,20 +1192,6 @@ Case.isValidCaseId = caseId =>
   );
 
 /**
- * isValidDocketNumber
- *
- * @param {string} docketNumber the docket number to validate
- * @returns {*|boolean} true if the docketNumber is valid, false otherwise
- */
-Case.isValidDocketNumber = docketNumber => {
-  return (
-    docketNumber &&
-    DOCKET_NUMBER_MATCHER.test(docketNumber) &&
-    parseInt(docketNumber.split('-')[0]) > 100
-  );
-};
-
-/**
  * stripLeadingZeros
  *
  * @param {string} docketNumber the docket number
@@ -1251,7 +1225,7 @@ Case.prototype.checkForReadyForTrial = function () {
   const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
-    this.status === Case.STATUS_TYPES.generalDocket;
+    this.status === CASE_STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
@@ -1269,7 +1243,7 @@ Case.prototype.checkForReadyForTrial = function () {
         daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
-        this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+        this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
   }
@@ -1364,7 +1338,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.trialTime = trialSessionEntity.startTime;
   this.trialLocation = trialSessionEntity.trialLocation;
   if (trialSessionEntity.isCalendared === true) {
-    this.status = Case.STATUS_TYPES.calendared;
+    this.status = CASE_STATUS_TYPES.calendared;
   }
   return this;
 };
@@ -1406,7 +1380,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isCalendared = function () {
-  return this.status === Case.STATUS_TYPES.calendared;
+  return this.status === CASE_STATUS_TYPES.calendared;
 };
 
 /**
@@ -1415,7 +1389,7 @@ Case.prototype.isCalendared = function () {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isReadyForTrial = function () {
-  return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
+  return this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial;
 };
 
 /**
@@ -1501,7 +1475,7 @@ Case.prototype.unsetAsHighPriority = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.removeFromTrial = function () {
-  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
   this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
   this.trialLocation = undefined;
@@ -1549,12 +1523,12 @@ Case.prototype.setCaseStatus = function (caseStatus) {
   this.status = caseStatus;
   if (
     [
-      Case.STATUS_TYPES.generalDocket,
-      Case.STATUS_TYPES.generalDocketReadyForTrial,
+      CASE_STATUS_TYPES.generalDocket,
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
     ].includes(caseStatus)
   ) {
     this.associatedJudge = Case.CHIEF_JUDGE;
-  } else if (caseStatus === Case.STATUS_TYPES.closed) {
+  } else if (caseStatus === CASE_STATUS_TYPES.closed) {
     this.closeCase();
   }
   return this;
@@ -1648,10 +1622,10 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
  */
 Case.prototype.canConsolidate = function (caseToConsolidate) {
   const ineligibleStatusTypes = [
-    Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.generalDocket,
-    Case.STATUS_TYPES.closed,
-    Case.STATUS_TYPES.onAppeal,
+    CASE_STATUS_TYPES.new,
+    CASE_STATUS_TYPES.generalDocket,
+    CASE_STATUS_TYPES.closed,
+    CASE_STATUS_TYPES.onAppeal,
   ];
 
   const caseToCheck = caseToConsolidate || this;

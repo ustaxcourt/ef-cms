@@ -14,6 +14,6 @@ exports.getInboxCaseMessagesForUserInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/messages/${userId}`,
+    endpoint: `/messages/inbox/${userId}`,
   });
 };
