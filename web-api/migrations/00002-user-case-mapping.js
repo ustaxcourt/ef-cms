@@ -1,15 +1,17 @@
 const createApplicationContext = require('../src/applicationContext');
+const {
+  isNewUserCaseMappingRecord,
+  isUserCaseMappingRecord,
+  upGenerator,
+} = require('./utilities');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { isUserCaseMappingRecord, upGenerator } = require('./utilities');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = async (item, documentClient, tableName) => {
   const caseId = item.sk.split('|')[1];
-  const shouldMigrate = item =>
-    !item.gsi1pk || !item.gsi1pk.startsWith('user-case|'); // indicates `user-case|` on gsi1pk
 
-  if (isUserCaseMappingRecord(item) && shouldMigrate(item)) {
+  if (isUserCaseMappingRecord(item) && !isNewUserCaseMappingRecord(item)) {
     const mappedCase = await documentClient
       .get({
         Key: {

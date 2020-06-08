@@ -1,6 +1,7 @@
 const {
   forAllRecords,
   isCaseRecord,
+  isNewUserCaseMappingRecord,
   isTrialSessionRecord,
   isUserCaseMappingRecord,
   upGenerator,
@@ -70,6 +71,30 @@ describe('utilities', () => {
         pk: 'user|',
         sk: 'user|',
       });
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isNewUserCaseMappingRecord', () => {
+    it('should return true if the record is a new user-case mapping record', () => {
+      const result = isNewUserCaseMappingRecord({
+        gsi1pk: 'user-case|',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the record is not a new user-case mapping record', () => {
+      const result = isNewUserCaseMappingRecord({
+        gsi1pk: 'case|',
+      });
+
+      expect(result).toEqual(false);
+    });
+
+    it('should return false if the record is not a new user-case mapping record (no gsi1pk)', () => {
+      const result = isNewUserCaseMappingRecord({});
+
       expect(result).toEqual(false);
     });
   });
