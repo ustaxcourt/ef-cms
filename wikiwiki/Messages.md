@@ -7,12 +7,6 @@
 * Sent - newest to oldest by Sent date
 * Completed - newest to oldest by Completed date
 
-## Message flow
-* Message comes into Individual and Section Inbox and always displays the message text
-* When clerk forwards a message (sent to), the message moves to Sent tab for both Individual and Section
-* Open messages appear in In Progress Messages on case detail page
-* All messages for a document appear in Document detail page in either In Progress or Complete tabs 
-
 ## Unread messages
 * When a new message is received, a closed envelope icon is displayed on page refresh (not in real time) next to the Messages link in the header
 * Total number of unread messages is displayed next to the My Messages page title
@@ -28,3 +22,25 @@
 * If Unread - Bold with blue envelope icon
 * If High Priority - Red exclamation point (not implemented yet)
 * If High Priority and Unread - Red exclamation point and bold (not implemented yet)
+
+## Create New Message
+*  "Create New Message" to the actions dropdown on Case Detail header
+* On click of Create New Message, the Create New Message modal displays
+
+**Select section/ recipient**
+* Required fields
+
+**Subject line**
+* is required
+* Free text field
+
+**Add message**
+* is required
+* Free text field
+
+**On Save**
+* Modal closes and success message displays "Your message has been sent."
+* Message is saved and associated with case
+* Message Detail screen is created
+* Message appears in Sent box for sending user and Section Sent box
+* Message appears in the recipient's My Messages Inbox, and the Section Messages Inbox
