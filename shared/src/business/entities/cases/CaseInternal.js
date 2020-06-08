@@ -125,18 +125,18 @@ const paperRequirements = joi
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
     hasVerifiedIrsNotice: joi.boolean().required(),
-    irsNoticeDate: Case.validationRules.irsNoticeDate,
+    irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
-    noticeOfAttachments: Case.validationRules.noticeOfAttachments,
+    noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
-      Case.validationRules.orderDesignatingPlaceOfTrial,
-    orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
+      Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition: Case.VALIDATION_RULES.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
-      Case.validationRules.orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee: Case.validationRules.orderForFilingFee,
-    orderForOds: Case.validationRules.orderForOds,
-    orderForRatification: Case.validationRules.orderForRatification,
-    orderToShowCause: Case.validationRules.orderToShowCause,
+      Case.VALIDATION_RULES.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: Case.VALIDATION_RULES.orderForFilingFee,
+    orderForOds: Case.VALIDATION_RULES.orderForOds,
+    orderForRatification: Case.VALIDATION_RULES.orderForRatification,
+    orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
     ownershipDisclosureFile: joi.when('partyType', {
       is: joi
         .exist()
@@ -170,9 +170,9 @@ const paperRequirements = joi
       otherwise: joiStrictTimestamp.optional().allow(null),
       then: joiStrictTimestamp.max('now').required(),
     }),
-    petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
-    petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
-    petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
+    petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
+    petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
+    petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
     preferredTrialCity: joi
       .alternatives()
       .conditional('requestForPlaceOfTrialFile', {
@@ -194,14 +194,14 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    statistics: Case.validationRules.statistics,
+    statistics: Case.VALIDATION_RULES.statistics,
     stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    useSameAsPrimary: Case.validationRules.useSameAsPrimary,
+    useSameAsPrimary: Case.VALIDATION_RULES.useSameAsPrimary,
   })
   .or(
     'preferredTrialCity',

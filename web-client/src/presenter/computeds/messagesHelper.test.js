@@ -25,4 +25,26 @@ describe('messagesHelper', () => {
     expect(result.showIndividualMessages).toBeFalsy();
     expect(result.showSectionMessages).toBeTruthy();
   });
+
+  it('should set messagesTitle to the current message box being displayed', () => {
+    let result = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result.messagesTitle).toEqual('My Messages');
+
+    result = runCompute(messagesHelper, {
+      state: {
+        messageBoxToDisplay: {
+          queue: 'section',
+        },
+      },
+    });
+
+    expect(result.messagesTitle).toEqual('Section Messages');
+  });
 });

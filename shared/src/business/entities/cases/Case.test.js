@@ -175,6 +175,17 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, docketNumber: '00101-20' },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.docketNumber).toBe('101-20');
+    });
+
     it('Creates an invalid case with an invalid nested contact object', () => {
       const myCase = new Case(
         {
@@ -553,16 +564,6 @@ describe('Case entity', () => {
       expect(
         Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
       ).toBeFalsy();
-    });
-  });
-
-  describe('isValidDocketNumber', () => {
-    it('returns true if a valid docketNumber', () => {
-      expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
-    });
-
-    it('returns false if an invalid docket number', () => {
-      expect(Case.isValidDocketNumber('00')).toBeFalsy();
     });
   });
 
