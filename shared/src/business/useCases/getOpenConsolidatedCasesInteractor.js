@@ -1,34 +1,106 @@
 const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
+const addCaseToMap = ({
+  caseRecord,
+  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+}) => {
+  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
+    caseRecord.caseId
+  ] = caseRecord;
+};
+
 const garbage = openUserCases => {
-  let casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap = {};
-  let userCaseIdsMap = {};
-  let leadCaseIdsToGet = [];
+  let casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap = {};
+  let userAssociatedCaseIdsMap = {};
+  let leadCaseIdsAssociatedWithUser = [];
 
   openUserCases.forEach(caseRecord => {
     const { caseId, leadCaseId } = caseRecord;
+    const caseIsALeadCase = leadCaseId === caseId;
 
-    // case is associated with user because it was retrieved using getOpenCasesByUser!
     caseRecord.isRequestingUserAssociated = true;
-    userCaseIdsMap[caseId] = true;
+    userAssociatedCaseIdsMap[caseId] = true;
 
-    if (!leadCaseId || leadCaseId === caseId) {
-      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap[
-        caseId
-      ] = caseRecord;
+    if (!leadCaseId) {
+      addCaseToMap({
+        caseRecord,
+        casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+      });
     }
 
-    if (leadCaseId && !leadCaseIdsToGet.includes(leadCaseId)) {
-      leadCaseIdsToGet.push(leadCaseId);
+    if (caseIsALeadCase) {
+      addCaseToMap({
+        caseRecord,
+        casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+      });
+    }
+
+    if (leadCaseId && !leadCaseIdsAssociatedWithUser.includes(leadCaseId)) {
+      leadCaseIdsAssociatedWithUser.push(leadCaseId);
     }
   });
 
   return {
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap,
-    leadCaseIdsToGet,
-    userCaseIdsMap,
+    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+    leadCaseIdsAssociatedWithUser,
+    userAssociatedCaseIdsMap,
   };
+};
+
+const literallyAnythingElse = ({
+  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+  consolidatedCases,
+  leadCaseId,
+}) => {
+  const leadCase = consolidatedCases.find(
+    consolidatedCase => consolidatedCase.caseId === leadCaseId,
+  );
+  leadCase.isRequestingUserAssociated = false;
+  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
+    leadCaseId
+  ] = leadCase;
+};
+
+const getConsolidatedCasesForLeadCase = async ({
+  applicationContext,
+  casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+  leadCaseId,
+  userAssociatedCaseIdsMap,
+}) => {
+  let consolidatedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByLeadCaseId({
+      applicationContext,
+      leadCaseId,
+    });
+
+  // USERCASE????
+  consolidatedCases = Case.validateRawCollection(consolidatedCases, {
+    applicationContext,
+    filtered: true,
+  });
+
+  if (!casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[leadCaseId]) {
+    literallyAnythingElse({
+      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+      consolidatedCases,
+      leadCaseId,
+    });
+  }
+
+  const caseConsolidatedCases = [];
+  consolidatedCases.forEach(consolidatedCase => {
+    consolidatedCase.isRequestingUserAssociated = !!userAssociatedCaseIdsMap[
+      consolidatedCase.caseId
+    ];
+
+    if (consolidatedCase.caseId !== leadCaseId) {
+      caseConsolidatedCases.push(consolidatedCase);
+    }
+  });
+
+  return Case.sortByDocketNumber(caseConsolidatedCases);
 };
 
 /**
@@ -41,70 +113,37 @@ const garbage = openUserCases => {
 exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const openUserCases = await applicationContext
+  let openUserCases = await applicationContext
     .getPersistenceGateway()
     .getOpenCasesByUser({ applicationContext, userId });
 
-  const openUserCasesValidated = UserCase.validateRawCollection(openUserCases, {
+  openUserCases = UserCase.validateRawCollection(openUserCases, {
     applicationContext,
   });
 
-  if (!openUserCasesValidated.length) {
+  if (!openUserCases.length) {
     return [];
   }
 
   const {
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap,
-    leadCaseIdsToGet: leadCaseIdsAssociatedWithCurrentUser,
-    userCaseIdsMap,
-  } = garbage(openUserCasesValidated);
+    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+    leadCaseIdsAssociatedWithUser,
+    userAssociatedCaseIdsMap,
+  } = garbage(openUserCases);
 
-  for (const leadCaseId of leadCaseIdsAssociatedWithCurrentUser) {
-    const consolidatedCases = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadCaseId({
-        applicationContext,
-        leadCaseId,
-      });
-
-    // USERCASE????
-    const consolidatedCasesValidated = Case.validateRawCollection(
-      consolidatedCases,
-      { applicationContext, filtered: true },
-    );
-
-    if (
-      !casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap[
-        leadCaseId
-      ]
-    ) {
-      const leadCase = consolidatedCasesValidated.find(
-        consolidatedCase => consolidatedCase.caseId === leadCaseId,
-      );
-      leadCase.isRequestingUserAssociated = false;
-      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap[
-        leadCaseId
-      ] = leadCase;
-    }
-
-    const caseConsolidatedCases = [];
-    consolidatedCasesValidated.forEach(consolidatedCase => {
-      consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
-        consolidatedCase.caseId
-      ];
-
-      if (consolidatedCase.caseId !== leadCaseId) {
-        caseConsolidatedCases.push(consolidatedCase);
-      }
-    });
-
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap[
+  for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
+    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap[
       leadCaseId
-    ].consolidatedCases = Case.sortByDocketNumber(caseConsolidatedCases);
+    ].consolidatedCases = await getConsolidatedCasesForLeadCase({
+      applicationContext,
+      casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
+      leadCaseId,
+      userAssociatedCaseIdsMap,
+    });
   }
 
   const foundCases = Object.values(
-    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithCurrentUserMap,
+    casesThatAreNotLeadCasesOrLeadCasesAssociatedWithUserMap,
   );
 
   return foundCases;
