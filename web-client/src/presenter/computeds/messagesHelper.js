@@ -5,5 +5,9 @@ export const messagesHelper = get => {
   const showIndividualMessages = messageBoxToDisplay.queue === 'my';
   const showSectionMessages = messageBoxToDisplay.queue === 'section';
 
-  return { showIndividualMessages, showSectionMessages };
+  const messagesTitle = showIndividualMessages
+    ? 'My Messages'
+    : 'Section Messages';
+
+  return { messagesTitle, showIndividualMessages, showSectionMessages };
 };
