@@ -4,8 +4,6 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
-console.log('we are here');
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,6 +12,13 @@ app.use(awsServerlessExpressMiddleware.eventContext());
 const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
+const {
+  removeCasePendingItemLambda,
+} = require('./cases/removeCasePendingItemLambda');
+const {
+  saveCaseDetailInternalEditLambda,
+} = require('./cases/saveCaseDetailInternalEditLambda');
+const { createCaseLambda } = require('./cases/createCaseLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
@@ -55,6 +60,41 @@ app.post('/api/court-issued-order', async (req, res) => {
     headers: req.headers,
   };
   const response = await createCourtIssuedOrderPdfFromHtmlLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.put('/cases/:caseId/', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await saveCaseDetailInternalEditLambda({
+    ...event,
+    body: JSON.stringify(req.body),
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.delete('/cases/:caseId/remove-pending/:documentId', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await removeCasePendingItemLambda({
+    ...event,
+  });
+  res.json(JSON.parse(response.body));
+});
+
+app.post('/cases', async (req, res) => {
+  const event = (req.apiGateway && req.apiGateway.event) || {
+    headers: req.headers,
+    pathParameters: req.params,
+  };
+  const response = await createCaseLambda({
     ...event,
     body: JSON.stringify(req.body),
   });
