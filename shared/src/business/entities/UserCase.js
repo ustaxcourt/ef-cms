@@ -14,6 +14,7 @@ UserCase.validationName = 'UserCase';
  * @constructor
  */
 function UserCase(rawUserCase) {
+  this.entityName = 'UserCase';
   this.caseId = rawUserCase.caseId;
   this.caseCaption = rawUserCase.caseCaption;
   this.createdAt = rawUserCase.createdAt;
@@ -25,11 +26,11 @@ function UserCase(rawUserCase) {
 joiValidationDecorator(
   UserCase,
   joi.object().keys({
-    caseCaption: Case.validationRules.caseCaption,
-    caseId: Case.validationRules.caseId,
-    docketNumber: Case.validationRules.docketNumber,
-    docketNumberWithSuffix: Case.validationRules.docketNumberWithSuffix,
-    leadCaseId: Case.validationRules.leadCaseId,
+    caseCaption: Case.VALIDATION_RULES.caseCaption,
+    caseId: Case.VALIDATION_RULES.caseId,
+    docketNumber: Case.VALIDATION_RULES.docketNumber,
+    docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
+    leadCaseId: Case.VALIDATION_RULES.leadCaseId,
   }),
   Case.VALIDATION_ERROR_MESSAGES,
 );

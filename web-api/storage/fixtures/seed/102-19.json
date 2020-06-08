@@ -92,7 +92,8 @@
     "docketNumber": "102-19",
     "status": "New",
     "createdAt": "2019-03-01T21:40:46.415Z",
-    "caseCaption": "Selma Horn & Cairo Harris, Petitioners"
+    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
+    "entityName": "UserCase"
   },
   {
     "docketNumberWithSuffix": "102-19P",

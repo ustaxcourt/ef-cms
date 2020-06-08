@@ -115,6 +115,7 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoFilePetitionSuccessSequence } from './sequences/gotoFilePetitionSuccessSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
+import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
@@ -258,6 +259,8 @@ import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
+import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
@@ -524,6 +527,7 @@ export const presenter = {
     gotoFilePetitionSuccessSequence,
     gotoIdleLogoutSequence,
     gotoLoginSequence,
+    gotoMessageDetailSequence,
     gotoMessagesSequence,
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
@@ -666,6 +670,8 @@ export const presenter = {
     setWorkQueueIsInternalSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
     showMoreResultsSequence,
     signOutSequence,
     startScanSequence,

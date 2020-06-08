@@ -259,7 +259,7 @@
         - 
           name: "pattern"
           args: 
-            regex: "/^(\\d{3,5}-\\d{2})$/"
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
     docketNumberSuffix: 
       type: "string"
       flags: 

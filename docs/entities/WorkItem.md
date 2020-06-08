@@ -54,7 +54,21 @@
     caseStatus: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "Assigned - Case"
+        - "Assigned - Motion"
+        - "Calendared"
+        - "CAV"
+        - "Closed"
+        - "General Docket - Not at Issue"
+        - "General Docket - At Issue (Ready for Trial)"
+        - "Jurisdiction Retained"
+        - "New"
+        - "On Appeal"
+        - "Rule 155"
+        - "Submitted"
     caseTitle: 
       type: "string"
       flags: 
@@ -63,7 +77,7 @@
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 500
     completedAt: 
       type: "date"
       flags: 
@@ -121,7 +135,7 @@
         - 
           name: "pattern"
           args: 
-            regex: "/^(\\d{3,5}-\\d{2})$/"
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
     docketNumberSuffix: 
       type: "string"
       flags: 
@@ -207,6 +221,7 @@
         - "halpernsChambers"
         - "holmesChambers"
         - "jacobsChambers"
+        - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
         - "leydensChambers"
@@ -272,6 +287,7 @@
         - "halpernsChambers"
         - "holmesChambers"
         - "jacobsChambers"
+        - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
         - "leydensChambers"

@@ -32,14 +32,18 @@ import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import {
   formattedCaseDetail,
-  formattedCases,
+  formattedClosedCases,
+  formattedOpenCases,
 } from './computeds/formattedCaseDetail';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedMessageDetail } from './computeds/formattedMessageDetail';
+import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
@@ -112,12 +116,16 @@ const helpers = {
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
+  externalUserCasesHelper,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
   fileUploadStatusHelper,
   formattedCaseDetail,
-  formattedCases,
+  formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedMessageDetail,
+  formattedMessages,
+  formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
@@ -167,9 +175,10 @@ export const baseState = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
   caseDetail: {},
-  cases: [],
+  closedCases: [],
   cognitoLoginUrl: null,
-  completeForm: {}, // TODO: replace with state.form
+  completeForm: {},
+  // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -196,16 +205,19 @@ export const baseState = {
       tab: null,
     },
   },
-  docketRecordIndex: 0, // needs its own object because it's present when other forms are on screen
+  docketRecordIndex: 0,
+  // needs its own object because it's present when other forms are on screen
   documentId: null,
-  fieldOrder: [], // TODO: related to errors
+  fieldOrder: [],
+  // TODO: related to errors
   fileUploadProgress: {
     // used for the progress bar shown in modal when uploading files
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {}, // shared object for creating new entities, clear before using
+  form: {},
+  // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
     showBetaBar: true,
@@ -218,6 +230,7 @@ export const baseState = {
   },
   navigation: {},
   notifications: {},
+  openCases: [],
   pdfForSigning: {
     documentId: null,
     nameForSigning: '',
