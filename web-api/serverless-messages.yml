@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   createCaseMessage:
     handler: web-api/${self:provider.dir}/messagesHandlers.createCaseMessageLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getCaseMessage:
     handler: web-api/${self:provider.dir}/messagesHandlers.getCaseMessageLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getInboxCaseMessagesForUser:
     handler: web-api/${self:provider.dir}/messagesHandlers.getInboxCaseMessagesForUserLambda
     events:
@@ -84,6 +87,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getInboxCaseMessagesForSection:
     handler: web-api/${self:provider.dir}/messagesHandlers.getInboxCaseMessagesForSectionLambda
     events:
@@ -96,6 +100,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getOutboxCaseMessagesForUser:
     handler: web-api/${self:provider.dir}/messagesHandlers.getOutboxCaseMessagesForUserLambda
     events:
@@ -108,6 +113,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getOutboxCaseMessagesForSection:
     handler: web-api/${self:provider.dir}/messagesHandlers.getOutboxCaseMessagesForSectionLambda
     events:
