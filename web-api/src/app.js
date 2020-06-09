@@ -127,6 +127,9 @@ const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
+  getConsolidatedCasesByUserLambda,
+} = require('./cases/getConsolidatedCasesByUserLambda');
+const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
@@ -136,8 +139,14 @@ const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
 const {
+  getDocumentQCInboxForUserLambda,
+} = require('./workitems/getDocumentQCInboxForUserLambda');
+const {
   getDocumentQCServedForSectionLambda,
 } = require('./workitems/getDocumentQCServedForSectionLambda');
+const {
+  getDocumentQCServedForUserLambda,
+} = require('./workitems/getDocumentQCServedForUserLambda');
 const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
@@ -150,6 +159,12 @@ const {
 const {
   getInboxMessagesForSectionLambda,
 } = require('./workitems/getInboxMessagesForSectionLambda');
+const {
+  getInboxMessagesForUserLambda,
+} = require('./workitems/getInboxMessagesForUserLambda');
+const {
+  getIrsPractitionersBySearchKeyLambda,
+} = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
@@ -166,8 +181,14 @@ const {
   getPractitionersByNameLambda,
 } = require('./practitioners/getPractitionersByNameLambda');
 const {
+  getPrivatePractitionersBySearchKeyLambda,
+} = require('./users/getPrivatePractitionersBySearchKeyLambda');
+const {
   getSentMessagesForSectionLambda,
 } = require('./workitems/getSentMessagesForSectionLambda');
+const {
+  getSentMessagesForUserLambda,
+} = require('./workitems/getSentMessagesForUserLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -189,6 +210,12 @@ const {
 const {
   orderAdvancedSearchLambda,
 } = require('./documents/orderAdvancedSearchLambda');
+const {
+  privatePractitionerCaseAssociationLambda,
+} = require('./cases/privatePractitionerCaseAssociationLambda');
+const {
+  privatePractitionerPendingCaseAssociationLambda,
+} = require('./cases/privatePractitionerPendingCaseAssociationLambda');
 const {
   removeCaseFromTrialLambda,
 } = require('./trialSessions/removeCaseFromTrialLambda');
@@ -276,18 +303,29 @@ const {
 const {
   updateUserCaseNoteLambda,
 } = require('./caseNote/updateUserCaseNoteLambda');
+const {
+  updateUserContactInformationLambda,
+} = require('./users/updateUserContactInformationLambda');
+const {
+  verifyPendingCaseForUserLambda,
+} = require('./cases/verifyPendingCaseForUserLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
+const { createUserLambda } = require('./users/createUserLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseMessageLambda } = require('./messages/getCaseMessageLambda');
+const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
+const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
+const { getUserByIdLambda } = require('./users/getUserByIdLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
+const { getUserLambda } = require('./users/getUserLambda');
 const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -735,6 +773,59 @@ app.post(
 app.delete(
   '/trial-sessions/:trialSessionId',
   lambdaWrapper(deleteTrialSessionLambda),
+);
+
+/**
+ * users
+ */
+app.get('/users', lambdaWrapper(getUserLambda));
+app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
+app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
+app.post('/users', lambdaWrapper(createUserLambda));
+app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
+app.get(
+  '/users/:userId/cases-with-consolidation',
+  lambdaWrapper(getConsolidatedCasesByUserLambda),
+);
+app.get(
+  '/users/:userId/case/:caseId/pending',
+  lambdaWrapper(verifyPendingCaseForUserLambda),
+);
+app.put(
+  '/users/:userId/case/:caseId',
+  lambdaWrapper(privatePractitionerCaseAssociationLambda),
+);
+app.put(
+  '/users/:userId/case/:caseId/pending',
+  lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
+);
+app.get(
+  '/users/:userId/messages/inbox',
+  lambdaWrapper(getInboxMessagesForUserLambda),
+);
+app.get(
+  '/users/:userId/messages/sent',
+  lambdaWrapper(getSentMessagesForUserLambda),
+);
+app.get(
+  '/users/:userId/document-qc/inbox',
+  lambdaWrapper(getDocumentQCInboxForUserLambda),
+);
+app.get(
+  '/users/:userId/document-qc/served',
+  lambdaWrapper(getDocumentQCServedForUserLambda),
+);
+app.put(
+  '/users/:userId/contact-fino',
+  lambdaWrapper(updateUserContactInformationLambda),
+);
+app.get(
+  '/users/privatePractitioners/search',
+  lambdaWrapper(getPrivatePractitionersBySearchKeyLambda),
+);
+app.get(
+  '/users/irsPractitioners/search',
+  lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
 );
 
 exports.app = app;
