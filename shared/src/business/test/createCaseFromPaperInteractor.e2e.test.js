@@ -9,6 +9,7 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -90,7 +91,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               assigneeName: 'Alex Petitionsclerk',
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               createdAt: RECEIVED_DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
@@ -133,7 +134,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       receivedAt: RECEIVED_DATE,
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -145,7 +146,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsclerkInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19',
         document: {
@@ -174,7 +175,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsSectionInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19',
         document: {
