@@ -2,8 +2,7 @@
  * Given a list of cases associated with the current user, creates a map of
  *  consolidated and lead cases.
  *
- * @param {object} providers the providers object
- * @param {object} providers.openUserCases the list of open cases associated with the current user
+ * @param {object} openUserCases the list of open cases associated with the current user
  * @returns {object} casesAssociatedWithUserOrLeadCaseMap - a map of
  *  consolidated and lead cases. leadCaseIdsAssociatedWithUser - a list of leadCaseIds
  *  associated with the current user. userAssociatedCaseIdsMap - a map of open cases associated
