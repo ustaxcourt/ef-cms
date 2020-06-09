@@ -20,5 +20,14 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=irsPractitioner&path=/case-detail/102-20&info=associated-respondent',
   },
+  {
+    actions: [
+      'wait for #tab-open to be visible',
+      'wait for #tab-closed to be visible',
+    ],
+    notes:
+      'an associated respondent can see two tabs displaying open and closed cases',
+    url: 'http://localhost:1234/mock-login?token=irsPractitioner&path=/',
+  },
   'http://localhost:1234/mock-login?token=irsPractitioner&path=/search/no-matches',
 ];
