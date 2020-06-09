@@ -96,7 +96,7 @@ export const CaseListPractitioner = connect(
                   <Tab
                     id="tab-open"
                     tabName="Open"
-                    title={`Open Cases (${externalUserCasesHelper.openCaseResults.length})`}
+                    title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
                   >
                     {renderTable(
                       externalUserCasesHelper.openCaseResults,
@@ -108,7 +108,7 @@ export const CaseListPractitioner = connect(
                   <Tab
                     id="tab-closed"
                     tabName="Closed"
-                    title={`Closed Cases (${externalUserCasesHelper.closedCaseResults.length})`}
+                    title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
                   >
                     {renderTable(
                       externalUserCasesHelper.closedCaseResults,
@@ -141,7 +141,7 @@ export const CaseListPractitioner = connect(
                 <Tab
                   id="tab-open"
                   tabName="Open"
-                  title={`Open Cases (${externalUserCasesHelper.openCaseResults.length})`}
+                  title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
                 >
                   {renderTable(
                     externalUserCasesHelper.openCaseResults,
@@ -153,7 +153,7 @@ export const CaseListPractitioner = connect(
                 <Tab
                   id="tab-closed"
                   tabName="Closed"
-                  title={`Closed Cases (${externalUserCasesHelper.closedCaseResults.length})`}
+                  title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
                 >
                   {renderTable(
                     externalUserCasesHelper.closedCaseResults,
