@@ -147,7 +147,10 @@ const lambdaWrapper = async lambda => {
       pathParameters: req.params,
       queryStringParameters: req.query,
     };
-    const response = await lambda(event);
+    const response = await lambda({
+      ...event,
+      body: JSON.stringify(req.body),
+    });
     res.json(JSON.parse(response.body));
   };
 };
