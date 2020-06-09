@@ -30,6 +30,7 @@ export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
 export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
+export AWS_REGION=us-east-1
 
 echo "killing s3rver if already running"
 pkill -f s3rver
@@ -79,7 +80,9 @@ echo "starting streams service"
 npx sls offline start "$@" --config web-api/serverless-streams.yml &
 
 echo "starting proxy"
-node ./web-api/proxy.js
+node ./web-api/proxy.js &
+
+nodemon -e 'js' --exec "node -r esm web-api/src/app-local.js"
 
 echo "proxy stopped"
 
