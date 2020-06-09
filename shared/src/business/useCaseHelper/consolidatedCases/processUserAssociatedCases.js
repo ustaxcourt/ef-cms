@@ -1,9 +1,13 @@
 /**
- * TODO
+ * Given a list of cases associated with the current user, creates a map of
+ *  consolidated and lead cases.
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @returns {object} the open cases data
+ * @param {object} providers.openUserCases the list of open cases associated with the current user
+ * @returns {object} casesAssociatedWithUserOrLeadCaseMap - a map of
+ *  consolidated and lead cases. leadCaseIdsAssociatedWithUser - a list of leadCaseIds
+ *  associated with the current user. userAssociatedCaseIdsMap - a map of open cases associated
+ *  with the current user
  */
 exports.processUserAssociatedCases = openUserCases => {
   let casesAssociatedWithUserOrLeadCaseMap = {};

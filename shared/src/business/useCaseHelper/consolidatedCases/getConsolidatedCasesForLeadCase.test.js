@@ -64,8 +64,8 @@ describe('getConsolidatedCasesForLeadCase', () => {
     });
 
     expect(
-      casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
-    ).toBeDefined();
+      applicationContext.getUseCaseHelpers().setUnassociatedLeadCase,
+    ).toBeCalled();
   });
 
   it('should set isRequestingUserAssociated for each case associated with the specified lead caseId', async () => {
