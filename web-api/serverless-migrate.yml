@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   migrateCase:
     handler: web-api/${self:provider.dir}/migrateHandlers.migrateCaseLambda
     events:

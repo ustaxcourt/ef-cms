@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   getPractitionersByName:
     handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionersByNameLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getPractitionerByBarNumber:
     handler: web-api/${self:provider.dir}/practitionersHandlers.getPractitionerByBarNumberLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   createPractitionerUser:
     handler: web-api/${self:provider.dir}/practitionersHandlers.createPractitionerUserLambda
     events:
@@ -84,6 +87,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updatePractitionerUser:
     handler: web-api/${self:provider.dir}/practitionersHandlers.updatePractitionerUserLambda
     layers:
