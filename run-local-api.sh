@@ -10,5 +10,6 @@ export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
 export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
+export AWS_REGION=us-east-1
 
 nodemon -e 'js' --exec "node -r esm web-api/src/app-local.js"
