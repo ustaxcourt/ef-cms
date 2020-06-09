@@ -37,6 +37,9 @@ const {
   createCaseFromPaperLambda,
 } = require('./cases/createCaseFromPaperLambda');
 const {
+  createCaseMessageLambda,
+} = require('./messages/createCaseMessageLambda');
+const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
@@ -94,8 +97,20 @@ const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
+  getInboxCaseMessagesForSectionLambda,
+} = require('./messages/getInboxCaseMessagesForSectionLambda');
+const {
+  getInboxCaseMessagesForUserLambda,
+} = require('./messages/getInboxCaseMessagesForUserLambda');
+const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
+const {
+  getOutboxCaseMessagesForSectionLambda,
+} = require('./messages/getOutboxCaseMessagesForSectionLambda');
+const {
+  getOutboxCaseMessagesForUserLambda,
+} = require('./messages/getOutboxCaseMessagesForUserLambda');
 const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
@@ -174,6 +189,7 @@ const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
+const { getCaseMessageLambda } = require('./messages/getCaseMessageLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
@@ -474,6 +490,28 @@ app.post(
 app.post(
   '/documents/:documentId/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
+);
+
+/**
+ * messages
+ */
+app.post('/messages', lambdaWrapper(createCaseMessageLambda));
+app.get('/messages/:messageId', lambdaWrapper(getCaseMessageLambda));
+app.get(
+  '/messages/inbox/:userId',
+  lambdaWrapper(getInboxCaseMessagesForUserLambda),
+);
+app.get(
+  '/messages/inbox/section/:section',
+  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+);
+app.get(
+  '/messages/outbox/:userId',
+  lambdaWrapper(getOutboxCaseMessagesForUserLambda),
+);
+app.get(
+  '/messages/outbox/:section',
+  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
 
 exports.app = app;
