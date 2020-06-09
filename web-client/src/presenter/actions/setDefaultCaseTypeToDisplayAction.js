@@ -4,12 +4,14 @@ import { state } from 'cerebral';
  * sets the default case type to display to open
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const setDefaultCaseTypeToDisplayAction = ({ store }) => {
-  store.set(
-    state.openClosedCases.caseType,
-    state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
-  );
+export const setDefaultCaseTypeToDisplayAction = ({
+  applicationContext,
+  store,
+}) => {
+  const { EXTERNAL_USER_DASHBOARD_TABS } = applicationContext.getConstants();
+  store.set(state.openClosedCases.caseType, EXTERNAL_USER_DASHBOARD_TABS.OPEN);
 };
