@@ -5,45 +5,64 @@ const { Statistic } = require('../../shared/src/business/entities/Statistic');
 const applicationContext = createApplicationContext({});
 
 const mutateRecord = item => {
-  if (
-    isCaseRecord(item) &&
-    item.caseType === Case.CASE_TYPES_MAP.deficiency &&
-    item.hasVerifiedIrsNotice === true
-  ) {
+  if (isCaseRecord(item)) {
     let { statistics } = item;
-    if (!statistics || statistics.length === 0) {
-      const defaultStatistic = new Statistic(
+
+    if (
+      item.caseType === Case.CASE_TYPES_MAP.deficiency &&
+      item.hasVerifiedIrsNotice === true
+    ) {
+      if (!statistics || statistics.length === 0) {
+        const defaultStatistic = new Statistic(
+          {
+            irsDeficiencyAmount: 1,
+            irsTotalPenalties: 1,
+            year: '2012',
+            yearOrPeriod: 'Year',
+          },
+          { applicationContext },
+        );
+        statistics = [defaultStatistic];
+      } else {
+        statistics.forEach(statistic => {
+          if (statistic.deficiencyAmount) {
+            statistic.irsDeficiencyAmount = statistic.deficiencyAmount;
+          }
+          if (statistic.totalPenalties) {
+            statistic.irsTotalPenalties = statistic.totalPenalties;
+          }
+        });
+      }
+
+      const caseEntity = new Case(
         {
-          irsDeficiencyAmount: 1,
-          irsTotalPenalties: 1,
-          year: '2012',
-          yearOrPeriod: 'Year',
+          ...item,
+          statistics,
         },
         { applicationContext },
-      );
-      statistics = [defaultStatistic];
-    } else {
-      statistics.map(statistic => {
-        if (statistic.deficiencyAmount) {
-          statistic.irsDeficiencyAmount = statistic.deficiencyAmount;
-        }
-        if (statistic.totalPenalties) {
-          statistic.irsTotalPenalties = statistic.totalPenalties;
-        }
-      });
+      )
+        .validate()
+        .toRawObject();
+
+      return { ...item, ...caseEntity };
+    } else if (
+      (item.caseType !== Case.CASE_TYPES_MAP.deficiency ||
+        item.hasVerifiedIrsNotice !== true) &&
+      statistics &&
+      statistics.length
+    ) {
+      const caseEntity = new Case(
+        {
+          ...item,
+          statistics: [],
+        },
+        { applicationContext },
+      )
+        .validate()
+        .toRawObject();
+
+      return { ...item, ...caseEntity };
     }
-
-    const caseEntity = new Case(
-      {
-        ...item,
-        statistics,
-      },
-      { applicationContext },
-    )
-      .validate()
-      .toRawObject();
-
-    return { ...item, ...caseEntity };
   }
 };
 
