@@ -7,6 +7,12 @@ KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
+pushd ./web-api/terraform/main
+  ../bin/deploy-init.sh "${slsStage}"
+  ELASTICSEARCH_ENDPOINT="$(terraform output elasticsearch_endpoint)"
+  export ELASTICSEARCH_ENDPOINT
+popd
+
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
@@ -39,4 +45,4 @@ popd
 set -eo pipefail
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}"
+TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}" -var "elasticsearch_endpoint=${ELASTICSEARCH_ENDPOINT}" -var "user_pool_id=${USER_POOL_ID}" -var "irs_superuser_email=${IRS_SUPERUSER_EMAIL}"

@@ -21,3 +21,15 @@ variable "es_instance_count" {
 variable "honeybadger_key" {
   type = "string"
 }
+
+variable "elasticsearch_endpoint" {
+  type = "string"
+}
+
+variable "user_pool_id" {
+  type = "string"
+}
+
+variable "irs_superuser_email" {
+  type = "string"
+}
