@@ -43,6 +43,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
+  createPractitionerUserLambda,
+} = require('./practitioners/createPractitionerUserLambda');
+const {
   deleteCaseDeadlineLambda,
 } = require('./caseDeadline/deleteCaseDeadlineLambda');
 const {
@@ -60,6 +63,9 @@ const {
 const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
+const {
+  fetchPendingItemsLambda,
+} = require('./reports/fetchPendingItemsLambda');
 const {
   fileCorrespondenceDocumentLambda,
 } = require('./correspondence/fileCorrespondenceDocumentLambda');
@@ -82,8 +88,17 @@ const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
+  generatePrintableCaseInventoryReportLambda,
+} = require('./reports/generatePrintableCaseInventoryReportLambda');
+const {
   generatePrintableFilingReceiptLambda,
 } = require('./documents/generatePrintableFilingReceiptLambda');
+const {
+  generatePrintablePendingReportLambda,
+} = require('./reports/generatePrintablePendingReportLambda');
+const {
+  generateTrialCalendarPdfLambda,
+} = require('./reports/generateTrialCalendarPdfLambda');
 const {
   getAllCaseDeadlinesLambda,
 } = require('./caseDeadline/getAllCaseDeadlinesLambda');
@@ -91,17 +106,32 @@ const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
 const {
+  getCaseInventoryReportLambda,
+} = require('./reports/getCaseInventoryReportLambda');
+const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
+  getDocumentQCBatchedForSectionLambda,
+} = require('./workitems/getDocumentQCBatchedForSectionLambda');
+const {
+  getDocumentQCInboxForSectionLambda,
+} = require('./workitems/getDocumentQCInboxForSectionLambda');
+const {
+  getDocumentQCServedForSectionLambda,
+} = require('./workitems/getDocumentQCServedForSectionLambda');
+const {
   getInboxCaseMessagesForSectionLambda,
 } = require('./messages/getInboxCaseMessagesForSectionLambda');
 const {
   getInboxCaseMessagesForUserLambda,
 } = require('./messages/getInboxCaseMessagesForUserLambda');
+const {
+  getInboxMessagesForSectionLambda,
+} = require('./workitems/getInboxMessagesForSectionLambda');
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
@@ -112,8 +142,20 @@ const {
   getOutboxCaseMessagesForUserLambda,
 } = require('./messages/getOutboxCaseMessagesForUserLambda');
 const {
+  getPractitionerByBarNumberLambda,
+} = require('./practitioners/getPractitionerByBarNumberLambda');
+const {
+  getPractitionersByNameLambda,
+} = require('./practitioners/getPractitionersByNameLambda');
+const {
+  getSentMessagesForSectionLambda,
+} = require('./workitems/getSentMessagesForSectionLambda');
+const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
+const {
+  getUsersInSectionLambda,
+} = require('./workitems/getUsersInSectionLambda');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -126,6 +168,9 @@ const {
 const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
+const {
+  runTrialSessionPlanningReportLambda,
+} = require('./reports/runTrialSessionPlanningReportLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -172,6 +217,9 @@ const {
   updatePetitionerInformationLambda,
 } = require('./cases/updatePetitionerInformationLambda');
 const {
+  updatePractitionerUserLambda,
+} = require('./practitioners/updatePractitionerUserLambda');
+const {
   updatePrimaryContactLambda,
 } = require('./cases/updatePrimaryContactLambda');
 const {
@@ -188,12 +236,14 @@ const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
+const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseMessageLambda } = require('./messages/getCaseMessageLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
+const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
@@ -512,6 +562,79 @@ app.get(
 app.get(
   '/messages/outbox/:section',
   lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+);
+
+/**
+ * migrate
+ */
+app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
+
+/**
+ * practitioners
+ */
+app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
+app.get(
+  '/practitioners/:barNumber',
+  lambdaWrapper(getPractitionerByBarNumberLambda),
+);
+app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
+app.put(
+  '/practitioners/:barNumber',
+  lambdaWrapper(updatePractitionerUserLambda),
+);
+
+/**
+ * reports
+ */
+app.get(
+  '/reports/blocked/:trialLocation',
+  lambdaWrapper(getBlockedCasesLambda),
+);
+app.get(
+  '/reports/case-inventory-report',
+  lambdaWrapper(getCaseInventoryReportLambda),
+);
+app.get(
+  '/reports/printable-case-inventory-report',
+  lambdaWrapper(generatePrintableCaseInventoryReportLambda),
+);
+app.get('/reports/pending-items', lambdaWrapper(fetchPendingItemsLambda));
+app.get(
+  '/reports/pending-report',
+  lambdaWrapper(generatePrintablePendingReportLambda),
+);
+app.post(
+  '/reports/trial-calendar-pdf',
+  lambdaWrapper(generateTrialCalendarPdfLambda),
+);
+app.post(
+  '/reports/planning-report',
+  lambdaWrapper(runTrialSessionPlanningReportLambda),
+);
+
+/**
+ * sections
+ */
+app.get(
+  '/sections/:section/messages/inbox',
+  lambdaWrapper(getInboxMessagesForSectionLambda),
+);
+app.get(
+  '/sections/:section/messages/sent',
+  lambdaWrapper(getSentMessagesForSectionLambda),
+);
+app.get(
+  '/sections/:section/document-qc/batched',
+  lambdaWrapper(getDocumentQCBatchedForSectionLambda),
+);
+app.get(
+  '/sections/:section/document-qc/served',
+  lambdaWrapper(getDocumentQCServedForSectionLambda),
+);
+app.get('/sections/:section/users', lambdaWrapper(getUsersInSectionLambda));
+app.get(
+  '/sections/:section/document-qc/inbox',
+  lambdaWrapper(getDocumentQCInboxForSectionLambda),
 );
 
 exports.app = app;

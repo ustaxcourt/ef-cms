@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   getInboxMessagesForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getSentMessagesForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getSentMessagesForSectionLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDocumentQCBatchedForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
@@ -84,6 +87,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDocumentQCServedForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
@@ -96,6 +100,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getUsersInSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getUsersInSectionLambda
     events:
@@ -107,6 +112,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  #done
   getDocumentQCInboxForSection:
     handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:

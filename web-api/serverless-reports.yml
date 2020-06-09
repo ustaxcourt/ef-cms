@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   getBlockedCases:
     handler: web-api/${self:provider.dir}/reportsHandlers.getBlockedCasesLambda
     events:
@@ -60,6 +61,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getCaseInventoryReport:
     handler: web-api/${self:provider.dir}/reportsHandlers.getCaseInventoryReportLambda
     events:
@@ -72,6 +74,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   generatePrintableCaseInventoryReport:
     handler: web-api/${self:provider.dir}/reportsHandlers.generatePrintableCaseInventoryReportLambda
     layers:
@@ -88,6 +91,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   fetchPendingItemsLambda:
     handler: web-api/${self:provider.dir}/reportsHandlers.fetchPendingItemsLambda
     events:
@@ -100,6 +104,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   generatePrintablePendingReport:
     handler: web-api/${self:provider.dir}/reportsHandlers.generatePrintablePendingReportLambda
     layers:
@@ -116,6 +121,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   generateTrialCalendarPdfLambda:
     handler: web-api/${self:provider.dir}/reportsHandlers.generateTrialCalendarPdfLambda
     layers:
@@ -132,6 +138,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   runTrialSessionPlanningReport:
     handler: web-api/${self:provider.dir}/reportsHandlers.runTrialSessionPlanningReportLambda
     layers:
