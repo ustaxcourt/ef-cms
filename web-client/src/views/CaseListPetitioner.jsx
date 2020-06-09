@@ -70,6 +70,8 @@ export const CaseListPetitioner = connect(
               {showLoadMore && (
                 <Button
                   secondary
+                  className="margin-bottom-20"
+                  margin-direction="bottom"
                   onClick={() => {
                     showMoreResultsSequence();
                   }}

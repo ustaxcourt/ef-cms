@@ -60,6 +60,7 @@ export const CaseListPractitioner = connect(
         {showLoadMore && (
           <Button
             secondary
+            className="margin-bottom-20"
             onClick={() => {
               showMoreResultsSequence();
             }}
