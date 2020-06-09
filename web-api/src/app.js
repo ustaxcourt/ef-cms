@@ -133,9 +133,6 @@ const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
-  getConsolidatedCasesByUserLambda,
-} = require('./cases/getConsolidatedCasesByUserLambda');
-const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
@@ -782,10 +779,6 @@ app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
  */
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
 app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
-app.get(
-  '/users/:userId/cases-with-consolidation',
-  lambdaWrapper(getConsolidatedCasesByUserLambda),
-);
 app.put(
   '/users/:userId/case/:caseId',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),
