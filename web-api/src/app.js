@@ -346,6 +346,7 @@ const lambdaWrapper = lambda => {
   return async (req, res) => {
     const event = (req.apiGateway && req.apiGateway.event) || {
       headers: req.headers,
+      path: req.params,
       pathParameters: req.params,
       queryStringParameters: req.query,
     };
@@ -353,7 +354,13 @@ const lambdaWrapper = lambda => {
       ...event,
       body: JSON.stringify(req.body),
     });
-    res.json(JSON.parse(response.body));
+    if (response.headers['Content-Type'] === 'application/pdf') {
+      res.send(response.body);
+    } else if (response.headers['Content-Type'] === 'application/json') {
+      res.json(JSON.parse(response.body || '{}'));
+    } else {
+      console.log('ERROR: we do not support this return type');
+    }
   };
 };
 

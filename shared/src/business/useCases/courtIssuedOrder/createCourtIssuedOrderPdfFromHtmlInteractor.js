@@ -23,7 +23,6 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   documentTitle,
   signatureText,
 }) => {
-  console.log('caseid', caseId);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
