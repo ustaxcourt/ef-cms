@@ -19,9 +19,6 @@ export const DashboardRespondent = connect(
           <SuccessNotification />
           <ErrorNotification />
           {dashboardExternalHelper.showCaseList && <CaseListRespondent />}
-          {!dashboardExternalHelper.showCaseList && (
-            <p>You have no open or closed cases.</p>
-          )}
         </section>
       </React.Fragment>
     );
