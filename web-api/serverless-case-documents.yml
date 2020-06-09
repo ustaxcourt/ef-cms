@@ -285,6 +285,7 @@ functions:
             identitySource: method.request.querystring.token
             type: request
 
+  #done
   orderAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
     events:
@@ -297,6 +298,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   opinionAdvancedSearch:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.opinionAdvancedSearchLambda
     events:
