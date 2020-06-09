@@ -362,6 +362,14 @@ module.exports = [
     notes: ['Check accessibility of Pay filing fee button'],
     url: 'http://localhost:1234/mock-login?token=petitioner&path=',
   },
+  {
+    actions: [
+      'wait for #tab-open to be visible',
+      'wait for #tab-closed to be visible',
+    ],
+    notes: ['Check accessibility of open and closed cases'],
+    url: 'http://localhost:1234/mock-login?token=petitioner&path=',
+  },
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
   'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
 ];
