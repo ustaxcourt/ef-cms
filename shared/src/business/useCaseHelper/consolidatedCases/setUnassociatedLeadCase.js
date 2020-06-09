@@ -1,11 +1,10 @@
 /**
  * Finds a lead case when it is not associated with the current user
  *
- * @param {object} providers the providers object
- * @param {object} providers.casesAssociatedWithUserOrLeadCaseMap an object containing cases associated with the current user
- * @param {object} providers.consolidatedCases the list of consolidated cases
- * @param {object} providers.leadCaseId the leadCaseId
- * @returns casesAssociatedWithUserOrLeadCaseMap an object containing cases associated with the current user
+ * @param {object} arguments.casesAssociatedWithUserOrLeadCaseMap an object containing cases associated with the current user
+ * @param {object} arguments.consolidatedCases the list of consolidated cases
+ * @param {object} arguments.leadCaseId the leadCaseId
+ * @returns {object} casesAssociatedWithUserOrLeadCaseMap an object containing cases associated with the current user
  */
 exports.setUnassociatedLeadCase = ({
   casesAssociatedWithUserOrLeadCaseMap,
