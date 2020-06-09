@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   updatePrimaryContact:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.updatePrimaryContactLambda
     layers:
@@ -64,6 +65,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateSecondaryContact:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.updateSecondaryContactLambda
     layers:
@@ -80,6 +82,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   associatePrivatePractitioner:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.associatePrivatePractitionerWithCaseLambda
     events:
@@ -92,6 +95,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   associateIrsPractitioner:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.associateIrsPractitionerWithCaseLambda
     events:
@@ -104,6 +108,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateCounselOnCase:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.updateCounselOnCaseLambda
     events:
@@ -116,6 +121,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   deleteCounselFromCase:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.deleteCounselFromCaseLambda
     events:
@@ -128,6 +134,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updatePetitionDetails:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.updatePetitionDetailsLambda
     events:
@@ -140,6 +147,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updatePetitionerInformation:
     handler: web-api/${self:provider.dir}/casePartiesHandlers.updatePetitionerInformationLambda
     layers:

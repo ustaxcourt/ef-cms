@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   validate:
     handler: web-api/${self:provider.dir}/documentsHandlers.validatePdfLambda
     events:
@@ -62,6 +63,7 @@ functions:
     alarms:
       - errorExceptions
 
+  #done
   getUploadPolicy:
     handler: web-api/${self:provider.dir}/documentsHandlers.getUploadPolicyLambda
     events:
@@ -74,6 +76,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   generatePrintableFilingReceiptLambda:
     handler: web-api/${self:provider.dir}/documentsHandlers.generatePrintableFilingReceiptLambda
     layers:
@@ -90,6 +93,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   virusScan:
     handler: web-api/${self:provider.dir}/documentsHandlers.virusScanPdfLambda
     memorySize: 3008
