@@ -354,7 +354,11 @@ const lambdaWrapper = lambda => {
       ...event,
       body: JSON.stringify(req.body),
     });
-    if (response.headers['Content-Type'] === 'application/pdf') {
+    if (
+      ['application/pdf', 'text/html'].includes(
+        response.headers['Content-Type'],
+      )
+    ) {
       res.send(response.body);
     } else if (response.headers['Content-Type'] === 'application/json') {
       res.json(JSON.parse(response.body || '{}'));
