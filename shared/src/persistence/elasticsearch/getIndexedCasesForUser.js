@@ -30,14 +30,26 @@ exports.getIndexedCasesForUser = async ({
         query: {
           bool: {
             must: [
-              { match: { 'pk.S': `user|${userId}` } },
-              { match: { 'sk.S': 'case|' } },
-              { match: { 'gsi1pk.S': 'user-case|' } },
+              {
+                match: {
+                  'pk.S': { operator: 'and', query: `user|${userId}` },
+                },
+              },
+              {
+                match: {
+                  'sk.S': { operator: 'and', query: 'case|' },
+                },
+              },
+              {
+                match: {
+                  'gsi1pk.S': { operator: 'and', query: 'user-case|' },
+                },
+              },
               {
                 bool: {
                   should: statuses.map(status => ({
                     match: {
-                      'status.S': status,
+                      'status.S': { operator: 'and', query: status },
                     },
                   })),
                 },
