@@ -23,16 +23,19 @@ const {
 } = require('./documents/archiveDraftDocumentLambda');
 const {
   associateIrsPractitionerWithCaseLambda,
-} = require('./cases/associateIrsPractitionerWithCaseLambda');
+} = require('./manualAssociation/associateIrsPractitionerWithCaseLambda');
 const {
   associatePrivatePractitionerWithCaseLambda,
-} = require('./cases/associatePrivatePractitionerWithCaseLambda');
+} = require('./manualAssociation/associatePrivatePractitionerWithCaseLambda');
 const {
   batchDownloadTrialSessionLambda,
 } = require('./trialSessions/batchDownloadTrialSessionLambda');
 const {
   blockCaseFromTrialLambda,
 } = require('./cases/blockCaseFromTrialLambda');
+const {
+  caseAdvancedSearchLambda,
+} = require('./cases/caseAdvancedSearchLambda');
 const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
@@ -80,7 +83,7 @@ const {
 } = require('./documents/downloadPolicyUrlLambda');
 const {
   fetchPendingItemsLambda,
-} = require('./reports/fetchPendingItemsLambda');
+} = require('./pendingItems/fetchPendingItemsLambda');
 const {
   fileCorrespondenceDocumentLambda,
 } = require('./correspondence/fileCorrespondenceDocumentLambda');
@@ -110,10 +113,10 @@ const {
 } = require('./documents/generatePrintableFilingReceiptLambda');
 const {
   generatePrintablePendingReportLambda,
-} = require('./reports/generatePrintablePendingReportLambda');
+} = require('./pendingItems/generatePrintablePendingReportLambda');
 const {
   generateTrialCalendarPdfLambda,
-} = require('./reports/generateTrialCalendarPdfLambda');
+} = require('./trialSessions/generateTrialCalendarPdfLambda');
 const {
   getAllCaseDeadlinesLambda,
 } = require('./caseDeadline/getAllCaseDeadlinesLambda');
@@ -135,9 +138,6 @@ const {
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
-const {
-  getDocumentQCBatchedForSectionLambda,
-} = require('./workitems/getDocumentQCBatchedForSectionLambda');
 const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
@@ -205,9 +205,6 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  getUsersInSectionLambda,
-} = require('./workitems/getUsersInSectionLambda');
-const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -230,7 +227,7 @@ const {
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
   runTrialSessionPlanningReportLambda,
-} = require('./reports/runTrialSessionPlanningReportLambda');
+} = require('./trialSessions/runTrialSessionPlanningReportLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -317,7 +314,6 @@ const {
 } = require('./cases/verifyPendingCaseForUserLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
-const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
@@ -334,6 +330,7 @@ const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserByIdLambda } = require('./users/getUserByIdLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
+const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
@@ -348,7 +345,7 @@ const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
-const lambdaWrapper = async lambda => {
+const lambdaWrapper = lambda => {
   return async (req, res) => {
     const event = (req.apiGateway && req.apiGateway.event) || {
       headers: req.headers,
@@ -714,10 +711,6 @@ app.get(
 app.get(
   '/sections/:section/messages/sent',
   lambdaWrapper(getSentMessagesForSectionLambda),
-);
-app.get(
-  '/sections/:section/document-qc/batched',
-  lambdaWrapper(getDocumentQCBatchedForSectionLambda),
 );
 app.get(
   '/sections/:section/document-qc/served',
