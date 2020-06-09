@@ -12,7 +12,7 @@ const test = setupTest();
 
 describe('Case Confirmation', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(40000);
   });
 
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {

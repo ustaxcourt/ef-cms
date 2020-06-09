@@ -363,6 +363,7 @@ const lambdaWrapper = lambda => {
       ...event,
       body: JSON.stringify(req.body),
     });
+    res.status(response.statusCode);
     if (
       ['application/pdf', 'text/html'].includes(
         response.headers['Content-Type'],
@@ -370,7 +371,7 @@ const lambdaWrapper = lambda => {
     ) {
       res.send(response.body);
     } else if (response.headers['Content-Type'] === 'application/json') {
-      res.json(JSON.parse(response.body || '{}'));
+      res.json(JSON.parse(response.body || 'null'));
     } else {
       console.log('ERROR: we do not support this return type');
     }
@@ -429,9 +430,21 @@ app.post(
   '/case-documents/:caseId/:documentId/sign',
   lambdaWrapper(signDocumentLambda),
 );
+app.get(
+  '/case-documents/:caseId/:documentId/download-policy-url',
+  lambdaWrapper(downloadPolicyUrlLambda),
+);
+app.get(
+  '/case-documents/:caseId/:documentId/document-download-url',
+  lambdaWrapper(getDocumentDownloadUrlLambda),
+);
 app.delete(
   '/case-documents/:caseId/:documentId',
   lambdaWrapper(archiveDraftDocumentLambda),
+);
+app.put(
+  '/case-documents/:caseId/court-issued-orders/:documentId',
+  lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
 );
 app.post(
   '/case-documents/:caseId/external-document',
@@ -468,18 +481,6 @@ app.put(
 app.post(
   '/case-documents/:caseId/court-issued-order',
   lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
-);
-app.put(
-  '/case-documents/:caseId/court-issued-orders/:documentId',
-  lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
-);
-app.get(
-  '/case-documents/:caseId/:documentId/download-policy-url',
-  lambdaWrapper(downloadPolicyUrlLambda),
-);
-app.get(
-  '/case-documents/:caseId/:documentId/document-download-url',
-  lambdaWrapper(getDocumentDownloadUrlLambda),
 );
 app.get(
   '/case-documents/order-search',
