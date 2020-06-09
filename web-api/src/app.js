@@ -28,6 +28,9 @@ const {
   createCaseDeadlineLambda,
 } = require('./caseDeadline/createCaseDeadlineLambda');
 const {
+  createCaseFromPaperLambda,
+} = require('./cases/createCaseFromPaperLambda');
+const {
   createCourtIssuedOrderPdfFromHtmlLambda,
 } = require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda');
 const {
@@ -55,6 +58,11 @@ const {
   fileDocketEntryToCaseLambda,
 } = require('./documents/fileDocketEntryToCaseLambda');
 const {
+  getOpenConsolidatedCasesLambda,
+} = require('./cases/getOpenConsolidatedCasesLambda');
+const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
+
+const {
   fileExternalDocumentToCaseLambda,
 } = require('./documents/fileExternalDocumentToCaseLambda');
 const {
@@ -69,6 +77,9 @@ const {
 const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
+const {
+  getConsolidatedCasesByCaseLambda,
+} = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
@@ -115,9 +126,11 @@ const {
   updateQcCompleteForTrialLambda,
 } = require('./cases/updateQcCompleteForTrialLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
+const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
+const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
@@ -126,6 +139,18 @@ const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
+
+const lambdaWrapper = async lambda => {
+  return async (req, res) => {
+    const event = (req.apiGateway && req.apiGateway.event) || {
+      headers: req.headers,
+      pathParameters: req.params,
+      queryStringParameters: req.query,
+    };
+    const response = await lambda(event);
+    res.json(JSON.parse(response.body));
+  };
+};
 
 app.get('/api/swagger', async (req, res) => {
   const { body, headers } = await swaggerLambda();
@@ -770,5 +795,15 @@ app.delete('/case-meta/:caseId/statistics/:statisticId', async (req, res) => {
   });
   res.json(JSON.parse(response.body));
 });
+
+app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
+app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
+app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+app.get(
+  '/cases/:caseId/consolidated-cases',
+  lambdaWrapper(getConsolidatedCasesByCaseLambda),
+);
+app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
 
 exports.app = app;
