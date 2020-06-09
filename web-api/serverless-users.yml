@@ -48,6 +48,7 @@ package:
 resources: ${file(./web-api/config/resources.yml)}
 
 functions:
+  #done
   getUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getUserLambda
     events:
@@ -59,6 +60,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  #done
   getUserById:
     handler: web-api/${self:provider.dir}/usersHandlers.getUserByIdLambda
     events:
@@ -71,6 +73,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getInternalUsers:
     handler: web-api/${self:provider.dir}/usersHandlers.getInternalUsersLambda
     events:
@@ -83,6 +86,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   createUser:
     handler: web-api/${self:provider.dir}/usersHandlers.createUserLambda
     events:
@@ -95,6 +99,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getCasesByUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getCasesByUserLambda
     events:
@@ -107,6 +112,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getConsolidatedCasesByUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getConsolidatedCasesByUserLambda
     events:
@@ -119,6 +125,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   verifyPendingCaseForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.verifyPendingCaseForUserLambda
     events:
@@ -131,6 +138,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   privatePractitionerCaseAssociation:
     handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerCaseAssociationLambda
     events:
@@ -143,6 +151,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   privatePractitionerPendingAssociation:
     handler: web-api/${self:provider.dir}/usersHandlers.privatePractitionerPendingCaseAssociationLambda
     events:
@@ -155,6 +164,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getInboxMessagesForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getInboxMessagesForUserLambda
     events:
@@ -167,6 +177,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getSentMessagesForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getSentMessagesForUserLambda
     events:
@@ -179,6 +190,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDocumentQCInboxForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCInboxForUserLambda
     events:
@@ -191,6 +203,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getDocumentQCServedForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.getDocumentQCServedForUserLambda
     events:
@@ -203,6 +216,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   updateUserContactInformation:
     handler: web-api/${self:provider.dir}/usersHandlers.updateUserContactInformationLambda
     layers:
@@ -220,6 +234,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getPrivatePractitionersBySearchKey:
     handler: web-api/${self:provider.dir}/usersHandlers.getPrivatePractitionersBySearchKeyLambda
     events:
@@ -232,6 +247,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   getIrsPractitionersBySearchKey:
     handler: web-api/${self:provider.dir}/usersHandlers.getIrsPractitionersBySearchKeyLambda
     events:
