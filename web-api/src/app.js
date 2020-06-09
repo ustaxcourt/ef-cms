@@ -7,6 +7,15 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
+    // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
+    req.headers['x-apigateway-event'] = 'null';
+    req.headers['x-apigateway-context'] = 'null';
+  }
+  return next();
+});
 app.use(awsServerlessExpressMiddleware.eventContext());
 
 const {
@@ -606,6 +615,9 @@ app.put(
  * cases
  */
 app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
+app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
 app.delete(
   '/cases/:caseId/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
@@ -617,9 +629,6 @@ app.get(
 app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
 app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
 app.get('/cases/:caseId', lambdaWrapper(getCaseLambda));
-app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
-app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
-app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
 
 /**
