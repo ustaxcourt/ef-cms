@@ -52,6 +52,7 @@
         - "halpernsChambers"
         - "holmesChambers"
         - "jacobsChambers"
+        - "jonesChambers"
         - "kerrigansChambers"
         - "laubersChambers"
         - "leydensChambers"

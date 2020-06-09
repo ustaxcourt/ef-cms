@@ -580,7 +580,8 @@
     "createdAt": "2020-04-29T15:50:41.686Z",
     "docketNumber": "105-20",
     "docketNumberWithSuffix": "105-19L",
-    "status": "General Docket - Not at Issue"
+    "status": "General Docket - Not at Issue",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
@@ -595,7 +596,8 @@
     "createdAt": "2020-04-29T15:50:41.686Z",
     "docketNumber": "105-20",
     "docketNumberWithSuffix": "105-19L",
-    "status": "General Docket - Not at Issue"
+    "status": "General Docket - Not at Issue",
+    "entityName": "UserCase"
   },
   {
     "associatedJudge": "Chief Judge",

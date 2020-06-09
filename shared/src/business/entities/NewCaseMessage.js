@@ -36,10 +36,10 @@ joiValidationDecorator(
   NewCaseMessage,
   joi.object().keys({
     entityName: joi.string().valid('NewCaseMessage').required(),
-    message: CaseMessage.validationRules.message,
-    subject: CaseMessage.validationRules.subject,
-    toSection: CaseMessage.validationRules.toSection,
-    toUserId: CaseMessage.validationRules.toUserId,
+    message: CaseMessage.VALIDATION_RULES.message,
+    subject: CaseMessage.VALIDATION_RULES.subject,
+    toSection: CaseMessage.VALIDATION_RULES.toSection,
+    toUserId: CaseMessage.VALIDATION_RULES.toUserId,
   }),
   NewCaseMessage.VALIDATION_ERROR_MESSAGES,
 );

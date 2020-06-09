@@ -7,15 +7,18 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const DashboardPractitioner = connect(
-  { user: state.user },
-  function DashboardPractitioner({ user }) {
+  { dashboardExternalHelper: state.dashboardExternalHelper, user: state.user },
+  function DashboardPractitioner({ dashboardExternalHelper, user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <CaseListPractitioner />
+          {dashboardExternalHelper.showCaseList && <CaseListPractitioner />}
+          {!dashboardExternalHelper.showCaseList && (
+            <p>You have no open or closed cases.</p>
+          )}
         </section>
       </React.Fragment>
     );

@@ -83,3 +83,39 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getInboxCaseMessagesForSection:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getInboxCaseMessagesForSectionLambda
+    events:
+      - http:
+          path: /inbox/section/{section}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getOutboxCaseMessagesForUser:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getOutboxCaseMessagesForUserLambda
+    events:
+      - http:
+          path: /outbox/{userId}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getOutboxCaseMessagesForSection:
+    handler: web-api/${self:provider.dir}/messagesHandlers.getOutboxCaseMessagesForSectionLambda
+    events:
+      - http:
+          path: /outbox/section/{section}
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
