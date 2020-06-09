@@ -378,11 +378,6 @@ app.post(
 /**
  * case-deadlines
  */
-app.post('/case-deadlines/:caseId', lambdaWrapper(createCaseDeadlineLambda));
-app.get(
-  '/case-deadlines/:caseId',
-  lambdaWrapper(getCaseDeadlinesForCaseLambda),
-);
 app.put(
   '/case-deadlines/:caseId/:caseDeadlineId',
   lambdaWrapper(updateCaseDeadlineLambda),
@@ -390,6 +385,11 @@ app.put(
 app.delete(
   '/case-deadlines/:caseId/:caseDeadlineId',
   lambdaWrapper(deleteCaseDeadlineLambda),
+);
+app.post('/case-deadlines/:caseId', lambdaWrapper(createCaseDeadlineLambda));
+app.get(
+  '/case-deadlines/:caseId',
+  lambdaWrapper(getCaseDeadlinesForCaseLambda),
 );
 app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
 
@@ -472,10 +472,6 @@ app.get(
   '/case-documents/opinion-search',
   lambdaWrapper(opinionAdvancedSearchLambda),
 );
-app.post(
-  '/case-documents/:caseId/correspondence',
-  lambdaWrapper(fileCorrespondenceDocumentLambda),
-);
 app.put(
   '/case-documents/:caseId/correspondence/:documentId',
   lambdaWrapper(updateCorrespondenceDocumentLambda),
@@ -483,6 +479,10 @@ app.put(
 app.delete(
   '/case-documents/:caseId/correspondence/:documentId',
   lambdaWrapper(deleteCorrespondenceDocumentLambda),
+);
+app.post(
+  '/case-documents/:caseId/correspondence',
+  lambdaWrapper(fileCorrespondenceDocumentLambda),
 );
 
 /**
@@ -526,10 +526,6 @@ app.post(
   '/case-meta/:caseId/other-statistics',
   lambdaWrapper(updateOtherStatisticsLambda),
 );
-app.post(
-  '/case-meta/:caseId/statistics',
-  lambdaWrapper(addDeficiencyStatisticLambda),
-);
 app.put(
   '/case-meta/:caseId/statistics/:statisticId',
   lambdaWrapper(updateDeficiencyStatisticLambda),
@@ -537,6 +533,10 @@ app.put(
 app.delete(
   '/case-meta/:caseId/statistics/:statisticId',
   lambdaWrapper(deleteDeficiencyStatisticLambda),
+);
+app.post(
+  '/case-meta/:caseId/statistics',
+  lambdaWrapper(addDeficiencyStatisticLambda),
 );
 
 /**
@@ -597,22 +597,22 @@ app.put(
 /**
  * cases
  */
-app.post('/cases', lambdaWrapper(createCaseLambda));
+app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
 app.delete(
   '/cases/:caseId/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
 );
-app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
-app.get('/cases/:caseId', lambdaWrapper(getCaseLambda));
-app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
-app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
-app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
-app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.get(
   '/cases/:caseId/consolidated-cases',
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
 app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
+app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
+app.get('/cases/:caseId', lambdaWrapper(getCaseLambda));
+app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
+app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
+app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+app.post('/cases', lambdaWrapper(createCaseLambda));
 
 /**
  * documents
@@ -634,7 +634,6 @@ app.post(
 /**
  * messages
  */
-app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 app.get('/messages/:messageId', lambdaWrapper(getCaseMessageLambda));
 app.get(
   '/messages/inbox/:userId',
@@ -652,6 +651,7 @@ app.get(
   '/messages/outbox/:section',
   lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
+app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 
 /**
  * migrate
@@ -661,16 +661,16 @@ app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
 /**
  * practitioners
  */
-app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
 app.get(
   '/practitioners/:barNumber',
   lambdaWrapper(getPractitionerByBarNumberLambda),
 );
-app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
 app.put(
   '/practitioners/:barNumber',
   lambdaWrapper(updatePractitionerUserLambda),
 );
+app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
+app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
 
 /**
  * reports
@@ -725,13 +725,6 @@ app.get(
 /**
  * trial-sessions
  */
-app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
-app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
-app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
-app.get(
-  '/trial-sessions/:trialSessionId',
-  lambdaWrapper(getTrialSessionDetailsLambda),
-);
 app.post(
   '/trial-sessions/:trialSessionId/generate-notices',
   lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
@@ -772,30 +765,34 @@ app.post(
   '/trial-sessions/:trialSessionId/cases/:caseId',
   lambdaWrapper(addCaseToTrialSessionLambda),
 );
+app.get(
+  '/trial-sessions/:trialSessionId',
+  lambdaWrapper(getTrialSessionDetailsLambda),
+);
 app.delete(
   '/trial-sessions/:trialSessionId',
   lambdaWrapper(deleteTrialSessionLambda),
 );
+app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
+app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
 
 /**
  * users
  */
-app.get('/users', lambdaWrapper(getUserLambda));
-app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
-app.post('/users', lambdaWrapper(createUserLambda));
 app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
 app.get(
   '/users/:userId/cases-with-consolidation',
   lambdaWrapper(getConsolidatedCasesByUserLambda),
 );
-app.get(
-  '/users/:userId/case/:caseId/pending',
-  lambdaWrapper(verifyPendingCaseForUserLambda),
-);
 app.put(
   '/users/:userId/case/:caseId',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),
+);
+app.get(
+  '/users/:userId/case/:caseId/pending',
+  lambdaWrapper(verifyPendingCaseForUserLambda),
 );
 app.put(
   '/users/:userId/case/:caseId/pending',
@@ -818,7 +815,7 @@ app.get(
   lambdaWrapper(getDocumentQCServedForUserLambda),
 );
 app.put(
-  '/users/:userId/contact-fino',
+  '/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
 );
 app.get(
@@ -829,12 +826,13 @@ app.get(
   '/users/irsPractitioners/search',
   lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
 );
+app.get('/users/:userId', lambdaWrapper(getUserByIdLambda));
+app.get('/users', lambdaWrapper(getUserLambda));
+app.post('/users', lambdaWrapper(createUserLambda));
 
 /**
  * work-items
  */
-app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
-app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
 app.put(
   '/work-items/:workItemId/assignee',
   lambdaWrapper(forwardWorkItemLambda),
@@ -847,5 +845,7 @@ app.post(
   '/work-items/:workItemId/read',
   lambdaWrapper(setWorkItemAsReadLambda),
 );
+app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
+app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
 
 exports.app = app;
