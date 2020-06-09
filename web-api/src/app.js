@@ -19,6 +19,12 @@ const {
   archiveDraftDocumentLambda,
 } = require('./documents/archiveDraftDocumentLambda');
 const {
+  associateIrsPractitionerWithCaseLambda,
+} = require('./cases/associateIrsPractitionerWithCaseLambda');
+const {
+  associatePrivatePractitionerWithCaseLambda,
+} = require('./cases/associatePrivatePractitionerWithCaseLambda');
+const {
   blockCaseFromTrialLambda,
 } = require('./cases/blockCaseFromTrialLambda');
 const {
@@ -39,6 +45,9 @@ const {
 const {
   deleteCorrespondenceDocumentLambda,
 } = require('./correspondence/deleteCorrespondenceDocumentLambda');
+const {
+  deleteCounselFromCaseLambda,
+} = require('./cases/deleteCounselFromCaseLambda');
 const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
@@ -69,6 +78,9 @@ const {
 const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
+const {
+  generatePrintableFilingReceiptLambda,
+} = require('./documents/generatePrintableFilingReceiptLambda');
 const {
   getAllCaseDeadlinesLambda,
 } = require('./caseDeadline/getAllCaseDeadlinesLambda');
@@ -118,6 +130,9 @@ const {
   updateCorrespondenceDocumentLambda,
 } = require('./correspondence/updateCorrespondenceDocumentLambda');
 const {
+  updateCounselOnCaseLambda,
+} = require('./cases/updateCounselOnCaseLambda');
+const {
   updateCourtIssuedDocketEntryLambda,
 } = require('./documents/updateCourtIssuedDocketEntryLambda');
 const {
@@ -136,8 +151,20 @@ const {
   updateOtherStatisticsLambda,
 } = require('./cases/updateOtherStatisticsLambda');
 const {
+  updatePetitionDetailsLambda,
+} = require('./cases/updatePetitionDetailsLambda');
+const {
+  updatePetitionerInformationLambda,
+} = require('./cases/updatePetitionerInformationLambda');
+const {
+  updatePrimaryContactLambda,
+} = require('./cases/updatePrimaryContactLambda');
+const {
   updateQcCompleteForTrialLambda,
 } = require('./cases/updateQcCompleteForTrialLambda');
+const {
+  updateSecondaryContactLambda,
+} = require('./cases/updateSecondaryContactLambda');
 const {
   updateUserCaseNoteLambda,
 } = require('./caseNote/updateUserCaseNoteLambda');
@@ -149,6 +176,7 @@ const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
+const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -159,6 +187,8 @@ const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
+const { validatePdfLambda } = require('./documents/validatePdfLambda');
+const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 const lambdaWrapper = async lambda => {
   return async (req, res) => {
@@ -374,6 +404,42 @@ app.delete('/case-notes/:caseId', lambdaWrapper(deleteCaseNoteLambda));
 app.put('/case-notes/:caseId', lambdaWrapper(saveCaseNoteLambda));
 
 /**
+ * case-parties
+ */
+app.put(
+  '/case-parties/:caseId/contact-primary',
+  lambdaWrapper(updatePrimaryContactLambda),
+);
+app.put(
+  '/case-parties/:caseId/contact-secondary',
+  lambdaWrapper(updateSecondaryContactLambda),
+);
+app.post(
+  '/case-parties/:caseId/associate-private-practitioner',
+  lambdaWrapper(associatePrivatePractitionerWithCaseLambda),
+);
+app.post(
+  '/case-parties/:caseId/associate-irs-practitioner',
+  lambdaWrapper(associateIrsPractitionerWithCaseLambda),
+);
+app.put(
+  '/case-parties/:caseId/counsel/:userId',
+  lambdaWrapper(updateCounselOnCaseLambda),
+);
+app.delete(
+  '/case-parties/:caseId/counsel/:userId',
+  lambdaWrapper(deleteCounselFromCaseLambda),
+);
+app.put(
+  '/case-parties/:caseId/petition-details',
+  lambdaWrapper(updatePetitionDetailsLambda),
+);
+app.put(
+  '/case-parties/:caseId/petitioner-info',
+  lambdaWrapper(updatePetitionerInformationLambda),
+);
+
+/**
  * cases
  */
 app.post('/cases', lambdaWrapper(createCaseLambda));
@@ -392,5 +458,22 @@ app.get(
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
 app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
+
+/**
+ * documents
+ */
+app.post('/documents/:documentId/validate', lambdaWrapper(validatePdfLambda));
+app.get(
+  '/documents/:documentId/upload-policy',
+  lambdaWrapper(getUploadPolicyLambda),
+);
+app.post(
+  '/documents/filing-receipt-pdf',
+  lambdaWrapper(generatePrintableFilingReceiptLambda),
+);
+app.post(
+  '/documents/:documentId/virus-scan',
+  lambdaWrapper(virusScanPdfLambda),
+);
 
 exports.app = app;
