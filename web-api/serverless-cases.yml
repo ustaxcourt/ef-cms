@@ -87,6 +87,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  # done
   createCaseFromPaper:
     handler: web-api/${self:provider.dir}/casesHandlers.createCaseFromPaperLambda
     events:
@@ -99,6 +100,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  # done
   getCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getCaseLambda
     events:
@@ -114,6 +116,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  # done
   getOpenConsolidatedCases:
     handler: web-api/${self:provider.dir}/casesHandlers.getOpenConsolidatedCasesLambda
     events:
@@ -125,6 +128,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  # done
   getClosedCases:
     handler: web-api/${self:provider.dir}/casesHandlers.getClosedCasesLambda
     events:
@@ -136,6 +140,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  # done
   caseAdvancedSearch:
     handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
     events:
@@ -147,6 +152,7 @@ functions:
             arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
             managedExternally: true
 
+  # done
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:
@@ -159,6 +165,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  # done
   serveCaseToIrs:
     handler: web-api/${self:provider.dir}/casesHandlers.serveCaseToIrsLambda
     layers:
