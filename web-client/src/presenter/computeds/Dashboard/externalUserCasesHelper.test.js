@@ -65,6 +65,21 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
+  it('sets the total count of both open and closed cases', () => {
+    const result = runCompute(externalUserCasesHelper, {
+      state: {
+        ...baseState,
+        closedCases: [{ caseId: 'hey' }],
+        openCases: [{ caseId: 'hey' }, { caseId: 'bye' }],
+      },
+    });
+
+    expect(result).toMatchObject({
+      closedCasesCount: 1,
+      openCasesCount: 2,
+    });
+  });
+
   it('uses current pages in state', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
