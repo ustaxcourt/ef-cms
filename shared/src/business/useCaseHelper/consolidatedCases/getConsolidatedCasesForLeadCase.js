@@ -1,8 +1,7 @@
 const { Case } = require('../../entities/cases/Case');
-const { setUnassociatedLeadCase } = require('./setUnassociatedLeadCase');
 
 /**
- * TODO
+ * Retr
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -27,7 +26,7 @@ exports.getConsolidatedCasesForLeadCase = async ({
   });
 
   if (!casesAssociatedWithUserOrLeadCaseMap[leadCaseId]) {
-    setUnassociatedLeadCase({
+    applicationContext.getUseCaseHelpers().setUnassociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases,
       leadCaseId,

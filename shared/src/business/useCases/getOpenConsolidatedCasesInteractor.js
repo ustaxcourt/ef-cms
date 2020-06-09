@@ -1,9 +1,3 @@
-const {
-  getConsolidatedCasesForLeadCase,
-} = require('../useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
-const {
-  processUserAssociatedCases,
-} = require('../useCaseHelper/consolidatedCases/processUserAssociatedCases');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -32,17 +26,21 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
-  } = processUserAssociatedCases(openUserCases);
+  } = applicationContext
+    .getUseCaseHelpers()
+    .processUserAssociatedCases(openUserCases);
 
   for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
     casesAssociatedWithUserOrLeadCaseMap[
       leadCaseId
-    ].consolidatedCases = await getConsolidatedCasesForLeadCase({
-      applicationContext,
-      casesAssociatedWithUserOrLeadCaseMap,
-      leadCaseId,
-      userAssociatedCaseIdsMap,
-    });
+    ].consolidatedCases = await applicationContext
+      .getUseCaseHelpers()
+      .getConsolidatedCasesForLeadCase({
+        applicationContext,
+        casesAssociatedWithUserOrLeadCaseMap,
+        leadCaseId,
+        userAssociatedCaseIdsMap,
+      });
   }
 
   const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);
