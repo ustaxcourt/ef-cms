@@ -22,7 +22,9 @@ export const externalUserCasesHelper = (get, applicationContext) => {
       0,
       closedCurrentPage * pageSize,
     ),
+    closedCasesCount: formattedClosedCases.length,
     openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
+    openCasesCount: formattedOpenCases.length,
     showLoadMoreClosedCases:
       formattedClosedCases.length > closedCurrentPage * pageSize,
     showLoadMoreOpenCases:
