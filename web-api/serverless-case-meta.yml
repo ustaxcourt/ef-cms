@@ -139,6 +139,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  #done
   removeConsolidatedCases:
     handler: web-api/${self:provider.dir}/caseMetaHandlers.removeConsolidatedCasesLambda
     events:

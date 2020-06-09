@@ -84,8 +84,17 @@ const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
+  opinionAdvancedSearchLambda,
+} = require('./documents/opinionAdvancedSearchLambda');
+const {
+  orderAdvancedSearchLambda,
+} = require('./documents/orderAdvancedSearchLambda');
+const {
   removeCasePendingItemLambda,
 } = require('./cases/removeCasePendingItemLambda');
+const {
+  removeConsolidatedCasesLambda,
+} = require('./cases/removeConsolidatedCasesLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -259,6 +268,14 @@ app.get(
   '/case-documents/:caseId/:documentId/document-download-url',
   lambdaWrapper(getDocumentDownloadUrlLambda),
 );
+app.get(
+  '/case-documents/order-search',
+  lambdaWrapper(orderAdvancedSearchLambda),
+);
+app.get(
+  '/case-documents/opinion-search',
+  lambdaWrapper(opinionAdvancedSearchLambda),
+);
 app.post(
   '/case-documents/:caseId/correspondence',
   lambdaWrapper(fileCorrespondenceDocumentLambda),
@@ -299,6 +316,10 @@ app.put(
 app.put(
   '/case-meta/:caseId/consolidate-case',
   lambdaWrapper(addConsolidatedCaseLambda),
+);
+app.delete(
+  '/case-meta/:caseId/consolidate-case',
+  lambdaWrapper(removeConsolidatedCasesLambda),
 );
 app.put(
   '/case-meta/:caseId/qc-complete',
