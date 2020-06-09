@@ -13,6 +13,7 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -25,6 +26,7 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
+  setDefaultCaseTypeToDisplayAction,
   closeMobileMenuAction,
   getUserAction,
   setUserAction,

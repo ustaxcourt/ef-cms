@@ -396,8 +396,8 @@ const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
-  getConsolidatedCasesByUserInteractor,
-} = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
+  getConsolidatedCasesForLeadCase,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -673,6 +673,9 @@ const {
   processStreamRecordsInteractor,
 } = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
 const {
+  processUserAssociatedCases,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/processUserAssociatedCases');
+const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -762,6 +765,9 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
+  setUnassociatedLeadCase,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/setUnassociatedLeadCase');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
@@ -1321,9 +1327,12 @@ module.exports = (appContextUser = {}) => {
         fetchPendingItems,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
+        getConsolidatedCasesForLeadCase,
+        processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        setUnassociatedLeadCase,
         updateCaseAutomaticBlock,
       };
     },
@@ -1389,7 +1398,6 @@ module.exports = (appContextUser = {}) => {
         getCasesByUserInteractor,
         getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
-        getConsolidatedCasesByUserInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
