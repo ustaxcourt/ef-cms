@@ -129,7 +129,7 @@ export const CaseListRespondent = connect(
               <select
                 aria-label="additional case info"
                 className="usa-select"
-                id="mobile-document-detail-tab-selector"
+                id="mobile-case-type-tab-selector"
                 onChange={e => {
                   setCaseTypeToDisplaySequence({ tabName: e.target.value });
                 }}
@@ -141,22 +141,22 @@ export const CaseListRespondent = connect(
                   Closed Cases ({externalUserCasesHelper.closedCasesCount})
                 </option>
               </select>
-              <div>
-                {caseType === closedTab &&
-                  renderTable(
-                    externalUserCasesHelper.closedCaseResults,
-                    externalUserCasesHelper.showLoadMoreClosedCases,
-                    showMoreClosedCasesSequence,
-                    closedTab,
-                  )}
-                {caseType === openTab &&
-                  renderTable(
-                    externalUserCasesHelper.openCaseResults,
-                    externalUserCasesHelper.showLoadMoreOpenCases,
-                    showMoreOpenCasesSequence,
-                    openTab,
-                  )}
-              </div>
+            </div>
+            <div className="grid-row margin-top-1">
+              {caseType === closedTab &&
+                renderTable(
+                  externalUserCasesHelper.closedCaseResults,
+                  externalUserCasesHelper.showLoadMoreClosedCases,
+                  showMoreClosedCasesSequence,
+                  closedTab,
+                )}
+              {caseType === openTab &&
+                renderTable(
+                  externalUserCasesHelper.openCaseResults,
+                  externalUserCasesHelper.showLoadMoreOpenCases,
+                  showMoreOpenCasesSequence,
+                  openTab,
+                )}
             </div>
             <div className="grid-row">
               {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}

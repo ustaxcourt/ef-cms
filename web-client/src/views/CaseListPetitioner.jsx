@@ -145,36 +145,39 @@ export const CaseListPetitioner = connect(
         <Mobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
-            <select
-              aria-label="additional case info"
-              className="usa-select"
-              id="mobile-document-detail-tab-selector"
-              onChange={e => {
-                setCaseTypeToDisplaySequence({ tabName: e.target.value });
-              }}
-            >
-              <option value={openTab}>
-                Open Cases ({externalUserCasesHelper.openCasesCount})
-              </option>
-              <option value={closedTab}>
-                Closed Cases ({externalUserCasesHelper.closedCasesCount})
-              </option>
-            </select>
-            <div>
-              {caseType === closedTab &&
-                renderCaseListTable({
-                  cases: externalUserCasesHelper.closedCaseResults,
-                  showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
-                  showMoreResultsSequence: showMoreClosedCasesSequence,
-                  tabName: closedTab,
-                })}
-              {caseType === openTab &&
-                renderCaseListTable({
-                  cases: externalUserCasesHelper.openCaseResults,
-                  showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
-                  showMoreResultsSequence: showMoreOpenCasesSequence,
-                  tabName: openTab,
-                })}
+            <div className="grid-row">
+              <select
+                aria-label="additional case info"
+                className="usa-select"
+                id="mobile-case-type-tab-selector"
+                onChange={e => {
+                  setCaseTypeToDisplaySequence({ tabName: e.target.value });
+                }}
+              >
+                <option value={openTab}>
+                  Open Cases ({externalUserCasesHelper.openCasesCount})
+                </option>
+                <option value={closedTab}>
+                  Closed Cases ({externalUserCasesHelper.closedCasesCount})
+                </option>
+              </select>
+              <div>
+                {caseType === closedTab &&
+                  renderCaseListTable({
+                    cases: externalUserCasesHelper.closedCaseResults,
+                    showLoadMore:
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                    showMoreResultsSequence: showMoreClosedCasesSequence,
+                    tabName: closedTab,
+                  })}
+                {caseType === openTab &&
+                  renderCaseListTable({
+                    cases: externalUserCasesHelper.openCaseResults,
+                    showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
+                    showMoreResultsSequence: showMoreOpenCasesSequence,
+                    tabName: openTab,
+                  })}
+              </div>
             </div>
           </div>
         </Mobile>
