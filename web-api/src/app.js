@@ -10,6 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
 const {
+  addCaseToTrialSessionLambda,
+} = require('./trialSessions/addCaseToTrialSessionLambda');
+const {
   addConsolidatedCaseLambda,
 } = require('./cases/addConsolidatedCaseLambda');
 const {
@@ -24,6 +27,9 @@ const {
 const {
   associatePrivatePractitionerWithCaseLambda,
 } = require('./cases/associatePrivatePractitionerWithCaseLambda');
+const {
+  batchDownloadTrialSessionLambda,
+} = require('./trialSessions/batchDownloadTrialSessionLambda');
 const {
   blockCaseFromTrialLambda,
 } = require('./cases/blockCaseFromTrialLambda');
@@ -46,6 +52,9 @@ const {
   createPractitionerUserLambda,
 } = require('./practitioners/createPractitionerUserLambda');
 const {
+  createTrialSessionLambda,
+} = require('./trialSessions/createTrialSessionLambda');
+const {
   deleteCaseDeadlineLambda,
 } = require('./caseDeadline/deleteCaseDeadlineLambda');
 const {
@@ -57,6 +66,9 @@ const {
 const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
+const {
+  deleteTrialSessionLambda,
+} = require('./trialSessions/deleteTrialSessionLambda');
 const {
   deleteUserCaseNoteLambda,
 } = require('./caseNote/deleteUserCaseNoteLambda');
@@ -103,6 +115,9 @@ const {
   getAllCaseDeadlinesLambda,
 } = require('./caseDeadline/getAllCaseDeadlinesLambda');
 const {
+  getCalendaredCasesForTrialSessionLambda,
+} = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
+const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
 const {
@@ -123,6 +138,9 @@ const {
 const {
   getDocumentQCServedForSectionLambda,
 } = require('./workitems/getDocumentQCServedForSectionLambda');
+const {
+  getEligibleCasesForTrialSessionLambda,
+} = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
   getInboxCaseMessagesForSectionLambda,
 } = require('./messages/getInboxCaseMessagesForSectionLambda');
@@ -151,6 +169,15 @@ const {
   getSentMessagesForSectionLambda,
 } = require('./workitems/getSentMessagesForSectionLambda');
 const {
+  getTrialSessionDetailsLambda,
+} = require('./trialSessions/getTrialSessionDetailsLambda');
+const {
+  getTrialSessionsLambda,
+} = require('./trialSessions/getTrialSessionsLambda');
+const {
+  getTrialSessionWorkingCopyLambda,
+} = require('./trialSessions/getTrialSessionWorkingCopyLambda');
+const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
@@ -162,6 +189,9 @@ const {
 const {
   orderAdvancedSearchLambda,
 } = require('./documents/orderAdvancedSearchLambda');
+const {
+  removeCaseFromTrialLambda,
+} = require('./trialSessions/removeCaseFromTrialLambda');
 const {
   removeCasePendingItemLambda,
 } = require('./cases/removeCasePendingItemLambda');
@@ -177,6 +207,15 @@ const {
 const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
+const {
+  setNoticesForCalendaredTrialSessionLambda,
+} = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
+const {
+  setTrialSessionAsSwingSessionLambda,
+} = require('./trialSessions/setTrialSessionAsSwingSessionLambda');
+const {
+  setTrialSessionCalendarLambda,
+} = require('./trialSessions/setTrialSessionCalendarLambda');
 const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
@@ -228,6 +267,12 @@ const {
 const {
   updateSecondaryContactLambda,
 } = require('./cases/updateSecondaryContactLambda');
+const {
+  updateTrialSessionLambda,
+} = require('./trialSessions/updateTrialSessionLambda');
+const {
+  updateTrialSessionWorkingCopyLambda,
+} = require('./trialSessions/updateTrialSessionWorkingCopyLambda');
 const {
   updateUserCaseNoteLambda,
 } = require('./caseNote/updateUserCaseNoteLambda');
@@ -635,6 +680,61 @@ app.get('/sections/:section/users', lambdaWrapper(getUsersInSectionLambda));
 app.get(
   '/sections/:section/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForSectionLambda),
+);
+
+/**
+ * trial-sessions
+ */
+app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
+app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
+app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+app.get(
+  '/trial-sessions/:trialSessionId',
+  lambdaWrapper(getTrialSessionDetailsLambda),
+);
+app.post(
+  '/trial-sessions/:trialSessionId/generate-notices',
+  lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
+);
+app.post(
+  '/trial-sessions/:trialSessionId/set-swing-session',
+  lambdaWrapper(setTrialSessionAsSwingSessionLambda),
+);
+app.get(
+  '/trial-sessions/:trialSessionId/eligible-cases',
+  lambdaWrapper(getEligibleCasesForTrialSessionLambda),
+);
+app.post(
+  '/trial-sessions/:trialSessionId/set-calendar',
+  lambdaWrapper(setTrialSessionCalendarLambda),
+);
+app.get(
+  '/trial-sessions/:trialSessionId/get-calendared-cases',
+  lambdaWrapper(getCalendaredCasesForTrialSessionLambda),
+);
+app.get(
+  '/trial-sessions/:trialSessionId/working-copy',
+  lambdaWrapper(getTrialSessionWorkingCopyLambda),
+);
+app.put(
+  '/trial-sessions/:trialSessionId/working-copy',
+  lambdaWrapper(updateTrialSessionWorkingCopyLambda),
+);
+app.get(
+  '/trial-sessions/:trialSessionId/batch-download',
+  lambdaWrapper(batchDownloadTrialSessionLambda),
+);
+app.put(
+  '/trial-sessions/:trialSessionId/remove-case/:caseId',
+  lambdaWrapper(removeCaseFromTrialLambda),
+);
+app.post(
+  '/trial-sessions/:trialSessionId/cases/:caseId',
+  lambdaWrapper(addCaseToTrialSessionLambda),
+);
+app.delete(
+  '/trial-sessions/:trialSessionId',
+  lambdaWrapper(deleteTrialSessionLambda),
 );
 
 exports.app = app;
