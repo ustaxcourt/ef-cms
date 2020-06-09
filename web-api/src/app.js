@@ -43,6 +43,9 @@ const {
   deleteDeficiencyStatisticLambda,
 } = require('./cases/deleteDeficiencyStatisticLambda');
 const {
+  deleteUserCaseNoteLambda,
+} = require('./caseNote/deleteUserCaseNoteLambda');
+const {
   downloadPolicyUrlLambda,
 } = require('./documents/downloadPolicyUrlLambda');
 const {
@@ -57,11 +60,6 @@ const {
 const {
   fileDocketEntryToCaseLambda,
 } = require('./documents/fileDocketEntryToCaseLambda');
-const {
-  getOpenConsolidatedCasesLambda,
-} = require('./cases/getOpenConsolidatedCasesLambda');
-const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
-
 const {
   fileExternalDocumentToCaseLambda,
 } = require('./documents/fileExternalDocumentToCaseLambda');
@@ -83,6 +81,12 @@ const {
 const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
+const {
+  getOpenConsolidatedCasesLambda,
+} = require('./cases/getOpenConsolidatedCasesLambda');
+const {
+  getUserCaseNoteForCasesLambda,
+} = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -134,15 +138,22 @@ const {
 const {
   updateQcCompleteForTrialLambda,
 } = require('./cases/updateQcCompleteForTrialLambda');
+const {
+  updateUserCaseNoteLambda,
+} = require('./caseNote/updateUserCaseNoteLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
+const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
+const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
+const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { signDocumentLambda } = require('./documents/signDocumentLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
@@ -342,6 +353,25 @@ app.delete(
   '/case-meta/:caseId/statistics/:statisticId',
   lambdaWrapper(deleteDeficiencyStatisticLambda),
 );
+
+/**
+ * case-notes
+ */
+app.get(
+  '/case-notes/batch-cases/:caseIds/user-notes',
+  lambdaWrapper(getUserCaseNoteForCasesLambda),
+);
+app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));
+app.put(
+  '/case-notes/:caseId/user-notes',
+  lambdaWrapper(updateUserCaseNoteLambda),
+);
+app.delete(
+  '/case-notes/:caseId/user-notes',
+  lambdaWrapper(deleteUserCaseNoteLambda),
+);
+app.delete('/case-notes/:caseId', lambdaWrapper(deleteCaseNoteLambda));
+app.put('/case-notes/:caseId', lambdaWrapper(saveCaseNoteLambda));
 
 /**
  * cases
