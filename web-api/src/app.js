@@ -37,6 +37,9 @@ const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
+  completeWorkItemLambda,
+} = require('./workitems/completeWorkItemLambda');
+const {
   createCaseDeadlineLambda,
 } = require('./caseDeadline/createCaseDeadlineLambda');
 const {
@@ -244,6 +247,9 @@ const {
   setTrialSessionCalendarLambda,
 } = require('./trialSessions/setTrialSessionCalendarLambda');
 const {
+  setWorkItemAsReadLambda,
+} = require('./workitems/setWorkItemAsReadLambda');
+const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
 const {
@@ -310,11 +316,13 @@ const {
   verifyPendingCaseForUserLambda,
 } = require('./cases/verifyPendingCaseForUserLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
+const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { caseAdvancedSearchLambda } = require('/cases/caseAdvancedSearchLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { createWorkItemLambda } = require('./workitems/createWorkItemLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
+const { forwardWorkItemLambda } = require('./workitems/forwardWorkItemLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseMessageLambda } = require('./messages/getCaseMessageLambda');
@@ -326,6 +334,7 @@ const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
 const { getUserByIdLambda } = require('./users/getUserByIdLambda');
 const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
+const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -826,6 +835,24 @@ app.get(
 app.get(
   '/users/irsPractitioners/search',
   lambdaWrapper(getIrsPractitionersBySearchKeyLambda),
+);
+
+/**
+ * work-items
+ */
+app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
+app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
+app.put(
+  '/work-items/:workItemId/assignee',
+  lambdaWrapper(forwardWorkItemLambda),
+);
+app.put(
+  '/work-items/:workItemId/complete',
+  lambdaWrapper(completeWorkItemLambda),
+);
+app.post(
+  '/work-items/:workItemId/read',
+  lambdaWrapper(setWorkItemAsReadLambda),
 );
 
 exports.app = app;
