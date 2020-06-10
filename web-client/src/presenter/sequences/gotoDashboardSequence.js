@@ -26,7 +26,6 @@ const proceedToMessages = [navigateToMessagesAction];
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
-  setDefaultCaseTypeToDisplayAction,
   closeMobileMenuAction,
   getUserAction,
   setUserAction,
@@ -58,6 +57,7 @@ const goToDashboard = [
     ],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
+      setDefaultCaseTypeToDisplayAction,
       getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
@@ -71,11 +71,13 @@ const goToDashboard = [
       setCurrentPageAction('DashboardJudge'),
     ],
     petitioner: [
+      setDefaultCaseTypeToDisplayAction,
       getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
+      setDefaultCaseTypeToDisplayAction,
       getOpenAndClosedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),

@@ -1,7 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../shared/src/business/entities/cases/CaseConstants';
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,

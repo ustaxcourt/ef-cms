@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHIEF_JUDGE } = require('./cases/CaseConstants');
+const { CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Message } = require('./Message');
@@ -13,7 +13,7 @@ const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
-} = require('./cases/CaseConstants');
+} = require('./EntityConstants');
 const {
   CHAMBERS_SECTIONS,
   IRS_SYSTEM_SECTION,

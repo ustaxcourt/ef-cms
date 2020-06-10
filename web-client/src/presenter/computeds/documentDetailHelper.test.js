@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { Correspondence } from '../../../../shared/src/business/entities/Correspondence';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';

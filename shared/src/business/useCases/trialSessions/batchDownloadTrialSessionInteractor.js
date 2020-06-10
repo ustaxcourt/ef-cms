@@ -4,7 +4,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { formatDateString } = require('../../../business/utilities/DateHandler');
 const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
