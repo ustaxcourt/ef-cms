@@ -23,7 +23,7 @@ exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
   fs.closeSync(inputPdf.fd);
 
   try {
-    // await applicationContext.runVirusScan({ filePath: inputPdf.name });
+    await applicationContext.runVirusScan({ filePath: inputPdf.name });
     applicationContext.getStorageClient().putObjectTagging({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: documentId,

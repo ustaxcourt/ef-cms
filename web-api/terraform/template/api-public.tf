@@ -4,7 +4,7 @@ data "archive_file" "zip_api_public" {
   source_file = "${path.module}/api-public/dist/index.js"
 }
 
-data "aws_lambda_layer_version" "puppeteer_existing" {
+data "aws_lambda_layer_version" "puppeteer_public_existing" {
   layer_name = "${var.environment}-puppeteer"
 }
 
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "api_public_lambda" {
   memory_size = "3008"
 
   layers = [
-    "${data.aws_lambda_layer_version.puppeteer_existing.arn}"
+    "${data.aws_lambda_layer_version.puppeteer_public_existing.arn}"
   ]
 
   runtime = "nodejs12.x"
