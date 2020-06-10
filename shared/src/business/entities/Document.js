@@ -4,6 +4,7 @@ const {
   DOCKET_NUMBER_MATCHER,
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
+  DOCUMENT_RELATIONSHIPS,
 } = require('./EntityConstants');
 const {
   joiValidationDecorator,
@@ -79,14 +80,6 @@ Document.SCENARIOS = [
   'Type F',
   'Type G',
   'Type H',
-];
-
-Document.RELATIONSHIPS = [
-  'primaryDocument',
-  'primarySupportingDocument',
-  'secondaryDocument',
-  'secondarySupportingDocument',
-  'supportingDocument',
 ];
 
 /**
@@ -485,7 +478,7 @@ joiValidationDecorator(
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
-      .valid(...Document.RELATIONSHIPS)
+      .valid(...DOCUMENT_RELATIONSHIPS)
       .optional(),
     scenario: joi
       .string()
