@@ -28,10 +28,6 @@ variable "honeybadger_key" {
   default = "default_key"
 }
 
-variable "elasticsearch_endpoint" {
-  type = "string"
-}
-
 variable "user_pool_id" {
   type = "string"
 }
