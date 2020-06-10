@@ -128,7 +128,8 @@ resource "aws_lambda_permission" "apigw_lambda" {
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
     "aws_api_gateway_method.api_method",
-    "aws_api_gateway_integration.api_integration"
+    "aws_api_gateway_integration.api_integration",
+    "aws_api_gateway_authorizer.custom_authorizer"
   ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   stage_name = "${var.environment}"
