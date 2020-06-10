@@ -8,17 +8,16 @@ import React from 'react';
 
 export const DashboardRespondent = connect(
   {
-    dashboardExternalHelper: state.dashboardExternalHelper,
     user: state.user,
   },
-  function DashboardRespondent({ dashboardExternalHelper, user }) {
+  function DashboardRespondent({ user }) {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          {dashboardExternalHelper.showCaseList && <CaseListRespondent />}
+          <CaseListRespondent />
         </section>
       </React.Fragment>
     );
