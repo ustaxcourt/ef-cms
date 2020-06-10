@@ -17,9 +17,6 @@ const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
 
-Document.NOTICE_EVENT_CODES = ['NOT'];
-Document.PETITION_DOCUMENT_TYPES = ['Petition'];
-Document.OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
 Document.ORDER_DOCUMENT_TYPES = [
   'O',
   'OAJ',
@@ -344,14 +341,6 @@ Document.eventCodes = [
   'MIND',
   'MINC',
 ];
-
-/**
- *
- * @returns {boolean} true if the document is a petition document type, false otherwise
- */
-Document.prototype.isPetitionDocument = function () {
-  return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
-};
 
 joiValidationDecorator(
   Document,
