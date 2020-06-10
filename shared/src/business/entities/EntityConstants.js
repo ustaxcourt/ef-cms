@@ -39,6 +39,47 @@ const DOCUMENT_RELATIONSHIPS = [
   'supportingDocument',
 ];
 
+const ORDER_DOCUMENT_TYPES = [
+  'O',
+  'OAJ',
+  'OAL',
+  'OAP',
+  'OAPF',
+  'OAR',
+  'OAS',
+  'OASL',
+  'OAW',
+  'OAX',
+  'OCA',
+  'OD',
+  'ODD',
+  'ODL',
+  'ODP',
+  'ODR',
+  'ODS',
+  'ODSL',
+  'ODW',
+  'ODX',
+  'OF',
+  'OFAB',
+  'OFFX',
+  'OFWD',
+  'OFX',
+  'OIP',
+  'OJR',
+  'OODS',
+  'OPFX',
+  'OPX',
+  'ORAP',
+  'OROP',
+  'OSC',
+  'OSCP',
+  'OST',
+  'OSUB',
+  'OAD',
+  'ODJ',
+];
+
 const DOCUMENT_NOTICE_EVENT_CODES = ['NOT'];
 const DOCUMENT_CATEGORIES = Object.keys(documentMapExternal);
 const DOCUMENT_CATEGORY_MAP = documentMapExternal;
@@ -46,6 +87,26 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 const DOCUMENT_INTERNAL_CATEGORY_MAP = documentMapInternal;
 const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 const OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
+
+const SCENARIOS = [
+  'Standard',
+  'Nonstandard A',
+  'Nonstandard B',
+  'Nonstandard C',
+  'Nonstandard D',
+  'Nonstandard E',
+  'Nonstandard F',
+  'Nonstandard G',
+  'Nonstandard H',
+  'Type A',
+  'Type B',
+  'Type C',
+  'Type D',
+  'Type E',
+  'Type F',
+  'Type G',
+  'Type H',
+];
 
 module.exports = {
   CASE_STATUS_TYPES,
@@ -60,6 +121,8 @@ module.exports = {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   OPINION_DOCUMENT_TYPES,
+  ORDER_DOCUMENT_TYPES,
+  SCENARIOS,
   SERVICE_INDICATOR_TYPES,
   TRIAL_LOCATION_MATCHER,
 };

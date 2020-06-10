@@ -5,6 +5,7 @@ const {
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
+  SCENARIOS,
 } = require('./EntityConstants');
 const {
   joiValidationDecorator,
@@ -17,67 +18,7 @@ const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
 
-Document.ORDER_DOCUMENT_TYPES = [
-  'O',
-  'OAJ',
-  'OAL',
-  'OAP',
-  'OAPF',
-  'OAR',
-  'OAS',
-  'OASL',
-  'OAW',
-  'OAX',
-  'OCA',
-  'OD',
-  'ODD',
-  'ODL',
-  'ODP',
-  'ODR',
-  'ODS',
-  'ODSL',
-  'ODW',
-  'ODX',
-  'OF',
-  'OFAB',
-  'OFFX',
-  'OFWD',
-  'OFX',
-  'OIP',
-  'OJR',
-  'OODS',
-  'OPFX',
-  'OPX',
-  'ORAP',
-  'OROP',
-  'OSC',
-  'OSCP',
-  'OST',
-  'OSUB',
-  'OAD',
-  'ODJ',
-];
 Document.validationName = 'Document';
-
-Document.SCENARIOS = [
-  'Standard',
-  'Nonstandard A',
-  'Nonstandard B',
-  'Nonstandard C',
-  'Nonstandard D',
-  'Nonstandard E',
-  'Nonstandard F',
-  'Nonstandard G',
-  'Nonstandard H',
-  'Type A',
-  'Type B',
-  'Type C',
-  'Type D',
-  'Type E',
-  'Type F',
-  'Type G',
-  'Type H',
-];
 
 /**
  * constructor
@@ -471,7 +412,7 @@ joiValidationDecorator(
       .optional(),
     scenario: joi
       .string()
-      .valid(...Document.SCENARIOS)
+      .valid(...SCENARIOS)
       .optional(),
     secondaryDate: joiStrictTimestamp
       .optional()

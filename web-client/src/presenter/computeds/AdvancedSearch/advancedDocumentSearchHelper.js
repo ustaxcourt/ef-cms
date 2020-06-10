@@ -1,5 +1,9 @@
 import { Document } from '../../../../../shared/src/business/entities/Document';
-import { OPINION_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  OPINION_DOCUMENT_TYPES,
+  ORDER_DOCUMENT_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from 'cerebral';
@@ -64,7 +68,7 @@ export const formatDocumentSearchResultRecord = (
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';
-  } else if (Document.ORDER_DOCUMENT_TYPES.includes(result.eventCode)) {
+  } else if (ORDER_DOCUMENT_TYPES.includes(result.eventCode)) {
     result.formattedSignedJudgeName = result.signedJudgeName
       ? applicationContext
           .getUtilities()
