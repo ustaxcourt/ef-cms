@@ -202,7 +202,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   stage_name = "${var.environment}"
-  description = "Deployed at ${timestamp()}"
+  stage_description = "Deployed at ${timestamp()}"
 }
 
 resource "aws_acm_certificate" "api_gateway_east_cert" {
