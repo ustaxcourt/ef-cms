@@ -2,7 +2,6 @@ const {
   getOpenConsolidatedCasesInteractor,
 } = require('./getOpenConsolidatedCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 jest.mock('../entities/UserCase');
@@ -49,10 +48,6 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   });
 
   it('should make a call to retrieve open cases by user', async () => {
-    const openCaseStatuses = Object.values(CASE_STATUS_TYPES).filter(
-      status => status !== CASE_STATUS_TYPES.closed,
-    );
-
     await getOpenConsolidatedCasesInteractor({
       applicationContext,
     });
@@ -61,7 +56,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
       applicationContext.getPersistenceGateway().getIndexedCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
-      statuses: openCaseStatuses,
+      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });

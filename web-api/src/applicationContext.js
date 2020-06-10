@@ -79,6 +79,9 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  CASE_STATUS_TYPES,
+} = require('../../shared/src/business/entities/cases/CaseConstants');
+const {
   caseAdvancedSearch,
 } = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
 const {
@@ -1042,6 +1045,9 @@ module.exports = (appContextUser = {}) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
+      OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
+        status => status !== CASE_STATUS_TYPES.closed,
+      ),
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
     }),
