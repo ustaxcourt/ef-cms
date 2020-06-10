@@ -13,7 +13,7 @@ export const CoverSheet = ({
   mailingDate,
 }) => {
   return (
-    <>
+    <div id="document-cover-sheet">
       <div>
         <div className="width-half float-left">
           <div className="width-half float-left">
@@ -35,11 +35,10 @@ export const CoverSheet = ({
           {dateFiledLodged}
         </div>
         <div className="clear"></div>
-        <div className="clear"></div>
       </div>
 
-      <div className="case-information">
-        <div id="caption">
+      <div className="case-information margin-top-40">
+        <div className="border-none" id="caption">
           <div id="caption-title">{caseTitle}</div>
           <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>
@@ -62,6 +61,6 @@ export const CoverSheet = ({
       {certificateOfService && (
         <div id="certificate-of-service">Certificate of Service</div>
       )}
-    </>
+    </div>
   );
 };
