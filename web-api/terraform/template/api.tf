@@ -34,7 +34,7 @@ resource "aws_lambda_function" "api_lambda" {
       TEMP_DOCUMENTS_BUCKET_NAME = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
       DYNAMODB_ENDPOINT = "dynamodb.us-east-1.amazonaws.com"
       MASTER_DYNAMODB_ENDPOINT = "dynamodb.us-east-1.amazonaws.com"
-      ELASTICSEARCH_ENDPOINT = "${var.elasticsearch_endpoint}"
+      ELASTICSEARCH_ENDPOINT = "${aws_elasticsearch_domain.efcms-search.endpoint}"
       MASTER_REGION = "us-east-1"
       STAGE = "${var.environment}"
       USER_POOL_ID = "${var.user_pool_id}"

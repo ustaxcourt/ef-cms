@@ -22,10 +22,6 @@ variable "honeybadger_key" {
   type = "string"
 }
 
-variable "elasticsearch_endpoint" {
-  type = "string"
-}
-
 variable "user_pool_id" {
   type = "string"
 }
