@@ -44,6 +44,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
 RUN npm set progress=false && \
+  npm config set puppeteer_skip_chromium_download true && \
   npm i
 
 COPY . /home/app
