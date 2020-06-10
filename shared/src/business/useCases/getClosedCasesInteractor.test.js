@@ -1,4 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { getClosedCasesInteractor } = require('./getClosedCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -21,7 +22,7 @@ describe('getClosedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getClosedCasesByUser.mockImplementation(() => mockFoundCasesList);
+      .getIndexedCasesForUser.mockImplementation(() => mockFoundCasesList);
     UserCase.validateRawCollection.mockImplementation(
       foundCases => foundCases || [],
     );
@@ -35,15 +36,16 @@ describe('getClosedCasesInteractor', () => {
     expect(applicationContext.getCurrentUser).toBeCalled();
   });
 
-  it('should make a call to retrieve open cases by user', async () => {
+  it('should make a call to retrieve closed cases by user', async () => {
     await getClosedCasesInteractor({
       applicationContext,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getClosedCasesByUser,
+      applicationContext.getPersistenceGateway().getIndexedCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
+      statuses: [CASE_STATUS_TYPES.closed],
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
