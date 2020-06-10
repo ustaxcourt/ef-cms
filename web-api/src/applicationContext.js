@@ -13,7 +13,6 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
-const elasticsearchIndexes = require('../elasticsearch/elasticsearch-indexes');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -246,6 +245,9 @@ const {
 const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  elasticsearchIndexes,
+} = require('../elasticsearch/elasticsearch-indexes');
 const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
