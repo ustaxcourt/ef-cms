@@ -27,8 +27,46 @@ resource "aws_lambda_function" "api_lambda" {
 
   layers = [
     "${data.aws_lambda_layer_version.puppeteer_existing.arn}"
-    # "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
-    # "${data.aws_lambda_layer_version.clamav_existing.arn}"
+  ]
+
+  runtime = "nodejs12.x"
+
+  environment {
+    variables = {
+      S3_ENDPOINT = "s3.us-east-1.amazonaws.com"
+      DOCUMENTS_BUCKET_NAME = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+      TEMP_DOCUMENTS_BUCKET_NAME = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
+      DYNAMODB_ENDPOINT = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_DYNAMODB_ENDPOINT = "dynamodb.us-east-1.amazonaws.com"
+      ELASTICSEARCH_ENDPOINT = "${aws_elasticsearch_domain.efcms-search.endpoint}"
+      MASTER_REGION = "us-east-1"
+      STAGE = "${var.environment}"
+      USER_POOL_ID = "${aws_cognito_user_pool.pool.id}"
+      USER_POOL_IRS_ID = "${aws_cognito_user_pool.irs_pool.id}"
+      NODE_ENV = "production"
+      EMAIL_SOURCE = "noreply@mail.efcms-${var.environment}.${var.dns_domain}"
+      EMAIL_DOCUMENT_SERVED_TEMPLATE = "document_served_${var.environment}"
+      EMAIL_SERVED_PETITION_TEMPLATE = "petition_served_${var.environment}"
+      EFCMS_DOMAIN = "${var.dns_domain}"
+      CLAMAV_DEF_DIR = "/opt/var/lib/clamav"
+      CIRCLE_HONEYBADGER_API_KEY = "${var.honeybadger_key}"
+      IRS_SUPERUSER_EMAIL = "${var.irs_superuser_email}"
+    }
+  }
+}
+
+resource "aws_lambda_function" "api_clamav_lambda" {
+  filename      = "${data.archive_file.zip_api.output_path}"
+  function_name = "api_clamav_${var.environment}"
+  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  handler       = "index.handler"
+  source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
+  timeout = "10"
+  memory_size = "3008"
+
+  layers = [
+    "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
+    "${data.aws_lambda_layer_version.clamav_existing.arn}"
   ]
 
   runtime = "nodejs12.x"
@@ -68,10 +106,37 @@ resource "aws_api_gateway_rest_api" "gateway_for_api" {
 resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   parent_id = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
-  path_part = "{proxy+}"
+  path_part = "/api/{proxy+}"
+}
+
+resource "aws_api_gateway_resource" "api_clamav_resource" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  parent_id = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
+  path_part = "/clamav/{proxy+}"
+}
+
+resource "aws_api_gateway_method" "api_clamav_method_post" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_resource.api_clamav_resource.id}"
+  http_method = "POST"
+  authorization = "CUSTOM"
+  authorizer_id = "${aws_api_gateway_authorizer.custom_authorizer.id}"
+}
+
+resource "aws_api_gateway_method" "api_clamav_method_options" {
+  depends_on = [
+    "aws_api_gateway_method.api_clamav_method_post"
+  ]
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_resource.api_clamav_resource.id}"
+  http_method = "OPTIONS"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_method" "api_method_get" {
+  depends_on = [
+    "aws_api_gateway_method.api_clamav_method_options"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_resource.api_resource.id}"
   http_method = "GET"
@@ -128,6 +193,27 @@ resource "aws_api_gateway_authorizer" "custom_authorizer" {
   authorizer_uri         = "${aws_lambda_function.cognito_authorizer_lambda.invoke_arn}"
   authorizer_credentials = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
+
+resource "aws_api_gateway_integration" "api_clamav_integration_post" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_method.api_clamav_method_post.resource_id}"
+  http_method = "${aws_api_gateway_method.api_clamav_method_post.http_method}"
+
+  integration_http_method = "POST"
+  type = "AWS_PROXY"
+  uri = "${aws_lambda_function.api_clamav_lambda.invoke_arn}"
+}
+
+resource "aws_api_gateway_integration" "api_clamav_integration_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_method.api_clamav_method_options.resource_id}"
+  http_method = "${aws_api_gateway_method.api_clamav_method_options.http_method}"
+
+  integration_http_method = "POST"
+  type = "AWS_PROXY"
+  uri = "${aws_lambda_function.api_lambda.invoke_arn}"
+}
+
 
 resource "aws_api_gateway_integration" "api_integration_get" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
@@ -189,11 +275,15 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
+    "aws_api_gateway_method.api_clamav_method_post",
+    "aws_api_gateway_method.api_clamav_method_options",
     "aws_api_gateway_method.api_method_get",
     "aws_api_gateway_method.api_method_post",
     "aws_api_gateway_method.api_method_put",
     "aws_api_gateway_method.api_method_delete",
     "aws_api_gateway_method.api_method_options",
+    "aws_api_gateway_integration.api_clamav_integration_post",
+    "aws_api_gateway_integration.api_clamav_integration_options",
     "aws_api_gateway_integration.api_integration_get",
     "aws_api_gateway_integration.api_integration_post",
     "aws_api_gateway_integration.api_integration_put",

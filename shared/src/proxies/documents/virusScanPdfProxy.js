@@ -12,5 +12,6 @@ exports.virusScanPdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/virus-scan`,
+    useClamav: true,
   });
 };
