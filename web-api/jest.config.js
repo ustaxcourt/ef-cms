@@ -12,6 +12,8 @@ module.exports = {
     '!src/**/*Lambda.js',
     '!src/**/*.test.js',
     '!src/app.js',
+    '!src/app-public.js',
+    '!src/lambdaWrapper.js',
     '!src/app-local.js',
   ],
   verbose: false,

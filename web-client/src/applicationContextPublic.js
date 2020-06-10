@@ -34,7 +34,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000';
+    return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,

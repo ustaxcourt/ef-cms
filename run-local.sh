@@ -82,7 +82,8 @@ npx sls offline start "$@" --config web-api/serverless-streams.yml &
 echo "starting proxy"
 node ./web-api/proxy.js &
 
-nodemon -e 'js' --exec "node -r esm web-api/src/app-local.js"
+nodemon -e 'js' --exec "node -r esm web-api/src/app-local.js" &
+nodemon -e 'js' --exec "node -r esm web-api/src/app-public-local.js"
 
 echo "proxy stopped"
 
