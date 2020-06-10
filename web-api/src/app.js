@@ -372,6 +372,8 @@ const lambdaWrapper = lambda => {
       res.send(response.body);
     } else if (response.headers['Content-Type'] === 'application/json') {
       res.json(JSON.parse(response.body || 'null'));
+    } else if (response.headers.Location) {
+      res.redirect(response.headers.Location);
     } else {
       console.log('ERROR: we do not support this return type');
     }
