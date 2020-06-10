@@ -1,6 +1,4 @@
-FROM cypress/base:12.16.0
-
-RUN echo "recache again"
+FROM cypress/base:12.16.2
 
 WORKDIR /home/app
 
