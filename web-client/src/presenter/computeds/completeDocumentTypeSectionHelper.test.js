@@ -1,4 +1,4 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { DOCUMENT_CATEGORY_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from './completeDocumentTypeSectionHelper';
 import { runCompute } from 'cerebral/test';
@@ -25,7 +25,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Application';
     const categoryIdx = 0;
 
-    const { category, documentType } = Document.CATEGORY_MAP[categoryKey][
+    const { category, documentType } = DOCUMENT_CATEGORY_MAP[categoryKey][
       categoryIdx
     ];
 
@@ -49,7 +49,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Motion';
     const categoryIdx = 22;
 
-    const { category, documentType } = Document.CATEGORY_MAP[categoryKey][
+    const { category, documentType } = DOCUMENT_CATEGORY_MAP[categoryKey][
       categoryIdx
     ];
 
