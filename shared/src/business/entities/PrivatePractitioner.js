@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
+const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 const { User, userDecorator, userValidation } = require('./User');
 
 /**

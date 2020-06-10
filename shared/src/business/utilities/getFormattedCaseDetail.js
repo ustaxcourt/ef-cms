@@ -4,7 +4,7 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');

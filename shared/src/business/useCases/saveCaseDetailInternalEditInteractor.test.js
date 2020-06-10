@@ -2,7 +2,7 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');

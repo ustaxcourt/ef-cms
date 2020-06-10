@@ -6,7 +6,7 @@ const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
+const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
 
 /**
  * constructor
