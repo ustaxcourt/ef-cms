@@ -1,6 +1,6 @@
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
-const { up } = require('./00002-user-case-mapping');
+const { up } = require('./00003-user-case-mapping');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 
 describe('user case mapping migration', () => {
