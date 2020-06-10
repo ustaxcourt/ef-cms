@@ -31,9 +31,9 @@ resource "aws_lambda_function" "api_lambda" {
   memory_size = "3008"
 
   layers = [
-    "${data.aws_lambda_layer_version.puppeteer_existing.arn}",
-    "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
-    "${data.aws_lambda_layer_version.clamav_existing.arn}"
+    "${data.aws_lambda_layer_version.puppeteer_existing.arn}"
+    # "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
+    # "${data.aws_lambda_layer_version.clamav_existing.arn}"
   ]
 
   runtime = "nodejs12.x"
