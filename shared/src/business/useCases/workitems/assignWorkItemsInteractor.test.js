@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
 const { User } = require('../../entities/User');
 

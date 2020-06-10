@@ -1,4 +1,4 @@
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 
 /**
  * updateCaseAutomaticBlock

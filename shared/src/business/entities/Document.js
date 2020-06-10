@@ -6,7 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
+const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
 const { flatten } = require('lodash');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Order } = require('./orders/Order');

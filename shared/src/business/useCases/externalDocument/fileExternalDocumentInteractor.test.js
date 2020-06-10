@@ -5,7 +5,7 @@ const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
