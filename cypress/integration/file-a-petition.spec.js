@@ -198,6 +198,9 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
+
+    cy.wait(10000);
+
     cy.url().should('include', 'file-a-petition/success');
     cy.get('a#button-back-to-dashboard').click();
   });
