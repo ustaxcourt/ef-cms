@@ -28,10 +28,6 @@ variable "honeybadger_key" {
   default = "default_key"
 }
 
-variable "user_pool_id" {
-  type = "string"
-}
-
 variable "irs_superuser_email" {
   type = "string"
 }
