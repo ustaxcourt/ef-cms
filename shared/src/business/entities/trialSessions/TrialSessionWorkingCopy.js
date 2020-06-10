@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { DOCKET_NUMBER_MATCHER } = require('../cases/CaseConstants');
+const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
 
 TrialSessionWorkingCopy.TRIAL_STATUS_TYPES = [
   'Set for Trial',

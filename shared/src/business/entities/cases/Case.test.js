@@ -6,7 +6,7 @@ const {
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
-const { CASE_STATUS_TYPES } = require('./CaseConstants');
+const { CASE_STATUS_TYPES } = require('../EntityConstants');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
