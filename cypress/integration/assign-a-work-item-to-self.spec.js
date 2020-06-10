@@ -7,10 +7,6 @@ const {
 } = require('../support/pages/dashboard');
 
 describe('Assign a work item ', () => {
-  before(() => {
-    cy.task('seed');
-  });
-
   it('views the section inbox', () => {
     navigateToDashboard('petitionsclerk');
     viewDocumentQCSectionInbox();
