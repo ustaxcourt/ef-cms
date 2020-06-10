@@ -31,6 +31,14 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
+const DOCUMENT_RELATIONSHIPS = [
+  'primaryDocument',
+  'primarySupportingDocument',
+  'secondaryDocument',
+  'secondarySupportingDocument',
+  'supportingDocument',
+];
+
 const DOCUMENT_CATEGORIES = Object.keys(documentMapExternal);
 const DOCUMENT_CATEGORY_MAP = documentMapExternal;
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
@@ -47,6 +55,7 @@ module.exports = {
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORIES,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
+  DOCUMENT_RELATIONSHIPS,
   SERVICE_INDICATOR_TYPES,
   TRIAL_LOCATION_MATCHER,
 };
