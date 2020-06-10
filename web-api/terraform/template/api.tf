@@ -48,7 +48,7 @@ resource "aws_lambda_function" "api_lambda" {
       ELASTICSEARCH_ENDPOINT = "${aws_elasticsearch_domain.efcms-search.endpoint}"
       MASTER_REGION = "us-east-1"
       STAGE = "${var.environment}"
-      USER_POOL_ID = "${var.user_pool_id}"
+      USER_POOL_ID = "${aws_cognito_user_pool.pool.id}"
       NODE_ENV = "production"
       EMAIL_SOURCE = "noreply@mail.efcms-${var.environment}.${var.dns_domain}"
       EMAIL_DOCUMENT_SERVED_TEMPLATE = "document_served_${var.environment}"
