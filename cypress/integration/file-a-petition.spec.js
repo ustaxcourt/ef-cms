@@ -199,6 +199,7 @@ describe('creation form', () => {
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
 
+    // wait for elasticsearch to refresh
     cy.wait(10000);
 
     cy.url().should('include', 'file-a-petition/success');
