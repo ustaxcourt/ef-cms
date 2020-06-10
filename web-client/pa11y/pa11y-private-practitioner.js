@@ -7,11 +7,11 @@ module.exports = [
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/search/no-matches',
   {
     actions: [
-      'wait for #tab-open to be visible',
       'wait for #tab-closed to be visible',
+      'click element #tab-closed',
+      'wait for element #tabContent-closed to be visible',
     ],
-    notes:
-      'a private practitioner can see two tabs displaying open and closed cases',
+    notes: 'check the a11y of the Closed Cases tab',
     url: 'http://localhost:1234/mock-login?token=privatePractitioner&path=/',
   },
 ];
