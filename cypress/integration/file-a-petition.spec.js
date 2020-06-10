@@ -3,7 +3,6 @@ let createdDocketNumber;
 
 describe('File a petition', function () {
   before(() => {
-    cy.task('seed');
     cy.login('petitioner');
   });
 
@@ -189,9 +188,10 @@ describe('creation form', () => {
   });
 
   it('submits forms and redirects to the file petition success page', () => {
+    cy.get('button#submit-case').scrollIntoView().click();
+
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
-    cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase');
     cy.get('@postCase').should(xhr => {
       // eslint-disable-next-line jest/valid-expect
