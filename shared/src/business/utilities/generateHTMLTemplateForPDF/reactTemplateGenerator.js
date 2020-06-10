@@ -15,6 +15,9 @@ const {
   ChangeOfAddress,
 } = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx');
 const {
+  CoverSheet,
+} = require('../pdfGenerator/documentTemplates/CoverSheet.jsx');
+const {
   DatePrintedFooter,
 } = require('../pdfGenerator/components/DatePrintedFooter.jsx');
 const {
@@ -67,6 +70,7 @@ const components = {
   AddressLabelCoverSheet,
   CaseInventoryReport,
   ChangeOfAddress,
+  CoverSheet,
   DatePrintedFooter,
   DocketRecord,
   DocumentService,
