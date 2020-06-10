@@ -21,6 +21,8 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 # build the cognito authorizer using parcel
 pushd ../template/cognito-authorizer
 npx parcel build index.js --target node --bundle-node-modules --no-minify
