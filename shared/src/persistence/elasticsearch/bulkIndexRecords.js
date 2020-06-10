@@ -25,8 +25,8 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
   });
 
   const failedRecords = [];
-  if (response.body.errors) {
-    response.body.items.forEach((action, i) => {
+  if (response.errors) {
+    response.items.forEach((action, i) => {
       const operation = Object.keys(action)[0];
       if (action[operation].error) {
         let record = body[i * 2 + 1];
