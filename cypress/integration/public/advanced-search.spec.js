@@ -13,10 +13,6 @@ const {
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
-  before(() => {
-    cy.task('seed');
-  });
-
   describe('case - by name', () => {
     it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
       navigateToDashboard();
