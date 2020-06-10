@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
+import { refreshElasticsearchIndex } from '../helpers';
 
 export const docketClerkUpdatesCaseStatusToClosed = test => {
   return it('Docket clerk updates case status to closed', async () => {
@@ -22,6 +23,8 @@ export const docketClerkUpdatesCaseStatusToClosed = test => {
     });
 
     await test.runSequence('submitUpdateCaseModalSequence');
+
+    await refreshElasticsearchIndex();
 
     expect(test.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.closed,
