@@ -6,7 +6,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
