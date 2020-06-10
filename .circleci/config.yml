@@ -573,71 +573,71 @@ workflows:
             branches:
               ignore:
                 - develop
-      - build-shared:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - build-api:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - build-client-unit:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - build-client-integration:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - e2e-pa11y:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - e2e-cypress:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - e2e-cypress-public:
-          requires:
-            - bundle
-          filters:
-            branches:
-              ignore:
-                - develop
-      - build-client-coverage:
-          requires:
-            - build-shared
-            - build-api
-            - build-client-unit
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-cypress
-            - e2e-cypress-public
-          filters:
-            branches:
-              ignore:
-                - develop
+      # - build-shared:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - build-api:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - build-client-unit:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - build-client-integration:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - e2e-pa11y:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - e2e-cypress:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - e2e-cypress-public:
+      #     requires:
+      #       - bundle
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
+      # - build-client-coverage:
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client-unit
+      #       - build-client-integration
+      #       - e2e-pa11y
+      #       - e2e-cypress
+      #       - e2e-cypress-public
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
       - pre-deploy:
           requires:
-            - build-client-coverage
+            - bundle
           filters:
             branches:
               only:

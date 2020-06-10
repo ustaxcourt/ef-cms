@@ -82,6 +82,13 @@ resource "aws_api_gateway_method" "api_method" {
   authorization = "NONE"
 }
 
+resource "aws_api_gateway_authorizer" "custom_authorizer" {
+  name                   = "custom_authorizer_${var.environment}"
+  rest_api_id            = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  authorizer_uri         = "${aws_lambda_function.cognito_authorizer_lambda.invoke_arn}"
+  authorizer_credentials = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
+}
+
 # resource "aws_api_gateway_method" "proxy_root" {
 #   rest_api_id   = "${aws_api_gateway_rest_api.gateway_for_api.id}"
 #   resource_id   = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
