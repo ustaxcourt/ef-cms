@@ -78,6 +78,10 @@ th {
   width: 49%;
 }
 
+.margin-top-40 {
+  margin-top: 40px;
+}
+
 .margin-top-80 {
   margin-top: 80px;
 }
@@ -143,6 +147,10 @@ th {
   border-right: 1px dashed;
   font-size: 14px;
   line-height: 18px;
+
+  &.border-none {
+    border: none;
+  }
 
   #caption-extension,
   #caption-v,
@@ -352,6 +360,20 @@ th {
     font-size: 14px;
     font-weight: normal;
     text-decoration: none;
+  }
+}
+#document-cover-sheet {
+  .case-information,
+  #docket-number,
+  #document-title,
+  #certificate-of-service {
+    font-family: 'nimbus_sans_l', sans-serif !important;
+  }
+
+  #certificate-of-service {
+    position: absolute;
+    bottom: 60px;
+    left: 60;
   }
 }
 

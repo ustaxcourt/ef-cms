@@ -67,18 +67,21 @@ const changeOfAddress = async ({ applicationContext, content }) => {
   return pdf;
 };
 
-const docketRecord = async ({ applicationContext, data }) => {
-  const pdfContentHtml = await generatePrintableDocketRecordTemplate({
-    applicationContext,
+const coverSheet = async ({ applicationContext, data }) => {
+  const coverSheetTemplate = reactTemplateGenerator({
+    componentName: 'CoverSheet',
     data,
   });
 
-  const docketNumber = data.caseDetail.docketNumberWithSuffix;
+  // TODO: Served footer
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber,
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: coverSheetTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Notice of Docket Change',
     },
   });
 
@@ -87,9 +90,29 @@ const docketRecord = async ({ applicationContext, data }) => {
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      docketNumber: data.docketNumberWithSuffix,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
+const docketRecord = async ({ applicationContext, data }) => {
+  const pdfContentHtml = await generatePrintableDocketRecordTemplate({
+    applicationContext,
+    data,
+  });
+
+  const docketNumber = data.caseDetail.docketNumberWithSuffix;
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber,
-      headerHtml,
       overwriteHeader: true,
     });
 
@@ -610,6 +633,7 @@ module.exports = {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,

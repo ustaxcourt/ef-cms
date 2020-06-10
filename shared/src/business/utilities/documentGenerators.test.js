@@ -11,6 +11,7 @@ const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
@@ -154,6 +155,38 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Change_Of_Address', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('coverSheet', () => {
+    it('Generates a CoverSheet document', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner',
+          caseTitle: 'Test Person',
+          certificateOfService: true,
+          dateFiledLodged: '01/01/2020',
+          dateFiledLodgedLabel: 'Filed',
+          dateReceived: '01/02/2020',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+          electronicallyFiled: true,
+          mailingDate: '12/26/2019',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CoverSheet', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
