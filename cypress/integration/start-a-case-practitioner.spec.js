@@ -22,6 +22,9 @@ describe('Start a case as a practitioner ', () => {
 
   it('fills in the start a case form', () => {
     fillInAndSubmitForm();
+
+    // wait for elasticsearch to refresh
+    cy.wait(10000);
   });
 
   it('expect the case list to be displayed with 4 items now', () => {
