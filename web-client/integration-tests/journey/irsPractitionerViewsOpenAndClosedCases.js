@@ -8,6 +8,6 @@ export const irsPractitionerViewsOpenAndClosedCases = test => {
 
     expect(test.getState('currentPage')).toEqual('DashboardRespondent');
     expect(test.getState('openCases').length).toBeGreaterThan(0);
-    expect(test.getState('closedCases').length).toBe(0);
+    expect(test.getState('closedCases').length).toBeGreaterThan(0);
   });
 };
