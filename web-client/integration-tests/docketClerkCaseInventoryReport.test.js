@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {

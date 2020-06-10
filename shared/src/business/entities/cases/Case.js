@@ -12,7 +12,7 @@ const {
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
+} = require('../EntityConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
