@@ -8,6 +8,14 @@ data "aws_lambda_layer_version" "puppeteer_existing" {
   layer_name = "${var.environment}-puppeteer"
 }
 
+data "aws_lambda_layer_version" "clamav_existing" {
+  layer_name = "${var.environment}-av"
+}
+
+data "aws_lambda_layer_version" "clamav_main_existing" {
+  layer_name = "${var.environment}-avm"
+}
+
 # resource "aws_cloudwatch_log_group" "api_lambda_log_group" {
 #   name              = "/aws/lambda/api_${var.environment}"
 #   retention_in_days = 14
@@ -21,11 +29,14 @@ resource "aws_lambda_function" "api_lambda" {
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
   timeout = "10"
   memory_size = "3008"
-  layers = ["${data.aws_lambda_layer_version.puppeteer_existing.arn}"]
+
+  layers = [
+    "${data.aws_lambda_layer_version.puppeteer_existing.arn}",
+    "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
+    "${data.aws_lambda_layer_version.clamav_existing.arn}"
+  ]
 
   runtime = "nodejs12.x"
-
-  # depends_on = ["aws_cloudwatch_log_group.api_lambda_log_group"]
 
   environment {
     variables = {
