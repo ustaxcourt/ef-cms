@@ -9,10 +9,12 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
   TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
+} = require('../EntityConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -37,7 +39,7 @@ const joiStrictTimestamp = getTimestampSchema();
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
 );
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
@@ -256,7 +258,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.docketNumber = rawCase.docketNumber;
+  if (rawCase.docketNumber) {
+    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+  }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
@@ -374,7 +378,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.contactSecondary = contacts.secondary;
 }
 
-Case.validationRules = {
+Case.VALIDATION_RULES = {
   associatedJudge: joi
     .string()
     .max(50)
@@ -759,7 +763,7 @@ Case.validationRules = {
 
 joiValidationDecorator(
   Case,
-  joi.object().keys(Case.validationRules),
+  joi.object().keys(Case.VALIDATION_RULES),
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
@@ -1060,8 +1064,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.getPetitionDocument = function () {
   return this.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
@@ -1092,8 +1095,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
       new DocketRecord(
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode:
-            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filingDate: this.receivedAt || this.createdAt,
         },
         { applicationContext },
@@ -1188,20 +1190,6 @@ Case.isValidCaseId = caseId =>
   /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
     caseId,
   );
-
-/**
- * isValidDocketNumber
- *
- * @param {string} docketNumber the docket number to validate
- * @returns {*|boolean} true if the docketNumber is valid, false otherwise
- */
-Case.isValidDocketNumber = docketNumber => {
-  return (
-    docketNumber &&
-    DOCKET_NUMBER_MATCHER.test(docketNumber) &&
-    parseInt(docketNumber.split('-')[0]) > 100
-  );
-};
 
 /**
  * stripLeadingZeros

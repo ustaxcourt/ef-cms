@@ -1,3 +1,4 @@
+const { getUniqueId } = require('../sharedAppContext');
 const { User } = require('../business/entities/User');
 
 const [
@@ -16,6 +17,7 @@ const user = new User({
   name,
   role,
   section,
+  userId: getUniqueId(),
 });
 
 if (!user.isValid()) {

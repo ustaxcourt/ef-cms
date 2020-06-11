@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkViewsCaseDetailAfterAddingOrder = test => {
   return it('Petitions clerk views case detail after adding order', async () => {

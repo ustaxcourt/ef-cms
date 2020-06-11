@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 
 describe('sendServedPartiesEmails', () => {

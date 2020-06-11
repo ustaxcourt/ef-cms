@@ -2,15 +2,17 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} = require('../EntityConstants');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
-const { CASE_STATUS_TYPES } = require('./CaseConstants');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
-const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -173,6 +175,17 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, docketNumber: '00101-20' },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.docketNumber).toBe('101-20');
     });
 
     it('Creates an invalid case with an invalid nested contact object', () => {
@@ -553,16 +566,6 @@ describe('Case entity', () => {
       expect(
         Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
       ).toBeFalsy();
-    });
-  });
-
-  describe('isValidDocketNumber', () => {
-    it('returns true if a valid docketNumber', () => {
-      expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
-    });
-
-    it('returns false if an invalid docket number', () => {
-      expect(Case.isValidDocketNumber('00')).toBeFalsy();
     });
   });
 
@@ -1680,7 +1683,7 @@ describe('Case entity', () => {
       });
       const result = myCase.getPetitionDocument();
       expect(result.documentType).toEqual(
-        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+        INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
     });
   });

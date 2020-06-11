@@ -10,6 +10,7 @@ const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -57,7 +58,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let secondaryDate;
-  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
+  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
     secondaryDate = documentMeta.date;
   }
 

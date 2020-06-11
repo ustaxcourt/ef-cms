@@ -23,7 +23,19 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getOpenCasesByUser.mockImplementation(() => mockFoundCasesList);
+      .getIndexedCasesForUser.mockImplementation(() => mockFoundCasesList);
+    applicationContext
+      .getUseCaseHelpers()
+      .processUserAssociatedCases.mockReturnValue({
+        casesAssociatedWithUserOrLeadCaseMap: {
+          'c54ba5a9-b37b-479d-9201-067ec6e335bb': MOCK_CASE,
+        },
+        leadCaseIdsAssociatedWithUser: [MOCK_CASE.caseId],
+        userAssociatedCaseIdsMap: {},
+      });
+    applicationContext
+      .getUseCaseHelpers()
+      .getConsolidatedCasesForLeadCase.mockReturnValue([]);
     UserCase.validateRawCollection.mockImplementation(foundCases => foundCases);
   });
 
@@ -41,9 +53,10 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getOpenCasesByUser,
+      applicationContext.getPersistenceGateway().getIndexedCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
+      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });

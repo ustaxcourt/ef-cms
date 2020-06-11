@@ -16,7 +16,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { Document } = require('../Document');
+const { DOCUMENT_CATEGORY_MAP } = require('../EntityConstants');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
@@ -221,7 +221,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   const objectionDocumentTypes = [
-    ...Document.CATEGORY_MAP['Motion'].map(entry => {
+    ...DOCUMENT_CATEGORY_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
     'Motion to Withdraw Counsel (filed by petitioner)',

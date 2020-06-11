@@ -82,7 +82,8 @@
     "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
     "docketNumber": "113-19",
     "docketNumberWithSuffix": "113-19L",
-    "status": "Submitted"
+    "status": "Submitted",
+    "entityName": "UserCase"
   },
   {
     "documentType": "Statement of Taxpayer Identification",

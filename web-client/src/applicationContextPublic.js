@@ -18,6 +18,7 @@ import {
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
@@ -34,7 +35,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000';
+    return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
@@ -55,6 +56,7 @@ const applicationContextPublic = {
     getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getPublicJudgesInteractor,
+    getTodaysOpinionsInteractor,
     opinionPublicSearchInteractor,
     orderPublicSearchInteractor,
     validateCaseAdvancedSearchInteractor,

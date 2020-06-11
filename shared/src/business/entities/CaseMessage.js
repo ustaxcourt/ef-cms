@@ -6,7 +6,7 @@ const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const { DOCKET_NUMBER_MATCHER } = require('./cases/CaseConstants');
+const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
 
 /**
  * constructor
@@ -45,7 +45,7 @@ CaseMessage.VALIDATION_ERROR_MESSAGES = {
   toUserId: 'Select a recipient',
 };
 
-CaseMessage.validationRules = {
+CaseMessage.VALIDATION_RULES = {
   caseId: joi
     .string()
     .uuid({
@@ -124,7 +124,7 @@ CaseMessage.validationRules = {
 
 joiValidationDecorator(
   CaseMessage,
-  joi.object().keys(CaseMessage.validationRules),
+  joi.object().keys(CaseMessage.VALIDATION_RULES),
   CaseMessage.VALIDATION_ERROR_MESSAGES,
 );
 

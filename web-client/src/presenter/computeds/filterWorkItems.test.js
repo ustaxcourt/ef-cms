@@ -1,5 +1,5 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
