@@ -8,34 +8,38 @@ import React from 'react';
 export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
-    token: state.token,
   },
   function FilingsAndProceedings({
     arrayIndex,
-    baseUrl,
     caseDetail,
     caseDetailHelper,
     entry,
     formattedCaseDetail,
+    openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
-    token,
   }) {
     const renderDocumentLink = () => {
       return (
         <>
           <NonMobile>
-            <a
+            <Button
+              link
               aria-label={`View PDF: ${entry.description}`}
-              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
-              target="_blank"
+              onClick={() =>
+                openCaseDocumentDownloadUrlSequence({
+                  caseId: caseDetail.caseId,
+                  documentId: entry.documentId,
+                })
+              }
             >
               {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
@@ -43,7 +47,7 @@ export const FilingsAndProceedings = connect(
                 </span>
               )}
               {entry.descriptionDisplay}
-            </a>
+            </Button>
           </NonMobile>
           <Mobile>
             <Button
