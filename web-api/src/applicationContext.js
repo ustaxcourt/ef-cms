@@ -79,7 +79,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
-} = require('../../shared/src/business/entities/cases/CaseConstants');
+} = require('../../shared/src/business/entities/EntityConstants');
 const {
   caseAdvancedSearch,
 } = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
