@@ -7,11 +7,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
-jest.mock('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
-
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
@@ -74,8 +69,6 @@ describe('addCoversheetInteractor', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
-
-    generateCoverPagePdf.mockImplementation(testPdfDocBytes);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
