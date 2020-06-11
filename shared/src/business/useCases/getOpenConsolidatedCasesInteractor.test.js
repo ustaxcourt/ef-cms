@@ -93,4 +93,8 @@ describe('getOpenConsolidatedCasesInteractor', () => {
       },
     ]);
   });
+
+  it('should ', async () => {
+    // BUG - user is associated with a consolidated case that is NOT the lead case
+  });
 });

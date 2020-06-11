@@ -3,31 +3,23 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getUnassociatedLeadCase', () => {
   it('should set the found case isRequestingUserAssociated to false', () => {
-    let casesAssociatedWithUserOrLeadCaseMap = {};
-
-    getUnassociatedLeadCase({
-      casesAssociatedWithUserOrLeadCaseMap,
+    const result = getUnassociatedLeadCase({
       consolidatedCases: [MOCK_CASE],
       leadCaseId: MOCK_CASE.caseId,
     });
 
-    expect(
-      casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId]
-        .isRequestingUserAssociated,
-    ).toBe(false);
+    expect(result.isRequestingUserAssociated).toBe(false);
   });
 
-  it('should search for the lead case and add it to the casesAssociatedWithUserOrLeadCaseMap', () => {
+  it('should return the found lead case', () => {
     let casesAssociatedWithUserOrLeadCaseMap = {};
 
-    getUnassociatedLeadCase({
+    const result = getUnassociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases: [MOCK_CASE],
       leadCaseId: MOCK_CASE.caseId,
     });
 
-    expect(
-      casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
-    ).toMatchObject(MOCK_CASE);
+    expect(result).toMatchObject(MOCK_CASE);
   });
 });
