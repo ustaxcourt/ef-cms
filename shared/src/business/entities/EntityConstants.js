@@ -159,6 +159,30 @@ const INITIAL_DOCUMENT_TYPES = {
   },
 };
 
+const NOTICE_OF_DOCKET_CHANGE = {
+  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+  documentType: 'Notice of Docket Change',
+  eventCode: 'NODC',
+};
+
+const NOTICE_OF_TRIAL = {
+  documentTitle: 'Notice of Trial on [Date] at [Time]',
+  documentType: 'Notice of Trial',
+  eventCode: 'NDT',
+};
+
+const STANDING_PRETRIAL_NOTICE = {
+  documentTitle: 'Standing Pretrial Notice',
+  documentType: 'Standing Pretrial Notice',
+  eventCode: 'SPTN',
+};
+
+const STANDING_PRETRIAL_ORDER = {
+  documentTitle: 'Standing Pretrial Order',
+  documentType: 'Standing Pretrial Order',
+  eventCode: 'SPTO',
+};
+
 module.exports = {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
@@ -173,11 +197,15 @@ module.exports = {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
+  NOTICE_OF_DOCKET_CHANGE,
+  NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_DOCUMENT_TYPES,
   SCENARIOS,
   SERVICE_INDICATOR_TYPES,
+  STANDING_PRETRIAL_NOTICE,
+  STANDING_PRETRIAL_ORDER,
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_LOCATION_MATCHER,
