@@ -272,11 +272,28 @@ const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
+const CASE_TYPES_MAP = {
+  cdp: 'CDP (Lien/Levy)',
+  deficiency: 'Deficiency',
+  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
+  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
+  innocentSpouse: 'Innocent Spouse',
+  interestAbatement: 'Interest Abatement',
+  other: 'Other',
+  partnershipSection1101: 'Partnership (BBA Section 1101)',
+  partnershipSection6226: 'Partnership (Section 6226)',
+  partnershipSection6228: 'Partnership (Section 6228)',
+  passport: 'Passport',
+  whistleblower: 'Whistleblower',
+  workerClassification: 'Worker Classification',
+};
+
 module.exports = {
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
