@@ -35,25 +35,16 @@ exports.post = ({
   endpoint,
   headers = {},
   options = {},
-  useClamav = false,
 }) =>
   applicationContext
     .getHttpClient()
-    .post(
-      `${
-        useClamav
-          ? applicationContext.getClamavBaseUrl()
-          : applicationContext.getBaseUrl()
-      }${endpoint}`,
-      body,
-      {
-        headers: {
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-          ...headers,
-        },
-        ...options,
+    .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+      headers: {
+        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        ...headers,
       },
-    )
+      ...options,
+    })
     .then(response => response.data);
 
 /**

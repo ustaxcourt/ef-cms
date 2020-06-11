@@ -441,13 +441,10 @@ const applicationContext = {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:4000/api';
+    return process.env.API_URL || 'http://localhost:4000';
   },
   getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
-  getClamavBaseUrl: () => {
-    return process.env.API_CLAMAV_URL || 'http://localhost:4000/clamav';
-  },
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
