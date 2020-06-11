@@ -5,15 +5,15 @@ import React from 'react';
 
 export const TodaysOpinions = connect(
   {
-    todaysOpinions: state.todaysOpinions,
+    todaysOpinionsHelper: state.todaysOpinionsHelper,
   },
-  function TodaysOpinions({ todaysOpinions }) {
+  function TodaysOpinions({ todaysOpinionsHelper }) {
     return (
       <>
         <BigHeader text="Today’s Opinions" />
 
         <section className="usa-section grid-container todays-opinions">
-          <h1>December 23, 2018</h1>
+          <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
           <table
             aria-label="todays opinions"
@@ -32,16 +32,16 @@ export const TodaysOpinions = connect(
               </tr>
             </thead>
             <tbody>
-              {todaysOpinions.map((opinion, idx) => (
+              {todaysOpinionsHelper.formattedOpinions.map((opinion, idx) => (
                 <tr key={idx}>
                   <td className="center-column">{idx + 1}</td>
                   <td aria-hidden="true"></td>
                   <td>{opinion.docketNumberWithSuffix}</td>
                   <td>{opinion.caseCaption}</td>
-                  <td>{opinion.documentType}</td>
+                  <td>{opinion.formattedDocumentType}</td>
                   <td>{opinion.numberOfPages}</td>
-                  <td>{opinion.filingDate}</td>
-                  <td>{opinion.judge}</td>
+                  <td>{opinion.formattedFilingDate}</td>
+                  <td>{opinion.formattedJudgeName}</td>
                 </tr>
               ))}
             </tbody>
