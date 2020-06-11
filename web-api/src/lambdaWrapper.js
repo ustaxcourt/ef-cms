@@ -1,6 +1,6 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
-    const event = (req.apiGateway && req.apiGateway.event) || {
+    const event = {
       headers: req.headers,
       path: req.params,
       pathParameters: req.params,
