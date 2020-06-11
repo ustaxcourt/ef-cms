@@ -11,7 +11,6 @@ const { post } = require('../requests');
 exports.virusScanPdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
-    endpoint: `/documents/${documentId}/virus-scan`,
-    useClamav: true,
+    endpoint: `/clamav/documents/${documentId}/virus-scan`,
   });
 };
