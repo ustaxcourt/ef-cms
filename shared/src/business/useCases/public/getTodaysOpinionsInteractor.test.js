@@ -2,9 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  createEndOfDayISO,
+  createISODateString,
+  createStartOfDayISO,
+  deconstructDate,
+} = require('../../utilities/DateHandler');
+const {
   getTodaysOpinionsInteractor,
 } = require('./getTodaysOpinionsInteractor');
-const { formatNow, FORMATS } = require('../../utilities/DateHandler');
 const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 
 describe('getTodaysOpinionsInteractor', () => {
@@ -50,24 +55,17 @@ describe('getTodaysOpinionsInteractor', () => {
       applicationContext,
     });
 
-    const currentDate = formatNow(FORMATS.MMDDYYYY);
-
-    const currentDateSplit = currentDate.split('/');
-    const currentDateMonth = currentDateSplit[0];
-    const currentDateDay = currentDateSplit[1];
-    const currentDateYear = currentDateSplit[2];
+    const { day, month, year } = deconstructDate(createISODateString());
+    const currentDateStart = createStartOfDayISO({ day, month, year });
+    const currentDateEnd = createEndOfDayISO({ day, month, year });
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: OPINION_DOCUMENT_TYPES,
-      endDateDay: currentDateDay,
-      endDateMonth: currentDateMonth,
-      endDateYear: currentDateYear,
-      startDateDay: currentDateDay,
-      startDateMonth: currentDateMonth,
-      startDateYear: currentDateYear,
+      endDate: currentDateEnd,
+      startDate: currentDateStart,
     });
   });
 });
