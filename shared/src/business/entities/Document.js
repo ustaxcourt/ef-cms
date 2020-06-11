@@ -1,12 +1,16 @@
-const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
-const documentMapExternal = require('../../tools/externalFilingEvents.json');
-const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('@hapi/joi');
+const {
+  COURT_ISSUED_EVENT_CODES,
+  DOCKET_NUMBER_MATCHER,
+  DOCUMENT_CATEGORY_MAP,
+  DOCUMENT_INTERNAL_CATEGORY_MAP,
+  DOCUMENT_RELATIONSHIPS,
+  SCENARIOS,
+} = require('./EntityConstants');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
 const { flatten } = require('lodash');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Order } = require('./orders/Order');
@@ -14,83 +18,7 @@ const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
 
-Document.CATEGORIES = Object.keys(documentMapExternal);
-Document.CATEGORY_MAP = documentMapExternal;
-Document.NOTICE_EVENT_CODES = ['NOT'];
-Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
-Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
-Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
-Document.PETITION_DOCUMENT_TYPES = ['Petition'];
-Document.OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
-Document.ORDER_DOCUMENT_TYPES = [
-  'O',
-  'OAJ',
-  'OAL',
-  'OAP',
-  'OAPF',
-  'OAR',
-  'OAS',
-  'OASL',
-  'OAW',
-  'OAX',
-  'OCA',
-  'OD',
-  'ODD',
-  'ODL',
-  'ODP',
-  'ODR',
-  'ODS',
-  'ODSL',
-  'ODW',
-  'ODX',
-  'OF',
-  'OFAB',
-  'OFFX',
-  'OFWD',
-  'OFX',
-  'OIP',
-  'OJR',
-  'OODS',
-  'OPFX',
-  'OPX',
-  'ORAP',
-  'OROP',
-  'OSC',
-  'OSCP',
-  'OST',
-  'OSUB',
-  'OAD',
-  'ODJ',
-];
 Document.validationName = 'Document';
-
-Document.SCENARIOS = [
-  'Standard',
-  'Nonstandard A',
-  'Nonstandard B',
-  'Nonstandard C',
-  'Nonstandard D',
-  'Nonstandard E',
-  'Nonstandard F',
-  'Nonstandard G',
-  'Nonstandard H',
-  'Type A',
-  'Type B',
-  'Type C',
-  'Type D',
-  'Type E',
-  'Type F',
-  'Type G',
-  'Type H',
-];
-
-Document.RELATIONSHIPS = [
-  'primaryDocument',
-  'primarySupportingDocument',
-  'secondaryDocument',
-  'secondarySupportingDocument',
-  'supportingDocument',
-];
 
 /**
  * constructor
@@ -303,14 +231,12 @@ Document.isPendingOnCreation = rawDocument => {
 
 Document.getDocumentTypes = () => {
   const allFilingEvents = flatten([
-    ...Object.values(documentMapExternal),
-    ...Object.values(documentMapInternal),
+    ...Object.values(DOCUMENT_CATEGORY_MAP),
+    ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
-  const courtIssuedDocTypes = Document.COURT_ISSUED_EVENT_CODES.map(
-    t => t.documentType,
-  );
+  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
   const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
     t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
   );
@@ -356,14 +282,6 @@ Document.eventCodes = [
   'MIND',
   'MINC',
 ];
-
-/**
- *
- * @returns {boolean} true if the document is a petition document type, false otherwise
- */
-Document.prototype.isPetitionDocument = function () {
-  return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
-};
 
 joiValidationDecorator(
   Document,
@@ -490,11 +408,11 @@ joiValidationDecorator(
     receivedAt: joiStrictTimestamp.optional(),
     relationship: joi
       .string()
-      .valid(...Document.RELATIONSHIPS)
+      .valid(...DOCUMENT_RELATIONSHIPS)
       .optional(),
     scenario: joi
       .string()
-      .valid(...Document.SCENARIOS)
+      .valid(...SCENARIOS)
       .optional(),
     secondaryDate: joiStrictTimestamp
       .optional()
@@ -650,9 +568,9 @@ Document.prototype.getQCWorkItem = function () {
 };
 
 Document.prototype.isAutoServed = function () {
-  const externalDocumentTypes = flatten(Object.values(documentMapExternal)).map(
-    t => t.documentType,
-  );
+  const externalDocumentTypes = flatten(
+    Object.values(DOCUMENT_CATEGORY_MAP),
+  ).map(t => t.documentType);
 
   const isExternalDocumentType = externalDocumentTypes.includes(
     this.documentType,

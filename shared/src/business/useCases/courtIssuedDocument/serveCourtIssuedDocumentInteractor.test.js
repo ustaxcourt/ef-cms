@@ -4,16 +4,18 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
+} = require('../../entities/EntityConstants');
+const {
   ENTERED_AND_SERVED_EVENT_CODES,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
-const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -65,7 +67,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         index,
       });
 
-      const eventCodeMap = Document.COURT_ISSUED_EVENT_CODES.find(
+      const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
         entry => entry.eventCode === eventCode,
       );
 
