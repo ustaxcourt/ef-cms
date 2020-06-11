@@ -5,6 +5,7 @@ const {
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
+  OBJECTIONS_OPTIONS,
   SCENARIOS,
 } = require('./EntityConstants');
 const {
@@ -205,16 +206,6 @@ Document.TRACKED_DOCUMENT_TYPES = {
   },
 };
 
-Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
-  'Notice of Change of Address',
-  'Notice of Change of Telephone Number',
-  'Notice of Change of Address and Telephone Number',
-];
-
-Document.TRANSCRIPT_EVENT_CODE = 'TRAN';
-
-Document.OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
-
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {
@@ -375,7 +366,7 @@ joiValidationDecorator(
     numberOfPages: joi.number().optional().allow(null),
     objections: joi
       .string()
-      .valid(...Document.OBJECTIONS_OPTIONS)
+      .valid(...OBJECTIONS_OPTIONS)
       .optional(),
     ordinalValue: joi.string().optional(),
     partyIrsPractitioner: joi.boolean().optional(),

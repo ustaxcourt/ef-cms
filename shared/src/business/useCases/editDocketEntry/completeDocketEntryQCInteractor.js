@@ -5,6 +5,9 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  CONTACT_CHANGE_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -234,11 +237,7 @@ exports.completeDocketEntryQCInteractor = async ({
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
-  if (
-    Document.CONTACT_CHANGE_DOCUMENT_TYPES.includes(
-      updatedDocument.documentType,
-    )
-  ) {
+  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocument.documentType)) {
     if (servedParties.paper.length > 0) {
       const { Body: pdfData } = await applicationContext
         .getStorageClient()

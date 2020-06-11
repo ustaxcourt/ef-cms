@@ -1,10 +1,12 @@
 const joi = require('@hapi/joi');
 const {
+  COURT_ISSUED_EVENT_CODES,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
-const { COURT_ISSUED_EVENT_CODES } = require('../EntityConstants');
-const { Document } = require('../Document');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
 const { Order } = require('../orders/Order');
@@ -116,7 +118,7 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isTranscript = document.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+  const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
     document.documentType,
