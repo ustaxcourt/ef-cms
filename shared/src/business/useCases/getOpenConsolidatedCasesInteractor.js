@@ -12,7 +12,11 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
 
   let openUserCases = await applicationContext
     .getPersistenceGateway()
-    .getOpenCasesByUser({ applicationContext, userId });
+    .getIndexedCasesForUser({
+      applicationContext,
+      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
+      userId,
+    });
 
   openUserCases = UserCase.validateRawCollection(openUserCases, {
     applicationContext,
@@ -22,7 +26,7 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     return [];
   }
 
-  const {
+  let {
     casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
@@ -31,13 +35,26 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     .processUserAssociatedCases(openUserCases);
 
   for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
+    const consolidatedCases = await applicationContext
+      .getUseCaseHelpers()
+      .getConsolidatedCasesForLeadCase({ applicationContext, leadCaseId });
+
+    if (!casesAssociatedWithUserOrLeadCaseMap[leadCaseId]) {
+      casesAssociatedWithUserOrLeadCaseMap[
+        leadCaseId
+      ] = applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
+        casesAssociatedWithUserOrLeadCaseMap,
+        consolidatedCases,
+        leadCaseId,
+      });
+    }
+
     casesAssociatedWithUserOrLeadCaseMap[
       leadCaseId
-    ].consolidatedCases = await applicationContext
+    ].consolidatedCases = applicationContext
       .getUseCaseHelpers()
-      .getConsolidatedCasesForLeadCase({
-        applicationContext,
-        casesAssociatedWithUserOrLeadCaseMap,
+      .formatAndSortConsolidatedCases({
+        consolidatedCases,
         leadCaseId,
         userAssociatedCaseIdsMap,
       });

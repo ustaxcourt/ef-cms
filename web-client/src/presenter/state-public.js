@@ -32,6 +32,7 @@ export const state = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  todaysOpinions: [],
   user: {},
   validationErrors: {},
 };

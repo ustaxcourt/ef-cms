@@ -2,15 +2,18 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+} = require('../EntityConstants');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
-const { CASE_STATUS_TYPES } = require('./CaseConstants');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
-const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -472,7 +475,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+            petitionPaymentStatus: PAYMENT_STATUS.PAID,
           },
           {
             applicationContext,
@@ -488,7 +491,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+            petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           },
           {
             applicationContext,
@@ -1681,7 +1684,7 @@ describe('Case entity', () => {
       });
       const result = myCase.getPetitionDocument();
       expect(result.documentType).toEqual(
-        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+        INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
     });
   });

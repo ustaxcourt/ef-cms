@@ -3,13 +3,17 @@ const {
   calendarDatesCompared,
   createISODateString,
 } = require('./DateHandler');
+const {
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
+  PAYMENT_STATUS,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
 const { cloneDeep, isEmpty } = require('lodash');
-const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
 
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
@@ -59,7 +63,7 @@ const formatDocument = (applicationContext, document) => {
   result.isNotServedCourtIssuedDocument =
     result.isCourtIssuedDocument && !result.servedAt;
 
-  result.isTranscript = result.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+  result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
   result.qcWorkItemsUntouched =
     !!qcWorkItems.length &&
@@ -96,7 +100,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = document => {
-  const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
+  const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
   const isTranscript = transcriptCodes.includes(document.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
@@ -375,12 +379,12 @@ const formatCase = (applicationContext, caseDetail) => {
 
   let paymentDate = '';
   let paymentMethod = '';
-  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+  if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     paymentDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
     paymentMethod = caseDetail.petitionPaymentMethod;
-  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+  } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     paymentDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');

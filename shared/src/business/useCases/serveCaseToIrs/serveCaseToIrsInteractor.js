@@ -1,10 +1,13 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -13,7 +16,7 @@ exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+  if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {
@@ -24,7 +27,7 @@ exports.addDocketEntryForPaymentStatus = ({
         { applicationContext },
       ),
     );
-  } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+  } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {
@@ -41,8 +44,7 @@ exports.addDocketEntryForPaymentStatus = ({
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   const stinDocument = caseEntity.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
   if (stinDocument) {
@@ -81,11 +83,8 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   caseEntity.markAsSentToIRS();
 
-  for (const initialDocumentTypeKey of Object.keys(
-    Document.INITIAL_DOCUMENT_TYPES,
-  )) {
-    const initialDocumentType =
-      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
+    const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
     const initialDocument = caseEntity.documents.find(
       document => document.documentType === initialDocumentType.documentType,
@@ -102,7 +101,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
       if (
         initialDocument.documentType ===
-        Document.INITIAL_DOCUMENT_TYPES.petition.documentType
+        INITIAL_DOCUMENT_TYPES.petition.documentType
       ) {
         await applicationContext
           .getUseCaseHelpers()
@@ -143,8 +142,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const petitionDocument = caseEntity.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
   const initializeCaseWorkItem = petitionDocument.workItems.find(
@@ -241,7 +239,6 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   if (caseEntity.isPaper) {
     const paperServicePdfBuffer = Buffer.from(pdfData);
-
     return paperServicePdfBuffer;
   }
 };

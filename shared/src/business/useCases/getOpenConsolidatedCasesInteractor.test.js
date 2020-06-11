@@ -23,7 +23,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getOpenCasesByUser.mockImplementation(() => mockFoundCasesList);
+      .getIndexedCasesForUser.mockImplementation(() => mockFoundCasesList);
     applicationContext
       .getUseCaseHelpers()
       .processUserAssociatedCases.mockReturnValue({
@@ -53,9 +53,10 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getOpenCasesByUser,
+      applicationContext.getPersistenceGateway().getIndexedCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
+      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
@@ -91,5 +92,43 @@ describe('getOpenConsolidatedCasesInteractor', () => {
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
       },
     ]);
+  });
+
+  it('should return a list of open cases when the user is associated with a consolidated case that is not the lead case', async () => {
+    const consolidatedCaseThatIsNotTheLeadCase = {
+      ...MOCK_CASE,
+      caseId: applicationContext.getUniqueId(),
+      isLeadCase: false,
+    };
+    const mockUserAssociatedCaseIdsMap = {};
+    mockUserAssociatedCaseIdsMap[
+      consolidatedCaseThatIsNotTheLeadCase.caseId
+    ] = true;
+    applicationContext
+      .getUseCaseHelpers()
+      .processUserAssociatedCases.mockReturnValue({
+        casesAssociatedWithUserOrLeadCaseMap: {},
+        leadCaseIdsAssociatedWithUser: [
+          consolidatedCaseThatIsNotTheLeadCase.caseId,
+        ],
+        userAssociatedCaseIdsMap: mockUserAssociatedCaseIdsMap,
+      });
+    applicationContext
+      .getUseCaseHelpers()
+      .getUnassociatedLeadCase.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCaseHelpers()
+      .formatAndSortConsolidatedCases.mockReturnValue([
+        consolidatedCaseThatIsNotTheLeadCase,
+      ]);
+
+    const result = await getOpenConsolidatedCasesInteractor({
+      applicationContext,
+    });
+
+    expect(result[0]).toBe(MOCK_CASE);
+    expect(result[0].consolidatedCases[0]).toBe(
+      consolidatedCaseThatIsNotTheLeadCase,
+    );
   });
 });
