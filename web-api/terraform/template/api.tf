@@ -22,7 +22,7 @@ resource "aws_lambda_function" "api_lambda" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler       = "index.handler"
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
-  timeout = "10"
+  timeout = "29"
   memory_size = "3008"
 
   layers = [
@@ -61,7 +61,7 @@ resource "aws_lambda_function" "api_clamav_lambda" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler       = "index.handler"
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
-  timeout = "10"
+  timeout = "29"
   memory_size = "3008"
 
   layers = [
@@ -205,9 +205,31 @@ resource "aws_api_gateway_integration" "api_clamav_integration_post" {
   resource_id = "${aws_api_gateway_method.api_clamav_method_post.resource_id}"
   http_method = "${aws_api_gateway_method.api_clamav_method_post.http_method}"
 
+  request_parameters = {
+    "integration.request.header.X-Amz-Invocation-Type" = "'Event'"
+  }
+
   integration_http_method = "POST"
-  type = "AWS_PROXY"
+  type = "AWS"
   uri = "${aws_lambda_function.api_clamav_lambda.invoke_arn}"
+}
+
+resource "aws_api_gateway_method_response" "clamav_method_response_post" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_resource.api_clamav_resource.id}"
+  http_method = "${aws_api_gateway_method.api_clamav_method_post.http_method}"
+  status_code = "200"
+  response_parameters = { "method.response.header.Access-Control-Allow-Origin" = true }
+}
+
+resource "aws_api_gateway_integration_response" "clamav_response_post" {
+  rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
+  resource_id = "${aws_api_gateway_resource.api_clamav_resource.id}"
+  http_method = "${aws_api_gateway_method.api_clamav_method_post.http_method}"
+  status_code = "${aws_api_gateway_method_response.clamav_method_response_post.status_code}"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'",
+  }
 }
 
 resource "aws_api_gateway_integration" "api_clamav_integration_options" {
@@ -278,6 +300,16 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }
+
+
+resource "aws_lambda_permission" "apigw_clamav_lambda" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.api_clamav_lambda.function_name}"
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
+}
+
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
