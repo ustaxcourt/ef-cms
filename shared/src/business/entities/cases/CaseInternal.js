@@ -8,11 +8,11 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
-const { PAYMENT_STATUS } = require('../EntityConstants');
+const { PAYMENT_STATUS, PROCEDURE_TYPES } = require('../EntityConstants');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
-CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
+CaseInternal.DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
 /**
  * CaseInternal Entity
