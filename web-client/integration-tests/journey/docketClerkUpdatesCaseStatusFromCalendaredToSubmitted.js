@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
   return it('Docket clerk updates case status from Calendared to Submitted with an associated judge', async () => {

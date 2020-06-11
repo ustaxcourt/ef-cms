@@ -12,7 +12,11 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
 
   let openUserCases = await applicationContext
     .getPersistenceGateway()
-    .getOpenCasesByUser({ applicationContext, userId });
+    .getIndexedCasesForUser({
+      applicationContext,
+      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
+      userId,
+    });
 
   openUserCases = UserCase.validateRawCollection(openUserCases, {
     applicationContext,

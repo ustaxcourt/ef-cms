@@ -1,3 +1,4 @@
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -15,7 +16,11 @@ exports.getClosedCasesInteractor = async ({ applicationContext }) => {
 
   closedCases = await applicationContext
     .getPersistenceGateway()
-    .getClosedCasesByUser({ applicationContext, userId });
+    .getIndexedCasesForUser({
+      applicationContext,
+      statuses: [CASE_STATUS_TYPES.closed],
+      userId,
+    });
 
   foundCases = UserCase.validateRawCollection(closedCases, {
     applicationContext,

@@ -1,6 +1,6 @@
 const {
   CASE_STATUS_TYPES,
-} = require('../../../business/entities/cases/CaseConstants');
+} = require('../../../business/entities/EntityConstants');
 const { getUserCases } = require('./getUserCases');
 
 /**
