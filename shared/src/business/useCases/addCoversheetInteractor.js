@@ -1,6 +1,3 @@
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 const { Case } = require('../entities/cases/Case');
 
 /**
@@ -20,14 +17,13 @@ exports.generateCoverSheetData = ({
   useInitialData,
 }) => {
   const isLodged = documentEntity.lodged;
-  const { isPaper } = documentEntity;
+  const { certificateOfService, isPaper } = documentEntity;
 
   const dateServedFormatted =
     (documentEntity.servedAt &&
-      'Served ' +
-        applicationContext
-          .getUtilities()
-          .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+      applicationContext
+        .getUtilities()
+        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -83,17 +79,14 @@ exports.generateCoverSheetData = ({
   const coverSheetData = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService:
-      documentEntity.certificateOfService === true
-        ? 'Certificate of Service'
-        : '',
+    certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
     docketNumber: `Docket Number: ${docketNumberWithSuffix}`,
     documentTitle,
-    electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
+    electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',
   };
   return coverSheetData;
@@ -130,10 +123,12 @@ exports.addCoverToPdf = async ({
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
-  const coverPagePdf = await generateCoverPagePdf({
-    applicationContext,
-    content: coverSheetData,
-  });
+  const coverPagePdf = await applicationContext
+    .getDocumentGenerators()
+    .coverSheet({
+      applicationContext,
+      data: coverSheetData,
+    });
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
   const coverPageDocumentPages = await pdfDoc.copyPages(

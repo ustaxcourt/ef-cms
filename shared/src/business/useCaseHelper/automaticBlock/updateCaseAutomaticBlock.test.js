@@ -6,7 +6,7 @@ const {
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
 

@@ -1,5 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('./cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 

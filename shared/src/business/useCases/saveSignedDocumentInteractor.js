@@ -1,5 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
+const { SIGNED_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 
 /**
  * saveSignedDocumentInteractor
@@ -41,11 +42,10 @@ exports.saveSignedDocumentInteractor = async ({
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
         documentTitle:
-          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+          SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
-          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
-        eventCode:
-          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+          SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+        eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
         filedBy: originalDocumentEntity.filedBy,
         isPaper: false,
         processingStatus: 'complete',

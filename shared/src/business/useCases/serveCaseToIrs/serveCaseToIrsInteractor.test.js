@@ -5,9 +5,12 @@ const {
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
-const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -27,7 +30,7 @@ describe('serveCaseToIrsInteractor', () => {
       document: {
         createdAt: '2018-12-27T18:06:02.968Z',
         documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-        documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+        documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
       isInitializeCase: true,
       isQC: true,
@@ -291,7 +294,7 @@ describe('serveCaseToIrsInteractor', () => {
       .updateCase.mock.calls[0][0].caseToUpdate.documents.find(
         document =>
           document.documentType ===
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       );
     expect(result).toBeDefined();
     expect(documentWithServedParties.servedParties).toBeDefined();
@@ -317,7 +320,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       {
         ...MOCK_CASE,
         petitionPaymentDate: 'Today',
-        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
       { applicationContext },
     );
@@ -337,7 +340,7 @@ describe('addDocketEntryForPaymentStatus', () => {
         ...MOCK_CASE,
         contactPrimary: undefined,
         documents: [],
-        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: 'Today',
       },
       { applicationContext },

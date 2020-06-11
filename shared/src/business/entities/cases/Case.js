@@ -1,18 +1,23 @@
 const joi = require('@hapi/joi');
 const {
+  ANSWER_DOCUMENT_CODES,
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  COURT_ISSUED_EVENT_CODES,
+  DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
+  TRIAL_LOCATION_MATCHER,
+} = require('../EntityConstants');
+const {
   calculateDifferenceInDays,
   createISODateString,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
-  CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
-  DOCKET_NUMBER_SUFFIXES,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -37,37 +42,9 @@ const joiStrictTimestamp = getTimestampSchema();
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
 );
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
-
-Case.PAYMENT_STATUS = {
-  PAID: 'Paid',
-  UNPAID: 'Not Paid',
-  WAIVED: 'Waived',
-};
-
-Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  CASE_STATUS_TYPES.assignedCase,
-  CASE_STATUS_TYPES.assignedMotion,
-  CASE_STATUS_TYPES.cav,
-  CASE_STATUS_TYPES.jurisdictionRetained,
-  CASE_STATUS_TYPES.rule155,
-  CASE_STATUS_TYPES.submitted,
-];
-
-Case.STATUS_TYPES_MANUAL_UPDATE = [
-  CASE_STATUS_TYPES.assignedCase,
-  CASE_STATUS_TYPES.assignedMotion,
-  CASE_STATUS_TYPES.cav,
-  CASE_STATUS_TYPES.closed,
-  CASE_STATUS_TYPES.generalDocket,
-  CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  CASE_STATUS_TYPES.jurisdictionRetained,
-  CASE_STATUS_TYPES.onAppeal,
-  CASE_STATUS_TYPES.rule155,
-  CASE_STATUS_TYPES.submitted,
-];
 
 Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
@@ -90,9 +67,6 @@ Case.CASE_TYPES_MAP = {
 
 Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
 
-// This is the order that they appear in the UI
-Case.PROCEDURE_TYPES = ['Regular', 'Small'];
-
 Case.FILING_TYPES = {
   [User.ROLES.petitioner]: [
     'Myself',
@@ -109,20 +83,6 @@ Case.FILING_TYPES = {
 };
 
 Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
-
-Case.ANSWER_DOCUMENT_CODES = [
-  'A',
-  'AAAP',
-  'AAPN',
-  'AATP',
-  'AATS',
-  'AATT',
-  'APA',
-  'ASAP',
-  'ASUP',
-  'ATAP',
-  'ATSP',
-];
 
 Case.AUTOMATIC_BLOCKED_REASONS = {
   dueDate: 'Due Date',
@@ -271,7 +231,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
   this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+    rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
@@ -622,26 +582,26 @@ Case.VALIDATION_RULES = {
     .description('Party type of the case petitioner.'),
   petitionPaymentDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joiStrictTimestamp.optional().allow(null),
       then: joiStrictTimestamp.required(),
     })
     .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
       then: joi.string().max(50).required(),
     })
     .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
     .string()
-    .valid(...Object.values(Case.PAYMENT_STATUS))
+    .valid(...Object.values(PAYMENT_STATUS))
     .required()
     .description('Status of the case fee payment.'),
   petitionPaymentWaivedDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
+      is: PAYMENT_STATUS.WAIVED,
       otherwise: joiStrictTimestamp.allow(null).optional(),
       then: joiStrictTimestamp.required(),
     })
@@ -660,7 +620,7 @@ Case.VALIDATION_RULES = {
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
     .string()
-    .valid(...Case.PROCEDURE_TYPES)
+    .valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
   qcCompleteForTrial: joi
@@ -1062,8 +1022,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.getPetitionDocument = function () {
   return this.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
@@ -1094,8 +1053,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
       new DocketRecord(
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode:
-            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filingDate: this.receivedAt || this.createdAt,
         },
         { applicationContext },
@@ -1230,7 +1188,7 @@ Case.prototype.checkForReadyForTrial = function () {
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
       const isAnswerDocument = includes(
-        Case.ANSWER_DOCUMENT_CODES,
+        ANSWER_DOCUMENT_CODES,
         document.eventCode,
       );
 

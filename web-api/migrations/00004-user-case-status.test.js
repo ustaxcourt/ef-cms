@@ -1,6 +1,9 @@
+const {
+  CASE_STATUS_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
-const { up } = require('./00002-user-case-mapping');
+const { up } = require('./00004-user-case-status');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 
 describe('user case mapping migration', () => {
@@ -65,10 +68,15 @@ describe('user case mapping migration', () => {
     expect(putStub).not.toHaveBeenCalled();
   });
 
-  it('should not update the item when its a new user-case record', async () => {
+  it('should not update the item when it has a status', async () => {
     documentClient.scan = jest.fn().mockReturnValue({
       promise: async () => ({
-        Items: [mockNewUserCaseItem],
+        Items: [
+          {
+            ...mockNewUserCaseItem,
+            status: CASE_STATUS_TYPES.closed,
+          },
+        ],
       }),
     });
 
