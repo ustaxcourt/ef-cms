@@ -1,8 +1,7 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-API_URL="https://efcms-api-${ENV}.${EFCMS_DOMAIN}/api"
-API_CLAMAV_URL="https://efcms-api-${ENV}.${EFCMS_DOMAIN}/clamav"
+API_URL="https://efcms-api-${ENV}.${EFCMS_DOMAIN}"
 WS_URL="wss://efcms-${ENV}-ws.${EFCMS_DOMAIN}"
 COGNITO_REDIRECT_URL="https%3A//ui-${ENV}.${EFCMS_DOMAIN}/log-in"
 COGNITO_REDIRECT_URI="https://ui-${ENV}.${EFCMS_DOMAIN}/log-in"
