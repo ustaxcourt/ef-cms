@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
@@ -7,10 +8,12 @@ import React from 'react';
 export const CreateCaseMessageModalDialog = connect(
   {
     constants: state.constants,
+    createCaseMessageModalHelper: state.createCaseMessageModalHelper,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
     updateCreateCaseMessageValueInModalSequence:
       sequences.updateCreateCaseMessageValueInModalSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     users: state.users,
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
@@ -19,10 +22,12 @@ export const CreateCaseMessageModalDialog = connect(
   },
   function CreateMessageModalDialog({
     constants,
+    createCaseMessageModalHelper,
     form,
     onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
     updateCreateCaseMessageValueInModalSequence,
+    updateScreenMetadataSequence,
     users,
     validateCreateCaseMessageInModalSequence,
     validationErrors,
@@ -161,6 +166,33 @@ export const CreateCaseMessageModalDialog = connect(
             }}
           />
         </FormGroup>
+
+        {createCaseMessageModalHelper.showAddDocumentForm && (
+          <FormGroup>
+            <label className="usa-label" htmlFor="document">
+              Add document(s) <span className="usa-hint">(optional)</span>
+            </label>
+            <select className="usa-select" id="document" name="document">
+              <option value="">- Select -</option>
+            </select>
+          </FormGroup>
+        )}
+
+        {createCaseMessageModalHelper.showAddMoreDocumentsButton && (
+          <Button
+            link
+            icon="plus-circle"
+            iconColor="blue"
+            onClick={() => {
+              updateScreenMetadataSequence({
+                key: 'showAddDocumentForm',
+                value: true,
+              });
+            }}
+          >
+            Add More Document(s)
+          </Button>
+        )}
       </ConfirmModal>
     );
   },
