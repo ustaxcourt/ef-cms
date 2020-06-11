@@ -655,7 +655,7 @@ workflows:
                 - experimental2
       - deploy-api-east:
           requires:
-            - bundle
+            - pre-deploy
           filters:
             branches:
               only:
@@ -668,7 +668,7 @@ workflows:
                 - experimental2
       - deploy-api-west:
           requires:
-            - bundle
+            - pre-deploy
           filters:
             branches:
               only:
