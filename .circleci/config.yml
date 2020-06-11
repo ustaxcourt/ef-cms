@@ -562,11 +562,6 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - bundle:
-          filters:
-            branches:
-              ignore:
-                - develop
       # - build-shared:
       #     requires:
       #       - bundle
@@ -641,8 +636,6 @@ workflows:
       #           - experimental1
       #           - experimental2
       - pre-deploy:
-          requires:
-            - bundle
           filters:
             branches:
               only:
