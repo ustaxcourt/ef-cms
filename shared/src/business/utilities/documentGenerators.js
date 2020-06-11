@@ -73,25 +73,35 @@ const coverSheet = async ({ applicationContext, data }) => {
     data,
   });
 
-  // TODO: Served footer
-
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
     content: { main: coverSheetTemplate },
     options: {
       overwriteMain: true,
-      title: 'Notice of Docket Change',
+      title: 'Cover Sheet',
     },
   });
+
+  let footerHtml = '';
+  if (data.dateServed) {
+    footerHtml = reactTemplateGenerator({
+      componentName: 'DateServedFooter',
+      data: {
+        dateServed: data.dateServed,
+      },
+    });
+  }
 
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
+      displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
+      footerHtml,
+      headerHtml: '',
       overwriteHeader: true,
     });
 
@@ -241,8 +251,6 @@ const order = async ({ applicationContext, data }) => {
       docketNumber: docketNumberWithSuffix,
     },
   });
-
-  // TODO: Date Served Footer
 
   const pdf = await applicationContext
     .getUseCases()

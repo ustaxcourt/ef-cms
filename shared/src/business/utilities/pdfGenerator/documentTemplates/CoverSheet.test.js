@@ -20,24 +20,24 @@ describe('CoverSheet', () => {
   });
 
   it('renders the received date', () => {
-    const wrapper = shallow(<CoverSheet dateReceived="01/01/20" />);
+    const wrapper = shallow(<CoverSheet dateReceived="01/01/2020" />);
     const text = wrapper.find('#date-received').text();
 
     expect(text).toContain('Received');
-    expect(text).toContain('01/01/20');
+    expect(text).toContain('01/01/2020');
   });
 
   it('renders a filed or lodged label along with the associated date', () => {
     const wrapper = shallow(
       <CoverSheet
-        dateFiledLodged="02/02/20"
+        dateFiledLodged="02/02/2020"
         dateFiledLodgedLabel="Some Label"
       />,
     );
     const text = wrapper.find('#filed-or-lodged').text();
 
     expect(text).toContain('Some Label');
-    expect(text).toContain('02/02/20');
+    expect(text).toContain('02/02/2020');
   });
 
   it('renders Electronically Filed if the case was filed electronically', () => {
