@@ -2,7 +2,9 @@
 
 The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based legacy case management system operated through several, disparate desktop applications installed on individual workstations. Flexion was awarded a competitive bid in October 2018 to develop and deploy a new web-based electronic filing and case management system that would provide a single integrated point to handle all communication, documentation, and task workflows associated with moving a case through the Court from inception to completion. The new system would allow the public to file new cases, track them, and submit additional information about their cases through a secure online portal, instead of the current mail-based, paper petitioning process. It also provides the Court with the means to transfer most of their paper-based processes and workflows into easier, more efficient online ones.
 
-Work is not yet in production, so `master` does not deploy. For additional background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+### Build Status
+
+#### develop
 
 | develop | master | staging | test |
 | ------- | ------ | ------- | ---- |
@@ -48,11 +50,6 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 <a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
-## Dependency diagrams
-
-- <a href="docs/images/client-dependencies.jpg">Client</a>
-- <a href="docs/images/server-dependencies.jpg">Server</a>
-
 ## Backlog
 
 The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
@@ -82,7 +79,7 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 ### ECR
-ECR is Amazon’s docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
+ECR is Amazon’s Docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
 
 ## Running this project locally without Docker
 
@@ -215,8 +212,8 @@ See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 ## Testing / Coverage Tips
 
 - Run all tests with `npm run test`
-- The web client, api, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively.
-- TIP: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
+- The web client, API, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively
+- Tip: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
 
 Example coverage output:
 ```
@@ -227,7 +224,7 @@ All files |        0 |        0 |        0 |        0 |                   |
 ----------|----------|----------|----------|----------|-------------------|
 ```
 - Stmts: % of statements executed in the code
-- Branch: % of control structures (for example, if statements) executed in the code
+- Branch: % of control structures (for example, `if` statements) executed in the code
 - Funcs: % of functions executed in the code
 - Uncovered Line #s: lines not covered by tests
 

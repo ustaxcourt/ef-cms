@@ -48,11 +48,23 @@ const {
 const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
+const {
+  PrivatePractitioner,
+} = require('../business/entities/PrivatePractitioner');
+const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
+const { CaseMessage } = require('../business/entities/CaseMessage');
+const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
+const { ForwardMessage } = require('../business/entities/ForwardMessage');
+const { Practitioner } = require('../business/entities/Practitioner');
+const { PublicUser } = require('../business/entities/PublicUser');
 const { Statistic } = require('../business/entities/Statistic');
+const { User } = require('../business/entities/User');
+const { UserCase } = require('../business/entities/UserCase');
+const { WorkItem } = require('../business/entities/WorkItem');
 
 const generateMarkdownSchema = (entity, entityName) => {
   const json = entity.getSchema().describe();
@@ -191,8 +203,18 @@ generateMarkdownSchema(
   'contacts/SurvivingSpouseContact',
 );
 
+generateMarkdownSchema(Batch, 'Batch');
 generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
+generateMarkdownSchema(CaseMessage, 'CaseMessage');
+generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
+generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
+generateMarkdownSchema(Practitioner, 'Practitioner');
+generateMarkdownSchema(PrivatePractitioner, 'PrivatePractitioner');
+generateMarkdownSchema(PublicUser, 'PublicUser');
 generateMarkdownSchema(Statistic, 'Statistic');
+generateMarkdownSchema(User, 'User');
+generateMarkdownSchema(UserCase, 'UserCase');
+generateMarkdownSchema(WorkItem, 'WorkItem');

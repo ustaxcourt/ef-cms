@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
@@ -8,6 +6,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
@@ -18,7 +17,7 @@ describe('serveCaseToIrsInteractor', () => {
       assigneeId: null,
       assigneeName: 'IRSBatchSystem',
       caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2018-12-27T18:06:02.968Z',
       completedBy: 'Petitioner',
       completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -43,46 +42,25 @@ describe('serveCaseToIrsInteractor', () => {
           to: null,
         },
       ],
-      section: 'irsBatchSection',
+      section: 'docket',
       sentBy: 'petitioner',
       updatedAt: '2018-12-27T18:06:02.968Z',
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
     },
   ];
 
-  const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
-  const testPdfDocBytes = () => {
-    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-  };
-
-  const testPdfDoc = testPdfDocBytes();
-
-  const MOCK_PDF_DATA =
-    'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbm' +
-    'd0aCAxMDQKPj4Kc3RyZWFtCniccwrhMlAAwaJ0Ln2P1Jyy1JLM5ERdc0MjCwUjE4WQNC4Q' +
-    '6cNlCFZkqGCqYGSqEJLLZWNuYGZiZmbkYuZsZmlmZGRgZmluDCQNzc3NTM2NzdzMXMxMjQ' +
-    'ztFEKyuEK0uFxDuAAOERdVCmVuZHN0cmVhbQplbmRvYmoKCjYgMCBvYmoKPDwKL0ZpbHRl' +
-    'ciAvRmxhdGVEZWNvZGUKL1R5cGUgL09ialN0bQovTiA0Ci9GaXJzdCAyMAovTGVuZ3RoID' +
-    'IxNQo+PgpzdHJlYW0KeJxVj9GqwjAMhu/zFHkBzTo3nCCCiiKIHPEICuJF3cKoSCu2E8/b' +
-    '20wPIr1p8v9/8kVhgilmGfawX2CGaVrgcAi0/bsy0lrX7IGWpvJ4iJYEN3gEmrrGBlQwGs' +
-    'HHO9VBX1wNrxAqMX87RBD5xpJuddqwd82tjAHxzV1U5LPgy52DKXWnr1Lheg+j/c/pzGVr' +
-    'iqV0VlwZPXGPCJjElw/ybkwUmeoWgxesDXGhHJC/D/iikp1Av80ptKU0FdBEe25pPihAM1' +
-    'u6ytgaaWfs2Hrz35CJT1+EWmAKZW5kc3RyZWFtCmVuZG9iagoKNyAwIG9iago8PAovU2l6' +
-    'ZSA4Ci9Sb290IDIgMCBSCi9GaWx0ZXIgL0ZsYXRlRGVjb2RlCi9UeXBlIC9YUmVmCi9MZW' +
-    '5ndGggMzgKL1cgWyAxIDIgMiBdCi9JbmRleCBbIDAgOCBdCj4+CnN0cmVhbQp4nBXEwREA' +
-    'EBAEsCwz3vrvRmOOyyOoGhZdutHN2MT55fIAVocD+AplbmRzdHJlYW0KZW5kb2JqCgpzdG' +
-    'FydHhyZWYKNTEwCiUlRU9G';
-
   let mockCase;
 
   beforeAll(() => {
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
+
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, cb) => {
+        return cb(true);
+      },
+    });
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -114,9 +92,6 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(mockCase);
-    applicationContext
-      .getUseCaseHelpers()
-      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -144,9 +119,6 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getUseCaseHelpers()
-      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -161,6 +133,61 @@ describe('serveCaseToIrsInteractor', () => {
     ).toMatchObject({
       replaceCoversheet: true,
     });
+  });
+
+  it('should preserve original case caption and docket number on the coversheet if the case is not paper', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      replaceCoversheet: true,
+      useInitialData: true,
+    });
+  });
+
+  it('should generate a notice of receipt of petition document and upload it to s3', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalled();
+    expect(applicationContext.getStorageClient).toHaveBeenCalled();
   });
 
   it('should not return a paper service pdf when the case is electronic', async () => {

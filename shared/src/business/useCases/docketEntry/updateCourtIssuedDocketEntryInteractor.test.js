@@ -2,7 +2,7 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { User } = require('../../entities/User');
 
@@ -62,10 +62,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
               docketNumberSuffix: 'S',
@@ -86,10 +86,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
           workItems: [
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-18',
               docketNumberSuffix: 'S',
               document: {},

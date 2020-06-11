@@ -6,6 +6,9 @@ require('@babel/register')({
 
 // Documents
 const {
+  AddressLabelCoverSheet,
+} = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.jsx');
+const {
   CaseInventoryReport,
 } = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
 const {
@@ -20,6 +23,9 @@ const {
 const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
+const {
+  NoticeOfReceiptOfPetition,
+} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.jsx');
 const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
@@ -41,6 +47,9 @@ const {
 const {
   TrialCalendar,
 } = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
+const {
+  TrialSessionPlanningReport,
+} = require('../pdfGenerator/documentTemplates/TrialSessionPlanningReport.jsx');
 const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
@@ -55,12 +64,14 @@ const React = require('react');
 const ReactDOM = require('react-dom/server');
 
 const components = {
+  AddressLabelCoverSheet,
   CaseInventoryReport,
   ChangeOfAddress,
   DatePrintedFooter,
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  NoticeOfReceiptOfPetition,
   Order,
   PageMetaHeaderDocket,
   PendingReport,
@@ -70,6 +81,7 @@ const components = {
   StandingPretrialNotice,
   StandingPretrialOrder,
   TrialCalendar,
+  TrialSessionPlanningReport,
 };
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {
