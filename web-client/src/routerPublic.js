@@ -36,7 +36,7 @@ const router = {
     });
 
     route('/todays-opinions', () => {
-      setPageTitle("Today's Opinions");
+      setPageTitle('Today’s Opinions');
       app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
