@@ -10,6 +10,6 @@ const { get } = require('../requests');
 exports.getTodaysOpinionsInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/public-api/todays-opinion',
+    endpoint: '/public-api/todays-opinions',
   });
 };
