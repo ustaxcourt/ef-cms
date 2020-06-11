@@ -4,6 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
+const { PAYMENT_STATUS } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -41,10 +42,9 @@ exports.updatePetitionDetailsInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const isPaid =
-    editableFields.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID;
+  const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
-    editableFields.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED;
+    editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
 
   const newCase = new Case(
     {
@@ -61,7 +61,7 @@ exports.updatePetitionDetailsInteractor = async ({
     { applicationContext },
   );
 
-  if (oldCase.petitionPaymentStatus === Case.PAYMENT_STATUS.UNPAID) {
+  if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
       newCase.addDocketRecord(
         new DocketRecord(

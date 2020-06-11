@@ -1,5 +1,8 @@
 const faker = require('faker');
 const {
+  PROCEDURE_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
+const {
   TrialSession,
 } = require('../../../../shared/src/business/entities/trialSessions/TrialSession');
 const { Case } = require('../../../../shared/src/business/entities/cases/Case');
@@ -137,7 +140,7 @@ const createCase = async ({
         preferredTrialCity: faker.random.arrayElement(
           TrialSession.TRIAL_CITY_STRINGS,
         ),
-        procedureType: faker.random.arrayElement(Case.PROCEDURE_TYPES),
+        procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },
       stinFileId,
     });

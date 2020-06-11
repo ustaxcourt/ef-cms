@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -125,7 +126,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
     // petitionPaymentDate
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.PAID,
+      value: PAYMENT_STATUS.PAID,
     });
     await test.runSequence('saveSavedCaseForLaterSequence');
 
