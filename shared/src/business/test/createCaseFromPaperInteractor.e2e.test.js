@@ -1,4 +1,8 @@
 const {
+  CASE_STATUS_TYPES,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
+const {
   createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
 const {
@@ -8,8 +12,6 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -50,7 +52,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         mailingDate: 'testing',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         receivedAt: RECEIVED_DATE,
         requestForPlaceOfTrialFile: new File(
           [],

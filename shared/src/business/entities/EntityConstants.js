@@ -183,7 +183,89 @@ const STANDING_PRETRIAL_ORDER = {
   eventCode: 'SPTO',
 };
 
+const SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfDocketChange: NOTICE_OF_DOCKET_CHANGE,
+  noticeOfTrial: NOTICE_OF_TRIAL,
+  standingPretrialNotice: STANDING_PRETRIAL_NOTICE,
+  standingPretrialOrder: STANDING_PRETRIAL_ORDER,
+};
+
+const SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
+};
+
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = [
+  'Entry of Appearance',
+  'Substitution of Counsel',
+];
+
+const EVENT_CODES = [
+  INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+  INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+  INITIAL_DOCUMENT_TYPES.petition.eventCode,
+  INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+  INITIAL_DOCUMENT_TYPES.stin.eventCode,
+  NOTICE_OF_DOCKET_CHANGE.eventCode,
+  NOTICE_OF_TRIAL.eventCode,
+  STANDING_PRETRIAL_NOTICE.eventCode,
+  STANDING_PRETRIAL_ORDER.eventCode,
+  'MISL',
+  'FEE',
+  'FEEW',
+  'MGRTED',
+  'MIND',
+  'MINC',
+];
+
+const PAYMENT_STATUS = {
+  PAID: 'Paid',
+  UNPAID: 'Not Paid',
+  WAIVED: 'Waived',
+};
+
+const PROCEDURE_TYPES = ['Regular', 'Small']; // This is the order that they appear in the UI
+
+const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.jurisdictionRetained,
+  CASE_STATUS_TYPES.rule155,
+  CASE_STATUS_TYPES.submitted,
+];
+
+const STATUS_TYPES_MANUAL_UPDATE = [
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.closed,
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.jurisdictionRetained,
+  CASE_STATUS_TYPES.onAppeal,
+  CASE_STATUS_TYPES.rule155,
+  CASE_STATUS_TYPES.submitted,
+];
+
+const ANSWER_DOCUMENT_CODES = [
+  'A',
+  'AAAP',
+  'AAPN',
+  'AATP',
+  'AATS',
+  'AATT',
+  'APA',
+  'ASAP',
+  'ASUP',
+  'ATAP',
+  'ATSP',
+];
+
 module.exports = {
+  ANSWER_DOCUMENT_CODES,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
@@ -196,16 +278,24 @@ module.exports = {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
+  EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  PROCEDURE_TYPES,
   SCENARIOS,
   SERVICE_INDICATOR_TYPES,
+  SIGNED_DOCUMENT_TYPES,
   STANDING_PRETRIAL_NOTICE,
   STANDING_PRETRIAL_ORDER,
+  STATUS_TYPES_MANUAL_UPDATE,
+  STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_LOCATION_MATCHER,

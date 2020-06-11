@@ -1,11 +1,14 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { INITIAL_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -13,7 +16,7 @@ exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+  if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {
@@ -24,7 +27,7 @@ exports.addDocketEntryForPaymentStatus = ({
         { applicationContext },
       ),
     );
-  } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+  } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {

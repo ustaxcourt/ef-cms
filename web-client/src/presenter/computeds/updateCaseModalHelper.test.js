@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import {
+  CASE_STATUS_TYPES,
+  STATUS_TYPES_MANUAL_UPDATE,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { updateCaseModalHelper as updateCaseModalHelperComputed } from './updateCaseModalHelper';
@@ -59,6 +61,6 @@ describe('updateCaseModalHelper', () => {
         caseDetail: mockCase,
       },
     });
-    expect(result.caseStatusOptions).toEqual(Case.STATUS_TYPES_MANUAL_UPDATE);
+    expect(result.caseStatusOptions).toEqual(STATUS_TYPES_MANUAL_UPDATE);
   });
 });

@@ -7,7 +7,13 @@ import {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
   SERVICE_INDICATOR_TYPES,
+  SIGNED_DOCUMENT_TYPES,
+  STATUS_TYPES_MANUAL_UPDATE,
+  STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
@@ -19,7 +25,6 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { Document } from '../../shared/src/business/entities/Document';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import {
   MAX_FILE_SIZE_BYTES,
@@ -80,9 +85,9 @@ export const getConstants = () => ({
   ORDER_TYPES_MAP: Order.ORDER_TYPES,
   OTHER_TYPES: ContactFactory.OTHER_TYPES,
   PARTY_TYPES: ContactFactory.PARTY_TYPES,
-  PAYMENT_STATUS: Case.PAYMENT_STATUS,
+  PAYMENT_STATUS: PAYMENT_STATUS,
   PRACTITIONER_TYPE_OPTIONS: Practitioner.PRACTITIONER_TYPE_OPTIONS,
-  PROCEDURE_TYPES: Case.PROCEDURE_TYPES,
+  PROCEDURE_TYPES: PROCEDURE_TYPES,
   REFRESH_INTERVAL: 20 * MINUTES,
   ROLE_PERMISSIONS,
   SCAN_MODES: Scan.SCAN_MODES,
@@ -95,11 +100,11 @@ export const getConstants = () => ({
   SESSION_TIMEOUT:
     (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
     55 * MINUTES,
-  SIGNED_DOCUMENT_TYPES: Document.SIGNED_DOCUMENT_TYPES,
+  SIGNED_DOCUMENT_TYPES: SIGNED_DOCUMENT_TYPES,
   STATUS_TYPES: CASE_STATUS_TYPES,
-  STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
-  STATUS_TYPES_WITH_ASSOCIATED_JUDGE: Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-  SYSTEM_GENERATED_DOCUMENT_TYPES: Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
+  STATUS_TYPES_MANUAL_UPDATE: STATUS_TYPES_MANUAL_UPDATE,
+  STATUS_TYPES_WITH_ASSOCIATED_JUDGE: STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES: SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE: TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
