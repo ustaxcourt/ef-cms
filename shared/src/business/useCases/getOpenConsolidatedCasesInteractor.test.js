@@ -94,7 +94,41 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     ]);
   });
 
-  it('should ', async () => {
-    // BUG - user is associated with a consolidated case that is NOT the lead case
+  it('should return a list of open cases when the user is associated with a consolidated case that is not the lead case', async () => {
+    const consolidatedCaseThatIsNotTheLeadCase = {
+      ...MOCK_CASE,
+      caseId: applicationContext.getUniqueId(),
+      isLeadCase: false,
+    };
+    const mockUserAssociatedCaseIdsMap = {};
+    mockUserAssociatedCaseIdsMap[
+      consolidatedCaseThatIsNotTheLeadCase.caseId
+    ] = true;
+    applicationContext
+      .getUseCaseHelpers()
+      .processUserAssociatedCases.mockReturnValue({
+        casesAssociatedWithUserOrLeadCaseMap: {},
+        leadCaseIdsAssociatedWithUser: [
+          consolidatedCaseThatIsNotTheLeadCase.caseId,
+        ],
+        userAssociatedCaseIdsMap: mockUserAssociatedCaseIdsMap,
+      });
+    applicationContext
+      .getUseCaseHelpers()
+      .getUnassociatedLeadCase.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCaseHelpers()
+      .formatAndSortConsolidatedCases.mockReturnValue([
+        consolidatedCaseThatIsNotTheLeadCase,
+      ]);
+
+    const result = await getOpenConsolidatedCasesInteractor({
+      applicationContext,
+    });
+
+    expect(result[0]).toBe(MOCK_CASE);
+    expect(result[0].consolidatedCases[0]).toBe(
+      consolidatedCaseThatIsNotTheLeadCase,
+    );
   });
 });
