@@ -6,10 +6,10 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
-const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
 
 const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
@@ -62,7 +62,7 @@ const formatDocument = (applicationContext, document) => {
   result.isNotServedCourtIssuedDocument =
     result.isCourtIssuedDocument && !result.servedAt;
 
-  result.isTranscript = result.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+  result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
   result.qcWorkItemsUntouched =
     !!qcWorkItems.length &&
@@ -99,7 +99,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = document => {
-  const transcriptCodes = [Document.TRANSCRIPT_EVENT_CODE];
+  const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
   const isTranscript = transcriptCodes.includes(document.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
