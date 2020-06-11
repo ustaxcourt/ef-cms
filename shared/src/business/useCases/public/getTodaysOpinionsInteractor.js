@@ -6,7 +6,6 @@ const {
 } = require('../../utilities/DateHandler');
 const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * getTodaysOpinionsInteractor
  *

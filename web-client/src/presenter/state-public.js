@@ -6,6 +6,7 @@ import { loadingHelper } from './computeds/loadingHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
+import { todaysOpinionsHelper } from './computeds/public/todaysOpinionsHelper';
 
 const helpers = {
   advancedDocumentSearchHelper,
@@ -15,6 +16,7 @@ const helpers = {
   menuHelper,
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
+  todaysOpinionsHelper,
 };
 
 export const state = {
