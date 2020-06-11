@@ -118,6 +118,47 @@ const CONTACT_CHANGE_DOCUMENT_TYPES = [
   'Notice of Change of Address and Telephone Number',
 ];
 
+const TRACKED_DOCUMENT_TYPES = {
+  application: {
+    category: 'Application',
+  },
+  motion: {
+    category: 'Motion',
+  },
+  orderToShowCause: {
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  proposedStipulatedDecision: {
+    documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDE',
+  },
+};
+
+const INITIAL_DOCUMENT_TYPES = {
+  applicationForWaiverOfFilingFee: {
+    documentType: 'Application for Waiver of Filing Fee',
+    eventCode: 'APW',
+  },
+  ownershipDisclosure: {
+    documentType: 'Ownership Disclosure Statement',
+    eventCode: 'DISC',
+  },
+  petition: {
+    documentType: 'Petition',
+    eventCode: 'P',
+  },
+  requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+  },
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+  },
+};
+
 module.exports = {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
@@ -131,11 +172,13 @@ module.exports = {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
+  INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_DOCUMENT_TYPES,
   SCENARIOS,
   SERVICE_INDICATOR_TYPES,
+  TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_LOCATION_MATCHER,
 };
