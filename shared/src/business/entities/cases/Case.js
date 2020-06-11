@@ -12,6 +12,7 @@ const {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
@@ -1063,8 +1064,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.getPetitionDocument = function () {
   return this.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
@@ -1095,8 +1095,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
       new DocketRecord(
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode:
-            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filingDate: this.receivedAt || this.createdAt,
         },
         { applicationContext },
