@@ -2,7 +2,7 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { User } = require('../../entities/User');
 

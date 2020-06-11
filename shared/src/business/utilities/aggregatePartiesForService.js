@@ -1,7 +1,7 @@
 const {
   setServiceIndicatorsForCase,
 } = require('./setServiceIndicatorsForCase');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 /**
  * aggregatePartiesForService

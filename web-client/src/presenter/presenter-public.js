@@ -7,6 +7,7 @@ import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequen
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
+import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
@@ -37,6 +38,7 @@ export const presenter = {
     gotoPublicCaseDetailSequence,
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
+    gotoTodaysOpinionsSequence,
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,

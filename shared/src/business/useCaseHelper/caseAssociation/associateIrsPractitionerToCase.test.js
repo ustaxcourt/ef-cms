@@ -4,11 +4,9 @@ const {
 const {
   associateIrsPractitionerToCase,
 } = require('./associateIrsPractitionerToCase');
-const {
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('associateIrsPractitionerToCase', () => {
