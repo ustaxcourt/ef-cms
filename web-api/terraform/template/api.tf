@@ -239,6 +239,9 @@ resource "aws_api_gateway_integration_response" "clamav_response_post" {
 }
 
 resource "aws_api_gateway_integration" "api_clamav_integration_options" {
+  depends_on = [
+    "aws_api_gateway_integration.api_clamav_integration_post"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_clamav_method_options.resource_id}"
   http_method = "${aws_api_gateway_method.api_clamav_method_options.http_method}"
@@ -250,6 +253,9 @@ resource "aws_api_gateway_integration" "api_clamav_integration_options" {
 
 
 resource "aws_api_gateway_integration" "api_integration_get" {
+  depends_on = [
+    "aws_api_gateway_integration.api_clamav_integration_options"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_method_get.resource_id}"
   http_method = "${aws_api_gateway_method.api_method_get.http_method}"
@@ -260,6 +266,9 @@ resource "aws_api_gateway_integration" "api_integration_get" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_post" {
+  depends_on = [
+    "aws_api_gateway_integration.api_integration_get"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_method_post.resource_id}"
   http_method = "${aws_api_gateway_method.api_method_post.http_method}"
@@ -270,6 +279,9 @@ resource "aws_api_gateway_integration" "api_integration_post" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_put" {
+  depends_on = [
+    "aws_api_gateway_integration.api_integration_post"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_method_put.resource_id}"
   http_method = "${aws_api_gateway_method.api_method_put.http_method}"
@@ -280,6 +292,9 @@ resource "aws_api_gateway_integration" "api_integration_put" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_delete" {
+  depends_on = [
+    "aws_api_gateway_integration.api_integration_put"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_method_delete.resource_id}"
   http_method = "${aws_api_gateway_method.api_method_delete.http_method}"
@@ -290,6 +305,9 @@ resource "aws_api_gateway_integration" "api_integration_delete" {
 }
 
 resource "aws_api_gateway_integration" "api_integration_options" {
+  depends_on = [
+    "aws_api_gateway_integration.api_integration_delete"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_method.api_method_options.resource_id}"
   http_method = "${aws_api_gateway_method.api_method_options.http_method}"
