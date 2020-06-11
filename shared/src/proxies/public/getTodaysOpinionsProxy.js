@@ -1,6 +1,5 @@
 const { get } = require('../requests');
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * getTodaysOpinionsProxy
  *
