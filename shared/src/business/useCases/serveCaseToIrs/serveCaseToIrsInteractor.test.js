@@ -8,6 +8,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -319,7 +320,7 @@ describe('addDocketEntryForPaymentStatus', () => {
       {
         ...MOCK_CASE,
         petitionPaymentDate: 'Today',
-        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
       { applicationContext },
     );
@@ -339,7 +340,7 @@ describe('addDocketEntryForPaymentStatus', () => {
         ...MOCK_CASE,
         contactPrimary: undefined,
         documents: [],
-        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: 'Today',
       },
       { applicationContext },
