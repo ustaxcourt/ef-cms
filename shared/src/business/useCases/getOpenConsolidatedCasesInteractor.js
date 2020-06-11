@@ -50,20 +50,15 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
       });
     }
 
-    const caseConsolidatedCases = [];
-    consolidatedCases.forEach(consolidatedCase => {
-      consolidatedCase.isRequestingUserAssociated = !!userAssociatedCaseIdsMap[
-        consolidatedCase.caseId
-      ];
-
-      if (consolidatedCase.caseId !== leadCaseId) {
-        caseConsolidatedCases.push(consolidatedCase);
-      }
-    });
-
     casesAssociatedWithUserOrLeadCaseMap[
       leadCaseId
-    ].consolidatedCases = Case.sortByDocketNumber(caseConsolidatedCases);
+    ].consolidatedCases = applicationContext
+      .getUseCaseHelpers()
+      .formatAndSortConsolidatedCases({
+        consolidatedCases,
+        leadCaseId,
+        userAssociatedCaseIdsMap,
+      });
   }
 
   const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);

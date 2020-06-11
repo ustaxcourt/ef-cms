@@ -282,6 +282,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  formatAndSortConsolidatedCases,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
+const {
   formatJudgeName,
 } = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
@@ -1333,6 +1336,7 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
+        formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
