@@ -6,6 +6,7 @@ import { Loading } from './Loading';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
+import { TodaysOpinions } from './Public/TodaysOpinions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -17,6 +18,7 @@ const pages = {
   PublicCaseDetail,
   PublicPrintableDocketRecord,
   PublicSearch,
+  TodaysOpinions,
 };
 
 /**
