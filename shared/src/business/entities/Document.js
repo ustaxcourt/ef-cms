@@ -6,8 +6,12 @@ const {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
+  NOTICE_OF_DOCKET_CHANGE,
+  NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
   SCENARIOS,
+  STANDING_PRETRIAL_NOTICE,
+  STANDING_PRETRIAL_ORDER,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
@@ -124,35 +128,11 @@ const practitionerAssociationDocumentTypes = [
   'Substitution of Counsel',
 ];
 
-Document.NOTICE_OF_DOCKET_CHANGE = {
-  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
-  documentType: 'Notice of Docket Change',
-  eventCode: 'NODC',
-};
-
-Document.NOTICE_OF_TRIAL = {
-  documentTitle: 'Notice of Trial on [Date] at [Time]',
-  documentType: 'Notice of Trial',
-  eventCode: 'NDT',
-};
-
-Document.STANDING_PRETRIAL_NOTICE = {
-  documentTitle: 'Standing Pretrial Notice',
-  documentType: 'Standing Pretrial Notice',
-  eventCode: 'SPTN',
-};
-
-Document.STANDING_PRETRIAL_ORDER = {
-  documentTitle: 'Standing Pretrial Order',
-  documentType: 'Standing Pretrial Order',
-  eventCode: 'SPTO',
-};
-
 Document.SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfDocketChange: Document.NOTICE_OF_DOCKET_CHANGE,
-  noticeOfTrial: Document.NOTICE_OF_TRIAL,
-  standingPretrialNotice: Document.STANDING_PRETRIAL_NOTICE,
-  standingPretrialOrder: Document.STANDING_PRETRIAL_ORDER,
+  noticeOfDocketChange: NOTICE_OF_DOCKET_CHANGE,
+  noticeOfTrial: NOTICE_OF_TRIAL,
+  standingPretrialNotice: STANDING_PRETRIAL_NOTICE,
+  standingPretrialOrder: STANDING_PRETRIAL_ORDER,
 };
 
 Document.SIGNED_DOCUMENT_TYPES = {
@@ -213,10 +193,10 @@ Document.eventCodes = [
   INITIAL_DOCUMENT_TYPES.petition.eventCode,
   INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
   INITIAL_DOCUMENT_TYPES.stin.eventCode,
-  Document.NOTICE_OF_DOCKET_CHANGE.eventCode,
-  Document.NOTICE_OF_TRIAL.eventCode,
-  Document.STANDING_PRETRIAL_NOTICE.eventCode,
-  Document.STANDING_PRETRIAL_ORDER.eventCode,
+  NOTICE_OF_DOCKET_CHANGE.eventCode,
+  NOTICE_OF_TRIAL.eventCode,
+  STANDING_PRETRIAL_NOTICE.eventCode,
+  STANDING_PRETRIAL_ORDER.eventCode,
   // TODO: Move these constants
   'MISL',
   'FEE',
