@@ -21,6 +21,7 @@ function UserCase(rawUserCase) {
   this.docketNumber = rawUserCase.docketNumber;
   this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
   this.leadCaseId = rawUserCase.leadCaseId;
+  this.status = rawUserCase.status;
 }
 
 joiValidationDecorator(
@@ -31,6 +32,7 @@ joiValidationDecorator(
     docketNumber: Case.VALIDATION_RULES.docketNumber,
     docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
     leadCaseId: Case.VALIDATION_RULES.leadCaseId,
+    status: Case.VALIDATION_RULES.status,
   }),
   Case.VALIDATION_ERROR_MESSAGES,
 );

@@ -9,10 +9,12 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
   TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
+} = require('../EntityConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -37,7 +39,7 @@ const joiStrictTimestamp = getTimestampSchema();
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
 );
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
@@ -1062,8 +1064,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.getPetitionDocument = function () {
   return this.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
@@ -1094,8 +1095,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
       new DocketRecord(
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode:
-            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filingDate: this.receivedAt || this.createdAt,
         },
         { applicationContext },

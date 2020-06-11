@@ -9,8 +9,6 @@ const {
 
 describe('Create case and submit to IRS', function () {
   before(() => {
-    cy.task('seed');
-
     navigateToDocumentQC('petitionsclerk');
 
     getCreateACaseButton().click();

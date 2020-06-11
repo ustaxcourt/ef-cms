@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const respondentViewsCaseDetailOfBatchedCase = test => {
   return it('Respondent views case detail', async () => {
