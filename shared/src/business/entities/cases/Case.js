@@ -9,6 +9,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_LOCATION_MATCHER,
@@ -37,7 +38,7 @@ const joiStrictTimestamp = getTimestampSchema();
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
 );
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
