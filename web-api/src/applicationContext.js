@@ -13,7 +13,6 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
-const elasticsearchIndexes = require('../elasticsearch/elasticsearch-indexes');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -31,6 +30,7 @@ const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
@@ -78,6 +78,9 @@ const {
 const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const {
   caseAdvancedSearch,
 } = require('../../shared/src/persistence/elasticsearch/caseAdvancedSearch');
@@ -247,6 +250,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  elasticsearchIndexes,
+} = require('../elasticsearch/elasticsearch-indexes');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -324,9 +330,6 @@ const {
   getAllCaseDeadlines,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
 const {
-  getAllCaseDeadlinesInteractor,
-} = require('../../shared/src/business/useCases/caseDeadline/getAllCaseDeadlinesInteractor');
-const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -347,6 +350,9 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+const {
+  getCaseDeadlinesAllInteractor,
+} = require('../../shared/src/business/useCases/getCaseDeadlinesAllInteractor');
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
@@ -464,6 +470,9 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
+const {
+  getIndexedCasesForUser,
+} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
 const {
   getIndexMappingFields,
 } = require('../../shared/src/persistence/elasticsearch/getIndexMappingFields');
@@ -1039,6 +1048,9 @@ module.exports = (appContextUser = {}) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 5000,
+      OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
+        status => status !== CASE_STATUS_TYPES.closed,
+      ),
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
     }),
@@ -1051,6 +1063,7 @@ module.exports = (appContextUser = {}) => {
       addressLabelCoverSheet,
       caseInventoryReport,
       changeOfAddress,
+      coverSheet,
       docketRecord,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
@@ -1201,6 +1214,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUser,
         getIndexMappingFields,
         getIndexMappingLimit,
+        getIndexedCasesForUser,
         getInternalUsers,
         getOpenCasesByUser,
         getPractitionerByBarNumber,
@@ -1383,9 +1397,9 @@ module.exports = (appContextUser = {}) => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
-        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
+        getCaseDeadlinesAllInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,

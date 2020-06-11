@@ -12,7 +12,7 @@ const {
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
-const { Document } = require('../Document');
+const { DOCUMENT_CATEGORY_MAP } = require('../EntityConstants');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -126,7 +126,7 @@ function DocketEntryFactory(rawProps) {
   }
 
   const objectionDocumentTypes = [
-    ...Document.CATEGORY_MAP['Motion'].map(entry => {
+    ...DOCUMENT_CATEGORY_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
     'Motion to Withdraw Counsel (filed by petitioner)',

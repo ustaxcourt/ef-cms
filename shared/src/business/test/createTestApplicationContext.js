@@ -240,6 +240,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFileUint8Array),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+    coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),

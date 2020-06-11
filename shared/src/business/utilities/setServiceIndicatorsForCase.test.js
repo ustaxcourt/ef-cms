@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../entities/cases/CaseConstants';
+import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
