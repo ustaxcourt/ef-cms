@@ -8,6 +8,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
+const { PAYMENT_STATUS } = require('../EntityConstants');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -110,7 +111,7 @@ const paperRequirements = joi
   .object()
   .keys({
     applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
+      is: PAYMENT_STATUS.WAIVED,
       otherwise: joi.optional().allow(null),
       then: joi.object().required(),
     }),
@@ -166,7 +167,7 @@ const paperRequirements = joi
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joiStrictTimestamp.optional().allow(null),
       then: joiStrictTimestamp.max('now').required(),
     }),

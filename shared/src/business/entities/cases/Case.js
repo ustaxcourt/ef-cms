@@ -13,6 +13,7 @@ const {
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
@@ -42,12 +43,6 @@ const orderDocumentTypes = Order.ORDER_TYPES.map(
 const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
-
-Case.PAYMENT_STATUS = {
-  PAID: 'Paid',
-  UNPAID: 'Not Paid',
-  WAIVED: 'Waived',
-};
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.assignedCase,
@@ -273,7 +268,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
   this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+    rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
@@ -624,26 +619,26 @@ Case.VALIDATION_RULES = {
     .description('Party type of the case petitioner.'),
   petitionPaymentDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joiStrictTimestamp.optional().allow(null),
       then: joiStrictTimestamp.required(),
     })
     .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
       then: joi.string().max(50).required(),
     })
     .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
     .string()
-    .valid(...Object.values(Case.PAYMENT_STATUS))
+    .valid(...Object.values(PAYMENT_STATUS))
     .required()
     .description('Status of the case fee payment.'),
   petitionPaymentWaivedDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
+      is: PAYMENT_STATUS.WAIVED,
       otherwise: joiStrictTimestamp.allow(null).optional(),
       then: joiStrictTimestamp.required(),
     })
