@@ -283,6 +283,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  formatAndSortConsolidatedCases,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
+const {
   formatJudgeName,
 } = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
@@ -573,6 +576,9 @@ const {
   getTrialSessionWorkingCopyInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor');
 const {
+  getUnassociatedLeadCase,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase');
+const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
@@ -771,9 +777,6 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
-const {
-  setUnassociatedLeadCase,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/setUnassociatedLeadCase');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
@@ -1335,14 +1338,15 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
+        formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getUnassociatedLeadCase,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
-        setUnassociatedLeadCase,
         updateCaseAutomaticBlock,
       };
     },
