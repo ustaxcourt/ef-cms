@@ -4,7 +4,7 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -296,7 +296,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -332,7 +332,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()

@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
@@ -376,7 +377,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           automaticBlocked: true,
           automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
         {
           applicationContext,
@@ -1982,7 +1983,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.automaticBlocked).toEqual(true);
       expect(caseToUpdate.automaticBlockedReason).toEqual(
-        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        AUTOMATIC_BLOCKED_REASONS.pending,
       );
       expect(caseToUpdate.automaticBlockedDate).toBeDefined();
       expect(caseToUpdate.isValid()).toBeTruthy();

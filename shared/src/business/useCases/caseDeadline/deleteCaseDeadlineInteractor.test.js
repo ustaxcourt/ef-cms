@@ -4,7 +4,7 @@ const {
 const {
   deleteCaseDeadlineInteractor,
 } = require('./deleteCaseDeadlineInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { MOCK_CASE_WITHOUT_PENDING } = require('../../../test/mockCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -100,7 +100,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()
