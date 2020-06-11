@@ -5,7 +5,7 @@ const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 /**
  * getTodaysOpinionsInteractor
  *
- * @param {object} providers the providers object containing applicationContext, keyword
+ * @param {object} providers the providers object containing applicationContext
  * @param {object} providers.applicationContext application context object
  * @returns {array} an array of opinions (if any)
  */
