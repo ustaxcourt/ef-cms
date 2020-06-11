@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -36,9 +37,19 @@ export const TodaysOpinions = connect(
                 <tr key={idx}>
                   <td className="center-column">{idx + 1}</td>
                   <td aria-hidden="true"></td>
-                  <td>{opinion.docketNumberWithSuffix}</td>
+                  <td>
+                    <CaseLink formattedCase={opinion} />
+                  </td>
                   <td>{opinion.caseCaption}</td>
-                  <td>{opinion.formattedDocumentType}</td>
+                  <td>
+                    <a
+                      href={opinion.documentLink}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {opinion.formattedDocumentType}
+                    </a>
+                  </td>
                   <td>{opinion.numberOfPages}</td>
                   <td>{opinion.formattedFilingDate}</td>
                   <td>{opinion.formattedJudgeName}</td>
