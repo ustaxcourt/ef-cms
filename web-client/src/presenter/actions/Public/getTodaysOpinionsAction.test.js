@@ -21,7 +21,7 @@ describe('getTodaysOpinionsAction', () => {
     ];
     applicationContext
       .getUseCases()
-      .getTodaysOpinionsInterator.mockReturnValue(mockTodaysOpinions);
+      .getTodaysOpinionsInteractor.mockReturnValue(mockTodaysOpinions);
 
     const result = await runAction(getTodaysOpinionsAction, {
       modules: {
