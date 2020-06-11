@@ -177,10 +177,10 @@ describe('documentGenerators', () => {
           dateFiledLodged: '01/01/2020',
           dateFiledLodgedLabel: 'Filed',
           dateReceived: '01/02/2020',
+          dateServed: '01/03/2020',
           docketNumberWithSuffix: '123-45S',
           documentTitle: 'Petition',
           electronicallyFiled: true,
-          mailingDate: '12/26/2019',
         },
       });
 

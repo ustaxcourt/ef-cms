@@ -21,6 +21,9 @@ const {
   DatePrintedFooter,
 } = require('../pdfGenerator/components/DatePrintedFooter.jsx');
 const {
+  DateServedFooter,
+} = require('../pdfGenerator/components/DateServedFooter.jsx');
+const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
@@ -72,6 +75,7 @@ const components = {
   ChangeOfAddress,
   CoverSheet,
   DatePrintedFooter,
+  DateServedFooter,
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
