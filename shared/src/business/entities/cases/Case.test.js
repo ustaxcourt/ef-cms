@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
 } = require('../EntityConstants');
 const {
   MOCK_CASE,
@@ -474,7 +475,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+            petitionPaymentStatus: PAYMENT_STATUS.PAID,
           },
           {
             applicationContext,
@@ -490,7 +491,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+            petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           },
           {
             applicationContext,

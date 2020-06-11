@@ -1,9 +1,9 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
 const { CaseInternal } = require('./CaseInternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { PAYMENT_STATUS } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
@@ -44,7 +44,7 @@ describe('CaseInternal entity', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
@@ -89,7 +89,7 @@ describe('CaseInternal entity', () => {
           partyType: ContactFactory.PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
         },
@@ -122,7 +122,7 @@ describe('CaseInternal entity', () => {
           partyType: ContactFactory.PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
         },
@@ -164,7 +164,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           receivedAt: new Date().toISOString(),
         },
         { applicationContext },
@@ -320,7 +320,7 @@ describe('CaseInternal entity', () => {
           partyType: ContactFactory.PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
           stinFile: { anObject: true },
@@ -358,7 +358,7 @@ describe('CaseInternal entity', () => {
           partyType: ContactFactory.PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
           stinFile: { anObject: true },
