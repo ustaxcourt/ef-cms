@@ -6,6 +6,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
   formatDocument,
@@ -293,7 +294,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     let noticeUpdatedDocument = new Document(
       {
-        ...Document.NOTICE_OF_DOCKET_CHANGE,
+        ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
         userId: user.userId,
       },
@@ -301,7 +302,7 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     noticeUpdatedDocument.documentTitle = replaceBracketed(
-      Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
+      NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
 
