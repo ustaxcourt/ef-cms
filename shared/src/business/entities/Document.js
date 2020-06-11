@@ -5,8 +5,10 @@ const {
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
+  INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   SCENARIOS,
+  TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
   joiValidationDecorator,
@@ -122,35 +124,6 @@ const practitionerAssociationDocumentTypes = [
   'Substitution of Counsel',
 ];
 
-/**
- * documentTypes
- *
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
- */
-Document.INITIAL_DOCUMENT_TYPES = {
-  applicationForWaiverOfFilingFee: {
-    documentType: 'Application for Waiver of Filing Fee',
-    eventCode: 'APW',
-  },
-  ownershipDisclosure: {
-    documentType: 'Ownership Disclosure Statement',
-    eventCode: 'DISC',
-  },
-  petition: {
-    documentType: 'Petition',
-    eventCode: 'P',
-  },
-  requestForPlaceOfTrial: {
-    documentTitle: 'Request for Place of Trial at [Place]',
-    documentType: 'Request for Place of Trial',
-    eventCode: 'RQT',
-  },
-  stin: {
-    documentType: 'Statement of Taxpayer Identification',
-    eventCode: 'STIN',
-  },
-};
-
 Document.NOTICE_OF_DOCKET_CHANGE = {
   documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
   documentType: 'Notice of Docket Change',
@@ -189,34 +162,13 @@ Document.SIGNED_DOCUMENT_TYPES = {
   },
 };
 
-Document.TRACKED_DOCUMENT_TYPES = {
-  application: {
-    category: 'Application',
-  },
-  motion: {
-    category: 'Motion',
-  },
-  orderToShowCause: {
-    documentType: 'Order to Show Cause',
-    eventCode: 'OSC',
-  },
-  proposedStipulatedDecision: {
-    documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDE',
-  },
-};
-
 Document.isPendingOnCreation = rawDocument => {
-  const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
-    trackedType => {
-      return (
-        (rawDocument.category &&
-          trackedType.category === rawDocument.category) ||
-        (rawDocument.eventCode &&
-          trackedType.eventCode === rawDocument.eventCode)
-      );
-    },
-  );
+  const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
+    return (
+      (rawDocument.category && trackedType.category === rawDocument.category) ||
+      (rawDocument.eventCode && trackedType.eventCode === rawDocument.eventCode)
+    );
+  });
   return isPending;
 };
 
@@ -228,8 +180,8 @@ Document.getDocumentTypes = () => {
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
   const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
-  const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
-    t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
+  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
+    t => INITIAL_DOCUMENT_TYPES[t].documentType,
   );
   const signedTypes = Object.keys(Document.SIGNED_DOCUMENT_TYPES).map(
     t => Document.SIGNED_DOCUMENT_TYPES[t].documentType,
@@ -256,11 +208,11 @@ Document.getDocumentTypes = () => {
  * @returns {Array} event codes defined in the Document entity
  */
 Document.eventCodes = [
-  Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
-  Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-  Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-  Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+  INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+  INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+  INITIAL_DOCUMENT_TYPES.petition.eventCode,
+  INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+  INITIAL_DOCUMENT_TYPES.stin.eventCode,
   Document.NOTICE_OF_DOCKET_CHANGE.eventCode,
   Document.NOTICE_OF_TRIAL.eventCode,
   Document.STANDING_PRETRIAL_NOTICE.eventCode,
