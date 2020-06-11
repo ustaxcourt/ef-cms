@@ -1,6 +1,8 @@
 const joi = require('@hapi/joi');
 const {
   ANSWER_DOCUMENT_CODES,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   COURT_ISSUED_EVENT_CODES,
@@ -80,14 +82,6 @@ Case.FILING_TYPES = {
     'A business',
     'Other',
   ],
-};
-
-Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
-
-Case.AUTOMATIC_BLOCKED_REASONS = {
-  dueDate: 'Due Date',
-  pending: 'Pending Item',
-  pendingAndDueDate: 'Pending Item and Due Date',
 };
 
 Case.CHIEF_JUDGE = CHIEF_JUDGE;
@@ -359,7 +353,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi
       .string()
-      .valid(...Object.values(Case.AUTOMATIC_BLOCKED_REASONS))
+      .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
       .required()
       .description('The reason the case was automatically blocked from trial.'),
   }),
@@ -948,7 +942,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     const result = caseCaptionRegex.exec(docketRecord.description);
     if (result) {
       const [, , changedCaption] = result;
-      lastCaption = changedCaption.replace(` ${Case.CASE_CAPTION_POSTFIX}`, '');
+      lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
     }
   });
 
@@ -959,7 +953,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.addDocketRecord(
       new DocketRecord(
         {
-          description: `Caption of case is amended from '${lastCaption} ${Case.CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${Case.CASE_CAPTION_POSTFIX}'`,
+          description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           eventCode: 'MINC',
           filingDate: createISODateString(),
         },
@@ -1386,11 +1380,11 @@ Case.prototype.updateAutomaticBlocked = function ({ caseDeadlines }) {
   const hasPendingItems = this.doesHavePendingItems();
   let automaticBlockedReason;
   if (hasPendingItems && !isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
   } else if (hasPendingItems) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pending;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
   } else if (!isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.dueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
   }
   if (automaticBlockedReason) {
     this.automaticBlocked = true;

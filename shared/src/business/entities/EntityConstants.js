@@ -264,8 +264,18 @@ const ANSWER_DOCUMENT_CODES = [
   'ATSP',
 ];
 
+const CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
+
+const AUTOMATIC_BLOCKED_REASONS = {
+  dueDate: 'Due Date',
+  pending: 'Pending Item',
+  pendingAndDueDate: 'Pending Item and Due Date',
+};
+
 module.exports = {
   ANSWER_DOCUMENT_CODES,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
