@@ -200,7 +200,7 @@ describe('creation form', () => {
     });
 
     // wait for elasticsearch to refresh
-    cy.wait(10000);
+    cy.wait(1000);
 
     cy.url().should('include', 'file-a-petition/success');
     cy.get('a#button-back-to-dashboard').click();

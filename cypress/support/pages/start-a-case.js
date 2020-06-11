@@ -38,7 +38,7 @@ exports.fillInAndSubmitForm = () => {
   cy.get('button#submit-case').scrollIntoView().click();
 
   // wait for elasticsearch to refresh
-  cy.wait(10000);
+  cy.wait(3000);
 
   // success page
   cy.url().should('include', 'file-a-petition/success');
