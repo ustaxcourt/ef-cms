@@ -1,11 +1,11 @@
+const { getUnassociatedLeadCase } = require('./getUnassociatedLeadCase');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { setUnassociatedLeadCase } = require('./setUnassociatedLeadCase');
 
-describe('setUnassociatedLeadCase', () => {
+describe('getUnassociatedLeadCase', () => {
   it('should set the found case isRequestingUserAssociated to false', () => {
     let casesAssociatedWithUserOrLeadCaseMap = {};
 
-    setUnassociatedLeadCase({
+    getUnassociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases: [MOCK_CASE],
       leadCaseId: MOCK_CASE.caseId,
@@ -20,7 +20,7 @@ describe('setUnassociatedLeadCase', () => {
   it('should search for the lead case and add it to the casesAssociatedWithUserOrLeadCaseMap', () => {
     let casesAssociatedWithUserOrLeadCaseMap = {};
 
-    setUnassociatedLeadCase({
+    getUnassociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases: [MOCK_CASE],
       leadCaseId: MOCK_CASE.caseId,

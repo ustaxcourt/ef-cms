@@ -6,17 +6,11 @@
  * @param {object} arguments.leadCaseId the leadCaseId
  * @returns {object} casesAssociatedWithUserOrLeadCaseMap an object containing cases associated with the current user
  */
-exports.setUnassociatedLeadCase = ({
-  casesAssociatedWithUserOrLeadCaseMap,
-  consolidatedCases,
-  leadCaseId,
-}) => {
+exports.getUnassociatedLeadCase = ({ consolidatedCases, leadCaseId }) => {
   const leadCase = consolidatedCases.find(
     consolidatedCase => consolidatedCase.caseId === leadCaseId,
   );
-
   leadCase.isRequestingUserAssociated = false;
-  casesAssociatedWithUserOrLeadCaseMap[leadCaseId] = leadCase;
 
-  return casesAssociatedWithUserOrLeadCaseMap;
+  return leadCase;
 };

@@ -1,3 +1,4 @@
+const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -26,7 +27,7 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     return [];
   }
 
-  const {
+  let {
     casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
@@ -35,16 +36,34 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     .processUserAssociatedCases(openUserCases);
 
   for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
+    const consolidatedCases = await applicationContext
+      .getUseCaseHelpers()
+      .getConsolidatedCasesForLeadCase({ applicationContext, leadCaseId });
+
+    if (!casesAssociatedWithUserOrLeadCaseMap[leadCaseId]) {
+      casesAssociatedWithUserOrLeadCaseMap[
+        leadCaseId
+      ] = applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
+        casesAssociatedWithUserOrLeadCaseMap,
+        consolidatedCases,
+        leadCaseId,
+      });
+    }
+
+    const caseConsolidatedCases = [];
+    consolidatedCases.forEach(consolidatedCase => {
+      consolidatedCase.isRequestingUserAssociated = !!userAssociatedCaseIdsMap[
+        consolidatedCase.caseId
+      ];
+
+      if (consolidatedCase.caseId !== leadCaseId) {
+        caseConsolidatedCases.push(consolidatedCase);
+      }
+    });
+
     casesAssociatedWithUserOrLeadCaseMap[
       leadCaseId
-    ].consolidatedCases = await applicationContext
-      .getUseCaseHelpers()
-      .getConsolidatedCasesForLeadCase({
-        applicationContext,
-        casesAssociatedWithUserOrLeadCaseMap,
-        leadCaseId,
-        userAssociatedCaseIdsMap,
-      });
+    ].consolidatedCases = Case.sortByDocketNumber(caseConsolidatedCases);
   }
 
   const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);

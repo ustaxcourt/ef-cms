@@ -64,7 +64,7 @@ describe('getConsolidatedCasesForLeadCase', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().setUnassociatedLeadCase,
+      applicationContext.getUseCaseHelpers().getUnassociatedLeadCase,
     ).toBeCalled();
   });
 
