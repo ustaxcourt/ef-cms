@@ -4,7 +4,6 @@ const {
 const {
   formatAndSortConsolidatedCases,
 } = require('./formatAndSortConsolidatedCases');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('formatAndSortConsolidatedCases', () => {
   it('should set isRequestingUserAssociated for each case associated with the lead caseId', async () => {

@@ -1,4 +1,3 @@
-const { Case } = require('../entities/cases/Case');
 const { UserCase } = require('../entities/UserCase');
 
 /**
