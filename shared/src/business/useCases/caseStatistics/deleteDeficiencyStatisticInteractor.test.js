@@ -4,7 +4,7 @@ const {
 const {
   deleteDeficiencyStatisticInteractor,
 } = require('./deleteDeficiencyStatisticInteractor');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_TYPES_MAP } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -81,7 +81,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue(
       Promise.resolve({
         ...MOCK_CASE,
-        caseType: Case.CASE_TYPES_MAP.deficiency,
+        caseType: CASE_TYPES_MAP.deficiency,
         hasVerifiedIrsNotice: true,
         statistics: [statistic],
       }),

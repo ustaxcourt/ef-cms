@@ -4,6 +4,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
@@ -51,23 +52,7 @@ const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
 Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
-Case.CASE_TYPES_MAP = {
-  cdp: 'CDP (Lien/Levy)',
-  deficiency: 'Deficiency',
-  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
-  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
-  innocentSpouse: 'Innocent Spouse',
-  interestAbatement: 'Interest Abatement',
-  other: 'Other',
-  partnershipSection1101: 'Partnership (BBA Section 1101)',
-  partnershipSection6226: 'Partnership (Section 6226)',
-  partnershipSection6228: 'Partnership (Section 6228)',
-  passport: 'Passport',
-  whistleblower: 'Whistleblower',
-  workerClassification: 'Worker Classification',
-};
-
-Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
+Case.CASE_TYPES = Object.values(CASE_TYPES_MAP);
 
 Case.FILING_TYPES = {
   [User.ROLES.petitioner]: [
@@ -647,7 +632,7 @@ Case.VALIDATION_RULES = {
         .items(joi.object().meta({ entityName: 'Statistic' }))
         .optional(),
       then: joi.when('caseType', {
-        is: Case.CASE_TYPES_MAP.deficiency,
+        is: CASE_TYPES_MAP.deficiency,
         otherwise: joi
           .array()
           .items(joi.object().meta({ entityName: 'Statistic' }))
