@@ -4,7 +4,6 @@ const {
 
 describe('Filing an Answer', function () {
   before(() => {
-    cy.task('seed');
     cy.login('irsPractitioner', '/case-detail/102-19');
   });
 
