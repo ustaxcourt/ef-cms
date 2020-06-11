@@ -39,7 +39,7 @@ export const TodaysOpinions = connect({}, function TodaysOpinions() {
               </td> */}
               <td>3</td>
               <td>12/23/2018</td>
-              <td>Your Momma</td>
+              <td>Judge Armen</td>
             </tr>
           </tbody>
         </table>
