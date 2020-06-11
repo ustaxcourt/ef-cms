@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
+const { COURT_ISSUED_EVENT_CODES } = require('../EntityConstants');
 const { Document } = require('../Document');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
@@ -88,7 +89,7 @@ joiValidationDecorator(
 const isDraftDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES,
     'documentType',
   );
 
@@ -110,7 +111,7 @@ const isDraftDocument = function (document, docketRecord) {
 const isPrivateDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES,
     'documentType',
   );
 

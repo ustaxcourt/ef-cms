@@ -22,7 +22,6 @@ const {
 
 describe('Create a work item ', () => {
   before(() => {
-    cy.task('seed');
     navigateToDocumentDetail(
       'petitionsclerk',
       '104-19',

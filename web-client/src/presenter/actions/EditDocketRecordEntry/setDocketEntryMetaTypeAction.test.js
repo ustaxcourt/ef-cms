@@ -1,4 +1,4 @@
-import { Document } from '../../../../../shared/src/business/entities/Document';
+import { COURT_ISSUED_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -13,7 +13,7 @@ describe('setDocketEntryMetaTypeAction', () => {
       state: {
         form: {
           documentId: '123',
-          eventCode: Document.COURT_ISSUED_EVENT_CODES[0].eventCode,
+          eventCode: COURT_ISSUED_EVENT_CODES[0].eventCode,
         },
       },
     });
