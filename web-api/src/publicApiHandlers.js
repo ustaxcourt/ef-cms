@@ -15,4 +15,6 @@ module.exports = {
     .opinionPublicSearchLambda,
   orderPublicSearchLambda: require('./public-api/orderPublicSearchLambda')
     .orderPublicSearchLambda,
+  todaysOpinionsLambda: require('./public-api/todaysOpinionsLambda')
+    .todaysOpinionsLambda,
 };

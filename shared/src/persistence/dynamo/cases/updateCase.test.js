@@ -4,7 +4,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
-} = require('../../../business/entities/cases/CaseConstants');
+} = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
