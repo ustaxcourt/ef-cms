@@ -24,21 +24,21 @@ fi
 npm run build:assets
 
 # build the cognito authorizer using parcel
-# pushd ../template/cognito-authorizer
-# npx parcel build index.js --target node --bundle-node-modules --no-minify
-# popd
+pushd ../template/cognito-authorizer
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
 
-# pushd ../template/log-forwarder
-# npx parcel build index.js --target node --bundle-node-modules --no-minify
-# popd
+pushd ../template/log-forwarder
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
 
-# pushd ../template/api
-# npx parcel build index.js --target node --bundle-node-modules --no-minify
-# popd
+pushd ../template/api
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
 
-# pushd ../template/api-public
-# npx parcel build index.js --target node --bundle-node-modules --no-minify
-# popd
+pushd ../template/api-public
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
 
 
 # exit on any failure
