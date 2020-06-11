@@ -106,13 +106,13 @@ resource "aws_api_gateway_rest_api" "gateway_for_api" {
 resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   parent_id = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
-  path_part = "/api/{proxy+}"
+  path_part = "{proxy+}"
 }
 
 resource "aws_api_gateway_resource" "api_clamav_resource" {
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   parent_id = "${aws_api_gateway_rest_api.gateway_for_api.root_resource_id}"
-  path_part = "/clamav/{proxy+}"
+  path_part = "clamav"
 }
 
 resource "aws_api_gateway_method" "api_clamav_method_post" {
