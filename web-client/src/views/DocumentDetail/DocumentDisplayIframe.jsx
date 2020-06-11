@@ -1,27 +1,36 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
-import React from 'react';
+import { sequences, state } from 'cerebral';
+import React, { useEffect } from 'react';
 
 export const DocumentDisplayIframe = connect(
   {
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     documentDetailHelper: state.documentDetailHelper,
-    token: state.token,
+    iframeSrc: state.iframeSrc,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
   },
   function DocumentDisplayIframe({
-    baseUrl,
     caseDetail,
     documentDetailHelper,
-    token,
+    iframeSrc,
+    openCaseDocumentDownloadUrlSequence,
   }) {
+    useEffect(() => {
+      openCaseDocumentDownloadUrlSequence({
+        caseId: caseDetail.caseId,
+        documentId: documentDetailHelper.formattedDocument.documentId,
+        isForIFrame: true,
+      });
+    }, [caseDetail]);
+
     return (
       <>
         {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
         {!process.env.CI && (
           <iframe
-            key={documentDetailHelper.formattedDocument.signedAt}
-            src={`${baseUrl}/case-documents/${caseDetail.caseId}/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
+            key={iframeSrc}
+            src={iframeSrc}
             title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
           />
         )}
