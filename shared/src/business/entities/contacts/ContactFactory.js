@@ -6,7 +6,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { SERVICE_INDICATOR_TYPES } = require('../cases/CaseConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 const ContactFactory = {};
 
 ContactFactory.COUNTRY_TYPES = {

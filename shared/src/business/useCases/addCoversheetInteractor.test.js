@@ -7,11 +7,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
-jest.mock('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
-
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
@@ -75,8 +70,6 @@ describe('addCoversheetInteractor', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
 
-    generateCoverPagePdf.mockImplementation(testPdfDocBytes);
-
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -98,6 +91,9 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(params);
 
     expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
   });
@@ -116,6 +112,9 @@ describe('addCoversheetInteractor', () => {
 
     await addCoversheetInteractor(params);
 
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
@@ -234,7 +233,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.certificateOfService).toEqual('Certificate of Service');
+      expect(result.certificateOfService).toEqual(true);
     });
 
     it('does NOT display Certificate of Service when the document is filed without a certificate of service', async () => {
@@ -256,7 +255,7 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
         },
       });
-      expect(result.certificateOfService).toEqual('');
+      expect(result.certificateOfService).toEqual(false);
     });
 
     it('generates correct filed date', async () => {
@@ -446,7 +445,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('');
     });
 
-    it('displays the date served if present in MMDDYYYY format along with a Served label', async () => {
+    it('displays the date served if present in MMDDYYYY format', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -468,7 +467,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateServed).toEqual('Served 04/20/2019');
+      expect(result.dateServed).toEqual('04/20/2019');
     });
 
     it('does not display the service date if servedAt is not present', async () => {
@@ -564,7 +563,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.electronicallyFiled).toEqual('Electronically Filed');
+      expect(result.electronicallyFiled).toEqual(true);
     });
 
     it('does NOT display Electronically Filed when the document is filed by paper', async () => {
@@ -587,7 +586,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.electronicallyFiled).toEqual('');
+      expect(result.electronicallyFiled).toEqual(false);
     });
 
     it('returns the mailing date if present', async () => {

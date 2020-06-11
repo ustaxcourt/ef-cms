@@ -3,7 +3,6 @@ let createdDocketNumber;
 
 describe('File a petition', function () {
   before(() => {
-    cy.task('seed');
     cy.login('petitioner');
   });
 
@@ -189,15 +188,21 @@ describe('creation form', () => {
   });
 
   it('submits forms and redirects to the file petition success page', () => {
+    cy.get('button#submit-case').scrollIntoView().click();
+
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
-    cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase');
     cy.get('@postCase').should(xhr => {
       // eslint-disable-next-line jest/valid-expect
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
+
+    // wait for elasticsearch to refresh
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
+
     cy.url().should('include', 'file-a-petition/success');
     cy.get('a#button-back-to-dashboard').click();
   });

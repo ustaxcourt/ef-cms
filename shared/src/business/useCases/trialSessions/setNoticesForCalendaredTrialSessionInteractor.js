@@ -5,6 +5,11 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  NOTICE_OF_TRIAL,
+  STANDING_PRETRIAL_NOTICE,
+  STANDING_PRETRIAL_ORDER,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -117,8 +122,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         caseId: caseEntity.caseId,
         documentId: newNoticeOfTrialIssuedDocumentId,
         documentTitle: noticeOfTrialDocumentTitle,
-        documentType: Document.NOTICE_OF_TRIAL.documentType,
-        eventCode: Document.NOTICE_OF_TRIAL.eventCode,
+        documentType: NOTICE_OF_TRIAL.documentType,
+        eventCode: NOTICE_OF_TRIAL.eventCode,
         processingStatus: 'complete',
         userId: user.userId,
       },
@@ -143,10 +148,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           trialSessionId: trialSessionEntity.trialSessionId,
         });
 
-      standingPretrialDocumentTitle =
-        Document.STANDING_PRETRIAL_NOTICE.documentType;
-      standingPretrialDocumentEventCode =
-        Document.STANDING_PRETRIAL_NOTICE.eventCode;
+      standingPretrialDocumentTitle = STANDING_PRETRIAL_NOTICE.documentType;
+      standingPretrialDocumentEventCode = STANDING_PRETRIAL_NOTICE.eventCode;
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
@@ -157,10 +160,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           trialSessionId: trialSessionEntity.trialSessionId,
         });
 
-      standingPretrialDocumentTitle =
-        Document.STANDING_PRETRIAL_ORDER.documentType;
-      standingPretrialDocumentEventCode =
-        Document.STANDING_PRETRIAL_ORDER.eventCode;
+      standingPretrialDocumentTitle = STANDING_PRETRIAL_ORDER.documentType;
+      standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
     const newStandingPretrialDocumentId = applicationContext.getUniqueId();

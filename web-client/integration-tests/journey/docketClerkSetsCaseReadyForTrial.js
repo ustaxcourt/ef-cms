@@ -1,6 +1,6 @@
 const {
   CASE_STATUS_TYPES,
-} = require('../../../shared/src/business/entities/cases/CaseConstants');
+} = require('../../../shared/src/business/entities/EntityConstants');
 
 export const docketClerkSetsCaseReadyForTrial = test => {
   return it('Docket clerk sets a case ready for trial', async () => {

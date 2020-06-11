@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 

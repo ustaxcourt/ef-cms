@@ -1,10 +1,8 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFormDocumentUrlForPreviewAction } from './getFormDocumentUrlForPreviewAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-
-const { INITIAL_DOCUMENT_TYPES } = Document;
 
 describe('getFormDocumentUrlForPreviewAction', () => {
   let form;

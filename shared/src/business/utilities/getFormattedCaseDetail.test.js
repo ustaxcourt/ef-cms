@@ -12,7 +12,7 @@ import {
 import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
-const { CASE_STATUS_TYPES } = require('../entities/cases/CaseConstants');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>

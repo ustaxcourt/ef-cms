@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';

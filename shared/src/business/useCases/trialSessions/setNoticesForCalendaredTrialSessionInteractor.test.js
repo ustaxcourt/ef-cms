@@ -2,24 +2,27 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  NOTICE_OF_TRIAL,
+  STANDING_PRETRIAL_NOTICE,
+  STANDING_PRETRIAL_ORDER,
+} = require('../../entities/EntityConstants');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
-const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.documents.find(
-    document => document.documentType === Document.NOTICE_OF_TRIAL.documentType,
+    document => document.documentType === NOTICE_OF_TRIAL.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.documents.find(
     document =>
-      document.documentType ===
-        Document.STANDING_PRETRIAL_NOTICE.documentType ||
-      document.documentType === Document.STANDING_PRETRIAL_ORDER.documentType,
+      document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
+      document.documentType === STANDING_PRETRIAL_ORDER.documentType,
   );
 };
 
@@ -205,7 +208,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketRecord.find(
-        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+        entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };
 
@@ -345,7 +348,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketRecord.find(
-        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+        entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };
 
