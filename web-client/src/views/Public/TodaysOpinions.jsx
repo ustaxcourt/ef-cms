@@ -16,8 +16,8 @@ export const TodaysOpinions = connect(
           <h1>December 23, 2018</h1>
 
           <table
-            aria-label="docket record"
-            className="usa-table case-detail docket-record responsive-table row-border-only"
+            aria-label="todays opinions"
+            className="usa-table todays-opinions responsive-table row-border-only"
           >
             <thead>
               <tr>
