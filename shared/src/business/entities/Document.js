@@ -6,12 +6,11 @@ const {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
-  NOTICE_OF_DOCKET_CHANGE,
-  NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
+  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
+  SIGNED_DOCUMENT_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
@@ -123,25 +122,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.generateFiledBy(rawDocument);
 }
 
-const practitionerAssociationDocumentTypes = [
-  'Entry of Appearance',
-  'Substitution of Counsel',
-];
-
-Document.SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfDocketChange: NOTICE_OF_DOCKET_CHANGE,
-  noticeOfTrial: NOTICE_OF_TRIAL,
-  standingPretrialNotice: STANDING_PRETRIAL_NOTICE,
-  standingPretrialOrder: STANDING_PRETRIAL_ORDER,
-};
-
-Document.SIGNED_DOCUMENT_TYPES = {
-  signedStipulatedDecision: {
-    documentType: 'Stipulated Decision',
-    eventCode: 'SDEC',
-  },
-};
-
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
     return (
@@ -163,16 +143,16 @@ Document.getDocumentTypes = () => {
   const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
     t => INITIAL_DOCUMENT_TYPES[t].documentType,
   );
-  const signedTypes = Object.keys(Document.SIGNED_DOCUMENT_TYPES).map(
-    t => Document.SIGNED_DOCUMENT_TYPES[t].documentType,
+  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
+    t => SIGNED_DOCUMENT_TYPES[t].documentType,
   );
-  const systemGeneratedTypes = Object.keys(
-    Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
-  ).map(t => Document.SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType);
+  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
+    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
+  );
 
   const documentTypes = [
     ...initialTypes,
-    ...practitionerAssociationDocumentTypes,
+    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
     ...filingEventTypes,
     ...orderDocTypes,
     ...courtIssuedDocTypes,
@@ -182,29 +162,6 @@ Document.getDocumentTypes = () => {
 
   return documentTypes;
 };
-
-/**
- *
- * @returns {Array} event codes defined in the Document entity
- */
-Document.eventCodes = [
-  INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
-  INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-  INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-  INITIAL_DOCUMENT_TYPES.stin.eventCode,
-  NOTICE_OF_DOCKET_CHANGE.eventCode,
-  NOTICE_OF_TRIAL.eventCode,
-  STANDING_PRETRIAL_NOTICE.eventCode,
-  STANDING_PRETRIAL_ORDER.eventCode,
-  // TODO: Move these constants
-  'MISL',
-  'FEE',
-  'FEEW',
-  'MGRTED',
-  'MIND',
-  'MINC',
-];
 
 joiValidationDecorator(
   Document,
@@ -498,7 +455,7 @@ Document.prototype.isAutoServed = function () {
   const isExternalDocumentType = externalDocumentTypes.includes(
     this.documentType,
   );
-  const isPractitionerAssociationDocumentType = practitionerAssociationDocumentTypes.includes(
+  const isPractitionerAssociationDocumentType = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(
     this.documentType,
   );
   //if fully concatenated document title includes the word Simultaneous, do not auto-serve

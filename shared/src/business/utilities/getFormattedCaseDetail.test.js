@@ -1,4 +1,3 @@
-import { Case } from '../entities/cases/Case';
 import {
   TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
@@ -12,7 +11,10 @@ import {
 import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
+const {
+  CASE_STATUS_TYPES,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -754,7 +756,7 @@ it('should format filing fee string for a paid petition fee', () => {
       ...mockCaseDetailBase,
       petitionPaymentDate: '2019-03-01T21:40:46.415Z',
       petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
     },
   });
 
@@ -766,7 +768,7 @@ it('should format filing fee string for a waived petition fee', () => {
     applicationContext,
     caseDetail: {
       ...mockCaseDetailBase,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
     },
   });
@@ -779,7 +781,7 @@ it('should format filing fee string for an unpaid petition fee', () => {
     applicationContext,
     caseDetail: {
       ...mockCaseDetailBase,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     },
   });
 
