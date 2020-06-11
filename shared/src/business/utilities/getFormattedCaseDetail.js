@@ -3,13 +3,16 @@ const {
   calendarDatesCompared,
   createISODateString,
 } = require('./DateHandler');
+const {
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
 
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
