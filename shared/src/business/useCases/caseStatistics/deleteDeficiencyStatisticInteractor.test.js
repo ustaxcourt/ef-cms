@@ -6,7 +6,7 @@ const {
 } = require('./deleteDeficiencyStatisticInteractor');
 const { CASE_TYPES_MAP } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('deleteDeficiencyStatisticInteractor', () => {
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
@@ -23,7 +23,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 

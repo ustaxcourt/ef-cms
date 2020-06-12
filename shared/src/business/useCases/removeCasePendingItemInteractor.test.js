@@ -4,6 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('removeCasePendingItemInteractor', () => {
@@ -12,7 +13,7 @@ describe('removeCasePendingItemInteractor', () => {
   beforeEach(() => {
     user = new User({
       name: 'Petitions Clerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -28,7 +29,7 @@ describe('removeCasePendingItemInteractor', () => {
   it('should throw an unauthorized error if user is unauthorized for updating a case', async () => {
     user = new User({
       name: 'Petitioner',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '2c464719-646c-463e-9826-16443500ed88',
     });
 

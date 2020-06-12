@@ -4,12 +4,12 @@ const {
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     section: 'docket',
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
@@ -62,7 +62,7 @@ describe('fileDocketEntryInteractor', () => {
       partyType: ContactFactory.PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 

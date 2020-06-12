@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -26,15 +28,15 @@ const getBaseState = user => {
 };
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   userId: '123',
 };
 const docketClerkUser = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '234',
 };
 const judgeUser = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: '345',
 };
 

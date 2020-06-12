@@ -1,12 +1,12 @@
 const faker = require('faker');
 const {
   PROCEDURE_TYPES,
+  ROLES,
 } = require('../../../../shared/src/business/entities/EntityConstants');
 const {
   TrialSession,
 } = require('../../../../shared/src/business/entities/trialSessions/TrialSession');
 const { Case } = require('../../../../shared/src/business/entities/cases/Case');
-const { User } = require('../../../../shared/src/business/entities/User');
 
 const createTrialSession = async ({ applicationContext }) => {
   let startDate = faker.date.future(1);
@@ -133,7 +133,7 @@ const createCase = async ({
           state: faker.address.stateAbbr(),
         },
         filingType: faker.random.arrayElement(
-          Case.FILING_TYPES[User.ROLES.petitioner],
+          Case.FILING_TYPES[ROLES.petitioner],
         ),
         hasIrsNotice: false,
         partyType: 'Petitioner',

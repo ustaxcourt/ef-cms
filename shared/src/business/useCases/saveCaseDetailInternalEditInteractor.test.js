@@ -5,7 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { omit } = require('lodash');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateCase', () => {
   const MOCK_CASE = {
@@ -64,7 +64,7 @@ describe('updateCase', () => {
 
   const petitionsClerkUser = {
     name: 'petitions clerk',
-    role: User.ROLES.petitionsClerk,
+    role: ROLES.petitionsClerk,
     userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
   };
 
