@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkClearsSignatureFromDraftDocument = test => {
   return it('petitions clerk clears signature on a draft document', async () => {
     await test.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,

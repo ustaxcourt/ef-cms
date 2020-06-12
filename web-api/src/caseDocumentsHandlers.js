@@ -9,6 +9,8 @@ module.exports = {
     .createWorkItemLambda,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .downloadPolicyUrlLambda,
+  fileCorrespondenceDocumentLambda: require('./correspondence/fileCorrespondenceDocumentLambda')
+    .fileCorrespondenceDocumentLambda,
   fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
     .fileCourtIssuedDocketEntryLambda,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
@@ -21,14 +23,16 @@ module.exports = {
     .fileExternalDocumentToConsolidatedCasesLambda,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .getDocumentDownloadUrlLambda,
+  opinionAdvancedSearchLambda: require('./documents/opinionAdvancedSearchLambda')
+    .opinionAdvancedSearchLambda,
   orderAdvancedSearchLambda: require('./documents/orderAdvancedSearchLambda')
     .orderAdvancedSearchLambda,
-  saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
-    .saveIntermediateDocketEntryLambda,
   serveCourtIssuedDocumentLambda: require('./cases/serveCourtIssuedDocumentLambda')
     .serveCourtIssuedDocumentLambda,
   signDocumentLambda: require('./documents/signDocumentLambda')
     .signDocumentLambda,
+  updateCorrespondenceDocumentLambda: require('./correspondence/updateCorrespondenceDocumentLambda')
+    .updateCorrespondenceDocumentLambda,
   updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
     .updateCourtIssuedDocketEntryLambda,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')

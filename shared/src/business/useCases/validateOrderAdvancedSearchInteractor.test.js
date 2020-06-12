@@ -8,7 +8,7 @@ describe('validateOrderAdvancedSearchInteractor', () => {
     const errors = validateOrderAdvancedSearchInteractor({
       applicationContext,
       orderSearch: {
-        orderKeyword: 'Joe Exotic',
+        keyword: 'Joe Exotic',
       },
     });
 
@@ -19,10 +19,10 @@ describe('validateOrderAdvancedSearchInteractor', () => {
     const errors = validateOrderAdvancedSearchInteractor({
       applicationContext,
       orderSearch: {
-        orderKeyword: '',
+        keyword: '',
       },
     });
 
-    expect(errors).toMatchObject({ orderKeyword: 'Enter a keyword or phrase' });
+    expect(errors).toMatchObject({ keyword: 'Enter a keyword or phrase' });
   });
 });

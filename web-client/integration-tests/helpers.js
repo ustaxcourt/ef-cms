@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-export */
 import { CerebralTest } from 'cerebral/test';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
@@ -9,7 +10,8 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
+
+import { DynamoDB } from 'aws-sdk';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -36,6 +38,19 @@ const {
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
+Object.assign(applicationContext, {
+  getDocumentClient: () => {
+    return new DynamoDB.DocumentClient({
+      endpoint: 'http://localhost:8000',
+      region: 'us-east-1',
+    });
+  },
+  getEnvironment: () => ({
+    stage: 'local',
+  }),
+  getScanner: getScannerInterface,
+});
+
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 export const fakeFile = (() => {
@@ -56,6 +71,35 @@ export const getFormattedDocumentQCMyInbox = async test => {
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
   });
+};
+
+const client = require('../../shared/src/persistence/dynamodbClientService');
+
+export const getEmailsForAddress = address => {
+  return client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `email-${address}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
+};
+
+export const deleteEmails = emails => {
+  return Promise.all(
+    emails.map(email =>
+      client.delete({
+        applicationContext,
+        key: {
+          pk: email.pk,
+          sk: email.sk,
+        },
+      }),
+    ),
+  );
 };
 
 export const getFormattedDocumentQCSectionInbox = async test => {
@@ -318,6 +362,11 @@ export const uploadPetition = async (
   overrides = {},
   loginUsername = 'petitioner',
 ) => {
+  const user = {
+    ...userMap[loginUsername],
+    sub: userMap[loginUsername].userId,
+  };
+
   const petitionMetadata = {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -326,6 +375,7 @@ export const uploadPetition = async (
       address3: 'Et sunt veritatis ei',
       city: 'Et id aut est velit',
       countryType: 'domestic',
+      email: user.email,
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
@@ -343,10 +393,6 @@ export const uploadPetition = async (
   const stinFileId = '2efcd272-da92-4e31-bedc-28cdad2e08b0';
 
   //create token
-  const user = {
-    ...userMap[loginUsername],
-    sub: userMap[loginUsername].userId,
-  };
   const userToken = jwt.sign(user, 'secret');
 
   const response = await axios.post(
@@ -369,6 +415,7 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
+  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -410,9 +457,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   presenter.state.baseUrl = process.env.API_URL || 'http://localhost:3000';
 
-  presenter.providers.applicationContext = Object.assign(applicationContext, {
-    getScanner: getScannerInterface,
-  });
+  presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext = applicationContext;
   const { initialize: initializeSocketProvider, start, stop } = socketProvider({
@@ -522,8 +567,8 @@ export const gotoRoute = (routes, routeToGoTo) => {
         '$',
     );
     if (routeToGoTo.match(regex)) {
-      let match = regex.exec(routeToGoTo);
-      while (match != null) {
+      const match = regex.exec(routeToGoTo);
+      if (match != null) {
         const args = match.splice(1);
         return route.cb.call(this, ...args);
       }
@@ -561,19 +606,17 @@ export const wait = time => {
 };
 
 export const refreshElasticsearchIndex = async () => {
-  await Promise.all(
-    elasticsearchIndexes.map(async index => {
-      await axios.post(`http://localhost:9200/${index}/_refresh`);
-    }),
-  );
+  // refresh all ES indices:
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
+  await axios.post('http://localhost:9200/_refresh');
   return await wait(1500);
 };
 
 export const base64ToUInt8Array = b64 => {
-  var binaryStr = Buffer.from(b64, 'base64').toString('binary');
-  var len = binaryStr.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
+  const binaryStr = Buffer.from(b64, 'base64').toString('binary');
+  const len = binaryStr.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
     bytes[i] = binaryStr.charCodeAt(i);
   }
   return bytes;

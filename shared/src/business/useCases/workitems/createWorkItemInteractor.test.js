@@ -70,7 +70,7 @@ describe('createWorkItem', () => {
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: Case.STATUS_TYPES.new,
       docketNumber: '101-18',
-      docketNumberSuffix: undefined,
+      docketNumberWithSuffix: '101-18',
       document: {
         documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Answer',
@@ -117,7 +117,7 @@ describe('createWorkItem', () => {
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: Case.STATUS_TYPES.new,
       docketNumber: '101-18',
-      docketNumberSuffix: undefined,
+      docketNumberWithSuffix: '101-18',
       document: {
         documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Answer',

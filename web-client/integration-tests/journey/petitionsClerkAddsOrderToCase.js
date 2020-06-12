@@ -5,7 +5,7 @@ import { wait } from '../helpers';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export default test => {
+export const petitionsClerkAddsOrderToCase = test => {
   return it('Petitions clerk adds Order to case', async () => {
     await test.runSequence('openCreateMessageModalSequence');
 

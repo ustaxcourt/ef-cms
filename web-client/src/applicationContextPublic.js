@@ -17,8 +17,10 @@ import {
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
+import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
@@ -44,8 +46,10 @@ const applicationContextPublic = {
     generatePublicDocketRecordPdfInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getPublicJudgesInteractor,
+    opinionPublicSearchInteractor,
     orderPublicSearchInteractor,
     validateCaseAdvancedSearchInteractor,
+    validateOpinionAdvancedSearchInteractor,
     validateOrderAdvancedSearchInteractor,
   }),
   getUtilities: () => {

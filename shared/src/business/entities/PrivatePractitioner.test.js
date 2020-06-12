@@ -20,13 +20,14 @@ describe('PrivatePractitioner', () => {
       role: User.ROLES.privatePractitioner,
       userId: 'petitioner',
     });
+
     expect(user.isValid()).toBeTruthy();
     expect(user.entityName).toEqual('PrivatePractitioner');
   });
 
   it('Creates an invalid', () => {
     const user = new PrivatePractitioner({
-      role: User.ROLES.privatePractitioner,
+      role: User.ROLES.irsPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });

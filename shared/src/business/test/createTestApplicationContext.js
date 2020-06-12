@@ -103,6 +103,7 @@ const { Case } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
+const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
@@ -178,6 +179,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(formatDocument),
+    formatDollars: jest.fn().mockImplementation(formatDollars),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formattedTrialSessionDetails: jest
       .fn()
@@ -215,15 +217,18 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
-    generatePendingReportPdf: jest.fn(),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
   });
 
   const getDocumentGeneratorsReturnMock = {
+    caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    pendingReport: jest.fn().mockImplementation(getFakeFile),
+    receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
   };
 
@@ -234,11 +239,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generatePrintableFilingReceiptTemplate: jest
-      .fn()
-      .mockReturnValue('<div></div>'),
     generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateStandingPretrialOrderTemplate: jest.fn(),
     generateTrialCalendarTemplate: jest.fn(),
     generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
@@ -250,6 +251,12 @@ const createTestApplicationContext = ({ user } = {}) => {
       setContent: jest.fn(),
     }),
   };
+
+  const mockGetStorageClient = appContextProxy({
+    getObject: jest.fn().mockReturnValue({
+      promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
+    }),
+  });
 
   const mockGetPersistenceGateway = appContextProxy({
     addWorkItemToSectionInbox,
@@ -382,6 +389,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getEntityByName: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
+    getIrsSuperuserEmail: jest.fn(),
     getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
@@ -396,7 +404,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
-    getStorageClient: appContextProxy(),
+    getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getTemplateGenerators: jest
       .fn()
@@ -441,4 +449,5 @@ module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
+  getFakeFile,
 };

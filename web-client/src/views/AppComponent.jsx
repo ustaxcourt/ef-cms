@@ -33,6 +33,7 @@ import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/E
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
@@ -41,8 +42,10 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
+import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -62,6 +65,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UploadCorrespondenceDocument } from './Correspondence/UploadCorrespondenceDocument';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -102,14 +106,17 @@ const pages = {
   EditUploadCourtIssuedDocument,
   Error,
   FileDocumentWizard,
+  FilePetitionSuccess,
   IdleLogout,
   Interstitial,
   Loading,
   LogIn,
   Messages,
   PendingReport,
+  PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
+  PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
@@ -128,6 +135,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UploadCorrespondenceDocument,
   UploadCourtIssuedDocument,
   UserContactEdit,
 };

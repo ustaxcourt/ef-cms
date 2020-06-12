@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { gotoDashboardSequence } from './gotoDashboardSequence';
+import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 
 export const closeModalAndReturnToDashboardSequence = [
   clearModalAction,
-  gotoDashboardSequence,
+  navigateToDashboardAction,
 ];

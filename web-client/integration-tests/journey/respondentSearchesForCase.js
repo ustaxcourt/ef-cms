@@ -1,4 +1,4 @@
-export default test => {
+export const respondentSearchesForCase = test => {
   return it('Respondent searches for case', async () => {
     await test.runSequence('updateSearchTermSequence', {
       searchTerm: test.docketNumber,
