@@ -204,9 +204,14 @@ export const CreateCaseMessageModalDialog = connect(
               id="document"
               name="document"
               onChange={e => {
+                const optionTextSplit = e.target.value.split('|');
+
+                const documentId = optionTextSplit[0];
+                const documentTitle = optionTextSplit[1];
+
                 updateCreateCaseMessageAttachmentsSequence({
-                  documentId: e.target.value,
-                  documentTitle: e.target.options[e.target.selectedIndex].text,
+                  documentId,
+                  documentTitle,
                 });
                 updateScreenMetadataSequence({
                   key: 'showAddDocumentForm',
@@ -216,6 +221,39 @@ export const CreateCaseMessageModalDialog = connect(
               }}
             >
               <option value="">- Select -</option>
+              {createCaseMessageModalHelper.draftDocuments.length > 0 && (
+                <optgroup label="Draft documents">
+                  {createCaseMessageModalHelper.draftDocuments.map(document => {
+                    const title =
+                      document.documentTitle || document.documentType;
+                    return (
+                      <option
+                        key={document.documentId}
+                        value={`${document.documentId}|${title}`}
+                      >
+                        {document.createdAtFormatted} - {title}
+                      </option>
+                    );
+                  })}
+                </optgroup>
+              )}
+
+              {createCaseMessageModalHelper.documents.length > 0 && (
+                <optgroup label="Docket record">
+                  {createCaseMessageModalHelper.documents.map(document => {
+                    const title =
+                      document.documentTitle || document.documentType;
+                    return (
+                      <option
+                        key={document.documentId}
+                        value={`${document.documentId}|${title}`}
+                      >
+                        {document.createdAtFormatted} - {title}
+                      </option>
+                    );
+                  })}
+                </optgroup>
+              )}
             </select>
           </FormGroup>
         )}
