@@ -6,7 +6,7 @@ import { docketClerkEditsPetitionerInformation } from './journey/docketClerkEdit
 import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
 import { docketClerkEditsServiceIndicatorForPractitioner } from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import { docketClerkEditsServiceIndicatorForRespondent } from './journey/docketClerkEditsServiceIndicatorForRespondent';
-import { docketClerkServesOrderOnPaperParties } from './journey/docketClerkServesOrderOnPaperParties';
+import { docketClerkServesDocumentOnPaperParties } from './journey/docketClerkServesDocumentOnPaperParties';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -50,5 +50,5 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     expectedDocumentType: 'Order',
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrderOnPaperParties(test, 0);
+  docketClerkServesDocumentOnPaperParties(test, 0);
 });

@@ -16,13 +16,14 @@ export const TodaysOpinions = connect(
         <section className="usa-section grid-container todays-opinions">
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
-          {(todaysOpinionsHelper.formattedOpinions.length === 0) &
-          <p>There are no opinions today.</p>}
+          {todaysOpinionsHelper.formattedOpinions.length === 0 && (
+            <p>There are no opinions today.</p>
+          )}
 
           {todaysOpinionsHelper.formattedOpinions.length > 0 && (
             <table
-              aria-label="docket record"
-              className="usa-table case-detail docket-record responsive-table row-border-only"
+              aria-label="todays opinions"
+              className="usa-table todays-opinions responsive-table row-border-only"
             >
               <thead>
                 <tr>

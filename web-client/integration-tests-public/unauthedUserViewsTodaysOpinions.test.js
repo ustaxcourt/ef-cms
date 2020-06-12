@@ -1,7 +1,7 @@
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkConvertsAnOrderToAnOpinion } from '../integration-tests/journey/docketClerkConvertsAnOrderToAnOpinion';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
-import { docketClerkEditsDocketEntryFromOrderTypeB } from '../integration-tests/journey/docketClerkEditsDocketEntryFromOrderTypeB';
-import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
 
 import {
@@ -29,6 +29,8 @@ describe('Unauthed user views todays opinions', () => {
     testClient.docketNumber = caseDetail.docketNumber;
   });
 
+  //  the next few tests create an order document, then edit it to convert
+  //  it to an opinion type document, and then serve that opinion in order for it to show up in todays opinions
   loginAs(testClient, 'docketclerk');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order to do something',
@@ -37,8 +39,8 @@ describe('Unauthed user views todays opinions', () => {
   });
   docketClerkViewsDraftOrder(testClient, 0);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
-  docketClerkEditsDocketEntryFromOrderTypeB(testClient, 0);
-  docketClerkServesOrder(testClient, 0);
+  docketClerkConvertsAnOrderToAnOpinion(testClient, 0);
+  docketClerkServesDocument(testClient, 0);
 
   unauthedUserViewsTodaysOpinions(test);
 });
