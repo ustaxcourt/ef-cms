@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- * sets the state.today'sOpinions based on props.today'sOpinions
+ * sets the state.todaysOpinions based on props.todaysOpinions
  *
  * @param {object} props the props object
  * @param {object} store the store object

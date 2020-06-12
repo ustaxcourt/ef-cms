@@ -103,6 +103,7 @@ export const DocketRecordOverlay = connect(
               <hr className="margin-top-1 margin-bottom-2" />
               <h3 tabIndex="-1">{record.description}</h3>
               <Button
+                link
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
                 onClick={() => {

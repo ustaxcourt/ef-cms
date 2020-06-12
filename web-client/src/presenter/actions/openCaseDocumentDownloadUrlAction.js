@@ -24,7 +24,6 @@ export const openCaseDocumentDownloadUrlAction = async ({
     isPublic,
   });
 
-  console.log('url', url);
   if (isForIFrame) {
     store.set(state.iframeSrc, url);
   } else {

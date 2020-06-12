@@ -1,5 +1,5 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { PAYMENT_STATUS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from './caseDetailEditHelper';
 import { runCompute } from 'cerebral/test';
@@ -329,7 +329,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         },
       },
     });
@@ -340,7 +340,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
     });
@@ -351,7 +351,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
     });
