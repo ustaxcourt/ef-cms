@@ -4,7 +4,7 @@ const {
 const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('./getIrsPractitionersBySearchKeyInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 let user;
 
@@ -17,7 +17,7 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
   it('should throw an error when not authorized', async () => {
     user = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -40,7 +40,7 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
   it('should return users from persistence', async () => {
     user = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 

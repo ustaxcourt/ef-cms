@@ -5,7 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../test/mockUsers');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const contactPrimary = {
@@ -72,7 +72,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -81,7 +81,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -134,7 +134,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -143,7 +143,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -184,7 +184,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -193,7 +193,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },

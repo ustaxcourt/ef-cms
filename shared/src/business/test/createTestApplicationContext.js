@@ -110,6 +110,7 @@ const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -385,7 +386,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return new User(
         user || {
           name: 'richard',
-          role: User.ROLES.petitioner,
+          role: ROLES.petitioner,
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       );

@@ -4,7 +4,7 @@ const {
 const {
   canSetTrialSessionAsCalendaredInteractor,
 } = require('./canSetTrialSessionAsCalendaredInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -45,7 +45,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
   it('gets the result back from the interactor', () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
 

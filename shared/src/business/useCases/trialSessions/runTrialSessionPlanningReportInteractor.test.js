@@ -6,8 +6,8 @@ const {
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { User } = require('../../entities/User');
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
@@ -22,7 +22,7 @@ describe('run trial session planning report', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -41,7 +41,7 @@ describe('run trial session planning report', () => {
 
   it('returns the created pdf url', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     };
 
@@ -128,7 +128,7 @@ describe('run trial session planning report', () => {
         },
       ];
       user = {
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'petitionsClerk',
       };
 

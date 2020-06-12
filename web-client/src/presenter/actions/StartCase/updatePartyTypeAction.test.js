@@ -1,5 +1,5 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -17,7 +17,7 @@ const getFixtures = (props, state = {}) => ({
   state: {
     ...state,
     user: {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     },
   },
 });

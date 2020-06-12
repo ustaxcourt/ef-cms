@@ -1,12 +1,12 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
-const { User } = require('./User');
+const { ROLES } = require('./EntityConstants');
 const { WorkItem } = require('./WorkItem');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  role: User.ROLES.petitioner,
+  role: ROLES.petitioner,
   userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
 };
 const caseDetail = {

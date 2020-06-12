@@ -2,9 +2,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../EntityConstants');
 const {
   MOCK_CASE,
@@ -21,7 +23,6 @@ const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -376,7 +377,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           automaticBlocked: true,
           automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
         {
           applicationContext,
@@ -1982,7 +1983,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.automaticBlocked).toEqual(true);
       expect(caseToUpdate.automaticBlockedReason).toEqual(
-        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        AUTOMATIC_BLOCKED_REASONS.pending,
       );
       expect(caseToUpdate.automaticBlockedDate).toBeDefined();
       expect(caseToUpdate.isValid()).toBeTruthy();
@@ -2875,7 +2876,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2894,7 +2895,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2908,7 +2909,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity,
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });

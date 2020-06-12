@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -22,11 +23,7 @@ exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
-  if (
-    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
-      user.role,
-    )
-  ) {
+  if (![ROLES.privatePractitioner, ROLES.irsPractitioner].includes(user.role)) {
     throw new UnauthorizedError(
       'Unauthorized to retrieve users other than practitioners',
     );

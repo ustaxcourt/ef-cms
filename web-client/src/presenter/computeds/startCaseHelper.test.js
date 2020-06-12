@@ -1,5 +1,5 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
@@ -14,7 +14,7 @@ const startCaseHelper = withAppContextDecorator(
 describe('start a case computed', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
   });
 
@@ -106,7 +106,7 @@ describe('start a case computed', () => {
 
   it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
     });
 
     const result = runCompute(startCaseHelper, {
@@ -122,7 +122,7 @@ describe('start a case computed', () => {
 
   it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
 
     const result = runCompute(startCaseHelper, {

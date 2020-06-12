@@ -1,12 +1,15 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
+
 import { applicationContext } from '../../applicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 applicationContext.getCurrentUser = () => ({
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
 });
 

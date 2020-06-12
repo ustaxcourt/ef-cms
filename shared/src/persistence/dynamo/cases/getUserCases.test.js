@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 const { getUserCases } = require('./getUserCases');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 const {
   applicationContext,
@@ -17,7 +17,7 @@ applicationContext.getDocumentClient.mockReturnValue({
 });
 
 const user = {
-  role: User.ROLES.petitioner,
+  role: ROLES.petitioner,
   userId: '522573b0-dc40-47f7-96fd-64758da315f5',
 };
 
