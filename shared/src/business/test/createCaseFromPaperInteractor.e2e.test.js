@@ -14,7 +14,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('createCaseFromPaperInteractor integration test', () => {
   const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
@@ -26,7 +26,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });

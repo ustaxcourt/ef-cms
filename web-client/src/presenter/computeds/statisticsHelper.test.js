@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { statisticsHelper as statisticsHelperComputed } from './statisticsHelper';
@@ -124,7 +124,7 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
         },
         permissions: {
           ADD_EDIT_STATISTICS: true,
@@ -142,7 +142,7 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
         },
         permissions: {
           ADD_EDIT_STATISTICS: false,
@@ -160,7 +160,7 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.cdp,
+          caseType: CASE_TYPES_MAP.cdp,
         },
         permissions: {
           ADD_EDIT_STATISTICS: true,
@@ -180,7 +180,7 @@ describe('statisticsHelper', () => {
     const result = runCompute(statisticsHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           statistics: statisticsWithMaxLength,
         },
         permissions: {

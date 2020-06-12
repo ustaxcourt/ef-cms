@@ -4,7 +4,7 @@ const {
 const {
   updateDocketEntryInteractor,
 } = require('./updateDocketEntryInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
@@ -77,14 +77,14 @@ describe('updateDocketEntryInteractor', () => {
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
   beforeEach(() => {
     mockCurrentUser = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -92,7 +92,7 @@ describe('updateDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

@@ -2,42 +2,42 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 import { getJudgeForUserChambersInteractor } from './getJudgeForUserChambersInteractor';
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 let currentUser;
 
 const chambersUser = {
-  role: User.ROLES.chambers,
+  role: ROLES.chambers,
   section: 'judgesChambers',
   userId: 'chambers1',
 };
 
 const judgeUser = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   section: 'judgesChambers',
   userId: 'judge1',
 };
 
 const allUsers = [
   {
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     section: 'docket',
     userId: 'docketclerk1',
   },
   { ...judgeUser },
   {
-    role: User.ROLES.judge,
+    role: ROLES.judge,
     section: 'judgesChambers2',
     userId: 'judge2',
   },
   { ...chambersUser },
   {
-    role: User.ROLES.chambers,
+    role: ROLES.chambers,
     section: 'judgesChambers',
     userId: 'chambers2',
   },
   {
-    role: User.ROLES.chambers,
+    role: ROLES.chambers,
     section: 'judgesChambers2',
     userId: 'chambers3',
   },
@@ -110,7 +110,7 @@ describe('getJudgeForUserChambersInteractor', () => {
 
   it('Returns no user if the given user is not associated with any chambers section', async () => {
     currentUser = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketclerk1',
     };
 

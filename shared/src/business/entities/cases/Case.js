@@ -1,7 +1,11 @@
 const joi = require('@hapi/joi');
 const {
   ANSWER_DOCUMENT_CODES,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
@@ -9,6 +13,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
+  ROLES,
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
@@ -49,45 +54,14 @@ const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
 Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
 
-Case.CASE_TYPES_MAP = {
-  cdp: 'CDP (Lien/Levy)',
-  deficiency: 'Deficiency',
-  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
-  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
-  innocentSpouse: 'Innocent Spouse',
-  interestAbatement: 'Interest Abatement',
-  other: 'Other',
-  partnershipSection1101: 'Partnership (BBA Section 1101)',
-  partnershipSection6226: 'Partnership (Section 6226)',
-  partnershipSection6228: 'Partnership (Section 6228)',
-  passport: 'Passport',
-  whistleblower: 'Whistleblower',
-  workerClassification: 'Worker Classification',
-};
-
-Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
-
 Case.FILING_TYPES = {
-  [User.ROLES.petitioner]: [
-    'Myself',
-    'Myself and my spouse',
-    'A business',
-    'Other',
-  ],
-  [User.ROLES.privatePractitioner]: [
+  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.privatePractitioner]: [
     'Individual petitioner',
     'Petitioner and spouse',
     'A business',
     'Other',
   ],
-};
-
-Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
-
-Case.AUTOMATIC_BLOCKED_REASONS = {
-  dueDate: 'Due Date',
-  pending: 'Pending Item',
-  pendingAndDueDate: 'Pending Item and Due Date',
 };
 
 Case.CHIEF_JUDGE = CHIEF_JUDGE;
@@ -359,7 +333,7 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi
       .string()
-      .valid(...Object.values(Case.AUTOMATIC_BLOCKED_REASONS))
+      .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
       .required()
       .description('The reason the case was automatically blocked from trial.'),
   }),
@@ -409,7 +383,7 @@ Case.VALIDATION_RULES = {
     .meta({ tags: ['Restricted'] }),
   caseType: joi
     .string()
-    .valid(...Case.CASE_TYPES)
+    .valid(...CASE_TYPES)
     .required(),
   closedDate: joi.when('status', {
     is: CASE_STATUS_TYPES.closed,
@@ -461,8 +435,8 @@ Case.VALIDATION_RULES = {
   filingType: joi
     .string()
     .valid(
-      ...Case.FILING_TYPES[User.ROLES.petitioner],
-      ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
+      ...Case.FILING_TYPES[ROLES.petitioner],
+      ...Case.FILING_TYPES[ROLES.privatePractitioner],
     )
     .optional(),
   hasVerifiedIrsNotice: joi
@@ -653,7 +627,7 @@ Case.VALIDATION_RULES = {
         .items(joi.object().meta({ entityName: 'Statistic' }))
         .optional(),
       then: joi.when('caseType', {
-        is: Case.CASE_TYPES_MAP.deficiency,
+        is: CASE_TYPES_MAP.deficiency,
         otherwise: joi
           .array()
           .items(joi.object().meta({ entityName: 'Statistic' }))
@@ -948,7 +922,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     const result = caseCaptionRegex.exec(docketRecord.description);
     if (result) {
       const [, , changedCaption] = result;
-      lastCaption = changedCaption.replace(` ${Case.CASE_CAPTION_POSTFIX}`, '');
+      lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
     }
   });
 
@@ -959,7 +933,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.addDocketRecord(
       new DocketRecord(
         {
-          description: `Caption of case is amended from '${lastCaption} ${Case.CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${Case.CASE_CAPTION_POSTFIX}'`,
+          description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           eventCode: 'MINC',
           filingDate: createISODateString(),
         },
@@ -1317,7 +1291,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
 
-  const isIrsSuperuser = user.role === User.ROLES.irsSuperuser;
+  const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
   const petitionDocument = (caseRaw.documents || []).find(
     doc => doc.documentType === 'Petition',
@@ -1386,11 +1360,11 @@ Case.prototype.updateAutomaticBlocked = function ({ caseDeadlines }) {
   const hasPendingItems = this.doesHavePendingItems();
   let automaticBlockedReason;
   if (hasPendingItems && !isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
   } else if (hasPendingItems) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pending;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
   } else if (!isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.dueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
   }
   if (automaticBlockedReason) {
     this.automaticBlocked = true;

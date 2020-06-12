@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -10,7 +10,7 @@ const addEditUserCaseNoteModalHelper = withAppContextDecorator(
   addEditUserCaseNoteModalHelperComputed,
   {
     getConstants: () => ({
-      USER_ROLES: User.ROLES,
+      USER_ROLES: ROLES,
     }),
     getCurrentUser: () => currentUser,
   },
@@ -19,7 +19,7 @@ const addEditUserCaseNoteModalHelper = withAppContextDecorator(
 describe('addEditUserCaseNoteModalHelper', () => {
   it("should return Judge's notes as notesLabel if current user is not a trial clerk", () => {
     currentUser = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
     };
 
     const result = runCompute(addEditUserCaseNoteModalHelper, {});
@@ -29,7 +29,7 @@ describe('addEditUserCaseNoteModalHelper', () => {
 
   it('should return Notes as notesLabel if current user is a trial clerk', () => {
     currentUser = {
-      role: User.ROLES.trialClerk,
+      role: ROLES.trialClerk,
     };
 
     const result = runCompute(addEditUserCaseNoteModalHelper, {});

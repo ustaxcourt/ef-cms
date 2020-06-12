@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
 
@@ -32,7 +35,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -56,7 +59,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()

@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { dashboardExternalHelper as dashboardExternalHelperComputed } from './dashboardExternalHelper';
 import { runCompute } from 'cerebral/test';
@@ -12,7 +12,7 @@ const dashboardExternalHelper = withAppContextDecorator(
 describe('petitioner dashboard helper', () => {
   it('shows "what to expect" but not case list when there are no open or closed cases', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -26,7 +26,7 @@ describe('petitioner dashboard helper', () => {
   });
   it('shows case list but not "what to expect" when there is an open or closed case case', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -40,7 +40,7 @@ describe('petitioner dashboard helper', () => {
   });
   it('shows case search if defined user has privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -55,7 +55,7 @@ describe('petitioner dashboard helper', () => {
 
   it('shows case search if defined user has irsPractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {
@@ -70,7 +70,7 @@ describe('petitioner dashboard helper', () => {
 
   it('hides case search if defined user does not have privatePractitioner or irsPractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
     });
     const result = runCompute(dashboardExternalHelper, {
       state: {

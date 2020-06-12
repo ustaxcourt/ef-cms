@@ -1,5 +1,5 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import { runCompute } from 'cerebral/test';
@@ -11,10 +11,10 @@ const contactsHelper = withAppContextDecorator(
 );
 
 const petitionerUser = {
-  role: User.ROLES.petitioner,
+  role: ROLES.petitioner,
 };
 const practitionerUser = {
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
 };
 
 describe('contactsHelper', () => {

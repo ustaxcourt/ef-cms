@@ -1,4 +1,4 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { Statistic } from '../../../shared/src/business/entities/Statistic';
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
@@ -14,7 +14,7 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: Case.CASE_TYPES_MAP.deficiency,
+      value: CASE_TYPES_MAP.deficiency,
     });
     await test.runSequence('refreshStatisticsSequence');
     await test.runSequence('updateFormValueSequence', {

@@ -1,7 +1,7 @@
 const {
   fetchPendingItemsInteractor,
 } = require('./fetchPendingItemsInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fetchPendingItemsInteractor', () => {
   let searchSpy;
@@ -10,7 +10,7 @@ describe('fetchPendingItemsInteractor', () => {
     environment: { stage: 'local' },
     getCurrentUser: () => {
       return {
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       };
     },
@@ -42,7 +42,7 @@ describe('fetchPendingItemsInteractor', () => {
   it('should throw an unauthorized error if the user does not have access to blocked cases', async () => {
     applicationContext.getCurrentUser = () => {
       return {
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'petitioner',
       };
     };
