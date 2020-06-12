@@ -1,5 +1,5 @@
 resource "aws_lambda_layer_version" "puppeteer_layer" {
-  filename   = "../../runtimes/puppeteer/puppeteer_lambda_layer.tar.gz"
+  filename   = "../../runtimes/puppeteer/puppeteer_lambda_layer.zip"
   layer_name = "puppeteer-${var.environment}"
 
   compatible_runtimes = ["nodejs12.x"]
@@ -18,8 +18,8 @@ resource "aws_s3_bucket" "layer_bucket" {
 
 resource "aws_s3_bucket_object" "clamav_layer_object" {
   bucket = "${aws_s3_bucket.layer_bucket.id}"
-  key    = "${var.environment}_clamav_lambda_layer.tar.gz"
-  source = "../../runtimes/clamav/clamav_lambda_layer.tar.gz"
+  key    = "${var.environment}_clamav_lambda_layer.zip"
+  source = "../../runtimes/clamav/clamav_lambda_layer.zip"
 }
 
 resource "aws_lambda_layer_version" "clamav_layer" {

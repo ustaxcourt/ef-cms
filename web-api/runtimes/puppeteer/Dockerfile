@@ -5,6 +5,6 @@ WORKDIR /home/build
 COPY package.json /home/build/nodejs/package.json
 COPY package-lock.json /home/build/nodejs/package-lock.json
 RUN cd /home/build/nodejs/ && npm ci
-RUN tar -czf puppeteer_lambda_layer.tar.gz nodejs
+RUN zip -r puppeteer_lambda_layer.zip .
 
 CMD echo "tar has been created"
