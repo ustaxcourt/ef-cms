@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkViewsCaseDetail = (
   test,
@@ -18,9 +20,7 @@ export const petitionsClerkViewsCaseDetail = (
     expect(test.getState('caseDetail.documents').length).toEqual(
       expectedDocumentCount,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(
-      Case.CHIEF_JUDGE,
-    );
+    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
 
     const caseDetail = test.getState('caseDetail');
 

@@ -2,10 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} = require('../../entities/EntityConstants');
+const {
   removeCaseFromTrialInteractor,
 } = require('./removeCaseFromTrialInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -121,7 +123,7 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
@@ -176,7 +178,7 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
