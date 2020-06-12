@@ -6,6 +6,7 @@ const {
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
 } = require('../EntityConstants');
@@ -615,7 +616,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Petitioners',
@@ -628,7 +629,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
@@ -638,7 +639,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estate,
+        partyType: PARTY_TYPES.estate,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -650,7 +651,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Petitioner',
@@ -660,7 +661,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.trust,
+        partyType: PARTY_TYPES.trust,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -672,7 +673,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
       });
       expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
@@ -680,7 +681,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -692,7 +693,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -704,7 +705,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+        partyType: PARTY_TYPES.partnershipBBA,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -716,7 +717,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.conservator,
+        partyType: PARTY_TYPES.conservator,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -728,7 +729,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.guardian,
+        partyType: PARTY_TYPES.guardian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -740,7 +741,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.custodian,
+        partyType: PARTY_TYPES.custodian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -752,7 +753,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -764,7 +765,7 @@ describe('Case entity', () => {
     it('party type Legally Incompetent Person', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+        partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -776,7 +777,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.donor,
+        partyType: PARTY_TYPES.donor,
       });
       expect(caseCaption).toEqual('Test Petitioner, Donor, Petitioner');
     });
@@ -784,7 +785,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.transferee,
+        partyType: PARTY_TYPES.transferee,
       });
       expect(caseCaption).toEqual('Test Petitioner, Transferee, Petitioner');
     });
@@ -792,7 +793,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+        partyType: PARTY_TYPES.survivingSpouse,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -2303,7 +2304,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {
@@ -2327,7 +2328,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {

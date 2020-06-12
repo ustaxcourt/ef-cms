@@ -9,9 +9,8 @@ const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 let { applicationContext } = require('../test/createTestApplicationContext');
@@ -114,7 +113,7 @@ describe('update petitioner contact information on a case', () => {
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
@@ -128,7 +127,7 @@ describe('update petitioner contact information on a case', () => {
         caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactPrimary: MOCK_CASE.contactPrimary,
         contactSecondary: { countryType: 'domestic' },
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
       }),
     ).rejects.toThrow();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -151,7 +150,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
@@ -174,7 +173,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -195,7 +194,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
 
     const result = await updatePetitionerInformationInteractor({
@@ -212,7 +211,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
@@ -229,7 +228,7 @@ describe('update petitioner contact information on a case', () => {
         ...MOCK_CASE.contactPrimary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -246,7 +245,7 @@ describe('update petitioner contact information on a case', () => {
         ...MOCK_CASE.contactPrimary,
         email: 'test@example.com',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(
@@ -264,7 +263,7 @@ describe('update petitioner contact information on a case', () => {
           countryType: 'alien',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
       }),
     ).rejects.toThrow('The Case entity was invalid');
     expect(updateCaseStub).not.toHaveBeenCalled();

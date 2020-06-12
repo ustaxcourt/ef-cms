@@ -1,8 +1,8 @@
 import {
   COUNTRY_TYPES,
+  PARTY_TYPES,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -34,7 +34,7 @@ describe('updatePartyTypeAction', () => {
         value: 'Myself',
       }),
     );
-    expect(state.form.partyType).toEqual(ContactFactory.PARTY_TYPES.petitioner);
+    expect(state.form.partyType).toEqual(PARTY_TYPES.petitioner);
   });
 
   it('sets the partyType to "Petitioner & Deceased Spouse" when "isSpouseDeceased" is updated to "Yes"', async () => {
@@ -45,9 +45,7 @@ describe('updatePartyTypeAction', () => {
         value: 'Yes',
       }),
     );
-    expect(state.form.partyType).toEqual(
-      ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-    );
+    expect(state.form.partyType).toEqual(PARTY_TYPES.petitionerDeceasedSpouse);
   });
 
   it('sets the partyType to "Petitioner & Spouse" when "isSpouseDeceased" is updated to "No"', async () => {
@@ -58,9 +56,7 @@ describe('updatePartyTypeAction', () => {
         value: 'No',
       }),
     );
-    expect(state.form.partyType).toEqual(
-      ContactFactory.PARTY_TYPES.petitionerSpouse,
-    );
+    expect(state.form.partyType).toEqual(PARTY_TYPES.petitionerSpouse);
   });
 
   it('sets the partyType to "Donor" when "otherType" is updated to "Donor"', async () => {
@@ -71,7 +67,7 @@ describe('updatePartyTypeAction', () => {
         value: 'Donor',
       }),
     );
-    expect(state.form.partyType).toEqual(ContactFactory.PARTY_TYPES.donor);
+    expect(state.form.partyType).toEqual(PARTY_TYPES.donor);
   });
 
   it('sets the partyType to "Transferee" when "otherType" is updated to "Transferee"', async () => {
@@ -82,7 +78,7 @@ describe('updatePartyTypeAction', () => {
         value: 'Transferee',
       }),
     );
-    expect(state.form.partyType).toEqual(ContactFactory.PARTY_TYPES.transferee);
+    expect(state.form.partyType).toEqual(PARTY_TYPES.transferee);
   });
 
   it('sets the partyType to "Surviving Spouse" when "otherType" is updated to "Deceased Spouse"', async () => {
@@ -93,9 +89,7 @@ describe('updatePartyTypeAction', () => {
         value: 'Deceased Spouse',
       }),
     );
-    expect(state.form.partyType).toEqual(
-      ContactFactory.PARTY_TYPES.survivingSpouse,
-    );
+    expect(state.form.partyType).toEqual(PARTY_TYPES.survivingSpouse);
   });
 
   it('sets the partyType to the props.value passed in when key is "businessType"', async () => {

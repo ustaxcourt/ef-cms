@@ -8,10 +8,9 @@ const {
   setWorkItemAsReadInteractor,
 } = require('../useCases/workitems/setWorkItemAsReadInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -43,7 +42,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },

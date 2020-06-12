@@ -3,11 +3,9 @@ const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const {
   CASE_TYPES,
+  PARTY_TYPES,
   PROCEDURE_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
-const {
-  ContactFactory,
-} = require('../../../shared/src/business/entities/contacts/ContactFactory');
 const {
   TrialSession,
 } = require('../../../shared/src/business/entities/trialSessions/TrialSession');
@@ -76,7 +74,7 @@ const main = () => {
         countryType: 'domestic',
         filingType: 'Myself and my spouse',
         hasIrsNotice: faker.random.boolean(),
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity,
         privatePractitioners: [],
         procedureType: PROCEDURE_TYPES[faker.random.number() % 2],

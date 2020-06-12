@@ -1,5 +1,7 @@
-import { COUNTRY_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -33,7 +35,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
       state: 'IA',
     },
     hasPaper: true,
-    partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    partyType: PARTY_TYPES.petitionerSpouse,
     preferredTrialCity: trialLocation,
     procedureType: 'Small', // should generate a Standing Pretrial Notice
     trialLocation,

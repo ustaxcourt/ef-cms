@@ -4,8 +4,7 @@ const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { PAYMENT_STATUS } = require('../entities/EntityConstants');
+const { PARTY_TYPES, PAYMENT_STATUS } = require('../entities/EntityConstants');
 const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
@@ -88,7 +87,7 @@ describe('createCaseFromPaperInteractor', () => {
         hasIrsNotice: true,
         irsNoticeDate: DATE,
         mailingDate: 'testing',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -135,7 +134,7 @@ describe('createCaseFromPaperInteractor', () => {
         hasIrsNotice: true,
         irsNoticeDate: DATE,
         mailingDate: 'test',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -182,7 +181,7 @@ describe('createCaseFromPaperInteractor', () => {
         hasIrsNotice: true,
         irsNoticeDate: DATE,
         mailingDate: 'testing',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -230,7 +229,7 @@ describe('createCaseFromPaperInteractor', () => {
         hasIrsNotice: true,
         irsNoticeDate: DATE,
         mailingDate: 'testing',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,

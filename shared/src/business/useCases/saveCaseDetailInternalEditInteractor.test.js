@@ -1,9 +1,11 @@
 const {
+  CASE_STATUS_TYPES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { omit } = require('lodash');
 const { ROLES } = require('../entities/EntityConstants');
 
@@ -54,7 +56,7 @@ describe('updateCase', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
     petitioners: [{ name: 'Test Petitioner' }],
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
@@ -138,7 +140,7 @@ describe('updateCase', () => {
         filingType: 'Myself and my spouse',
         hasVerifiedIrsNotice: false,
         isPaper: false,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity: 'Mobile, Alabama',
         privatePractitioners: [],
         procedureType: 'Small',
