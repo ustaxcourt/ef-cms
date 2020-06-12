@@ -283,6 +283,9 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
+  formatAndSortConsolidatedCases,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/formatAndSortConsolidatedCases');
+const {
   formatJudgeName,
 } = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
@@ -330,6 +333,9 @@ const {
   getAllCaseDeadlines,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
 const {
+  getAllCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
+const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -350,9 +356,6 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCaseDeadlinesAllInteractor,
-} = require('../../shared/src/business/useCases/getCaseDeadlinesAllInteractor');
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
@@ -555,6 +558,9 @@ const {
   getSentMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
+  getTodaysOpinionsInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
+const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
@@ -572,6 +578,9 @@ const {
 const {
   getTrialSessionWorkingCopyInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor');
+const {
+  getUnassociatedLeadCase,
+} = require('../../shared/src/business/useCaseHelper/consolidatedCases/getUnassociatedLeadCase');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
@@ -771,9 +780,6 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
-const {
-  setUnassociatedLeadCase,
-} = require('../../shared/src/business/useCaseHelper/consolidatedCases/setUnassociatedLeadCase');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
@@ -1012,8 +1018,8 @@ const entitiesByName = {
   User,
 };
 
-module.exports = (appContextUser = {}) => {
-  setCurrentUser(appContextUser);
+module.exports = appContextUser => {
+  if (appContextUser) setCurrentUser(appContextUser);
 
   return {
     barNumberGenerator,
@@ -1335,14 +1341,15 @@ module.exports = (appContextUser = {}) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
+        formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getUnassociatedLeadCase,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
-        setUnassociatedLeadCase,
         updateCaseAutomaticBlock,
       };
     },
@@ -1397,9 +1404,9 @@ module.exports = (appContextUser = {}) => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
+        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
-        getCaseDeadlinesAllInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
@@ -1433,6 +1440,7 @@ module.exports = (appContextUser = {}) => {
         getPublicDownloadPolicyUrlInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
+        getTodaysOpinionsInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,

@@ -5,6 +5,9 @@ const {
   ContactFactory,
 } = require('../../../shared/src/business/entities/contacts/ContactFactory');
 const {
+  PROCEDURE_TYPES,
+} = require('../../../shared/src/business/entities/EntityConstants');
+const {
   TrialSession,
 } = require('../../../shared/src/business/entities/trialSessions/TrialSession');
 const { Case } = require('../../../shared/src/business/entities/cases/Case');
@@ -76,7 +79,7 @@ const main = () => {
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         preferredTrialCity,
         privatePractitioners: [],
-        procedureType: Case.PROCEDURE_TYPES[faker.random.number() % 2],
+        procedureType: PROCEDURE_TYPES[faker.random.number() % 2],
       },
       stinFileId,
     };

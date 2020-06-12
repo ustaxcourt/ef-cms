@@ -1,10 +1,10 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { CaseInternal } = require('../cases/CaseInternal');
 const { ContactFactory } = require('./ContactFactory');
+const { PAYMENT_STATUS } = require('../EntityConstants');
 
 let caseExternal;
 
@@ -584,7 +584,7 @@ describe('Petition', () => {
         partyType: ContactFactory.PARTY_TYPES.transferee,
         petitionFile: {},
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         receivedAt: '2009-10-13T08:06:07.539Z',
