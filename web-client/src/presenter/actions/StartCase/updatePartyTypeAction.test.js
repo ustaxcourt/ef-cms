@@ -1,5 +1,8 @@
+import {
+  COUNTRY_TYPES,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -158,7 +161,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+            COUNTRY_TYPES: COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -183,7 +186,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+            COUNTRY_TYPES: COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -208,7 +211,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+            COUNTRY_TYPES: COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {

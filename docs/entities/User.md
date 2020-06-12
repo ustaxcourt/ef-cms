@@ -178,6 +178,25 @@
         presence: "required"
       allow: 
         - "User"
+    section: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    token: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    userId: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     name: 
       type: "string"
       flags: 
@@ -270,24 +289,5 @@
               presence: "optional"
             allow: 
               - null
-    section: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    token: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
 
  ```

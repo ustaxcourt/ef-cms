@@ -1,5 +1,7 @@
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  COUNTRY_TYPES,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
 import { applicationContext } from '../../../applicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
@@ -85,7 +87,7 @@ describe('advancedSearchHelper', () => {
         ...getBaseState(globalUser),
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+            countryType: COUNTRY_TYPES.DOMESTIC,
           },
         },
       },
@@ -102,7 +104,7 @@ describe('advancedSearchHelper', () => {
         ...getBaseState(globalUser),
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
           },
         },
       },

@@ -173,6 +173,20 @@
         presence: "required"
       allow: 
         - "Practitioner"
+    section: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    token: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    userId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      allow: 
+        - null
     name: 
       type: "string"
       flags: 
@@ -250,20 +264,6 @@
               presence: "optional"
             allow: 
               - null
-    section: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    token: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    userId: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
     additionalPhone: 
       type: "string"
       flags: 
