@@ -8,6 +8,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
+const { PARTY_TYPES } = require('../EntityConstants');
 const { PAYMENT_STATUS, PROCEDURE_TYPES } = require('../EntityConstants');
 const { Statistic } = require('../Statistic');
 
@@ -142,10 +143,10 @@ const paperRequirements = joi
       is: joi
         .exist()
         .valid(
-          ContactFactory.PARTY_TYPES.corporation,
-          ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-          ContactFactory.PARTY_TYPES.partnershipBBA,
-          ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          PARTY_TYPES.corporation,
+          PARTY_TYPES.partnershipAsTaxMattersPartner,
+          PARTY_TYPES.partnershipBBA,
+          PARTY_TYPES.partnershipOtherThanTaxMatters,
         ),
       otherwise: joi.optional().allow(null),
       then: joi.when('orderForOds', {

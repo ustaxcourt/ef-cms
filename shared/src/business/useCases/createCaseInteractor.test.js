@@ -1,7 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('./createCaseInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('createCaseInteractor', () => {
@@ -40,7 +39,7 @@ describe('createCaseInteractor', () => {
           caseType: 'Other',
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
@@ -76,7 +75,7 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',
@@ -126,7 +125,7 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',
@@ -188,7 +187,7 @@ describe('createCaseInteractor', () => {
         filingType: 'Myself and my spouse',
         hasIrsNotice: true,
         isSpouseDeceased: 'No',
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',

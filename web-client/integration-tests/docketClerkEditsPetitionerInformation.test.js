@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -23,7 +23,7 @@ describe('docket clerk edits the petitioner information', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

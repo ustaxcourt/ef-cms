@@ -5,7 +5,7 @@ const {
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -37,7 +37,7 @@ describe('addCoversheetInteractor', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
     ],
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
   };
 
   const optionalTestingCaseData = {
@@ -64,7 +64,7 @@ describe('addCoversheetInteractor', () => {
         lodged: true,
       },
     ],
-    partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    partyType: PARTY_TYPES.petitionerSpouse,
   };
 
   beforeAll(() => {
@@ -210,7 +210,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       ],
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     };
 
     it('displays Certificate of Service when the document is filed with a certificate of service', async () => {

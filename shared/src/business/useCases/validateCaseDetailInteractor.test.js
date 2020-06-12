@@ -1,10 +1,13 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -89,7 +92,7 @@ describe('validate case detail', () => {
         filingType: 'Myself',
         hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
@@ -151,7 +154,7 @@ describe('validate case detail', () => {
         filingType: 'Other',
         hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
@@ -201,7 +204,7 @@ describe('validate case detail', () => {
         filingType: 'Other',
         hasVerifiedIrsNotice: false,
         irsNoticeDate: null,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',

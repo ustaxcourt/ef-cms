@@ -1,12 +1,14 @@
 const {
+  CASE_STATUS_TYPES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { ROLES } = require('../entities/EntityConstants');
@@ -56,7 +58,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         ],
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -402,7 +404,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Aberdeen, South Dakota',
       privatePractitioners: [],
       procedureType: 'Small',

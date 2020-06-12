@@ -2,9 +2,8 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
@@ -59,7 +58,7 @@ describe('fileDocketEntryInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
