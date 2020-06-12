@@ -4,8 +4,8 @@ const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { PAYMENT_STATUS } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -90,7 +90,7 @@ describe('createCaseFromPaperInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
@@ -137,7 +137,7 @@ describe('createCaseFromPaperInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
@@ -184,7 +184,7 @@ describe('createCaseFromPaperInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),
@@ -232,7 +232,7 @@ describe('createCaseFromPaperInteractor', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         receivedAt: new Date().toISOString(),

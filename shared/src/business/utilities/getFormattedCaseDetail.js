@@ -6,6 +6,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  PAYMENT_STATUS,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
@@ -378,12 +379,12 @@ const formatCase = (applicationContext, caseDetail) => {
 
   let paymentDate = '';
   let paymentMethod = '';
-  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+  if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     paymentDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
     paymentMethod = caseDetail.petitionPaymentMethod;
-  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+  } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     paymentDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
