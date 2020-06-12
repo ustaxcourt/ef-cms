@@ -43,10 +43,8 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
 exports.genericHandler = (event, cb, options = {}) => {
   return handle(event, async () => {
     const user = options.user || getUserFromAuthHeader(event);
-    console.log(user);
     const applicationContext =
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
-    console.log('tt');
     const {
       isPublicUser,
       logEvent = true,
