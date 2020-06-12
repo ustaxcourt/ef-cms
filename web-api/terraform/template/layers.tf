@@ -30,7 +30,8 @@ resource "aws_s3_bucket_object" "puppeteer_layer_object" {
 }
 
 resource "aws_lambda_layer_version" "puppeteer_layer" {
-  filename   = "../../runtimes/puppeteer/puppeteer_lambda_layer.zip"
+  s3_bucket = "${aws_s3_bucket.layer_bucket.id}"
+  s3_key = "${aws_s3_bucket_object.puppeteer_layer_object.key}"
   layer_name = "puppeteer-${var.environment}"
 
   compatible_runtimes = ["nodejs12.x"]
