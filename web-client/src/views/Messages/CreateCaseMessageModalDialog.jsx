@@ -6,6 +6,15 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const getDocumentOption = document => {
+  const title = document.documentTitle || document.documentType;
+  return (
+    <option key={document.documentId} value={`${document.documentId}|${title}`}>
+      {document.createdAtFormatted} - {title}
+    </option>
+  );
+};
+
 export const CreateCaseMessageModalDialog = connect(
   {
     constants: state.constants,
@@ -223,35 +232,17 @@ export const CreateCaseMessageModalDialog = connect(
               <option value="">- Select -</option>
               {createCaseMessageModalHelper.draftDocuments.length > 0 && (
                 <optgroup label="Draft documents">
-                  {createCaseMessageModalHelper.draftDocuments.map(document => {
-                    const title =
-                      document.documentTitle || document.documentType;
-                    return (
-                      <option
-                        key={document.documentId}
-                        value={`${document.documentId}|${title}`}
-                      >
-                        {document.createdAtFormatted} - {title}
-                      </option>
-                    );
-                  })}
+                  {createCaseMessageModalHelper.draftDocuments.map(
+                    getDocumentOption,
+                  )}
                 </optgroup>
               )}
 
               {createCaseMessageModalHelper.documents.length > 0 && (
                 <optgroup label="Docket record">
-                  {createCaseMessageModalHelper.documents.map(document => {
-                    const title =
-                      document.documentTitle || document.documentType;
-                    return (
-                      <option
-                        key={document.documentId}
-                        value={`${document.documentId}|${title}`}
-                      >
-                        {document.createdAtFormatted} - {title}
-                      </option>
-                    );
-                  })}
+                  {createCaseMessageModalHelper.documents.map(
+                    getDocumentOption,
+                  )}
                 </optgroup>
               )}
             </select>
