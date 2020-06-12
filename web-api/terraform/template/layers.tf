@@ -17,13 +17,13 @@ resource "aws_s3_bucket" "layer_bucket" {
 }
 
 resource "aws_s3_bucket_object" "clamav_layer_object" {
-  bucket = "${aws_s3_bucket.layer_bucket.arn}"
+  bucket = "${aws_s3_bucket.layer_bucket.id}"
   key    = "${var.environment}_clamav_lambda_layer.tar.gz"
   source = "../../runtimes/clamav/clamav_lambda_layer.tar.gz"
 }
 
 resource "aws_lambda_layer_version" "clamav_layer" {
-  s3_bucket = "${aws_s3_bucket.layer_bucket.arn}"
+  s3_bucket = "${aws_s3_bucket.layer_bucket.id}"
   s3_key = "aws_s3_bucket_object.clamav_layer_object.key"
   layer_name = "clamav-${var.environment}"
 
