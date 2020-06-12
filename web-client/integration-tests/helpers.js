@@ -558,6 +558,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
         '$',
