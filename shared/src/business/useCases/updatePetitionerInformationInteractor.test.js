@@ -11,6 +11,7 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 let { applicationContext } = require('../test/createTestApplicationContext');
@@ -45,7 +46,7 @@ const useCases = {
 
 const userData = {
   name: 'administrator',
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 let userObj = userData;
@@ -273,7 +274,7 @@ describe('update petitioner contact information on a case', () => {
     persistenceGateway.getCaseByCaseId = async () => ({
       ...MOCK_CASE,
     });
-    userObj.role = User.ROLES.petitioner;
+    userObj.role = ROLES.petitioner;
     await expect(
       updatePetitionerInformationInteractor({
         applicationContext,

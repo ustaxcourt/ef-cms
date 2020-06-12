@@ -4,7 +4,7 @@ const {
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('./getDocumentQCInboxForUserInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getDocumentQCInboxForUserInteractor', () => {
   let mockWorkItem = {
@@ -22,7 +22,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
 
   it('throws an error if the user does not have access to the work item', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext.getPersistenceGateway().getDocumentQCServedForSection = async () =>

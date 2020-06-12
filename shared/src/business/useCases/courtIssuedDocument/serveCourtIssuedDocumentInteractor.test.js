@@ -16,7 +16,7 @@ const {
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -36,7 +36,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockUser = {
     name: 'Docket Clerk',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
 
@@ -273,7 +273,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should throw an Unauthorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
     // petitioner role does NOT have the SERVE_DOCUMENT permission
-    const user = { ...mockUser, role: User.ROLES.petitioner };
+    const user = { ...mockUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(

@@ -6,6 +6,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -27,8 +28,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
   }
 
   const isInternalUser = User.isInternalUser(user && user.role);
-  const isIrsSuperuser =
-    user && user.role && user.role === User.ROLES.irsSuperuser;
+  const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
 
   if (!isInternalUser && !isIrsSuperuser) {
     //verify that the user has access to this document
