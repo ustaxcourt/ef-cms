@@ -9,7 +9,7 @@ import React from 'react';
 const getDocumentOption = document => {
   const title = document.documentTitle || document.documentType;
   return (
-    <option key={document.documentId} value={`${document.documentId}|${title}`}>
+    <option key={document.documentId} value={`${document.documentId}`}>
       {document.createdAtFormatted} - {title}
     </option>
   );
@@ -213,14 +213,8 @@ export const CreateCaseMessageModalDialog = connect(
               id="document"
               name="document"
               onChange={e => {
-                const optionTextSplit = e.target.value.split('|');
-
-                const documentId = optionTextSplit[0];
-                const documentTitle = optionTextSplit[1];
-
                 updateCreateCaseMessageAttachmentsSequence({
-                  documentId,
-                  documentTitle,
+                  documentId: e.target.value,
                 });
                 updateScreenMetadataSequence({
                   key: 'showAddDocumentForm',
