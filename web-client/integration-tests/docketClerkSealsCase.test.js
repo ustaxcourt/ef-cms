@@ -1,9 +1,8 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedUserAdvancedSearchForSealedCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -30,7 +29,7 @@ describe('Docket Clerk seals a case', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

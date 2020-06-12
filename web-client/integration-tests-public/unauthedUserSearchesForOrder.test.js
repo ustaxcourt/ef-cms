@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
@@ -41,7 +41,7 @@ describe('Petitioner creates case', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

@@ -1,5 +1,5 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -71,7 +71,7 @@ describe('addDocketEntryHelper', () => {
   });
 
   it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
-    state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
+    state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
   });

@@ -14,10 +14,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -136,7 +135,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ...documentsWithCaseClosingEventCodes,
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },
@@ -203,7 +202,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },

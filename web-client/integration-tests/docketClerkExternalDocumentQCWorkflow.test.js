@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   assignWorkItems,
   findWorkItemByCaseId,
@@ -50,7 +50,7 @@ describe('Create a work item', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
   });

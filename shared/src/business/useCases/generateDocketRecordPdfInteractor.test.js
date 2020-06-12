@@ -1,5 +1,4 @@
-import { COUNTRY_TYPES } from '../entities/EntityConstants';
-import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -59,7 +58,7 @@ const caseDetail = {
     },
   ],
   irsPractitioners: [],
-  partyType: ContactFactory.PARTY_TYPES.petitioner,
+  partyType: PARTY_TYPES.petitioner,
   privatePractitioners: [],
 };
 
