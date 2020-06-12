@@ -2,13 +2,22 @@ import { runAction } from 'cerebral/test';
 import { updateCreateCaseMessageAttachmentsAction } from './updateCreateCaseMessageAttachmentsAction';
 
 describe('updateCreateCaseMessageAttachmentsAction', () => {
+  const caseDetail = {
+    documents: [
+      {
+        documentId: '123',
+        documentType: 'Petition',
+      },
+    ],
+  };
+
   it('appends the given document meta from props to the form.modal.attachments array', async () => {
     const result = await runAction(updateCreateCaseMessageAttachmentsAction, {
       props: {
         documentId: '123',
-        documentTitle: 'Test Document',
       },
       state: {
+        caseDetail,
         modal: {
           form: {
             attachments: [],
@@ -18,7 +27,7 @@ describe('updateCreateCaseMessageAttachmentsAction', () => {
     });
 
     expect(result.state.modal.form.attachments).toEqual([
-      { documentId: '123', documentTitle: 'Test Document' },
+      { documentId: '123', documentTitle: 'Petition' },
     ]);
   });
 
@@ -29,6 +38,7 @@ describe('updateCreateCaseMessageAttachmentsAction', () => {
         documentTitle: '',
       },
       state: {
+        caseDetail,
         modal: {
           form: {
             attachments: [],

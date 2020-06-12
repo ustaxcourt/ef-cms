@@ -6,6 +6,15 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const getDocumentOption = document => {
+  const title = document.documentTitle || document.documentType;
+  return (
+    <option key={document.documentId} value={`${document.documentId}`}>
+      {document.createdAtFormatted} - {title}
+    </option>
+  );
+};
+
 export const CreateCaseMessageModalDialog = connect(
   {
     constants: state.constants,
@@ -206,7 +215,6 @@ export const CreateCaseMessageModalDialog = connect(
               onChange={e => {
                 updateCreateCaseMessageAttachmentsSequence({
                   documentId: e.target.value,
-                  documentTitle: e.target.options[e.target.selectedIndex].text,
                 });
                 updateScreenMetadataSequence({
                   key: 'showAddDocumentForm',
@@ -216,6 +224,21 @@ export const CreateCaseMessageModalDialog = connect(
               }}
             >
               <option value="">- Select -</option>
+              {createCaseMessageModalHelper.draftDocuments.length > 0 && (
+                <optgroup label="Draft documents">
+                  {createCaseMessageModalHelper.draftDocuments.map(
+                    getDocumentOption,
+                  )}
+                </optgroup>
+              )}
+
+              {createCaseMessageModalHelper.documents.length > 0 && (
+                <optgroup label="Docket record">
+                  {createCaseMessageModalHelper.documents.map(
+                    getDocumentOption,
+                  )}
+                </optgroup>
+              )}
             </select>
           </FormGroup>
         )}
