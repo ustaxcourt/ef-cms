@@ -116,3 +116,15 @@ To revert your `serverless-prune-plugin`, just change `before` back to `after` o
 This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit.
 
 The script will output data related to the mapping for the environment and can help pinpoint areas to look into further. To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.
+
+
+### Removing Cognito user pool during environment destruction
+
+```Web API Terraform stderr:  	* module.ef-cms_apis.aws_cognito_user_pool_domain.main (destroy): 1 error occurred:
+
+Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParameter: 1 validation error(s) found.
+
+Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
+```
+
+If this error is seen during environment destruction, run `terraform state rm aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
