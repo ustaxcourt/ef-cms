@@ -1,7 +1,6 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-const { Case } = require('../../entities/cases/Case');
+const { CHIEF_JUDGE, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -129,7 +128,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     });
 
     expect(latestCase).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       status: 'Calendared',
       trialDate: '2025-12-01T00:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
