@@ -1,72 +1,16 @@
 const joi = require('@hapi/joi');
 
 const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../EntityConstants');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 const ContactFactory = {};
-
-ContactFactory.COUNTRY_TYPES = {
-  DOMESTIC: 'domestic',
-  INTERNATIONAL: 'international',
-};
-
-ContactFactory.US_STATES = {
-  AK: 'Alaska',
-  AL: 'Alabama',
-  AR: 'Arkansas',
-  AZ: 'Arizona',
-  CA: 'California',
-  CO: 'Colorado',
-  CT: 'Connecticut',
-  DC: 'District of Columbia',
-  DE: 'Delaware',
-  FL: 'Florida',
-  GA: 'Georgia',
-  HI: 'Hawaii',
-  IA: 'Iowa',
-  ID: 'Idaho',
-  IL: 'Illinois',
-  IN: 'Indiana',
-  KS: 'Kansas',
-  KY: 'Kentucky',
-  LA: 'Louisiana',
-  MA: 'Massachusetts',
-  MD: 'Maryland',
-  ME: 'Maine',
-  MI: 'Michigan',
-  MN: 'Minnesota',
-  MO: 'Missouri',
-  MS: 'Mississippi',
-  MT: 'Montana',
-  NC: 'North Carolina',
-  ND: 'North Dakota',
-  NE: 'Nebraska',
-  NH: 'New Hampshire',
-  NJ: 'New Jersey',
-  NM: 'New Mexico',
-  NV: 'Nevada',
-  NY: 'New York',
-  OH: 'Ohio',
-  OK: 'Oklahoma',
-  OR: 'Oregon',
-  PA: 'Pennsylvania',
-  RI: 'Rhode Island',
-  SC: 'South Carolina',
-  SD: 'South Dakota',
-  TN: 'Tennessee',
-  TX: 'Texas',
-  UT: 'Utah',
-  VA: 'Virginia',
-  VT: 'Vermont',
-  WA: 'Washington',
-  WI: 'Wisconsin',
-  WV: 'West Virginia',
-  WY: 'Wyoming',
-};
 
 ContactFactory.PARTY_TYPES = {
   conservator: 'Conservator',
@@ -163,10 +107,7 @@ const commonValidationRequirements = {
     .optional(),
 };
 const domesticValidationObject = {
-  countryType: joi
-    .string()
-    .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
-    .required(),
+  countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
   ...commonValidationRequirements,
   state: joi.string().required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
@@ -174,10 +115,7 @@ const domesticValidationObject = {
 
 const internationalValidationObject = {
   country: joi.string().required(),
-  countryType: joi
-    .string()
-    .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
-    .required(),
+  countryType: joi.string().valid(COUNTRY_TYPES.INTERNATIONAL).required(),
   ...commonValidationRequirements,
   postalCode: joi.string().required(),
 };
@@ -192,11 +130,11 @@ const internationalValidationObject = {
  * @returns {object} the joi validation object
  */
 ContactFactory.getValidationObject = ({
-  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType = COUNTRY_TYPES.DOMESTIC,
   isPaper = false,
 }) => {
   const baseValidationObject =
-    countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
+    countryType === COUNTRY_TYPES.DOMESTIC
       ? domesticValidationObject
       : internationalValidationObject;
 
@@ -214,9 +152,9 @@ ContactFactory.getValidationObject = ({
  * @returns {object} the error message map object which maps errors to custom messages
  */
 ContactFactory.getErrorToMessageMap = ({
-  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType = COUNTRY_TYPES.DOMESTIC,
 }) => {
-  return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
+  return countryType === COUNTRY_TYPES.DOMESTIC
     ? ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES
     : ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 };

@@ -5,8 +5,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { ROLES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
@@ -64,28 +63,25 @@ const userValidation = {
       address3: joi.string().max(100).optional().allow(null),
       city: joi.string().max(100).required(),
       country: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().optional().allow(null),
         then: joi.string().required(),
       }),
       countryType: joi
         .string()
-        .valid(
-          ContactFactory.COUNTRY_TYPES.DOMESTIC,
-          ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
-        )
+        .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
         .required(),
 
       phone: joi.string().max(100).required(),
 
       postalCode: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
         then: joi.string().max(100).required(),
       }),
 
       state: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().max(100).required(),
         then: joi.string().optional().allow(null),
       }),
