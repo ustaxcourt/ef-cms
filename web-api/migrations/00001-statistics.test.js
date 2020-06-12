@@ -1,6 +1,6 @@
 const {
   CASE_TYPES_MAP,
-} = require('../../shared/src/business/entities/cases/EntityConstants');
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 const { up } = require('./00001-statistics');
