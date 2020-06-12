@@ -4,14 +4,14 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
-const { ROLES } = require('../entities/EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const contactPrimary = {
   address1: '123 Main St',
   city: 'Somewhere',
-  countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType: COUNTRY_TYPES.DOMESTIC,
   name: 'Test Petitioner',
   phone: '1234567890',
   postalCode: '12345',

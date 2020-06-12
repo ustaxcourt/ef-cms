@@ -5,6 +5,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
@@ -89,7 +90,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'contact@example.com',
         name: 'Contact Primary',
         phone: '123123134',
@@ -146,7 +147,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Contact Primary',
         phone: '123123134',
         postalCode: '12345',
@@ -155,7 +156,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Contact Secondary',
         phone: '123123134',
         postalCode: '12345',

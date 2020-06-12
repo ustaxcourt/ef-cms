@@ -1,14 +1,17 @@
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+  ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   ROLES,
 } = require('../EntityConstants');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
@@ -1316,10 +1319,7 @@ describe('Case entity', () => {
           documents: [
             {
               createdAt: prepareDateFromString()
-                .subtract(
-                  Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
-                  Case.ANSWER_CUTOFF_UNIT,
-                )
+                .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS, ANSWER_CUTOFF_UNIT)
                 .toISOString(),
               eventCode: 'A',
             },
@@ -1338,10 +1338,7 @@ describe('Case entity', () => {
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1364,10 +1361,7 @@ describe('Case entity', () => {
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -2273,7 +2267,7 @@ describe('Case entity', () => {
     const contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'TN',
@@ -2283,7 +2277,7 @@ describe('Case entity', () => {
     const contactSecondary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Contact Secondary',
       postalCode: '12345',
       state: 'TN',

@@ -318,7 +318,72 @@ const FILING_TYPES = {
   ],
 };
 
+const ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
+
+const ANSWER_CUTOFF_UNIT = 'day';
+
+const COUNTRY_TYPES = {
+  DOMESTIC: 'domestic',
+  INTERNATIONAL: 'international',
+};
+
+const US_STATES = {
+  AK: 'Alaska',
+  AL: 'Alabama',
+  AR: 'Arkansas',
+  AZ: 'Arizona',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DC: 'District of Columbia',
+  DE: 'Delaware',
+  FL: 'Florida',
+  GA: 'Georgia',
+  HI: 'Hawaii',
+  IA: 'Iowa',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  MA: 'Massachusetts',
+  MD: 'Maryland',
+  ME: 'Maine',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MO: 'Missouri',
+  MS: 'Mississippi',
+  MT: 'Montana',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  NE: 'Nebraska',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NV: 'Nevada',
+  NY: 'New York',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VA: 'Virginia',
+  VT: 'Vermont',
+  WA: 'Washington',
+  WI: 'Wisconsin',
+  WV: 'West Virginia',
+  WY: 'Wyoming',
+};
+
 module.exports = {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+  ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
@@ -327,6 +392,7 @@ module.exports = {
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -359,4 +425,5 @@ module.exports = {
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_LOCATION_MATCHER,
+  US_STATES,
 };

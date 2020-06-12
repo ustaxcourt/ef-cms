@@ -6,8 +6,8 @@ const {
 } = require('./updateCorrespondenceDocumentInteractor');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { Correspondence } = require('../../entities/Correspondence');
+const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   let mockUser;
@@ -30,7 +30,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'contact@example.com',
       name: 'Contact Primary',
       phone: '123123134',

@@ -5,8 +5,8 @@ const {
   fileCorrespondenceDocumentInteractor,
 } = require('./fileCorrespondenceDocumentInteractor');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
@@ -23,7 +23,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'contact@example.com',
       name: 'Contact Primary',
       phone: '123123134',
