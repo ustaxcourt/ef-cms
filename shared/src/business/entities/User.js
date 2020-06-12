@@ -36,6 +36,24 @@ const userDecorator = (obj, rawObj) => {
   }
 };
 
+const baseUserValidation = {
+  judgeFullName: joi.when('role', {
+    is: ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().max(100).optional(),
+  }),
+  judgeTitle: joi.when('role', {
+    is: ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().max(100).optional(),
+  }),
+  name: joi.string().max(100).optional(),
+  role: joi
+    .string()
+    .valid(...Object.values(ROLES))
+    .required(),
+};
+
 const userValidation = {
   barNumber: joi.string().optional().allow(null),
   contact: joi
@@ -75,21 +93,6 @@ const userValidation = {
     .optional(),
   email: joi.string().max(100).optional(),
   entityName: joi.string().valid('User').required(),
-  judgeFullName: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  judgeTitle: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  name: joi.string().max(100).optional(),
-  role: joi
-    .string()
-    .valid(...Object.values(ROLES))
-    .required(),
   section: joi
     .string()
     // Removed temporarily: Eric will re-add
@@ -102,6 +105,7 @@ const userValidation = {
       version: ['uuidv4'],
     })
     .required(),
+  ...baseUserValidation,
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -167,6 +171,7 @@ User.isInternalUser = function (role) {
 module.exports = {
   User,
   VALIDATION_ERROR_MESSAGES,
+  baseUserValidation,
   userDecorator,
   userValidation,
 };

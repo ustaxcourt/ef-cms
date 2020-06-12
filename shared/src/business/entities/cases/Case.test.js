@@ -4,6 +4,7 @@ const {
 const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   ROLES,
@@ -1611,7 +1612,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -2093,7 +2094,7 @@ describe('Case entity', () => {
         CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(caseToUpdate.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
@@ -2226,7 +2227,7 @@ describe('Case entity', () => {
       updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
 
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
-      expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
     });
 
     it('should update the case status, leave the associated judge unchanged, and call closeCase if the new status is Closed', () => {
