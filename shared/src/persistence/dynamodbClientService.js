@@ -40,7 +40,10 @@ const filterEmptyStrings = params => {
 };
 
 const getTableName = ({ applicationContext }) =>
-  `efcms-${applicationContext.environment.stage}`;
+  `efcms-${
+    (applicationContext.environment || applicationContext.getEnvironment())
+      .stage
+  }`;
 /**
  *
  * @param {object} params the params to put

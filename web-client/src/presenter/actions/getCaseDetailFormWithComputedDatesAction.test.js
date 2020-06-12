@@ -1,6 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { castToISO } from './getCaseDetailFormWithComputedDatesAction';
-import { getCaseDetailFormWithComputedDatesAction } from './getCaseDetailFormWithComputedDatesAction';
+import {
+  castToISO,
+  getCaseDetailFormWithComputedDatesAction,
+} from './getCaseDetailFormWithComputedDatesAction';
+
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -233,5 +236,32 @@ describe('getCaseDetailFormWithComputedDatesAction', () => {
     expect(results.output.formWithComputedDates.petitionPaymentDate).toEqual(
       null,
     );
+  });
+
+  it('calculates lastDateOfPeriod for each statistic or sets to undefined if lastDateOfPeriod values are not present', async () => {
+    const results = await runAction(getCaseDetailFormWithComputedDatesAction, {
+      modules,
+
+      state: {
+        form: {
+          statistics: [
+            {
+              lastDateOfPeriodDay: '5',
+              lastDateOfPeriodMonth: '8',
+              lastDateOfPeriodYear: '2012',
+            },
+            {
+              year: '2012',
+            },
+          ],
+        },
+      },
+    });
+    expect(
+      results.output.formWithComputedDates.statistics[0].lastDateOfPeriod,
+    ).toEqual('2012-08-05T04:00:00.000Z');
+    expect(
+      results.output.formWithComputedDates.statistics[1].lastDateOfPeriod,
+    ).toEqual(null);
   });
 });

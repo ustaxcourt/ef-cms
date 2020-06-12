@@ -98,9 +98,7 @@ exports.generateChangeOfAddress = async ({
           content: {
             caseCaptionExtension,
             caseTitle,
-            docketNumberWithSuffix: `${caseDetail.docketNumber}${
-              caseDetail.docketNumberSuffix || ''
-            }`,
+            docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
             documentTitle: documentType.title,
             name: `${name} (${user.barNumber})`,
             newData,
@@ -167,7 +165,7 @@ exports.generateChangeOfAddress = async ({
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
           docketNumber: caseEntity.docketNumber,
-          docketNumberSuffix: caseEntity.docketNumberSuffix,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           document: {
             ...changeOfAddressDocument.toRawObject(),
             createdAt: changeOfAddressDocument.createdAt,

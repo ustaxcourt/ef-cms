@@ -1,14 +1,13 @@
-import { loginAs, setupTest } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { uploadPetition } from './helpers';
 
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 
-import petitionsClerkCompletesAndSetsTrialSession from './journey/petitionsClerkCompletesAndSetsTrialSession';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkViewsDocketRecordAfterSettingTrial from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
+import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsClerkCompletesAndSetsTrialSession';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
 const test = setupTest();
 
@@ -38,6 +37,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
+      expect(caseDetail.docketNumber).toBeDefined();
       createdCaseIds.push(caseDetail.caseId);
       createdDocketNumbers.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;

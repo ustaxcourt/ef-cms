@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkUnprioritizesCase = test => {
   return it('Petitions clerk unprioritizes the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

@@ -10,24 +10,8 @@ exports.deleteDynamoDBTables = async ({ environment }) => {
     environment,
   });
   for (const table of tables) {
-    console.log('Delete ', table);
+    console.log('Delete DynamoDB Table:', table);
     await dynamoDB.deleteTable({ TableName: table }).promise();
-    await sleep(5000);
-  }
-
-  let resourceCount = tables.length;
-
-  while (resourceCount > 0) {
-    await sleep(5000);
-    const refreshedTables = await getDynamoDBTables({
-      dynamoDB,
-      environment,
-    });
-    console.log(
-      'Waiting for domains to be deleted: ',
-      Date(),
-      refreshedTables.length,
-    );
-    resourceCount = refreshedTables.length;
+    await sleep(100);
   }
 };

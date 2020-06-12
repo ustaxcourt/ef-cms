@@ -9,8 +9,8 @@ import { docketClerkVerifiesStipulatedDecisionExistsInOutbox } from './journey/d
 import { docketClerkViewsStipulatedDecision } from './journey/docketClerkViewsStipulatedDecision';
 
 // practitioner
-import practitionerFilesDocumentForStipulatedDecision from './journey/practitionerFilesDocumentForStipulatedDecision';
-import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
+import { practitionerFilesDocumentForStipulatedDecision } from './journey/practitionerFilesDocumentForStipulatedDecision';
+import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 
 // petitioner
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';

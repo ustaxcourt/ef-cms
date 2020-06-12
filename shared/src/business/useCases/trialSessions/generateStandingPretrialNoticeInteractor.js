@@ -38,7 +38,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, docketNumberSuffix, irsPractitioners } = caseDetail;
+  const { caseCaption, docketNumberWithSuffix, irsPractitioners } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
@@ -46,7 +46,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
       applicationContext,
       content: {
         caseCaption,
-        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+        docketNumberWithSuffix,
         trialInfo: {
           address1,
           address2,

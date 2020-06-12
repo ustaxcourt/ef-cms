@@ -3,7 +3,11 @@ import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseIn
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+export const petitionsClerkCreatesNewCase = (
+  test,
+  fakeFile,
+  trialLocation = 'Birmingham, Alabama',
+) => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
@@ -31,15 +35,15 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     ).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     });
 

@@ -8,6 +8,7 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -95,8 +96,9 @@ describe('Case entity', () => {
 
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -109,8 +111,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -123,8 +126,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -137,8 +141,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -230,6 +235,26 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates a valid case with statistics', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              deficiencyAmount: 1,
+              totalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
@@ -513,14 +538,7 @@ describe('Case entity', () => {
   });
 
   describe('markAsSentToIRS', () => {
-    it('sets irsSendDate', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
-    });
-    it('updates docket record status on petition documents', () => {
+    it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
@@ -542,10 +560,8 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
-      expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
-      expect(caseRecord.docketRecord[1].status).toBeUndefined();
+      caseRecord.markAsSentToIRS();
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
   });
 
@@ -1608,6 +1624,66 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getPetitionDocument', () => {
+    it('should get the petition document by documentType', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const result = myCase.getPetitionDocument();
+      expect(result.documentType).toEqual(
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      );
+    });
+  });
+
+  describe('getIrsSendDate', () => {
+    it('should get the IRS send date from the petition document', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toEqual('2019-03-01T21:40:46.415Z');
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not served', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [{ documentType: 'Petition' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not found', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Answer', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe('stripLeadingZeros', () => {
     it('should remove leading zeros', () => {
       const result = Case.stripLeadingZeros('000101-19');
@@ -1637,7 +1713,11 @@ describe('Case entity', () => {
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
-      expect(myCase.documents[0].processingStatus).toEqual('success');
+      expect(
+        myCase.documents.find(
+          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+        ).processingStatus,
+      ).toEqual('success');
     });
   });
 
@@ -2674,6 +2754,9 @@ describe('Case entity', () => {
   describe('isAssociatedUser', () => {
     let caseEntity;
     beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -2685,10 +2768,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext: {
-            getCurrentUser: () =>
-              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          },
+          applicationContext,
         },
       );
     });
@@ -2767,36 +2847,38 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketRecord: [
-          {
-            description: 'first record',
-            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-            eventCode: 'P',
-            filingDate: '2018-03-01T00:01:00.000Z',
-            index: 1,
-          },
-          {
-            description: 'second record',
-            documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-            eventCode: 'STIN',
-            filingDate: '2018-03-01T00:02:00.000Z',
-            index: 1,
-          },
-        ],
-      },
-      {
-        applicationContext,
-      },
-    );
+    it('identifies duplicate values in docket record indices', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              description: 'first record',
+              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+              eventCode: 'P',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+            },
+            {
+              description: 'second record',
+              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+              eventCode: 'STIN',
+              filingDate: '2018-03-01T00:02:00.000Z',
+              index: 1,
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
 
-    expect(caseEntity.getFormattedValidationErrors()).toEqual({
-      'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      });
     });
   });
 
@@ -2813,6 +2895,78 @@ describe('Case entity', () => {
       expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
         'case-123-20-confirmation.pdf',
       );
+    });
+  });
+
+  describe('Statistics', () => {
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: true,
+          statistics: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        statistics: '"statistics" must contain at least 1 items',
+      });
+    });
+
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be required for other cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Other',
+          hasVerifiedIrsNotice: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+  });
+
+  describe('addCorrespondence', () => {
+    it('should successfully add correspondence', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      caseEntity.fileCorrespondence({
+        documentId: 'yeehaw',
+        documentTitle: 'Correspondence document',
+      });
+
+      expect(caseEntity.correspondence.length).toEqual(1);
     });
   });
 });

@@ -40,7 +40,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberWithSuffix } = caseDetail;
   const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
@@ -49,7 +49,8 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
       applicationContext,
       content: {
         caseCaption,
-        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+        docketNumber,
+        docketNumberWithSuffix,
         trialInfo: {
           address1,
           address2,

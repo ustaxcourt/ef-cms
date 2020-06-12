@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default (test, trialLocation) => {
+export const petitionsClerkBlocksCase = (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

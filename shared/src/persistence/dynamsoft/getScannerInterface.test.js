@@ -119,15 +119,17 @@ describe('getScannerInterface', () => {
   it('can set a scanner source by index', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
-    scannerAPI.setSourceByIndex(1);
-    expect(scannerAPI.DWObject);
+    const result = scannerAPI.setSourceByIndex(1);
+    expect(scannerAPI.DWObject).toBe(DWObject);
+    expect(result).toBe(true);
   });
 
   it('can set a scanner source by name', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
-    scannerAPI.setSourceByName(mockSources[0]);
-    expect(scannerAPI.DWObject);
+    const result = scannerAPI.setSourceByName(mockSources[0]);
+    expect(scannerAPI.DWObject).toBe(DWObject);
+    expect(result).toBe(true);
   });
 
   it('setSourceByName returns `false` when the source is not found', () => {

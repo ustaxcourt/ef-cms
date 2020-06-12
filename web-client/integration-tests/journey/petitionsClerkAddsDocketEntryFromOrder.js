@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export const petitionsClerkAddsDocketEntryFromOrder = test => {
   return it('Petitions Clerk adds a docket entry from the given order', async () => {
     let caseDetailFormatted;
 

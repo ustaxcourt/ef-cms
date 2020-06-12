@@ -3,16 +3,16 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
-import respondent1ViewsCaseDetailOfAssociatedCase from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
-import respondentFilesDocumentForAssociatedCase from './journey/respondentFilesDocumentForAssociatedCase';
-import respondentFilesFirstIRSDocumentOnCase from './journey/respondentFilesFirstIRSDocumentOnCase';
-import respondentRequestsAccessToCase from './journey/respondentRequestsAccessToCase';
-import respondentSearchesForCase from './journey/respondentSearchesForCase';
-import respondentSearchesForNonexistentCase from './journey/respondentSearchesForNonexistentCase';
-import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
-import respondentViewsCaseDetailOfAssociatedCase from './journey/respondentViewsCaseDetailOfAssociatedCase';
-import respondentViewsCaseDetailOfUnassociatedCase from './journey/respondentViewsCaseDetailOfUnassociatedCase';
-import respondentViewsDashboard from './journey/respondentViewsDashboard';
+import { respondent1ViewsCaseDetailOfAssociatedCase } from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
+import { respondentFilesDocumentForAssociatedCase } from './journey/respondentFilesDocumentForAssociatedCase';
+import { respondentFilesFirstIRSDocumentOnCase } from './journey/respondentFilesFirstIRSDocumentOnCase';
+import { respondentRequestsAccessToCase } from './journey/respondentRequestsAccessToCase';
+import { respondentSearchesForCase } from './journey/respondentSearchesForCase';
+import { respondentSearchesForNonexistentCase } from './journey/respondentSearchesForNonexistentCase';
+import { respondentViewsCaseDetail } from './journey/respondentViewsCaseDetail';
+import { respondentViewsCaseDetailOfAssociatedCase } from './journey/respondentViewsCaseDetailOfAssociatedCase';
+import { respondentViewsCaseDetailOfUnassociatedCase } from './journey/respondentViewsCaseDetailOfUnassociatedCase';
+import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
 const test = setupTest();
 

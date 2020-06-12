@@ -62,6 +62,8 @@ const FORMATTED_WORK_ITEM = {
     to: 'Unassigned',
   },
   docketNumber: '101-18',
+  docketNumberSuffix: 'S',
+  docketNumberWithSuffix: '101-18S',
   document: {
     attachments: true,
     documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
@@ -112,6 +114,8 @@ describe('formatted work queue computed', () => {
     caseStatus: Case.STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
+    docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '101-18S',
     document: {
       attachments: true,
       createdAt: '2018-12-27T18:05:54.164Z',
@@ -1235,21 +1239,6 @@ describe('formatted work queue computed', () => {
 
       result = formatWorkItem({ applicationContext, workItem });
       expect(result.showUnassignedIcon).toBeFalsy();
-    });
-
-    it('should return docketNumberWithSuffix as a combination of the docketNumber and docketNumberSuffix', () => {
-      const workItem = {
-        ...FORMATTED_WORK_ITEM,
-        docketNumber: '123-45',
-      };
-
-      let result = formatWorkItem({ applicationContext, workItem });
-      expect(result.docketNumberWithSuffix).toEqual('123-45');
-
-      workItem.docketNumberSuffix = 'S';
-
-      result = formatWorkItem({ applicationContext, workItem });
-      expect(result.docketNumberWithSuffix).toEqual('123-45S');
     });
 
     it('should return selected as true if workItemId is found in selectedWorkItems', () => {

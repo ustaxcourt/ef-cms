@@ -28,6 +28,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  advancedDocumentSearch,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -64,16 +67,20 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
+  caseInventoryReport,
+  changeOfAddress,
+  docketRecord,
+  noticeOfDocketChange,
+  pendingReport,
+  receiptOfFiling,
+  standingPretrialOrder,
+} = require('../../shared/src/business/utilities/documentGenerators');
+const {
   casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
-const {
-  changeOfAddress,
-  docketRecord,
-  standingPretrialOrder,
-} = require('../../shared/src/business/utilities/documentGenerators');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -225,6 +232,12 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
+  fileCaseCorrespondence,
+} = require('../../shared/src/persistence/dynamo/correspondence/fileCaseCorrespondence');
+const {
+  fileCorrespondenceDocumentInteractor,
+} = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
+const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor');
 const {
@@ -252,7 +265,6 @@ const {
   generateChangeOfAddressTemplate,
   generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
-  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
@@ -272,12 +284,6 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
-  generatePdfReportInteractor,
-} = require('../../shared/src/business/useCases/generatePdfReportInteractor');
-const {
-  generatePendingReportPdf,
-} = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
-const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor');
 const {
@@ -295,9 +301,6 @@ const {
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
-const {
-  generateStandingPretrialOrderTemplate,
-} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -579,11 +582,14 @@ const {
   onDisconnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
 const {
+  opinionAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/opinionAdvancedSearchInteractor');
+const {
+  opinionPublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
+const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
-const {
-  orderKeywordSearch,
-} = require('../../shared/src/persistence/elasticsearch/orderKeywordSearch');
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
@@ -633,9 +639,6 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
-  saveIntermediateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -654,11 +657,17 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  scrapePdfContents,
+} = require('../../shared/src/business/utilities/scrapePdfContents');
+const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
+  sendIrsSuperuserPetitionEmail,
+} = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -880,6 +889,19 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+const getDocumentClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoClientCache[type]) {
+    dynamoClientCache[type] = new DynamoDB.DocumentClient({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
+  }
+  return dynamoClientCache[type];
+};
+
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
@@ -937,23 +959,14 @@ module.exports = (appContextUser = {}) => {
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
     }),
-    getDocumentClient: ({ useMasterRegion = false } = {}) => {
-      const type = useMasterRegion ? 'master' : 'region';
-      if (!dynamoClientCache[type]) {
-        dynamoClientCache[type] = new DynamoDB.DocumentClient({
-          endpoint: useMasterRegion
-            ? environment.masterDynamoDbEndpoint
-            : environment.dynamoDbEndpoint,
-          region: useMasterRegion
-            ? environment.masterRegion
-            : environment.region,
-        });
-      }
-      return dynamoClientCache[type];
-    },
+    getDocumentClient,
     getDocumentGenerators: () => ({
+      caseInventoryReport,
       changeOfAddress,
       docketRecord,
+      noticeOfDocketChange,
+      pendingReport,
+      receiptOfFiling,
       standingPretrialOrder,
     }),
     getDocumentsBucketName: () => {
@@ -961,16 +974,43 @@ module.exports = (appContextUser = {}) => {
     },
     getElasticsearchIndexes: () => elasticsearchIndexes,
     getEmailClient: () => {
-      if (!sesCache) {
-        sesCache = new SES({
-          region: 'us-east-1',
-        });
+      if (process.env.CI) {
+        return {
+          sendBulkTemplatedEmail: params => {
+            return {
+              promise: () =>
+                Promise.all(
+                  params.Destinations.map(Destination => {
+                    const address = Destination.Destination.ToAddresses[0];
+                    const template = Destination.ReplacementTemplateData;
+                    return getDocumentClient()
+                      .put({
+                        Item: {
+                          pk: `email-${address}`,
+                          sk: getUniqueId(),
+                          template,
+                        },
+                        TableName: `efcms-${environment.stage}`,
+                      })
+                      .promise();
+                  }),
+                ),
+            };
+          },
+        };
+      } else {
+        if (!sesCache) {
+          sesCache = new SES({
+            region: 'us-east-1',
+          });
+        }
+        return sesCache;
       }
-      return sesCache;
     },
     getEntityByName: name => {
       return entitiesByName[name];
     },
+    getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseInteractor,
     }),
@@ -996,9 +1036,15 @@ module.exports = (appContextUser = {}) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
+    getPdfJs: () => {
+      const pdfjsLib = require('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      return pdfjsLib;
+    },
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        advancedDocumentSearch,
         associateUserWithCase,
         associateUserWithCasePending,
         bulkIndexRecords,
@@ -1030,6 +1076,7 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         fetchPendingItems: fetchPendingItemsPersistence,
+        fileCaseCorrespondence,
         getAllCaseDeadlines,
         getAllCatalogCases,
         getBlockedCases,
@@ -1076,7 +1123,6 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        orderKeywordSearch,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1159,9 +1205,7 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
-        generatePrintableFilingReceiptTemplate,
         generateStandingPretrialNoticeTemplate,
-        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
@@ -1175,9 +1219,9 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generateCaseInventoryReportPdf,
         generatePaperServiceAddressPagePdf,
-        generatePendingReportPdf,
         getCaseInventoryReport,
         saveFileAndGenerateUrl,
+        sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
       };
@@ -1213,6 +1257,7 @@ module.exports = (appContextUser = {}) => {
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
+        fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
@@ -1223,7 +1268,6 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
-        generatePdfReportInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
@@ -1271,6 +1315,8 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        opinionAdvancedSearchInteractor,
+        opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
@@ -1282,7 +1328,6 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
-        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sealCaseInteractor,
         serveCaseToIrsInteractor,
@@ -1333,6 +1378,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,
+        scrapePdfContents,
         setServiceIndicatorsForCase,
       };
     },

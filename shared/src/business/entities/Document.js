@@ -21,6 +21,7 @@ Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
 Document.ORDER_DOCUMENT_TYPES = [
   'O',
   'OAJ',

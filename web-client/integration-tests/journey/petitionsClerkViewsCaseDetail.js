@@ -1,9 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 export const petitionsClerkViewsCaseDetail = (
   test,
@@ -25,12 +20,6 @@ export const petitionsClerkViewsCaseDetail = (
     expect(test.getState('caseDetail.associatedJudge')).toEqual(
       Case.CHIEF_JUDGE,
     );
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showDocumentStatus).toEqual(true);
-    expect(helper.showIrsServedDate).toEqual(false);
 
     const caseDetail = test.getState('caseDetail');
 

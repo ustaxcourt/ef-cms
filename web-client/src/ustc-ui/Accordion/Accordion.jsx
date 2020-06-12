@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { decorateWithPostCallback } from '../utils/useCerebralState';
+import {
+  decorateWithPostCallback,
+  useCerebralStateFactory,
+} from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-import { useCerebralStateFactory } from '../utils/useCerebralState';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -53,6 +55,7 @@ export const Accordion = connect(
     const renderTab = (child, index) => {
       const {
         children,
+        customClassName,
         displayIcon = false,
         iconClassName,
         iconSize,
@@ -77,29 +80,38 @@ export const Accordion = connect(
 
       return (
         <>
-          <HeadingElement className="usa-accordion__heading">
+          <HeadingElement
+            className={customClassName || 'usa-accordion__heading'}
+          >
             <button
               aria-controls={itemContentId}
               aria-expanded={expandedText}
-              className="usa-accordion__button"
+              className="usa-accordion__button grid-container"
               id={itemButtonId}
               type="button"
               onClick={() => setTab(itemName)}
             >
-              {displayIcon && (
-                <span className="caseItem__icon">
-                  <FontAwesomeIcon
-                    className={iconClassName}
-                    icon={iconTypes}
-                    size={iconSize}
-                  />
-                </span>
-              )}
-              {title}
+              <div className="grid-row">
+                {displayIcon && (
+                  <span className="grid-col-auto">
+                    <span className="caseItem__icon">
+                      <FontAwesomeIcon
+                        className={iconClassName}
+                        icon={iconTypes}
+                        size={iconSize}
+                      />
+                    </span>
+                  </span>
+                )}
+                <div className="accordion-item-title grid-col-8">{title}</div>
+              </div>
             </button>
           </HeadingElement>
           {isActiveItem && (
-            <div className="usa-accordion__content" id={itemContentId}>
+            <div
+              className={customClassName || 'usa-accordion__heading'}
+              id={itemContentId}
+            >
               {children}
             </div>
           )}

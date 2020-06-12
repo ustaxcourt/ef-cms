@@ -10,6 +10,7 @@ export const CaseTypeSelect = connect(
     caseTypes: props.caseTypes,
     legend: props.legend,
     onChange: sequences[props.onChange],
+    onChangePreValidation: sequences[props.onChangePreValidation],
     validation: sequences[props.validation],
     validationErrors: state.validationErrors,
     value: props.value,
@@ -20,6 +21,7 @@ export const CaseTypeSelect = connect(
     className,
     legend,
     onChange,
+    onChangePreValidation,
     validation,
     validationErrors,
     value,
@@ -45,6 +47,7 @@ export const CaseTypeSelect = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                if (onChangePreValidation) onChangePreValidation();
                 validation();
               }}
             >

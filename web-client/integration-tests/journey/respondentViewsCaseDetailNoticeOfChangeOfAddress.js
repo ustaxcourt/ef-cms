@@ -1,4 +1,7 @@
-export default (test, createdDocketNumberIndex) => {
+export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
+  test,
+  createdDocketNumberIndex,
+) => {
   return it('respondent views case detail notice of change of address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],

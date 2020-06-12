@@ -49,20 +49,12 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     }
   }
 
-  const shouldShowIrsNoticeDate =
-    caseDetail.hasVerifiedIrsNotice ||
-    ((caseDetail.hasVerifiedIrsNotice === null ||
-      caseDetail.hasVerifiedIrsNotice === undefined) &&
-      caseDetail.hasIrsNotice);
-
   return {
     ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle,
-    shouldShowIrsNoticeDate,
-    showNoTrialLocationSelected:
-      caseDetail.isPaper && !requestForPlaceOfTrialDocumentId,
+    shouldShowIrsNoticeDate: caseDetail.hasVerifiedIrsNotice,
     showOrderForFilingFee:
       caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,

@@ -1,4 +1,4 @@
-export default test => {
+export const practitionerViewsCaseDetailOfPendingCase = test => {
   return it('Practitioner views case detail of owned case', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
