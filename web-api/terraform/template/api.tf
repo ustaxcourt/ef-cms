@@ -4,18 +4,6 @@ data "archive_file" "zip_api" {
   source_file = "${path.module}/api/dist/index.js"
 }
 
-data "aws_lambda_layer_version" "puppeteer_existing" {
-  layer_name = "${var.environment}-puppeteer"
-}
-
-data "aws_lambda_layer_version" "clamav_existing" {
-  layer_name = "${var.environment}-av"
-}
-
-data "aws_lambda_layer_version" "clamav_main_existing" {
-  layer_name = "${var.environment}-avm"
-}
-
 resource "aws_lambda_function" "api_lambda" {
   filename      = "${data.archive_file.zip_api.output_path}"
   function_name = "api_${var.environment}"
@@ -26,7 +14,7 @@ resource "aws_lambda_function" "api_lambda" {
   memory_size = "3008"
 
   layers = [
-    "${data.aws_lambda_layer_version.puppeteer_existing.arn}"
+    "${aws_lambda_layer_version.puppeteer_layer.arn}"
   ]
 
   runtime = "nodejs12.x"
@@ -65,8 +53,7 @@ resource "aws_lambda_function" "api_clamav_lambda" {
   memory_size = "3008"
 
   layers = [
-    "${data.aws_lambda_layer_version.clamav_main_existing.arn}",
-    "${data.aws_lambda_layer_version.clamav_existing.arn}"
+    "${aws_lambda_layer_version.clamav_layer.arn}"
   ]
 
   runtime = "nodejs12.x"
