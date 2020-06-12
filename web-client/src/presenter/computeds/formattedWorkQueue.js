@@ -140,6 +140,28 @@ export const formatWorkItem = ({
   return result;
 };
 
+const getDocketEntryEditLink = ({
+  formattedDocument,
+  isInProgress,
+  qcWorkItemsUntouched,
+  result,
+}) => {
+  let editLink;
+  if (formattedDocument.isCourtIssuedDocument && !formattedDocument.servedAt) {
+    editLink = '/edit-court-issued';
+  } else if (isInProgress) {
+    editLink = '/complete';
+  } else if (
+    !result.isCourtIssuedDocument &&
+    !result.isOrder &&
+    !formattedDocument.isPetition &&
+    qcWorkItemsUntouched
+  ) {
+    editLink = '/edit';
+  }
+  return editLink;
+};
+
 export const getWorkItemDocumentLink = ({
   applicationContext,
   permissions,
@@ -168,40 +190,28 @@ export const getWorkItemDocumentLink = ({
     (!formattedDocument.isInProgress ||
       (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
 
-  let editLink; //defaults to doc detail
-  if (
-    showDocumentEditLink &&
-    permissions.DOCKET_ENTRY &&
-    formattedDocument &&
-    !workQueueIsInternal
-  ) {
-    if (
-      formattedDocument.isCourtIssuedDocument &&
-      !formattedDocument.servedAt
-    ) {
-      editLink = '/edit-court-issued';
-    } else if (isInProgress) {
-      editLink = '/complete';
-    } else if (
-      !result.isCourtIssuedDocument &&
-      !result.isOrder &&
-      !formattedDocument.isPetition &&
-      qcWorkItemsUntouched
-    ) {
-      editLink = '/edit';
+  const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
+  let editLink = documentDetailLink;
+  if (showDocumentEditLink && !workQueueIsInternal) {
+    if (permissions.DOCKET_ENTRY) {
+      const editLinkExtension = getDocketEntryEditLink({
+        formattedDocument,
+        isInProgress,
+        qcWorkItemsUntouched,
+        result,
+      });
+      if (editLinkExtension) {
+        editLink += editLinkExtension;
+      }
+    } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
+      if (result.caseIsInProgress) {
+        editLink += '/review';
+      } else {
+        editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
+      }
     }
-  } else if (
-    showDocumentEditLink &&
-    permissions.UPDATE_CASE &&
-    formattedDocument &&
-    !workQueueIsInternal &&
-    formattedDocument.isPetition &&
-    result.caseIsInProgress &&
-    !formattedDocument.servedAt
-  ) {
-    editLink = '/review';
   }
-  if (!editLink) {
+  if (editLink === documentDetailLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
 
     const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
@@ -213,7 +223,7 @@ export const getWorkItemDocumentLink = ({
 
     if (messageId && (workQueueIsInternal || permissions.DOCKET_ENTRY)) {
       editLink = `/messages/${messageId}${markReadPath}`;
-    } else {
+    } else if (markReadPath) {
       editLink = `${markReadPath}`;
     }
   }

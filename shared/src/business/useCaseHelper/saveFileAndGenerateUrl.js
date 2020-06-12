@@ -7,14 +7,18 @@
  * @param {string} providers.file the file to save
  * @returns {string} the url to the file
  */
-exports.saveFileAndGenerateUrl = async ({ applicationContext, file }) => {
+exports.saveFileAndGenerateUrl = async ({
+  applicationContext,
+  file,
+  useTempBucket = false,
+}) => {
   const fileId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: file,
     documentId: fileId,
-    useTempBucket: true,
+    useTempBucket,
   });
 
   const {
@@ -22,7 +26,7 @@ exports.saveFileAndGenerateUrl = async ({ applicationContext, file }) => {
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
     documentId: fileId,
-    useTempBucket: true,
+    useTempBucket,
   });
   return { fileId, url };
 };

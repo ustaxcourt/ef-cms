@@ -1,5 +1,7 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
+import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
+import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -23,8 +25,11 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
+import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
+import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
@@ -75,7 +80,9 @@ import React, { useEffect } from 'react';
 
 const pages = {
   AccessibilityStatement,
+  AddDeficiencyStatistics,
   AddDocketEntry,
+  AddOtherStatistics,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
@@ -97,8 +104,11 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditCorrespondenceDocument,
+  EditDeficiencyStatistic,
   EditDocketEntry,
   EditDocketEntryMeta,
+  EditOtherStatistics,
   EditPetitionDetails,
   EditPetitionerInformation,
   EditPractitionerUser,
@@ -159,7 +169,7 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
-    });
+    }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
     return (

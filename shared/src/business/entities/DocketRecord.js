@@ -25,6 +25,7 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.documentId = rawDocketRecord.documentId;
   this.editState = rawDocketRecord.editState;
   this.eventCode = rawDocketRecord.eventCode;
+  this.numberOfPages = rawDocketRecord.numberOfPages;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
@@ -45,11 +46,13 @@ joiValidationDecorator(
   joi.object().keys({
     action: joi
       .string()
+      .max(100)
       .optional()
       .allow(null)
       .description('Action taken in response to this Docket Record item.'),
     description: joi
       .string()
+      .max(500)
       .required()
       .description(
         'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
@@ -64,6 +67,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
+      .max(1000)
       .allow(null)
       .optional()
       .meta({ tags: ['Restricted'] })
@@ -78,10 +82,11 @@ joiValidationDecorator(
       ),
     filedBy: joi
       .string()
+      .max(500)
       .optional()
       .allow(null)
       .meta({ tags: ['Restricted'] })
-      .description('ID of the user that filed this Docket Record item.'),
+      .description('User that filed this Docket Record item.'),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
@@ -91,13 +96,19 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
+      .valid('R', 'B', '')
       .allow(null)
       .optional()
       .description('Served parties code to override system-computed code.'),
   }),
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
+
+DocketRecord.prototype.setNumberOfPages = function (numberOfPages) {
+  this.numberOfPages = numberOfPages;
+};
 
 module.exports = { DocketRecord };

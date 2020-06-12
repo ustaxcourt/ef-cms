@@ -50,9 +50,7 @@ export const petitionerFilesAmendedMotion = (test, fakeFile) => {
       value: previousDocument.documentId,
     });
 
-    //TODO why does this have to be called twice?
-    await test.runSequence('selectDocumentSequence');
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

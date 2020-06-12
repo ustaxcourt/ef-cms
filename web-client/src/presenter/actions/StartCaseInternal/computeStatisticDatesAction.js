@@ -1,5 +1,31 @@
 import { state } from 'cerebral';
 
+export const combineLastDateOfPeriodFields = ({ applicationContext, form }) => {
+  const newForm = {
+    ...form,
+  };
+
+  if (
+    applicationContext
+      .getUtilities()
+      .isValidDateString(
+        `${newForm.lastDateOfPeriodMonth}-${newForm.lastDateOfPeriodDay}-${newForm.lastDateOfPeriodYear}`,
+      )
+  ) {
+    const computedLastDateOfPeriod = applicationContext
+      .getUtilities()
+      .createISODateStringFromObject({
+        day: newForm.lastDateOfPeriodDay,
+        month: newForm.lastDateOfPeriodMonth,
+        year: newForm.lastDateOfPeriodYear,
+      });
+    newForm.lastDateOfPeriod = computedLastDateOfPeriod;
+  } else {
+    newForm.lastDateOfPeriod = undefined;
+  }
+  return newForm;
+};
+
 /**
  * computes the dates for the statistics array from the form
  *
@@ -15,27 +41,12 @@ export const computeStatisticDatesAction = ({
 }) => {
   let statistics = get(state.form.statistics) || [];
 
-  statistics = statistics.map(statistic => {
-    if (
-      applicationContext
-        .getUtilities()
-        .isValidDateString(
-          `${statistic.lastDateOfPeriodMonth}-${statistic.lastDateOfPeriodDay}-${statistic.lastDateOfPeriodYear}`,
-        )
-    ) {
-      const computedLastDateOfPeriod = applicationContext
-        .getUtilities()
-        .createISODateStringFromObject({
-          day: statistic.lastDateOfPeriodDay,
-          month: statistic.lastDateOfPeriodMonth,
-          year: statistic.lastDateOfPeriodYear,
-        });
-      statistic.lastDateOfPeriod = computedLastDateOfPeriod;
-    } else {
-      statistic.lastDateOfPeriod = undefined;
-    }
-    return statistic;
-  });
+  statistics = statistics.map(statistic =>
+    combineLastDateOfPeriodFields({
+      applicationContext,
+      form: statistic,
+    }),
+  );
 
   store.set(state.form.statistics, statistics);
 };

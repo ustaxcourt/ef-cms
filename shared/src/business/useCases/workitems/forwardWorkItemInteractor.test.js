@@ -22,7 +22,7 @@ const mockCase = {
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Proposed Stipulated Decision',
       processingStatus: 'pending',
-      userId: 'petitioner',
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
       workItems: [
         {
           assigneeId: null,
@@ -56,7 +56,8 @@ const mockCase = {
           ],
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
-          sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          sentBy: 'Test Petitioner',
+          sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           sk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           updatedAt: '2019-07-12T17:09:41.027Z',
           workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -93,7 +94,8 @@ const mockCase = {
           ],
           pk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           section: 'petitions',
-          sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          sentBy: 'Test Petitioner',
+          sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           sk: 'work-item|c54ba5a9-b37b-479d-9201-067ec6e335bb',
           updatedAt: '2019-07-12T17:09:41.027Z',
           workItemId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',

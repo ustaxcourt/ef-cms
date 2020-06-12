@@ -39,7 +39,7 @@ describe('addCoversheetInteractor', () => {
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
         processingStatus: 'pending',
-        userId: 'petitionsclerk',
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
     ],
     partyType: ContactFactory.PARTY_TYPES.petitioner,
@@ -60,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         addToCoversheet: true,
         additionalInfo: 'Additional Info Something',
         certificateOfService: true,
+        certificateOfServiceDate: '2019-04-20',
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
@@ -98,6 +99,73 @@ describe('addCoversheetInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
+  it('replaces the cover page on a document', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(testingCaseData);
+
+    const params = {
+      applicationContext,
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      replaceCoversheet: true,
+    };
+
+    await addCoversheetInteractor(params);
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+  });
+
+  it("updates the document's page numbers", async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(testingCaseData);
+
+    const params = {
+      applicationContext,
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    };
+
+    await addCoversheetInteractor(params);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument,
+    ).toHaveBeenCalled();
+  });
+
+  it("updates the document and docket record's page numbers", async () => {
+    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
+      ...testingCaseData,
+      docketRecord: [
+        {
+          description: 'Test Docket Record',
+          documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          eventCode: 'O',
+          filingDate: new Date('2000-01-01').toISOString(),
+          index: 0,
+        },
+      ],
+    });
+
+    const params = {
+      applicationContext,
+      caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    };
+
+    await addCoversheetInteractor(params);
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocument,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketRecord,
     ).toHaveBeenCalled();
   });
 

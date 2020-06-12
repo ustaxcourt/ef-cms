@@ -1,3 +1,4 @@
+import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
@@ -90,28 +91,9 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const showStatistics = statistics && statistics.length > 0;
 
-  const formattedStatistics = (statistics || []).map(statistic => {
-    const formattedDate =
-      statistic.year ||
-      applicationContext
-        .getUtilities()
-        .formatDateString(statistic.lastDateOfPeriod, 'MMDDYY');
-
-    const formattedDeficiencyAmount = applicationContext
-      .getUtilities()
-      .formatDollars(statistic.deficiencyAmount);
-
-    const formattedTotalPenalties = applicationContext
-      .getUtilities()
-      .formatDollars(statistic.totalPenalties);
-
-    return {
-      ...statistic,
-      formattedDate,
-      formattedDeficiencyAmount,
-      formattedTotalPenalties,
-    };
-  });
+  const formattedStatistics = (statistics || []).map(statistic =>
+    formatStatistic({ applicationContext, statistic }),
+  );
 
   return {
     applicationForWaiverOfFilingFeeFile,

@@ -147,7 +147,8 @@ exports.fileExternalDocumentInteractor = async ({
           highPriority: highPriorityWorkItem,
           isQC: true,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
           trialDate: caseEntity.trialDate,
         },
         { applicationContext },
@@ -186,7 +187,7 @@ exports.fileExternalDocumentInteractor = async ({
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
-          caseEntity: caseToUpdate,
+          caseEntity,
           documentEntity,
           servedParties,
         });

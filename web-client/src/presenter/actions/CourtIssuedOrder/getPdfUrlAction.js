@@ -9,14 +9,8 @@ import { state } from 'cerebral';
  * @returns {object} pdfUrl
  */
 export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
-  const { htmlString } = props;
+  const { contentHtml, documentTitle, signatureText } = props;
   const caseDetail = get(state.caseDetail);
-
-  if (!htmlString) {
-    throw new Error('No markup found in documentHtml');
-  }
-
-  const { docketNumberWithSuffix } = caseDetail;
 
   const {
     url,
@@ -24,8 +18,10 @@ export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
-      docketNumberWithSuffix,
-      htmlString,
+      caseId: caseDetail.caseId,
+      contentHtml,
+      documentTitle,
+      signatureText,
     });
 
   return { pdfUrl: url };

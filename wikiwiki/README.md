@@ -37,6 +37,8 @@
 
 * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)
+* [Correspondence](./Correspondence.md)
+
 #### Petitioners
 * [External Filings](./External-Filings.md)
 
