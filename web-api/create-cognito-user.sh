@@ -69,7 +69,7 @@ createAccount() {
     --request POST \
     --output json \
     --data "$(generate_post_data "${email}" "${password}" "${role}" "${section}" "${name}")" \
-      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
+      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
