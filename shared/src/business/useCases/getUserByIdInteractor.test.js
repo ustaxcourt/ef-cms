@@ -1,16 +1,17 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUserByIdInteractor } = require('./getUserByIdInteractor');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const MOCK_REQUEST_USER = new User({
   name: 'Test Petitions clerk',
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 });
 
 const MOCK_RETRIEVED_USER = {
   name: 'Test Practitioner',
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
   userId: '4f67802c-1948-4749-b070-38f7316b15c5',
 };
@@ -20,7 +21,7 @@ describe('getUserByIdInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitioner',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'e93ce149-b42b-4764-802f-5d321ba36950',
       }),
     );
@@ -38,7 +39,7 @@ describe('getUserByIdInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
         name: 'Test Petitioner',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'e93ce149-b42b-4764-802f-5d321ba36950',
       }),
     );
@@ -69,7 +70,7 @@ describe('getUserByIdInteractor', () => {
       email: undefined,
       entityName: 'User',
       name: 'Test Practitioner',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       section: 'privatePractitioner',
       token: undefined,
       userId: '4f67802c-1948-4749-b070-38f7316b15c5',

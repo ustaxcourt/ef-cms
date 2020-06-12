@@ -288,11 +288,32 @@ const CASE_TYPES_MAP = {
   workerClassification: 'Worker Classification',
 };
 
+const CASE_TYPES = Object.values(CASE_TYPES_MAP);
+
+const ROLES = {
+  adc: 'adc',
+  admin: 'admin',
+  admissionsClerk: 'admissionsclerk',
+  chambers: 'chambers',
+  clerkOfCourt: 'clerkofcourt',
+  docketClerk: 'docketclerk',
+  floater: 'floater',
+  inactivePractitioner: 'inactivePractitioner',
+  irsPractitioner: 'irsPractitioner',
+  irsSuperuser: 'irsSuperuser',
+  judge: 'judge',
+  petitioner: 'petitioner',
+  petitionsClerk: 'petitionsclerk',
+  privatePractitioner: 'privatePractitioner',
+  trialClerk: 'trialclerk',
+};
+
 module.exports = {
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
@@ -315,6 +336,7 @@ module.exports = {
   PAYMENT_STATUS,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   PROCEDURE_TYPES,
+  ROLES,
   SCENARIOS,
   SERVICE_INDICATOR_TYPES,
   SIGNED_DOCUMENT_TYPES,

@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from './caseDetailSubnavHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -27,7 +27,7 @@ const getBaseState = user => {
 describe('caseDetailSubnavHelper', () => {
   it('should show internal-only tabs if user is internal', () => {
     const user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
@@ -44,7 +44,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should not show internal-only tabs if user is external', () => {
     const user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
@@ -60,7 +60,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should show case information tab if user is external and associated with the case', () => {
     const user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
@@ -76,7 +76,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should not show case information tab if user is external and not associated with the case', () => {
     const user = {
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {

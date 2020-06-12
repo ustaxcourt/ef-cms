@@ -1,5 +1,5 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filterQcItemsByAssociatedJudge } from './filterQcItemsByAssociatedJudge';
 
@@ -12,7 +12,7 @@ describe('filterQcItemsByAssociatedJudge', () => {
     applicationContext.getCurrentUser.mockImplementation(() => currentUser);
     applicationContext.getConstants.mockReturnValue({
       CHIEF_JUDGE: Case.CHIEF_JUDGE,
-      USER_ROLES: User.ROLES,
+      USER_ROLES: ROLES,
     });
   });
 
@@ -40,7 +40,7 @@ describe('filterQcItemsByAssociatedJudge', () => {
 
   it('returns a pass-through filter if the user is not of the judge, chambers, or adc roles', () => {
     currentUser = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     };
 
     const filterFunction = filterQcItemsByAssociatedJudge({
@@ -56,7 +56,7 @@ describe('filterQcItemsByAssociatedJudge', () => {
 
   it('returns a filter for the current judge or chambers user', () => {
     currentUser = {
-      role: User.ROLES.chambers,
+      role: ROLES.chambers,
     };
 
     judgeUser = {
@@ -75,7 +75,7 @@ describe('filterQcItemsByAssociatedJudge', () => {
 
   it('returns a filter for the current adc user', () => {
     currentUser = {
-      role: User.ROLES.adc,
+      role: ROLES.adc,
     };
 
     const filterFunction = filterQcItemsByAssociatedJudge({

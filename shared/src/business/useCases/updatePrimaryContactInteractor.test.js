@@ -3,6 +3,7 @@ const {
 } = require('./updatePrimaryContactInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const fakeData =
@@ -27,7 +28,7 @@ describe('update primary contact on a case', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'bob',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );

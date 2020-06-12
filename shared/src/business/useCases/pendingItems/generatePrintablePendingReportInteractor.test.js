@@ -5,7 +5,7 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('./generatePrintablePendingReportInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('generatePrintablePendingReportInteractor', () => {
   beforeAll(() => {
@@ -38,7 +38,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
@@ -53,7 +53,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   it('should throw an unauthorized error if the user does not have access', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
 

@@ -4,6 +4,7 @@ const {
 const {
   updateCourtIssuedOrderInteractor,
 } = require('./updateCourtIssuedOrderInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('updateCourtIssuedOrderInteractor', () => {
@@ -60,14 +61,14 @@ describe('updateCourtIssuedOrderInteractor', () => {
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     userId: '3433e36f-3b50-4c92-aa55-6efb4e432883',
   };
 
   beforeEach(() => {
     mockCurrentUser = new User({
       name: 'Olivia Jade',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -88,7 +89,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if not authorized', async () => {
-    mockCurrentUser.role = User.ROLES.privatePractitioner;
+    mockCurrentUser.role = ROLES.privatePractitioner;
     mockUserById = { name: 'bob' };
 
     await expect(

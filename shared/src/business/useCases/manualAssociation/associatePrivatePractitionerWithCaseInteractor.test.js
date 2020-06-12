@@ -4,7 +4,7 @@ const {
 const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -60,7 +60,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   it('should add mapping for a practitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.adc,
+      role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext
@@ -68,7 +68,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       .getUserById.mockImplementation(() => {
         return {
           name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-          role: User.ROLES.privatePractitioner,
+          role: ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       });

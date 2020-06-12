@@ -6,6 +6,7 @@ const {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../EntityConstants');
 const {
   MOCK_CASE,
@@ -22,7 +23,6 @@ const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -2876,7 +2876,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2895,7 +2895,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2909,7 +2909,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity,
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });

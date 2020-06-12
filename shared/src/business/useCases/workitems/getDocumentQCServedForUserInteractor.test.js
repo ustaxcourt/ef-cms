@@ -4,15 +4,15 @@ const {
 const {
   getDocumentQCServedForUserInteractor,
 } = require('./getDocumentQCServedForUserInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('getDocumentQCServedForUserInteractor', () => {
   let user;
 
   beforeEach(() => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
     applicationContext.getCurrentUser.mockReturnValue(user);
@@ -47,7 +47,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
   it('throws an error if the user does not have access to the work item', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -91,7 +91,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
   it('successfully returns the work items for a docket clerk', async () => {
     user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     };
 

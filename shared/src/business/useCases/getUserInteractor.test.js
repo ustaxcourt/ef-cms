@@ -1,5 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUserInteractor } = require('./getUserInteractor');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('getUserInteractor', () => {
@@ -7,13 +8,13 @@ describe('getUserInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Petitionsclerk',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       section: 'petitions',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -28,7 +29,7 @@ describe('getUserInteractor', () => {
       email: undefined,
       entityName: 'User',
       name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       section: 'petitions',
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -39,13 +40,13 @@ describe('getUserInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Judge',
-        role: User.ROLES.judge,
+        role: ROLES.judge,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Judge',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       section: 'judge',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -60,7 +61,7 @@ describe('getUserInteractor', () => {
       email: undefined,
       entityName: 'User',
       name: 'Test Judge',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       section: 'judge',
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

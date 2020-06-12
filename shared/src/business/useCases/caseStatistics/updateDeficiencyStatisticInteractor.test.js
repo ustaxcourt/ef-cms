@@ -5,7 +5,7 @@ const {
   updateDeficiencyStatisticInteractor,
 } = require('./updateDeficiencyStatisticInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateDeficiencyStatisticInteractor', () => {
   let statistic = {
@@ -20,7 +20,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 

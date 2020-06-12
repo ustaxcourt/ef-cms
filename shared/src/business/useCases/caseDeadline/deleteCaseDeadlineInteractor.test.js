@@ -6,6 +6,7 @@ const {
 } = require('./deleteCaseDeadlineInteractor');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { MOCK_CASE_WITHOUT_PENDING } = require('../../../test/mockCase');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -30,7 +31,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   beforeEach(() => {
     user = new User({
       name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

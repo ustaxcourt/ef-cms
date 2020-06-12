@@ -6,14 +6,14 @@ const {
 } = require('./fileCorrespondenceDocumentInteractor');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const mockUser = {
     name: 'Docket Clerk',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
   const mockCase = {
@@ -82,7 +82,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user role does not have theCASE_CORRESPONDENCE permission', async () => {
-    const user = { ...mockUser, role: User.ROLES.petitioner };
+    const user = { ...mockUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(

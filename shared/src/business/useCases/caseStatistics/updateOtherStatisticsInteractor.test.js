@@ -5,12 +5,12 @@ const {
   updateOtherStatisticsInteractor,
 } = require('./updateOtherStatisticsInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateOtherStatisticsInteractor', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 

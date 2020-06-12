@@ -8,6 +8,7 @@ const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
@@ -67,14 +68,14 @@ describe('fileExternalDocumentInteractor', () => {
       partyType: ContactFactory.PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'irsPractitioner',
-        role: User.ROLES.irsPractitioner,
+        role: ROLES.irsPractitioner,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     );
