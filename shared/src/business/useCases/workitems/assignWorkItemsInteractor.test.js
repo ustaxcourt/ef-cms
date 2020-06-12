@@ -4,7 +4,7 @@ const {
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,
@@ -59,7 +59,7 @@ describe('assignWorkItemsInteractor', () => {
 
     applicationContext.user = {
       name: 'bob',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
     };
     let error;
     try {

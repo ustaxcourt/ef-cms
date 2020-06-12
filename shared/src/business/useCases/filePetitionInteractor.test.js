@@ -1,6 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { filePetitionInteractor } = require('./filePetitionInteractor');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 beforeAll(() => {
   applicationContext
@@ -26,7 +26,7 @@ describe('filePetitionInteractor', () => {
 
   it('throws an error when an unauthorized user tries to access the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'irsPractitioner',
     });
     let error;
@@ -44,7 +44,7 @@ describe('filePetitionInteractor', () => {
 
   it('calls upload on a Petition file', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     await filePetitionInteractor({

@@ -4,8 +4,8 @@ const {
 const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 const mockUser = {
   admissionsDate: '2019-03-01T21:40:46.415Z',
@@ -20,7 +20,7 @@ const mockUser = {
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 
@@ -86,7 +86,7 @@ describe('update practitioner user', () => {
 
   it('throws unauthorized for a non-internal user', async () => {
     testUser = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 

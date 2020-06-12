@@ -7,7 +7,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('remove case from trial session', () => {
   const MOCK_TRIAL_SESSION = {
@@ -29,7 +29,7 @@ describe('remove case from trial session', () => {
 
   beforeEach(() => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
 
@@ -52,7 +52,7 @@ describe('remove case from trial session', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
     mockTrialSession = MOCK_TRIAL_SESSION;

@@ -1,6 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createPractitionerUser } = require('./createPractitionerUser');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('createPractitionerUser', () => {
   const mockAdmissionsDate = new Date('1876/02/19');
@@ -15,7 +15,7 @@ describe('createPractitionerUser', () => {
       lastName: 'IRSPractitioner',
       originalBarState: 'CA',
       practitionerType: 'Attorney',
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     };
 
     const result = await createPractitionerUser({
@@ -38,7 +38,7 @@ describe('createPractitionerUser', () => {
       lastName: 'IRSPractitioner',
       originalBarState: 'CA',
       practitionerType: 'Attorney',
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     };
 
     const result = await createPractitionerUser({

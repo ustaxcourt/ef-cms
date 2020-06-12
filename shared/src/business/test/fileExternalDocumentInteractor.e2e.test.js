@@ -9,6 +9,7 @@ const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('fileExternalDocumentInteractor integration test', () => {
@@ -19,7 +20,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Test Petitioner',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
@@ -412,7 +413,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Docketclerk',
-        role: User.ROLES.docketClerk,
+        role: ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );

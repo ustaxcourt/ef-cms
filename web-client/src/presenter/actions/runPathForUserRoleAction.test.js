@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -37,7 +37,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the petitioner path for user role petitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -50,7 +50,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the privatePractitioner path for user role privatePractitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -63,7 +63,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the irsPractitioner path for user role irsPractitioner', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -76,7 +76,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -89,7 +89,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the docketclerk path for user role docketclerk', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {
@@ -102,7 +102,7 @@ describe('runPathForUserRoleAction', () => {
 
   it('should return the judge path for user role judge', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.judge,
+      role: ROLES.judge,
     });
     await runAction(runPathForUserRoleAction, {
       modules: {

@@ -1,5 +1,8 @@
 import {
+  CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_TYPES,
+  CASE_TYPES_MAP,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_CATEGORIES,
@@ -9,6 +12,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
   SIGNED_DOCUMENT_TYPES,
   STATUS_TYPES_MANUAL_UPDATE,
@@ -37,7 +41,6 @@ import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtI
 import { Scan } from '../../shared/src/business/entities/Scan';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
 
 const MINUTES = 60 * 1000;
 
@@ -57,12 +60,12 @@ export const getConstants = () => ({
   ADMISSIONS_STATUS_OPTIONS: Practitioner.ADMISSIONS_STATUS_OPTIONS,
   ADVANCED_SEARCH_TABS,
   BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
-  CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+  CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
   CASE_LIST_PAGE_SIZE: 20,
   CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-  CASE_TYPES: Case.CASE_TYPES,
-  CASE_TYPES_MAP: Case.CASE_TYPES_MAP,
+  CASE_TYPES,
+  CASE_TYPES_MAP: CASE_TYPES_MAP,
   CATEGORIES: DOCUMENT_CATEGORIES,
   CATEGORY_MAP: DOCUMENT_CATEGORY_MAP,
   CHAMBERS_SECTION,
@@ -110,5 +113,5 @@ export const getConstants = () => ({
   TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
   TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
   US_STATES: ContactFactory.US_STATES,
-  USER_ROLES: User.ROLES,
+  USER_ROLES: ROLES,
 });

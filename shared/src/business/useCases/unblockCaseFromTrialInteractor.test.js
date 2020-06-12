@@ -3,12 +3,12 @@ const {
 } = require('./unblockCaseFromTrialInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('unblockCaseFromTrialInteractor', () => {
   it('should set the blocked flag to false and remove the blockedReason', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext

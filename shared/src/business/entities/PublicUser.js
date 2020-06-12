@@ -2,14 +2,14 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { User } = require('./User');
+const { ROLES } = require('./EntityConstants');
 
 PublicUser.validationName = 'PublicUser';
 
 const userDecorator = (obj, rawObj) => {
   obj.name = rawObj.name;
   obj.role = rawObj.role;
-  if (obj.role === User.ROLES.judge) {
+  if (obj.role === ROLES.judge) {
     obj.judgeFullName = rawObj.judgeFullName;
     obj.judgeTitle = rawObj.judgeTitle;
   }
@@ -17,19 +17,19 @@ const userDecorator = (obj, rawObj) => {
 
 const userValidation = {
   judgeFullName: joi.when('role', {
-    is: User.ROLES.judge,
+    is: ROLES.judge,
     otherwise: joi.optional().allow(null),
     then: joi.string().max(100).optional(),
   }),
   judgeTitle: joi.when('role', {
-    is: User.ROLES.judge,
+    is: ROLES.judge,
     otherwise: joi.optional().allow(null),
     then: joi.string().max(100).optional(),
   }),
   name: joi.string().max(100).optional(),
   role: joi
     .string()
-    .valid(...Object.values(User.ROLES))
+    .valid(...Object.values(ROLES))
     .required(),
 };
 
