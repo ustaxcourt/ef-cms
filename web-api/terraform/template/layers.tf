@@ -24,7 +24,7 @@ resource "aws_s3_bucket_object" "clamav_layer_object" {
 
 resource "aws_lambda_layer_version" "clamav_layer" {
   s3_bucket = "${aws_s3_bucket.layer_bucket.id}"
-  s3_key = "aws_s3_bucket_object.clamav_layer_object.key"
+  s3_key = "${aws_s3_bucket_object.clamav_layer_object.key}"
   layer_name = "clamav-${var.environment}"
 
   compatible_runtimes = ["nodejs12.x"]
