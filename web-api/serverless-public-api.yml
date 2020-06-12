@@ -124,7 +124,3 @@ functions:
           path: /todays-opinions
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

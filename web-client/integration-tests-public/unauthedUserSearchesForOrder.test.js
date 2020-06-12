@@ -3,7 +3,7 @@ import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journe
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
-import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -58,7 +58,7 @@ describe('Docket clerk creates orders to search for', () => {
     signedAtFormatted: '01/02/2020',
   });
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
-  docketClerkServesOrder(testClient, 0);
+  docketClerkServesDocument(testClient, 0);
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
@@ -66,7 +66,7 @@ describe('Docket clerk creates orders to search for', () => {
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
-  docketClerkServesOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',

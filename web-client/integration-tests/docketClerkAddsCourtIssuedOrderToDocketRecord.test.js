@@ -5,9 +5,9 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsDocketEntryFromOrderWithDate } from './journey/docketClerkAddsDocketEntryFromOrderWithDate';
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
+import { docketClerkConvertsAnOrderToAnOpinion } from './journey/docketClerkConvertsAnOrderToAnOpinion';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkEditsDocketEntryFromOrderTypeA } from './journey/docketClerkEditsDocketEntryFromOrderTypeA';
-import { docketClerkEditsDocketEntryFromOrderTypeB } from './journey/docketClerkEditsDocketEntryFromOrderTypeB';
 import { docketClerkEditsDocketEntryFromOrderTypeC } from './journey/docketClerkEditsDocketEntryFromOrderTypeC';
 import { docketClerkEditsDocketEntryFromOrderTypeD } from './journey/docketClerkEditsDocketEntryFromOrderTypeD';
 import { docketClerkEditsDocketEntryFromOrderTypeE } from './journey/docketClerkEditsDocketEntryFromOrderTypeE';
@@ -64,7 +64,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkEditsDocketEntryFromOrderTypeA(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeB(test, 0);
+  docketClerkConvertsAnOrderToAnOpinion(test, 0);
   docketClerkEditsDocketEntryFromOrderTypeC(test, 0);
   docketClerkEditsDocketEntryFromOrderTypeD(test, 0);
   docketClerkEditsDocketEntryFromOrderTypeE(test, 0);
