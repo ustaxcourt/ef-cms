@@ -324,6 +324,7 @@ module.exports = {
           'textarea',
           'thorton',
           'thortons',
+          'todays',
           'touchmove',
           'transferee',
           'truthy',
