@@ -308,6 +308,16 @@ const ROLES = {
   trialClerk: 'trialclerk',
 };
 
+const FILING_TYPES = {
+  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.privatePractitioner]: [
+    'Individual petitioner',
+    'Petitioner and spouse',
+    'A business',
+    'Other',
+  ],
+};
+
 module.exports = {
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
@@ -327,6 +337,7 @@ module.exports = {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES,
+  FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
