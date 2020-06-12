@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
 const {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
@@ -45,15 +46,6 @@ const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const joiStrictTimestamp = getTimestampSchema();
-const orderDocumentTypes = Order.ORDER_TYPES.map(
-  orderType => orderType.documentType,
-);
-const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-  courtIssuedDoc => courtIssuedDoc.documentType,
-);
-
-Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
-Case.ANSWER_CUTOFF_UNIT = 'day';
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -688,6 +680,13 @@ joiValidationDecorator(
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
+
 /**
  * builds the case caption from case contact name(s) based on party type
  *
@@ -1161,7 +1160,7 @@ Case.prototype.checkForReadyForTrial = function () {
       );
 
       const requiredTimeElapsedSinceFiling =
-        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
+        daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
