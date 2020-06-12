@@ -558,6 +558,9 @@ const {
   getSentMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
+  getTodaysOpinionsInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
+const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
@@ -1437,6 +1440,7 @@ module.exports = (appContextUser = {}) => {
         getPublicDownloadPolicyUrlInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
+        getTodaysOpinionsInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
