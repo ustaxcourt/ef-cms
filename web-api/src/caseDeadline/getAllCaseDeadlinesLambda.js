@@ -13,12 +13,12 @@ exports.getAllCaseDeadlinesLambda = event =>
       applicationContext.getUseCases(),
     );
     console.log(
-      'typeof applicationContext.getUseCases().getCaseDeadlinesAllInteractor is',
-      typeof applicationContext.getUseCases().getCaseDeadlinesAllInteractor,
+      'typeof applicationContext.getUseCases().getAllCaseDeadlinesInteractor is',
+      typeof applicationContext.getUseCases().getAllCaseDeadlinesInteractor,
     );
     return await applicationContext
       .getUseCases()
-      .getCaseDeadlinesAllInteractor({
+      .getAllCaseDeadlinesInteractor({
         applicationContext,
       });
   });

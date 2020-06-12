@@ -37,6 +37,7 @@ web-api/terraform/template/cognito-triggers/index.js.zip
 web-api/terraform/template/log-forwarder/index.js.zip
 web-api/terraform/template/api/index.js.zip
 web-api/terraform/template/api-public/index.js.zip
+web-api/terraform/main/new-policy.json
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*
