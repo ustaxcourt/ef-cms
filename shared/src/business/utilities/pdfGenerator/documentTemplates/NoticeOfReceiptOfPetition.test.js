@@ -33,7 +33,7 @@ describe('NoticeOfReceiptOfPetition', () => {
       `Docket Number ${docketNumberWithSuffix}`,
     );
     expect(wrapper.find('h3').at(0).text()).toEqual(
-      'NOTIFICATION OF RECEIPT OF PETITION',
+      'Notice of Receipt of Petition',
     );
   });
 
