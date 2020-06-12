@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "layer_bucket" {
 }
 
 resource "aws_s3_bucket_object" "clamav_layer_object" {
-  bucket = "${var.environment}.layers.deploys"
+  bucket = "${aws_s3_bucket.layer_bucket.arn}"
   key    = "${var.environment}_clamav_lambda_layer.tar.gz"
   source = "../../runtimes/clamav/clamav_lambda_layer.tar.gz"
 }
