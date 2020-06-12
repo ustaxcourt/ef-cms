@@ -7,7 +7,7 @@ const { WorkItem } = require('./WorkItem');
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
   role: User.ROLES.petitioner,
-  userId: 'petitioner',
+  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
 };
 const caseDetail = {
   contactPrimary: {
@@ -102,7 +102,7 @@ describe('Document entity', () => {
     it('Creates an invalid document with no document type', () => {
       const myDoc = new Document(
         {
-          userId: '123',
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
         { applicationContext },
       );
@@ -133,7 +133,7 @@ describe('Document entity', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
@@ -837,10 +837,15 @@ describe('Document entity', () => {
   describe('setQCed', () => {
     it('updates the document QC information with user name, id, and date', () => {
       const document = new Document(A_VALID_DOCUMENT, { applicationContext });
-      const user = { name: 'Jean Luc', userId: 'ncc-1701-c' };
+      const user = {
+        name: 'Jean Luc',
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
       document.setQCed(user);
       expect(document.qcByUser.name).toEqual('Jean Luc');
-      expect(document.qcByUser.userId).toEqual('ncc-1701-c');
+      expect(document.qcByUser.userId).toEqual(
+        '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      );
       expect(document.qcAt).toBeDefined();
     });
   });
@@ -852,7 +857,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -872,7 +877,7 @@ describe('Document entity', () => {
               workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
             },
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -907,7 +912,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -1022,6 +1027,20 @@ describe('Document entity', () => {
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
+    });
+  });
+
+  describe('getFormattedType', () => {
+    it('strips out the dash and returns the verbiage after it', () => {
+      expect(Document.getFormattedType('TCOP - T.C. Opinion')).toEqual(
+        'T.C. Opinion',
+      );
+    });
+
+    it("returns the verbiage if there's no dash", () => {
+      expect(Document.getFormattedType('Summary Opinion')).toEqual(
+        'Summary Opinion',
+      );
     });
   });
 });

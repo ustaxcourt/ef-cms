@@ -17,7 +17,7 @@ const statisticsFormHelper = withAppContextDecorator(
 );
 
 export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
-  return it('Petitioner edits Petition IRS Notice', async () => {
+  return it('Petitions clerk edits Petition IRS Notice', async () => {
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
       tab: 'IrsNotice',
@@ -118,9 +118,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     let errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('required');
-    expect(errors[0].totalPenalties).toContain('required');
-    expect(errors[0].year).toContain('required');
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Change between a statistic period and year
     await test.runSequence('updateFormValueSequence', {
@@ -137,14 +137,16 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
       true,
     );
 
+    // Attempt to submit without required (period) statistics fields
     await test.runSequence('saveSavedCaseForLaterSequence');
 
     errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('required');
-    expect(errors[0].totalPenalties).toContain('required');
-    expect(errors[0].year).toBeUndefined();
+    expect(errors[0].enterAllValues).toContain(
+      'Enter period, deficiency amount, and total penalties',
+    );
 
+    // Switch back to year input
     await test.runSequence('updateFormValueSequence', {
       key: 'statistics.0.yearOrPeriod',
       value: 'Year',
@@ -156,6 +158,14 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     expect(statisticsUiHelper.statisticOptions[0].showYearInput).toEqual(true);
     expect(statisticsUiHelper.statisticOptions[0].showPeriodInput).toBeFalsy();
+
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    errors = test.getState('validationErrors.statistics');
+
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Select calculate penalties for the first statistic
     await test.runSequence('showCalculatePenaltiesModalSequence', {
@@ -215,17 +225,17 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     statistics = test.getState('form.statistics');
     modal = test.getState('modal');
 
-    expect(statistics[0].totalPenalties).toEqual('$6.01');
+    expect(statistics[0].irsTotalPenalties).toEqual('$6.01');
     expect(modal.showModal).toBeUndefined();
 
     // Attempt to insert a non-number into currency amount inputs
     await test.runSequence('updateFormValueSequence', {
-      key: 'statistics.0.deficiencyAmount',
+      key: 'statistics.0.irsDeficiencyAmount',
       value: '$100',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'statistics.0.totalPenalties',
+      key: 'statistics.0.irsTotalPenalties',
       value: '1,000',
     });
 
@@ -233,8 +243,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     errors = test.getState('validationErrors.statistics');
 
-    expect(errors[0].deficiencyAmount).toContain('must be a number');
-    expect(errors[0].deficiencyAmount).toContain('must be a number');
+    expect(errors[0].enterAllValues).toContain(
+      'Enter year, deficiency amount, and total penalties',
+    );
 
     // Fill out all statistics values and submit
     for (let i = 0; i < 12; i++) {
@@ -244,12 +255,12 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
       });
 
       await test.runSequence('updateFormValueSequence', {
-        key: `statistics.${i}.deficiencyAmount`,
+        key: `statistics.${i}.irsDeficiencyAmount`,
         value: 1000 + i,
       });
 
       await test.runSequence('updateFormValueSequence', {
-        key: `statistics.${i}.totalPenalties`,
+        key: `statistics.${i}.irsTotalPenalties`,
         value: 100 + i,
       });
     }
@@ -267,87 +278,87 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     expect(reviewUiHelper.formattedStatistics).toEqual([
       expect.objectContaining({
-        deficiencyAmount: 1000,
-        formattedDeficiencyAmount: '$1,000.00',
-        formattedTotalPenalties: '$100.00',
-        totalPenalties: 100,
+        formattedIrsDeficiencyAmount: '$1,000.00',
+        formattedIrsTotalPenalties: '$100.00',
+        irsDeficiencyAmount: 1000,
+        irsTotalPenalties: 100,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1001,
-        formattedDeficiencyAmount: '$1,001.00',
-        formattedTotalPenalties: '$101.00',
-        totalPenalties: 101,
+        formattedIrsDeficiencyAmount: '$1,001.00',
+        formattedIrsTotalPenalties: '$101.00',
+        irsDeficiencyAmount: 1001,
+        irsTotalPenalties: 101,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1002,
-        formattedDeficiencyAmount: '$1,002.00',
-        formattedTotalPenalties: '$102.00',
-        totalPenalties: 102,
+        formattedIrsDeficiencyAmount: '$1,002.00',
+        formattedIrsTotalPenalties: '$102.00',
+        irsDeficiencyAmount: 1002,
+        irsTotalPenalties: 102,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1003,
-        formattedDeficiencyAmount: '$1,003.00',
-        formattedTotalPenalties: '$103.00',
-        totalPenalties: 103,
+        formattedIrsDeficiencyAmount: '$1,003.00',
+        formattedIrsTotalPenalties: '$103.00',
+        irsDeficiencyAmount: 1003,
+        irsTotalPenalties: 103,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1004,
-        formattedDeficiencyAmount: '$1,004.00',
-        formattedTotalPenalties: '$104.00',
-        totalPenalties: 104,
+        formattedIrsDeficiencyAmount: '$1,004.00',
+        formattedIrsTotalPenalties: '$104.00',
+        irsDeficiencyAmount: 1004,
+        irsTotalPenalties: 104,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1005,
-        formattedDeficiencyAmount: '$1,005.00',
-        formattedTotalPenalties: '$105.00',
-        totalPenalties: 105,
+        formattedIrsDeficiencyAmount: '$1,005.00',
+        formattedIrsTotalPenalties: '$105.00',
+        irsDeficiencyAmount: 1005,
+        irsTotalPenalties: 105,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1006,
-        formattedDeficiencyAmount: '$1,006.00',
-        formattedTotalPenalties: '$106.00',
-        totalPenalties: 106,
+        formattedIrsDeficiencyAmount: '$1,006.00',
+        formattedIrsTotalPenalties: '$106.00',
+        irsDeficiencyAmount: 1006,
+        irsTotalPenalties: 106,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1007,
-        formattedDeficiencyAmount: '$1,007.00',
-        formattedTotalPenalties: '$107.00',
-        totalPenalties: 107,
+        formattedIrsDeficiencyAmount: '$1,007.00',
+        formattedIrsTotalPenalties: '$107.00',
+        irsDeficiencyAmount: 1007,
+        irsTotalPenalties: 107,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1008,
-        formattedDeficiencyAmount: '$1,008.00',
-        formattedTotalPenalties: '$108.00',
-        totalPenalties: 108,
+        formattedIrsDeficiencyAmount: '$1,008.00',
+        formattedIrsTotalPenalties: '$108.00',
+        irsDeficiencyAmount: 1008,
+        irsTotalPenalties: 108,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1009,
-        formattedDeficiencyAmount: '$1,009.00',
-        formattedTotalPenalties: '$109.00',
-        totalPenalties: 109,
+        formattedIrsDeficiencyAmount: '$1,009.00',
+        formattedIrsTotalPenalties: '$109.00',
+        irsDeficiencyAmount: 1009,
+        irsTotalPenalties: 109,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1010,
-        formattedDeficiencyAmount: '$1,010.00',
-        formattedTotalPenalties: '$110.00',
-        totalPenalties: 110,
+        formattedIrsDeficiencyAmount: '$1,010.00',
+        formattedIrsTotalPenalties: '$110.00',
+        irsDeficiencyAmount: 1010,
+        irsTotalPenalties: 110,
         year: 2019,
       }),
       expect.objectContaining({
-        deficiencyAmount: 1011,
-        formattedDeficiencyAmount: '$1,011.00',
-        formattedTotalPenalties: '$111.00',
-        totalPenalties: 111,
+        formattedIrsDeficiencyAmount: '$1,011.00',
+        formattedIrsTotalPenalties: '$111.00',
+        irsDeficiencyAmount: 1011,
+        irsTotalPenalties: 111,
         year: 2019,
       }),
     ]);

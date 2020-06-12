@@ -123,7 +123,7 @@ jobs:
         environment:
           discovery.type: single-node
     resource_class: xlarge
-    parallelism: 4
+    parallelism: 5
     steps:
       - attach_workspace:
           at: ~/
@@ -135,7 +135,7 @@ jobs:
           command: |
             SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:3000/api/swagger
-            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" | circleci tests split --split-by=timings)
+            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
@@ -161,6 +161,7 @@ jobs:
             ./web-client/coverage-integration-1/coverage-final.json \
             ./web-client/coverage-integration-2/coverage-final.json \
             ./web-client/coverage-integration-3/coverage-final.json \
+            ./web-client/coverage-integration-4/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
           name: Check Coverage
@@ -249,6 +250,45 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run cypress
+      - store_artifacts:
+          path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
+
+  e2e-cypress-public:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+      - image: elastic/elasticsearch:7.5.2
+        environment:
+          discovery.type: single-node
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+    resource_class: xlarge
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          command: |
+            npm run build:all &&
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+
+            SKIP_CACHE_INVALIDATION=true TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run cypress:public
       - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
@@ -462,10 +502,10 @@ jobs:
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete"
       - run:
           name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete"
 
   post-deploy:
     machine:
@@ -578,6 +618,9 @@ workflows:
       - e2e-cypress:
           requires:
             - bundle
+      - e2e-cypress-public:
+          requires:
+            - bundle
       - build-client-coverage:
           requires:
             - build-shared
@@ -586,6 +629,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-cypress
+            - e2e-cypress-public
       - pre-deploy:
           requires:
             - build-client-coverage
@@ -658,6 +702,13 @@ workflows:
             branches:
               ignore:
                 - develop
+      - e2e-cypress-public:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
       - build-client-coverage:
           requires:
             - build-shared
@@ -666,6 +717,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-cypress
+            - e2e-cypress-public
           filters:
             branches:
               ignore:
@@ -681,7 +733,7 @@ workflows:
                 - test
                 - migration
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - deploy-api-east:
           requires:
@@ -694,7 +746,7 @@ workflows:
                 - test
                 - migration
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - deploy-api-west:
           requires:
@@ -707,7 +759,7 @@ workflows:
                 - test
                 - migration
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - switch-and-deploy-ui:
           requires:
@@ -721,7 +773,7 @@ workflows:
                 - test
                 - migration
                 - master
-                - experimental
+                - experimental1
                 - experimental2
       - post-deploy:
           requires:
@@ -734,5 +786,5 @@ workflows:
                 - test
                 - migration
                 - master
-                - experimental
+                - experimental1
                 - experimental2

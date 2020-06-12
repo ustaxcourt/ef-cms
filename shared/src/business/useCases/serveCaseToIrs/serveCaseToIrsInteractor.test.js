@@ -1,12 +1,13 @@
-const fs = require('fs');
-const path = require('path');
+const {
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
+} = require('./serveCaseToIrsInteractor');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 const { User } = require('../../entities/User');
 
 describe('serveCaseToIrsInteractor', () => {
@@ -47,14 +48,6 @@ describe('serveCaseToIrsInteractor', () => {
     },
   ];
 
-  const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
-  const testPdfDocBytes = () => {
-    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
-  };
-
-  const testPdfDoc = testPdfDocBytes();
-
   const MOCK_PDF_DATA =
     'JVBERi0xLjcKJYGBgYEKCjUgMCBvYmoKPDwKL0ZpbHRlciAvRmxhdGVEZWNvZGUKL0xlbm' +
     'd0aCAxMDQKPj4Kc3RyZWFtCniccwrhMlAAwaJ0Ln2P1Jyy1JLM5ERdc0MjCwUjE4WQNC4Q' +
@@ -76,14 +69,12 @@ describe('serveCaseToIrsInteractor', () => {
   beforeAll(() => {
     mockCase = MOCK_CASE;
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockResolvedValue(testPdfDoc);
+    applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      userId: 'notauser',
+      userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
     });
 
     await expect(
@@ -122,6 +113,41 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      replaceCoversheet: false,
+    });
+  });
+
+  it('should replace coversheet on the served petition if the case is not paper', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: User.ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+    applicationContext
+      .getUseCaseHelpers()
+      .generateCaseConfirmationPdf.mockReturnValue(MOCK_PDF_DATA);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+    ).toMatchObject({
+      replaceCoversheet: true,
+    });
   });
 
   it('should not return a paper service pdf when the case is electronic', async () => {
@@ -186,7 +212,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],
         },
         {
@@ -197,7 +223,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],
         },
       ],
@@ -235,5 +261,54 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateWorkItem,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateWorkItem.mock.calls[0][0]
+        .workItemToUpdate.document.servedAt,
+    ).toBeDefined();
+  });
+});
+
+describe('addDocketEntryForPaymentStatus', () => {
+  it('adds a docketRecord for a paid petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitionPaymentDate: 'Today',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      },
+      { applicationContext },
+    );
+    await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+
+    const addedDocketRecord = caseEntity.docketRecord.find(
+      docketEntry => docketEntry.eventCode === 'FEE',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
+  });
+
+  it('adds a docketRecord for a waived petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        contactPrimary: undefined,
+        documents: [],
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: 'Today',
+      },
+      { applicationContext },
+    );
+    await addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
+
+    const addedDocketRecord = caseEntity.docketRecord.find(
+      docketEntry => docketEntry.eventCode === 'FEEW',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 });

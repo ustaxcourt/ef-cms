@@ -31,7 +31,8 @@ describe('completeDocketEntryQCInteractor', () => {
       },
       isQC: true,
       section: 'docket',
-      sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sentBy: 'Test User',
+      sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       updatedAt: new Date().toISOString(),
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -96,13 +97,13 @@ describe('completeDocketEntryQCInteractor', () => {
       compile: () => () => '',
     }));
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -110,9 +111,6 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(caseRecord);
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockReturnValue(testPdfDoc);
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );

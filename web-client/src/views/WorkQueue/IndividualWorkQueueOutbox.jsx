@@ -72,7 +72,7 @@ export const IndividualWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
+                      href={item.editLink}
                       onClick={e => {
                         e.stopPropagation();
                       }}
@@ -101,7 +101,7 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.currentMessage.to}
                   </td>
                 )}
-                <td className="message-queue-row">{item.sentBy}</td>
+                <td className="message-queue-row">{item.completedBy}</td>
                 {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}

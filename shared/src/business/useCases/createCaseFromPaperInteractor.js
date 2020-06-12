@@ -33,7 +33,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      isInitializeCase: documentEntity.isPetitionDocument(),
+      isInitializeCase: true,
       isQC: true,
       section: user.section,
       sentBy: user.name,
@@ -60,7 +60,6 @@ const addPetitionDocumentWithWorkItemToCase = ({
   caseToAdd.addDocument(documentEntity, { applicationContext });
 
   return {
-    message: newMessage,
     workItem: workItemEntity,
   };
 };
@@ -158,10 +157,7 @@ exports.createCaseFromPaperInteractor = async ({
     { applicationContext },
   );
 
-  const {
-    message: newMessage,
-    workItem: newWorkItem,
-  } = addPetitionDocumentWithWorkItemToCase({
+  const { workItem: newWorkItem } = addPetitionDocumentWithWorkItemToCase({
     applicationContext,
     caseToAdd,
     documentEntity: petitionDocumentEntity,
@@ -305,7 +301,6 @@ exports.createCaseFromPaperInteractor = async ({
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
-      messageId: newMessage.messageId,
       workItem: newWorkItem.validate().toRawObject(),
     }),
   ]);

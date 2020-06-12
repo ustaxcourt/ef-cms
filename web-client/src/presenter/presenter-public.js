@@ -10,9 +10,10 @@ import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSeq
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
+import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
-import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
+import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -22,6 +23,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
+import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
@@ -38,9 +40,10 @@ export const presenter = {
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
+    notFoundErrorSequence,
     showMoreResultsSequence,
-    submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
     toggleBetaBarSequence,
@@ -50,6 +53,7 @@ export const presenter = {
     updateAdvancedSearchFormValueSequence,
     updateDocketNumberSearchFormSequence,
     validateCaseAdvancedSearchFormSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validateOpinionSearchSequence,
     validateOrderSearchSequence,
   },

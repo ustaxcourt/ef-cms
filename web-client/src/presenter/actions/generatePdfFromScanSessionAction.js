@@ -30,7 +30,7 @@ export const generatePdfFromScanSessionAction = async ({
   // this blocks the browser
   const pdfBlob = await applicationContext
     .getUseCases()
-    .generatePDFFromJPGDataInteractor(scannedBuffer);
+    .generatePDFFromJPGDataInteractor(scannedBuffer, applicationContext);
 
   const file = new File([pdfBlob], 'myfile.pdf', {
     type: 'application/pdf',

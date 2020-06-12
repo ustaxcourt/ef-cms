@@ -21,6 +21,7 @@ describe('validateCaseDetail', () => {
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue(null);
   });
+
   it('should call the success path when no errors are found', async () => {
     await runAction(validateCaseDetailAction, {
       modules: {
@@ -65,5 +66,43 @@ describe('validateCaseDetail', () => {
       },
     });
     expect(errorStub.mock.calls.length).toEqual(1);
+  });
+
+  it('aggregates statistics errors if present', async () => {
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue({
+        statistics: [
+          { deficiency: 'enter deficiency amount', index: 1 },
+          { index: 2, irsTotalPenalties: 'enter total penalties' },
+        ],
+      });
+
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [
+            { yearOrPeriod: 'Year' },
+            { yearOrPeriod: 'Period' },
+            { yearOrPeriod: 'Year' },
+          ],
+        },
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors.statistics).toEqual([
+      {},
+      {
+        enterAllValues: 'Enter period, deficiency amount, and total penalties',
+        index: 1,
+      },
+      {
+        enterAllValues: 'Enter year, deficiency amount, and total penalties',
+        index: 2,
+      },
+    ]);
   });
 });

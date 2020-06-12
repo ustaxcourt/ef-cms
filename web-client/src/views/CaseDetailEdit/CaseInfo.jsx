@@ -76,6 +76,28 @@ export const CaseInfo = connect(
           </>
         )}
 
+        {!form.isPaper && (
+          <>
+            <FormGroup>
+              <label className="usa-label" htmlFor="received-at-text">
+                Date received
+              </label>
+              <span className="display-inline-block" id="received-at-text">
+                {caseDetailEditHelper.receivedAtFormatted}
+              </span>
+            </FormGroup>
+
+            <FormGroup>
+              <label className="usa-label" htmlFor="mailing-date-text">
+                Mailing date
+              </label>
+              <span className="display-inline-block" id="mailing-date-text">
+                Electronically filed
+              </span>
+            </FormGroup>
+          </>
+        )}
+
         <FormGroup errorText={validationErrors.caseCaption}>
           <label className="usa-label" htmlFor="case-caption">
             Case caption
@@ -132,47 +154,65 @@ export const CaseInfo = connect(
           </div>
         </FormGroup>
 
-        <TrialCity
-          label="Trial location"
-          showDefaultOption={true}
-          showHint={false}
-          showRegularTrialCitiesHint={false}
-          showSmallTrialCitiesHint={false}
-          trialCitiesByState={
-            trialCitiesHelper(form.procedureType).trialCitiesByState
-          }
-          value={form.preferredTrialCity}
-          onChange={e => {
-            updateOrderForDesignatingPlaceOfTrialSequence({
-              key: e.target.name,
-              value: e.target.value || null,
-            });
-            validateCaseDetailSequence();
-          }}
-        />
-        <FormGroup>
-          <div className="order-checkbox">
-            <input
-              checked={form.orderDesignatingPlaceOfTrial}
-              className="usa-checkbox__input"
-              id="order-designating-place-of-trial"
-              name="orderDesignatingPlaceOfTrial"
-              type="checkbox"
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-              }}
-            />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="order-designating-place-of-trial"
-            >
-              Order Designating Place of Trial
-            </label>
-          </div>
-        </FormGroup>
+        {form.isPaper && (
+          <TrialCity
+            label="Trial location"
+            showDefaultOption={true}
+            showHint={false}
+            showRegularTrialCitiesHint={false}
+            showSmallTrialCitiesHint={false}
+            trialCitiesByState={
+              trialCitiesHelper(form.procedureType).trialCitiesByState
+            }
+            value={form.preferredTrialCity}
+            onChange={e => {
+              updateOrderForDesignatingPlaceOfTrialSequence({
+                key: e.target.name,
+                value: e.target.value || null,
+              });
+              validateCaseDetailSequence();
+            }}
+          />
+        )}
+
+        {!form.isPaper && (
+          <>
+            <FormGroup>
+              <label className="usa-label" htmlFor="trial-location-text">
+                Trial location
+              </label>
+              <span className="display-inline-block" id="trial-location-text">
+                {form.preferredTrialCity}
+              </span>
+            </FormGroup>
+          </>
+        )}
+
+        {form.isPaper && (
+          <FormGroup>
+            <div className="order-checkbox">
+              <input
+                checked={form.orderDesignatingPlaceOfTrial}
+                className="usa-checkbox__input"
+                id="order-designating-place-of-trial"
+                name="orderDesignatingPlaceOfTrial"
+                type="checkbox"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label inline-block"
+                htmlFor="order-designating-place-of-trial"
+              >
+                Order Designating Place of Trial
+              </label>
+            </div>
+          </FormGroup>
+        )}
 
         <PetitionPaymentForm
           bind="form"
@@ -208,7 +248,7 @@ export const CaseInfo = connect(
         )}
 
         <h3 id="orders-needed">
-          Orders Needed <span className="usa-hint">(optional)</span>
+          Orders/Notices Needed <span className="usa-hint">(optional)</span>
         </h3>
         <div
           aria-labelledby="orders-needed"

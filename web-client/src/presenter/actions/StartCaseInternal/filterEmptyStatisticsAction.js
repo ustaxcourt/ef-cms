@@ -22,8 +22,8 @@ export const filterEmptyStatisticsAction = ({
       statistic.lastDateOfPeriodDay ||
       statistic.lastDateOfPeriodMonth ||
       statistic.lastDateOfPeriodYear ||
-      statistic.deficiencyAmount ||
-      statistic.totalPenalties,
+      statistic.irsDeficiencyAmount ||
+      statistic.irsTotalPenalties,
   );
 
   const { CASE_TYPES_MAP } = applicationContext.getConstants();

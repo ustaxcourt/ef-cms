@@ -77,7 +77,7 @@
 **Orders needed**
 * Optional  
 
-#### IRS Notice
+### IRS Notice
 
 **Notice attached to Petition**
 * Is required
@@ -87,6 +87,43 @@
 
 **Type of Case**
 * Field hidden until Notice attached to Petition selection is made
+
+
+#### Statistics
+* Statistics fields display when "Yes" is selected for "Notice attached to petition?" and Deficiency is selected as case type
+
+**Year or Period**
+* Defaults to Year
+* If "Period" is selected, display "Last date of period" field and hide "Year" field
+* If "Year is selected, display "Year" field, and hide "Last date of period"
+
+**Year**
+* Numeric values only
+* Max character = 4
+
+**Last date of period**
+* Date cannot be in the future
+* If invalid date is entered on save, display error: "Enter a valid last date of period"
+
+**Deficiency**
+* required for first set
+* numeric values only
+* format for US currency during input = $XX,XXX.XX
+
+**Total penalties**
+* required for first set
+* numeric values only
+* format for US currency during input = $XX,XXX.XX
+
+**Calculate Penalties**
+* Petition clerk can enter up to 10 penalties, and on "Calculate", modal closes and the total will populate in the Total Penalties field
+* If a clerk has manually entered a total penalties field, and then calculates, the calculated total will override the manual entry
+* Clerks are able to manually edit a calculated total
+
+**Add Another Year/Period**
+* Clerks are able to add up to 12 year/period sets
+* Sets 2-12 are optional UNLESS any field in a set includes data
+* If any field in a set has data, then all fields in that set are required 
 
 #### Upload PDFs
 

@@ -7,6 +7,7 @@ const {
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -14,6 +15,7 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
+const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
@@ -243,8 +245,8 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           statistics: [
             {
-              deficiencyAmount: 1,
-              totalPenalties: 1,
+              irsDeficiencyAmount: 1,
+              irsTotalPenalties: 1,
               year: '2001',
               yearOrPeriod: 'Year',
             },
@@ -255,6 +257,19 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates an invalid case with an invalid trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '91:30',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
@@ -319,6 +334,19 @@ describe('Case entity', () => {
           blocked: true,
           blockedDate: '2019-03-01T21:42:29.073Z',
           blockedReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with a trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '9:30',
         },
         {
           applicationContext,
@@ -1186,7 +1214,7 @@ describe('Case entity', () => {
       );
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
@@ -1203,7 +1231,7 @@ describe('Case entity', () => {
       expect(workItems.length).toEqual(1);
       expect(workItems).toMatchObject([
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
@@ -1622,6 +1650,26 @@ describe('Case entity', () => {
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
     });
+
+    it('should get a correspondence document by id', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = myCase.getDocumentById({
+        documentId: mockCorrespondence.documentId,
+      });
+
+      expect(result.documentId).toEqual(mockCorrespondence.documentId);
+    });
   });
 
   describe('getPetitionDocument', () => {
@@ -1709,15 +1757,42 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
+
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
+
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
       ).toEqual('success');
+    });
+
+    it('should update a correspondence document', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      myCase.updateDocument({
+        documentId: mockCorrespondence.documentId,
+        documentTitle: 'updated title',
+      });
+
+      expect(
+        myCase.correspondence.find(
+          d => d.documentId === mockCorrespondence.documentId,
+        ).documentTitle,
+      ).toEqual('updated title');
     });
   });
 
@@ -2899,7 +2974,7 @@ describe('Case entity', () => {
   });
 
   describe('Statistics', () => {
-    it('should be required for deficiency cases', () => {
+    it('should be required for deficiency cases when hasVerifiedIrsNotice is true', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -2920,7 +2995,7 @@ describe('Case entity', () => {
       });
     });
 
-    it('should be required for deficiency cases', () => {
+    it('should not be required for deficiency cases when hasVerifiedIrsNotice is false', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -2967,6 +3042,220 @@ describe('Case entity', () => {
       });
 
       expect(caseEntity.correspondence.length).toEqual(1);
+    });
+  });
+
+  describe('statistics', () => {
+    it('should successfully add a statistic', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.addStatistic(statisticToAdd);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+    });
+
+    it('should throw an error if the max number of statistics for a case has already been reached', () => {
+      const statisticsWithMaxLength = new Array(12); // 12 is the maximum number of statistics
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: statisticsWithMaxLength,
+        },
+        { applicationContext },
+      );
+
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      let error;
+      try {
+        caseEntity.addStatistic(statisticToAdd);
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).toBeDefined();
+      expect(error.toString()).toEqual(
+        'Error: maximum number of statistics reached',
+      );
+      expect(caseEntity.statistics.length).toEqual(12);
+    });
+
+    it('should successfully update a statistic', () => {
+      const statisticId = '2db9f2b6-d65b-4f71-8ddc-c218d0787e15';
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              determinationDeficiencyAmount: 567,
+              determinationTotalPenalties: 789,
+              irsDeficiencyAmount: 11.2,
+              irsTotalPenalties: 66.87,
+              statisticId,
+              year: 2012,
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.updateStatistic(statisticToUpdate, statisticId);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toEqual(statisticToUpdate);
+    });
+
+    it('should not update a statistic if its id is not present on the case', () => {
+      const originalStatistic = {
+        determinationDeficiencyAmount: 567,
+        determinationTotalPenalties: 789,
+        irsDeficiencyAmount: 11.2,
+        irsTotalPenalties: 66.87,
+        statisticId: '2db9f2b6-d65b-4f71-8ddc-c218d0787e15',
+        year: 2012,
+        yearOrPeriod: 'Year',
+      };
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [originalStatistic],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.updateStatistic(
+        statisticToUpdate,
+        '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+      );
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toMatchObject(originalStatistic);
+    });
+
+    it('should successfully delete a statistic', () => {
+      const statistic0Id = 'cc0f6102-3537-4047-b951-74c21b1aab76';
+      const statistic1Id = 'f4c00a75-f6d9-4e63-9cc7-ca1deee8a949';
+      const originalStatistics = [
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: statistic0Id,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        {
+          determinationDeficiencyAmount: 2,
+          determinationTotalPenalties: 2,
+          irsDeficiencyAmount: 2,
+          irsTotalPenalties: 2,
+          statisticId: statistic1Id,
+          year: 2013,
+          yearOrPeriod: 'Year',
+        },
+      ];
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: originalStatistics,
+        },
+        { applicationContext },
+      );
+
+      caseEntity.deleteStatistic(statistic0Id);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0].statisticId).toEqual(statistic1Id);
+    });
+
+    it('should not delete a statistic if its statisticId is not present on the case', () => {
+      const statistic0Id = 'cc0f6102-3537-4047-b951-74c21b1aab76';
+      const statistic1Id = 'f4c00a75-f6d9-4e63-9cc7-ca1deee8a949';
+      const originalStatistics = [
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: statistic0Id,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        {
+          determinationDeficiencyAmount: 2,
+          determinationTotalPenalties: 2,
+          irsDeficiencyAmount: 2,
+          irsTotalPenalties: 2,
+          statisticId: statistic1Id,
+          year: 2013,
+          yearOrPeriod: 'Year',
+        },
+      ];
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: originalStatistics,
+        },
+        { applicationContext },
+      );
+
+      caseEntity.deleteStatistic('16fc02bc-f00a-453c-a19c-e5597a8850ba');
+
+      expect(caseEntity.statistics.length).toEqual(2);
     });
   });
 });
