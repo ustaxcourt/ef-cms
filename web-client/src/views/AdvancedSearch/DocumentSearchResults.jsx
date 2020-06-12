@@ -64,6 +64,7 @@ export const DocumentSearchResults = connect(
                       <td>{result.caseTitle}</td>
                       <td>
                         <Button
+                          link
                           onClick={() => {
                             openCaseDocumentDownloadUrlSequence({
                               caseId: result.caseId,

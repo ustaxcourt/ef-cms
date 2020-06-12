@@ -1012,8 +1012,8 @@ const entitiesByName = {
   User,
 };
 
-module.exports = (appContextUser = {}) => {
-  setCurrentUser(appContextUser);
+module.exports = appContextUser => {
+  if (appContextUser) setCurrentUser(appContextUser);
 
   return {
     barNumberGenerator,

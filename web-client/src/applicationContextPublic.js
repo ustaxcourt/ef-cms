@@ -15,6 +15,7 @@ import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
+import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
@@ -55,6 +56,7 @@ const applicationContextPublic = {
     generatePublicDocketRecordPdfInteractor,
     getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
+    getDocumentDownloadUrlInteractor,
     getPublicJudgesInteractor,
     getTodaysOpinionsInteractor,
     opinionPublicSearchInteractor,
