@@ -12,7 +12,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
-import { setRequestAccessWizardStepAction } from '../actions/setRequestAccessWizardStep';
+import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -33,12 +33,12 @@ const gotoRequestAccess = [
       {
         irsPractitioner: [
           set(state.form.partyIrsPractitioner, true),
-          setRequestAccessWizardStepAction('RequestAccess'),
+          setRequestAccessWizardStepActionGenerator('RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],
         privatePractitioner: [
           set(state.form.partyPrivatePractitioner, true),
-          setRequestAccessWizardStepAction('RequestAccess'),
+          setRequestAccessWizardStepActionGenerator('RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],
       },
