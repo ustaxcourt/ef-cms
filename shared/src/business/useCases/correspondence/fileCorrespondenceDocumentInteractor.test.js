@@ -2,10 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileCorrespondenceDocumentInteractor,
 } = require('./fileCorrespondenceDocumentInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
@@ -65,7 +68,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

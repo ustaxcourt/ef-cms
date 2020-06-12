@@ -6,9 +6,8 @@ const {
 } = require('./fileExternalDocumentInteractor');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
@@ -65,7 +64,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,

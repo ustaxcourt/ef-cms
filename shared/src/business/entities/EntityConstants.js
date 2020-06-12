@@ -381,6 +381,32 @@ const US_STATES = {
   WY: 'Wyoming',
 };
 
+const PARTY_TYPES = {
+  conservator: 'Conservator',
+  corporation: 'Corporation',
+  custodian: 'Custodian',
+  donor: 'Donor',
+  estate: 'Estate with an executor/personal representative/fiduciary/etc.',
+  estateWithoutExecutor:
+    'Estate without an executor/personal representative/fiduciary/etc.',
+  guardian: 'Guardian',
+  nextFriendForIncompetentPerson:
+    'Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)',
+  nextFriendForMinor:
+    'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
+  partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
+  partnershipBBA:
+    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipOtherThanTaxMatters:
+    'Partnership (as a partner other than Tax Matters Partner)',
+  petitioner: 'Petitioner',
+  petitionerDeceasedSpouse: 'Petitioner & deceased spouse',
+  petitionerSpouse: 'Petitioner & spouse',
+  survivingSpouse: 'Surviving spouse',
+  transferee: 'Transferee',
+  trust: 'Trust',
+};
+
 module.exports = {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
@@ -410,6 +436,7 @@ module.exports = {
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_DOCUMENT_TYPES,
+  PARTY_TYPES,
   PAYMENT_STATUS,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   PROCEDURE_TYPES,

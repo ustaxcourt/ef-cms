@@ -5,10 +5,9 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('assignWorkItemsInteractor integration test', () => {
@@ -49,7 +48,7 @@ describe('assignWorkItemsInteractor integration test', () => {
         ],
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },

@@ -2,10 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
+  PARTY_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
@@ -99,7 +101,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,

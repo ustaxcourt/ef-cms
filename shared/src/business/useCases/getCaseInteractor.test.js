@@ -1,8 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { documents } = MOCK_CASE;
 
 const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
@@ -253,7 +252,7 @@ describe('Get case', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         caseType: 'Other',
         createdAt: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'Test Petitioner' }],
         preferredTrialCity: 'Washington, District of Columbia',
         procedureType: 'Regular',

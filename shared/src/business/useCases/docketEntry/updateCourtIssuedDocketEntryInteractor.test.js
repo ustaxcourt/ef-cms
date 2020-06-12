@@ -3,8 +3,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -102,7 +101,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
