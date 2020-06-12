@@ -10,6 +10,7 @@ const {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -53,18 +54,6 @@ const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
 
 Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
-
-Case.FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
-  [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
-  ],
-};
-
-Case.CHIEF_JUDGE = CHIEF_JUDGE;
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -160,7 +149,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
     this.automaticBlocked = rawCase.automaticBlocked;
     this.automaticBlockedDate = rawCase.automaticBlockedDate;
     this.automaticBlockedReason = rawCase.automaticBlockedReason;
@@ -435,8 +424,8 @@ Case.VALIDATION_RULES = {
   filingType: joi
     .string()
     .valid(
-      ...Case.FILING_TYPES[ROLES.petitioner],
-      ...Case.FILING_TYPES[ROLES.privatePractitioner],
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
     )
     .optional(),
   hasVerifiedIrsNotice: joi
@@ -1408,7 +1397,7 @@ Case.prototype.unsetAsHighPriority = function () {
  */
 Case.prototype.removeFromTrial = function () {
   this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = Case.CHIEF_JUDGE;
+  this.associatedJudge = CHIEF_JUDGE;
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
@@ -1459,7 +1448,7 @@ Case.prototype.setCaseStatus = function (caseStatus) {
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     ].includes(caseStatus)
   ) {
-    this.associatedJudge = Case.CHIEF_JUDGE;
+    this.associatedJudge = CHIEF_JUDGE;
   } else if (caseStatus === CASE_STATUS_TYPES.closed) {
     this.closeCase();
   }
