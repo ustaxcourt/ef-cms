@@ -3,12 +3,14 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
+  CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_CATEGORIES,
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
+  FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -25,7 +27,6 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
@@ -70,7 +71,7 @@ export const getConstants = () => ({
   CATEGORY_MAP: DOCUMENT_CATEGORY_MAP,
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
-  CHIEF_JUDGE: Case.CHIEF_JUDGE,
+  CHIEF_JUDGE: CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES: CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES: COURT_ISSUED_EVENT_CODES,
@@ -79,7 +80,7 @@ export const getConstants = () => ({
   EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
   ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
   EXTERNAL_USER_DASHBOARD_TABS,
-  FILING_TYPES: Case.FILING_TYPES,
+  FILING_TYPES: FILING_TYPES,
   INITIAL_DOCUMENT_TYPES: INITIAL_DOCUMENT_TYPES,
   INTERNAL_CATEGORY_MAP: DOCUMENT_INTERNAL_CATEGORY_MAP,
   MAX_FILE_SIZE_BYTES,

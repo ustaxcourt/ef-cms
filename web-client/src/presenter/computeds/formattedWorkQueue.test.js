@@ -1,9 +1,8 @@
 import {
   CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
@@ -465,7 +464,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -508,7 +507,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -552,7 +551,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             caseIsInProgress: true,
             caseStatus: CASE_STATUS_TYPES.new,
             document: {
