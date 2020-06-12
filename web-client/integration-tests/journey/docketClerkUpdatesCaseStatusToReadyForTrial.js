@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
   return it('Docket clerk updates case status to General Docket - At Issue (Ready for Trial)', async () => {
@@ -42,9 +44,7 @@ export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
     expect(test.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(
-      Case.CHIEF_JUDGE,
-    );
+    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
     expect(test.getState('modal')).toEqual({});
   });
 };

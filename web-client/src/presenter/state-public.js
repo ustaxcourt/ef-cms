@@ -28,6 +28,12 @@ export const state = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  header: {
+    searchTerm: '',
+    showBetaBar: true,
+    showMobileMenu: false,
+    showUsaBannerDetails: false,
+  },
   isPublic: true,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses

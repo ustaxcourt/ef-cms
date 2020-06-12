@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CHIEF_JUDGE,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filterQcItemsByAssociatedJudge } from './filterQcItemsByAssociatedJudge';
 
@@ -11,7 +13,7 @@ describe('filterQcItemsByAssociatedJudge', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockImplementation(() => currentUser);
     applicationContext.getConstants.mockReturnValue({
-      CHIEF_JUDGE: Case.CHIEF_JUDGE,
+      CHIEF_JUDGE: CHIEF_JUDGE,
       USER_ROLES: ROLES,
     });
   });
