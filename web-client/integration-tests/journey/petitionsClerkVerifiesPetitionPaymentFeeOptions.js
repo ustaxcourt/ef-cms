@@ -1,5 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
   test,
@@ -14,7 +15,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.PAID,
+      value: PAYMENT_STATUS.PAID,
     });
 
     expect(test.getState('form.orderForFilingFee')).toEqual(false);
@@ -55,7 +56,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.UNPAID,
+      value: PAYMENT_STATUS.UNPAID,
     });
 
     expect(test.getState('form.orderForFilingFee')).toEqual(true);
@@ -71,7 +72,7 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.WAIVED,
+      value: PAYMENT_STATUS.WAIVED,
     });
 
     expect(test.getState('form.orderForFilingFee')).toEqual(false);
