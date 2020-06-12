@@ -330,6 +330,9 @@ const {
   getAllCaseDeadlines,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
 const {
+  getAllCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
+const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -350,9 +353,6 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCaseDeadlinesAllInteractor,
-} = require('../../shared/src/business/useCases/getCaseDeadlinesAllInteractor');
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
@@ -1397,9 +1397,9 @@ module.exports = (appContextUser = {}) => {
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
+        getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
-        getCaseDeadlinesAllInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,

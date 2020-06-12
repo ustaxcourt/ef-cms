@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the getCaseDeadlines call
  */
-exports.getCaseDeadlinesAllInteractor = async ({ applicationContext }) => {
+exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
