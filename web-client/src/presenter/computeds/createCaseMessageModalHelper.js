@@ -1,9 +1,14 @@
 import { state } from 'cerebral';
 
-export const createCaseMessageModalHelper = get => {
-  const { docketRecordWithDocument, draftDocuments } = get(
-    state.formattedCaseDetail,
-  );
+export const createCaseMessageModalHelper = (get, applicationContext) => {
+  const caseDetail = get(state.caseDetail);
+  const {
+    docketRecordWithDocument,
+    draftDocuments,
+  } = applicationContext
+    .getUtilities()
+    .getFormattedCaseDetail({ applicationContext, caseDetail });
+
   const form = get(state.modal.form);
   const screenMetadata = get(state.screenMetadata);
   const documentAttachmentLimit = 5; // TODO: Do something better with this

@@ -13,11 +13,18 @@ export const updateCreateCaseMessageAttachmentsAction = ({
   props,
   store,
 }) => {
-  const { documentId, documentTitle } = props;
   const { attachments } = get(state.modal.form);
+  const { documents } = get(state.caseDetail);
+  const { documentId } = props;
 
   // TODO: Should we evaluate the length of the array and conditionally push?
   if (documentId) {
+    const document = documents.find(
+      document => document.documentId === documentId,
+    );
+
+    const documentTitle = document.documentTitle || document.documentType;
+
     attachments.push({
       documentId,
       documentTitle,
