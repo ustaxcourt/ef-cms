@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -11,6 +12,8 @@ export const CreateCaseMessageModalDialog = connect(
     createCaseMessageModalHelper: state.createCaseMessageModalHelper,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
+    updateCreateCaseMessageAttachmentsSequence:
+      sequences.updateCreateCaseMessageAttachmentsSequence,
     updateCreateCaseMessageValueInModalSequence:
       sequences.updateCreateCaseMessageValueInModalSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -26,6 +29,7 @@ export const CreateCaseMessageModalDialog = connect(
     form,
     onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
+    updateCreateCaseMessageAttachmentsSequence,
     updateCreateCaseMessageValueInModalSequence,
     updateScreenMetadataSequence,
     users,
@@ -167,12 +171,50 @@ export const CreateCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
+        {form.attachments && form.attachments.length > 0 && (
+          <div className="margin-bottom-20">
+            <div>
+              <FontAwesomeIcon
+                className="fa-icon-black"
+                icon="file-pdf"
+                size="1x"
+              />
+              <strong className="margin-left-1">Attachment(s)</strong>
+            </div>
+            {form.attachments.map((document, idx) => {
+              return (
+                <div
+                  className="margin-top-1"
+                  key={`${idx}-${document.documentId}`}
+                >
+                  {document.documentTitle}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {createCaseMessageModalHelper.showAddDocumentForm && (
           <FormGroup>
             <label className="usa-label" htmlFor="document">
               Add document(s) <span className="usa-hint">(optional)</span>
             </label>
-            <select className="usa-select" id="document" name="document">
+            <select
+              className="usa-select"
+              id="document"
+              name="document"
+              onChange={e => {
+                updateCreateCaseMessageAttachmentsSequence({
+                  documentId: e.target.value,
+                  documentTitle: e.target.options[e.target.selectedIndex].text,
+                });
+                updateScreenMetadataSequence({
+                  key: 'showAddDocumentForm',
+                  value: false,
+                });
+                validateCreateCaseMessageInModalSequence();
+              }}
+            >
               <option value="">- Select -</option>
             </select>
           </FormGroup>
@@ -190,6 +232,7 @@ export const CreateCaseMessageModalDialog = connect(
               });
             }}
           >
+            {' '}
             Add More Document(s)
           </Button>
         )}
