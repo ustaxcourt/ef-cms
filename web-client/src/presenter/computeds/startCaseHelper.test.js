@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  FILING_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
@@ -101,7 +103,7 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
   });
 
   it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
@@ -117,7 +119,7 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.privatePractitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.privatePractitioner);
   });
 
   it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
@@ -133,6 +135,6 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
   });
 });
