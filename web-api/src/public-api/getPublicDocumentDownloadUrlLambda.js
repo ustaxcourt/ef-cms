@@ -10,6 +10,7 @@ const { genericHandler } = require('../genericHandler');
 exports.getPublicDocumentDownloadUrlLambda = event =>
   genericHandler(event, async () => {
     const applicationContext = createApplicationContext({});
+    console.log('gg');
     try {
       const results = await applicationContext
         .getUseCases()

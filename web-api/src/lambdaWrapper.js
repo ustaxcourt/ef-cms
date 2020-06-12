@@ -6,6 +6,7 @@ export const lambdaWrapper = lambda => {
       pathParameters: req.params,
       queryStringParameters: req.query,
     };
+
     const response = await lambda({
       ...event,
       body: JSON.stringify(req.body),
