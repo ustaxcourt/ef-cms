@@ -2,7 +2,7 @@ import {
   addBatchesForScanning,
   createPDFFromScannedBatches,
   selectScannerSource,
-} from './scanHelpers.js';
+} from './scanHelpers';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
