@@ -52,16 +52,16 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi.string().optional().allow(null),
+  businessType: joi.string().optional().allow(null), // TODO: enum
   caseType: joi.when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
     then: joi.string().required(),
   }),
-  contactPrimary: joi.object().optional(),
-  contactSecondary: joi.object().optional(),
-  countryType: joi.string().optional(),
-  filingType: joi.string().required(),
+  contactPrimary: joi.object().optional(), // TODO: object definition
+  contactSecondary: joi.object().optional(), // TODO: object definition
+  countryType: joi.string().optional(), // TODO: enum
+  filingType: joi.string().required(), // TODO: enum
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
     is: 'A business',
@@ -73,16 +73,16 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
-  partyType: joi.string().required(),
-  petitionFile: joi.object().required(),
+  partyType: joi.string().required(), // TODO: enum
+  petitionFile: joi.object().required(), // TODO: object definition
   petitionFileSize: joi.when('petitionFile', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
     then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
   }),
-  preferredTrialCity: joi.string().required(),
-  procedureType: joi.string().required(),
-  stinFile: joi.object().required(),
+  preferredTrialCity: joi.string().required(), // TODO: enum
+  procedureType: joi.string().required(), // TODO: enum
+  stinFile: joi.object().required(), // TODO: object definition
   stinFileSize: joi.when('stinFile', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),

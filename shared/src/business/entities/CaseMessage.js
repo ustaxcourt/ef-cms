@@ -63,6 +63,7 @@ CaseMessage.VALIDATION_RULES = {
     .description('ID of the case the message is attached to.'),
   caseStatus: joi
     .string()
+    .max(500) // TODO: enum
     .optional()
     .description('The status of the associated case.'),
   createdAt: joiStrictTimestamp
@@ -71,6 +72,7 @@ CaseMessage.VALIDATION_RULES = {
   docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
   docketNumberWithSuffix: joi
     .string()
+    .max(500)
     .allow(null)
     .optional()
     .description('The docket number and suffix for the associated case.'),
