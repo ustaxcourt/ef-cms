@@ -1,4 +1,5 @@
 import {
+  BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CASE_TYPES,
@@ -11,8 +12,11 @@ import {
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
+  ESTATE_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  ORDER_TYPES,
+  OTHER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -32,13 +36,11 @@ import {
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } from '../../shared/src/persistence/s3/getUploadPolicy';
-import { Order } from '../../shared/src/business/entities/orders/Order';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
@@ -63,7 +65,7 @@ const EXTERNAL_USER_DASHBOARD_TABS = {
 export const getConstants = () => ({
   ADMISSIONS_STATUS_OPTIONS: Practitioner.ADMISSIONS_STATUS_OPTIONS,
   ADVANCED_SEARCH_TABS,
-  BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
+  BUSINESS_TYPES: BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
   CASE_LIST_PAGE_SIZE: 20,
@@ -81,7 +83,7 @@ export const getConstants = () => ({
   DATE_FORMATS: FORMATS,
   DEFAULT_PROCEDURE_TYPE: CaseInternal.DEFAULT_PROCEDURE_TYPE,
   EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
-  ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+  ESTATE_TYPES: ESTATE_TYPES,
   EXTERNAL_USER_DASHBOARD_TABS,
   FILING_TYPES: FILING_TYPES,
   INITIAL_DOCUMENT_TYPES: INITIAL_DOCUMENT_TYPES,
@@ -89,8 +91,8 @@ export const getConstants = () => ({
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   NOTICE_EVENT_CODES: DOCUMENT_NOTICE_EVENT_CODES,
-  ORDER_TYPES_MAP: Order.ORDER_TYPES,
-  OTHER_TYPES: ContactFactory.OTHER_TYPES,
+  ORDER_TYPES_MAP: ORDER_TYPES,
+  OTHER_TYPES: OTHER_TYPES,
   PARTY_TYPES: PARTY_TYPES,
   PAYMENT_STATUS: PAYMENT_STATUS,
   PRACTITIONER_TYPE_OPTIONS: Practitioner.PRACTITIONER_TYPE_OPTIONS,

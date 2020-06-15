@@ -13,6 +13,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  ORDER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -41,7 +42,6 @@ const { find, includes, isEmpty } = require('lodash');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
-const { Order } = require('../orders/Order');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
@@ -681,9 +681,7 @@ joiValidationDecorator(
   Case.VALIDATION_ERROR_MESSAGES,
 );
 
-const orderDocumentTypes = Order.ORDER_TYPES.map(
-  orderType => orderType.documentType,
-);
+const orderDocumentTypes = ORDER_TYPES.map(orderType => orderType.documentType);
 const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
