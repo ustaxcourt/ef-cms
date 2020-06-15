@@ -13,7 +13,6 @@ const LOG_LEVEL = 'info'; // ['debug', 'info', 'warn', 'error', 'silent']. Defau
 // do not include trailing slashes
 const PROXY_DESTINATIONS = {
   '/notifications': `http://${PROXY_HOST}:3011`,
-  '/public-api': `http://${PROXY_HOST}:3013`,
   '/streams': `http://${PROXY_HOST}:3012`,
 };
 
