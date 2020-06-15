@@ -15,7 +15,7 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { v4: uuidv4 } = require('uuid');
 
