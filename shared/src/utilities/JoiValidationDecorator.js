@@ -134,9 +134,14 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
+      const ids = Object.entries(this)
+        .filter(([key, value]) => value && key.endsWith('Id'))
+        .map(([key, value]) => `${key}: "${value}"`)
+        .join('; ');
       throw new InvalidEntityError(
         JSON.stringify(this.getFormattedValidationErrors()),
-        entityConstructor.validationName, this.
+        entityConstructor.validationName,
+        ids,
       );
     }
     return this;
