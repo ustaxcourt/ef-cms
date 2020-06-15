@@ -4,9 +4,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
 const { invert } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { TRIAL_CITIES, US_STATES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { US_STATES } = require('../../entities/EntityConstants');
 
 const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [
@@ -39,7 +38,7 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const trialCities = [...TrialSession.TRIAL_CITIES.ALL];
+  const trialCities = [...TRIAL_CITIES.ALL];
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
       return applicationContext.getUtilities().compareStrings(a.city, b.city);
