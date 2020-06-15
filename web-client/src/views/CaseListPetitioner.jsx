@@ -13,7 +13,6 @@ export const CaseListPetitioner = connect(
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
-    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
@@ -23,7 +22,6 @@ export const CaseListPetitioner = connect(
     closedTab,
     externalUserCasesHelper,
     openTab,
-    pageSize,
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
@@ -50,7 +48,7 @@ export const CaseListPetitioner = connect(
         <>
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
           {cases.length > 0 && (
-            <div className="margin-top-2">
+            <>
               <table
                 className="usa-table responsive-table dashboard"
                 id="case-list"
@@ -84,10 +82,10 @@ export const CaseListPetitioner = connect(
                     showMoreResultsSequence();
                   }}
                 >
-                  Load {pageSize} more
+                  Load More
                 </Button>
               )}
-            </div>
+            </>
           )}
         </>
       );
@@ -161,23 +159,22 @@ export const CaseListPetitioner = connect(
                   Closed Cases ({externalUserCasesHelper.closedCasesCount})
                 </option>
               </select>
-              <div>
-                {caseType === closedTab &&
-                  renderCaseListTable({
-                    cases: externalUserCasesHelper.closedCaseResults,
-                    showLoadMore:
-                      externalUserCasesHelper.showLoadMoreClosedCases,
-                    showMoreResultsSequence: showMoreClosedCasesSequence,
-                    tabName: closedTab,
-                  })}
-                {caseType === openTab &&
-                  renderCaseListTable({
-                    cases: externalUserCasesHelper.openCaseResults,
-                    showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
-                    showMoreResultsSequence: showMoreOpenCasesSequence,
-                    tabName: openTab,
-                  })}
-              </div>
+            </div>
+            <div className="grid-row margin-top-1">
+              {caseType === closedTab &&
+                renderCaseListTable({
+                  cases: externalUserCasesHelper.closedCaseResults,
+                  showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
+                  showMoreResultsSequence: showMoreClosedCasesSequence,
+                  tabName: closedTab,
+                })}
+              {caseType === openTab &&
+                renderCaseListTable({
+                  cases: externalUserCasesHelper.openCaseResults,
+                  showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
+                  showMoreResultsSequence: showMoreOpenCasesSequence,
+                  tabName: openTab,
+                })}
             </div>
           </div>
         </Mobile>
