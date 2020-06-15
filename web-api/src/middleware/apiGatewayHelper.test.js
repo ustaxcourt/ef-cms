@@ -216,18 +216,6 @@ describe('getAuthHeader', () => {
     expect(response).toEqual('petitioner');
   });
 
-  it('should return the user token from the Authorization header #2', () => {
-    let error;
-    try {
-      getAuthHeader({
-        headers: {},
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-  });
-
   it('should return the user token from the Authorization header #3', () => {
     let error;
     try {
