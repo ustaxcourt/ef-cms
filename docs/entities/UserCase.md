@@ -52,5 +52,28 @@
             options: 
               version: 
                 - "uuidv4"
+    status: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "optional"
+        description: "Status of the case."
+      allow: 
+        - "Assigned - Case"
+        - "Assigned - Motion"
+        - "Calendared"
+        - "CAV"
+        - "Closed"
+        - "General Docket - Not at Issue"
+        - "General Docket - At Issue (Ready for Trial)"
+        - "Jurisdiction Retained"
+        - "New"
+        - "On Appeal"
+        - "Rule 155"
+        - "Submitted"
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
 
  ```

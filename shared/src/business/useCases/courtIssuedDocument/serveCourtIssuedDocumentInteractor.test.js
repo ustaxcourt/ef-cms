@@ -5,6 +5,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
@@ -13,10 +14,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
-const { User } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -36,7 +36,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockUser = {
     name: 'Docket Clerk',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
 
@@ -89,7 +89,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'contact@example.com',
         name: 'Contact Primary',
         phone: '123123134',
@@ -135,7 +135,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ...documentsWithCaseClosingEventCodes,
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },
@@ -146,7 +146,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Contact Primary',
         phone: '123123134',
         postalCode: '12345',
@@ -155,7 +155,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Contact Secondary',
         phone: '123123134',
         postalCode: '12345',
@@ -202,7 +202,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },
@@ -273,7 +273,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should throw an Unauthorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
     // petitioner role does NOT have the SERVE_DOCUMENT permission
-    const user = { ...mockUser, role: User.ROLES.petitioner };
+    const user = { ...mockUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(

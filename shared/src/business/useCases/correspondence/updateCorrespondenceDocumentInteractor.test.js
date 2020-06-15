@@ -2,19 +2,22 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   updateCorrespondenceDocumentInteractor,
 } = require('./updateCorrespondenceDocumentInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { Correspondence } = require('../../entities/Correspondence');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { User } = require('../../entities/User');
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   let mockUser;
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockUserFixture = {
     name: 'Docket Clerk',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
   const mockCorrespondence = new Correspondence({
@@ -30,7 +33,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'contact@example.com',
       name: 'Contact Primary',
       phone: '123123134',
@@ -73,7 +76,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
@@ -88,7 +91,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
-    mockUser = { ...mockUser, role: User.ROLES.petitioner };
+    mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
       updateCorrespondenceDocumentInteractor({

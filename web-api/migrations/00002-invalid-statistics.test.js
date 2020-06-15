@@ -1,4 +1,6 @@
-const { Case } = require('../../shared/src/business/entities/cases/Case');
+const {
+  CASE_TYPES_MAP,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 const { up } = require('./00002-invalid-statistics');
@@ -42,7 +44,7 @@ describe('invalid statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: false,
             statistics: [
               {
@@ -71,7 +73,7 @@ describe('invalid statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.cdp,
+            caseType: CASE_TYPES_MAP.cdp,
             hasVerifiedIrsNotice: true,
             statistics: [
               {
@@ -100,7 +102,7 @@ describe('invalid statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.cdp,
+            caseType: CASE_TYPES_MAP.cdp,
             hasVerifiedIrsNotice: true,
             statistics: [],
           },
@@ -119,7 +121,7 @@ describe('invalid statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.cdp,
+            caseType: CASE_TYPES_MAP.cdp,
             hasVerifiedIrsNotice: false,
             statistics: [{ yearOrPeriod: 'Year' }],
           },
@@ -141,7 +143,7 @@ describe('invalid statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: false,
             statistics: [],
           },

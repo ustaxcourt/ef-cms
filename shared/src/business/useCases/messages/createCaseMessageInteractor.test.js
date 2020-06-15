@@ -7,12 +7,12 @@ const {
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('createCaseMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
     });
 
@@ -32,20 +32,20 @@ describe('createCaseMessageInteractor', () => {
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValueOnce({
         name: 'Test Petitionsclerk',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         section: 'petitions',
         userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       })
       .mockReturnValueOnce({
         name: 'Test Petitionsclerk2',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         section: 'petitions',
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });

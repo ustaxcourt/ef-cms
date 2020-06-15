@@ -1,11 +1,11 @@
+import { ROLES } from '../business/entities/EntityConstants';
 import { ROLE_PERMISSIONS } from './authorizationClientService';
-import { User } from '../business/entities/User';
 import { getUserPermissions } from './getUserPermissions';
 
 describe('getUserPermissions', () => {
   it('returns an object containing ROLE_PERMISSIONS and a boolean value based on the given user role', () => {
     const user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     };
 
     const permissions = getUserPermissions(user);

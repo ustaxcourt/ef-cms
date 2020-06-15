@@ -1,6 +1,9 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
+
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
@@ -72,31 +75,31 @@ const SECTION_DOCUMENT_QC_OUTBOX = {
 };
 
 const petitionsClerk1 = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'p1',
 };
 
 const petitionsClerk2 = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'p2',
 };
 
 const docketClerk1 = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   section: 'docket',
   userId: 'd1',
 };
 
 const docketClerk2 = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   section: 'docket',
   userId: 'd2',
 };
 
 const adc = {
-  role: User.ROLES.adc,
+  role: ROLES.adc,
   section: 'adc',
   userId: 'd3',
 };
@@ -224,7 +227,7 @@ describe('filterWorkItems', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '7f87f5d1-dfce-4515-a1e4-5231ceac61bb',
     });
 
@@ -498,7 +501,7 @@ describe('filterWorkItems', () => {
   it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        USER_ROLES: User.ROLES,
+        USER_ROLES: ROLES,
         applicationContext,
         ...MY_DOCUMENT_QC_OUTBOX,
         user: petitionsClerk1,
@@ -544,7 +547,7 @@ describe('filterWorkItems', () => {
     const user = petitionsClerk1;
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        USER_ROLES: User.ROLES,
+        USER_ROLES: ROLES,
         applicationContext,
         ...SECTION_DOCUMENT_QC_OUTBOX,
         user,

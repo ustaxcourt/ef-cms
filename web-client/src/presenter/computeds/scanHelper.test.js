@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { scanHelper as scanHelperComputed } from './scanHelper';
@@ -12,7 +12,7 @@ const scanHelper = withAppContextDecorator(
 describe('scanHelper', () => {
   it('sets hasScanFeature to `true` for `petitionsclerk` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -22,7 +22,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `true` for `docketclerk` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -32,7 +32,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `true` for `adc` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.adc,
+      role: ROLES.adc,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -42,7 +42,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `false` for `petitioner` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -52,7 +52,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `false` for `practitioner` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
     });
     const result = runCompute(scanHelper, {
       state: {},
@@ -62,7 +62,7 @@ describe('scanHelper', () => {
 
   it('sets hasScanFeature to `false` for `respondent` user roles', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
     const result = runCompute(scanHelper, {
       state: {},

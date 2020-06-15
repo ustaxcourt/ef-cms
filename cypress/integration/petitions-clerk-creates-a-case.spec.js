@@ -27,4 +27,9 @@ describe('Create case and submit to IRS', function () {
       expect(xhr.responseBody).to.have.property('docketNumber');
     });
   });
+
+  it('should display a confirmation modal when the user clicks cancel on the review page', () => {
+    cy.get('button#cancel-create-case').scrollIntoView().click();
+    cy.get('div.modal-header').should('exist');
+  });
 });

@@ -4,7 +4,7 @@ const {
 const {
   deleteCorrespondenceDocumentInteractor,
 } = require('./deleteCorrespondenceDocumentInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('deleteCorrespondenceDocumentInteractor', () => {
   let mockUser;
@@ -12,14 +12,14 @@ describe('deleteCorrespondenceDocumentInteractor', () => {
   beforeEach(() => {
     mockUser = {
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
     };
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
-    const user = { ...mockUser, role: User.ROLES.petitioner };
+    const user = { ...mockUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(

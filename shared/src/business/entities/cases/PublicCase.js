@@ -1,6 +1,7 @@
 const joi = require('@hapi/joi');
 const {
   COURT_ISSUED_EVENT_CODES,
+  ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
@@ -9,7 +10,6 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
-const { Order } = require('../orders/Order');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
@@ -89,7 +89,7 @@ joiValidationDecorator(
 );
 
 const isDraftDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
     COURT_ISSUED_EVENT_CODES,
     'documentType',
@@ -111,7 +111,7 @@ const isDraftDocument = function (document, docketRecord) {
 };
 
 const isPrivateDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
     COURT_ISSUED_EVENT_CODES,
     'documentType',

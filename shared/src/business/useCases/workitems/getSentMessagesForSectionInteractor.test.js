@@ -4,8 +4,8 @@ const {
 const {
   getSentMessagesForSectionInteractor,
 } = require('./getSentMessagesForSectionInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('getSentMessagesForSectionInteractor', () => {
   const sentMessagesForSectionMock = [
@@ -39,7 +39,7 @@ describe('getSentMessagesForSectionInteractor', () => {
 
   it('throws an error if the user does not have access to the work item', async () => {
     const mockPetitionerUser = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
@@ -54,7 +54,7 @@ describe('getSentMessagesForSectionInteractor', () => {
 
   it('successfully returns the work item for a docket clerk', async () => {
     const mockDocketClerkUser = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'bf143814-1354-4c4c-be9e-ca8144a15117',
     };
     applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
