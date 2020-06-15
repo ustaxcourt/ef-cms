@@ -5,10 +5,8 @@ const {
   CASE_TYPES,
   PARTY_TYPES,
   PROCEDURE_TYPES,
+  TRIAL_CITIES,
 } = require('../../../shared/src/business/entities/EntityConstants');
-const {
-  TrialSession,
-} = require('../../../shared/src/business/entities/trialSessions/TrialSession');
 const { userMap } = require('../../../shared/src/test/mockUserTokenMap');
 
 const USAGE = `
@@ -43,7 +41,7 @@ const main = () => {
 
   for (let i = 0; i < numToCreate; i++) {
     const preferredTrialCityObject =
-      TrialSession.TRIAL_CITIES.ALL[faker.random.number() % 74];
+      TRIAL_CITIES.ALL[faker.random.number() % 74];
 
     const preferredTrialCity =
       preferredTrialCityObject.city + ', ' + preferredTrialCityObject.state;

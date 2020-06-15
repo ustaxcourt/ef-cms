@@ -15,6 +15,8 @@ import {
   ESTATE_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
   ORDER_TYPES,
   OTHER_TYPES,
   PARTY_TYPES,
@@ -22,11 +24,14 @@ import {
   PROCEDURE_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SESSION_STATUS_GROUPS,
+  SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_CITIES,
   US_STATES,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
@@ -37,15 +42,10 @@ import {
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
-import {
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-} from '../../shared/src/persistence/s3/getUploadPolicy';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { Scan } from '../../shared/src/business/entities/Scan';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 
 const MINUTES = 60 * 1000;
@@ -105,7 +105,7 @@ export const getConstants = () => ({
   SERVICE_STAMP_OPTIONS,
   SESSION_DEBOUNCE: 250,
   SESSION_MODAL_TIMEOUT: 5 * MINUTES,
-  SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
+  SESSION_STATUS_GROUPS: SESSION_STATUS_GROUPS,
   SESSION_TIMEOUT:
     (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
     55 * MINUTES,
@@ -115,8 +115,8 @@ export const getConstants = () => ({
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE: STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES: SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE: TRANSCRIPT_EVENT_CODE,
-  TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-  TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
+  TRIAL_CITIES: TRIAL_CITIES,
+  TRIAL_SESSION_TYPES: SESSION_TYPES,
   TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
   US_STATES: US_STATES,
   USER_ROLES: ROLES,
