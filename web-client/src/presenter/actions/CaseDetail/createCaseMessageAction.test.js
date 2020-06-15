@@ -19,6 +19,12 @@ describe('createCaseMessageAction', () => {
         },
         modal: {
           form: {
+            attachments: [
+              {
+                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentTitle: 'Petition',
+              },
+            ],
             message: 'You there!',
             subject: 'Hey!',
           },
@@ -33,6 +39,12 @@ describe('createCaseMessageAction', () => {
       applicationContext.getUseCases().createCaseMessageInteractor.mock
         .calls[0][0],
     ).toMatchObject({
+      attachments: [
+        {
+          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentTitle: 'Petition',
+        },
+      ],
       caseId: 'a7806fa0-ce6a-41ca-b66e-59438953f8bb',
       message: 'You there!',
       subject: 'Hey!',
