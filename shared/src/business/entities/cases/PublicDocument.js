@@ -50,7 +50,7 @@ joiValidationDecorator(
     documentTitle: joi.string().max(500).optional(),
     documentType: joi.string().max(500).optional(), // TODO: enum
     eventCode: joi.string().max(500).optional(), // TODO: enum
-    filedBy: joi.string().max(100).optional(),
+    filedBy: joi.string().max(500).optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: joi.string().max(500).optional(), // TODO: enum
     receivedAt: joiStrictTimestamp.optional(),

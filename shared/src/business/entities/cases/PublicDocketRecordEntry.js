@@ -31,7 +31,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    filedBy: joi.string().max(100).optional(),
+    filedBy: joi.string().max(500).optional(),
     filingDate: joiStrictTimestamp.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
     numberOfPages: joi.number().integer().optional(),
