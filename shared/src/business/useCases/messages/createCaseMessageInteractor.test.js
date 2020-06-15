@@ -25,6 +25,12 @@ describe('createCaseMessageInteractor', () => {
 
   it('creates the case message', async () => {
     const caseMessageData = {
+      attachments: [
+        {
+          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentTitle: 'Petition',
+        },
+      ],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       message: "How's it going?",
       subject: 'Hey!',
