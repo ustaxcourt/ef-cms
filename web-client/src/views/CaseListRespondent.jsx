@@ -72,7 +72,7 @@ export const CaseListRespondent = connect(
               showMoreResultsSequence();
             }}
           >
-            Load more
+            Load More
           </Button>
         )}
       </>

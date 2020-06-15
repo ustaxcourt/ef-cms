@@ -82,7 +82,7 @@ export const CaseListPetitioner = connect(
                     showMoreResultsSequence();
                   }}
                 >
-                  Load more
+                  Load More
                 </Button>
               )}
             </>
