@@ -19,7 +19,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.attachments = rawMessage.attachments;
+  this.attachments = rawMessage.attachments || [];
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.createdAt = rawMessage.createdAt || createISODateString();
