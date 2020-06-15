@@ -1,11 +1,11 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getBlockedCasesInteractor } = require('./getBlockedCasesInteractor');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('getBlockedCasesInteractor', () => {
   it('calls search function with correct params and returns records', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
@@ -35,7 +35,7 @@ describe('getBlockedCasesInteractor', () => {
 
   it('should throw an unauthorized error if the user does not have access to blocked cases', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
 

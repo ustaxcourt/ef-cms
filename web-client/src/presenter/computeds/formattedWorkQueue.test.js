@@ -1,6 +1,8 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
@@ -31,13 +33,13 @@ const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
 const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'abc',
 };
 
 const docketClerkUser = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   section: 'docket',
   userId: 'abc',
 };
@@ -437,7 +439,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for a given judge or chambers user', () => {
     const judgeUser = {
       name: 'Test Judge',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: JUDGE_USER_ID_1,
     };
 
@@ -462,7 +464,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -481,7 +483,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for an adc user', () => {
     const adcUser = {
       name: 'Test ADC',
-      role: User.ROLES.adc,
+      role: ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -505,7 +507,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -525,7 +527,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on in progress cases for a petitionsclerk', () => {
     const petitionsClerkUser = {
       name: 'Test PetitionsClerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -549,7 +551,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             caseIsInProgress: true,
             caseStatus: CASE_STATUS_TYPES.new,
             document: {

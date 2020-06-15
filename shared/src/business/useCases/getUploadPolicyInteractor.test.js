@@ -1,6 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getUploadPolicyInteractor } = require('./getUploadPolicyInteractor');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('getUploadPolicyInteractor', () => {
   it('throw unauthorized error on invalid role', async () => {
@@ -22,7 +22,7 @@ describe('getUploadPolicyInteractor', () => {
   it('returns the expected policy when the file does not already exist', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       isExternalUser: () => true,
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -41,7 +41,7 @@ describe('getUploadPolicyInteractor', () => {
   it('throws an unauthorized exception when file already exists', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       isExternalUser: () => true,
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext

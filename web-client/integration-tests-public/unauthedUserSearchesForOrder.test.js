@@ -1,9 +1,9 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
-import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -41,7 +41,7 @@ describe('Petitioner creates case', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
@@ -58,7 +58,7 @@ describe('Docket clerk creates orders to search for', () => {
     signedAtFormatted: '01/02/2020',
   });
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
-  docketClerkServesOrder(testClient, 0);
+  docketClerkServesDocument(testClient, 0);
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
@@ -66,7 +66,7 @@ describe('Docket clerk creates orders to search for', () => {
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
-  docketClerkServesOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',

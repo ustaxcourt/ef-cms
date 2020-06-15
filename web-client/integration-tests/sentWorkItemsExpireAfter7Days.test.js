@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { User } from '../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../shared/src/business/entities/EntityConstants';
 import {
   getFormattedMyOutbox,
   getFormattedSectionOutbox,
@@ -32,7 +34,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     expect(caseDetail.docketNumber).toBeDefined();
 
     const applicationContext = applicationContextFactory({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       section: 'petitions',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });

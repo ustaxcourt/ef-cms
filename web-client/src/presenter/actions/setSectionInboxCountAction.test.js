@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -51,7 +51,7 @@ describe('setSectionInboxCountAction', () => {
 
   it('sets sectionInboxCount for a docketClerk user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     });
 
     const result = await runAction(setSectionInboxCountAction, {
@@ -74,7 +74,7 @@ describe('setSectionInboxCountAction', () => {
   it('sets sectionInboxCount for a judge user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Judge Barker',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
     });
 
     const result = await runAction(setSectionInboxCountAction, {
@@ -99,7 +99,7 @@ describe('setSectionInboxCountAction', () => {
   it('sets sectionInboxCount for a chambers user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'ADC',
-      role: User.ROLES.adc,
+      role: ROLES.adc,
     });
 
     const result = await runAction(setSectionInboxCountAction, {

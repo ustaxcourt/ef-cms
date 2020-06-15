@@ -39,6 +39,7 @@ const {
 } = require('./public-api/orderPublicSearchLambda');
 const { getPublicCaseLambda } = require('./public-api/getPublicCaseLambda');
 const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
+const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 
 /**
  * public-api
@@ -48,6 +49,7 @@ app.get('/public-api/cases/:caseId', lambdaWrapper(getPublicCaseLambda));
 app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
 app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
+app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
 app.get(
   '/public-api/docket-number-search/:docketNumber',
   lambdaWrapper(getCaseForPublicDocketSearchLambda),

@@ -5,8 +5,8 @@ const {
   getUserCaseNoteForCasesInteractor,
 } = require('./getUserCaseNoteForCasesInteractor');
 const { omit } = require('lodash');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 const MOCK_NOTE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -15,7 +15,7 @@ const MOCK_NOTE = {
 };
 
 const mockJudge = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
 };
 

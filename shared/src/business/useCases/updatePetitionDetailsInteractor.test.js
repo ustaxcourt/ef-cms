@@ -5,8 +5,8 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { PAYMENT_STATUS } = require('../entities/EntityConstants');
+const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
 
 describe('updatePetitionDetailsInteractor', () => {
   let mockCase;
@@ -19,7 +19,7 @@ describe('updatePetitionDetailsInteractor', () => {
     mockCase = cloneDeep(MOCK_CASE);
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 

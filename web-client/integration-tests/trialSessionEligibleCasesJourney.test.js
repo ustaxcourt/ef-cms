@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CHIEF_JUDGE } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -294,9 +294,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
-      expect(test.getState('caseDetail.associatedJudge')).toEqual(
-        Case.CHIEF_JUDGE,
-      );
+      expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
 
       //Case #3 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {
