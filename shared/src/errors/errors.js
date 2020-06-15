@@ -104,6 +104,6 @@ module.exports.InvalidEntityError = class InvalidEntityError extends Error {
     validationName,
     entityIds,
   ) {
-    super(`Entity ${validationName} is invalid. ${message}. ${entityIds}`);
+    super(`The ${validationName} entity was invalid. ${message}. ${entityIds}`);
   }
 };
