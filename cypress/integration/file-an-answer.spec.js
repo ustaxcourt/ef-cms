@@ -38,7 +38,7 @@ describe('Filing an Answer', function () {
   });
 
   it('docket record table reflects newly-added record', () => {
-    cy.get('table.docket-record').find('a').should('contain', 'Answer');
+    cy.get('table.docket-record').find('button').should('contain', 'Answer');
   });
 
   it('reflects changes to 102-19 by showing it in irsPractitioner case list', () => {
