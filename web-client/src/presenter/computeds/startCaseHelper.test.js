@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  FILING_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
@@ -14,7 +16,7 @@ const startCaseHelper = withAppContextDecorator(
 describe('start a case computed', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
   });
 
@@ -101,12 +103,12 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
   });
 
   it('returns privatePractitioner filing types if user is privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
     });
 
     const result = runCompute(startCaseHelper, {
@@ -117,12 +119,12 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.privatePractitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.privatePractitioner);
   });
 
   it('returns petitioner filing types by default if user is not petitioner or privatePractitioner role', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
 
     const result = runCompute(startCaseHelper, {
@@ -133,6 +135,6 @@ describe('start a case computed', () => {
         getTrialCityName,
       },
     });
-    expect(result.filingTypes).toEqual(Case.FILING_TYPES.petitioner);
+    expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
   });
 });

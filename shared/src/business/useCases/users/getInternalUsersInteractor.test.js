@@ -2,12 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('Get internal users', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
     applicationContext
@@ -42,7 +42,7 @@ describe('Get internal users', () => {
 
   it('throws unauthorized error for unauthorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     let error;

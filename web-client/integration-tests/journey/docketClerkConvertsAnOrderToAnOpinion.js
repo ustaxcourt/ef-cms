@@ -3,7 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkEditsDocketEntryFromOrderTypeB = (
+export const docketClerkConvertsAnOrderToAnOpinion = (
   test,
   draftOrderIndex,
 ) => {

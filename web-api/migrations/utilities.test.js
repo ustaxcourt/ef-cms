@@ -1,4 +1,7 @@
 const {
+  CASE_TYPES_MAP,
+} = require('../../shared/src/business/entities/EntityConstants');
+const {
   forAllRecords,
   isCaseRecord,
   isNewUserCaseMappingRecord,
@@ -6,13 +9,12 @@ const {
   isUserCaseMappingRecord,
   upGenerator,
 } = require('./utilities');
-const { Case } = require('../../shared/src/business/entities/cases/Case');
 
 describe('utilities', () => {
   describe('isCaseRecord', () => {
     it('should return true if the item is a case record', () => {
       const result = isCaseRecord({
-        caseType: Case.CASE_TYPES_MAP.cdp,
+        caseType: CASE_TYPES_MAP.cdp,
       });
 
       expect(result).toEqual(true);
@@ -40,7 +42,7 @@ describe('utilities', () => {
 
     it('should return false if the item is not a trial session record', () => {
       const result = isTrialSessionRecord({
-        caseType: Case.CASE_TYPES_MAP.cdp,
+        caseType: CASE_TYPES_MAP.cdp,
       });
 
       expect(result).toEqual(false);
@@ -108,11 +110,11 @@ describe('utilities', () => {
       scannedItems = [
         {
           caseId: 'case-123',
-          caseType: Case.CASE_TYPES_MAP.cdp,
+          caseType: CASE_TYPES_MAP.cdp,
         },
         {
           caseId: 'case-321',
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
         },
       ];
 
@@ -148,11 +150,11 @@ describe('utilities', () => {
       scannedItems = [
         {
           caseId: 'case-123',
-          caseType: Case.CASE_TYPES_MAP.cdp,
+          caseType: CASE_TYPES_MAP.cdp,
         },
         {
           caseId: 'case-321',
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
         },
       ];
 

@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { editStatisticFormHelper as editStatisticFormHelperComputed } from './editStatisticFormHelper';
 import { runCompute } from 'cerebral/test';
@@ -38,7 +38,7 @@ describe('editStatisticFormHelper', () => {
     const result = runCompute(editStatisticFormHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.cdp,
+          caseType: CASE_TYPES_MAP.cdp,
         },
         form: {},
       },
@@ -50,7 +50,7 @@ describe('editStatisticFormHelper', () => {
     const result = runCompute(editStatisticFormHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         form: {},
@@ -63,7 +63,7 @@ describe('editStatisticFormHelper', () => {
     const result = runCompute(editStatisticFormHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [{ irsTotalPenalties: 1 }, { irsTotalPenalties: 2 }],
         },
@@ -77,7 +77,7 @@ describe('editStatisticFormHelper', () => {
     const result = runCompute(editStatisticFormHelper, {
       state: {
         caseDetail: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [{ irsTotalPenalties: 1 }],
         },

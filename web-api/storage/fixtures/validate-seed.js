@@ -25,10 +25,9 @@ stdin.on('end', () => {
 
 /**
  * @param {Array} entry to the seedFile which ought to exist
- * @param {string} entry.seedFile the seed file that referenced the documentId
  * @param {string} entry.uuid the documentId's UUID
  */
-function checkFilesExist([uuid, seedFile]) {
+function checkFilesExist([uuid]) {
   const createFiles = {
     [`${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_metadata.json`]: `${__dirname}/s3/noop-documents-local-us-east-1/${EXISTING_UUID}._S3rver_metadata.json`,
     [`${__dirname}/s3/noop-documents-local-us-east-1/${uuid}._S3rver_object`]: `${__dirname}/s3/noop-documents-local-us-east-1/${EXISTING_UUID}._S3rver_object`,

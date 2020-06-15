@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   delete user.password;
@@ -17,7 +17,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
       applicationContext,
     });
 
-    if (user.role === User.ROLES.judge) {
+    if (user.role === ROLES.judge) {
       await client.put({
         Item: {
           pk: 'section|judge',
@@ -39,8 +39,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (
-    (user.role === User.ROLES.privatePractitioner ||
-      user.role === User.ROLES.irsPractitioner) &&
+    (user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner) &&
     user.name &&
     user.barNumber
   ) {
@@ -70,7 +70,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 exports.createUser = async ({ applicationContext, user }) => {
   let userId;
   let userPoolId =
-    user.role === User.ROLES.irsSuperuser
+    user.role === ROLES.irsSuperuser
       ? process.env.USER_POOL_IRS_ID
       : process.env.USER_POOL_ID;
 

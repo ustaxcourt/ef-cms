@@ -26,7 +26,6 @@ export const CaseListRespondent = connect(
     dashboardExternalHelper,
     externalUserCasesHelper,
     openTab,
-    pageSize,
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
@@ -73,7 +72,7 @@ export const CaseListRespondent = connect(
               showMoreResultsSequence();
             }}
           >
-            Load {pageSize} more
+            Load More
           </Button>
         )}
       </>

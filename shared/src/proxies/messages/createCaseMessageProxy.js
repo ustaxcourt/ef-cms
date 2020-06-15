@@ -14,6 +14,7 @@ const { post } = require('../requests');
  */
 exports.createCaseMessageInteractor = ({
   applicationContext,
+  attachments,
   caseId,
   message,
   subject,
@@ -23,6 +24,7 @@ exports.createCaseMessageInteractor = ({
   return post({
     applicationContext,
     body: {
+      attachments,
       caseId,
       message,
       subject,

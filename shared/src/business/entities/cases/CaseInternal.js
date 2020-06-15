@@ -4,11 +4,13 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
+} = require('../EntityConstants');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
-const { PAYMENT_STATUS, PROCEDURE_TYPES } = require('../EntityConstants');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -142,10 +144,10 @@ const paperRequirements = joi
       is: joi
         .exist()
         .valid(
-          ContactFactory.PARTY_TYPES.corporation,
-          ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-          ContactFactory.PARTY_TYPES.partnershipBBA,
-          ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          PARTY_TYPES.corporation,
+          PARTY_TYPES.partnershipAsTaxMattersPartner,
+          PARTY_TYPES.partnershipBBA,
+          PARTY_TYPES.partnershipOtherThanTaxMatters,
         ),
       otherwise: joi.optional().allow(null),
       then: joi.when('orderForOds', {

@@ -1,6 +1,5 @@
 const { get } = require('../requests');
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * getTodaysOpinionsProxy
  *
@@ -11,6 +10,6 @@ const { get } = require('../requests');
 exports.getTodaysOpinionsInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/public-api/todays-opinion',
+    endpoint: '/public-api/todays-opinions',
   });
 };

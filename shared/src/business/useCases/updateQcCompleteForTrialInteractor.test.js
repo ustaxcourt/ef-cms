@@ -3,7 +3,7 @@ const {
 } = require('./updateQcCompleteForTrialInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateQcCompleteForTrialInteractor', () => {
   let user;
@@ -22,7 +22,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
 
   it('should throw an error if the user is unauthorized to update a trial session', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -38,7 +38,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
 
   it('should call updateCase with the updated qcCompleteForTrial value and return the updated case', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     };
 

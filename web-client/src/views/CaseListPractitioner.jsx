@@ -15,7 +15,6 @@ export const CaseListPractitioner = connect(
     dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
-    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
@@ -26,7 +25,6 @@ export const CaseListPractitioner = connect(
     dashboardExternalHelper,
     externalUserCasesHelper,
     openTab,
-    pageSize,
     setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
@@ -73,7 +71,7 @@ export const CaseListPractitioner = connect(
               showMoreResultsSequence();
             }}
           >
-            Load {pageSize} more
+            Load More
           </Button>
         )}
       </>

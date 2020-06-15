@@ -1,6 +1,8 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../shared/src/business/entities/User';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -72,7 +74,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = test => {
     for (const document of documents) {
       expect(document.servedAt).toBeDefined();
       expect(document.servedParties.length).toEqual(1);
-      expect(document.servedParties[0].role).toEqual(User.ROLES.irsSuperuser);
+      expect(document.servedParties[0].role).toEqual(ROLES.irsSuperuser);
     }
   });
 };
