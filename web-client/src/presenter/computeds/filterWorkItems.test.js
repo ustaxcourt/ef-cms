@@ -1,6 +1,8 @@
-import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
 import {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
+  IRS_SYSTEM_SECTION,
+  PETITIONS_SECTION,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 
@@ -236,15 +238,15 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-01',
       isQC: false,
-      section: CONSTANTS.PETITIONS_SECTION,
+      section: PETITIONS_SECTION,
     });
 
     workItemPetitionsMyMessagesSent = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
       docketNumber: '100-02',
       isQC: false,
-      section: CONSTANTS.PETITIONS_SECTION,
-      sentBySection: CONSTANTS.PETITIONS_SECTION,
+      section: PETITIONS_SECTION,
+      sentBySection: PETITIONS_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
 
@@ -252,13 +254,13 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-03',
       isQC: false,
-      section: CONSTANTS.PETITIONS_SECTION,
+      section: PETITIONS_SECTION,
     });
 
     workItemPetitionsSectionMessagesSent = generateWorkItem({
       docketNumber: '100-04',
       isQC: false,
-      sentBySection: CONSTANTS.PETITIONS_SECTION,
+      sentBySection: PETITIONS_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
 
@@ -266,7 +268,7 @@ describe('filterWorkItems', () => {
       assigneeId: petitionsClerk1.userId,
       docketNumber: '100-05',
       isQC: true,
-      section: CONSTANTS.PETITIONS_SECTION,
+      section: PETITIONS_SECTION,
     });
 
     workItemPetitionsMyDocumentQCServed = generateWorkItem({
@@ -276,7 +278,7 @@ describe('filterWorkItems', () => {
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
       isQC: true,
-      section: CONSTANTS.IRS_SYSTEM_SECTION,
+      section: IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
 
@@ -284,7 +286,7 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-08',
       isQC: true,
-      section: CONSTANTS.PETITIONS_SECTION,
+      section: PETITIONS_SECTION,
     });
 
     workItemPetitionsSectionDocumentQCServed = generateWorkItem({
@@ -294,7 +296,7 @@ describe('filterWorkItems', () => {
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
       isQC: true,
-      section: CONSTANTS.IRS_SYSTEM_SECTION,
+      section: IRS_SYSTEM_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
 
@@ -303,14 +305,14 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-11',
       isQC: false,
-      section: CONSTANTS.DOCKET_SECTION,
+      section: DOCKET_SECTION,
     });
 
     workItemDocketMyMessagesSent = generateWorkItem({
       assigneeId: docketClerk2.userId,
       docketNumber: '100-12',
       isQC: false,
-      sentBySection: CONSTANTS.DOCKET_SECTION,
+      sentBySection: DOCKET_SECTION,
       sentByUserId: docketClerk1.userId,
     });
 
@@ -318,13 +320,13 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-13',
       isQC: false,
-      section: CONSTANTS.DOCKET_SECTION,
+      section: DOCKET_SECTION,
     });
 
     workItemDocketSectionMessagesSent = generateWorkItem({
       docketNumber: '100-14',
       isQC: false,
-      sentBySection: CONSTANTS.DOCKET_SECTION,
+      sentBySection: DOCKET_SECTION,
       sentByUserId: docketClerk2.userId,
     });
 
@@ -333,14 +335,14 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-15',
       isQC: true,
-      section: CONSTANTS.DOCKET_SECTION,
+      section: DOCKET_SECTION,
     });
 
     workItemDocketSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-17',
       isQC: true,
-      section: CONSTANTS.DOCKET_SECTION,
+      section: DOCKET_SECTION,
     });
 
     workItemDocketMyDocumentQCInProgress = generateWorkItem(
@@ -349,7 +351,7 @@ describe('filterWorkItems', () => {
         completedAt: null,
         docketNumber: '100-18',
         isQC: true,
-        section: CONSTANTS.DOCKET_SECTION,
+        section: DOCKET_SECTION,
       },
       {
         isFileAttached: false,
@@ -362,7 +364,7 @@ describe('filterWorkItems', () => {
         completedAt: null,
         docketNumber: '100-19',
         isQC: true,
-        section: CONSTANTS.DOCKET_SECTION,
+        section: DOCKET_SECTION,
       },
       {
         isFileAttached: false,

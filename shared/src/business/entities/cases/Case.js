@@ -13,11 +13,13 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  MAX_FILE_SIZE_MB,
   ORDER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
+  TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
@@ -41,10 +43,8 @@ const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
-const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const joiStrictTimestamp = getTimestampSchema();
 
@@ -565,7 +565,7 @@ Case.VALIDATION_RULES = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+      joi.string().valid(...TRIAL_CITY_STRINGS, null),
       joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
@@ -635,7 +635,7 @@ Case.VALIDATION_RULES = {
   trialLocation: joi
     .alternatives()
     .try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+      joi.string().valid(...TRIAL_CITY_STRINGS, null),
       joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
