@@ -2,11 +2,14 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
+const {
+  CHAMBERS_SECTIONS,
+  DOCKET_NUMBER_MATCHER,
+  SECTIONS,
+} = require('./EntityConstants');
 
 /**
  * constructor

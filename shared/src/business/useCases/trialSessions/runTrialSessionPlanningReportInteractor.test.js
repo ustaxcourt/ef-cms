@@ -6,8 +6,7 @@ const {
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { ROLES, TRIAL_CITIES } = require('../../entities/EntityConstants');
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
@@ -154,9 +153,7 @@ describe('run trial session planning report', () => {
         { term: 'spring', year: '2019' },
         { term: 'winter', year: '2019' },
       ]);
-      expect(results.trialLocationData.length).toEqual(
-        TrialSession.TRIAL_CITIES.ALL.length,
-      );
+      expect(results.trialLocationData.length).toEqual(TRIAL_CITIES.ALL.length);
       expect(results.trialLocationData[0]).toMatchObject({
         allCaseCount: 4,
         previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],

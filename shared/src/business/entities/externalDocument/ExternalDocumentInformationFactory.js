@@ -4,19 +4,19 @@ const {
   makeRequiredHelper,
 } = require('./externalDocumentHelpers');
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
+  DOCUMENT_CATEGORY_MAP,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-} = require('../../../persistence/s3/getUploadPolicy');
+} = require('../EntityConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 const {
   SecondaryDocumentInformationFactory,
 } = require('./SecondaryDocumentInformationFactory');
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { DOCUMENT_CATEGORY_MAP } = require('../EntityConstants');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 

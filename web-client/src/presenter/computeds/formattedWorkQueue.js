@@ -1,7 +1,7 @@
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../shared/src/business/entities/WorkQueue';
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { filterQcItemsByAssociatedJudge } from '../utilities/filterQcItemsByAssociatedJudge';
 import { state } from 'cerebral';
