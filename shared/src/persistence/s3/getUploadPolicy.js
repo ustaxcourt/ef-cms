@@ -1,6 +1,3 @@
-exports.MAX_FILE_SIZE_MB = 250; // megabytes
-exports.MAX_FILE_SIZE_BYTES = exports.MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabytes
-
 /**
  * getUploadPolicy
  *
