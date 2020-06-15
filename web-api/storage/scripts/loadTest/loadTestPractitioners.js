@@ -12,7 +12,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
 (async () => {
   let practitionerUser;
 
-  let apigateway = new AWS.APIGateway({
+  const apigateway = new AWS.APIGateway({
     region: process.env.REGION,
   });
   const { items: apis } = await apigateway
