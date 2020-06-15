@@ -60,6 +60,7 @@ export const CaseMessagesIndividualInbox = connect(
                   <td>
                     <CaseMessagesRowAttachments
                       attachments={message.attachments}
+                      caseId={message.caseId}
                     />
                   </td>
                 </tr>
