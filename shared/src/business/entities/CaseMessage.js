@@ -19,6 +19,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.attachments = rawMessage.attachments;
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.createdAt = rawMessage.createdAt || createISODateString();
@@ -46,6 +47,10 @@ CaseMessage.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseMessage.VALIDATION_RULES = {
+  attachments: joi
+    .array()
+    .optional()
+    .description('Array of document metadata objects attached to the message.'),
   caseId: joi
     .string()
     .uuid({
