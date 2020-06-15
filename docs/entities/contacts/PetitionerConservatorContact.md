@@ -90,7 +90,7 @@
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 500
     title: 
       type: "string"
       flags: 
