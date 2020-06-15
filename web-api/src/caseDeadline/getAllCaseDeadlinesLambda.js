@@ -8,14 +8,6 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getAllCaseDeadlinesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    console.log(
-      'applicationContext.getUseCases()',
-      applicationContext.getUseCases(),
-    );
-    console.log(
-      'typeof applicationContext.getUseCases().getAllCaseDeadlinesInteractor is',
-      typeof applicationContext.getUseCases().getAllCaseDeadlinesInteractor,
-    );
     return await applicationContext
       .getUseCases()
       .getAllCaseDeadlinesInteractor({
