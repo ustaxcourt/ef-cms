@@ -3,6 +3,11 @@
 ---
   type: "object"
   keys: 
+    attachments: 
+      type: "array"
+      flags: 
+        presence: "optional"
+        description: "Array of document metadata objects attached to the message."
     caseId: 
       type: "string"
       flags: 
@@ -20,6 +25,11 @@
       flags: 
         presence: "optional"
         description: "The status of the associated case."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
     createdAt: 
       type: "date"
       flags: 
@@ -42,6 +52,11 @@
       flags: 
         presence: "optional"
         description: "The docket number and suffix for the associated case."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
       allow: 
         - null
     entityName: 

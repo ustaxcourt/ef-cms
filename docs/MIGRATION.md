@@ -310,7 +310,7 @@ Valid Case object example:
       "docketNumber": "218-20",
       "documentId": "a45da352-e588-404c-9cac-715a57a6cda0",
       "documentTitle": "Order and Decision Entered, Chief Judge Foley",
-      "documentType": "OAD - Order and Decision Entered,",
+      "documentType": "OAD - Order and Decision Entered",
       "draftState": {
         "eventCode": "OAD",
         "documentTitle": "Order and Decision",
@@ -353,7 +353,7 @@ Valid Case object example:
             },
             "servedParties": [],
             "attachments": false,
-            "documentType": "OAD - Order and Decision Entered,",
+            "documentType": "OAD - Order and Decision Entered",
             "pending": false,
             "isFileAttached": true,
             "receivedAt": "2020-01-27T21:42:52.074Z",
@@ -383,7 +383,7 @@ Valid Case object example:
               "createdAt": "2020-01-27T21:43:03.175Z",
               "from": "Test docketclerk1",
               "fromUserId": "1f1a0a03-f023-4be4-9a96-452424c46adc",
-              "message": "OAD - Order and Decision Entered, filed by Docketclerk is ready for review.",
+              "message": "OAD - Order and Decision Entered filed by Docketclerk is ready for review.",
               "messageId": "00c2a058-6075-4322-bb94-d5b01e0e7115"
             }
           ]
@@ -397,7 +397,7 @@ Valid Case object example:
       "docketNumber": "218-20",
       "documentId": "f2715cf5-14ec-4a55-a28a-a7c11b04a8d2",
       "documentTitle": "Order and Decision Entered, Judge Halpern",
-      "documentType": "OAD - Order and Decision Entered,",
+      "documentType": "OAD - Order and Decision Entered",
       "draftState": {
         "eventCode": "OAD",
         "documentTitle": "Order and Decision",
@@ -482,7 +482,7 @@ Valid Case object example:
               }
             ],
             "attachments": false,
-            "documentType": "OAD - Order and Decision Entered,",
+            "documentType": "OAD - Order and Decision Entered",
             "pending": false,
             "isFileAttached": true,
             "receivedAt": "2020-01-27T21:43:35.243Z",
@@ -512,7 +512,7 @@ Valid Case object example:
               "createdAt": "2020-01-27T21:43:47.828Z",
               "from": "Test docketclerk1",
               "fromUserId": "1f1a0a03-f023-4be4-9a96-452424c46adc",
-              "message": "OAD - Order and Decision Entered, filed by Docketclerk is ready for review.",
+              "message": "OAD - Order and Decision Entered filed by Docketclerk is ready for review.",
               "messageId": "bf815c62-3cd1-4499-abdc-f404606c63f0"
             }
           ]
@@ -862,7 +862,7 @@ Valid Case object example:
     {
       "description": "Order and Decision Entered, Chief Judge Foley",
       "documentId": "a45da352-e588-404c-9cac-715a57a6cda0",
-      "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Chief Judge Foley\",\"judge\":\"Chief Judge Foley\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"a45da352-e588-404c-9cac-715a57a6cda0\"}",
+      "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Chief Judge Foley\",\"judge\":\"Chief Judge Foley\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"a45da352-e588-404c-9cac-715a57a6cda0\"}",
       "eventCode": "OAD",
       "filingDate": "2020-01-27T21:43:03.625Z",
       "index": 4
@@ -870,7 +870,7 @@ Valid Case object example:
     {
       "description": "Order and Decision Entered, Judge Halpern",
       "documentId": "f2715cf5-14ec-4a55-a28a-a7c11b04a8d2",
-      "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered,\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Judge Halpern\",\"judge\":\"Judge Halpern\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"f2715cf5-14ec-4a55-a28a-a7c11b04a8d2\"}",
+      "editState": "{\"eventCode\":\"OAD\",\"documentType\":\"OAD - Order and Decision Entered\",\"documentTitle\":\"Order and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order and Decision Entered, Judge Halpern\",\"judge\":\"Judge Halpern\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"f2715cf5-14ec-4a55-a28a-a7c11b04a8d2\"}",
       "eventCode": "OAD",
       "filingDate": "2020-01-27T21:43:48.390Z",
       "index": 5
