@@ -128,3 +128,11 @@ Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.
 ```
 
 If this error is seen during environment destruction, run `terraform state rm aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
+
+
+### NotFoundException when calling the GetDomainName
+
+This error occurs when code changes do not cause the checksums of the files to change. In order to redeploy, the file must have a different checksum than what is recorded in the database. 
+
+Solution: Delete checksums from the environment dynamo table that is failing. For example, if the dev deploy is failing, navigate to the efcms-deploy-dev table in AWS and delete all the check-sum-** items. 
+
