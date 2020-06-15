@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -17,15 +16,11 @@ export const CaseMessagesRowAttachments = connect(
           attachments.map(attachment => {
             return (
               <div className="margin-bottom-1" key={attachment.documentId}>
-                <FontAwesomeIcon
-                  className="fa-icon-blue"
-                  icon="file-pdf"
-                  size="1x"
-                />
                 <Button
                   link
-                  className="padding-0"
                   href={`${baseUrl}/case-documents/${caseId}/${attachment.documentId}/document-download-url?token=${token}`}
+                  icon="file-pdf"
+                  iconColor="blue"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
