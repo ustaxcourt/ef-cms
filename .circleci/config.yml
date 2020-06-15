@@ -317,12 +317,6 @@ jobs:
       - run:
           name: Setup Honeybadger Keys
           command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-      # - run:
-      #     name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
-      #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
-      # - run:
-      #     name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
-      #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
@@ -335,69 +329,15 @@ jobs:
       - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
-
-  deploy-api-east:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: Build Docker Image
-          command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Honeybadger Keys
-          command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Streams - us-east-1 (east only)'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-streams.sh ${ENV} us-east-1"
-
-  deploy-api-west:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: Build Docker Image
-          command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Honeybadger Keys
-          command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
-
-  switch-and-deploy-ui:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
-          name: Build Docker Image
-          command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Honeybadger Keys
-          command: echo "export CIRCLE_HONEYBADGER_API_KEY='$(./get-honeybadger-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       # - run:
       #     name: 'Deploy - Switch environment color'
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
@@ -407,17 +347,6 @@ jobs:
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0"
-
-  post-deploy:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Build Docker Image
-          command: docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web WS - Route53'
@@ -528,22 +457,9 @@ workflows:
             - e2e-pa11y
             - e2e-cypress
             - e2e-cypress-public
-      - pre-deploy:
+      - deploy:
           requires:
             - build-client-coverage
-      - deploy-api-west:
-          requires:
-            - pre-deploy
-      - deploy-api-east:
-          requires:
-            - pre-deploy
-      - switch-and-deploy-ui:
-          requires:
-            - deploy-api-west
-            - deploy-api-east
-      - post-deploy:
-          requires:
-            - switch-and-deploy-ui
     triggers:
       - schedule:
           cron: '0 12-23 * * 1-5'
@@ -558,124 +474,71 @@ workflows:
             branches:
               ignore:
                 - develop
-      # - build-shared:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-api:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-unit:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-integration:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-pa11y:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-cypress:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - e2e-cypress-public:
-      #     requires:
-      #       - bundle
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      # - build-client-coverage:
-      #     requires:
-      #       - build-shared
-      #       - build-api
-      #       - build-client-unit
-      #       - build-client-integration
-      #       - e2e-pa11y
-      #       - e2e-cypress
-      #       - e2e-cypress-public
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
-      - pre-deploy:
+      - build-shared:
           requires:
             - bundle
           filters:
             branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
-      - deploy-api-east:
+              ignore:
+                - develop
+      - build-api:
           requires:
-            - pre-deploy
+            - bundle
           filters:
             branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
-      - deploy-api-west:
+              ignore:
+                - develop
+      - build-client-unit:
           requires:
-            - pre-deploy
+            - bundle
           filters:
             branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
-      - switch-and-deploy-ui:
+              ignore:
+                - develop
+      - build-client-integration:
           requires:
-            - deploy-api-west
-            - deploy-api-east
+            - bundle
           filters:
             branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
-      - post-deploy:
+              ignore:
+                - develop
+      - e2e-pa11y:
           requires:
-            - switch-and-deploy-ui
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-cypress:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-cypress-public:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client-coverage:
+          requires:
+            - build-shared
+            - build-api
+            - build-client-unit
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-cypress
+            - e2e-cypress-public
+          filters:
+            branches:
+              ignore:
+                - develop
+      - deploy:
+          requires:
+            - bundle
           filters:
             branches:
               only:
