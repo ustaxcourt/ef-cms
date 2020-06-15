@@ -1,6 +1,10 @@
+import {
+  CASE_CAPTION_POSTFIX,
+  COUNTRY_TYPES,
+  US_STATES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -46,10 +50,10 @@ const applicationContextPublic = {
   getConstants: () =>
     deepFreeze({
       ADVANCED_SEARCH_TABS,
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      US_STATES: ContactFactory.US_STATES,
+      COUNTRY_TYPES: COUNTRY_TYPES,
+      US_STATES: US_STATES,
     }),
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,

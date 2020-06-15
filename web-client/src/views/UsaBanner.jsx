@@ -34,7 +34,7 @@ export const UsaBanner = connect(
               </div>
               <button
                 aria-controls="gov-banner"
-                aria-expanded={showUsaBannerDetails}
+                aria-expanded={!!showUsaBannerDetails}
                 className="usa-accordion__button usa-banner__button"
                 onClick={() => toggleUsaBannerDetailsSequence()}
               >

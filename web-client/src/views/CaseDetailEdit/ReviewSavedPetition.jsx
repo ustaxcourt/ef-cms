@@ -4,6 +4,7 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -379,6 +380,7 @@ export const ReviewSavedPetition = connect(
             </Button>
             <Button
               link
+              id="cancel-create-case"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
@@ -388,6 +390,9 @@ export const ReviewSavedPetition = connect(
           </div>
         </section>
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
+        {showModal == 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+        )}
       </>
     );
   },

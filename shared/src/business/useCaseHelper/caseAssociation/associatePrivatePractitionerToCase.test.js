@@ -4,16 +4,18 @@ const {
 const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
 
   const practitionerUser = {
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-    role: User.ROLES.privatePractitioner,
+    role: ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 

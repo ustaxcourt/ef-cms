@@ -1,5 +1,5 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
   return it('Petitions clerk verifies that the Order for ODS checkbox is correctly checked and unchecked', async () => {
@@ -9,14 +9,14 @@ export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
       key: 'partyType',
-      value: ContactFactory.PARTY_TYPES.petitioner,
+      value: PARTY_TYPES.petitioner,
     });
 
     expect(test.getState('form.orderForOds')).toBeFalsy();
 
     await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
       key: 'partyType',
-      value: ContactFactory.PARTY_TYPES.corporation,
+      value: PARTY_TYPES.corporation,
     });
 
     expect(test.getState('form.orderForOds')).toBeTruthy();

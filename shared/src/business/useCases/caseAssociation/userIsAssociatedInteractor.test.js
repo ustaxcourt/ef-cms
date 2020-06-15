@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 const { userIsAssociated } = require('./userIsAssociatedInteractor');
 
 describe('userIsAssociated', () => {
@@ -11,7 +11,7 @@ describe('userIsAssociated', () => {
       userId: 'abc-123',
     };
     const user = {
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'abc-123',
     };
 
@@ -30,14 +30,14 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'abc-123',
     };
 
     const result = userIsAssociated({ applicationContext, caseDetail, user });
     expect(result).toEqual(true);
 
-    user.role = User.ROLES.privatePractitioner;
+    user.role = ROLES.privatePractitioner;
     caseDetail.irsPractitioners = [{ userId: 'abc-123' }];
 
     const result2 = userIsAssociated({ applicationContext, caseDetail, user });
@@ -54,7 +54,7 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'abc-123',
     };
 
@@ -68,7 +68,7 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'abc-123',
     };
 

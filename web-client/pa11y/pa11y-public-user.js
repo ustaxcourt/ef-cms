@@ -45,4 +45,5 @@ module.exports = [
     notes: 'checks a11y of advanced opinion search with results',
     url: 'http://localhost:5678/',
   },
+  'http://localhost:5678/todays-opinions',
 ];

@@ -4,12 +4,12 @@ const {
 const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('./generatePrintableCaseInventoryReportInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('generatePrintableCaseInventoryReportInteractor', () => {
   it('calls generateCaseInventoryReportPdf function and returns result', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
     applicationContext
@@ -32,7 +32,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
 
   it('should throw an unauthorized error if the user does not have access', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
 
@@ -46,7 +46,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
 
   it('should throw an error if associatedJudge and status are not passed in', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 

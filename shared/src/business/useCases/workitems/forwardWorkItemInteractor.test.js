@@ -5,11 +5,11 @@ const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const mockPetitionsClerk = {
   name: 'Petitionsclerk',
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
 };
@@ -188,7 +188,7 @@ describe('forwardWorkItemInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     const mockTaxPayer = {
       name: 'Tax Payer',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
     applicationContext.getCurrentUser.mockReturnValue(mockTaxPayer);

@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
+ * @returns {Promise<object>} the url of the printable pdf
  */
 export const generatePrintableCaseInventoryReportAction = async ({
   applicationContext,

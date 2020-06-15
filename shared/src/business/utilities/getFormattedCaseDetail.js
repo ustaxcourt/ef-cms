@@ -11,7 +11,7 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
@@ -75,7 +75,7 @@ const formatDocument = (applicationContext, document) => {
   if (result.servedParties && result.servedParties.length > 0) {
     if (
       result.servedParties.length === 1 &&
-      result.servedParties[0].role === User.ROLES.irsSuperuser
+      result.servedParties[0].role === ROLES.irsSuperuser
     ) {
       result.servedPartiesCode = 'R';
     } else {
