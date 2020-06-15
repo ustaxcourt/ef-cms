@@ -33,7 +33,6 @@ export const FilingsAndProceedings = connect(
             <Button
               link
               aria-label={`View PDF: ${entry.description}`}
-              rel="noreferrer noopener"
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
                   caseId: caseDetail.caseId,
