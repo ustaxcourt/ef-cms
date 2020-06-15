@@ -72,8 +72,6 @@ set -- \
   --circleHoneybadgerApiKey noop \
   --elasticsearch_endpoint "http://localhost:9200"
 
-echo "starting public api service"
-npx sls offline start "$@" --config web-api/serverless-public-api.yml &
 echo "starting notifications service"
 npx sls offline start "$@" --config web-api/serverless-notifications.yml &
 echo "starting streams service"
