@@ -4,6 +4,8 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
+  CHAMBERS_SECTION,
+  CHAMBERS_SECTIONS,
   CHIEF_JUDGE,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
@@ -23,6 +25,7 @@ import {
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
+  SECTIONS,
   SERVICE_INDICATOR_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_TYPES,
@@ -34,11 +37,6 @@ import {
   TRIAL_CITIES,
   US_STATES,
 } from '../../shared/src/business/entities/EntityConstants';
-import {
-  CHAMBERS_SECTION,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} from '../../shared/src/business/entities/WorkQueue';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';

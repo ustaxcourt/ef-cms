@@ -9,7 +9,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
+const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
