@@ -12,7 +12,6 @@ export const CaseMessagesRowAttachments = connect(
     return (
       <>
         {attachments &&
-          attachments.length > 0 &&
           attachments.map(attachment => {
             return (
               <div className="margin-bottom-1" key={attachment.documentId}>
