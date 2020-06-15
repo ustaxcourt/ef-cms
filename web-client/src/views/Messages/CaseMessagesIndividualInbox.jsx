@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseMessagesRowAttachments } from './CaseMessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -56,7 +57,14 @@ export const CaseMessagesIndividualInbox = connect(
                   <td className="message-queue-row small">
                     {message.fromSection}
                   </td>
-                  <td></td>
+                  <td>
+                    {message.attachments.length > 0 && (
+                      <CaseMessagesRowAttachments
+                        attachments={message.attachments}
+                        caseId={message.caseId}
+                      />
+                    )}
+                  </td>
                 </tr>
               </tbody>
             );
