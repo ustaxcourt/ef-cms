@@ -11,7 +11,7 @@ export const getDefaultAttachmentToDisplayAction = ({ get }) => {
   const { attachments } = get(state.messageDetail);
   let attachmentDocumentToDisplay = null;
 
-  if (attachments.length) {
+  if (attachments && attachments.length) {
     attachmentDocumentToDisplay = attachments[0];
   }
 
