@@ -27,8 +27,8 @@ process.argv.forEach((val, index) => {
 });
 
 /**
- * @arg obj1 {string}
- * @arg obj2 {string}
+ * @arg obj1 {object}
+ * @arg obj2 {object}
  * @returns {boolean} if objects are deep-equal
  */
 function deepEqual(obj1, obj2) {
