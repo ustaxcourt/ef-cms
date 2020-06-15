@@ -9,11 +9,11 @@ const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { Document } = require('../../entities/Document');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { Message } = require('../../entities/Message');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 exports.generateChangeOfAddress = async ({
@@ -130,14 +130,14 @@ exports.generateChangeOfAddress = async ({
         userId: user.userId,
       };
 
-      if (user.role === User.ROLES.privatePractitioner) {
+      if (user.role === ROLES.privatePractitioner) {
         documentData.privatePractitioners = [
           {
             name,
             partyPrivatePractitioner: true,
           },
         ];
-      } else if (user.role === User.ROLES.irsPractitioner) {
+      } else if (user.role === ROLES.irsPractitioner) {
         documentData.partyIrsPractitioner = true;
       }
 

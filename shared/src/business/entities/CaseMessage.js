@@ -2,11 +2,14 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
+const {
+  CHAMBERS_SECTIONS,
+  DOCKET_NUMBER_MATCHER,
+  SECTIONS,
+} = require('./EntityConstants');
 
 /**
  * constructor
@@ -19,6 +22,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
+  this.attachments = rawMessage.attachments;
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.createdAt = rawMessage.createdAt || createISODateString();
@@ -46,6 +50,10 @@ CaseMessage.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseMessage.VALIDATION_RULES = {
+  attachments: joi
+    .array()
+    .optional()
+    .description('Array of document metadata objects attached to the message.'),
   caseId: joi
     .string()
     .uuid({

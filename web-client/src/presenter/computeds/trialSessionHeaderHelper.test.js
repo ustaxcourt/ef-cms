@@ -1,6 +1,6 @@
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../shared/src/business/entities/User';
 import { runCompute } from 'cerebral/test';
-
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -14,7 +14,7 @@ const trialSessionHeaderHelper = withAppContextDecorator(
   trialSessionHeaderHelperComputed,
   {
     getConstants: () => ({
-      USER_ROLES: User.ROLES,
+      USER_ROLES: ROLES,
     }),
     getCurrentUser: () => currentUser,
     getUtilities: () => ({
@@ -29,25 +29,25 @@ const trialSessionHeaderHelper = withAppContextDecorator(
 
 const chambersUser = new User({
   name: 'Trial Judge Chambers',
-  role: User.ROLES.chambers,
+  role: ROLES.chambers,
   userId: CHAMBERS_USER_ID,
 });
 
 const judgeUser = new User({
   name: 'Trial Judge',
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: JUDGE_USER_ID,
 });
 
 const trialClerkUser = new User({
   name: 'Trial Clerk',
-  role: User.ROLES.trialClerk,
+  role: ROLES.trialClerk,
   userId: TRIAL_CLERK_USER_ID,
 });
 
 const baseState = {
-  constants: { USER_ROLES: User.ROLES },
-  judgeUser: { role: User.ROLES.judge, userId: JUDGE_USER_ID },
+  constants: { USER_ROLES: ROLES },
+  judgeUser: { role: ROLES.judge, userId: JUDGE_USER_ID },
 };
 
 describe('trial session helper computed', () => {

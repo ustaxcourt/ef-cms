@@ -7,12 +7,11 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
-const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
+const pdfLib = require('pdf-lib');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -80,6 +79,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
+  SESSION_STATUS_GROUPS,
 } = require('../../shared/src/business/entities/EntityConstants');
 const {
   caseAdvancedSearch,
@@ -558,6 +558,9 @@ const {
   getSentMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
+  getTodaysOpinionsInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
+const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
@@ -666,6 +669,9 @@ const {
 const {
   opinionPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/opinionPublicSearchInteractor');
+const {
+  ORDER_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const {
   orderAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/orderAdvancedSearchInteractor');
@@ -789,9 +795,6 @@ const {
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
-const {
-  TrialSession,
-} = require('../../shared/src/business/entities/trialSessions/TrialSession');
 const {
   unblockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
@@ -931,11 +934,8 @@ const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { Document } = require('../../shared/src/business/entities/Document');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
-const { Order } = require('../../shared/src/business/entities/orders/Order');
+const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { User } = require('../../shared/src/business/entities/User');
-
-const pdfLib = require('pdf-lib');
-
 const { v4: uuidv4 } = require('uuid');
 
 // increase the timeout for zip uploads to S3
@@ -1054,8 +1054,8 @@ module.exports = (appContextUser = {}) => {
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
       ),
-      ORDER_TYPES_MAP: Order.ORDER_TYPES,
-      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
+      ORDER_TYPES_MAP: ORDER_TYPES,
+      SESSION_STATUS_GROUPS: SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
     getDispatchers: () => ({
@@ -1437,6 +1437,7 @@ module.exports = (appContextUser = {}) => {
         getPublicDownloadPolicyUrlInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
+        getTodaysOpinionsInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,

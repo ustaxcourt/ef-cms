@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { CaseInternal } = require('./CaseInternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
+const { PARTY_TYPES } = require('../EntityConstants');
 const { PAYMENT_STATUS } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
@@ -41,7 +41,7 @@ describe('CaseInternal entity', () => {
             state: 'AK',
           },
           mailingDate: 'test',
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -86,7 +86,7 @@ describe('CaseInternal entity', () => {
           orderDesignatingPlaceOfTrial: true,
           ownershipDisclosureFile: { anObject: true },
           ownershipDisclosureFileSize: 1,
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -119,7 +119,7 @@ describe('CaseInternal entity', () => {
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
           orderForOds: true,
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -179,7 +179,7 @@ describe('CaseInternal entity', () => {
     it('fails validation if partyType is Corporation and orderForOds is undefined', () => {
       const caseInternal = new CaseInternal(
         {
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
         { applicationContext },
       );
@@ -193,7 +193,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           orderForOds: false,
-          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         { applicationContext },
       );
@@ -317,7 +317,7 @@ describe('CaseInternal entity', () => {
           mailingDate: 'test',
           ownershipDisclosureFile: { anObject: true },
           ownershipDisclosureFileSize: 1,
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -355,7 +355,7 @@ describe('CaseInternal entity', () => {
           orderDesignatingPlaceOfTrial: false,
           ownershipDisclosureFile: { anObject: true },
           ownershipDisclosureFileSize: 1,
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,

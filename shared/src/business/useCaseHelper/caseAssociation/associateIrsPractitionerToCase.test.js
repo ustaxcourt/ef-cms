@@ -6,8 +6,8 @@ const {
 } = require('./associateIrsPractitionerToCase');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { ROLES } = require('../../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
 
 describe('associateIrsPractitionerToCase', () => {
   let caseRecord = {
@@ -54,7 +54,7 @@ describe('associateIrsPractitionerToCase', () => {
   it('should not add mapping if already there', async () => {
     const user = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -84,7 +84,7 @@ describe('associateIrsPractitionerToCase', () => {
 
     const user = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 

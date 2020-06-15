@@ -17,6 +17,6 @@ html(lang="en")
     #app
     #modal-root
     #dwtcontrolContainer
-    footer.grid-container
+    footer.grid-container.position-fixed.bottom-0.right-0
       p Deployed #{(new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'})} EST
     script(src="index." + process.env.USTC_ENV + ".js")

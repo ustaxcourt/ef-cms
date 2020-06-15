@@ -2,12 +2,11 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHIEF_JUDGE } = require('./EntityConstants');
+const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { Message } = require('./Message');
 const { omit, orderBy } = require('lodash');
-const { User } = require('./User');
 const joiStrictTimestamp = getTimestampSchema();
 const {
   CASE_STATUS_TYPES,
@@ -18,7 +17,7 @@ const {
   CHAMBERS_SECTIONS,
   IRS_SYSTEM_SECTION,
   SECTIONS,
-} = require('./WorkQueue');
+} = require('./EntityConstants');
 
 /**
  * constructor
@@ -122,14 +121,14 @@ joiValidationDecorator(
       .valid(
         ...SECTIONS,
         ...CHAMBERS_SECTIONS,
-        ...Object.values(User.ROLES),
+        ...Object.values(ROLES),
         IRS_SYSTEM_SECTION,
       )
       .required(),
     sentBy: joi.string().max(100).required(),
     sentBySection: joi
       .string()
-      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+      .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
       .optional(),
     sentByUserId: joi
       .string()

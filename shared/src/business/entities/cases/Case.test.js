@@ -1,11 +1,18 @@
 const {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+  ANSWER_CUTOFF_UNIT,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  ROLES,
+} = require('../EntityConstants');
+const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-  INITIAL_DOCUMENT_TYPES,
-  PAYMENT_STATUS,
-} = require('../EntityConstants');
 const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
@@ -21,7 +28,6 @@ const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -376,7 +382,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           automaticBlocked: true,
           automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
         {
           applicationContext,
@@ -610,7 +616,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Petitioners',
@@ -623,7 +629,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
@@ -633,7 +639,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estate,
+        partyType: PARTY_TYPES.estate,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -645,7 +651,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Petitioner',
@@ -655,7 +661,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.trust,
+        partyType: PARTY_TYPES.trust,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -667,7 +673,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
       });
       expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
@@ -675,7 +681,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -687,7 +693,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -699,7 +705,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+        partyType: PARTY_TYPES.partnershipBBA,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -711,7 +717,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.conservator,
+        partyType: PARTY_TYPES.conservator,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -723,7 +729,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.guardian,
+        partyType: PARTY_TYPES.guardian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -735,7 +741,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.custodian,
+        partyType: PARTY_TYPES.custodian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -747,7 +753,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -759,7 +765,7 @@ describe('Case entity', () => {
     it('party type Legally Incompetent Person', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+        partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -771,7 +777,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.donor,
+        partyType: PARTY_TYPES.donor,
       });
       expect(caseCaption).toEqual('Test Petitioner, Donor, Petitioner');
     });
@@ -779,7 +785,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.transferee,
+        partyType: PARTY_TYPES.transferee,
       });
       expect(caseCaption).toEqual('Test Petitioner, Transferee, Petitioner');
     });
@@ -787,7 +793,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+        partyType: PARTY_TYPES.survivingSpouse,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -1314,10 +1320,7 @@ describe('Case entity', () => {
           documents: [
             {
               createdAt: prepareDateFromString()
-                .subtract(
-                  Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
-                  Case.ANSWER_CUTOFF_UNIT,
-                )
+                .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS, ANSWER_CUTOFF_UNIT)
                 .toISOString(),
               eventCode: 'A',
             },
@@ -1336,10 +1339,7 @@ describe('Case entity', () => {
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1362,10 +1362,7 @@ describe('Case entity', () => {
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1610,7 +1607,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1982,7 +1979,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.automaticBlocked).toEqual(true);
       expect(caseToUpdate.automaticBlockedReason).toEqual(
-        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        AUTOMATIC_BLOCKED_REASONS.pending,
       );
       expect(caseToUpdate.automaticBlockedDate).toBeDefined();
       expect(caseToUpdate.isValid()).toBeTruthy();
@@ -2092,7 +2089,7 @@ describe('Case entity', () => {
         CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(caseToUpdate.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
@@ -2225,7 +2222,7 @@ describe('Case entity', () => {
       updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
 
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
-      expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
     });
 
     it('should update the case status, leave the associated judge unchanged, and call closeCase if the new status is Closed', () => {
@@ -2271,7 +2268,7 @@ describe('Case entity', () => {
     const contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'TN',
@@ -2281,7 +2278,7 @@ describe('Case entity', () => {
     const contactSecondary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Contact Secondary',
       postalCode: '12345',
       state: 'TN',
@@ -2307,7 +2304,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {
@@ -2331,7 +2328,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {
@@ -2875,7 +2872,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2894,7 +2891,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2908,7 +2905,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity,
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });

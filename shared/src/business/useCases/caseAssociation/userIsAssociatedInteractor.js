@@ -1,4 +1,4 @@
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 /**
  * userIsAssociated
  *
@@ -15,14 +15,12 @@ exports.userIsAssociated = ({ caseDetail, user }) => {
     return true;
   }
 
-  if (
-    ![User.ROLES.irsPractitioner, User.ROLES.privatePractitioner].includes(role)
-  ) {
+  if (![ROLES.irsPractitioner, ROLES.privatePractitioner].includes(role)) {
     return false;
   }
 
   let association;
-  if (role === User.ROLES.irsPractitioner) {
+  if (role === ROLES.irsPractitioner) {
     association = 'irsPractitioners';
   } else {
     association = 'privatePractitioners';

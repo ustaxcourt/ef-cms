@@ -1,16 +1,18 @@
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} = require('../entities/EntityConstants');
+const {
   updateCaseContextInteractor,
 } = require('./updateCaseContextInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
   });
@@ -35,7 +37,7 @@ describe('updateCaseContextInteractor', () => {
 
   it('should call updateCase with the updated case status and return the updated case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext
@@ -71,7 +73,7 @@ describe('updateCaseContextInteractor', () => {
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
-    expect(result.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+    expect(result.associatedJudge).toEqual(CHIEF_JUDGE);
     expect(result.trialSessionId).toBeUndefined();
   });
 
@@ -110,7 +112,7 @@ describe('updateCaseContextInteractor', () => {
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({

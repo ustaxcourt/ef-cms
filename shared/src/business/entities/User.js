@@ -5,33 +5,14 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-// const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-
-User.ROLES = {
-  adc: 'adc',
-  admin: 'admin',
-  admissionsClerk: 'admissionsclerk',
-  chambers: 'chambers',
-  clerkOfCourt: 'clerkofcourt',
-  docketClerk: 'docketclerk',
-  floater: 'floater',
-  inactivePractitioner: 'inactivePractitioner',
-  irsPractitioner: 'irsPractitioner',
-  irsSuperuser: 'irsSuperuser',
-  judge: 'judge',
-  petitioner: 'petitioner',
-  petitionsClerk: 'petitionsclerk',
-  privatePractitioner: 'privatePractitioner',
-  trialClerk: 'trialclerk',
-};
+const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
   obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
-  obj.role = rawObj.role || User.ROLES.petitioner;
+  obj.role = rawObj.role || ROLES.petitioner;
   obj.section = rawObj.section;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
@@ -48,10 +29,28 @@ const userDecorator = (obj, rawObj) => {
       state: rawObj.contact.state,
     };
   }
-  if (obj.role === User.ROLES.judge) {
+  if (obj.role === ROLES.judge) {
     obj.judgeFullName = rawObj.judgeFullName;
     obj.judgeTitle = rawObj.judgeTitle;
   }
+};
+
+const baseUserValidation = {
+  judgeFullName: joi.when('role', {
+    is: ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().max(100).optional(),
+  }),
+  judgeTitle: joi.when('role', {
+    is: ROLES.judge,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().max(100).optional(),
+  }),
+  name: joi.string().max(100).optional(),
+  role: joi
+    .string()
+    .valid(...Object.values(ROLES))
+    .required(),
 };
 
 const userValidation = {
@@ -64,28 +63,25 @@ const userValidation = {
       address3: joi.string().max(100).optional().allow(null),
       city: joi.string().max(100).required(),
       country: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().optional().allow(null),
         then: joi.string().required(),
       }),
       countryType: joi
         .string()
-        .valid(
-          ContactFactory.COUNTRY_TYPES.DOMESTIC,
-          ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
-        )
+        .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
         .required(),
 
       phone: joi.string().max(100).required(),
 
       postalCode: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
         then: joi.string().max(100).required(),
       }),
 
       state: joi.when('countryType', {
-        is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().max(100).required(),
         then: joi.string().optional().allow(null),
       }),
@@ -93,25 +89,10 @@ const userValidation = {
     .optional(),
   email: joi.string().max(100).optional(),
   entityName: joi.string().valid('User').required(),
-  judgeFullName: joi.when('role', {
-    is: User.ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  judgeTitle: joi.when('role', {
-    is: User.ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  name: joi.string().max(100).optional(),
-  role: joi
-    .string()
-    .valid(...Object.values(User.ROLES))
-    .required(),
   section: joi
     .string()
     // Removed temporarily: Eric will re-add
-    // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(User.ROLES))
+    // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
     .optional(),
   token: joi.string().optional(),
   userId: joi
@@ -120,6 +101,7 @@ const userValidation = {
       version: ['uuidv4'],
     })
     .required(),
+  ...baseUserValidation,
 };
 
 const VALIDATION_ERROR_MESSAGES = {
@@ -159,25 +141,25 @@ joiValidationDecorator(
 
 User.isExternalUser = function (role) {
   const externalRoles = [
-    User.ROLES.petitioner,
-    User.ROLES.privatePractitioner,
-    User.ROLES.irsPractitioner,
-    User.ROLES.irsSuperuser,
+    ROLES.petitioner,
+    ROLES.privatePractitioner,
+    ROLES.irsPractitioner,
+    ROLES.irsSuperuser,
   ];
   return externalRoles.includes(role);
 };
 
 User.isInternalUser = function (role) {
   const internalRoles = [
-    User.ROLES.adc,
-    User.ROLES.admissionsClerk,
-    User.ROLES.chambers,
-    User.ROLES.clerkOfCourt,
-    User.ROLES.docketClerk,
-    User.ROLES.floater,
-    User.ROLES.judge,
-    User.ROLES.petitionsClerk,
-    User.ROLES.trialClerk,
+    ROLES.adc,
+    ROLES.admissionsClerk,
+    ROLES.chambers,
+    ROLES.clerkOfCourt,
+    ROLES.docketClerk,
+    ROLES.floater,
+    ROLES.judge,
+    ROLES.petitionsClerk,
+    ROLES.trialClerk,
   ];
   return internalRoles.includes(role);
 };
@@ -185,6 +167,7 @@ User.isInternalUser = function (role) {
 module.exports = {
   User,
   VALIDATION_ERROR_MESSAGES,
+  baseUserValidation,
   userDecorator,
   userValidation,
 };

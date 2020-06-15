@@ -3,8 +3,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
-const { User } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -102,10 +101,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
@@ -137,7 +136,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   it('should throw an error if the document is not found on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -156,7 +155,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   it('should call updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -183,7 +182,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -216,7 +215,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
   it('should not update non-editable fields on the document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

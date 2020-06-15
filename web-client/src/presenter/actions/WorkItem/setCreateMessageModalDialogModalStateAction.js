@@ -8,5 +8,7 @@ import { state } from 'cerebral';
  */
 export const setCreateMessageModalDialogModalStateAction = ({ store }) => {
   store.set(state.modal.validationErrors, {});
-  store.set(state.modal.form, {});
+  store.set(state.modal.form, {
+    attachments: [],
+  });
 };

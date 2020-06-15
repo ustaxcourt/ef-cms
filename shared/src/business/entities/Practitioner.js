@@ -3,13 +3,14 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
+const { ROLES } = require('./EntityConstants');
 const joiStrictTimestamp = getTimestampSchema();
+
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
 const ADMISSIONS_STATUS_OPTIONS = [
@@ -32,9 +33,9 @@ function Practitioner(rawUser) {
 }
 
 const roleMap = {
-  DOJ: User.ROLES.irsPractitioner,
-  IRS: User.ROLES.irsPractitioner,
-  Private: User.ROLES.privatePractitioner,
+  DOJ: ROLES.irsPractitioner,
+  IRS: ROLES.irsPractitioner,
+  Private: ROLES.privatePractitioner,
 };
 
 Practitioner.prototype.init = function (rawUser) {
@@ -56,7 +57,7 @@ Practitioner.prototype.init = function (rawUser) {
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
-    this.role = User.ROLES.inactivePractitioner;
+    this.role = ROLES.inactivePractitioner;
   }
   this.suffix = rawUser.suffix;
   this.section = this.role;
@@ -166,10 +167,10 @@ const practitionerValidation = {
     .description('The type of practitioner - either Attorney or Non-Attorney.'),
   role: joi.alternatives().conditional('admissionsStatus', {
     is: joi.valid('Active'),
-    otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
+    otherwise: joi.string().valid(ROLES.inactivePractitioner).required(),
     then: joi
       .string()
-      .valid(...[User.ROLES.irsPractitioner, User.ROLES.privatePractitioner])
+      .valid(...[ROLES.irsPractitioner, ROLES.privatePractitioner])
       .required(),
   }),
   suffix: joi

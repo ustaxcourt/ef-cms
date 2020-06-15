@@ -5,12 +5,12 @@ const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
 const { getCaseMessageInteractor } = require('./getCaseMessageInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getCaseMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '9bd0308c-2b06-4589-b36e-242398bea31b',
     });
 
@@ -40,7 +40,7 @@ describe('getCaseMessageInteractor', () => {
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     });
     applicationContext
