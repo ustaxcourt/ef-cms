@@ -2,7 +2,7 @@ const {
   getAllCaseDeadlinesInteractor,
 } = require('./getAllCaseDeadlinesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ROLES } = require('../../entities/EntityConstants');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('getAllCaseDeadlinesInteractor', () => {
