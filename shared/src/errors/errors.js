@@ -101,16 +101,9 @@ module.exports.InvalidEntityError = class InvalidEntityError extends Error {
    */
   constructor(
     message = 'entity is invalid or invalid for operation',
-    constructorName,
-    entityId,
+    validationName,
+    entityIds,
   ) {
-    super(message);
-
-    this.constructorName = constructorName;
-    this.entityId = entityId;
-  }
-
-  toString() {
-    return `Entity ${this.constructorName} is invalid. ${this.message}. Entity id is: ${this.entityId}`;
+    super(`Entity ${validationName} is invalid. ${message}. ${entityIds}`);
   }
 };
