@@ -23,6 +23,7 @@ describe('getCaseMessageInteractor', () => {
 
   it('retrieves the case message from persistence and returns it', async () => {
     const caseMessageData = {
+      attachments: [],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: 'General Docket - Not at Issue',
       createdAt: '2019-03-01T21:40:46.415Z',
