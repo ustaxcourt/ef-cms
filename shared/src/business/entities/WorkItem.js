@@ -17,7 +17,7 @@ const {
   CHAMBERS_SECTIONS,
   IRS_SYSTEM_SECTION,
   SECTIONS,
-} = require('./WorkQueue');
+} = require('./EntityConstants');
 
 /**
  * constructor
