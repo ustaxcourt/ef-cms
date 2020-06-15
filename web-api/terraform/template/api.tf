@@ -214,6 +214,9 @@ resource "aws_api_gateway_method_response" "clamav_method_response_post" {
 }
 
 resource "aws_api_gateway_integration_response" "clamav_response_post" {
+  depends_on = [
+    "aws_api_gateway_integration.api_clamav_integration_post"
+  ]
   rest_api_id = "${aws_api_gateway_rest_api.gateway_for_api.id}"
   resource_id = "${aws_api_gateway_resource.api_clamav_resource.id}"
   http_method = "${aws_api_gateway_method.api_clamav_method_post.http_method}"
