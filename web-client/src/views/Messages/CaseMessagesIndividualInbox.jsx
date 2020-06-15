@@ -58,10 +58,12 @@ export const CaseMessagesIndividualInbox = connect(
                     {message.fromSection}
                   </td>
                   <td>
-                    <CaseMessagesRowAttachments
-                      attachments={message.attachments}
-                      caseId={message.caseId}
-                    />
+                    {message.attachments.length > 0 && (
+                      <CaseMessagesRowAttachments
+                        attachments={message.attachments}
+                        caseId={message.caseId}
+                      />
+                    )}
                   </td>
                 </tr>
               </tbody>
