@@ -10,28 +10,8 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+
 const ContactFactory = {};
-
-ContactFactory.BUSINESS_TYPES = {
-  corporation: PARTY_TYPES.corporation,
-  partnershipAsTaxMattersPartner: PARTY_TYPES.partnershipAsTaxMattersPartner,
-  partnershipBBA: PARTY_TYPES.partnershipBBA,
-  partnershipOtherThanTaxMatters: PARTY_TYPES.partnershipOtherThanTaxMatters,
-};
-
-ContactFactory.ESTATE_TYPES = {
-  estate: PARTY_TYPES.estate,
-  estateWithoutExecutor: PARTY_TYPES.estateWithoutExecutor,
-  trust: PARTY_TYPES.trust,
-};
-
-ContactFactory.OTHER_TYPES = {
-  conservator: PARTY_TYPES.conservator,
-  custodian: PARTY_TYPES.custodian,
-  guardian: PARTY_TYPES.guardian,
-  nextFriendForIncompetentPerson: PARTY_TYPES.nextFriendForIncompetentPerson,
-  nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
-};
 
 ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
