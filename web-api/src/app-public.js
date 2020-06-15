@@ -55,7 +55,7 @@ app.get(
   lambdaWrapper(getCaseForPublicDocketSearchLambda),
 );
 app.post(
-  '/public-api/:caseId/generate-docket-record',
+  '/public-api/cases/:caseId/generate-docket-record',
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
 );
 app.get(
