@@ -4,17 +4,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
 
-TrialSessionWorkingCopy.TRIAL_STATUS_TYPES = [
-  'Set for Trial',
-  'Dismissed',
-  'Continued',
-  'Rule 122',
-  'A Basis Reached',
-  'Settled',
-  'Recall',
-  'Taken Under Advisement',
-];
-
 TrialSessionWorkingCopy.validationName = 'TrialSessionWorkingCopy';
 
 /**
