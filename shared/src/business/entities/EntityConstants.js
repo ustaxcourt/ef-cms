@@ -407,11 +407,74 @@ const PARTY_TYPES = {
   trust: 'Trust',
 };
 
+const BUSINESS_TYPES = {
+  corporation: PARTY_TYPES.corporation,
+  partnershipAsTaxMattersPartner: PARTY_TYPES.partnershipAsTaxMattersPartner,
+  partnershipBBA: PARTY_TYPES.partnershipBBA,
+  partnershipOtherThanTaxMatters: PARTY_TYPES.partnershipOtherThanTaxMatters,
+};
+
+const ESTATE_TYPES = {
+  estate: PARTY_TYPES.estate,
+  estateWithoutExecutor: PARTY_TYPES.estateWithoutExecutor,
+  trust: PARTY_TYPES.trust,
+};
+
+const OTHER_TYPES = {
+  conservator: PARTY_TYPES.conservator,
+  custodian: PARTY_TYPES.custodian,
+  guardian: PARTY_TYPES.guardian,
+  nextFriendForIncompetentPerson: PARTY_TYPES.nextFriendForIncompetentPerson,
+  nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
+};
+
+const ORDER_TYPES = [
+  {
+    documentType: 'Order',
+    eventCode: 'O',
+  },
+  {
+    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+    documentType: 'Order of Dismissal for Lack of Jurisdiction',
+    eventCode: 'ODJ',
+  },
+  {
+    documentTitle: 'Order of Dismissal',
+    documentType: 'Order of Dismissal',
+    eventCode: 'OD',
+  },
+  {
+    documentTitle: 'Order of Dismissal and Decision',
+    documentType: 'Order of Dismissal and Decision',
+    eventCode: 'ODD',
+  },
+  {
+    documentTitle: 'Order to Show Cause',
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  {
+    documentTitle: 'Order and Decision',
+    documentType: 'Order and Decision',
+    eventCode: 'OAD',
+  },
+  {
+    documentTitle: 'Decision',
+    documentType: 'Decision',
+    eventCode: 'DEC',
+  },
+  {
+    documentType: 'Notice',
+    eventCode: 'NOT',
+  },
+];
+
 module.exports = {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
+  BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
   CASE_TYPES,
@@ -428,6 +491,7 @@ module.exports = {
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
+  ESTATE_TYPES,
   EVENT_CODES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -436,6 +500,8 @@ module.exports = {
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_DOCUMENT_TYPES,
+  ORDER_TYPES,
+  OTHER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,

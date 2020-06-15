@@ -7,6 +7,7 @@ const {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
+  ORDER_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
   SIGNED_DOCUMENT_TYPES,
@@ -19,7 +20,6 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
-const { Order } = require('./orders/Order');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
@@ -138,7 +138,7 @@ Document.getDocumentTypes = () => {
     ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
+  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
   const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
   const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
     t => INITIAL_DOCUMENT_TYPES[t].documentType,
