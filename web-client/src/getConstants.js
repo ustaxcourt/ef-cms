@@ -1,6 +1,8 @@
 import {
+  ADMISSIONS_STATUS_OPTIONS,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE,
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
@@ -10,10 +12,12 @@ import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  DEFAULT_PROCEDURE_TYPE,
   DOCUMENT_CATEGORIES,
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
+  EMPLOYER_OPTIONS,
   ESTATE_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -23,8 +27,10 @@ import {
   OTHER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   ROLES,
+  SCAN_MODES,
   SECTIONS,
   SERVICE_INDICATOR_TYPES,
   SESSION_STATUS_GROUPS,
@@ -35,16 +41,12 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES,
+  TRIAL_STATUS_TYPES,
   US_STATES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
-import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { Scan } from '../../shared/src/business/entities/Scan';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 
 const MINUTES = 60 * 1000;
 
@@ -61,13 +63,13 @@ const EXTERNAL_USER_DASHBOARD_TABS = {
 };
 
 export const getConstants = () => ({
-  ADMISSIONS_STATUS_OPTIONS: Practitioner.ADMISSIONS_STATUS_OPTIONS,
+  ADMISSIONS_STATUS_OPTIONS,
   ADVANCED_SEARCH_TABS,
   BUSINESS_TYPES: BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE: 2,
   CASE_LIST_PAGE_SIZE: 20,
-  CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
+  CASE_SEARCH_PAGE_SIZE,
   CASE_TYPES,
   CASE_TYPES_MAP,
   CATEGORIES: DOCUMENT_CATEGORIES,
@@ -79,8 +81,8 @@ export const getConstants = () => ({
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES: COURT_ISSUED_EVENT_CODES,
   DATE_FORMATS: FORMATS,
-  DEFAULT_PROCEDURE_TYPE: CaseInternal.DEFAULT_PROCEDURE_TYPE,
-  EMPLOYER_OPTIONS: Practitioner.EMPLOYER_OPTIONS,
+  DEFAULT_PROCEDURE_TYPE,
+  EMPLOYER_OPTIONS,
   ESTATE_TYPES,
   EXTERNAL_USER_DASHBOARD_TABS,
   FILING_TYPES,
@@ -93,11 +95,11 @@ export const getConstants = () => ({
   OTHER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-  PRACTITIONER_TYPE_OPTIONS: Practitioner.PRACTITIONER_TYPE_OPTIONS,
+  PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   REFRESH_INTERVAL: 20 * MINUTES,
   ROLE_PERMISSIONS,
-  SCAN_MODES: Scan.SCAN_MODES,
+  SCAN_MODES,
   SECTIONS,
   SERVICE_INDICATOR_TYPES,
   SERVICE_STAMP_OPTIONS,
@@ -115,7 +117,7 @@ export const getConstants = () => ({
   TRANSCRIPT_EVENT_CODE: TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES: TRIAL_CITIES,
   TRIAL_SESSION_TYPES: SESSION_TYPES,
-  TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+  TRIAL_STATUS_TYPES,
   US_STATES,
   USER_ROLES: ROLES,
 });

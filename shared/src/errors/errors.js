@@ -99,9 +99,11 @@ module.exports.InvalidEntityError = class InvalidEntityError extends Error {
    *
    * @param {string} message the error message
    */
-  constructor(message = 'entity is invalid or invalid for operation') {
-    super(message);
-
-    this.statusCode = 422;
+  constructor(
+    message = 'entity is invalid or invalid for operation',
+    validationName,
+    entityIds,
+  ) {
+    super(`The ${validationName} entity was invalid. ${message}. ${entityIds}`);
   }
 };
