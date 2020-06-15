@@ -71,7 +71,7 @@ export const CaseListPractitioner = connect(
               showMoreResultsSequence();
             }}
           >
-            Load more
+            Load More
           </Button>
         )}
       </>
