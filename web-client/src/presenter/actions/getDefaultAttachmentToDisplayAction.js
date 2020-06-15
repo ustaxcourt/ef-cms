@@ -9,10 +9,13 @@ import { state } from 'cerebral';
  */
 export const getDefaultAttachmentToDisplayAction = ({ get }) => {
   const { attachments } = get(state.messageDetail);
+  let attachmentDocumentToDisplay = null;
 
   if (attachments.length) {
-    return {
-      attachmentDocumentToDisplay: attachments[0],
-    };
+    attachmentDocumentToDisplay = attachments[0];
   }
+
+  return {
+    attachmentDocumentToDisplay,
+  };
 };
