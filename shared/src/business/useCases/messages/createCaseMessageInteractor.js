@@ -10,6 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {array} providers.attachments array of objects containing documentId and documentTitle
  * @param {string} providers.caseId the id of the case
  * @param {string} providers.message the message text
  * @param {string} providers.subject the message subject
@@ -19,6 +20,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.createCaseMessageInteractor = async ({
   applicationContext,
+  attachments,
   caseId,
   message,
   subject,
@@ -50,6 +52,7 @@ exports.createCaseMessageInteractor = async ({
 
   const caseMessage = new CaseMessage(
     {
+      attachments,
       caseId,
       caseStatus: status,
       docketNumber,
