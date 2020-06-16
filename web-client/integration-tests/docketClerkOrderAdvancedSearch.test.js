@@ -318,7 +318,7 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      await wait(1000);
+      await wait(2000);
 
       expect(test.getState('searchResults')).toEqual(
         expect.arrayContaining([
