@@ -63,7 +63,7 @@ const publicCaseSchema = {
     })
     .optional(),
   createdAt: joiStrictTimestamp.optional(),
-  docketNumber: joi.string().max(500).optional(), // TODO: regex
+  docketNumber: joi.string().max(500).required(), // TODO: regex
   docketNumberSuffix: joi.string().max(2).allow(null).optional(), // TODO: enum
   isSealed: joi.boolean(),
   receivedAt: joiStrictTimestamp.optional(),
