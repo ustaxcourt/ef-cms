@@ -193,6 +193,7 @@ exports.batchGet = async ({ applicationContext, keys }) => {
  * @returns {Promise} the promise of the persistence call
  */
 exports.batchWrite = ({ applicationContext, items }) => {
+  console.log('items being passed', items);
   return applicationContext
     .getDocumentClient()
     .batchWrite({
