@@ -65,6 +65,9 @@ describe('serveCaseToIrsInteractor', () => {
         return cb(true);
       },
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
