@@ -55,7 +55,7 @@ function PublicCase(rawCase, { applicationContext }) {
 }
 
 const publicCaseSchema = {
-  caseCaption: joi.string().optional(),
+  caseCaption: joi.string().max(500).optional(),
   caseId: joi
     .string()
     .uuid({
@@ -63,19 +63,21 @@ const publicCaseSchema = {
     })
     .optional(),
   createdAt: joiStrictTimestamp.optional(),
-  docketNumber: joi.string().optional(),
-  docketNumberSuffix: joi.string().allow(null).optional(),
+  docketNumber: joi.string().max(500).required(), // TODO: regex
+  docketNumberSuffix: joi.string().max(2).allow(null).optional(), // TODO: enum
   isSealed: joi.boolean(),
   receivedAt: joiStrictTimestamp.optional(),
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: joi.string(),
+  caseId: joi.string().uuid({
+    version: ['uuidv4'],
+  }),
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
-  docketNumber: joi.string().required(),
-  docketNumberSuffix: joi.string().optional(),
+  docketNumber: joi.string().max(500).required(), // TODO: regex
+  docketNumberSuffix: joi.string().optional(), // TODO: enum
   docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),

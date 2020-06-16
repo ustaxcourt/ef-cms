@@ -1,5 +1,5 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import {
+  DEFAULT_PROCEDURE_TYPE,
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
@@ -164,9 +164,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   });
 
   it('should default to Regular procedureType when creating a new case', async () => {
-    expect(test.getState('form.procedureType')).toEqual(
-      CaseInternal.DEFAULT_PROCEDURE_TYPE,
-    );
+    expect(test.getState('form.procedureType')).toEqual(DEFAULT_PROCEDURE_TYPE);
   });
 
   it('should generate case caption from primary and secondary contact information', async () => {
