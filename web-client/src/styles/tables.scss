@@ -246,6 +246,13 @@ table.work-queue {
       max-width: 25rem;
     }
 
+    &.message-subject {
+      a {
+        line-height: 18px;
+        text-align: left;
+      }
+    }
+
     &.has-icon {
       width: 44px;
     }

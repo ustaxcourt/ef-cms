@@ -13,5 +13,9 @@ export const formattedMessages = (get, applicationContext) => {
     ),
   }));
 
+  result.sort((a, b) => {
+    return a.createdAt.localeCompare(b.createdAt);
+  });
+
   return result;
 };
