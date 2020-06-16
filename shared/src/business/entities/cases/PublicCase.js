@@ -1,6 +1,8 @@
 const joi = require('@hapi/joi');
 const {
   COURT_ISSUED_EVENT_CODES,
+  DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -63,8 +65,16 @@ const publicCaseSchema = {
     })
     .optional(),
   createdAt: joiStrictTimestamp.optional(),
-  docketNumber: joi.string().max(500).required(), // TODO: regex
-  docketNumberSuffix: joi.string().max(2).allow(null).optional(), // TODO: enum
+  docketNumber: joi
+    .string()
+    .regex(DOCKET_NUMBER_MATCHER)
+    .required()
+    .description('Unique case ID in XXXXX-YY format.'),
+  docketNumberSuffix: joi
+    .string()
+    .allow(null)
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .optional(),
   isSealed: joi.boolean(),
   receivedAt: joiStrictTimestamp.optional(),
 };

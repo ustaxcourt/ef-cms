@@ -14,7 +14,7 @@ describe('PublicCase', () => {
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
-          docketNumber: 'testing',
+          docketNumber: '101-20',
           docketNumberSuffix: 'S',
           docketRecord: [{}],
           documents: [{}],

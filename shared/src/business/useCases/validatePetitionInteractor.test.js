@@ -44,7 +44,7 @@ describe('validatePetitionInteractor', () => {
       applicationContext,
       petition: {
         caseType: 'defined',
-        filingType: 'defined',
+        filingType: 'Myself',
         hasIrsNotice: true,
         partyType: 'defined',
         petitionFile: new File([], 'test.png'),
