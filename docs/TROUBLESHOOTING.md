@@ -118,10 +118,21 @@ This error often occurs when we are indexing too many dynamic keys or nested obj
 The script will output data related to the mapping for the environment and can help pinpoint areas to look into further. To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.
 
 
+### Removing Cognito user pool during environment destruction
+
+```Web API Terraform stderr:  	* module.ef-cms_apis.aws_cognito_user_pool_domain.main (destroy): 1 error occurred:
+
+Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParameter: 1 validation error(s) found.
+
+Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
+```
+
+If this error is seen during environment destruction, run `terraform state rm aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
+
+
 ### NotFoundException when calling the GetDomainName
 
 This error occurs when code changes do not cause the checksums of the files to change. In order to redeploy, the file must have a different checksum than what is recorded in the database. 
 
-#### Solution
+Solution: Delete checksums from the environment dynamo table that is failing. For example, if the dev deploy is failing, navigate to the efcms-deploy-dev table in AWS and delete all the check-sum-** items. 
 
-Delete checksums from the environment dynamo table that is failing. For example, if the dev deploy is failing, navigate to the efcms-deploy-dev table in AWS and delete all the check-sum-** items. 

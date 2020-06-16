@@ -42,16 +42,16 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
 const commonValidationRequirements = {
-  address1: joi.string().required(),
-  address2: joi.string().optional(),
-  address3: joi.string().optional(),
-  city: joi.string().required(),
-  email: joi.string().optional(),
-  inCareOf: joi.string().optional(),
-  name: joi.string().required(),
-  phone: joi.string().required(),
-  secondaryName: joi.string().optional(),
-  title: joi.string().optional(),
+  address1: joi.string().max(500).required(),
+  address2: joi.string().max(500).optional(),
+  address3: joi.string().max(500).optional(),
+  city: joi.string().max(500).required(),
+  email: joi.string().max(500).optional(),
+  inCareOf: joi.string().max(500).optional(),
+  name: joi.string().max(500).required(),
+  phone: joi.string().max(500).required(),
+  secondaryName: joi.string().max(500).optional(),
+  title: joi.string().max(500).optional(),
   serviceIndicator: joi
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
@@ -60,15 +60,15 @@ const commonValidationRequirements = {
 const domesticValidationObject = {
   countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
   ...commonValidationRequirements,
-  state: joi.string().required(),
+  state: joi.string().max(500).required(), // TODO: enum
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
 const internationalValidationObject = {
-  country: joi.string().required(),
+  country: joi.string().max(500).required(),
   countryType: joi.string().valid(COUNTRY_TYPES.INTERNATIONAL).required(),
   ...commonValidationRequirements,
-  postalCode: joi.string().required(),
+  postalCode: joi.string().max(100).required(),
 };
 
 /* eslint-enable sort-keys-fix/sort-keys-fix */
@@ -90,7 +90,7 @@ ContactFactory.getValidationObject = ({
       : internationalValidationObject;
 
   if (isPaper) {
-    baseValidationObject.phone = joi.string().optional();
+    baseValidationObject.phone = joi.string().max(100).optional();
   }
   return baseValidationObject;
 };

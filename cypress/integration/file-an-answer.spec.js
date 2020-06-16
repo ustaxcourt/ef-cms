@@ -38,12 +38,14 @@ describe('Filing an Answer', function () {
   });
 
   it('docket record table reflects newly-added record', () => {
-    cy.get('table.docket-record').find('a').should('contain', 'Answer');
+    cy.get('table.docket-record').find('button').should('contain', 'Answer');
   });
 
   it('reflects changes to 102-19 by showing it in irsPractitioner case list', () => {
     // wait for elasticsearch to refresh
-    cy.wait(1000);
+    const SLEEP = 1000;
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(SLEEP);
 
     navigateToDashboard('irsPractitioner');
     cy.get('table#case-list').find('a').should('contain', '102-19');

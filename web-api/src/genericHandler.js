@@ -45,7 +45,6 @@ exports.genericHandler = (event, cb, options = {}) => {
     const user = options.user || getUserFromAuthHeader(event);
     const applicationContext =
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
-
     const {
       isPublicUser,
       logEvent = true,

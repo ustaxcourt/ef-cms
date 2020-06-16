@@ -111,11 +111,11 @@ const formatRecord = record => {
     .promise();
 
   const services = apis
-    .filter(api => api.name.includes(`${process.env.ENV}-ef-cms`))
+    .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
     .reduce((obj, api) => {
       obj[
-        api.name.replace(`${process.env.ENV}-`, '')
-      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
+        api.name.replace(`_${process.env.ENV}`, '')
+      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}/users`;
       return obj;
     }, {});
 
@@ -139,7 +139,7 @@ const formatRecord = record => {
 
       try {
         const result = await axios.post(
-          `${services['ef-cms-users-green']}/practitioner`,
+          `${services['gateway_api']}/users/practitioner`,
           { user: record },
           {
             headers: {
