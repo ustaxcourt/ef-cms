@@ -36,7 +36,7 @@ export const CaseMessagesSectionOutbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
