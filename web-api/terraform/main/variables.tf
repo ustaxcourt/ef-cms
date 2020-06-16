@@ -27,3 +27,7 @@ variable "honeybadger_key" {
   type = "string"
   default = "default_key"
 }
+
+variable "irs_superuser_email" {
+  type = "string"
+}

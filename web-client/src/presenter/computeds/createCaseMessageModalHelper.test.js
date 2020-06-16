@@ -173,4 +173,40 @@ describe('createCaseMessageModalHelper', () => {
 
     expect(result.showAddMoreDocumentsButton).toEqual(false);
   });
+
+  it('returns showMessageAttachments true when the the form has message attachments', () => {
+    const result = runCompute(createCaseMessageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [{}], // has at least one attachment
+          },
+        },
+        screenMetadata: {
+          showAddDocumentForm: false,
+        },
+      },
+    });
+
+    expect(result.showMessageAttachments).toEqual(true);
+  });
+
+  it('returns showMessageAttachments false when the the form has NO message attachments', () => {
+    const result = runCompute(createCaseMessageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [], // no attachments on form
+          },
+        },
+        screenMetadata: {
+          showAddDocumentForm: false,
+        },
+      },
+    });
+
+    expect(result.showMessageAttachments).toEqual(false);
+  });
 });

@@ -39,10 +39,15 @@ export const getFormDocumentUrlForPreviewAction = ({
 
   let pdfUrl;
   if (selectedDocument) {
-    const baseUrl = get(state.baseUrl);
-    const token = get(state.token);
+    const {
+      url,
+    } = applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
+      applicationContext,
+      caseId,
+      documentId: selectedDocument.documentId,
+    });
 
-    pdfUrl = `${baseUrl}/case-documents/${caseId}/${selectedDocument.documentId}/document-download-url?token=${token}`;
+    pdfUrl = url;
   }
 
   return { pdfUrl };

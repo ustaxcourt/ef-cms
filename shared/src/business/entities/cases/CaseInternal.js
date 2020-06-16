@@ -1,20 +1,18 @@
 const joi = require('@hapi/joi');
 const {
-  DEFAULT_PROCEDURE_TYPE,
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
+const {
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
   PAYMENT_STATUS,
 } = require('../EntityConstants');
-const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
-CaseInternal.DEFAULT_PROCEDURE_TYPE = DEFAULT_PROCEDURE_TYPE;
 
 /**
  * CaseInternal Entity
@@ -125,8 +123,8 @@ const paperRequirements = joi
         then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
       },
     ),
-    caseCaption: joi.string().required(),
-    caseType: joi.string().required(),
+    caseCaption: joi.string().max(500).required(),
+    caseType: joi.string().max(500).required(), // TODO: enum
     hasVerifiedIrsNotice: joi.boolean().required(),
     irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
@@ -161,8 +159,8 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
-    partyType: joi.string().required(),
-    petitionFile: joi.object().required(),
+    partyType: joi.string().max(500).required(), // TODO: enum
+    petitionFile: joi.object().required(), // TODO: object definition
     petitionFileSize: joi.when('petitionFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
@@ -183,14 +181,14 @@ const paperRequirements = joi
         otherwise: joi.optional().allow(null),
         then: joi.string().required(),
       }),
-    procedureType: joi.string().required(),
+    procedureType: joi.string().max(500).required(), // TODO: enum
     receivedAt: joiStrictTimestamp.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {
         is: joi.exist().not(null),
         otherwise: joi.object().optional(),
-        then: joi.object().required(),
+        then: joi.object().required(), // TODO: object definition
       }),
     requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
       is: joi.exist().not(null),
@@ -198,7 +196,7 @@ const paperRequirements = joi
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
     statistics: Case.VALIDATION_RULES.statistics,
-    stinFile: joi.object().optional(),
+    stinFile: joi.object().optional(), // TODO: object definition
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
