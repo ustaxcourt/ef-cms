@@ -9,6 +9,6 @@ exports.getSurvivingSpouseContact = ContactFactory.createContactFactory({
     secondaryName: 'Enter name of surviving spouse',
   },
   additionalValidation: {
-    secondaryName: joi.string().required(),
+    secondaryName: joi.string().max(500).required(),
   },
 });
