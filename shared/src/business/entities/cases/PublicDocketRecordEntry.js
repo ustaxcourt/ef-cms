@@ -24,9 +24,14 @@ function PublicDocketRecordEntry(rawDocketEntry) {
 joiValidationDecorator(
   PublicDocketRecordEntry,
   joi.object().keys({
-    description: joi.string().optional(),
-    documentId: joi.string().optional(),
-    filedBy: joi.string().optional(),
+    description: joi.string().max(500).optional(),
+    documentId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
+    filedBy: joi.string().max(500).optional(),
     filingDate: joiStrictTimestamp.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
     numberOfPages: joi.number().integer().optional(),

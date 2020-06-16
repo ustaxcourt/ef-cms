@@ -33,9 +33,9 @@ CaseSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseSearch.schema = joi.object().keys({
-  countryType: joi.string().optional(),
-  petitionerName: joi.string().required(),
-  petitionerState: joi.string().optional(),
+  countryType: joi.string().max(500).optional(), // TODO: enum
+  petitionerName: joi.string().max(500).required(),
+  petitionerState: joi.string().max(500).optional(), // TODO: enum
   yearFiledMax: joi.when('yearFiledMin', {
     is: joi.number(),
     otherwise: joi.number().integer().min(1900).max(new Date().getFullYear()),

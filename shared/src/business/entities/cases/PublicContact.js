@@ -17,8 +17,8 @@ function PublicContact(rawContact) {
 joiValidationDecorator(
   PublicContact,
   joi.object().keys({
-    name: joi.string().optional(),
-    state: joi.string().optional(),
+    name: joi.string().max(500).optional(),
+    state: joi.string().max(500).optional(), // TODO: enum
   }),
   {},
 );
