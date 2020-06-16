@@ -26,7 +26,26 @@ export const MessageDetail = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <h1>Message</h1>
+          <div className="grid-row grid-gap">
+            <div className="grid-col-8">
+              <h1>Message</h1>
+            </div>
+            <div className="grid-col-1">
+              <Button link className="action-button" icon="check-circle">
+                Complete
+              </Button>
+            </div>
+            <div className="grid-col-1">
+              <Button link className="action-button" icon="share-square">
+                Forward
+              </Button>
+            </div>
+            <div className="grid-col-1">
+              <Button link className="action-button" icon="reply">
+                Reply
+              </Button>
+            </div>
+          </div>
 
           <div className="bg-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3">
             <div className="grid-row">
