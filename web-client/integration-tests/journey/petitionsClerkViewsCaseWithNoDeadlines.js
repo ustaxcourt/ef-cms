@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export default test => {
+export const petitionsClerkViewsCaseWithNoDeadlines = test => {
   return it('Petitions clerk views case detail', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {

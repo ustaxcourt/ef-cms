@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Setting a Case for Trial
 ### QC of Eligible Cases
 * Cases with the status of "General Docket (At Issue) - Ready for Trial" with no blocks or pending items, will be included in the list of Eligible Cases for an existing trial session in the requested trial location
@@ -9,7 +11,7 @@
 * When the trial session is set, all eligible cases added to that session are issued a Notice Setting Case for Trial and a Standing Pre-Trial Order (Regular cases) or Standing Pre-Trial Notice (Small cases)
 * If any cases added include paper service, the clerk is directed to Print Paper Service documents; for printing purposes, the Notice Setting Case for Trial and Standing Pre-Trial Order/Notice are combined for each case
 * The Notice Setting Case for Trial displays on the Docket Record for each case added to the trial session
-* The Standing Pre-Trial Order or Standing Pre-Trial Notice displays on the Docket Record for each case added to the trial session 
+* The Standing Pre-Trial Order or Standing Pre-Trial Notice displays on the Docket Record for each case added to the trial session
 
 ### Manually Add a Case to an Open Trial Session
 * User manually adds a case to a trial session that is already set

@@ -3,6 +3,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
+import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setTabToInProgressAction } from '../actions/editUploadCourtIssuedDocument/setTabToInProgressAction';
 
 export const closeModalAndReturnToCaseDetailDraftDocumentsSequence = [
@@ -10,6 +11,7 @@ export const closeModalAndReturnToCaseDetailDraftDocumentsSequence = [
   setCasePropFromStateAction,
   setTabToInProgressAction,
   setCaseDetailPageTabAction,
+  setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,
 ];

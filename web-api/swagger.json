@@ -5417,10 +5417,6 @@
           "type": "string",
           "description": "the unique docket number associated with the case"
         },
-        "irsSendDate": {
-          "type": "string",
-          "description": "the date the case was sent to the IRS"
-        },
         "status": {
           "type": "string",
           "description": "the status of the case"

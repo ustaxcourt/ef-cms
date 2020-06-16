@@ -7,8 +7,13 @@ export const FormCancelModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.onCancelSequence],
+    useRunConfirmSequence: props.useRunConfirmSequence,
   },
-  function FormCancelModalDialog({ cancelSequence, confirmSequence }) {
+  function FormCancelModalDialog({
+    cancelSequence,
+    confirmSequence,
+    useRunConfirmSequence,
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"
@@ -18,6 +23,7 @@ export const FormCancelModalDialog = connect(
         confirmSequence={confirmSequence}
         message="If you cancel, your form selections will be lost."
         title="Are You Sure You Want to Cancel?"
+        useRunConfirmSequence={useRunConfirmSequence}
       ></ModalDialog>
     );
   },

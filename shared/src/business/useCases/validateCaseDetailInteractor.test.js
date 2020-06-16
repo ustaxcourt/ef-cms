@@ -87,7 +87,7 @@ describe('validate case detail', () => {
           },
         ],
         filingType: 'Myself',
-        hasIrsNotice: true,
+        hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
@@ -103,7 +103,7 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
-        hasIrsNotice: true,
+        hasVerifiedIrsNotice: true,
         irsNoticeDate: 'aa',
       },
     });
@@ -149,7 +149,7 @@ describe('validate case detail', () => {
           },
         ],
         filingType: 'Other',
-        hasIrsNotice: true,
+        hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
@@ -199,7 +199,7 @@ describe('validate case detail', () => {
           },
         ],
         filingType: 'Other',
-        hasIrsNotice: false,
+        hasVerifiedIrsNotice: false,
         irsNoticeDate: null,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],

@@ -38,6 +38,7 @@ describe('caseDetailSubnavHelper', () => {
     expect(result.showCaseInformationTab).toBeTruthy();
     expect(result.showDeadlinesTab).toBeTruthy();
     expect(result.showInProgressTab).toBeTruthy();
+    expect(result.showCorrespondenceTab).toBeTruthy();
     expect(result.showNotesTab).toBeTruthy();
   });
 
@@ -53,6 +54,7 @@ describe('caseDetailSubnavHelper', () => {
     });
     expect(result.showDeadlinesTab).toBeFalsy();
     expect(result.showInProgressTab).toBeFalsy();
+    expect(result.showCorrespondenceTab).toBeFalsy();
     expect(result.showNotesTab).toBeFalsy();
   });
 

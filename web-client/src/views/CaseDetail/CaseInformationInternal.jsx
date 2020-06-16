@@ -6,8 +6,8 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 const PetitionDetails = ({
@@ -372,7 +372,7 @@ export const CaseInformationInternal = connect(
                         Edit
                       </Button>
                     )}
-                    <If bind="caseDetail.irsSendDate">
+                    <If bind="formattedCaseDetail.irsSendDate">
                       <Button
                         link
                         className="margin-right-0 margin-top-1 padding-0 float-right"

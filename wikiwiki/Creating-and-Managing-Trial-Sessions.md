@@ -1,3 +1,5 @@
+[Return to Directory](./README.md)
+
 ## Trial Session Statuses
 * **New Trial Session** = trial session that has not been ‘set’
 * **Open Trial Session** = trial session that has been set and contains any “Open” cases independent of date
@@ -18,4 +20,4 @@
 * Trial session can be deleted before the calendar has been set ; cannot be deleted once calendar is set
 
 ## Closing a Trial session
-* When all cases on a trial session are moved to "Inactive" state, the trial session automatically becomes Closed and is displayed on the Closed tab 
+* When all cases on a trial session are moved to "Inactive" state, the trial session automatically becomes Closed and is displayed on the Closed tab

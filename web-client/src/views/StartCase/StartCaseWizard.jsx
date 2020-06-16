@@ -49,7 +49,10 @@ export const StartCaseWizard = connect(
           </Tabs>
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog
+            useRunConfirmSequence={true}
+            onCancelSequence="closeModalAndReturnToDashboardSequence"
+          />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

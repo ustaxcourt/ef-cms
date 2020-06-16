@@ -29,6 +29,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
   it('creates the case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
 
     const applicationContext = applicationContextFactory({
       role: User.ROLES.petitionsClerk,

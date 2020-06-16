@@ -1,4 +1,4 @@
-export default (test, createdCases) => {
+export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const selectedWorkItems = createdCases.map(newCase => {
       const firstDocketEntry = newCase.docketRecord.find(

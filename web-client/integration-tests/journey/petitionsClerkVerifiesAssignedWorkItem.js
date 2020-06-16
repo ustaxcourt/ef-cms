@@ -1,6 +1,6 @@
 import { getPetitionWorkItemForCase } from '../helpers';
 
-export default (test, createdCases) => {
+export const petitionsClerkVerifiesAssignedWorkItem = (test, createdCases) => {
   return it('Petitions clerk verifies assignment of work item', async () => {
     const { workItemId } = getPetitionWorkItemForCase(createdCases[0]);
 

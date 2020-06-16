@@ -1,4 +1,4 @@
-export default (test, params) => {
+export const unauthedUserSearchesByDocketNumber = (test, params) => {
   return it('Search for cases by docket number', async () => {
     let searchResults;
     const queryParams = {

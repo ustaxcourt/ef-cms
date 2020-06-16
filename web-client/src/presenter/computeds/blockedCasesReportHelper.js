@@ -37,8 +37,7 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
           caseTitle: applicationContext.getCaseTitle(
             blockedCase.caseCaption || '',
           ),
-          docketNumberWithSuffix:
-            blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
+          docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
         };
       });
   }

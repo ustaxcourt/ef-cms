@@ -1,6 +1,6 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
-import petitionsClerkViewsDocketRecordEditLinks from './journey/petitionsClerkViewsDocketRecordEditLinks';
+import { petitionsClerkViewsDocketRecordEditLinks } from './journey/petitionsClerkViewsDocketRecordEditLinks';
 
 const test = setupTest();
 
@@ -12,6 +12,7 @@ describe('Petitions clerk docket record journey', () => {
   loginAs(test, 'petitioner');
   it('create the case for this test', async () => {
     const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
   petitionerFilesDocumentForCase(test, fakeFile);

@@ -8,7 +8,7 @@ const publicCaseDetailHelper = withAppContextDecorator(
   applicationContextPublic,
 );
 
-export default test => {
+export const unauthedUserViewsCaseDetail = test => {
   return it('View case detail', async () => {
     await test.runSequence('gotoPublicCaseDetailSequence', {
       docketNumber: test.docketNumber,
