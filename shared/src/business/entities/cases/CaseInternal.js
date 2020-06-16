@@ -1,20 +1,20 @@
 const joi = require('@hapi/joi');
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
+  DEFAULT_PROCEDURE_TYPE,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-  PROCEDURE_TYPES,
 } = require('../EntityConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
-CaseInternal.DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
+CaseInternal.DEFAULT_PROCEDURE_TYPE = DEFAULT_PROCEDURE_TYPE;
 
 /**
  * CaseInternal Entity
