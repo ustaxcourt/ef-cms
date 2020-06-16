@@ -32,7 +32,7 @@ export const CreateCaseMessageModalDialog = connect(
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  function CreateMessageModalDialog({
+  function CreateCaseMessageModalDialog({
     constants,
     createCaseMessageModalHelper,
     form,
