@@ -334,7 +334,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
 const {
   getAllCaseDeadlinesInteractor,
-} = require('../../shared/src/business/useCases/caseDeadline/getAllCaseDeadlinesInteractor');
+} = require('../../shared/src/business/useCases/getAllCaseDeadlinesInteractor');
 const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
@@ -1015,8 +1015,8 @@ const entitiesByName = {
   User,
 };
 
-module.exports = (appContextUser = {}) => {
-  setCurrentUser(appContextUser);
+module.exports = appContextUser => {
+  if (appContextUser) setCurrentUser(appContextUser);
 
   return {
     barNumberGenerator,

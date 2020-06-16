@@ -38,7 +38,9 @@ exports.fillInAndSubmitForm = () => {
   cy.get('button#submit-case').scrollIntoView().click();
 
   // wait for elasticsearch to refresh
-  cy.wait(3000);
+  const SLEEP = 3000;
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(SLEEP);
 
   // success page
   cy.url().should('include', 'file-a-petition/success');
