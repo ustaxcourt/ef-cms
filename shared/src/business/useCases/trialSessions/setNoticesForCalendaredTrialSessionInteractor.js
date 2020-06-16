@@ -278,7 +278,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     return servedParties;
   };
 
-  for (var calendaredCase of calendaredCases) {
+  for (let calendaredCase of calendaredCases) {
     await setNoticeForCase(calendaredCase);
   }
 

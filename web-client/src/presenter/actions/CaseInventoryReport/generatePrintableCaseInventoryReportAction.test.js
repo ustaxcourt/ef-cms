@@ -8,7 +8,7 @@ describe('generatePrintableCaseInventoryReportAction', () => {
     applicationContext
       .getUseCases()
       .generatePrintableCaseInventoryReportInteractor.mockImplementation(() => {
-        return 'www.example.com';
+        return { url: 'www.example.com' };
       });
     presenter.providers.applicationContext = applicationContext;
   });

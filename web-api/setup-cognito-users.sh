@@ -24,7 +24,7 @@ generate_post_data() {
   firstName=$7
   middleName=$8
   lastName=$9
-  suffix=$10
+  suffix=${10}
   cat <<EOF
 {
   "email": "$email",
@@ -42,6 +42,7 @@ generate_post_data() {
   "birthYear": "1950",
   "employer": "$employer",
   "firmName": "Some Firm",
+  "originalBarState": "WA",
   "practitionerType": "Attorney",
   "contact": {
     "address1": "234 Main St",
@@ -95,8 +96,8 @@ createAccount() {
   employer=$7
   firstName=$8
   middleName=$9
-  lastName=$10
-  suffix=$11
+  lastName=${10}
+  suffix=${11}
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
@@ -173,9 +174,9 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
-createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "" "GM9999" "privatePractitioner" "Private Practitioner Gmail"
-createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "" "GM4444" "irsPractitioner" "IRS Practitioner Gmail"
-createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
+createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
+createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
+createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
 createManyAccounts "10" "clerkofcourt" "clerkofcourt"

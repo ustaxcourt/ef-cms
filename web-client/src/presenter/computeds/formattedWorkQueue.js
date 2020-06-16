@@ -102,10 +102,6 @@ export const formatWorkItem = ({
     result.showUnassignedIcon = true;
   }
 
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix || ''
-  }`;
-
   result.selected = !!selectedWorkItems.find(
     selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );

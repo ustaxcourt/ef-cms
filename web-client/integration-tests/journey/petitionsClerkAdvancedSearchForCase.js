@@ -2,7 +2,7 @@ import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSear
 import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default test => {
+export const petitionsClerkAdvancedSearchForCase = test => {
   return it('petitions clerk performs an advanced search for a case', async () => {
     await refreshElasticsearchIndex();
 

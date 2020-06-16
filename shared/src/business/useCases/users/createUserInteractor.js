@@ -1,7 +1,11 @@
 const {
+  createPractitionerUser,
+} = require('../../utilities/createPractitionerUser');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -15,16 +19,40 @@ const { User } = require('../../entities/User');
  */
 exports.createUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
+
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const createdUser = await applicationContext
-    .getPersistenceGateway()
-    .createUser({
-      applicationContext,
-      user,
-    });
+  let userEntity = null;
 
-  return new User(createdUser, { applicationContext }).validate().toRawObject();
+  if (
+    [
+      User.ROLES.privatePractitioner,
+      User.ROLES.irsPractitioner,
+      User.ROLES.inactivePractitioner,
+    ].includes(user.role)
+  ) {
+    userEntity = new Practitioner(
+      await createPractitionerUser({ applicationContext, user }),
+    );
+  } else {
+    if (user.barNumber === '') {
+      delete user.barNumber;
+    }
+    userEntity = new User(
+      { ...user, userId: applicationContext.getUniqueId() },
+      { applicationContext },
+    );
+  }
+
+  await applicationContext.getPersistenceGateway().createUser({
+    applicationContext,
+    user: {
+      ...userEntity.validate().toRawObject(),
+      password: user.password,
+    },
+  });
+
+  return userEntity.validate().toRawObject();
 };

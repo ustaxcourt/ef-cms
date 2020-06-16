@@ -1,6 +1,6 @@
 const React = require('react');
 
-const PageMetaHeaderDocket = ({ docketNumber }) => {
+export const PageMetaHeaderDocket = ({ docketNumber }) => {
   return (
     <>
       <div style={{ float: 'left', fontSize: '12px' }}>
@@ -13,5 +13,3 @@ const PageMetaHeaderDocket = ({ docketNumber }) => {
     </>
   );
 };
-
-export default PageMetaHeaderDocket;

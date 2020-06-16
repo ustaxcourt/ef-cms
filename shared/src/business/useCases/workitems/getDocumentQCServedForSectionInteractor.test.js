@@ -22,7 +22,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         isQC: true,
         messages: [],
@@ -32,7 +32,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         isQC: true,
         messages: [],
@@ -73,7 +73,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         messages: [],
         section: 'docket',
@@ -82,7 +82,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: {
           sentBy: 'petitioner',
         },
@@ -109,7 +109,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: { sentBy: 'petitioner' },
         messages: [],
         section: 'docket',
@@ -118,7 +118,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberWithSuffix: '101-18S',
         document: {
           sentBy: 'petitioner',
         },

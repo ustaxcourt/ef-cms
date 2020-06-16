@@ -10,7 +10,7 @@ describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .orderKeywordSearch.mockResolvedValue([
+      .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
           caseId: '1',
@@ -49,21 +49,21 @@ describe('orderPublicSearchInteractor', () => {
   it('should only search for order document types', async () => {
     await orderPublicSearchInteractor({
       applicationContext,
-      orderKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().orderKeywordSearch.mock
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      orderEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
     });
   });
 
   it('returns results with sealed cases filtered out', async () => {
     const result = await orderPublicSearchInteractor({
       applicationContext,
-      orderKeyword: 'fish',
+      keyword: 'fish',
     });
 
     expect(result).toMatchObject([

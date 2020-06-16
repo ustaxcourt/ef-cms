@@ -8,6 +8,7 @@ const {
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
+const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
 CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
@@ -27,7 +28,10 @@ function CaseInternal(rawCase) {
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.filingType = rawCase.filingType;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice || false;
   this.mailingDate = rawCase.mailingDate;
+  this.noticeOfAttachments = rawCase.noticeOfAttachments;
   this.orderDesignatingPlaceOfTrial = rawCase.orderDesignatingPlaceOfTrial;
   // this is so the validation that is checking for existence of 3 different fields
   // will work correctly
@@ -57,6 +61,11 @@ function CaseInternal(rawCase) {
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
+  this.useSameAsPrimary = rawCase.useSameAsPrimary;
+
+  this.statistics = Array.isArray(rawCase.statistics)
+    ? rawCase.statistics.map(statistic => new Statistic(statistic))
+    : [];
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
@@ -109,7 +118,10 @@ const paperRequirements = joi
     ),
     caseCaption: joi.string().required(),
     caseType: joi.string().required(),
+    hasVerifiedIrsNotice: joi.boolean().required(),
+    irsNoticeDate: Case.validationRules.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
+    noticeOfAttachments: Case.validationRules.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
       Case.validationRules.orderDesignatingPlaceOfTrial,
     orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
@@ -176,12 +188,14 @@ const paperRequirements = joi
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
+    statistics: Case.validationRules.statistics,
     stinFile: joi.object().optional(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
       then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
     }),
+    useSameAsPrimary: Case.validationRules.useSameAsPrimary,
   })
   .or(
     'preferredTrialCity',

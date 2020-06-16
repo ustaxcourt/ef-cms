@@ -13,6 +13,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     petitionPaymentWaivedDate,
     preferredTrialCity,
     receivedAt,
+    statistics,
     ...caseDetail
   } = get(state.form);
 
@@ -87,8 +88,34 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType
     ];
 
+  const showStatistics = statistics && statistics.length > 0;
+
+  const formattedStatistics = (statistics || []).map(statistic => {
+    const formattedDate =
+      statistic.year ||
+      applicationContext
+        .getUtilities()
+        .formatDateString(statistic.lastDateOfPeriod, 'MMDDYY');
+
+    const formattedDeficiencyAmount = applicationContext
+      .getUtilities()
+      .formatDollars(statistic.deficiencyAmount);
+
+    const formattedTotalPenalties = applicationContext
+      .getUtilities()
+      .formatDollars(statistic.totalPenalties);
+
+    return {
+      ...statistic,
+      formattedDate,
+      formattedDeficiencyAmount,
+      formattedTotalPenalties,
+    };
+  });
+
   return {
     applicationForWaiverOfFilingFeeFile,
+    formattedStatistics,
     hasIrsNoticeFormatted,
     hasOrders,
     irsNoticeDateFormatted,
@@ -99,6 +126,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     receivedAtFormatted,
     requestForPlaceOfTrialFile,
     shouldShowIrsNoticeDate,
+    showStatistics,
     stinFile,
   };
 };
