@@ -8,7 +8,7 @@ export const ForwardCaseMessageModalDialog = connect(
     return (
       <ConfirmModal
         cancelLabel="Cancel"
-        confirmLabel="Complete"
+        confirmLabel="Send"
         preventCancelOnBlur={true}
         title="Forward Message"
         onCancelSequence="clearModalFormSequence"

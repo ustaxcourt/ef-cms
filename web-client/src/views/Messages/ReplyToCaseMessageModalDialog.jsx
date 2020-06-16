@@ -8,7 +8,7 @@ export const ReplyToCaseMessageModalDialog = connect(
     return (
       <ConfirmModal
         cancelLabel="Cancel"
-        confirmLabel="Complete"
+        confirmLabel="Send"
         preventCancelOnBlur={true}
         title="Reply to Message"
         onCancelSequence="clearModalFormSequence"
