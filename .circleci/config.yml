@@ -534,7 +534,7 @@ workflows:
                 - develop
       - deploy:
           requires:
-            - bundle
+            - build-client-coverage
           filters:
             branches:
               only:
