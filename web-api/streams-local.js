@@ -27,18 +27,13 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
     .promise()
     .then(results => results.Table.LatestStreamArn);
 
-  console.log('streamARN', streamARN);
-
   const { StreamDescription } = await dynamodbStreamsClient
     .describeStream({
       StreamArn: streamARN,
     })
     .promise();
 
-  console.log(StreamDescription);
-
   const processShard = shard => {
-    console.log('shard', shard);
     const readable = DynamoDBReadable(dynamodbStreamsClient, streamARN, {
       ...config,
       iterator: 'TRIM_HORIZON',
@@ -49,10 +44,14 @@ const DynamoDBReadable = require('dynamodb-streams-readable');
     readable.pipe(
       new Writable({
         objectMode: true,
-        write: chunk => {
+        write: (chunk, encoding, processNextChunk) => {
           processStreamRecordsLambda({
             Records: chunk,
-          });
+          })
+            .then(() => processNextChunk())
+            .catch(err => {
+              console.log('error', err);
+            });
         },
       }),
     );
