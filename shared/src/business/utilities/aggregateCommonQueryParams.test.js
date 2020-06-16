@@ -1,7 +1,10 @@
+const {
+  CASE_SEARCH_MIN_YEAR,
+  COUNTRY_TYPES,
+  US_STATES,
+} = require('../entities/EntityConstants');
 const { aggregateCommonQueryParams } = require('./aggregateCommonQueryParams');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CaseSearch } = require('../entities/cases/CaseSearch');
-const { COUNTRY_TYPES, US_STATES } = require('../entities/EntityConstants');
 const { formatNow } = require('./DateHandler');
 
 describe('aggregateCommonQueryParams', () => {
@@ -239,7 +242,7 @@ describe('aggregateCommonQueryParams', () => {
           range: {
             'receivedAt.S': {
               format: 'yyyy',
-              gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
+              gte: `${CASE_SEARCH_MIN_YEAR}||/y`,
               lte: '2019||/y',
             },
           },
