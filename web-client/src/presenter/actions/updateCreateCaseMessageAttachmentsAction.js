@@ -23,6 +23,11 @@ export const updateCreateCaseMessageAttachmentsAction = ({
 
     const documentTitle = document.documentTitle || document.documentType;
 
+    if (attachments.length === 0) {
+      // This is the first attachment, so we should update the subject
+      store.set(state.modal.form.subject, documentTitle);
+    }
+
     attachments.push({
       documentId,
       documentTitle,
