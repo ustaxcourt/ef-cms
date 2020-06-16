@@ -8,16 +8,18 @@
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.get = ({ applicationContext, endpoint, params }) =>
-  applicationContext
+exports.get = ({ applicationContext, endpoint, params }) => {
+  const token = applicationContext.getCurrentUserToken();
+  return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       params,
     })
     .then(response => response.data);
+};
 
 /**
  *
