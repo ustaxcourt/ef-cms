@@ -233,7 +233,7 @@
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
-    "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
+    "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-hmr --no-cache --no-source-maps web-client/src/index.pug",
     "start:madge": "node ./graph-generators/index.js",
     "start:public:ci": "npm run clean:public && CI=true USTC_ENV=dev parcel --port 5678 -d dist-public --no-cache --no-source-maps web-client/src/index-public.pug",
     "start:public": "npm run clean:public && USTC_ENV=dev parcel --port 5678 -d dist-public --no-cache --no-source-maps web-client/src/index-public.pug",
