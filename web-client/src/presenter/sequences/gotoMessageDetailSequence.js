@@ -8,7 +8,6 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAttachmentDocumentToDisplayAction } from '../actions/setAttachmentDocumentToDisplayAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-
 import { setMessageAction } from '../actions/setMessageAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 

@@ -6,7 +6,6 @@ export const formattedMessageDetail = (get, applicationContext) => {
 
   const result = {
     ...messageDetail,
-    attachments: messageDetail.attachments || [],
     createdAtFormatted: formatDateIfToday(
       messageDetail.createdAt,
       applicationContext,
