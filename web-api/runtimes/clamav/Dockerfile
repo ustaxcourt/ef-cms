@@ -11,7 +11,7 @@ RUN rm -rf lib
 
 RUN yum update -y
 RUN amazon-linux-extras install epel -y
-RUN yum install -y cpio yum-utils tar.x86_64 gzip
+RUN yum install -y cpio yum-utils tar.x86_64 gzip zip
 
 RUN yumdownloader -x \*i686 --archlist=x86_64 clamav
 RUN rpm2cpio clamav-0*.rpm | cpio -vimd
@@ -68,4 +68,4 @@ RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamupdate
 
 RUN LD_LIBRARY_PATH=./lib ./bin/freshclam --config-file=bin/freshclam.conf
 
-RUN tar -czf clamav_lambda_layer.tar.gz bin lib var
+RUN zip -r clamav_lambda_layer.zip .

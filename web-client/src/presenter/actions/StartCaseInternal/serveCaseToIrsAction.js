@@ -16,20 +16,17 @@ export const serveCaseToIrsAction = async ({
   get,
   path,
   props,
-  router,
 }) => {
   const caseId = props.caseId || get(state.caseDetail.caseId);
 
-  const pdfBlob = await applicationContext
+  const pdfUrl = await applicationContext
     .getUseCases()
     .serveCaseToIrsInteractor({
       applicationContext,
       caseId,
     });
 
-  if (pdfBlob && (pdfBlob.size > 0 || pdfBlob.length > 0)) {
-    const pdfFile = new Blob([pdfBlob], { type: 'application/pdf' });
-    const pdfUrl = router.createObjectURL(pdfFile);
+  if (pdfUrl) {
     return path.paper({ pdfUrl });
   }
 
