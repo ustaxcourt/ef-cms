@@ -24,8 +24,7 @@ export const updatePrimaryContactAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Please confirm the information below is correct.',
-      title: 'Your changes have been saved.',
+      message: 'Changes saved.',
     },
     caseId: updatedCase.docketNumber,
   };

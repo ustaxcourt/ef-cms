@@ -1,7 +1,7 @@
 [
   {
     "completedAt": "2019-08-16T19:22:13.925Z",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "108-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
@@ -48,12 +48,11 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Trust",
     "associatedJudge": "Judge Armen",
-    "irsSendDate": "2019-08-16T19:22:13.919Z",
     "caseType": "Worker Classification",
     "sortableDocketNumber": 19000108,
     "entityName": "Case",
@@ -81,11 +80,9 @@
     "filingType": "Other",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": false,
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
-    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "trialDate": "2019-11-27T05:00:00.000Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
@@ -94,6 +91,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "docketNumber": "108-19",
+    "docketNumberWithSuffix": "108-19",
     "status": "Calendared"
   },
   {
@@ -228,6 +226,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-08-16T19:21:46.147Z",
     "workItems": [],
     "pending": false,
@@ -245,6 +244,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-08-16T19:21:46.146Z",
     "workItems": [
       {

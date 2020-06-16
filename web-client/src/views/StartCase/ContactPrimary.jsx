@@ -17,6 +17,8 @@ export const ContactPrimary = connect(
     onChange: props.onChange,
     onChangeSequence: sequences[props.onChange],
     parentView: props.parentView,
+    updateFormValueAndSecondaryContactInfoSequence:
+      sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
   },
   function ContactPrimary({
@@ -29,6 +31,7 @@ export const ContactPrimary = connect(
     onChange,
     onChangeSequence,
     parentView,
+    updateFormValueAndSecondaryContactInfoSequence,
     validationErrors,
     wrapperClassName,
   }) {
@@ -227,7 +230,7 @@ export const ContactPrimary = connect(
                 onBlurSequence();
               }}
               onChange={e => {
-                onChangeSequence({
+                updateFormValueAndSecondaryContactInfoSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

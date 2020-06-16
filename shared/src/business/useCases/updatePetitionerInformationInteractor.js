@@ -12,6 +12,7 @@ const {
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
+const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -39,6 +40,40 @@ exports.updatePetitionerInformationInteractor = async ({
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
+  const primaryEditableFields = {
+    address1: contactPrimary.address1,
+    address2: contactPrimary.address2,
+    address3: contactPrimary.address3,
+    city: contactPrimary.city,
+    country: contactPrimary.country,
+    countryType: contactPrimary.countryType,
+    inCareOf: contactPrimary.inCareOf,
+    name: contactPrimary.name,
+    phone: contactPrimary.phone,
+    postalCode: contactPrimary.postalCode,
+    secondaryName: contactPrimary.secondaryName,
+    serviceIndicator: contactPrimary.serviceIndicator,
+    state: contactPrimary.state,
+    title: contactPrimary.title,
+  };
+  let secondaryEditableFields;
+  if (contactSecondary) {
+    secondaryEditableFields = {
+      address1: contactSecondary.address1,
+      address2: contactSecondary.address2,
+      address3: contactSecondary.address3,
+      city: contactSecondary.city,
+      country: contactSecondary.country,
+      countryType: contactSecondary.countryType,
+      inCareOf: contactPrimary.inCareOf,
+      name: contactSecondary.name,
+      phone: contactSecondary.phone,
+      postalCode: contactSecondary.postalCode,
+      serviceIndicator: contactSecondary.serviceIndicator,
+      state: contactSecondary.state,
+    };
+  }
+
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
@@ -46,35 +81,38 @@ exports.updatePetitionerInformationInteractor = async ({
   const primaryChange = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
-      newData: contactPrimary,
+      newData: primaryEditableFields,
       oldData: oldCase.contactPrimary,
     });
 
   const secondaryChange =
-    contactSecondary &&
-    contactSecondary.name &&
+    secondaryEditableFields &&
+    secondaryEditableFields.name &&
     oldCase.contactSecondary &&
     oldCase.contactSecondary.name
       ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
-          newData: contactSecondary,
-          oldData: oldCase.contactSecondary || {},
+          newData: secondaryEditableFields,
+          oldData: oldCase.contactSecondary,
         })
       : undefined;
 
   const caseEntity = new Case(
     {
       ...oldCase,
-      contactPrimary,
-      contactSecondary,
+      contactPrimary: {
+        ...oldCase.contactPrimary,
+        ...primaryEditableFields,
+      },
+      contactSecondary: {
+        ...oldCase.contactSecondary,
+        ...secondaryEditableFields,
+      },
       partyType,
     },
     { applicationContext },
   );
 
-  const caseDetail = {
-    ...caseEntity.validate().toRawObject(),
-    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
-  };
+  const caseDetail = caseEntity.validate().toRawObject();
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -84,16 +122,16 @@ exports.updatePetitionerInformationInteractor = async ({
     newData,
     oldData,
   }) => {
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+
     const pdfContentHtml = await applicationContext
       .getTemplateGenerators()
       .generateChangeOfAddressTemplate({
         applicationContext,
         content: {
-          caption: caseDetail.caseCaption,
-          captionPostfix: caseDetail.caseCaptionPostfix,
-          docketNumberWithSuffix: `${caseDetail.docketNumber}${
-            caseDetail.docketNumberSuffix || ''
-          }`,
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
           documentTitle: documentType.title,
           name: contactName,
           newData,
@@ -159,17 +197,17 @@ exports.updatePetitionerInformationInteractor = async ({
   let paperServicePdfUrl;
   if (primaryChange) {
     primaryPdf = await createDocumentForChange({
-      contactName: contactPrimary.name,
+      contactName: primaryEditableFields.name,
       documentType: primaryChange,
-      newData: contactPrimary,
+      newData: primaryEditableFields,
       oldData: oldCase.contactPrimary,
     });
   }
   if (secondaryChange) {
     secondaryPdf = await createDocumentForChange({
-      contactName: contactSecondary.name,
+      contactName: secondaryEditableFields.name,
       documentType: secondaryChange,
-      newData: contactSecondary,
+      newData: secondaryEditableFields,
       oldData: oldCase.contactSecondary || {},
     });
   }
@@ -226,7 +264,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
 
   return {
-    paperServiceParties: servedParties && servedParties.paper,
+    paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
     updatedCase,
   };

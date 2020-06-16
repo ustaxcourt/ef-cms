@@ -124,11 +124,10 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
-    "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
     "sortableDocketNumber": 19000107,
     "entityName": "Case",
@@ -154,10 +153,8 @@
     "filingType": "A business",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": false,
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -165,6 +162,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
     "status": "General Docket - At Issue (Ready for Trial)",
     "associatedJudge": "Chief Judge"
   },
@@ -203,7 +201,7 @@
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "107-19L",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "completedMessage": "Served on IRS",
@@ -255,8 +253,6 @@
     "pk": "case-by-docket-number|107-19"
   },
   {
-    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
-    "docketNumber": "107-19",
     "createdAt": "2019-08-22T12:51:32.434Z",
     "deadlineDate": "2019-08-22T04:00:00.000Z",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
@@ -319,6 +315,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "entityName": "Document",
     "filingDate": "2019-08-16T17:29:10.133Z",
     "workItems": [],
     "pending": false,
@@ -336,6 +333,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-08-16T17:29:10.132Z",
     "workItems": [
       {
@@ -398,6 +396,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-08-16T17:29:10.133Z",
     "workItems": [],
     "pending": false,

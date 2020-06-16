@@ -32,7 +32,6 @@ joiValidationDecorator(
     forwardMessage: joi.string().required(),
     section: joi.string().required(),
   }),
-  undefined,
   ForwardMessage.VALIDATION_ERROR_MESSAGES,
 );
 

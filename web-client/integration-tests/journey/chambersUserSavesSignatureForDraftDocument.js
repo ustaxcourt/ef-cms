@@ -4,8 +4,6 @@ export const chambersUserSavesSignatureForDraftDocument = test => {
       gotoAfterSigning: 'DocumentDetail',
     });
 
-    expect(test.getState('alertSuccess.message')).toEqual(
-      'Your signature has been added',
-    );
+    expect(test.getState('alertSuccess.message')).toEqual('Signature added.');
   });
 };

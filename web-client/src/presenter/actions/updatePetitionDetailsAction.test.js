@@ -47,7 +47,7 @@ describe('updatePetitionDetailsAction', () => {
     });
     expect(result.output).toEqual({
       alertSuccess: {
-        title: 'Your changes have been saved.',
+        message: 'Changes saved.',
       },
       caseDetail: { docketNumber: '123-45' },
       caseId: '123-45',
@@ -85,7 +85,7 @@ describe('updatePetitionDetailsAction', () => {
     });
     expect(result.output).toEqual({
       alertSuccess: {
-        title: 'Your changes have been saved.',
+        message: 'Changes saved.',
       },
       caseDetail: { docketNumber: '123-45' },
       caseId: '123-45',
@@ -121,7 +121,7 @@ describe('updatePetitionDetailsAction', () => {
     });
     expect(result.output).toEqual({
       alertSuccess: {
-        title: 'Your changes have been saved.',
+        message: 'Changes saved.',
       },
       caseDetail: { docketNumber: '123-45' },
       caseId: '123-45',

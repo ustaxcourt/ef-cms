@@ -9,11 +9,13 @@ const { Document } = require('../entities/Document');
  * @param {string} providers.caseId the id of the case on which to save the document
  * @param {string} providers.originalDocumentId the id of the original (unsigned) document
  * @param {string} providers.signedDocumentId the id of the signed document
+ * @param {string} providers.nameForSigning the name on the signature of the signed document
  * @returns {object} the updated case
  */
 exports.saveSignedDocumentInteractor = async ({
   applicationContext,
   caseId,
+  nameForSigning,
   originalDocumentId,
   signedDocumentId,
 }) => {
@@ -52,7 +54,7 @@ exports.saveSignedDocumentInteractor = async ({
       { applicationContext },
     );
 
-    signedDocumentEntity.setSigned(user.userId);
+    signedDocumentEntity.setSigned(user.userId, nameForSigning);
 
     caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
   } else {
@@ -67,7 +69,7 @@ exports.saveSignedDocumentInteractor = async ({
       { applicationContext },
     );
 
-    signedDocumentEntity.setSigned(user.userId);
+    signedDocumentEntity.setSigned(user.userId, nameForSigning);
     caseEntity.updateDocument(signedDocumentEntity);
   }
 

@@ -8,13 +8,17 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setFileDocumentFormValueAction = ({ get, props, store }) => {
-  if (props.key === 'previousDocument') {
+  if (
+    ['previousDocument', 'secondaryDocument.previousDocument'].includes(
+      props.key,
+    )
+  ) {
     const caseDetail = get(state.caseDetail);
 
     const previousDocument = caseDetail.documents.find(
       document => document.documentId === props.value,
     );
-    store.set(state.form.previousDocument, previousDocument);
+    store.set(state.form[props.key], previousDocument);
   } else {
     if (props.value !== '') {
       store.set(state.form[props.key], props.value);

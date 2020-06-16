@@ -22,7 +22,7 @@ export const StartCaseWizard = connect(
   function StartCaseWizard({ showModal, submitFilePetitionSequence }) {
     return (
       <>
-        <BigHeader text="File a Petition" />
+        <BigHeader text="Create a Case" />
         <section
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
@@ -49,7 +49,10 @@ export const StartCaseWizard = connect(
           </Tabs>
         </section>
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog
+            useRunConfirmSequence={true}
+            onCancelSequence="closeModalAndReturnToDashboardSequence"
+          />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

@@ -1,17 +1,14 @@
-import { captureCreatedCase } from './journey/captureCreatedCase';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
-import { uploadPetition } from './helpers';
-import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManuallyAddsCaseToTrial';
-import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
+import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
+import { petitionsClerkManuallyRemovesCaseFromTrial } from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
 const test = setupTest();
 
@@ -33,16 +30,18 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
 
   test.casesReadyForTrial = [];
 
-  const createdCases = [];
+  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
     loginAs(test, 'petitioner');
     it(`Create case ${id}`, async () => {
-      await uploadPetition(test, caseOverrides);
+      const caseDetail = await uploadPetition(test, caseOverrides);
+      expect(caseDetail.docketNumber).toBeDefined();
+      createdCaseIds.push(caseDetail.caseId);
+      createdDocketNumbers.push(caseDetail.docketNumber);
+      test.docketNumber = caseDetail.docketNumber;
     });
-    petitionerViewsDashboard(test);
-    captureCreatedCase(test, createdCases, createdDocketNumbers);
 
     loginAs(test, 'petitionsclerk');
     petitionsClerkSubmitsCaseToIrs(test);
@@ -68,7 +67,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   petitionsClerkManuallyAddsCaseToTrial(test);
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
-    return [createdCases[1]];
+    return [createdCaseIds[1]];
   });
   petitionsClerkSetsATrialSessionsSchedule(test);
 

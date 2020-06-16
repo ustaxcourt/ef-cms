@@ -6,11 +6,11 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
+import { getConstants } from '../../getConstants';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
-import { parallel } from 'cerebral/factories';
+import { parallel, set } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
+
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
@@ -18,10 +18,13 @@ import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
+
+const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
   showModalFromQueryAction,
@@ -47,28 +50,33 @@ export const gotoCaseDetailSequence = [
   clearFormAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
+  setIsPrimaryTabAction,
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,
   setConsolidatedCasesForCaseAction,
   setDefaultDocketRecordSortAction,
-  setBaseUrlAction,
   set(state.editDocumentEntryPoint, 'CaseDetail'),
   runPathForUserRoleAction,
   {
     ...takePathForRoles(
       [
-        'adc',
-        'admissionsclerk',
-        'clerkofcourt',
-        'docketclerk',
-        'petitionsclerk',
-        'trialclerk',
+        USER_ROLES.adc,
+        USER_ROLES.admissionsClerk,
+        USER_ROLES.clerkOfCourt,
+        USER_ROLES.docketClerk,
+        USER_ROLES.petitionsClerk,
+        USER_ROLES.trialClerk,
       ],
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
-      ['petitioner', 'privatePractitioner', 'irsPractitioner', 'irsSuperuser'],
+      [
+        USER_ROLES.petitioner,
+        USER_ROLES.privatePractitioner,
+        USER_ROLES.irsPractitioner,
+        USER_ROLES.irsSuperuser,
+      ],
       gotoCaseDetailExternal,
     ),
     chambers: gotoCaseDetailInternalWithNotes,

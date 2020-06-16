@@ -1,6 +1,6 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export default test => {
+export const unauthedUserSearchesForSealedCaseByName = test => {
   return it('Search for sealed case by name', async () => {
     await refreshElasticsearchIndex(3000);
 
@@ -10,7 +10,7 @@ export default test => {
 
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
 
-    await test.runSequence('submitPublicAdvancedSearchSequence', {});
+    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
     const searchResults = test.getState('searchResults');
     expect(searchResults.length).toEqual(0);

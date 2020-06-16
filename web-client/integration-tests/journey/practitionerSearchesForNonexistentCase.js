@@ -1,4 +1,4 @@
-export default test => {
+export const practitionerSearchesForNonexistentCase = test => {
   return it('Practitioner searches for nonexistent case', async () => {
     await test.runSequence('updateSearchTermSequence', {
       searchTerm: '999-99',

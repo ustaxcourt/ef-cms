@@ -3,11 +3,14 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Document } = require('../Document');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
 const { Order } = require('../orders/Order');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
+
+const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * Public Case Entity
@@ -22,9 +25,9 @@ function PublicCase(rawCase, { applicationContext }) {
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
+  this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
   this.receivedAt = rawCase.receivedAt;
   this.isSealed = !!rawCase.sealedDate;
-  this.caseTitle = rawCase.caseTitle;
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)
@@ -53,17 +56,15 @@ const publicCaseSchema = {
       version: ['uuidv4'],
     })
     .optional(),
-  caseTitle: joi.string().optional(),
-  createdAt: joi.date().iso().optional(),
+  createdAt: joiStrictTimestamp.optional(),
   docketNumber: joi.string().optional(),
   docketNumberSuffix: joi.string().allow(null).optional(),
   isSealed: joi.boolean(),
-  receivedAt: joi.date().iso().optional(),
+  receivedAt: joiStrictTimestamp.optional(),
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
   caseId: joi.string(),
-  caseTitle: joi.any().forbidden(),
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
@@ -80,7 +81,6 @@ joiValidationDecorator(
   joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
     then: joi.object(sealedCaseSchemaRestricted),
   }),
-  undefined,
   {},
 );
 

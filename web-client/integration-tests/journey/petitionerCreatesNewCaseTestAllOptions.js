@@ -742,15 +742,20 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       state: 'CA',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '5',
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('alertSuccess')).toEqual({
-      message:
-        'Your receipt will appear under the Case Information tab in your case once your petition is processed by the court.',
-      title: 'Your petition has been successfully submitted.',
-    });
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPetitioner');
   });
 };

@@ -19,14 +19,13 @@ const { User } = require('../entities/User');
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
-const fakeFile = Buffer.from(fakeData, 'base64');
-fakeFile.name = 'fakeFile.pdf';
-
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
-  return fs.readFileSync(testAssetsPath + 'sample.pdf');
+  return new Uint8Array(
+    new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf')),
+  );
 };
 
 let testPdfDoc;
@@ -56,7 +55,7 @@ let persistenceGateway = {
 const useCases = {
   generatePdfFromHtmlInteractor: () => {
     generatePdfFromHtmlInteractorStub();
-    return fakeFile;
+    return fakeData;
   },
   userIsAssociated: () => true,
 };
@@ -69,7 +68,7 @@ const userData = {
 let userObj = userData;
 const applicationContext = {
   environment: { stage: 'local' },
-  getCaseCaptionNames: Case.getCaseCaptionNames,
+  getCaseTitle: Case.getCaseTitle,
   getChromiumBrowser: () => ({
     close: () => null,
     newPage: () => ({
@@ -137,17 +136,19 @@ describe('update petitioner contact information on a case', () => {
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
-  it('updates case but does not generate a notice if contactSecondary does not contain a name', async () => {
-    await updatePetitionerInformationInteractor({
-      applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      contactPrimary: MOCK_CASE.contactPrimary,
-      contactSecondary: { countryType: 'domestic' },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-    });
+  it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
+    await expect(
+      updatePetitionerInformationInteractor({
+        applicationContext,
+        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        contactPrimary: MOCK_CASE.contactPrimary,
+        contactSecondary: { countryType: 'domestic' },
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      }),
+    ).rejects.toThrow();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
-    expect(updateCaseStub).toHaveBeenCalled();
+    expect(updateCaseStub).not.toHaveBeenCalled();
   });
 
   it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
@@ -160,6 +161,7 @@ describe('update petitioner contact information on a case', () => {
         countryType: 'domestic',
         email: 'test@example.com',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -182,6 +184,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -202,6 +205,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -218,6 +222,7 @@ describe('update petitioner contact information on a case', () => {
         city: 'Somewhere',
         countryType: 'domestic',
         name: 'Test Petitioner',
+        phone: '1234567',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
@@ -246,6 +251,38 @@ describe('update petitioner contact information on a case', () => {
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
     expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
+  });
+
+  it('does not update contactPrimary email if it is passed in', async () => {
+    await updatePetitionerInformationInteractor({
+      applicationContext,
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        email: 'test@example.com',
+      },
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
+    });
+    expect(updateCaseStub).toHaveBeenCalled();
+    expect(
+      updateCaseStub.mock.calls[0][0].caseToUpdate.contactPrimary.email,
+    ).not.toBe('test@example.com');
+  });
+
+  it('throws an error when attempting to update contactPrimary.countryType to an invalid value', async () => {
+    await expect(
+      updatePetitionerInformationInteractor({
+        applicationContext,
+        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          countryType: 'alien',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
+    expect(updateCaseStub).not.toHaveBeenCalled();
   });
 
   it('throws an error if the user making the request does not have permission to edit petition details', async () => {

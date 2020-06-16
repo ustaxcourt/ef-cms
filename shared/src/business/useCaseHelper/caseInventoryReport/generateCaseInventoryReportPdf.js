@@ -5,43 +5,6 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * @param {Array} cases case entities
- * @returns {string} an html string resulting from rendering template with caseInfo
- */
-const generateCaseInventoryReportPage = async ({
-  applicationContext,
-  formattedCases,
-  reportTitle,
-  showJudgeColumn,
-  showStatusColumn,
-}) => {
-  const caseInventoryReportSassContent = require('./../../assets/ustcPdf.scss_');
-
-  const caseInventoryReportTemplateContent = require('./caseInventoryReport.pug_');
-
-  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
-
-  const pug = applicationContext.getPug();
-  const sass = applicationContext.getNodeSass();
-
-  const { css } = await new Promise(resolve => {
-    sass.render({ data: caseInventoryReportSassContent }, (err, result) => {
-      return resolve(result);
-    });
-  });
-  const compiledFunction = pug.compile(caseInventoryReportTemplateContent);
-  const html = compiledFunction({
-    formattedCases,
-    logo: ustcLogoBufferBase64,
-    reportTitle,
-    showJudgeColumn,
-    showStatusColumn,
-    styles: css,
-  });
-  return html;
-};
-
-/**
  * Generate Case Inventory Report PDF
  *
  * @param {object} providers the providers object
@@ -64,9 +27,7 @@ exports.generateCaseInventoryReportPdf = async ({
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(caseItem => ({
       ...caseItem,
-      caseCaptionNames: applicationContext.getCaseCaptionNames(
-        caseItem.caseCaption || '',
-      ),
+      caseTitle: applicationContext.getCaseTitle(caseItem.caseCaption || ''),
     }));
 
   let reportTitle = '';
@@ -85,29 +46,20 @@ exports.generateCaseInventoryReportPdf = async ({
     showJudgeColumn = false;
   }
 
-  const contentHtml = await generateCaseInventoryReportPage({
-    applicationContext,
-    formattedCases,
-    reportTitle,
-    showJudgeColumn,
-    showStatusColumn,
-  });
-
-  const documentId = await applicationContext
-    .getUseCases()
-    .generatePdfReportInteractor({
+  const caseInventoryReportPdf = await applicationContext
+    .getDocumentGenerators()
+    .caseInventoryReport({
       applicationContext,
-      contentHtml,
-      documentIdPrefix: 'case-inventory',
+      data: {
+        formattedCases,
+        reportTitle,
+        showJudgeColumn,
+        showStatusColumn,
+      },
     });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    documentId,
-    useTempBucket: true,
+    file: caseInventoryReportPdf,
   });
-
-  return url;
 };

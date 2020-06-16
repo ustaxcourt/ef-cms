@@ -1,18 +1,14 @@
 const {
   validateOrderAdvancedSearchInteractor,
 } = require('./validateOrderAdvancedSearchInteractor');
-const { OrderSearch } = require('../entities/orders/OrderSearch');
+const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateOrderAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the orderSearch', () => {
     const errors = validateOrderAdvancedSearchInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          OrderSearch,
-        }),
-      },
+      applicationContext,
       orderSearch: {
-        orderKeyword: 'Joe Exotic',
+        keyword: 'Joe Exotic',
       },
     });
 
@@ -21,16 +17,12 @@ describe('validateOrderAdvancedSearchInteractor', () => {
 
   it('returns an error when a search term is not provided', () => {
     const errors = validateOrderAdvancedSearchInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          OrderSearch,
-        }),
-      },
+      applicationContext,
       orderSearch: {
-        orderKeyword: '',
+        keyword: '',
       },
     });
 
-    expect(errors).toMatchObject({ orderKeyword: 'Enter a keyword or phrase' });
+    expect(errors).toMatchObject({ keyword: 'Enter a keyword or phrase' });
   });
 });

@@ -7,7 +7,8 @@ module.exports = [
       'wait for #case-title to be visible',
     ],
     notes: 'checks a11y of login and docket search',
-    url: 'http://localhost:1234/mock-login?token=irsSuperuser&path=/',
+    url:
+      'http://localhost:1234/mock-login?token=irsSuperuser&path=/&info=docket-search',
   },
   {
     actions: [
@@ -22,6 +23,7 @@ module.exports = [
       'wait for #case-title to be visible',
     ],
     notes: 'checks a11y of advanced docket search',
-    url: 'http://localhost:1234/mock-login?token=irsSuperuser&path=/',
+    url:
+      'http://localhost:1234/mock-login?token=irsSuperuser&path=/&info=advanced-search',
   },
 ];

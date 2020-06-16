@@ -11,13 +11,12 @@ import React from 'react';
 export const CaseDetailEdit = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
-    navigateToReviewSavedPetitionSequence:
-      sequences.navigateToReviewSavedPetitionSequence,
+    saveSavedCaseForLaterSequence: sequences.saveSavedCaseForLaterSequence,
     screenMetadata: state.screenMetadata,
   },
   function CaseDetailEdit({
     navigateBackSequence,
-    navigateToReviewSavedPetitionSequence,
+    saveSavedCaseForLaterSequence,
     screenMetadata,
   }) {
     return (
@@ -43,7 +42,7 @@ export const CaseDetailEdit = connect(
           id="submit-case"
           type="button"
           onClick={() => {
-            navigateToReviewSavedPetitionSequence();
+            saveSavedCaseForLaterSequence();
           }}
         >
           Review Petition

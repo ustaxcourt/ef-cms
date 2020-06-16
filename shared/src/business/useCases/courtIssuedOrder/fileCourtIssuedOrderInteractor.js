@@ -37,10 +37,69 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
+  const shouldScrapePDFContents = !documentMetadata.documentContents;
+
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
+  }
+
+  if (shouldScrapePDFContents) {
+    const { Body: pdfBuffer } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: primaryDocumentFileId,
+      })
+      .promise();
+
+    const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < pdfBuffer.length; ++i) {
+      view[i] = pdfBuffer[i];
+    }
+
+    // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
+    try {
+      const contents = await applicationContext
+        .getUtilities()
+        .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
+
+      if (contents) {
+        documentMetadata.documentContents = contents;
+      }
+    } catch (e) {
+      applicationContext.logger.info('Failed to parse PDF', e);
+      throw e;
+    }
+  }
+
+  if (documentMetadata.documentContents) {
+    const documentContentsId = applicationContext.getUniqueId();
+
+    const contentToStore = {
+      documentContents: documentMetadata.documentContents,
+      richText: documentMetadata.draftState
+        ? documentMetadata.draftState.richText
+        : undefined,
+    };
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(JSON.stringify(contentToStore)),
+      documentId: documentContentsId,
+      useTempBucket: true,
+    });
+
+    if (documentMetadata.draftState) {
+      delete documentMetadata.draftState.documentContents;
+      delete documentMetadata.draftState.richText;
+      delete documentMetadata.draftState.editorDelta;
+    }
+
+    delete documentMetadata.documentContents;
+    documentMetadata.documentContentsId = documentContentsId;
   }
 
   const documentEntity = new Document(

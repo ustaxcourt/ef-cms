@@ -46,18 +46,16 @@ export const StartCaseStep4 = connect(
       <>
         <Focus>
           <h2 className="focusable margin-bottom-105" tabIndex="-1">
-            4. How Do You Want This Case Handled?
+            4. What Case Procedure Should You Choose for Trial?
           </h2>
         </Focus>
-        <p className="margin-bottom-3 margin-top-0 required-statement">
-          *All fields required unless otherwise noted
-        </p>
+
         <p>
-          Tax laws allow you to file your case as a “small case,” which means
-          it’s handled a bit differently than a regular case. If you choose to
-          have your case processed as a small case, the Tax Court must approve
-          your choice. Generally, the Tax Court will agree with your request if
-          you qualify.
+          Tax law allows you to choose between a “regular“ or “small“ case
+          procedure if your case goes to trial. Each case procedure is handled
+          differently by the Court and has its own benefits. If your case
+          qualifies, you can choose whether to have it handled as a small case
+          or not.
         </p>
         <div className="usa-accordion start-a-case">
           <NonMobile>
@@ -98,14 +96,18 @@ export const StartCaseStep4 = connect(
           <div
             aria-hidden={!screenMetadata.showCaseDifference}
             className="usa-accordion__content"
+            hidden={!screenMetadata.showCaseDifference}
             id="case-difference-container"
           >
             <CaseDifferenceExplained />
           </div>
         </div>
+        <p className="margin-bottom-3 margin-top-0 required-statement">
+          *All fields required unless otherwise noted
+        </p>
         <div className="blue-container">
           <ProcedureType
-            legend="Select case procedure"
+            legend="Select case type"
             value={form.procedureType}
             onChange={e => {
               updateFormValueSequence({
@@ -122,8 +124,8 @@ export const StartCaseStep4 = connect(
           <>
             <h3 className="margin-top-4">U.S. Tax Court Trial Locations</h3>
             <p>
-              If your case goes to trial, this is where it will be held. Keep in
-              mind that the nearest location may not be in your state.
+              This is the place your case will be held if it goes to trial. Keep
+              in mind that the nearest location may not be in your state.
             </p>
             <div className="blue-container">
               <TrialCity

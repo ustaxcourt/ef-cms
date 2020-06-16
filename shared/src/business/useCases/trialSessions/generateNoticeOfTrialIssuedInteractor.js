@@ -1,4 +1,3 @@
-const { Case } = require('../../entities/cases/Case');
 const { formatNow } = require('../../utilities/DateHandler');
 
 /**
@@ -41,7 +40,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberWithSuffix } = caseDetail;
   const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
@@ -49,8 +48,9 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     .generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: Case.getCaseCaptionNames(caseCaption),
-        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+        caseCaption,
+        docketNumber,
+        docketNumberWithSuffix,
         trialInfo: {
           address1,
           address2,

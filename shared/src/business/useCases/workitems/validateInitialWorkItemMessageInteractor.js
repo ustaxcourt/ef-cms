@@ -1,3 +1,7 @@
+const {
+  InitialWorkItemMessage,
+} = require('../../entities/InitialWorkItemMessage');
+
 /**
  * validateInitialWorkItemMessageInteractor
  *
@@ -10,7 +14,7 @@ exports.validateInitialWorkItemMessageInteractor = ({
   applicationContext,
   message,
 }) => {
-  return new (applicationContext.getEntityConstructors().InitialWorkItemMessage)(
-    message,
-  ).getFormattedValidationErrors();
+  return new InitialWorkItemMessage(message, {
+    applicationContext,
+  }).getFormattedValidationErrors();
 };

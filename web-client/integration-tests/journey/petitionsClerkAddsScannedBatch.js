@@ -1,4 +1,7 @@
-export default (test, { scannerSourceIndex, scannerSourceName }) => {
+export const petitionsClerkAddsScannedBatch = (
+  test,
+  { scannerSourceIndex, scannerSourceName },
+) => {
   return it('Petitions clerk adds a batch of scanned documents', async () => {
     await test.runSequence('startScanSequence', {
       scannerSourceIndex,

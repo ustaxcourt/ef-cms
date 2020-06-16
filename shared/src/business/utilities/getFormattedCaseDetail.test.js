@@ -9,6 +9,7 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from './getFormattedCaseDetail';
+import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -21,7 +22,7 @@ const mockCaseDetailBase = {
   createdAt: new Date(),
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
-  irsSendDate: new Date(),
+  docketNumberWithSuffix: '123-45S',
   receivedAt: new Date(),
 };
 
@@ -257,24 +258,16 @@ describe('formatCase', () => {
   it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      caseCaption: 'Test Case Caption',
-      caseTitle:
-        'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
-      docketNumberSuffix: undefined,
+      caseCaption: 'Johnny Joe Jacobson, Petitioner',
       hasVerifiedIrsNotice: true,
       trialTime: 11,
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('receivedAtFormatted');
-    expect(result).toHaveProperty('irsDateFormatted');
-    expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
-    expect(result.datePetitionSentToIrsMessage).toEqual(
-      result.irsDateFormatted,
-    );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-    expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitle).toEqual('Johnny Joe Jacobson');
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
@@ -589,14 +582,23 @@ describe('formatDocument', () => {
     });
   });
 
-  it('should set the servedPartiesCode to `B` if status is served, servedAt date exists, and servedParties is an array', () => {
+  it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
     const results = formatDocument(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
-      status: 'served',
     });
     expect(results).toMatchObject({
       servedPartiesCode: 'B',
+    });
+  });
+
+  it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
+    const results = formatDocument(applicationContext, {
+      servedAt: '2019-03-27T21:53:00.297Z',
+      servedParties: [{ role: User.ROLES.irsSuperuser }],
+    });
+    expect(results).toMatchObject({
+      servedPartiesCode: 'R',
     });
   });
 });
@@ -809,37 +811,37 @@ describe('sortDocketRecords', () => {
     expect(result[0].index).toEqual('1');
   });
 
-  it('should evaluate sort items by index if sorted by date and item dates match', () => {
+  it('should sort items by index when item calendar dates match', () => {
     const result = sortDocketRecords(
       [
         {
           index: '2',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:02.000Z', // 8/2 @ 8:10:02PM EST
           },
         },
         {
           index: '1',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T00:10:00.000Z', // 8/2 @ 8:10:00PM EST
           },
         },
         {
           index: '4',
           record: {
-            filingDate: '2019-08-03',
+            filingDate: '2019-08-03T02:06:10.000Z', // 8/2 @ 10:10:00PM EST
           },
         },
         {
           index: '3',
           record: {
-            filingDate: '2019-08-03T00:06:44.000Z',
+            filingDate: '2019-08-03T06:06:44.000Z', // 8/3 @ 2:10:02AM EST
           },
         },
         {
           index: '5',
           record: {
-            filingDate: '2019-09-01T00:01:12.025Z',
+            filingDate: '2019-09-01T00:01:12.025Z', // 8/31 @ 8:01:12AM EST
           },
         },
       ],
@@ -847,6 +849,23 @@ describe('sortDocketRecords', () => {
     );
 
     expect(result[0].index).toEqual('1');
+    expect(result).toMatchObject([
+      {
+        index: '1',
+      },
+      {
+        index: '2',
+      },
+      {
+        index: '4',
+      },
+      {
+        index: '3',
+      },
+      {
+        index: '5',
+      },
+    ]);
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {

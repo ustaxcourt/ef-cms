@@ -35,20 +35,15 @@ export const StartCaseStep5 = connect(
       <>
         <Focus>
           <h2 id="file-a-document-header" tabIndex="-1">
-            5. Review Your Petition
+            5. Review Your Case
           </h2>
         </Focus>
-
-        <p>
-          You can’t edit your Petition once you submit it. Please make sure your
-          information appears the way you want it to.
-        </p>
-
         <Hint>
-          Don’t forget to check your PDF(s) to ensure all personal information
-          has been removed or redacted from all documents{' '}
-          <span className="semi-bold">EXCEPT</span> for the Statement of
-          Taxpayer Identification.
+          Please make sure your information is correct. Don’t forget to check
+          your PDF(s) to ensure all personal information has been removed or
+          redacted from all documents EXCEPT the Statement of Taxpayer
+          Identification Number (STIN). You will not be able to edit your case
+          once you submit it.{' '}
         </Hint>
 
         <div className="grid-container padding-x-0 create-case-review">
@@ -56,7 +51,7 @@ export const StartCaseStep5 = connect(
             <div className="tablet:grid-col-4 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
-                  <h3 className="underlined">About Your Petition</h3>
+                  <h3 className="underlined">About Your Case</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
@@ -180,8 +175,8 @@ export const StartCaseStep5 = connect(
                         <address aria-labelledby="primary-label">
                           {AddressDisplay(form.contactPrimary, constants, {
                             nameOverride:
-                              startCaseHelper.showCaseNameForPrimary &&
-                              startCaseHelper.caseName,
+                              startCaseHelper.showCaseTitleForPrimary &&
+                              startCaseHelper.caseTitle,
                           })}
                         </address>
                       )}
@@ -233,19 +228,31 @@ export const StartCaseStep5 = connect(
               </div>
               <div className="content-wrapper">
                 <ol className="numbered-list">
-                  <li>Double check that your Petition is timely.</li>
                   <li>
-                    Be sure you’ve removed or redacted all personal information
-                    from your documents.
-                  </li>
-                  <li>Don’t include any evidence with your Petition.</li>
-                  <li>
-                    Save your Petition and any IRS notices and upload them as a
-                    single PDF.
+                    Double check your IRS Notice to ensure your Petition is
+                    timely.
+                    <em>
+                      The Court must receive your case no later than 11:59 pm
+                      Eastern Time on the last date to file.
+                    </em>
                   </li>
                   <li>
-                    Confirm everything appears as you want it to—you can’t edit
-                    your Petition after you submit it.
+                    Be sure you have removed or redacted all personal
+                    information from your documents, with the exception of the
+                    STIN.
+                  </li>
+                  <li>
+                    Do not include any additional documents with your Petition,
+                    except for the IRS notice.{' '}
+                    <em>
+                      Documents that might be evidence can be submitted at a
+                      later time.
+                    </em>
+                  </li>
+                  <li>
+                    Confirm that all information being submitted appears as you
+                    want it to. You <strong>WILL NOT</strong> be able to edit
+                    your case after you submit.
                   </li>
                 </ol>
               </div>

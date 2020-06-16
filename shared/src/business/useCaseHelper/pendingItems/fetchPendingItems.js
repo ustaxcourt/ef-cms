@@ -1,7 +1,6 @@
-const AWS = require('aws-sdk');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
-const { get, pick } = require('lodash');
+const { pick } = require('lodash');
 
 /**
  * fetchPendingItems
@@ -22,7 +21,7 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
     'status',
   ];
 
-  const foundCases = [];
+  let foundCases;
 
   if (caseId) {
     const caseResult = await applicationContext
@@ -32,38 +31,15 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
         caseId,
       });
     const caseEntity = new Case(caseResult, { applicationContext });
-    foundCases.push(pick(caseEntity.validate().toRawObject(), source));
+    foundCases = [pick(caseEntity.validate().toRawObject(), source)];
   } else {
-    const searchParameters = {
-      body: {
-        _source: source,
-        query: {
-          bool: {
-            must: [{ match: { 'hasPendingItems.BOOL': true } }],
-          },
-        },
-        size: 5000,
-      },
-      index: 'efcms',
-    };
-
-    if (judge) {
-      searchParameters.body.query.bool.must.push({
-        match_phrase: { 'associatedJudge.S': judge },
+    foundCases = await applicationContext
+      .getPersistenceGateway()
+      .fetchPendingItems({
+        applicationContext,
+        judge,
+        source,
       });
-    }
-
-    const body = await applicationContext
-      .getSearchClient()
-      .search(searchParameters);
-
-    const hits = get(body, 'hits.hits');
-
-    if (hits && hits.length > 0) {
-      hits.forEach(hit => {
-        foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-      });
-    }
   }
 
   const foundDocuments = [];

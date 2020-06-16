@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export const petitionsClerkAddsDocketEntryFromOrder = test => {
   return it('Petitions Clerk adds a docket entry from the given order', async () => {
     let caseDetailFormatted;
 
@@ -41,8 +41,8 @@ export default test => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Entry added to Docket Record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {

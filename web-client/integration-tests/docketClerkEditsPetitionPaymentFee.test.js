@@ -1,6 +1,5 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 
@@ -15,6 +14,7 @@ describe('docket clerk edits a petition payment fee', () => {
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   loginAs(test, 'docketclerk');

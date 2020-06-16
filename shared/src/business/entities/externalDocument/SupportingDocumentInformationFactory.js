@@ -5,9 +5,11 @@ const {
 const {
   MAX_FILE_SIZE_BYTES,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
+const joiStrictTimestamp = getTimestampSchema();
 /**
  *
  * @constructor
@@ -41,7 +43,7 @@ SupportingDocumentInformationFactory.get = (
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joi.date().iso().max('now'),
+    certificateOfServiceDate: joiStrictTimestamp.max('now'),
     supportingDocumentFile: joi.object(),
     supportingDocumentFileSize: joi
       .number()
@@ -95,12 +97,7 @@ SupportingDocumentInformationFactory.get = (
     makeRequired('supportingDocumentFile');
   }
 
-  joiValidationDecorator(
-    entityConstructor,
-    schema,
-    undefined,
-    VALIDATION_ERROR_MESSAGES,
-  );
+  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new entityConstructor(documentMetadata);
 };

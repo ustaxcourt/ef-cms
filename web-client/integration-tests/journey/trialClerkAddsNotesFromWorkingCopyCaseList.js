@@ -6,7 +6,7 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export default test => {
+export const trialClerkAddsNotesFromWorkingCopyCaseList = test => {
   return it('Trial Clerk adds case notes from working copy case list', async () => {
     await test.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: test.trialSessionId,
@@ -24,8 +24,8 @@ export default test => {
     });
 
     expect(test.getState('modal')).toEqual({
-      caseCaptionNames: 'Mona Schultz',
       caseId,
+      caseTitle: 'Mona Schultz',
       notes: undefined,
       showModal: 'AddEditUserCaseNoteModal',
     });
@@ -36,8 +36,8 @@ export default test => {
     });
 
     expect(test.getState('modal')).toEqual({
-      caseCaptionNames: 'Mona Schultz',
       caseId,
+      caseTitle: 'Mona Schultz',
       notes: 'this is a note added from the modal',
       showModal: 'AddEditUserCaseNoteModal',
     });

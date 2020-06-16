@@ -95,9 +95,6 @@ CaseExternal.commonRequirements = {
 joiValidationDecorator(
   CaseExternal,
   joi.object().keys(CaseExternal.commonRequirements),
-  function () {
-    return !this.getFormattedValidationErrors();
-  },
   CaseExternal.VALIDATION_ERROR_MESSAGES,
 );
 

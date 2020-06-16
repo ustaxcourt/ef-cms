@@ -7,20 +7,18 @@ const applicationContext = createApplicationContext({});
 
 describe('generateNoticeOfTrialIssuedTemplate', () => {
   const caseDetail = {
-    caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
+    caseCaption: 'Test Case Caption, Petitioner',
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '123-45S',
   };
 
   it('Returns HTML with the given case and trial session data', async () => {
     const result = await generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
-        docketNumberWithSuffix:
-          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        caseCaption: caseDetail.caseCaption,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         trialInfo: {
           address1: '123 Some Street',
           address2: 'Courtroom 2',

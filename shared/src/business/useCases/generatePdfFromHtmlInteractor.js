@@ -1,6 +1,5 @@
 /**
  * generatePdfFromHtmlInteractor
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -38,37 +37,24 @@ exports.generatePdfFromHtmlInteractor = async ({
             </div>`;
 
     const headerTemplate = `
-      <!doctype html>
-      <html>
-        <head>
-        </head>
-        <body style="margin: 0px;">
           <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${headerContent}
           </div>
-        </body>
       </html>
     `;
 
     const footerTemplate = overwriteFooter
       ? `${footerHtml ? footerHtml : ''}`
       : `
-      <!doctype html>
-      <html>
-        <head>
-        </head>
-        <body style="margin: 0px;">
           <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${footerHtml ? footerHtml : ''}
-          </div>
-        </body>
-      </html>`;
+          </div>`;
 
     result = await page.pdf({
       displayHeaderFooter,
-      footerTemplate: footerTemplate,
+      footerTemplate,
       format: 'Letter',
-      headerTemplate: headerTemplate,
+      headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',

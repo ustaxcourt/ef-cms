@@ -34,11 +34,10 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
       .map(blockedCase => {
         return {
           ...setFormattedBlockDates(blockedCase),
-          caseName: applicationContext.getCaseCaptionNames(
+          caseTitle: applicationContext.getCaseTitle(
             blockedCase.caseCaption || '',
           ),
-          docketNumberWithSuffix:
-            blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
+          docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
         };
       });
   }

@@ -70,12 +70,13 @@ const aggregateCommonQueryParams = ({
     });
 
     nonExactMatchesQuery.push({
-      bool: {
-        should: [
-          { match: { 'contactPrimary.M.name.S': petitionerName } },
-          { match: { 'contactPrimary.M.secondaryName.S': petitionerName } },
-          { match: { 'contactSecondary.M.name.S': petitionerName } },
+      query_string: {
+        fields: [
+          'contactPrimary.M.name.S',
+          'contactPrimary.M.secondaryName.S',
+          'contactSecondary.M.name.S',
         ],
+        query: `*${petitionerName}*`,
       },
     });
   }
@@ -130,6 +131,11 @@ const aggregateCommonQueryParams = ({
       },
     });
   }
+
+  commonQuery.push(
+    { match: { 'pk.S': 'case|' } },
+    { match: { 'sk.S': 'case|' } },
+  );
 
   return {
     commonQuery,

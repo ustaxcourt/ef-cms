@@ -1,4 +1,4 @@
-import { forEach, isEmpty, set } from 'lodash';
+import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -126,6 +126,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/petition-qc..',
+      ifHasAccess(docketNumber => {
+        const { tab } = route.query();
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+          tab,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
@@ -135,32 +147,6 @@ const router = {
           docketNumber,
           documentId,
         });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
-    );
-
-    registerRoute(
-      '/case-detail/*/documents/*/edit-saved..',
-      ifHasAccess((docketNumber, documentId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(
-            docketNumber,
-          )} Edit saved document details`,
-        );
-
-        if (!isEmpty(app.getState('form'))) {
-          const { tab } = route.query();
-
-          return app.getSequence('gotoEditSavedPetitionSequence')({
-            docketNumber,
-            documentId,
-            tab,
-          });
-        } else {
-          return app.getSequence('gotoDocumentDetailSequence')({
-            docketNumber,
-            documentId,
-          });
-        }
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
@@ -441,6 +427,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/upload-correspondence',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add Correspondence`,
+        );
+        return app.getSequence('gotoUploadCorrespondenceDocumentSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
@@ -566,9 +564,11 @@ const router = {
 
     registerRoute(
       '/users/edit-practitioner/*',
-      ifHasAccess(userId => {
+      ifHasAccess(barNumber => {
         setPageTitle('EF-CMS User Management - Edit Practitioner User');
-        return app.getSequence('gotoEditPractitionerUserSequence')({ userId });
+        return app.getSequence('gotoEditPractitionerUserSequence')({
+          barNumber,
+        });
       }),
     );
 
@@ -691,14 +691,13 @@ const router = {
     );
 
     registerRoute(
-      '/print-preview/*',
+      '/print-paper-service/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        return app.getSequence('gotoPrintPreviewSequence')({
+        return app.getSequence('gotoPrintPaperServiceSequence')({
           alertWarning: {
             message:
-              'This case has parties receiving paper service. Print and mail all paper service documents below.',
-            title: 'This document has been electronically served',
+              'Document electronically served. Print and mail all paper service documents now.',
           },
           docketNumber,
         });
@@ -796,10 +795,10 @@ const router = {
     );
 
     registerRoute(
-      'file-a-petition/review-petition',
+      '/file-a-petition/success',
       ifHasAccess(() => {
-        setPageTitle('Review Petition');
-        return app.getSequence('gotoReviewPetitionFromPaperSequence')();
+        setPageTitle('Petition Filed Successfully');
+        return app.getSequence('gotoFilePetitionSuccessSequence')();
       }),
     );
 

@@ -21,9 +21,5 @@ exports.generateDocketRecordPdfInteractor = ({
       docketRecordSort,
     },
     endpoint: '/api/docket-record-pdf',
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

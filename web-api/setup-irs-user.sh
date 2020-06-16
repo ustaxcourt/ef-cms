@@ -30,38 +30,6 @@ generate_post_data() {
 EOF
 }
 
-createIrsAccount() {
-  email=$1
-  role=$2
-  section=$3
-  name=$4
-
-  curl --header "Content-Type: application/json" \
-    --header "Authorization: Bearer ${adminToken}" \
-    --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}")" \
-      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
-
-  response=$(aws cognito-idp admin-initiate-auth \
-    --user-pool-id "${USER_POOL_ID}" \
-    --client-id "${CLIENT_ID}" \
-    --region "${REGION}" \
-    --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"')
-
-  session=$(echo "${response}" | jq -r ".Session")
-
-  if [ "$session" != "null" ]; then
-    aws cognito-idp admin-respond-to-auth-challenge \
-      --user-pool-id  "${USER_POOL_ID}" \
-      --client-id "${CLIENT_ID}" \
-      --region "${REGION}" \
-      --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session="${session}"
-  fi
-}
-
 response=$(aws cognito-idp admin-initiate-auth \
   --user-pool-id "${USER_POOL_ID}" \
   --client-id "${CLIENT_ID}" \
@@ -70,4 +38,8 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-createIrsAccount "service.agent.test@irs.gov" "irsSuperuser" "irsSuperuser" "IRS Superuser"
+curl --header "Content-Type: application/json" \
+  --header "Authorization: Bearer ${adminToken}" \
+  --request POST \
+  --data "$(generate_post_data "service.agent.test@irs.gov" "irsSuperuser" "irsSuperuser" "IRS Superuser")" \
+    "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"

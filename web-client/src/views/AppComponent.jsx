@@ -14,7 +14,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
-import { CreatePractitionerUser } from './CreatePractitionerUser';
+import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -27,12 +27,13 @@ import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
-import { EditPractitionerUser } from './EditPractitionerUser';
+import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
+import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
@@ -41,14 +42,15 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { PendingReport } from './PendingReport/PendingReport';
-import { PractitionerDetail } from './PractitionerDetail';
+import { PetitionQc } from './PetitionQc/PetitionQc';
+import { PractitionerDetail } from './Practitioners/PractitionerDetail';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
-import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
+import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
+import { PrintPaperService } from './PrintPaperService';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
-import { ReviewPetitionFromPaper } from './StartCaseInternal/ReviewPetitionFromPaper';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -63,6 +65,7 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
+import { UploadCorrespondenceDocument } from './Correspondence/UploadCorrespondenceDocument';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -103,20 +106,22 @@ const pages = {
   EditUploadCourtIssuedDocument,
   Error,
   FileDocumentWizard,
+  FilePetitionSuccess,
   IdleLogout,
   Interstitial,
   Loading,
   LogIn,
   Messages,
   PendingReport,
+  PetitionQc,
   PractitionerDetail,
   PrimaryContactEdit,
-  PrintPreview,
+  PrintPaperPetitionReceipt,
+  PrintPaperService,
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
-  ReviewPetitionFromPaper,
   ReviewSavedPetition,
   SecondaryContactEdit,
   SelectDocumentType,
@@ -130,6 +135,7 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UploadCorrespondenceDocument,
   UploadCourtIssuedDocument,
   UserContactEdit,
 };
@@ -148,7 +154,7 @@ export const AppComponent = connect(
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
       if (header) header.focus();
-      return false;
+      return;
     };
 
     useEffect(() => {

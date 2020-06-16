@@ -6,8 +6,10 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default test => {
+export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
+    const practitionerBarNumber = test.barNumber || 'PT1234';
+
     expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
 
     await test.runSequence('openAddPrivatePractitionerModalSequence');
@@ -18,7 +20,7 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'practitionerSearch',
-      value: 'PT1234',
+      value: practitionerBarNumber,
     });
 
     await test.runSequence('openAddPrivatePractitionerModalSequence');
@@ -59,39 +61,45 @@ export default test => {
     );
 
     //add a second practitioner
-    await test.runSequence('updateFormValueSequence', {
-      key: 'practitionerSearch',
-      value: 'PT5432',
-    });
-    await test.runSequence('openAddPrivatePractitionerModalSequence');
+    if (!skipSecondary) {
+      await test.runSequence('updateFormValueSequence', {
+        key: 'practitionerSearch',
+        value: 'PT5432',
+      });
+      await test.runSequence('openAddPrivatePractitionerModalSequence');
 
-    expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
-    practitionerMatch = test.getState('modal.practitionerMatches.0');
-    expect(test.getState('modal.user.userId')).toEqual(
-      practitionerMatch.userId,
-    );
+      expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
+      practitionerMatch = test.getState('modal.practitionerMatches.0');
+      expect(test.getState('modal.user.userId')).toEqual(
+        practitionerMatch.userId,
+      );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'representingSecondary',
-      value: true,
-    });
+      await test.runSequence('updateModalValueSequence', {
+        key: 'representingSecondary',
+        value: true,
+      });
 
-    await test.runSequence('associatePrivatePractitionerWithCaseSequence');
-    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
-    expect(
-      test.getState('caseDetail.privatePractitioners.1.representingSecondary'),
-    ).toEqual(true);
-    expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
-      practitionerMatch.name,
-    );
+      await test.runSequence('associatePrivatePractitionerWithCaseSequence');
+      expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(
+        2,
+      );
+      expect(
+        test.getState(
+          'caseDetail.privatePractitioners.1.representingSecondary',
+        ),
+      ).toEqual(true);
+      expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
+        practitionerMatch.name,
+      );
 
-    formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+      formatted = runCompute(formattedCaseDetail, {
+        state: test.getState(),
+      });
 
-    expect(formatted.privatePractitioners.length).toEqual(2);
-    expect(formatted.privatePractitioners[1].formattedName).toEqual(
-      `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
-    );
+      expect(formatted.privatePractitioners.length).toEqual(2);
+      expect(formatted.privatePractitioners[1].formattedName).toEqual(
+        `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
+      );
+    }
   });
 };

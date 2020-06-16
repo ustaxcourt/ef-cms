@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   InitialWorkItemMessage,
 } = require('../../entities/InitialWorkItemMessage');
 const {
@@ -10,11 +13,7 @@ const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
 describe('validateInitialWorkItemMessageInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
     const errors = validateInitialWorkItemMessageInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          InitialWorkItemMessage,
-        }),
-      },
+      applicationContext,
       message: {},
     });
 
@@ -27,11 +26,7 @@ describe('validateInitialWorkItemMessageInteractor', () => {
 
   it('returns no errors when all properties are defined', () => {
     const errors = validateInitialWorkItemMessageInteractor({
-      applicationContext: {
-        getEntityConstructors: () => ({
-          InitialWorkItemMessage,
-        }),
-      },
+      applicationContext,
       message: {
         assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'hello world',

@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export default test => {
+export const petitionsClerkViewsUnreadMessage = test => {
   it('Views an unread message marking it read', async () => {
     const workQueue = await runCompute(formattedWorkQueue, {
       state: test.getState(),

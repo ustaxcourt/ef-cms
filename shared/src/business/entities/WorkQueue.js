@@ -2,7 +2,6 @@ const { sortBy } = require('lodash');
 
 exports.ADC_SECTION = 'adc';
 exports.ADMISSIONS_SECTION = 'admissions';
-exports.CALENDAR_SECTION = 'calendar';
 exports.CHAMBERS_SECTION = 'chambers';
 exports.CLERK_OF_COURT_SECTION = 'clerkofcourt';
 exports.DOCKET_SECTION = 'docket';
@@ -44,7 +43,6 @@ exports.WELLS_CHAMBERS_SECTION = 'wellsChambers';
 exports.SECTIONS = sortBy([
   exports.ADC_SECTION,
   exports.ADMISSIONS_SECTION,
-  exports.CALENDAR_SECTION,
   exports.CHAMBERS_SECTION,
   exports.CLERK_OF_COURT_SECTION,
   exports.DOCKET_SECTION,

@@ -10,7 +10,7 @@ describe('generateSignedDocument', () => {
   const testOutputPath = path.join(__dirname, '../../../test-output/');
 
   const testPdfDocBytes = () => {
-    return fs.readFileSync(testAssetsPath + 'sample.pdf');
+    return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
   };
 
   let testDoc;

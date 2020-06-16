@@ -1,4 +1,4 @@
-export default (test, overrides = {}) => {
+export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
   return it('Search for cases by meta data', async () => {
     const queryParams = {
       countryType: 'domestic',
@@ -10,7 +10,7 @@ export default (test, overrides = {}) => {
 
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
 
-    await test.runSequence('submitPublicAdvancedSearchSequence', {});
+    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
     const searchResults = test.getState('searchResults');
     expect(searchResults.length).toBeGreaterThan(0);

@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   fileCourtIssuedOrderInteractor,
@@ -11,6 +12,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
+    contactPrimary: {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: 'domestic',
+      email: 'fieri@example.com',
+      name: 'Guy Fieri',
+      phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
+    },
     createdAt: '',
     docketNumber: '45678-18',
     docketRecord: [
@@ -157,5 +168,94 @@ describe('fileCourtIssuedOrderInteractor', () => {
       .calls[0][0].caseToUpdate.documents[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
+  });
+
+  it('should store documentMetadata.documentContents in S3 and delete from data sent to persistence', async () => {
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        draftState: {
+          documentContents: 'I am some document contents',
+          editorDelta: 'I am some document contents',
+          richText: 'I am some document contents',
+        },
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[3].documentContents,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[3],
+    ).toMatchObject({
+      documentContentsId: expect.anything(),
+      draftState: {},
+    });
+  });
+
+  it('should parse pdf contents', async () => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: Buffer.from(getFakeFile()),
+      }),
+    });
+
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'TC Opinion',
+        documentType: 'TCOP - T.C. Opinion',
+        eventCode: 'TCOP',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+        .pdfBuffer instanceof ArrayBuffer,
+    ).toEqual(true);
+
+    expect(
+      Buffer.from(
+        applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
+          .pdfBuffer,
+      )
+        .toString()
+        .indexOf('%PDF'),
+    ).not.toEqual(-1);
+  });
+
+  it('should throw an error if fails to parse pdf', async () => {
+    applicationContext
+      .getUtilities()
+      .scrapePdfContents.mockImplementation(() => {
+        throw new Error('error parsing pdf');
+      });
+
+    await expect(
+      fileCourtIssuedOrderInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          docketNumber: '45678-18',
+          documentTitle: 'TC Opinion',
+          documentType: 'TCOP - T.C. Opinion',
+          eventCode: 'TCOP',
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('error parsing pdf');
   });
 });

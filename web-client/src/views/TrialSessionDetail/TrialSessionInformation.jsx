@@ -80,11 +80,11 @@ export const TrialSessionInformation = connect(
             </div>
           </div>
         </div>
-        <div className="trial-session-details margin-bottom-4">
+        <div className="margin-bottom-4">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap margin-bottom-2">
               <div className="grid-col-6">
-                <div className="card">
+                <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Details</h3>
                     <div className="grid-container padding-x-0">
@@ -146,7 +146,7 @@ export const TrialSessionInformation = connect(
                 </div>
               </div>
               <div className="grid-col-6">
-                <div className="card">
+                <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Assignments</h3>
                     <div className="grid-container padding-x-0">
@@ -194,7 +194,7 @@ export const TrialSessionInformation = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <div className="card trial-session-card">
+                <div className="card trial-session-card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">Courthouse location</h3>
                     {formattedTrialSessionDetails.noLocationEntered && (
@@ -216,7 +216,7 @@ export const TrialSessionInformation = connect(
                 </div>
               </div>
               <div className="grid-col-6">
-                <div className="card trial-session-card">
+                <div className="card trial-session-card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">Notes</h3>
                     {formattedTrialSessionDetails.notes}

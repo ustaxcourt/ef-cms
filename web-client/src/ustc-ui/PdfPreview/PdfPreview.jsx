@@ -1,5 +1,5 @@
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 
 import React, { useEffect } from 'react';
 
@@ -20,25 +20,20 @@ const PdfPreviewComponent = connect(
     }, []);
 
     return (
-      !process.env.CI && (
-        <iframe
-          id="pdf-preview-iframe"
-          src={pdfPreviewUrl}
-          title="PDF Preview"
-        />
-      )
+      <iframe id="pdf-preview-iframe" src={pdfPreviewUrl} title="PDF Preview" />
     );
   },
 );
 
 export const PdfPreview = connect(
   {
+    noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ pdfPreviewUrl }) {
+  function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
-      return '';
+      return noDocumentText ? noDocumentText : '';
     }
 
     return <PdfPreviewComponent />;

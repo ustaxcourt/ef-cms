@@ -1,4 +1,5 @@
-const { Case } = require('../../entities/cases/Case');
+const { formatDateString, formatNow } = require('../../utilities/DateHandler');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
  * generateStandingPretrialOrderInteractor
@@ -28,32 +29,25 @@ exports.generateStandingPretrialOrderInteractor = async ({
       docketNumber,
     });
 
-  const { city, judge, startDate, startTime, state } = trialSession;
+  const { startDate } = trialSession;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const fullStartDate = formatDateString(startDate, 'dddd, MMMM D, YYYY');
+  const footerDate = formatNow('MMDDYYYY');
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateStandingPretrialOrderTemplate({
+  return await applicationContext
+    .getDocumentGenerators()
+    .standingPretrialOrder({
       applicationContext,
-      content: {
-        caption: Case.getCaseCaptionNames(caseCaption),
-        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+      data: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
+        footerDate,
         trialInfo: {
-          city,
-          judge,
-          startDate,
-          startTime,
-          state,
+          ...trialSession,
+          fullStartDate,
         },
       },
     });
-
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
-    applicationContext,
-    contentHtml,
-    headerHtml:
-      '<div style="text-align:center;"><span class="pageNumber"></span></div>',
-    overwriteHeader: true,
-  });
 };

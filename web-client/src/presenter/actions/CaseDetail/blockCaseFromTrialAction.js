@@ -22,9 +22,7 @@ export const blockCaseFromTrialAction = async ({ applicationContext, get }) => {
 
   return {
     alertSuccess: {
-      message:
-        'To set this case for trial, remove the block from the Trial Information section.',
-      title: 'This case is now blocked from being set for trial',
+      message: 'Case blocked from being set for trial.',
     },
     caseDetail,
   };

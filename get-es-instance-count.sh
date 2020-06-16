@@ -4,8 +4,10 @@ BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
   echo "1"
-elif [[ $BRANCH == 'experimental' ]] ; then
-  echo "1"  
+elif [[ $BRANCH == 'experimental1' ]] ; then
+  echo "1"
+elif [[ $BRANCH == 'experimental2' ]] ; then
+  echo "1"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "1"
 elif [[ $BRANCH == 'staging' ]] ; then

@@ -14,6 +14,7 @@ export const BaseModal = connect(
   function BaseModal({
     children,
     className,
+    displaySuccessBanner = false,
     extraClassNames,
     onBlur,
     preventCancelOnBlur,
@@ -38,7 +39,7 @@ export const BaseModal = connect(
 
     const blurDialog = event => {
       if (preventCancelOnBlur) {
-        return false;
+        return;
       }
       return runBlurSequence(event);
     };
@@ -93,6 +94,7 @@ export const BaseModal = connect(
               aria-modal="true"
               className={classNames(
                 'modal-dialog padding-205',
+                displaySuccessBanner && 'modal-success',
                 extraClassNames,
               )}
               role="status"

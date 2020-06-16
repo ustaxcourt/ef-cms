@@ -137,9 +137,9 @@ exports.fileExternalDocumentInteractor = async ({
           caseId: caseId,
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
-          caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
           docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
           document: {
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,

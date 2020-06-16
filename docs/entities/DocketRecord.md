@@ -37,6 +37,12 @@ Restricted
 
 ##### Can be null.
 
+### entityName
+
+> `string` | required
+
+##### Can be DocketRecord.
+
 ### eventCode
 
 
@@ -407,6 +413,11 @@ Restricted
 Date that this Docket Record item was filed.
 
 > `date` | required
+
+##### Maximum date
+
+
+`now`
 
 ### index
 

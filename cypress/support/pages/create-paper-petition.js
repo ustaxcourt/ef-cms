@@ -17,12 +17,10 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('#preferred-trial-city')
     .scrollIntoView()
     .select('Birmingham, Alabama');
-  cy.get('label[for="payment-status-paid"]').click();
+  cy.get('label[for="payment-status-unpaid"]').click();
 
   cy.get('#tab-irs-notice').click();
-  cy.get('#case-type')
-    .scrollIntoView()
-    .select('Deficiency');
+  cy.get('#case-type').scrollIntoView().select('Deficiency');
   cy.get('#has-irs-verified-notice-no').click();
 
   cy.get('#upload-mode-upload').click();

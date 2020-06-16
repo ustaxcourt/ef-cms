@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
-export default (test, fakeFile) => {
+export const practitionerCreatesNewCase = (test, fakeFile) => {
   return it('Practitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -185,15 +185,20 @@ export default (test, fakeFile) => {
       value: 'Whistleblower',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '5',
+    });
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('alertSuccess')).toEqual({
-      message:
-        'Your receipt will appear under the Case Information tab in your case once your petition is processed by the court.',
-      title: 'Your petition has been successfully submitted.',
-    });
+    expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await test.runSequence('gotoDashboardSequence');
+
+    expect(test.getState('currentPage')).toBe('DashboardPractitioner');
 
     test.docketNumber = test.getState('cases.0.docketNumber');
   });

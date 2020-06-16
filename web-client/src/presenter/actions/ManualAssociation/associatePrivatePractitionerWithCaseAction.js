@@ -33,8 +33,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view Petitioner Counsel details below.',
-      title: 'Petitioner Counsel has been added to this case.',
+      message: 'Petitioner counsel added to case.',
     },
   });
 };

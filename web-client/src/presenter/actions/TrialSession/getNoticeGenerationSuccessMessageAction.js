@@ -13,15 +13,13 @@ export const getNoticeGenerationSuccessMessageAction = ({ get }) => {
   if (currentPage === 'CaseDetailInternal') {
     return {
       alertSuccess: {
-        message: 'Trial details are visible under Trial Information.',
-        title: 'This case has been set for trial',
+        message: 'Case set for trial.',
       },
     };
   } else {
     return {
       alertSuccess: {
-        message: 'You can view all cases set for this trial session below.',
-        title: 'Eligible cases have been set for this trial session.',
+        message: 'Eligible cases set for trial.',
       },
     };
   }

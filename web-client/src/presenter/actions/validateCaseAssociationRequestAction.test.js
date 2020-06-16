@@ -14,7 +14,7 @@ describe('validateCaseAssociationRequest', () => {
 
     mockCaseAssociationRequest = {
       certificateOfService: true,
-      certificateOfServiceDate: '1212-12-12',
+      certificateOfServiceDate: '1987-08-06T07:53.009Z',
       documentTitle: 'Entry of Appearance',
       documentType: 'Entry of Appearance',
       eventCode: '123',

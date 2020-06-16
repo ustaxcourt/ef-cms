@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkAddsCaseNote = test => {
   return it('petitions clerk adds procedural note to a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

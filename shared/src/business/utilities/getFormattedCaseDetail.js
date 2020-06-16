@@ -1,11 +1,12 @@
 const {
   calculateISODate,
+  calendarDatesCompared,
   createISODateString,
-  dateStringsCompared,
 } = require('./DateHandler');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
+const { User } = require('../entities/User');
 
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
@@ -37,7 +38,7 @@ const formatDocument = (applicationContext, document) => {
   }
 
   result.showServedAt = !!result.servedAt;
-  result.isStatusServed = result.status === 'served';
+  result.isStatusServed = !!result.servedAt;
   result.isPetition =
     result.documentType === 'Petition' || result.eventCode === 'P';
 
@@ -66,13 +67,15 @@ const formatDocument = (applicationContext, document) => {
     }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
-  if (
-    result.isStatusServed &&
-    !!result.servedAt &&
-    result.servedParties &&
-    result.servedParties.length > 0
-  ) {
-    result.servedPartiesCode = 'B';
+  if (result.servedParties && result.servedParties.length > 0) {
+    if (
+      result.servedParties.length === 1 &&
+      result.servedParties[0].role === User.ROLES.irsSuperuser
+    ) {
+      result.servedPartiesCode = 'R';
+    } else {
+      result.servedPartiesCode = 'B';
+    }
   } else {
     // TODO: Address Respondent and Petitioner codes
     result.servedPartiesCode = '';
@@ -286,13 +289,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.receivedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
-  result.irsDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.irsSendDate, 'DATE_TIME');
-
-  result.docketNumberWithSuffix = `${result.docketNumber}${
-    result.docketNumberSuffix || ''
-  }`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? applicationContext
@@ -300,16 +296,14 @@ const formatCase = (applicationContext, caseDetail) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = result.irsDateFormatted;
+  result.shouldShowIrsNoticeDate = result.hasVerifiedIrsNotice;
 
-  result.shouldShowIrsNoticeDate =
-    result.hasVerifiedIrsNotice ||
-    ((result.hasVerifiedIrsNotice === null ||
-      result.hasVerifiedIrsNotice === undefined) &&
-      result.hasIrsNotice);
-
-  result.caseName = applicationContext.getCaseCaptionNames(
+  result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
+  );
+
+  result.showCaseTitleForPrimary = !(
+    caseDetail.contactSecondary && caseDetail.contactSecondary.name
   );
 
   result.formattedPreferredTrialCity =
@@ -388,6 +382,7 @@ const formatCase = (applicationContext, caseDetail) => {
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadCaseId;
+  result.irsSendDate = caseEntity.getIrsSendDate();
 
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(
@@ -403,7 +398,7 @@ const formatCase = (applicationContext, caseDetail) => {
 const getDocketRecordSortFunc = sortBy => {
   const byIndex = (a, b) => a.index - b.index;
   const byDate = (a, b) => {
-    const compared = dateStringsCompared(
+    const compared = calendarDatesCompared(
       a.record.filingDate,
       b.record.filingDate,
     );

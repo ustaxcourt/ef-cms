@@ -1,6 +1,6 @@
 resource "aws_elasticsearch_domain" "efcms-search" {
   domain_name           = "efcms-search-${var.environment}"
-  elasticsearch_version = "7.1"
+  elasticsearch_version = "7.4"
 
   cluster_config {
     instance_type = "t2.small.elasticsearch"

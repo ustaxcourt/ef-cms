@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default (test, trialLocation) => {
+export const petitionsClerkBlocksCase = (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -21,8 +21,8 @@ export default (test, trialLocation) => {
 
     await test.runSequence('blockCaseFromTrialSequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'This case is now blocked from being set for trial',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Case blocked from being set for trial.',
     );
     expect(test.getState('caseDetail').blocked).toBeTruthy();
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');

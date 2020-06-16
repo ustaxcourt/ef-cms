@@ -32,8 +32,7 @@ export const updateCaseDeadlineAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view it in the deadlines section below.',
-      title: 'Your deadline was updated successfully.',
+      message: 'Deadline updated.',
     },
     caseDeadline: updateCaseDeadlineResult,
   });
