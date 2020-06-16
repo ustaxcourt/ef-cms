@@ -75,15 +75,13 @@ describe('InvalidEntityError', () => {
   let error;
 
   beforeEach(() => {
-    error = new InvalidEntityError();
+    error = new InvalidEntityError('TestEntity', 123, 'Test message');
   });
 
-  it('should set a status code of 422', () => {
-    expect(error.statusCode).toEqual(422);
-  });
-
-  it('should set the message', () => {
-    expect(error.message).toEqual('entity is invalid or invalid for operation');
+  it('should set the message which includes the entityName and failing ids', () => {
+    expect(error.message).toEqual(
+      'The TestEntity entity was invalid. Test message. 123',
+    );
   });
 });
 

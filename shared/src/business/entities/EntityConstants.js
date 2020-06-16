@@ -1,6 +1,7 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
+const { sortBy } = require('lodash');
 
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
@@ -469,32 +470,277 @@ const ORDER_TYPES = [
   },
 ];
 
+const COMMON_CITIES = [
+  { city: 'Birmingham', state: 'Alabama' },
+  { city: 'Mobile', state: 'Alabama' },
+  { city: 'Anchorage', state: 'Alaska' },
+  { city: 'Phoenix', state: 'Arizona' },
+  { city: 'Little Rock', state: 'Arkansas' },
+  { city: 'Los Angeles', state: 'California' },
+  { city: 'San Diego', state: 'California' },
+  { city: 'San Francisco', state: 'California' },
+  { city: 'Denver', state: 'Colorado' },
+  { city: 'Hartford', state: 'Connecticut' },
+  { city: 'Washington', state: 'District of Columbia' },
+  { city: 'Jacksonville', state: 'Florida' },
+  { city: 'Miami', state: 'Florida' },
+  { city: 'Tampa', state: 'Florida' },
+  { city: 'Atlanta', state: 'Georgia' },
+  { city: 'Honolulu', state: 'Hawaii' },
+  { city: 'Boise', state: 'Idaho' },
+  { city: 'Chicago', state: 'Illinois' },
+  { city: 'Indianapolis', state: 'Indiana' },
+  { city: 'Des Moines', state: 'Iowa' },
+  { city: 'Louisville', state: 'Kentucky' },
+  { city: 'New Orleans', state: 'Louisiana' },
+  { city: 'Baltimore', state: 'Maryland' },
+  { city: 'Boston', state: 'Massachusetts' },
+  { city: 'Detroit', state: 'Michigan' },
+  { city: 'St. Paul', state: 'Minnesota' },
+  { city: 'Jackson', state: 'Mississippi' },
+  { city: 'Kansas City', state: 'Missouri' },
+  { city: 'St. Louis', state: 'Missouri' },
+  { city: 'Helena', state: 'Montana' },
+  { city: 'Omaha', state: 'Nebraska' },
+  { city: 'Las Vegas', state: 'Nevada' },
+  { city: 'Reno', state: 'Nevada' },
+  { city: 'Albuquerque', state: 'New Mexico' },
+  { city: 'Buffalo', state: 'New York' },
+  { city: 'New York City', state: 'New York' },
+  { city: 'Winston-Salem', state: 'North Carolina' },
+  { city: 'Cincinnati', state: 'Ohio' },
+  { city: 'Cleveland', state: 'Ohio' },
+  { city: 'Columbus', state: 'Ohio' },
+  { city: 'Oklahoma City', state: 'Oklahoma' },
+  { city: 'Portland', state: 'Oregon' },
+  { city: 'Philadelphia', state: 'Pennsylvania' },
+  { city: 'Pittsburgh', state: 'Pennsylvania' },
+  { city: 'Columbia', state: 'South Carolina' },
+  { city: 'Knoxville', state: 'Tennessee' },
+  { city: 'Memphis', state: 'Tennessee' },
+  { city: 'Nashville', state: 'Tennessee' },
+  { city: 'Dallas', state: 'Texas' },
+  { city: 'El Paso', state: 'Texas' },
+  { city: 'Houston', state: 'Texas' },
+  { city: 'Lubbock', state: 'Texas' },
+  { city: 'San Antonio', state: 'Texas' },
+  { city: 'Salt Lake City', state: 'Utah' },
+  { city: 'Richmond', state: 'Virginia' },
+  { city: 'Seattle', state: 'Washington' },
+  { city: 'Spokane', state: 'Washington' },
+  { city: 'Charleston', state: 'West Virginia' },
+  { city: 'Milwaukee', state: 'Wisconsin' },
+];
+
+const SMALL_CITIES = [
+  { city: 'Fresno', state: 'California' },
+  { city: 'Tallahassee', state: 'Florida' },
+  { city: 'Pocatello', state: 'Idaho' },
+  { city: 'Peoria', state: 'Illinois' },
+  { city: 'Wichita', state: 'Kansas' },
+  { city: 'Shreveport', state: 'Louisiana' },
+  { city: 'Portland', state: 'Maine' },
+  { city: 'Billings', state: 'Montana' },
+  { city: 'Albany', state: 'New York' },
+  { city: 'Syracuse', state: 'New York' },
+  { city: 'Bismarck', state: 'North Dakota' },
+  { city: 'Aberdeen', state: 'South Dakota' },
+  { city: 'Burlington', state: 'Vermont' },
+  { city: 'Roanoke', state: 'Virginia' },
+  { city: 'Cheyenne', state: 'Wyoming' },
+  ...COMMON_CITIES,
+];
+
+const TRIAL_CITIES = {
+  ALL: SMALL_CITIES,
+  REGULAR: COMMON_CITIES,
+  SMALL: SMALL_CITIES,
+};
+
+const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
+const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+
+const SESSION_TYPES = [
+  'Regular',
+  'Small',
+  'Hybrid',
+  'Special',
+  'Motion/Hearing',
+];
+
+const SESSION_STATUS_GROUPS = {
+  all: 'All',
+  closed: 'Closed',
+  new: 'New',
+  open: 'Open',
+};
+
+const MAX_FILE_SIZE_MB = 250; // megabytes
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabytes
+
+const ADC_SECTION = 'adc';
+const ADMISSIONS_SECTION = 'admissions';
+const CHAMBERS_SECTION = 'chambers';
+const CLERK_OF_COURT_SECTION = 'clerkofcourt';
+const DOCKET_SECTION = 'docket';
+const IRS_SYSTEM_SECTION = 'irsSystem';
+const PETITIONS_SECTION = 'petitions';
+const TRIAL_CLERKS_SECTION = 'trialClerks';
+
+const ARMENS_CHAMBERS_SECTION = 'armensChambers';
+const ASHFORDS_CHAMBERS_SECTION = 'ashfordsChambers';
+const BUCHS_CHAMBERS_SECTION = 'buchsChambers';
+const CARLUZZOS_CHAMBERS_SECTION = 'carluzzosChambers';
+const COHENS_CHAMBERS_SECTION = 'cohensChambers';
+const COLVINS_CHAMBERS_SECTION = 'colvinsChambers';
+const COPELANDS_CHAMBERS_SECTION = 'copelandsChambers';
+const FOLEYS_CHAMBERS_SECTION = 'foleysChambers';
+const GALES_CHAMBERS_SECTION = 'galesChambers';
+const GERBERS_CHAMBERS_SECTION = 'gerbersChambers';
+const GOEKES_CHAMBERS_SECTION = 'goekesChambers';
+const GUSTAFSONS_CHAMBERS_SECTION = 'gustafsonsChambers';
+const GUYS_CHAMBERS_SECTION = 'guysChambers';
+const HALPERNS_CHAMBERS_SECTION = 'halpernsChambers';
+const HOLMES_CHAMBERS_SECTION = 'holmesChambers';
+const JACOBS_CHAMBERS_SECTION = 'jacobsChambers';
+const JONES_CHAMBERS_SECTION = 'jonesChambers';
+const KERRIGANS_CHAMBERS_SECTION = 'kerrigansChambers';
+const LAUBERS_CHAMBERS_SECTION = 'laubersChambers';
+const LEYDENS_CHAMBERS_SECTION = 'leydensChambers';
+const MARVELS_CHAMBERS_SECTION = 'marvelsChambers';
+const MORRISONS_CHAMBERS_SECTION = 'morrisonsChambers';
+const NEGAS_CHAMBERS_SECTION = 'negasChambers';
+const PANUTHOS_CHAMBERS_SECTION = 'panuthosChambers';
+const PARIS_CHAMBERS_SECTION = 'parisChambers';
+const PUGHS_CHAMBERS_SECTION = 'pughsChambers';
+const RUWES_CHAMBERS_SECTION = 'ruwesChambers';
+const THORNTONS_CHAMBERS_SECTION = 'thorntonsChambers';
+const URDAS_CHAMBERS_SECTION = 'urdasChambers';
+const VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
+const WELLS_CHAMBERS_SECTION = 'wellsChambers';
+
+const SECTIONS = sortBy([
+  ADC_SECTION,
+  ADMISSIONS_SECTION,
+  CHAMBERS_SECTION,
+  CLERK_OF_COURT_SECTION,
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  TRIAL_CLERKS_SECTION,
+]);
+
+const CHAMBERS_SECTIONS = sortBy([
+  ARMENS_CHAMBERS_SECTION,
+  ASHFORDS_CHAMBERS_SECTION,
+  BUCHS_CHAMBERS_SECTION,
+  CARLUZZOS_CHAMBERS_SECTION,
+  COHENS_CHAMBERS_SECTION,
+  COLVINS_CHAMBERS_SECTION,
+  COPELANDS_CHAMBERS_SECTION,
+  FOLEYS_CHAMBERS_SECTION,
+  GALES_CHAMBERS_SECTION,
+  GERBERS_CHAMBERS_SECTION,
+  GOEKES_CHAMBERS_SECTION,
+  GUSTAFSONS_CHAMBERS_SECTION,
+  GUYS_CHAMBERS_SECTION,
+  HALPERNS_CHAMBERS_SECTION,
+  HOLMES_CHAMBERS_SECTION,
+  JACOBS_CHAMBERS_SECTION,
+  JONES_CHAMBERS_SECTION,
+  KERRIGANS_CHAMBERS_SECTION,
+  LAUBERS_CHAMBERS_SECTION,
+  LEYDENS_CHAMBERS_SECTION,
+  MARVELS_CHAMBERS_SECTION,
+  MORRISONS_CHAMBERS_SECTION,
+  NEGAS_CHAMBERS_SECTION,
+  PANUTHOS_CHAMBERS_SECTION,
+  PARIS_CHAMBERS_SECTION,
+  PUGHS_CHAMBERS_SECTION,
+  RUWES_CHAMBERS_SECTION,
+  THORNTONS_CHAMBERS_SECTION,
+  URDAS_CHAMBERS_SECTION,
+  VASQUEZS_CHAMBERS_SECTION,
+  WELLS_CHAMBERS_SECTION,
+]);
+
+const TRIAL_STATUS_TYPES = [
+  'Set for Trial',
+  'Dismissed',
+  'Continued',
+  'Rule 122',
+  'A Basis Reached',
+  'Settled',
+  'Recall',
+  'Taken Under Advisement',
+];
+
+const SCAN_MODES = {
+  DUPLEX: 'duplex',
+  FEEDER: 'feeder',
+  FLATBED: 'flatbed',
+};
+
+const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
+
+const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
+
+const ADMISSIONS_STATUS_OPTIONS = [
+  'Active',
+  'Suspended',
+  'Disbarred',
+  'Resigned',
+  'Deceased',
+  'Inactive',
+];
+
+const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
+
+const CASE_SEARCH_MIN_YEAR = 1986;
+const CASE_SEARCH_PAGE_SIZE = 5;
+
 module.exports = {
+  ADC_SECTION,
+  ADMISSIONS_SECTION,
+  ADMISSIONS_STATUS_OPTIONS,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
   AUTOMATIC_BLOCKED_REASONS,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_MIN_YEAR,
+  CASE_SEARCH_PAGE_SIZE,
   CASE_STATUS_TYPES,
   CASE_TYPES,
   CASE_TYPES_MAP,
+  CHAMBERS_SECTION,
+  CHAMBERS_SECTIONS,
   CHIEF_JUDGE,
+  CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_SECTION,
   DOCUMENT_CATEGORIES,
   DOCUMENT_CATEGORY_MAP,
   DOCUMENT_INTERNAL_CATEGORIES,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
+  EMPLOYER_OPTIONS,
   ESTATE_TYPES,
   EVENT_CODES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  IRS_SYSTEM_SECTION,
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
@@ -504,11 +750,18 @@ module.exports = {
   OTHER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   ROLES,
+  SCAN_MODES,
   SCENARIOS,
+  SECTIONS,
   SERVICE_INDICATOR_TYPES,
+  SESSION_STATUS_GROUPS,
+  SESSION_TERMS,
+  SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
   STANDING_PRETRIAL_NOTICE,
   STANDING_PRETRIAL_ORDER,
@@ -517,6 +770,10 @@ module.exports = {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_CITIES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_CLERKS_SECTION,
   TRIAL_LOCATION_MATCHER,
+  TRIAL_STATUS_TYPES,
   US_STATES,
 };

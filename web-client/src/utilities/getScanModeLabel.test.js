@@ -1,10 +1,8 @@
-import { Scan } from '../../../shared/src/business/entities/Scan';
+import { SCAN_MODES } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { getScanModeLabel } from './getScanModeLabel';
 
 describe('getScanModeLabel', () => {
-  const { SCAN_MODES } = Scan;
-
   it('Returns Single Sided when the scan mode is feeder', () => {
     expect(getScanModeLabel(applicationContext, SCAN_MODES.FEEDER)).toEqual(
       'Single sided',

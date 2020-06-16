@@ -1,8 +1,5 @@
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { CaseExternal } = require('./CaseExternal');
-const { PARTY_TYPES } = require('../EntityConstants');
+const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 

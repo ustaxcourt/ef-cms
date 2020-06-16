@@ -79,6 +79,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
+  SESSION_STATUS_GROUPS,
 } = require('../../shared/src/business/entities/EntityConstants');
 const {
   caseAdvancedSearch,
@@ -795,9 +796,6 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
-  TrialSession,
-} = require('../../shared/src/business/entities/trialSessions/TrialSession');
-const {
   unblockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
 const {
@@ -1057,7 +1055,7 @@ module.exports = appContextUser => {
         status => status !== CASE_STATUS_TYPES.closed,
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
-      SESSION_STATUS_GROUPS: TrialSession.SESSION_STATUS_GROUPS,
+      SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
     getDispatchers: () => ({
