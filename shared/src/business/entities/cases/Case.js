@@ -980,11 +980,15 @@ Case.prototype.getDocumentById = function ({ documentId }) {
   return allCaseDocuments.find(document => document.documentId === documentId);
 };
 
-Case.prototype.getPetitionDocument = function () {
-  return this.documents.find(
+const getPetitionDocumentFromDocuments = function (documents) {
+  return documents.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return getPetitionDocumentFromDocuments(this.documents);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1744,3 +1748,4 @@ Case.prototype.deleteStatistic = function (statisticId) {
 
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
+exports.getPetitionDocumentFromDocuments = getPetitionDocumentFromDocuments;
