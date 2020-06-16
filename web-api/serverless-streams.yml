@@ -1,6 +1,5 @@
 service: ef-cms-streams
 plugins:
-  - serverless-offline-dynamodb-streams
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -47,15 +46,6 @@ package:
   excludeDevDependencies: true
 
 functions:
-  processStreamRecords:
-    handler: web-api/${self:provider.dir}/streamsHandlers.processStreamRecordsLambda
-    events:
-      - stream:
-          type: dynamodb
-          arn: ${opt:dynamo_stream_arn}
-          batchSize: 100
-          startingPosition: TRIM_HORIZON
-
   reprocessFailedRecords:
     handler: web-api/${self:provider.dir}/streamsHandlers.reprocessFailedRecordsLambda
     events:
