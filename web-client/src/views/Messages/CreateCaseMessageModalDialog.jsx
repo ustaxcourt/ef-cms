@@ -181,7 +181,7 @@ export const CreateCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
-        {form.attachments && form.attachments.length > 0 && (
+        {createCaseMessageModalHelper.showMessageAttachments && (
           <div className="margin-bottom-20">
             <div>
               <FontAwesomeIcon
