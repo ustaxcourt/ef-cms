@@ -51,7 +51,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
         postalCode: '12345',
         startDate: '2020-02-03T09:00:00.000Z',
         startTime: '09:00',
-        state: 'ST',
+        state: 'AL',
       });
   });
 
