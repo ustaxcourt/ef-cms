@@ -254,7 +254,7 @@
       type: "string"
       flags: 
         presence: "required"
-        description: "Unique case ID in XXXXX-YY format."
+        description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
           name: "pattern"
@@ -390,9 +390,18 @@
     initialDocketNumberSuffix: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
         description: "Case docket number suffix before modification."
       allow: 
+        - "W"
+        - "P"
+        - "X"
+        - "R"
+        - "SL"
+        - "L"
+        - "S"
+        - "_"
         - null
     irsNoticeDate: 
       type: "date"

@@ -392,7 +392,7 @@ Case.VALIDATION_RULES = {
     .string()
     .regex(DOCKET_NUMBER_MATCHER)
     .required()
-    .description('Unique case ID in XXXXX-YY format.'),
+    .description('Unique case identifier in XXXXX-YY format.'),
   docketNumberSuffix: joi
     .string()
     .allow(null)
@@ -447,7 +447,7 @@ Case.VALIDATION_RULES = {
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
-    // .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES), '_')
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
