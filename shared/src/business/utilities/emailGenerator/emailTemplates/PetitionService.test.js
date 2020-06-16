@@ -105,7 +105,7 @@ describe('PetitionService', () => {
       `Docket Entry No.: ${docketEntryNumber}`,
     );
     expect(documentInfo.text()).toContain(documentDetail.filingDate);
-    expect(documentInfo.text()).toContain(documentDetail.mailingDate);
+    expect(documentInfo.text()).toContain(documentDetail.formattedMailingDate);
     expect(documentInfo.text()).toContain(documentDetail.servedAtFormatted);
   });
 
