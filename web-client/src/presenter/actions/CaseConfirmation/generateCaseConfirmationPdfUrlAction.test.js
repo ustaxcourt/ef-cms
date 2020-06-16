@@ -1,8 +1,18 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseConfirmationPdfUrlAction } from './generateCaseConfirmationPdfUrlAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generateCaseConfirmationPdfUrlAction', () => {
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockReturnValue({
+        url: 'http://www.example.com',
+      });
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('creates a pdf and returns an object URL', async () => {
     const result = await runAction(generateCaseConfirmationPdfUrlAction, {
       modules: {
@@ -18,8 +28,6 @@ describe('generateCaseConfirmationPdfUrlAction', () => {
       },
     });
 
-    const expectedUrl =
-      'http://www.example.com/case-documents/ca123/case-123-45-confirmation.pdf/document-download-url?token=abcdefg';
-    expect(result.state.pdfPreviewUrl).toEqual(expectedUrl);
+    expect(result.state.pdfPreviewUrl).toEqual('http://www.example.com');
   });
 });
