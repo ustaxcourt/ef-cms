@@ -33,4 +33,22 @@ describe('setAttachmentDocumentToDisplayAction', () => {
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
+
+  it('does not set iframeSrc if props.attachmentDocumentToDisplay is null', async () => {
+    const result = await runAction(setAttachmentDocumentToDisplayAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        attachmentDocumentToDisplay: null,
+      },
+      state: {
+        attachmentDocumentToDisplay: null,
+        caseDetail: {
+          caseId: '48849291-d329-465d-a421-eecf06a671de',
+        },
+      },
+    });
+    expect(result.state.iframeSrc).toBeUndefined();
+  });
 });
