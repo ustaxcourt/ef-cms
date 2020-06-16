@@ -5,7 +5,10 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import {
+  Case,
+  getPetitionDocumentFromDocuments,
+} from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
@@ -539,6 +542,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
+      getPetitionDocumentFromDocuments,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

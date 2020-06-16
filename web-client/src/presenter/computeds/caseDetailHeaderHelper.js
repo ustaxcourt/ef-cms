@@ -61,9 +61,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
 
-  const petitionDocument = caseDetail.documents.find(
-    d => d.documentType === 'Petition',
-  );
+  const petitionDocument = applicationContext
+    .getUtilities()
+    .getPetitionDocumentFromDocuments(caseDetail.documents);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
 
   return {

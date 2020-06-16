@@ -9,6 +9,10 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  Case,
+  getPetitionDocumentFromDocuments,
+} = require('../entities/cases/Case');
+const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
@@ -102,7 +106,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { Case } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
@@ -205,6 +208,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getPetitionDocumentFromDocuments: jest
+      .fn()
+      .mockImplementation(getPetitionDocumentFromDocuments),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest

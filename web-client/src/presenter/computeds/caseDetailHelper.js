@@ -91,9 +91,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocument = caseDetail.documents.find(
-    d => d.documentType === 'Petition',
-  );
+  const petitionDocument = applicationContext
+    .getUtilities()
+    .getPetitionDocumentFromDocuments(caseDetail.documents);
   const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
 
   return {
