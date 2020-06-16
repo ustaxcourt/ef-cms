@@ -2,7 +2,7 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -36,7 +36,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { status: CASE_STATUS_TYPES.new },
+        caseDetail: { documents: [], status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(true);
@@ -50,10 +50,73 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { status: CASE_STATUS_TYPES.new },
+        caseDetail: { documents: [], status: CASE_STATUS_TYPES.new },
       },
     });
     expect(result.showEditCaseButton).toEqual(false);
+  });
+
+  it('should set showExternalButtons false if user is an internal user', () => {
+    const user = {
+      role: ROLES.petitionsClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [] },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+      },
+    });
+    expect(result.showExternalButtons).toEqual(false);
+  });
+
+  it('should set showExternalButtons false if user is an external user and the petition document on the case is not yet served', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          documents: [{ documentType: 'Petition' }],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+      },
+    });
+    expect(result.showExternalButtons).toEqual(false);
+  });
+
+  it('should set showExternalButtons true if user is an external user and the petition document on the case is served', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          documents: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+      },
+    });
+    expect(result.showExternalButtons).toEqual(true);
   });
 
   it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is associated with the case', () => {
@@ -64,7 +127,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { irsPractitioners: [{ userId: '789' }] },
+        caseDetail: { documents: [], irsPractitioners: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -85,6 +148,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          documents: [],
           irsPractitioners: [{ userId: '789' }],
           isSealed: true,
         },
@@ -107,7 +171,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { irsPractitioners: [{ userId: '123' }] },
+        caseDetail: { documents: [], irsPractitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -127,7 +191,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -147,7 +211,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -167,7 +231,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -186,7 +250,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'FilePetitionSuccess',
         form: {},
         screenMetadata: {
@@ -205,7 +269,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { isSealed: true },
+        caseDetail: { documents: [], isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -224,7 +288,10 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { privatePractitioners: [{ userId: '123' }] },
+        caseDetail: {
+          documents: [],
+          privatePractitioners: [{ userId: '123' }],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -243,7 +310,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -263,6 +330,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          documents: [],
           leadCaseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
         currentPage: 'CaseDetail',
@@ -285,6 +353,7 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          documents: [],
           leadCaseId: '',
         },
         currentPage: 'CaseDetail',
@@ -306,7 +375,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -319,7 +388,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show the Sealed Case banner if the case is sealed', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { isSealed: true },
+        caseDetail: { documents: [], isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {},
@@ -331,7 +400,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -346,7 +415,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -361,7 +430,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -381,7 +450,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -402,7 +471,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: { documents: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
