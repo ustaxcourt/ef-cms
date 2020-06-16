@@ -139,9 +139,9 @@ exports.joiValidationDecorator = function (
         .map(([key, value]) => `${key}: "${value}"`)
         .join('; ');
       throw new InvalidEntityError(
-        JSON.stringify(this.getFormattedValidationErrors()),
         entityConstructor.validationName,
         ids,
+        JSON.stringify(this.getFormattedValidationErrors()),
       );
     }
     return this;

@@ -19,9 +19,7 @@ export const updateCreateCaseMessageAttachmentsAction = ({
 
   // TODO: Should we evaluate the length of the array and conditionally push?
   if (documentId) {
-    const document = documents.find(
-      document => document.documentId === documentId,
-    );
+    const document = documents.find(d => d.documentId === documentId);
 
     const documentTitle = document.documentTitle || document.documentType;
 
