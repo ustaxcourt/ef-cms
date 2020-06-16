@@ -9,18 +9,16 @@ import React from 'react';
 export const MessageDetail = connect(
   {
     attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
-    baseUrl: state.baseUrl,
     formattedMessageDetail: state.formattedMessageDetail,
+    iframeSrc: state.iframeSrc,
     setAttachmentDocumentToDisplaySequence:
       sequences.setAttachmentDocumentToDisplaySequence,
-    token: state.token,
   },
   function MessageDetail({
     attachmentDocumentToDisplay,
-    baseUrl,
     formattedMessageDetail,
+    iframeSrc,
     setAttachmentDocumentToDisplaySequence,
-    token,
   }) {
     return (
       <>
@@ -97,7 +95,7 @@ export const MessageDetail = connect(
 
                 {!process.env.CI && attachmentDocumentToDisplay && (
                   <iframe
-                    src={`${baseUrl}/case-documents/${formattedMessageDetail.caseId}/${attachmentDocumentToDisplay.documentId}/document-download-url?token=${token}`}
+                    src={iframeSrc}
                     title={attachmentDocumentToDisplay.documentTitle}
                   />
                 )}
