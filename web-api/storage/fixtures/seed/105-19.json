@@ -25,13 +25,11 @@
     "noticeOfAttachments": false,
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
-    "initialTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "caseTitle": "Caryn Wall, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Caryn Wall, Petitioner",
     "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "filingType": "Individual petitioner",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": true,
     "petitionPaymentStatus": "Waived",
     "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
     "initialDocketNumberSuffix": "_",
@@ -43,6 +41,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "docketNumber": "105-19",
+    "docketNumberWithSuffix": "105-19",
     "status": "New",
     "associatedJudge": "Chief Judge"
   },
@@ -117,7 +116,7 @@
     "sk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
     "pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
     "gsi1pk": "work-item|98c7130f-f924-423f-9f2c-89f0616f446a",
-    "docketNumberSuffix": null,
+    "docketNumberWithSuffix": "105-19",
     "caseStatus": "New",
     "caseIsInProgress": false,
     "document": {
@@ -181,6 +180,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.297Z",
     "workItems": [
       {
@@ -231,6 +231,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2019-03-27T21:53:00.298Z",
     "workItems": [],
     "pending": false,

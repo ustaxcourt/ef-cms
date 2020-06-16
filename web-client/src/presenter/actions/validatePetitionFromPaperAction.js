@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -17,31 +16,62 @@ export const validatePetitionFromPaperAction = ({
   path,
   props,
 }) => {
-  const petition = get(state.petition);
+  const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
 
-  const receivedAt = props.computedDateReceived;
-
-  const form = omit(
-    {
-      ...get(state.form),
-    },
-    ['dateReceivedYear', 'dateReceivedMonth', 'dateReceivedDay'],
-  );
+  const form = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor({
       applicationContext,
-      petition: { ...petition, ...form, receivedAt },
+      petition: {
+        ...form,
+        petitionPaymentDate,
+        petitionPaymentWaivedDate,
+        receivedAt,
+      },
     });
 
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayMap = {
+      statistics: 'Statistics',
+    };
+
+    if (errors.statistics) {
+      const newErrorStatistics = [];
+      const formStatistics = get(state.form.statistics);
+
+      formStatistics.forEach((formStatistic, index) => {
+        const errorStatistic = errors.statistics.find(s => s.index === index);
+        if (errorStatistic) {
+          if (formStatistic.yearOrPeriod === 'Year') {
+            newErrorStatistics.push({
+              enterAllValues:
+                'Enter year, deficiency amount, and total penalties',
+              index,
+            });
+          } else {
+            newErrorStatistics.push({
+              enterAllValues:
+                'Enter period, deficiency amount, and total penalties',
+              index,
+            });
+          }
+        } else {
+          newErrorStatistics.push({});
+        }
+      });
+
+      errors.statistics = newErrorStatistics;
+    }
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayMap,
       errors,
     });
   }

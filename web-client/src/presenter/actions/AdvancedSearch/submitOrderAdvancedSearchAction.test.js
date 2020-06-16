@@ -14,16 +14,11 @@ describe('submitOrderAdvancedSearchAction', () => {
       state: {
         advancedSearchForm: {
           orderSearch: {
-            orderKeyword: 'a',
+            keyword: 'a',
           },
         },
       },
     });
-
-    console.log(
-      applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
-        .calls[0][0],
-    );
 
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock.calls
@@ -33,7 +28,9 @@ describe('submitOrderAdvancedSearchAction', () => {
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      searchParams: 'a',
+      searchParams: {
+        keyword: 'a',
+      },
     });
   });
 });

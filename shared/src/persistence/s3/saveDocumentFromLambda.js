@@ -1,5 +1,6 @@
 exports.saveDocumentFromLambda = ({
   applicationContext,
+  contentType: ContentType = 'application/pdf',
   document: body,
   documentId: key,
   useTempBucket,
@@ -13,7 +14,7 @@ exports.saveDocumentFromLambda = ({
     .putObject({
       Body: Buffer.from(body),
       Bucket,
-      ContentType: 'application/pdf',
+      ContentType,
       Key: key,
     })
     .promise();

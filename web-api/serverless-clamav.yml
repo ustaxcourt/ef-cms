@@ -12,7 +12,8 @@ custom:
     number: 3
     includeLayers: true
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
 provider:
   name: aws
@@ -25,11 +26,23 @@ provider:
     serverSideEncryption: AES256
 
 layers:
-  clamav:
-    name: ${self:provider.stage}-clamav
+  av:
+    name: ${self:provider.stage}-av
     compatibleRuntimes:
       - nodejs12.x
     path: web-api/runtimes/clamav
     package:
       exclude:
         - clamav_lambda_layer.tar.gz
+        - var/lib/clamav/main.cvd
+  avm:
+    name: ${self:provider.stage}-avm
+    compatibleRuntimes:
+      - nodejs12.x
+    path: web-api/runtimes/clamav/
+    package:
+      exclude:
+        - ./**
+      include:
+        - var/lib/clamav/main.cvd
+      excludeDevDependencies: true

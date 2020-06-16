@@ -1,6 +1,7 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { getConstants } from '../../getConstants';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -12,6 +13,7 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
+const { USER_ROLES } = getConstants();
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
@@ -24,13 +26,13 @@ const goToMessages = [
       {
         ...takePathForRoles(
           [
-            'admin',
-            'adc',
-            'admissionsclerk',
-            'chambers',
-            'clerkofcourt',
-            'floater',
-            'trialclerk',
+            USER_ROLES.admin,
+            USER_ROLES.adc,
+            USER_ROLES.admissionsClerk,
+            USER_ROLES.chambers,
+            USER_ROLES.clerkOfCourt,
+            USER_ROLES.floater,
+            USER_ROLES.trialClerk,
           ],
           [],
         ),

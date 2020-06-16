@@ -12,6 +12,16 @@ describe('submitCaseAssociationRequest', () => {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
+    contactPrimary: {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: 'domestic',
+      email: 'fieri@example.com',
+      name: 'Guy Fieri',
+      phone: '1234567890',
+      postalCode: '12345',
+      state: 'CA',
+    },
     docketNumber: '123-19',
     docketRecord: [
       {
@@ -29,12 +39,27 @@ describe('submitCaseAssociationRequest', () => {
     procedureType: 'Regular',
   };
 
+  let mockCurrentUser;
+  let mockGetUserById;
+
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockGetUserById);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockImplementation(() => caseRecord);
+  });
+
   it('should throw an error when not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockCurrentUser = {
       name: 'Olivia Jade',
       role: User.ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    };
 
     await expect(
       submitCaseAssociationRequestInteractor({
@@ -46,12 +71,12 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockCurrentUser = {
       name: 'Olivia Jade',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    };
+    mockGetUserById = {
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -65,10 +90,7 @@ describe('submitCaseAssociationRequest', () => {
       name: 'Olivia Jade',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+    };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
@@ -87,7 +109,7 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockCurrentUser = {
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -101,7 +123,7 @@ describe('submitCaseAssociationRequest', () => {
       name: 'Olivia Jade',
       role: User.ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -121,11 +143,26 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockCurrentUser = {
       name: 'Olivia Jade',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    };
+    mockGetUserById = {
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      name: 'Olivia Jade',
+      role: User.ROLES.irsPractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);

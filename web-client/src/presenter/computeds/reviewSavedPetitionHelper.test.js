@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from './reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -10,14 +10,7 @@ const {
 
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => {
-      return {
-        ...applicationContext.getConstants(),
-      };
-    },
-  },
+  applicationContext,
 );
 
 describe('reviewSavedPetitionHelper', () => {
@@ -27,7 +20,7 @@ describe('reviewSavedPetitionHelper', () => {
         form: {},
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
@@ -57,6 +50,11 @@ describe('reviewSavedPetitionHelper', () => {
                 INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
             },
             { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
+            {
+              documentType:
+                INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
+                  .documentType,
+            },
           ],
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
@@ -69,25 +67,44 @@ describe('reviewSavedPetitionHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
+      applicationForWaiverOfFilingFeeFile: {
+        documentType:
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
+      },
       hasIrsNoticeFormatted: 'Yes',
       hasOrders: true,
-      irsNoticeDateFormatted: '01/04/2020',
+      irsNoticeDateFormatted: '01/04/20',
       ownershipDisclosureFile: {
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
       },
       petitionFile: {
         documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       },
-      petitionPaymentStatusFormatted: 'Paid 03/14/2020 pay.gov',
+      petitionPaymentStatusFormatted: 'Paid 03/14/20 pay.gov',
       preferredTrialCityFormatted: 'No requested place of trial',
-      receivedAtFormatted: '01/04/2020',
+      receivedAtFormatted: '01/04/20',
       requestForPlaceOfTrialFile: {
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       },
       shouldShowIrsNoticeDate: true,
       stinFile: { documentType: INITIAL_DOCUMENT_TYPES.stin.documentType },
+    });
+  });
+
+  it('returns a petitionPaymentStatusFormatted for a waived payment status', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      petitionPaymentStatusFormatted: 'Waived 03/01/19',
     });
   });
 
@@ -98,7 +115,7 @@ describe('reviewSavedPetitionHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
@@ -123,7 +140,7 @@ describe('reviewSavedPetitionHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
       hasOrders: false,
       irsNoticeDateFormatted: undefined,
@@ -136,5 +153,96 @@ describe('reviewSavedPetitionHelper', () => {
       shouldShowIrsNoticeDate: false,
       stinFile: undefined,
     });
+  });
+
+  [
+    'orderForAmendedPetition',
+    'orderForAmendedPetitionAndFilingFee',
+    'orderForFilingFee',
+    'orderForOds',
+    'orderForRatification',
+    'orderToShowCause',
+    'noticeOfAttachments',
+    'orderDesignatingPlaceOfTrial',
+  ].forEach(order => {
+    it(`verify hasOrders is true if ${order} is set`, () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            [order]: true,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({
+        hasOrders: true,
+      });
+    });
+  });
+
+  it('returns showStatistics false if the statistics array is not present on the form', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {},
+      },
+    });
+
+    expect(result.showStatistics).toBeFalsy();
+  });
+
+  it('returns showStatistics false if the statistics array is present on the form but has length 0', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { statistics: [] },
+      },
+    });
+
+    expect(result.showStatistics).toBeFalsy();
+  });
+
+  it('returns showStatistics true if the statistics array is present on the form and has length greater than 0', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { statistics: [{ yearOrPeriod: 'Year' }] },
+      },
+    });
+
+    expect(result.showStatistics).toBeTruthy();
+  });
+
+  it('formats statistics with formatted dates and money', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          statistics: [
+            {
+              deficiencyAmount: 123,
+              totalPenalties: 30000,
+              year: '2012',
+              yearOrPeriod: 'Year',
+            },
+            {
+              deficiencyAmount: 0,
+              lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
+              totalPenalties: 21,
+              yearOrPeriod: 'Period',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.formattedStatistics).toMatchObject([
+      {
+        formattedDate: '2012',
+        formattedDeficiencyAmount: '$123.00',
+        formattedTotalPenalties: '$30,000.00',
+      },
+      {
+        formattedDate: '03/01/19',
+        formattedDeficiencyAmount: '$0.00',
+        formattedTotalPenalties: '$21.00',
+      },
+    ]);
   });
 });

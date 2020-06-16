@@ -6,8 +6,8 @@ export const docketClerkUpdatesCaseCaption = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('caseDetail.caseTitle')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+    expect(test.getState('caseDetail.caseCaption')).toEqual(
+      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
     );
 
     await test.runSequence('openUpdateCaseModalSequence');
@@ -25,8 +25,8 @@ export const docketClerkUpdatesCaseCaption = test => {
 
     await test.runSequence('clearModalSequence');
 
-    expect(test.getState('caseDetail.caseTitle')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+    expect(test.getState('caseDetail.caseCaption')).toEqual(
+      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
     );
     expect(test.getState('modal')).toEqual({});
 
@@ -44,9 +44,7 @@ export const docketClerkUpdatesCaseCaption = test => {
 
     await test.runSequence('submitUpdateCaseModalSequence');
 
-    expect(test.getState('caseDetail.caseTitle')).toEqual(
-      'Sisqo v. Commissioner of Internal Revenue, Respondent',
-    );
+    expect(test.getState('caseDetail.caseCaption')).toEqual('Sisqo');
     expect(test.getState('modal')).toEqual({});
   });
 };

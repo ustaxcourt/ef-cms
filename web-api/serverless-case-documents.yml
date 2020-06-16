@@ -8,14 +8,19 @@ plugins:
   - serverless-plugin-tracing
   - serverless-latest-layer-version
   - serverless-jetpack
+  - serverless-log-forwarding
   # - serverless-plugin-warmup
 
 custom:
+  logForwarding:
+    destinationARN: arn:aws:lambda:${opt:region}:${opt:accountId}:function:log_forwarder_${opt:stage}
+    filterPattern: 'ERROR'
   #warmup:
   #enabled: true
 
   jetpack:
-    mode: yarn
+    mode: npm
+    lockfile: ../package-lock.json
 
   prune:
     automatic: true
@@ -80,6 +85,7 @@ provider:
   dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
+  elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
@@ -97,15 +103,17 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+    ELASTICSEARCH_ENDPOINT: ${self:custom.vars.elasticsearchEndpoint, self:provider.elasticsearchEndpoint}
     MASTER_REGION: ${self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
-    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EMAIL_DOCUMENT_SERVED_TEMPLATE: document_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     CIRCLE_HONEYBADGER_API_KEY: ${opt:circleHoneybadgerApiKey}
+    IRS_SUPERUSER_EMAIL: ${opt:irsSuperuserEmail, self:custom.vars.irsSuperuserEmail}
 
 package:
   exclude:
@@ -214,6 +222,9 @@ functions:
           path: /{caseId}/{documentId}
           method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
 
   fileExternalDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
@@ -265,21 +276,13 @@ functions:
 
   updateDocketEntryMeta:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/docket-entry-meta
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  saveIntermediateDocketEntry:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
-    events:
-      - http:
-          path: /{caseId}/docket-entry-in-progress
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -368,3 +371,56 @@ functions:
           path: /{caseId}/{documentId}/document-download-url
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            arn: arn:aws:lambda:${opt:region}:${opt:accountId}:function:cognito_authorizer_lambda_${opt:stage}
+            managedExternally: true
+            identitySource: method.request.querystring.token
+            type: request
+
+  orderAdvancedSearch:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.orderAdvancedSearchLambda
+    events:
+      - http:
+          path: /order-search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  opinionAdvancedSearch:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.opinionAdvancedSearchLambda
+    events:
+      - http:
+          path: /opinion-search
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCorrespondenceDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/correspondence
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCorrespondenceDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCorrespondenceDocument
+    events:
+      - http:
+          path: /{caseId}/correspondence/{documentIdToEdit}
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

@@ -11,6 +11,10 @@ option:first-child {
   font-weight: initial;
 }
 
+.create-case-steps p {
+  max-width: 90%;
+}
+
 .usa-hint {
   display: inline-block;
   margin-bottom: 15px;
@@ -26,6 +30,10 @@ option:first-child {
       left: 0;
     }
   }
+}
+
+.add-correspondence-file {
+  align-self: center;
 }
 
 .usa-alert {
@@ -95,11 +103,13 @@ option:first-child {
 
 .usa-alert--warning {
   background-image: url('images/alerts/warning.svg');
+  font-weight: 600;
 }
 
 .usa-alert--success {
   background-color: $color-success;
   background-image: url('images/alerts/success.svg');
+  font-weight: 600;
 
   &::before {
     background-color: $color-green;
@@ -129,14 +139,14 @@ option:first-child {
 .usa-alert--info,
 .usa-alert--warning {
   max-width: 700px;
-  min-height: 75px;
+  min-height: 50px;
 
   .usa-alert__heading {
     margin-top: 0;
     margin-bottom: 8px;
-    font-family: $font-serif;
-    font-size: 20px;
-    font-weight: $font-bold;
+    font-family: $font-normal;
+    font-size: 17px;
+    font-weight: 600;
     line-height: 1.3em;
   }
 
@@ -146,10 +156,10 @@ option:first-child {
 
   .usa-alert__action {
     button {
-      margin: 0;
+      margin: 0 0 0 20px;
 
       svg {
-        margin-left: 10px;
+        margin-right: 10px;
       }
     }
   }
@@ -209,6 +219,18 @@ option:first-child {
   .hide-on-mobile {
     display: none;
   }
+
+  #file-a-petition {
+    margin-bottom: 70px;
+  }
+
+  .mobile-text-wrap {
+    white-space: normal;
+  }
+
+  #submit-case {
+    margin-bottom: 5px;
+  }
 }
 
 .margin-bottom-0 {
@@ -227,6 +249,10 @@ option:first-child {
   margin-bottom: 5rem !important;
 }
 
+.margin-top-10 {
+  margin-top: 7.7rem;
+}
+
 p {
   max-width: 700px;
   line-height: 24px;
@@ -243,10 +269,33 @@ p {
   line-height: 24px;
 }
 
+.steps-after-filing {
+  padding-left: 15px;
+  margin-top: 10px;
+}
+
+.payment-options {
+  .usa-accordion__button {
+    padding: 3px;
+    font-family: $font-source-sans;
+    font-size: 17px;
+    font-weight: normal;
+  }
+  button:not([disabled]):focus {
+    outline: none;
+  }
+  .usa-accordion__button:hover {
+    background-color: inherit;
+  }
+}
+
 .usa-alert__text:only-child {
   padding-top: 0;
 }
 
+.usa-accordion {
+  font-size: 100%;
+}
 button,
 input,
 optgroup,
@@ -258,4 +307,8 @@ textarea {
 input[type='file']::-webkit-file-upload-button {
   -webkit-appearance: initial;
   border-radius: 5px;
+}
+
+.add-another-penalty-button .svg-inline--fa {
+  margin-right: 0.5rem;
 }

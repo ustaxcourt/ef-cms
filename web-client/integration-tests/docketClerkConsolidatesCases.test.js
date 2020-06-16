@@ -27,6 +27,7 @@ describe('Case Consolidation Journey', () => {
 
   it('login as a petitioner and create the lead case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.caseId = test.leadCaseId = caseDetail.caseId;
     test.docketNumber = test.leadDocketNumber = caseDetail.docketNumber;
   });
@@ -38,6 +39,7 @@ describe('Case Consolidation Journey', () => {
 
   it('login as a petitioner and create the case to consolidate with', async () => {
     const caseDetail = await uploadPetition(test, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
     test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });

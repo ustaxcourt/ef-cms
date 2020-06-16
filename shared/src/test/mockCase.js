@@ -16,6 +16,7 @@ exports.MOCK_CASE = {
     title: 'Executor',
   },
   docketNumber: '101-18',
+  docketNumberWithSuffix: '101-18',
   docketRecord: [
     {
       description: 'first record',
@@ -44,7 +45,6 @@ exports.MOCK_CASE = {
   ],
   documents: MOCK_DOCUMENTS,
   filingType: 'Myself',
-  hasIrsNotice: true,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: 'Petitioner',
   preferredTrialCity: 'Washington, District of Columbia',
@@ -58,7 +58,14 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   caseType: 'Other',
   contactPrimary: {
+    address1: '123 Main St',
+    city: 'Somewhere',
+    countryType: 'domestic',
+    email: 'petitioner@example.com',
     name: 'Test Petitioner',
+    phone: '1234567',
+    postalCode: '12345',
+    state: 'TN',
     title: 'Executor',
   },
   docketNumber: '101-18',
@@ -90,7 +97,6 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   ],
   documents: MOCK_DOCUMENTS.slice(0, 3), // exclude proposed stipulated decision
   filingType: 'Myself',
-  hasIrsNotice: true,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: 'Petitioner',
   preferredTrialCity: 'Washington, District of Columbia',
@@ -102,7 +108,14 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
 exports.MOCK_CASE_WITHOUT_NOTICE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   contactPrimary: {
+    address1: '123 Main St',
+    city: 'Somewhere',
+    countryType: 'domestic',
+    email: 'petitioner@example.com',
     name: 'Test Petitioner',
+    phone: '1234567',
+    postalCode: '12345',
+    state: 'TN',
     title: 'Executor',
   },
   docketNumber: '101-18',

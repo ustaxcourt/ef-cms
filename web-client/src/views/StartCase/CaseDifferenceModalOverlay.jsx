@@ -21,12 +21,12 @@ export const CaseDifferenceModalOverlay = connect(
             <div className="grid-container">
               <Button
                 link
-                aria-roledescription="button to return to file a petition"
+                aria-roledescription="button to return to Create a Case"
                 className="heading-3"
                 onClick={() => clearModalSequence()}
               >
                 <FontAwesomeIcon icon="caret-left" />
-                Back to File a Petition
+                Back to Create a Case
               </Button>
             </div>
           </div>

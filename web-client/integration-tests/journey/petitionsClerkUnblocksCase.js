@@ -1,6 +1,10 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export default (test, trialLocation, checkReport = true) => {
+export const petitionsClerkUnblocksCase = (
+  test,
+  trialLocation,
+  checkReport = true,
+) => {
   return it('Petitions clerk unblocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -9,8 +13,8 @@ export default (test, trialLocation, checkReport = true) => {
 
     await test.runSequence('unblockCaseFromTrialSequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'The block on this case has been removed',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Block removed. Case is eligible for next available trial session.',
     );
     expect(test.getState('caseDetail').blocked).toBeFalsy();
     expect(test.getState('caseDetail').blockedReason).toBeUndefined();

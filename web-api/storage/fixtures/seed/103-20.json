@@ -28,7 +28,7 @@
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "gsi1pk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
-    "caseTitle": "Reuben Blair",
+    "caseCaption": "Reuben Blair",
     "section": "petitions",
     "trialDate": "2020-11-27T05:00:00.000Z",
     "workItemId": "1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
@@ -55,7 +55,7 @@
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
   {
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "103-20L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
     "gsi1pk": "work-item|2a3955ca-baad-4ca7-be23-d862d2ef5310",
@@ -173,7 +173,7 @@
     "updatedAt": "2020-01-23T21:45:34.520Z"
   },
   {
-    "docketNumberSuffix": "L",
+    "docketNumberWithSuffix": "103-20L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
     "document": {
@@ -228,7 +228,7 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Reuben Blair, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialCaption": "Reuben Blair, Petitioner",
     "qcCompleteForTrial": {},
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not Paid",
@@ -261,12 +261,10 @@
     "filingType": "Myself",
     "orderForOds": false,
     "orderForRatification": false,
-    "hasIrsNotice": false,
     "initialDocketNumberSuffix": "L",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "L",
     "orderToChangeDesignatedPlaceOfTrial": false,
-    "caseTitle": "Reuben Blair, Petitioner v. Commissioner of Internal Revenue, Respondent",
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2020-01-23T21:45:14.136Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -277,6 +275,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "docketNumber": "103-20",
+    "docketNumberWithSuffix": "103-20L",
     "status": "Calendared"
   },
   {
@@ -329,6 +328,7 @@
     ],
     "attachments": false,
     "documentType": "Administrative Record",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:45:34.520Z",
     "partyPrimary": true,
     "pending": false,
@@ -416,6 +416,7 @@
       }
     ],
     "documentType": "Notice of Trial",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:45:14.136Z",
     "workItems": [],
     "pending": false,
@@ -435,6 +436,7 @@
   },
   {
     "documentType": "Petition",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:44:54.043Z",
     "practitioner": [],
     "partyPrimary": true,
@@ -496,6 +498,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "entityName": "Document",
     "filingDate": "2020-01-23T21:44:54.044Z",
     "practitioner": [],
     "partyPrimary": true,

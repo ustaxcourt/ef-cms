@@ -15,9 +15,7 @@ export const docketClerkVerifiesDocketEntryMetaUpdates = (
     );
 
     expect(docketRecordEntry.filingDate).toEqual('2020-01-04T05:00:00.000Z');
-    expect(docketRecordEntry.filedBy).toEqual(
-      'Resp. & Petr. Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
-    );
+    expect(docketRecordEntry.filedBy).toEqual('Resp. & Petr. Mona Schultz');
     expect(docketRecordEntry.description).toEqual(
       'First Request for Admissions',
     );

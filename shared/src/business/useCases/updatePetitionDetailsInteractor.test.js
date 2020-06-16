@@ -39,11 +39,24 @@ describe('updatePetitionDetailsInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should throw a validation error if attempting to update caseType to undefined', async () => {
+    await expect(
+      updatePetitionDetailsInteractor({
+        applicationContext,
+        caseId: mockCase.caseId,
+        petitionDetails: {
+          caseType: undefined,
+        },
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
+  });
+
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
       petitionDetails: {
+        ...mockCase,
         petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
       },
     });
@@ -62,6 +75,7 @@ describe('updatePetitionDetailsInteractor', () => {
       applicationContext,
       caseId: mockCase.caseId,
       petitionDetails: {
+        ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
@@ -82,6 +96,7 @@ describe('updatePetitionDetailsInteractor', () => {
       applicationContext,
       caseId: mockCase.caseId,
       petitionDetails: {
+        ...mockCase,
         petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
@@ -108,6 +123,7 @@ describe('updatePetitionDetailsInteractor', () => {
       applicationContext,
       caseId: mockCase.caseId,
       petitionDetails: {
+        ...mockCase,
         petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
@@ -118,6 +134,7 @@ describe('updatePetitionDetailsInteractor', () => {
       docketRecordId: 'unique-id-1',
       documentId: undefined,
       editState: undefined,
+      entityName: 'DocketRecord',
       eventCode: 'FEEW',
       filedBy: undefined,
       filingDate: '2019-11-30T09:10:11.000Z',
@@ -137,6 +154,7 @@ describe('updatePetitionDetailsInteractor', () => {
       applicationContext,
       caseId: mockCase.caseId,
       petitionDetails: {
+        ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
@@ -148,6 +166,7 @@ describe('updatePetitionDetailsInteractor', () => {
       docketRecordId: 'unique-id-1',
       documentId: undefined,
       editState: undefined,
+      entityName: 'DocketRecord',
       eventCode: 'FEE',
       filedBy: undefined,
       filingDate: '2019-11-30T09:10:11.000Z',

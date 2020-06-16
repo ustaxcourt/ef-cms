@@ -12,21 +12,14 @@ const generateTrialCalendarTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const {
-    caption,
-    captionPostfix,
-    docketNumberWithSuffix,
-    documentTitle,
-    formattedTrialSessionDetails,
-    openCases,
-  } = content;
+  const { formattedTrialSessionDetails, openCases } = content;
 
   const renderCases = item => {
     return `<tr>
       <td style="width: 13%;" class="valign-top">
         ${item.docketNumberWithSuffix}
       </td>
-      <td class="line-height-13">${item.caseCaption}</td>
+      <td class="line-height-13">${item.caseTitle}</td>
       <td style="width: 25%;" class="line-height-13">
         ${item.privatePractitioners
           .map(practitioner => practitioner.name)
@@ -129,10 +122,10 @@ const generateTrialCalendarTemplate = async ({
       <table>
         <thead>
           <tr>
-            <th>Docket No.</th>
-            <th>Case Name</th>
-            <th>Petitioner Counsel</th>
-            <th>Respondent Counsel</th>
+            <th>Docket no.</th>
+            <th>Case title</th>
+            <th>Petitioner counsel</th>
+            <th>Respondent counsel</th>
           </tr>
         </thead>
         <tbody>
@@ -145,14 +138,10 @@ const generateTrialCalendarTemplate = async ({
   const main = renderTrialCalendar();
 
   const templateContent = {
-    caption,
-    captionPostfix,
-    docketNumberWithSuffix,
     main,
   };
 
   const options = {
-    h3: documentTitle,
     overwriteMain: true,
     styles: `
       body {

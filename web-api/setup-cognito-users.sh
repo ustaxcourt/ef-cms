@@ -21,6 +21,10 @@ generate_post_data() {
   section=$4
   name=$5
   employer=$6
+  firstName=$7
+  middleName=$8
+  lastName=$9
+  suffix=${10}
   cat <<EOF
 {
   "email": "$email",
@@ -28,13 +32,17 @@ generate_post_data() {
   "role": "$role",
   "section": "$section",
   "name": "$name",
+  "firstName": "$firstName",
+  "middleName": "$middleName",
+  "lastName": "$lastName",
+  "suffix": "$suffix",
   "barNumber": "$barNumber",
   "admissionsDate": "2019-03-01T21:40:46.415Z",
   "admissionsStatus": "Active",
   "birthYear": "1950",
   "employer": "$employer",
   "firmName": "Some Firm",
-  "isAdmitted": true,
+  "originalBarState": "WA",
   "practitionerType": "Attorney",
   "contact": {
     "address1": "234 Main St",
@@ -76,7 +84,8 @@ createAdmin() {
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 }
 
-#createAccount [email] [role] [index] [barNumber] [section] [overrideName(optional)] [employer(optional)]
+#createAccount [email] [role] [index] [barNumber] [section] [overrideName(optional)] [employer(optional)] [firstName(*optional)] [middleName(optional)] [lastName(*optional)] [suffix(optional)]
+# *optional - only optional when user is NOT irsPractitioner or privatePractitioner
 createAccount() {
   email=$1
   role=$2
@@ -85,11 +94,15 @@ createAccount() {
   section=$5
   name=${6:-Test ${role}$3}
   employer=$7
+  firstName=$8
+  middleName=$9
+  lastName=${10}
+  suffix=${11}
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}" "${employer}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}" "${employer}" "${firstName}" "${middleName}" "${lastName}" "${suffix}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -139,7 +152,7 @@ createPrivatePractitionerAccount() {
   overrideName=$3
   name=${overrideName:-Test private practitioner${index}}
 
-  createAccount "privatePractitioner${index}@example.com" "privatePractitioner" "${index}" "${barNumber}" "privatePractitioner" "${name}" "Private"
+  createAccount "privatePractitioner${index}@example.com" "privatePractitioner" "${index}" "${barNumber}" "privatePractitioner" "${name}" "Private" "Test" "private" "practitioner${index}"
 }
 
 createIRSPractitionerAccount() {
@@ -148,7 +161,7 @@ createIRSPractitionerAccount() {
   overrideName=$3
   name=${overrideName:-Test IRS practitioner${index}}
 
-  createAccount "irsPractitioner${index}@example.com" "irsPractitioner" "${index}" "${barNumber}" "irsPractitioner" "${name}" "IRS"
+  createAccount "irsPractitioner${index}@example.com" "irsPractitioner" "${index}" "${barNumber}" "irsPractitioner" "${name}" "IRS" "Test" "IRS" "practitioner${index}"
 }
 
 createJudgeAccount() {
@@ -161,9 +174,9 @@ createJudgeAccount() {
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
 createAccount "migrator@example.com" "admin" "" "" "admin"
-createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "" "GM9999" "privatePractitioner" "Private Practitioner Gmail"
-createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "" "GM4444" "irsPractitioner" "IRS Practitioner Gmail"
-createAccount "flexionustc+petitioner@gmail.com" "petitioner" "" "" "petitioner" "Petitioner Gmail"
+createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
+createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
+createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
 createManyAccounts "10" "adc" "adc"
 createManyAccounts "10" "admissionsclerk" "admissions"
 createManyAccounts "10" "clerkofcourt" "clerkofcourt"

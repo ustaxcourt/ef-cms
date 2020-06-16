@@ -36,7 +36,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result).toMatchObject({ blockedCasesCount: 3 });
   });
 
-  it('formats blocked cases with caseName, docketNumberWithSuffix, and blockedDateFormatted and sorts by docket number', () => {
+  it('formats blocked cases with caseTitle, docketNumberWithSuffix, and blockedDateFormatted and sorts by docket number', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [
@@ -46,6 +46,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Brett Osborne, Petitioner',
             caseId: '1',
             docketNumber: '105-19',
+            docketNumberWithSuffix: '105-19',
           },
           {
             automaticBlocked: true,
@@ -55,6 +56,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
             caseId: '2',
             docketNumber: '102-19',
+            docketNumberWithSuffix: '102-19',
           },
           {
             automaticBlocked: true,
@@ -66,6 +68,7 @@ describe('blockedCasesReportHelper', () => {
             caseId: '3',
             docketNumber: '103-18',
             docketNumberSuffix: 'S',
+            docketNumberWithSuffix: '103-18S',
           },
           {
             automaticBlocked: true,
@@ -73,6 +76,7 @@ describe('blockedCasesReportHelper', () => {
             caseCaption: 'Bob Barker, Petitioner',
             caseId: '4',
             docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
           },
         ],
       },
@@ -89,7 +93,7 @@ describe('blockedCasesReportHelper', () => {
           caseCaption:
             'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
           caseId: '3',
-          caseName: 'Tatum Craig, Wayne Obrien, Partnership Representative',
+          caseTitle: 'Tatum Craig, Wayne Obrien, Partnership Representative',
           docketNumber: '103-18',
           docketNumberSuffix: 'S',
           docketNumberWithSuffix: '103-18S',
@@ -102,7 +106,7 @@ describe('blockedCasesReportHelper', () => {
           blockedDateEarliest: '03/05/18',
           caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
           caseId: '2',
-          caseName: 'Selma Horn & Cairo Harris',
+          caseTitle: 'Selma Horn & Cairo Harris',
           docketNumber: '102-19',
           docketNumberWithSuffix: '102-19',
         },
@@ -112,7 +116,7 @@ describe('blockedCasesReportHelper', () => {
           blockedDateEarliest: '03/05/19',
           caseCaption: 'Bob Barker, Petitioner',
           caseId: '4',
-          caseName: 'Bob Barker',
+          caseTitle: 'Bob Barker',
           docketNumber: '104-19',
           docketNumberWithSuffix: '104-19',
         },
@@ -122,7 +126,7 @@ describe('blockedCasesReportHelper', () => {
           blockedDateEarliest: '03/01/19',
           caseCaption: 'Brett Osborne, Petitioner',
           caseId: '1',
-          caseName: 'Brett Osborne',
+          caseTitle: 'Brett Osborne',
           docketNumber: '105-19',
           docketNumberWithSuffix: '105-19',
         },

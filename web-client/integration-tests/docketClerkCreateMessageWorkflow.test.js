@@ -43,9 +43,14 @@ describe('a docketclerk user creates a new message for another docketclerk user'
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
   });
 
   it('petitioner uploads the external documents', async () => {
+    await test.runSequence('gotoFileDocumentSequence', {
+      docketNumber: caseDetail.docketNumber,
+    });
+
     await uploadExternalDecisionDocument(test);
   });
 

@@ -4,7 +4,7 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
     caseItem.docketNumberSuffix || ''
   }`;
-  caseItem.caseCaptionNames = applicationContext.getCaseCaptionNames(
+  caseItem.caseTitle = applicationContext.getCaseTitle(
     caseItem.caseCaption || '',
   );
   if (caseItem.removedFromTrialDate) {

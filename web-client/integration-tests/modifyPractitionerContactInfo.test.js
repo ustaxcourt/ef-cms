@@ -1,6 +1,6 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import practitionerUpdatesAddress from './journey/practitionerUpdatesAddress';
-import practitionerViewsCaseDetailNoticeOfChangeOfAddress from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
+import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
+import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
 const test = setupTest();
 
@@ -15,7 +15,8 @@ describe('Modify Practitioner Contact Information', () => {
   for (let i = 0; i < 3; i++) {
     loginAs(test, 'privatePractitioner');
     it(`login as a practitioner and create case #${i}`, async () => {
-      caseDetail = await uploadPetition(test);
+      caseDetail = await uploadPetition(test, {}, 'privatePractitioner');
+      expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 export const formattedCases = (get, applicationContext) => {
@@ -14,12 +15,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-
-  const { Document } = applicationContext.getEntityConstructors();
+  const { SYSTEM_GENERATED_DOCUMENT_TYPES } = applicationContext.getConstants();
   const systemGeneratedEventCodes = Object.keys(
-    Document.SYSTEM_GENERATED_DOCUMENT_TYPES,
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
-    return Document.SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
+    return SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
   });
 
   const {
@@ -30,11 +30,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
+
   const caseDeadlines = get(state.caseDeadlines);
   const caseId = get(state.caseDetail.caseId);
   if (caseId) {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
+
   const result = {
     ...applicationContext
       .getUtilities()
@@ -84,10 +86,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
+      const isPaperAndNotServed = result.isPaper && result.status === 'New';
+
       const showDocumentEditLink =
         document &&
         permissions.UPDATE_CASE &&
-        (!document.isInProgress ||
+        ((!isPaperAndNotServed && !document.isInProgress) ||
           ((permissions.DOCKET_ENTRY ||
             permissions.CREATE_ORDER_DOCKET_ENTRY) &&
             document.isInProgress));
@@ -111,7 +115,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ) {
           editLink = '/edit';
         } else if (document.isPetition && !document.servedAt) {
-          editLink = '/edit-saved';
+          editLink = '/review';
         }
       }
 
@@ -149,6 +153,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           (!userHasAccessToCase ||
             !userHasAccessToDocument ||
             !document ||
+            isPaperAndNotServed ||
             (document &&
               (document.isNotServedCourtIssuedDocument ||
                 document.isInProgress) &&

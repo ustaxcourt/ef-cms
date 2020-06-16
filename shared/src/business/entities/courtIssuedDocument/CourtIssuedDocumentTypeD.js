@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi');
-const moment = require('moment');
 const {
+  calculateISODate,
   createISODateString,
   formatDateString,
   FORMATS,
@@ -8,10 +8,13 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
-const yesterdayMoment = moment().subtract(1, 'd');
+const joiStrictTimestamp = getTimestampSchema();
+
+const yesterdayMoment = calculateISODate({ howMuch: -1, unit: 'days' });
 const yesterdayFormatted = formatDateString(
   createISODateString(yesterdayMoment),
   FORMATS.MMDDYYYY,
@@ -40,7 +43,7 @@ CourtIssuedDocumentTypeD.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeD.schema = {
   attachments: joi.boolean().required(),
-  date: joi.date().iso().min(yesterdayFormatted).required(),
+  date: joiStrictTimestamp.min(yesterdayFormatted).required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().optional(),
@@ -49,7 +52,6 @@ CourtIssuedDocumentTypeD.schema = {
 joiValidationDecorator(
   CourtIssuedDocumentTypeD,
   CourtIssuedDocumentTypeD.schema,
-  undefined,
   VALIDATION_ERROR_MESSAGES,
 );
 

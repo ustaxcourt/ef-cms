@@ -1,51 +1,86 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
+import { ErrorNotification } from '../ErrorNotification';
+import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
+import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
+import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
 export const PublicSearch = connect(
   {
+    advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
-    submitPublicAdvancedSearchSequence:
-      sequences.submitPublicAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence:
+      sequences.submitPublicCaseAdvancedSearchSequence,
+    submitPublicOpinionAdvancedSearchSequence:
+      sequences.submitPublicOpinionAdvancedSearchSequence,
+    submitPublicOrderAdvancedSearchSequence:
+      sequences.submitPublicOrderAdvancedSearchSequence,
   },
   function PublicSearch({
+    advancedSearchTabChangeSequence,
     submitCaseDocketNumberSearchSequence,
-    submitPublicAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence,
+    submitPublicOpinionAdvancedSearchSequence,
+    submitPublicOrderAdvancedSearchSequence,
   }) {
     return (
       <>
-        <NonMobile>
-          <BigHeader text="Search for a Case" />
+        <BigHeader text="Welcome to the U.S Tax Court’s Case Management System" />
 
-          <section className="usa-section grid-container advanced-search">
-            <CaseSearchForm
-              submitAdvancedSearchSequence={submitPublicAdvancedSearchSequence}
-              submitDocketNumberSearchSequence={
-                submitCaseDocketNumberSearchSequence
-              }
-            />
-            <SearchResults />
-          </section>
-        </NonMobile>
-        <Mobile>
-          <BigHeader text="Welcome to the U.S Tax Court’s Case Management System" />
+        <section className="usa-section grid-container advanced-search">
+          <SuccessNotification />
+          <ErrorNotification />
 
-          <section className="usa-section grid-container advanced-search">
-            <h2>Search for a Case</h2>
-            <CaseSearchForm
-              submitAdvancedSearchSequence={submitPublicAdvancedSearchSequence}
-              submitDocketNumberSearchSequence={
-                submitCaseDocketNumberSearchSequence
-              }
-            />
-            <SearchResults />
-          </section>
-        </Mobile>
+          <Tabs
+            bind="advancedSearchTab"
+            className="classic-horizontal-header3 tab-border"
+            onSelect={() => {
+              advancedSearchTabChangeSequence();
+            }}
+          >
+            <Tab id="tab-case" tabName="case" title="Case">
+              <p>
+                Anyone can search for a case in our system for cases filed{' '}
+                <span className="text-semibold">on or after May 1, 1986</span>.
+                If you aren’t affiliated with that case, you will only see
+                limited information about that case.
+              </p>
+
+              <CaseSearchForm
+                submitAdvancedSearchSequence={
+                  submitPublicCaseAdvancedSearchSequence
+                }
+                submitDocketNumberSearchSequence={
+                  submitCaseDocketNumberSearchSequence
+                }
+              />
+              <SearchResults />
+            </Tab>
+            <Tab id="tab-order" tabName="order" title="Order">
+              <OrderSearchForm
+                submitAdvancedSearchSequence={
+                  submitPublicOrderAdvancedSearchSequence
+                }
+              />
+              <DocumentSearchResults />
+            </Tab>
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+              <OpinionSearchForm
+                submitAdvancedSearchSequence={
+                  submitPublicOpinionAdvancedSearchSequence
+                }
+              />
+              <DocumentSearchResults />
+            </Tab>
+          </Tabs>
+        </section>
       </>
     );
   },

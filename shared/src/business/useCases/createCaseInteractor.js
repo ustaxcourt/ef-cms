@@ -28,9 +28,9 @@ const addPetitionDocumentToCase = ({
       caseId: caseToAdd.caseId,
       caseIsInProgress: caseToAdd.inProgress,
       caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
-      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
@@ -45,8 +45,8 @@ const addPetitionDocumentToCase = ({
 
   let message;
 
-  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-  message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
+  const caseTitle = Case.getCaseTitle(caseToAdd.caseCaption);
+  message = `${documentEntity.documentType} filed by ${caseTitle} is ready for review.`;
 
   workItemEntity.addMessage(
     new Message(
@@ -96,7 +96,6 @@ exports.createCaseInteractor = async ({
     petitionMetadata,
   ).validate();
 
-  // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
       applicationContext,

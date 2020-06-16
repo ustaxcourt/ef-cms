@@ -1,11 +1,18 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 
-const { VALIDATION_ERROR_MESSAGES } = Case;
+const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
+export const petitionsClerkCreatesNewCase = (
+  test,
+  fakeFile,
+  trialLocation = 'Birmingham, Alabama',
+) => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
+
+    await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -23,16 +30,20 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       VALIDATION_ERROR_MESSAGES.petitionFile,
     );
 
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toBeUndefined();
+
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedMonth',
+      key: 'receivedAtMonth',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedDay',
+      key: 'receivedAtDay',
       value: '01',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'dateReceivedYear',
+      key: 'receivedAtYear',
       value: '2001',
     });
 
@@ -46,6 +57,17 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
     });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'preferredTrialCity',
+      value: trialLocation,
+    });
+
+    await test.runSequence('submitPetitionFromPaperSequence');
+
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionFile',
@@ -87,6 +109,12 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: 1,
     });
 
+    await test.runSequence('submitPetitionFromPaperSequence');
+
+    expect(
+      test.getState('validationErrors.requestForPlaceOfTrialFile'),
+    ).toBeUndefined();
+
     await test.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
@@ -95,11 +123,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     await test.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'preferredTrialCity',
-      value: trialLocation,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -158,17 +181,20 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: '1234567890',
     });
 
+    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.UNPAID,
+    });
+
     await test.runSequence('validatePetitionFromPaperSequence');
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewPetitionFromPaperSequence');
+    await test.runSequence('submitPetitionFromPaperSequence');
 
-    await test.runSequence('gotoReviewPetitionFromPaperSequence');
+    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    expect(test.getState('currentPage')).toEqual('ReviewPetitionFromPaper');
-
-    await test.runSequence('createCaseFromPaperAndServeToIrsSequence');
+    await test.runSequence('serveCaseToIrsSequence');
 
     await test.runSequence('gotoCaseDetailSequence');
 

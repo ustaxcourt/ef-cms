@@ -49,6 +49,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         mailingDate: 'testing',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
         receivedAt: RECEIVED_DATE,
         requestForPlaceOfTrialFile: new File(
           [],
@@ -68,11 +69,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
-      caseTitle:
-        'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
       createdAt: RECEIVED_DATE,
       docketNumber: '101-19',
-      docketNumberSuffix: null,
+      docketNumberWithSuffix: '101-19',
       docketRecord: [
         {
           description: 'Petition',
@@ -124,9 +123,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
           receivedAt: RECEIVED_DATE,
         },
       ],
+      initialCaption: 'Bob Jones2, Petitioner',
       initialDocketNumberSuffix: '_',
-      initialTitle:
-        'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
@@ -149,7 +147,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
-        docketNumberSuffix: null,
+        docketNumberWithSuffix: '101-19',
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
@@ -178,7 +176,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         assigneeName: 'Alex Petitionsclerk',
         caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
-        docketNumberSuffix: null,
+        docketNumberWithSuffix: '101-19',
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',

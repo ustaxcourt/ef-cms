@@ -20,12 +20,10 @@ export const canConsolidateAction = async ({
     });
   }
 
-  const { Case } = applicationContext.getEntityConstructors();
-
-  const caseEntity = new Case(caseDetail, { applicationContext });
-
-  const results = caseEntity.getConsolidationStatus({
-    caseEntity: caseToConsolidate,
+  const results = applicationContext.getUseCases().canConsolidateInteractor({
+    applicationContext,
+    caseToConsolidate,
+    currentCase: caseDetail,
   });
 
   if (results.canConsolidate) {

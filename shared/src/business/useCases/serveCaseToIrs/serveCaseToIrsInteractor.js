@@ -1,14 +1,10 @@
-const sanitize = require('sanitize-filename');
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { createISODateString } = require('../../utilities/DateHandler');
+const { Case } = require('../../entities/cases/Case');
+const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { PDFDocument } = require('pdf-lib');
 const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -16,8 +12,6 @@ exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  const { Case, DocketRecord } = applicationContext.getEntityConstructors();
-
   if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
       new DocketRecord(
@@ -41,32 +35,6 @@ exports.addDocketEntryForPaymentStatus = ({
       ),
     );
   }
-};
-
-exports.uploadZipOfDocuments = async ({ applicationContext, caseEntity }) => {
-  const s3Ids = caseEntity.documents
-    .filter(document => !caseEntity.isDocumentDraft(document.documentId))
-    .map(document => document.documentId);
-  const fileNames = caseEntity.documents.map(
-    document => `${document.documentType}.pdf`,
-  );
-  let zipName = sanitize(`${caseEntity.docketNumber}`);
-
-  if (caseEntity.contactPrimary && caseEntity.contactPrimary.name) {
-    zipName += sanitize(
-      `_${caseEntity.contactPrimary.name.replace(/\s/g, '_')}`,
-    );
-  }
-  zipName += '.zip';
-
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
-
-  return { fileNames, s3Ids, zipName };
 };
 
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
@@ -107,38 +75,58 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       caseId: caseId,
     });
 
-  const { Case } = applicationContext.getEntityConstructors();
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
-  const servedParties = aggregatePartiesForService(caseEntity);
+  for (const initialDocumentTypeKey of Object.keys(
+    Document.INITIAL_DOCUMENT_TYPES,
+  )) {
+    const initialDocumentType =
+      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
-  Object.keys(Document.INITIAL_DOCUMENT_TYPES).forEach(
-    initialDocumentTypeKey => {
-      const initialDocumentType =
-        Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+    const initialDocument = caseEntity.documents.find(
+      document => document.documentType === initialDocumentType.documentType,
+    );
 
-      const initialDocument = caseEntity.documents.find(
-        document => document.documentType === initialDocumentType.documentType,
-      );
+    if (initialDocument) {
+      initialDocument.setAsServed([
+        {
+          name: 'IRS',
+          role: 'irsSuperuser',
+        },
+      ]);
+      caseEntity.updateDocument(initialDocument);
 
-      if (initialDocument) {
-        initialDocument.setAsServed(servedParties.all);
-        caseEntity.updateDocument(initialDocument);
+      if (
+        initialDocument.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType
+      ) {
+        await applicationContext
+          .getUseCaseHelpers()
+          .sendIrsSuperuserPetitionEmail({
+            applicationContext,
+            caseEntity,
+            documentEntity: initialDocument,
+          });
+      } else {
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+          applicationContext,
+          caseEntity,
+          documentEntity: initialDocument,
+          servedParties: {
+            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
+            electronic: [],
+          },
+        });
       }
-    },
-  );
+    }
+  }
 
   exports.addDocketEntryForPaymentStatus({ applicationContext, caseEntity });
 
   caseEntity
-    .updateCaseTitleDocketRecord({ applicationContext })
+    .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
-
-  await exports.uploadZipOfDocuments({
-    applicationContext,
-    caseEntity,
-  });
 
   //This functionality will probably change soon
   //  deletedStinDocumentId = await exports.deleteStinIfAvailable({
@@ -149,7 +137,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   //   item => item.documentId !== deletedStinDocumentId,
   // );
 
-  caseEntity.markAsSentToIRS(createISODateString());
+  caseEntity.markAsSentToIRS();
 
   const petitionDocument = caseEntity.documents.find(
     document =>
@@ -196,7 +184,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
   }
 
-  const results = await applicationContext
+  const pdfData = await applicationContext
     .getUseCaseHelpers()
     .generateCaseConfirmationPdf({
       applicationContext,
@@ -204,24 +192,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
     });
 
   if (caseEntity.isPaper) {
-    const pdfData = results;
-    const noticeDoc = await PDFDocument.load(pdfData);
-    const newPdfDoc = await PDFDocument.create();
-
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+    const paperServicePdfBuffer = Buffer.from(pdfData);
 
     return paperServicePdfBuffer;
   }

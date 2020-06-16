@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkPrioritizesCase = test => {
   return it('Petitions clerk prioritizes the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -18,8 +18,8 @@ export default test => {
 
     await test.runSequence('prioritizeCaseSequence');
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'This case has been added to eligible cases.',
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Case added to eligible list and will be set for trial when calendar is set.',
     );
     expect(test.getState('caseDetail').highPriority).toBeTruthy();
     expect(test.getState('caseDetail').highPriorityReason).toEqual(

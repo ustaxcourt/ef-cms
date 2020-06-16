@@ -1,6 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
+import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
+import { OpinionSearchForm } from './OpinionSearchForm';
 import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
@@ -19,6 +21,8 @@ export const AdvancedSearch = connect(
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
       sequences.submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence:
+      sequences.submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence:
       sequences.submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence:
@@ -31,6 +35,7 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
+    submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
@@ -45,6 +50,7 @@ export const AdvancedSearch = connect(
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
+            defaultActiveTab="case"
             onSelect={() => {
               advancedSearchTabChangeSequence();
             }}
@@ -69,6 +75,15 @@ export const AdvancedSearch = connect(
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
+              <DocumentSearchResults />
+            </Tab>
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+              <OpinionSearchForm
+                submitAdvancedSearchSequence={
+                  submitOpinionAdvancedSearchSequence
+                }
+              />
+              <DocumentSearchResults />
             </Tab>
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab

@@ -1,4 +1,4 @@
-export default test => {
+export const petitionsClerkDeletesScannedBatch = test => {
   return it('Petitions clerk deletes a batch', async () => {
     const selectedDocumentType = test.getState(
       'currentViewMetadata.documentSelectedForScan',

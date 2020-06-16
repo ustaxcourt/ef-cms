@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
@@ -23,11 +24,11 @@ const addPetitionDocumentWithWorkItemToCase = ({
       assigneeName: user.name,
       associatedJudge: caseToAdd.associatedJudge,
       caseId: caseToAdd.caseId,
-      caseIsInProgress: caseToAdd.inProgress,
+      caseIsInProgress: true,
       caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
-      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       document: {
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
@@ -94,14 +95,16 @@ exports.createCaseFromPaperInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { CaseInternal } = applicationContext.getEntityConstructors();
-  const petitionEntity = new CaseInternal({
-    ...petitionMetadata,
-    applicationForWaiverOfFilingFeeFileId,
-    ownershipDisclosureFileId,
-    petitionFileId,
-    stinFileId,
-  }).validate();
+  const petitionEntity = new CaseInternal(
+    {
+      ...petitionMetadata,
+      applicationForWaiverOfFilingFeeFileId,
+      ownershipDisclosureFileId,
+      petitionFileId,
+      stinFileId,
+    },
+    { applicationContext },
+  ).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(

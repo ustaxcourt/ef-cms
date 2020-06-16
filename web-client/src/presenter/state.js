@@ -3,7 +3,8 @@ import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourt
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addEditUserCaseNoteModalHelper } from './computeds/addEditUserCaseNoteModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import { advancedSearchHelper } from './computeds/advancedSearchHelper';
+import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
+import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
@@ -54,7 +55,6 @@ import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
-import { reviewPetitionFromPaperHelper } from './computeds/reviewPetitionFromPaperHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -64,6 +64,7 @@ import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
+import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -81,6 +82,7 @@ const helpers = {
   addDocketEntryHelper,
   addEditUserCaseNoteModalHelper,
   addToTrialSessionModalHelper,
+  advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
   batchDownloadHelper,
@@ -130,7 +132,6 @@ const helpers = {
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   requestAccessHelper,
-  reviewPetitionFromPaperHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
@@ -140,6 +141,7 @@ const helpers = {
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
+  statisticsFormHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
@@ -168,7 +170,16 @@ export const baseState = {
   completeForm: {}, // TODO: replace with state.form
   currentPage: 'Interstitial',
   currentViewMetadata: {
-    caseDetail: {},
+    caseDetail: {
+      caseDetailInternalTabs: {
+        caseInformation: false,
+        correspondence: false,
+        deadlines: false,
+        docketRecord: false,
+        inProgress: false,
+        notes: false,
+      },
+    },
     documentDetail: {
       tab: '',
     },

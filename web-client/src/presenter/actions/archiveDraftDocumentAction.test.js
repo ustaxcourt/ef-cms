@@ -27,8 +27,7 @@ describe('archiveDraftDocumentAction', () => {
       applicationContext.getUseCases().archiveDraftDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.state.alertSuccess).toMatchObject({
-      message: 'document-title-123',
-      title: 'This document has been deleted:',
+      message: 'Document deleted.',
     });
   });
 
@@ -52,8 +51,7 @@ describe('archiveDraftDocumentAction', () => {
       applicationContext.getUseCases().archiveDraftDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.state.alertSuccess).toMatchObject({
-      message: 'document-title-123',
-      title: 'This document has been deleted:',
+      message: 'Document deleted.',
     });
     expect(result.state.saveAlertsForNavigation).toEqual(true);
     expect(result.output.caseId).toEqual('abc-123ghadsf-zdasdf');

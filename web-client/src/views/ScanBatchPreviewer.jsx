@@ -165,7 +165,13 @@ export const ScanBatchPreviewer = connect(
       return (
         <div className="grid-row">
           <div className="grid-col-8">
-            <FormGroup errorText={validationErrors[documentType]}>
+            <FormGroup
+              errorText={[
+                validationErrors[documentType],
+                documentType === 'requestForPlaceOfTrialFile' &&
+                  validationErrors.chooseAtLeastOneValue,
+              ]}
+            >
               <fieldset
                 aria-label="scan mode selection"
                 className={classNames(

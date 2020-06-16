@@ -8,6 +8,7 @@ const {
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -27,6 +28,7 @@ describe('Case entity', () => {
     expect(myCase).toMatchObject({
       isSealed: false,
       noticeOfAttachments: false,
+      orderDesignatingPlaceOfTrial: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: false,
@@ -34,42 +36,6 @@ describe('Case entity', () => {
       orderForRatification: false,
       orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
-    });
-  });
-
-  it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
-    let myCase = new Case(MOCK_CASE, { applicationContext });
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: false,
-    });
-
-    myCase = new Case(
-      {
-        ...MOCK_CASE,
-        isPaper: true,
-      },
-      {
-        applicationContext,
-      },
-    );
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: false,
-    });
-  });
-
-  it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
-    const myCase = new Case(
-      {
-        ...MOCK_CASE,
-        isPaper: true,
-        preferredTrialCity: undefined,
-      },
-      {
-        applicationContext,
-      },
-    );
-    expect(myCase).toMatchObject({
-      orderDesignatingPlaceOfTrial: true,
     });
   });
 
@@ -130,8 +96,9 @@ describe('Case entity', () => {
 
   describe('filtered', () => {
     it('does not return private data if filtered is true and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -144,8 +111,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -158,8 +126,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is external', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f']; //petitioner user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //petitioner user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -172,8 +141,9 @@ describe('Case entity', () => {
     });
 
     it('returns private data if filtered is false and the user is internal', () => {
-      applicationContext.getCurrentUser = () =>
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f']; //docketclerk user
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      ); //docketclerk user
 
       const myCase = new Case(
         { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
@@ -192,6 +162,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.entityName).toEqual('Case');
     });
 
     it('Creates a valid case from an already existing case json', () => {
@@ -199,6 +170,19 @@ describe('Case entity', () => {
         applicationContext,
       });
       expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates an invalid case with an invalid nested contact object', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with a document', () => {
@@ -251,6 +235,26 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates a valid case with statistics', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              deficiencyAmount: 1,
+              totalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
@@ -534,14 +538,7 @@ describe('Case entity', () => {
   });
 
   describe('markAsSentToIRS', () => {
-    it('sets irsSendDate', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
-    });
-    it('updates docket record status on petition documents', () => {
+    it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(
         {
           ...MOCK_CASE,
@@ -563,41 +560,39 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      expect(caseRecord.irsSendDate).toBeDefined();
-      expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
-      expect(caseRecord.docketRecord[1].status).toBeUndefined();
+      caseRecord.markAsSentToIRS();
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
   });
 
   describe('getCaseCaption', () => {
     it('party type Petitioner', () => {
-      const caseTitle = Case.getCaseCaption(MOCK_CASE);
-      expect(caseTitle).toEqual('Test Petitioner, Petitioner');
+      const caseCaption = Case.getCaseCaption(MOCK_CASE);
+      expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
         partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       });
-      expect(caseTitle).toEqual(
+      expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Petitioners',
       );
     });
 
     it('party type Petitioner & Deceased Spouse', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
         partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
       });
-      expect(caseTitle).toEqual(
+      expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
       );
     });
@@ -608,18 +603,18 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.estate,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Test Petitioner 2, Executor, Petitioner(s)',
       );
     });
 
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
       });
-      expect(caseTitle).toEqual(
+      expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Petitioner',
       );
     });
@@ -630,18 +625,18 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.trust,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Trustee, Petitioner(s)',
       );
     });
 
     it('party type Corporation', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.corporation,
       });
-      expect(caseTitle).toEqual('Test Petitioner, Petitioner');
+      expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
 
     it('party type Partnership Tax Matters', () => {
@@ -650,8 +645,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Tax Matters Partner, Petitioner',
       );
     });
@@ -662,8 +657,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, A Partner Other Than the Tax Matters Partner, Petitioner',
       );
     });
@@ -674,8 +669,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Partnership Representative, Petitioner(s)',
       );
     });
@@ -686,8 +681,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.conservator,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Conservator, Petitioner',
       );
     });
@@ -698,8 +693,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.guardian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Guardian, Petitioner',
       );
     });
@@ -710,8 +705,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.custodian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Custodian, Petitioner',
       );
     });
@@ -722,8 +717,8 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Minor, Test Petitioner 2, Next Friend, Petitioner',
       );
     });
@@ -734,26 +729,26 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Incompetent, Test Petitioner 2, Next Friend, Petitioner',
       );
     });
 
     it('party type Donor', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.donor,
       });
-      expect(caseTitle).toEqual('Test Petitioner, Donor, Petitioner');
+      expect(caseCaption).toEqual('Test Petitioner, Donor, Petitioner');
     });
 
     it('party type Transferee', () => {
-      const caseTitle = Case.getCaseCaption({
+      const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.transferee,
       });
-      expect(caseTitle).toEqual('Test Petitioner, Transferee, Petitioner');
+      expect(caseCaption).toEqual('Test Petitioner, Transferee, Petitioner');
     });
 
     it('party type Surviving Spouse', () => {
@@ -762,33 +757,31 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
-      const caseTitle = Case.getCaseCaption(mockCase);
-      expect(caseTitle).toEqual(
+      const caseCaption = Case.getCaseCaption(mockCase);
+      expect(caseCaption).toEqual(
         'Test Petitioner, Deceased, Test Petitioner 2, Surviving Spouse, Petitioner',
       );
     });
   });
 
-  describe('getCaseCaptionNames', () => {
+  describe('getCaseTitle', () => {
     it('party type Petitioner', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
-        'Test Petitioner, Petitioner',
-      );
-      expect(caseCaptionNames).toEqual('Test Petitioner');
+      const caseTitle = Case.getCaseTitle('Test Petitioner, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Test Petitioner & Test Petitioner 2, Petitioners',
       );
-      expect(caseCaptionNames).toEqual('Test Petitioner & Test Petitioner 2');
+      expect(caseTitle).toEqual('Test Petitioner & Test Petitioner 2');
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseCaptionNames = Case.getCaseCaptionNames(
+      const caseTitle = Case.getCaseTitle(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor, Petitioner(s)',
       );
-      expect(caseCaptionNames).toEqual(
+      expect(caseTitle).toEqual(
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor',
       );
     });
@@ -915,37 +908,6 @@ describe('Case entity', () => {
         error = err;
       }
       expect(error).toBeTruthy();
-    });
-  });
-  describe('validateWithError', () => {
-    it('passes back an error passed in if invalid', () => {
-      let error = null;
-      const caseRecord = new Case(
-        {},
-        {
-          applicationContext,
-        },
-      );
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).toBeDefined();
-      expect(error.message).toContain("I'm a real error");
-    });
-
-    it('does not pass back an error passed in if valid', () => {
-      let error;
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      try {
-        caseRecord.validateWithError(new Error("I'm a real error"));
-      } catch (e) {
-        error = e;
-      }
-      expect(error).not.toBeDefined();
     });
   });
 
@@ -1098,14 +1060,14 @@ describe('Case entity', () => {
     });
   });
 
-  describe('updateCaseTitleDocketRecord', () => {
+  describe('updateCaseCaptionDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
       const caseToVerify = new Case(
         {},
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
@@ -1119,47 +1081,45 @@ describe('Case entity', () => {
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should not add to the docket record when the caption is equivalent to the initial title', () => {
+    it('should not add to the docket record when the caption is equivalent to the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'Caption',
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record with event code MINC when the caption changes from the initial title', () => {
+    it('should add to the docket record with event code MINC when the caption changes from the initial caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
           status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(1);
       expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
 
-    it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
+    it('should not add to the docket record when the caption is equivalent to the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very New Caption',
@@ -1173,19 +1133,18 @@ describe('Case entity', () => {
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             },
           ],
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
-    it('should add to the docket record when the caption changes from the last updated title', () => {
+    it('should add to the docket record when the caption changes from the last updated caption', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A Very Berry New Caption',
@@ -1199,14 +1158,13 @@ describe('Case entity', () => {
                 "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
             },
           ],
-          initialTitle:
-            'Caption v. Commissioner of Internal Revenue, Respondent',
+          initialCaption: 'Caption',
           status: Case.STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
-      ).updateCaseTitleDocketRecord({
+      ).updateCaseCaptionDocketRecord({
         applicationContext,
       });
       expect(caseToVerify.docketRecord.length).toEqual(3);
@@ -1232,7 +1190,7 @@ describe('Case entity', () => {
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
-          caseTitle: 'testing',
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -1249,7 +1207,7 @@ describe('Case entity', () => {
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: Case.STATUS_TYPES.new,
-          caseTitle: 'testing',
+          caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
           isQC: true,
@@ -1314,7 +1272,7 @@ describe('Case entity', () => {
     it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
       // eslint-disable-next-line spellcheck/spell-checker
       /*
-      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to 
+      Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to
       leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs
       at a time when it is calculating date/time differences across the existence of a leap year and DST, it may fail.
       */
@@ -1666,6 +1624,66 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getPetitionDocument', () => {
+    it('should get the petition document by documentType', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const result = myCase.getPetitionDocument();
+      expect(result.documentType).toEqual(
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      );
+    });
+  });
+
+  describe('getIrsSendDate', () => {
+    it('should get the IRS send date from the petition document', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toEqual('2019-03-01T21:40:46.415Z');
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not served', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [{ documentType: 'Petition' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
+    });
+
+    it('should return undefined for irsSendDate if the petition document is not found', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            { documentType: 'Answer', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      const result = myCase.getIrsSendDate();
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe('stripLeadingZeros', () => {
     it('should remove leading zeros', () => {
       const result = Case.stripLeadingZeros('000101-19');
@@ -1695,7 +1713,11 @@ describe('Case entity', () => {
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
-      expect(myCase.documents[0].processingStatus).toEqual('success');
+      expect(
+        myCase.documents.find(
+          d => d.documentId === MOCK_DOCUMENTS[0].documentId,
+        ).processingStatus,
+      ).toEqual('success');
     });
   });
 
@@ -2162,9 +2184,6 @@ describe('Case entity', () => {
       updatedCase.setCaseCaption('A whole new caption');
 
       expect(updatedCase.caseCaption).toEqual('A whole new caption');
-      expect(updatedCase.caseTitle).toEqual(
-        'A whole new caption v. Commissioner of Internal Revenue, Respondent',
-      );
     });
   });
 
@@ -2735,6 +2754,9 @@ describe('Case entity', () => {
   describe('isAssociatedUser', () => {
     let caseEntity;
     beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
       caseEntity = new Case(
         {
           ...MOCK_CASE,
@@ -2746,10 +2768,7 @@ describe('Case entity', () => {
           ],
         },
         {
-          applicationContext: {
-            getCurrentUser: () =>
-              MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-          },
+          applicationContext,
         },
       );
     });
@@ -2828,36 +2847,38 @@ describe('Case entity', () => {
   });
 
   describe('DocketRecord indices must be unique', () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketRecord: [
-          {
-            description: 'first record',
-            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-            eventCode: 'P',
-            filingDate: '2018-03-01T00:01:00.000Z',
-            index: 1,
-          },
-          {
-            description: 'second record',
-            documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-            eventCode: 'STIN',
-            filingDate: '2018-03-01T00:02:00.000Z',
-            index: 1,
-          },
-        ],
-      },
-      {
-        applicationContext,
-      },
-    );
+    it('identifies duplicate values in docket record indices', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          docketRecord: [
+            {
+              description: 'first record',
+              documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+              eventCode: 'P',
+              filingDate: '2018-03-01T00:01:00.000Z',
+              index: 1,
+            },
+            {
+              description: 'second record',
+              documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+              eventCode: 'STIN',
+              filingDate: '2018-03-01T00:02:00.000Z',
+              index: 1,
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
 
-    expect(caseEntity.getFormattedValidationErrors()).toEqual({
-      'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        'docketRecord[1]': '"docketRecord[1]" contains a duplicate value',
+      });
     });
   });
 
@@ -2874,6 +2895,78 @@ describe('Case entity', () => {
       expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
         'case-123-20-confirmation.pdf',
       );
+    });
+  });
+
+  describe('Statistics', () => {
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: true,
+          statistics: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual({
+        statistics: '"statistics" must contain at least 1 items',
+      });
+    });
+
+    it('should be required for deficiency cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Deficiency',
+          hasVerifiedIrsNotice: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be required for other cases', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          caseType: 'Other',
+          hasVerifiedIrsNotice: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
+    });
+  });
+
+  describe('addCorrespondence', () => {
+    it('should successfully add correspondence', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      caseEntity.fileCorrespondence({
+        documentId: 'yeehaw',
+        documentTitle: 'Correspondence document',
+      });
+
+      expect(caseEntity.correspondence.length).toEqual(1);
     });
   });
 });

@@ -8,7 +8,6 @@ const applicationContext = createApplicationContext({});
 describe('generateStandingPretrialNoticeTemplate', () => {
   const caseDetail = {
     caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
   };
@@ -17,8 +16,7 @@ describe('generateStandingPretrialNoticeTemplate', () => {
     const result = await generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
+        caseCaption: caseDetail.caseCaption,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {
@@ -64,8 +62,7 @@ describe('generateStandingPretrialNoticeTemplate', () => {
     const result = await generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
+        caseCaption: caseDetail.caseCaption,
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {
