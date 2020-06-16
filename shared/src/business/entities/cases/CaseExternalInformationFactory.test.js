@@ -1,11 +1,8 @@
 const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { PARTY_TYPES } = require('../EntityConstants');
+const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;

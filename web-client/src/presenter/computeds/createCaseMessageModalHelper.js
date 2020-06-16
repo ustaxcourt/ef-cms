@@ -25,10 +25,14 @@ export const createCaseMessageModalHelper = (get, applicationContext) => {
     }
   });
 
+  const showMessageAttachments =
+    form.attachments && form.attachments.length > 0;
+
   return {
     documents,
     draftDocuments,
     showAddDocumentForm: canAddDocument && shouldShowAddDocumentForm,
     showAddMoreDocumentsButton: canAddDocument && !shouldShowAddDocumentForm,
+    showMessageAttachments,
   };
 };

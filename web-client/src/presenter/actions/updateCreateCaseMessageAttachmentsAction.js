@@ -19,11 +19,14 @@ export const updateCreateCaseMessageAttachmentsAction = ({
 
   // TODO: Should we evaluate the length of the array and conditionally push?
   if (documentId) {
-    const document = documents.find(
-      document => document.documentId === documentId,
-    );
+    const document = documents.find(d => d.documentId === documentId);
 
     const documentTitle = document.documentTitle || document.documentType;
+
+    if (attachments.length === 0) {
+      // This is the first attachment, so we should update the subject
+      store.set(state.modal.form.subject, documentTitle);
+    }
 
     attachments.push({
       documentId,

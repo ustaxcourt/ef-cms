@@ -1,4 +1,4 @@
-import { Scan } from '../../../../shared/src/business/entities/Scan';
+import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -22,7 +22,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        scanMode: Scan.SCAN_MODES.FEEDER,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -46,7 +46,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        scanMode: Scan.SCAN_MODES.FEEDER,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -99,7 +99,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        scanMode: Scan.SCAN_MODES.FEEDER,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },

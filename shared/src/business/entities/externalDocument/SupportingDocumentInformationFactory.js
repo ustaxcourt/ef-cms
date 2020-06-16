@@ -2,12 +2,10 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
+const { MAX_FILE_SIZE_BYTES } = require('../EntityConstants');
 
 const joiStrictTimestamp = getTimestampSchema();
 /**

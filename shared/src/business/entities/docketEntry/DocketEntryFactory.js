@@ -1,18 +1,18 @@
 const joi = require('@hapi/joi');
 const {
+  DOCUMENT_CATEGORY_MAP,
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} = require('../EntityConstants');
+const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-} = require('../../../persistence/s3/getUploadPolicy');
-const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
-const { DOCUMENT_CATEGORY_MAP } = require('../EntityConstants');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
