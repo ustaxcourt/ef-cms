@@ -91,6 +91,11 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
+  const petitionDocument = caseDetail.documents.find(
+    d => d.documentType === 'Petition',
+  );
+  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+
   return {
     caseDeadlines,
     documentDetailTab,
@@ -122,6 +127,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
+    showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.privatePractitioners &&
