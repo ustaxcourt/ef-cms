@@ -41,6 +41,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToDocumentQCSequence } from './sequences/closeModalAndReturnToDocumentQCSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
@@ -455,6 +456,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToDocumentQCSequence,
     closeModalAndReturnToTrialSessionsSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
