@@ -18,14 +18,18 @@ export const setAttachmentDocumentToDisplayAction = async ({
 
   store.set(state.attachmentDocumentToDisplay, attachmentDocumentToDisplay);
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    caseId,
-    documentId: attachmentDocumentToDisplay.documentId,
-    isPublic: false,
-  });
+  if (attachmentDocumentToDisplay) {
+    const {
+      url,
+    } = await applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor({
+        applicationContext,
+        caseId,
+        documentId: attachmentDocumentToDisplay.documentId,
+        isPublic: false,
+      });
 
-  store.set(state.iframeSrc, url);
+    store.set(state.iframeSrc, url);
+  }
 };
