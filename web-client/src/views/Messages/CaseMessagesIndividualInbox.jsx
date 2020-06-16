@@ -37,7 +37,7 @@ export const CaseMessagesIndividualInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
@@ -58,6 +58,9 @@ export const CaseMessagesIndividualInbox = connect(
                     {message.fromSection}
                   </td>
                   <td>
+                    {message.attachments.length === 0 && (
+                      <span>No attachments</span>
+                    )}
                     {message.attachments.length > 0 && (
                       <CaseMessagesRowAttachments
                         attachments={message.attachments}

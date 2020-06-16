@@ -152,6 +152,7 @@ export const CreateCaseMessageModalDialog = connect(
             id="subject"
             name="subject"
             type="text"
+            value={form.subject || ''}
             onChange={e => {
               updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
@@ -180,7 +181,7 @@ export const CreateCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
-        {form.attachments && form.attachments.length > 0 && (
+        {createCaseMessageModalHelper.showMessageAttachments && (
           <div className="margin-bottom-20">
             <div>
               <FontAwesomeIcon
@@ -188,7 +189,7 @@ export const CreateCaseMessageModalDialog = connect(
                 icon="file-pdf"
                 size="1x"
               />
-              <strong className="margin-left-1">Attachment(s)</strong>
+              <span className="margin-left-1 semi-bold">Attachment(s)</span>
             </div>
             {form.attachments.map((document, idx) => {
               return (

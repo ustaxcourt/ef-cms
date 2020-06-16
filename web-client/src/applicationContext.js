@@ -5,7 +5,10 @@ import {
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import {
+  Case,
+  getPetitionDocumentFromDocuments,
+} from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
@@ -20,6 +23,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
@@ -317,6 +321,7 @@ const allUseCases = {
   getCasesByUserInteractor,
   getClosedCasesInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
@@ -441,7 +446,7 @@ const applicationContext = {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000';
+    return process.env.API_URL || 'http://localhost:4000';
   },
   getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
@@ -537,6 +542,7 @@ const applicationContext = {
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
+      getPetitionDocumentFromDocuments,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

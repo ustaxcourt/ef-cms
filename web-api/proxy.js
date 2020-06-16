@@ -12,25 +12,7 @@ const LOG_LEVEL = 'info'; // ['debug', 'info', 'warn', 'error', 'silent']. Defau
 
 // do not include trailing slashes
 const PROXY_DESTINATIONS = {
-  '/api': `http://${PROXY_HOST}:3001`,
-  '/case-deadlines': `http://${PROXY_HOST}:3009`,
-  '/case-documents': `http://${PROXY_HOST}:3008`,
-  '/case-meta': `http://${PROXY_HOST}:3015`,
-  '/case-notes': `http://${PROXY_HOST}:3010`,
-  '/case-parties': `http://${PROXY_HOST}:3014`,
-  '/cases': `http://${PROXY_HOST}:3002`,
-  '/documents': `http://${PROXY_HOST}:3004`,
-  '/messages': `http://${PROXY_HOST}:3018`,
-  '/migrate': `http://${PROXY_HOST}:3030`,
   '/notifications': `http://${PROXY_HOST}:3011`,
-  '/practitioners': `http://${PROXY_HOST}:3017`,
-  '/public-api': `http://${PROXY_HOST}:3013`,
-  '/reports': `http://${PROXY_HOST}:3016`,
-  '/sections': `http://${PROXY_HOST}:3006`,
-  '/streams': `http://${PROXY_HOST}:3012`,
-  '/trial-sessions': `http://${PROXY_HOST}:3007`,
-  '/users': `http://${PROXY_HOST}:3003`,
-  '/work-items': `http://${PROXY_HOST}:3005`,
 };
 
 const proxyMain = async () => {
