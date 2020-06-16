@@ -25,7 +25,7 @@ describe('StandingPretrialNotice', () => {
       postalCode: '12345',
       startDay: 'Friday',
       startTime: '10:00am',
-      state: 'TEST STATE',
+      state: 'AL',
     };
   });
 
