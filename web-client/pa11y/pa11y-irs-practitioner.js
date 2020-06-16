@@ -9,7 +9,7 @@ module.exports = [
     ],
     notes: 'checks a11y of revealed form for filing document',
     url:
-      'http://localhost:1234/mock-login?token=irsPractitioner&path=/case-detail/102-19&info=can-file-document',
+      'http://localhost:1234/mock-login?token=irsPractitioner&path=/case-detail/104-20&info=can-file-document',
   },
   {
     actions: [
