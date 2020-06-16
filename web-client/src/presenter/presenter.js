@@ -41,6 +41,7 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToDocumentQCSequence } from './sequences/closeModalAndReturnToDocumentQCSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
@@ -238,6 +239,7 @@ import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { setAttachmentDocumentToDisplaySequence } from './sequences/setAttachmentDocumentToDisplaySequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -455,6 +457,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToDocumentQCSequence,
     closeModalAndReturnToTrialSessionsSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
@@ -652,6 +655,7 @@ export const presenter = {
     selectWorkItemSequence,
     serveCaseToIrsSequence,
     serveCourtIssuedDocumentSequence,
+    setAttachmentDocumentToDisplaySequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,
     setCaseTypeToDisplaySequence,

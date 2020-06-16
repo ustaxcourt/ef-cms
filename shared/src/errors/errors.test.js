@@ -75,7 +75,7 @@ describe('InvalidEntityError', () => {
   let error;
 
   beforeEach(() => {
-    error = new InvalidEntityError('Test message', 'TestEntity', 123);
+    error = new InvalidEntityError('TestEntity', 123, 'Test message');
   });
 
   it('should set the message which includes the entityName and failing ids', () => {
