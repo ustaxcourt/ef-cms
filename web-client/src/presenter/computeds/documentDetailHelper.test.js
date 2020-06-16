@@ -524,7 +524,7 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'SDEC - Stipulated Decision Entered,',
+                documentType: 'SDEC - Stipulated Decision Entered',
                 signedAt: getDateISO(),
               },
             ],
