@@ -25,6 +25,7 @@ describe('Petitions clerk', () => {
   // Not necessary right now, this test exists as part of the deploy process already
   // it('should be able to create a case', () => {});
   // it('should be able to save newly created case for later', () => {});
+
   it('should be able to QC a petition', () => {
     cy.get('a[href*="document-qc/my/inbox"]').click();
     cy.get('button:contains("Switch to")').click();
@@ -34,7 +35,18 @@ describe('Petitions clerk', () => {
     cy.get('div.usa-alert--success').should('exist');
   });
 
-  it('should be able to add statistics ', () => {});
+  it('should be able to add statistics ', () => {
+    cy.get('button:contains("Switch to")').click();
+    cy.get('a[href*="petition-qc"]').first().click();
+    cy.get('button#tab-irs-notice').click();
+
+    // radio button not selected - bug?
+    cy.get('#has-irs-verified-notice-yes').click();
+
+    cy.get('input#date-of-notice-month').type('08');
+    cy.get('input#date-of-notice-day').type('08');
+    cy.get('input#date-of-notice-year').type('2020');
+  });
 
   // it('should verify advanced search works', () => {
   //   cy.visit(`/log-in?token=${token}&path=/search`);
