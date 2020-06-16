@@ -1,3 +1,7 @@
+const {
+  MAX_FILE_SIZE_BYTES,
+} = require('../../business/entities/EntityConstants');
+
 /**
  * getUploadPolicy
  *
@@ -13,11 +17,7 @@ exports.getUploadPolicy = ({ applicationContext, documentId }) =>
         Conditions: [
           ['starts-with', '$key', documentId],
           ['starts-with', '$Content-Type', ''],
-          [
-            'content-length-range',
-            0,
-            applicationContext.getConstants().MAX_FILE_SIZE_BYTES,
-          ],
+          ['content-length-range', 0, MAX_FILE_SIZE_BYTES],
         ],
       },
       (err, data) => {
