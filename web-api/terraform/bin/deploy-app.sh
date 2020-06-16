@@ -40,6 +40,14 @@ pushd ../template/api-public
 npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
 
+pushd ../template/streams
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
+
+pushd ../template/cron
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
+
 pushd ../../runtimes/puppeteer
 ./build.sh 
 popd
