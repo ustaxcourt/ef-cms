@@ -392,11 +392,6 @@
       flags: 
         presence: "optional"
         description: "Case docket number suffix before modification."
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 2
       allow: 
         - null
     irsNoticeDate: 

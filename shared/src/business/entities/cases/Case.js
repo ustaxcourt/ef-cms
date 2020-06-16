@@ -447,7 +447,7 @@ Case.VALIDATION_RULES = {
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
-    .max(2) // TODO: add enumerator
+    // .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
