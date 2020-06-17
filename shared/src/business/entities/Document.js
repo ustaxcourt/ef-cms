@@ -312,15 +312,38 @@ joiValidationDecorator(
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
+    signedAt: joi
+      .when('documentType', {
+        is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+        otherwise: joiStrictTimestamp.optional().allow(null),
+        then: joiStrictTimestamp.required(),
       })
-      .optional()
-      .allow(null),
-    signedJudgeName: joi.string().optional().allow(null),
+      .description('The time at which the document was signed.'),
+    signedByUserId: joi
+      .when('signedJudgeName', {
+        is: joi.exist().not(null),
+        otherwise: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .optional()
+          .allow(null),
+        then: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .required(),
+      })
+      .description('The user id of the signing judge.'),
+    signedJudgeName: joi
+      .when('documentType', {
+        is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+        otherwise: joi.string().optional().allow(null),
+        then: joi.string().required(),
+      })
+      .description('The judge who signed the document.'),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
       .string()
