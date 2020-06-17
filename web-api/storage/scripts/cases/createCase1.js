@@ -51,7 +51,7 @@ module.exports.createCase1 = async () => {
           name: 'Brett Osborne',
           phone: '+1 (537) 235-6147',
           postalCode: '89499',
-          state: 'AS',
+          state: 'AK',
         },
         filingType: 'Myself',
         hasIrsNotice: false,
@@ -101,6 +101,8 @@ module.exports.createCase1 = async () => {
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       caseId,
+      //fixme - dont hardcode a judge
+      nameForSigning: 'Maurice B. Foley',
       originalDocumentId: documentId,
       signedDocumentId: documentId,
     });

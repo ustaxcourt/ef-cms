@@ -336,7 +336,7 @@ joiValidationDecorator(
           })
           .required(),
       })
-      .description('The user id of the signing judge.'),
+      .description('The id of the user who applied the signature.'),
     signedJudgeName: joi
       .when('documentType', {
         is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
@@ -441,6 +441,7 @@ Document.prototype.generateFiledBy = function (caseDetail, force = false) {
  *
  */
 Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
+  //fixme - should we throw an exception if both arguments are not provided?
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
