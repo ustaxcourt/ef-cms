@@ -26,6 +26,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.attachments = rawMessage.attachments || [];
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
+  this.caseTitle = rawMessage.caseTitle;
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
@@ -67,6 +68,10 @@ CaseMessage.VALIDATION_RULES = {
     .valid(...Object.values(CASE_STATUS_TYPES))
     .optional()
     .description('The status of the associated case.'),
+  caseTitle: joi
+    .string()
+    .optional()
+    .description('The case title for the associated cases.'),
   createdAt: joiStrictTimestamp
     .required()
     .description('When the message was created.'),
