@@ -39,6 +39,11 @@
         - "On Appeal"
         - "Rule 155"
         - "Submitted"
+    caseTitle: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The case title for the associated cases."
     createdAt: 
       type: "date"
       flags: 
