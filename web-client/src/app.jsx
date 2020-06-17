@@ -69,6 +69,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
+import { faReply } from '@fortawesome/free-solid-svg-icons/faReply';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons/faShareSquare';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons/faShieldAlt';
@@ -163,7 +164,6 @@ const app = {
       faClock,
       faClockSolid,
       faClone,
-      faEnvelopeOpen,
       faCloudDownloadAlt,
       faCloudUploadAlt,
       faCopy,
@@ -171,8 +171,8 @@ const app = {
       faDollarSign,
       faEdit,
       faEditSolid,
-      faEnvelopeSolid,
       faEnvelopeOpen,
+      faEnvelopeSolid,
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
@@ -202,6 +202,7 @@ const app = {
       faPrint,
       faQuestionCircle,
       faRedoAlt,
+      faReply,
       faSearch,
       faShareSquare,
       faShieldAlt,

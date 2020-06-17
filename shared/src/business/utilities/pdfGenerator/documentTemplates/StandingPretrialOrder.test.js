@@ -19,7 +19,7 @@ describe('StandingPretrialOrder', () => {
       judge: {
         name: 'Test Judge',
       },
-      state: 'TEST STATE',
+      state: 'AL',
     };
   });
 

@@ -17,7 +17,7 @@ describe('PetitionService', () => {
     phone: '1234567890',
     postalCode: '12345',
     serviceIndicator: 'Electronic',
-    state: 'ST',
+    state: 'AL',
   };
 
   const contactSecondary = {
@@ -27,7 +27,7 @@ describe('PetitionService', () => {
     name: 'Secondary Petitioner',
     postalCode: '12345',
     serviceIndicator: 'Paper',
-    state: 'ST',
+    state: 'AL',
   };
 
   const docketEntryNumber = 1;
@@ -51,7 +51,7 @@ describe('PetitionService', () => {
       phoneNumber: '123-123-1234',
       postalCode: '12345',
       representing: 'Test Petitioner',
-      state: 'ST',
+      state: 'AL',
     },
     {
       address1: '543 Barrister Ct',
@@ -62,7 +62,7 @@ describe('PetitionService', () => {
       phoneNumber: '123-123-4321',
       postalCode: '12345',
       representing: 'Secondary Petitioner',
-      state: 'ST',
+      state: 'AL',
     },
   ];
 
