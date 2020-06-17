@@ -1,6 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
+import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
+import { ReplyToCaseMessageModalDialog } from './ReplyToCaseMessageModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -11,14 +14,23 @@ export const MessageDetail = connect(
     attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
     formattedMessageDetail: state.formattedMessageDetail,
     iframeSrc: state.iframeSrc,
+    openCompleteMessageModalSequence:
+      sequences.openCompleteMessageModalSequence,
+    openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
+    openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
     setAttachmentDocumentToDisplaySequence:
       sequences.setAttachmentDocumentToDisplaySequence,
+    showModal: state.modal.showModal,
   },
   function MessageDetail({
     attachmentDocumentToDisplay,
     formattedMessageDetail,
     iframeSrc,
+    openCompleteMessageModalSequence,
+    openForwardMessageModalSequence,
+    openReplyToMessageModalSequence,
     setAttachmentDocumentToDisplaySequence,
+    showModal,
   }) {
     return (
       <>
@@ -26,7 +38,41 @@ export const MessageDetail = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <h1>Message</h1>
+          <div className="grid-row grid-gap">
+            <div className="grid-col-8">
+              <h1>Message</h1>
+            </div>
+            <div className="grid-col-1">
+              <Button
+                link
+                className="action-button"
+                icon="check-circle"
+                onClick={() => openCompleteMessageModalSequence()}
+              >
+                Complete
+              </Button>
+            </div>
+            <div className="grid-col-1">
+              <Button
+                link
+                className="action-button"
+                icon="share-square"
+                onClick={() => openForwardMessageModalSequence()}
+              >
+                Forward
+              </Button>
+            </div>
+            <div className="grid-col-1">
+              <Button
+                link
+                className="action-button"
+                icon="reply"
+                onClick={() => openReplyToMessageModalSequence()}
+              >
+                Reply
+              </Button>
+            </div>
+          </div>
 
           <div className="bg-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3">
             <div className="grid-row">
@@ -103,6 +149,15 @@ export const MessageDetail = connect(
             </div>
           </div>
         </section>
+        {showModal === 'CompleteMessageModal' && (
+          <CompleteCaseMessageModalDialog />
+        )}
+        {showModal === 'ForwardMessageModal' && (
+          <ForwardCaseMessageModalDialog />
+        )}
+        {showModal === 'ReplyToMessageModal' && (
+          <ReplyToCaseMessageModalDialog />
+        )}
       </>
     );
   },
