@@ -71,7 +71,7 @@ CaseExternal.commonRequirements = {
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
     )
-    .required(), // TODO: enum
+    .required(),
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
     is: 'A business',

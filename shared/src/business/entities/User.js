@@ -5,7 +5,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
@@ -79,7 +79,10 @@ const userValidation = {
       }),
       state: joi.when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().max(100).required(),
+        otherwise: joi
+          .string()
+          .valid(...Object.keys(US_STATES))
+          .required(),
         then: joi.string().optional().allow(null),
       }),
     })
