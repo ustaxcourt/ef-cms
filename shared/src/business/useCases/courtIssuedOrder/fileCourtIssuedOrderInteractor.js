@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
+const { ORDER_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -41,6 +42,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  //fixme - account for all order types?
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
@@ -115,8 +117,13 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  if (documentMetadata.eventCode === 'NOT') {
-    documentEntity.setSigned(authorizedUser.userId);
+  //fixme - does it make sense that we added the extra condition?
+  if (
+    documentMetadata.eventCode === 'NOT' ||
+    ORDER_DOCUMENT_TYPES.includes(documentMetadata.eventCode)
+  ) {
+    //fixme - dont hardcode judge name
+    documentEntity.setSigned(authorizedUser.userId, 'Maurice B. Foley');
   }
 
   caseEntity.addDocumentWithoutDocketRecord(documentEntity);
