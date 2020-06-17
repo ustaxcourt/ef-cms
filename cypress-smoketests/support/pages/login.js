@@ -50,3 +50,7 @@ exports.getUserToken = async (username, password) => {
     })
     .promise();
 };
+
+exports.login = token => {
+  cy.visit(`/log-in?token=${token}`);
+};

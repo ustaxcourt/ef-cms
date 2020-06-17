@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-returns */
+/* eslint-disable promise/no-nesting */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
