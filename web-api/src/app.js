@@ -640,7 +640,7 @@ app.get(
   lambdaWrapper(getOutboxCaseMessagesForUserLambda),
 );
 app.get(
-  '/messages/outbox/:section',
+  '/messages/outbox/section/:section',
   lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
 app.post('/messages', lambdaWrapper(createCaseMessageLambda));
