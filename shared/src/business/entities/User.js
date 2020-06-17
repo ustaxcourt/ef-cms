@@ -1,11 +1,16 @@
 const joi = require('@hapi/joi');
 const {
+  COUNTRY_TYPES,
+  ROLES,
+  US_STATES,
+  US_STATES_OTHER,
+} = require('./EntityConstants');
+const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
@@ -81,7 +86,7 @@ const userValidation = {
         is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi
           .string()
-          .valid(...Object.keys(US_STATES))
+          .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
           .required(),
         then: joi.string().optional().allow(null),
       }),

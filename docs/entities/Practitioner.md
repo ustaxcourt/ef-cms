@@ -214,6 +214,17 @@
                   - "WI"
                   - "WV"
                   - "WY"
+                  - "AA"
+                  - "AE"
+                  - "AP"
+                  - "AS"
+                  - "FM"
+                  - "GU"
+                  - "MH"
+                  - "MP"
+                  - "PR"
+                  - "PW"
+                  - "VI"
     email: 
       type: "string"
       flags: 
