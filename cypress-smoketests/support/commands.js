@@ -26,3 +26,24 @@
 
 // https://github.com/cypress-io/cypress/issues/170
 // Usage: cy.upload_file('building.jpg', '#building [type="file"]');
+Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
+  cy.get(selector).then(subject => {
+    cy.fixture(fileName, 'base64').then(content => {
+      cy.window().then(win => {
+        const el = subject[0];
+        const blob = b64toBlob(content, contentType);
+        const testFile = new win.File([blob], fileName, {
+          type: contentType,
+        });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(testFile);
+        el.files = dataTransfer.files;
+        if (subject.is(':visible')) {
+          return cy.wrap(subject).trigger('change', { force: true });
+        } else {
+          return cy.wrap(subject);
+        }
+      });
+    });
+  });
+});

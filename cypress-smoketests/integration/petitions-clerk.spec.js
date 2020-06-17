@@ -1,4 +1,10 @@
 const AWS = require('aws-sdk');
+const {
+  fillInCreateCaseFromPaperForm,
+} = require('../../cypress/support/pages/create-paper-petition');
+const {
+  getCreateACaseButton,
+} = require('../../cypress/support/pages/document-qc');
 const { getUserToken } = require('../support/pages/login');
 
 AWS.config = new AWS.Config();
@@ -22,9 +28,14 @@ describe('Petitions clerk', () => {
     cy.get('.button-switch-box').should('exist');
   });
 
-  // Not necessary right now, this test exists as part of the deploy process already
-  // it('should be able to create a case', () => {});
-  // it('should be able to save newly created case for later', () => {});
+  it('should be able to create a case and serve it to IRS', () => {
+    cy.get('a[href*="document-qc/my/inbox"]').click();
+    getCreateACaseButton().click();
+
+    fillInCreateCaseFromPaperForm();
+
+    cy.get('#submit-case').click();
+  });
 
   it('should be able to QC a petition', () => {
     cy.get('a[href*="document-qc/my/inbox"]').click();
@@ -36,23 +47,23 @@ describe('Petitions clerk', () => {
   });
 
   it('should be able to add statistics ', () => {
+    cy.get('a[href*="document-qc/my/inbox"]').click();
     cy.get('button:contains("Switch to")').click();
     cy.get('a[href*="petition-qc"]').first().click();
     cy.get('button#tab-irs-notice').click();
 
     // radio button not selected - bug?
     cy.get('#has-irs-verified-notice-yes').click();
+    cy.get('#case-type').scrollIntoView().select('Deficiency');
 
-    cy.get('input#date-of-notice-month').type('08');
-    cy.get('input#date-of-notice-day').type('08');
-    cy.get('input#date-of-notice-year').type('2020');
+    cy.get('input#year-0').type('2020');
+    cy.get('input#deficiency-amount-0').type('1000');
+    cy.get('input#total-penalties-0').type('10');
+
+    cy.get('#case-edit-form button#submit-case').click();
+
+    cy.get('#ustc-review-and-serve-form button#submit-case')
+      .scrollIntoView()
+      .click();
   });
-
-  // it('should verify advanced search works', () => {
-  //   cy.visit(`/log-in?token=${token}&path=/search`);
-  //   cy.get('#advanced-search-button').should('exist');
-  //   cy.get('#petitioner-name').type('THISNAMESHOULDNEVEREXIST');
-  //   cy.get('#advanced-search-button').click();
-  //   cy.get('#no-search-results').should('exist');
-  // });
 });
