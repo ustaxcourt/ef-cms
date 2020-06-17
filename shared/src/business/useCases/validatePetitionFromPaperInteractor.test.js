@@ -29,7 +29,7 @@ describe('validate petition from paper', () => {
       applicationContext,
       petition: {
         caseCaption: 'testing',
-        caseType: 'testing',
+        caseType: 'CDP (Lien/Levy)',
         mailingDate: 'testing',
         orderDesignatingPlaceOfTrial: true,
         partyType: 'testing',

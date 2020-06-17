@@ -34,7 +34,7 @@ describe('assignWorkItemsInteractor integration test', () => {
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
-          state: 'AP',
+          state: 'AK',
         },
         contactSecondary: {},
         docketRecord: [
