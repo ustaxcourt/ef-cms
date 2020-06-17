@@ -6,6 +6,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
 const {
+  CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
   DOCKET_NUMBER_MATCHER,
   SECTIONS,
@@ -63,7 +64,7 @@ CaseMessage.VALIDATION_RULES = {
     .description('ID of the case the message is attached to.'),
   caseStatus: joi
     .string()
-    .max(500) // TODO: enum
+    .valid(...Object.values(CASE_STATUS_TYPES))
     .optional()
     .description('The status of the associated case.'),
   createdAt: joiStrictTimestamp

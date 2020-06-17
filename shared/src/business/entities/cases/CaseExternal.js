@@ -1,10 +1,14 @@
 const joi = require('@hapi/joi');
 const {
+  FILING_TYPES,
+  MAX_FILE_SIZE_BYTES,
+  ROLES,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { MAX_FILE_SIZE_BYTES } = require('../EntityConstants');
 
 /**
  * CaseExternal Entity
@@ -60,8 +64,14 @@ CaseExternal.commonRequirements = {
   }),
   contactPrimary: joi.object().optional(), // TODO: object definition
   contactSecondary: joi.object().optional(), // TODO: object definition
-  countryType: joi.string().optional(), // TODO: enum
-  filingType: joi.string().required(), // TODO: enum
+  countryType: joi.string().optional(),
+  filingType: joi
+    .string()
+    .valid(
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
+    )
+    .required(), // TODO: enum
   hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
     is: 'A business',

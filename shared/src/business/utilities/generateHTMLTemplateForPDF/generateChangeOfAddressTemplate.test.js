@@ -13,7 +13,7 @@ describe('generateChangeOfAddressTemplate', () => {
       countryType: 'domestic',
       phone: '123-123-1234',
       postalCode: '12345',
-      state: 'STATE',
+      state: 'WV',
     },
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
@@ -42,7 +42,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
-    expect(result.indexOf('STATE')).toBeGreaterThan(-1);
+    expect(result.indexOf('AL')).toBeGreaterThan(-1);
     expect(result.indexOf('12345')).toBeGreaterThan(-1);
     expect(result.indexOf('Address One')).toBeGreaterThan(-1);
   });
@@ -85,7 +85,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Notice of Change of Address')).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
-    expect(result.indexOf('STATE')).toBeGreaterThan(-1);
+    expect(result.indexOf('AL')).toBeGreaterThan(-1);
     expect(result.indexOf('12345')).toBeGreaterThan(-1);
     expect(result.indexOf('Address One')).toBeGreaterThan(-1);
     expect(result.indexOf('123-123-1234')).toEqual(-1);
@@ -112,7 +112,7 @@ describe('generateChangeOfAddressTemplate', () => {
     ).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toEqual(-1);
     expect(result.indexOf('City')).toEqual(-1);
-    expect(result.indexOf('STATE')).toEqual(-1);
+    expect(result.indexOf('>WV<')).toEqual(-1);
     expect(result.indexOf('12345')).toEqual(-1);
     expect(result.indexOf('Address One')).toEqual(-1);
     expect(result.indexOf('123-123-1234')).toBeGreaterThan(-1);
@@ -140,7 +140,7 @@ describe('generateChangeOfAddressTemplate', () => {
     ).toBeGreaterThan(-1);
     expect(result.indexOf('address 1')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
-    expect(result.indexOf('STATE')).toBeGreaterThan(-1);
+    expect(result.indexOf('>WV<')).toBeGreaterThan(-1);
     expect(result.indexOf('12345')).toBeGreaterThan(-1);
     expect(result.indexOf('Address One')).toBeGreaterThan(-1);
     expect(result.indexOf('321-321-4321')).toBeGreaterThan(-1);

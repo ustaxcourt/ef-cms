@@ -3,6 +3,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  US_STATES,
 } = require('../EntityConstants');
 const {
   JoiValidationConstants,
@@ -60,7 +61,10 @@ const commonValidationRequirements = {
 const domesticValidationObject = {
   countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
   ...commonValidationRequirements,
-  state: joi.string().max(500).required(), // TODO: enum
+  state: joi
+    .string()
+    .valid(...Object.keys(US_STATES))
+    .required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
