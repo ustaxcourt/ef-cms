@@ -12,7 +12,6 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('#date-received-day').type('01');
   cy.get('#date-received-year').type('2020');
   cy.get('#mailing-date').type('01/01/2020');
-  cy.get('#mailing-date').type('01/01/2020');
   cy.get('#procedure-type-0').click();
   cy.get('#preferred-trial-city')
     .scrollIntoView()
@@ -35,13 +34,4 @@ exports.fillInCreateCaseFromPaperForm = () => {
   ).click();
   cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#requestForPlaceOfTrialFile-file');
-};
-
-exports.saveCaseForLater = () => {
-  return cy.get('button:contains("Save for Later")').click();
-};
-
-exports.serveCaseToIrs = () => {
-  cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
-  cy.get('button#confirm').scrollIntoView().click();
 };
