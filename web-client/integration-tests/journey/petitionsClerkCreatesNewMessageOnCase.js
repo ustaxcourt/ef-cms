@@ -1,16 +1,16 @@
 import { NewCaseMessage } from '../../../shared/src/business/entities/NewCaseMessage';
-import { createCaseMessageModalHelper as createCaseMessageModalHelperComputed } from '../../src/presenter/computeds/createCaseMessageModalHelper';
+import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const createCaseMessageModalHelper = withAppContextDecorator(
-  createCaseMessageModalHelperComputed,
+const caseMessageModalHelper = withAppContextDecorator(
+  caseMessageModalHelperComputed,
 );
 
 export const petitionsClerkCreatesNewMessageOnCase = test => {
   const getHelper = () => {
-    return runCompute(createCaseMessageModalHelper, {
+    return runCompute(caseMessageModalHelper, {
       state: test.getState(),
     });
   };
@@ -35,7 +35,7 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
     const messageDocument = getHelper().documents[0];
     test.testMessageDocumentId = messageDocument.documentId;
 
-    await test.runSequence('updateCreateCaseMessageAttachmentsSequence', {
+    await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
       documentId: messageDocument.documentId,
     });
 
@@ -46,7 +46,7 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
     // Add four more attachments to reach the maximum of five.
     for (let i = 0; i < 4; i++) {
       // currently doesn't matter if we add the same document over and over
-      await test.runSequence('updateCreateCaseMessageAttachmentsSequence', {
+      await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
         documentId: messageDocument.documentId,
       });
     }
