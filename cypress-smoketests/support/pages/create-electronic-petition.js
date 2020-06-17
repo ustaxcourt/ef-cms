@@ -1,3 +1,15 @@
+exports.hasIrsNotice = {
+  NO: 1,
+  YES: 0,
+};
+
+exports.filingTypes = {
+  BUSINESS: 2,
+  INDIVIDUAL: 0,
+  OTHER: 3,
+  PETITIONER_AND_SPOUSE: 1,
+};
+
 exports.goToStartCreatePetition = () => {
   cy.get('a#file-a-petition').click();
 };
@@ -34,15 +46,26 @@ exports.completeWizardStep1 = () => {
   cy.upload_file('w3-dummy.pdf', 'input#stin-file');
 };
 
-exports.completeWizardStep2 = () => {
+exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
   cy.upload_file('w3-dummy.pdf', 'input#petition-file');
   cy.get('#irs-notice-radios').scrollIntoView();
-  cy.get('#irs-notice-radios label').first().click();
-  cy.get('#case-type').scrollIntoView().select('Notice of Deficiency');
+  cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();
+  cy.get('#case-type').scrollIntoView().select(caseType);
 };
 
-exports.completeWizardStep3 = () => {
-  cy.get('label#filing-type-0').scrollIntoView().click();
+exports.completeWizardStep3 = filingType => {
+  cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
+
+  if (filingType === this.filingTypes.PETITIONER_AND_SPOUSE) {
+    cy.get('label#is-spouse-deceased-0').click();
+    cy.get('input#use-same-address-above')
+      .scrollIntoView()
+      .check({ force: true });
+
+    cy.get('input#secondaryName').type('Annalise');
+    cy.get('input#secondaryInCareOf').type('Sam');
+  }
+
   cy.get('input#name').scrollIntoView().type('John');
   cy.get('input[name="contactPrimary.address1"]')
     .scrollIntoView()
