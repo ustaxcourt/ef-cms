@@ -14,10 +14,11 @@ export const CaseMessagesIndividualOutbox = connect(
           <thead>
             <tr>
               <th className="small" colSpan="2">
-                Docket
+                Docket Number
               </th>
               <th className="small">Sent</th>
               <th>Message</th>
+              <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
               <th className="small">Section</th>
@@ -52,6 +53,7 @@ export const CaseMessagesIndividualOutbox = connect(
                       {message.message}
                     </div>
                   </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row small">
