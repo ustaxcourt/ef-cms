@@ -6,6 +6,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
 const {
+  CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
   DOCKET_NUMBER_MATCHER,
   SECTIONS,
@@ -25,6 +26,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.attachments = rawMessage.attachments || [];
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
+  this.caseTitle = rawMessage.caseTitle;
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
@@ -63,9 +65,13 @@ CaseMessage.VALIDATION_RULES = {
     .description('ID of the case the message is attached to.'),
   caseStatus: joi
     .string()
-    .max(500) // TODO: enum
+    .valid(...Object.values(CASE_STATUS_TYPES))
     .optional()
     .description('The status of the associated case.'),
+  caseTitle: joi
+    .string()
+    .optional()
+    .description('The case title for the associated cases.'),
   createdAt: joiStrictTimestamp
     .required()
     .description('When the message was created.'),

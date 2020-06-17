@@ -71,15 +71,12 @@ const userValidation = {
         .string()
         .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
         .required(),
-
       phone: joi.string().max(100).required(),
-
       postalCode: joi.when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
         then: joi.string().max(100).required(),
       }),
-
       state: joi.when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: joi.string().max(100).required(),

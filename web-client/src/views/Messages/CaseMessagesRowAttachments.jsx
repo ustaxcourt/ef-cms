@@ -1,14 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesRowAttachments = connect(
   {
     baseUrl: state.baseUrl,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     token: state.token,
   },
-  function CaseMessagesRowAttachments({ attachments, baseUrl, caseId, token }) {
+  function CaseMessagesRowAttachments({
+    attachments,
+    caseId,
+    openCaseDocumentDownloadUrlSequence,
+  }) {
     return (
       <>
         {attachments &&
@@ -17,11 +23,14 @@ export const CaseMessagesRowAttachments = connect(
               <div className="margin-bottom-1" key={attachment.documentId}>
                 <Button
                   link
-                  href={`${baseUrl}/case-documents/${caseId}/${attachment.documentId}/document-download-url?token=${token}`}
                   icon="file-pdf"
                   iconColor="blue"
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  onClick={() => {
+                    openCaseDocumentDownloadUrlSequence({
+                      caseId,
+                      documentId: attachment.documentId,
+                    });
+                  }}
                 >
                   {attachment.documentTitle}
                 </Button>

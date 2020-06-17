@@ -6,9 +6,9 @@ const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
+const { OBJECTIONS_OPTIONS, SCENARIOS } = require('./EntityConstants');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const joiStrictTimestamp = getTimestampSchema();
-
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./externalDocument/ExternalDocumentInformationFactory');
@@ -126,7 +126,10 @@ function CaseAssociationRequestFactory(rawProps) {
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(), // TODO: object definition
-    scenario: joi.string().max(500).required(), // TODO: enum
+    scenario: joi
+      .string()
+      .valid(...SCENARIOS)
+      .required(),
   };
 
   let schemaOptionalItems = {
@@ -134,7 +137,10 @@ function CaseAssociationRequestFactory(rawProps) {
     certificateOfServiceDate: joiStrictTimestamp.max('now').required(),
     exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
-    objections: joi.string().max(500).required(), // TODO: enum
+    objections: joi
+      .string()
+      .valid(...OBJECTIONS_OPTIONS)
+      .required(),
     representingPrimary: joi.boolean().invalid(false).required(),
     representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(), // TODO: object definition
