@@ -1,11 +1,14 @@
 const AWS = require('aws-sdk');
 const {
   fillInCreateCaseFromPaperForm,
+  saveCaseForLater,
+  serveCaseToIrs,
 } = require('../../cypress/support/pages/create-paper-petition');
 const {
   getCreateACaseButton,
 } = require('../../cypress/support/pages/document-qc');
 const { getUserToken } = require('../support/pages/login');
+const { navigateToMySectionInbox } = require('../support/pages/document-qc');
 
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = Cypress.env('AWS_ACCESS_KEY_ID');
@@ -28,17 +31,30 @@ describe('Petitions clerk', () => {
     cy.get('.button-switch-box').should('exist');
   });
 
-  it('should be able to create a case and serve it to IRS', () => {
-    cy.get('a[href*="document-qc/my/inbox"]').click();
+  it('should be able to create a case and ssave for later', () => {
+    navigateToMySectionInbox();
     getCreateACaseButton().click();
 
     fillInCreateCaseFromPaperForm();
 
-    cy.get('#submit-case').click();
+    cy.get('button#submit-case').scrollIntoView().click();
+
+    saveCaseForLater();
+  });
+
+  it('should be able to create a case and serve to IRS', () => {
+    navigateToMySectionInbox();
+    getCreateACaseButton().click();
+
+    fillInCreateCaseFromPaperForm();
+
+    cy.get('button#submit-case').scrollIntoView().click();
+
+    serveCaseToIrs();
   });
 
   it('should be able to QC a petition', () => {
-    cy.get('a[href*="document-qc/my/inbox"]').click();
+    navigateToMySectionInbox();
     cy.get('button:contains("Switch to")').click();
     cy.get('a[href*="petition-qc"]').first().click();
     cy.get('button#submit-case').click();
