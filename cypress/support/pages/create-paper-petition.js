@@ -36,3 +36,12 @@ exports.fillInCreateCaseFromPaperForm = () => {
   cy.get('#upload-mode-upload').click();
   cy.upload_file('w3-dummy.pdf', 'input#requestForPlaceOfTrialFile-file');
 };
+
+exports.saveCaseForLater = () => {
+  return cy.get('button:contains("Save for Later")').click();
+};
+
+exports.serveCaseToIrs = () => {
+  cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
+  cy.get('button#confirm').scrollIntoView().click();
+};
