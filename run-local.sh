@@ -56,25 +56,6 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-# set common arguments used by sls below (appearing as "$@")
-set -- \
-  --accountId noop \
-  --domain noop \
-  --efcmsTableName=efcms-local \
-  --noAuth \
-  --noTimeout \
-  --region us-east-1 \
-  --run_dir "${RUN_DIR}" \
-  --skipCacheInvalidation "${SKIP_CACHE_INVALIDATION}" \
-  --stage local \
-  --stageColor "blue" \
-  --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
-  --circleHoneybadgerApiKey noop \
-  --elasticsearch_endpoint "http://localhost:9200"
-
-echo "starting notifications service"
-npx sls offline start "$@" --config web-api/serverless-notifications.yml &
-
 echo "starting proxy"
 node ./web-api/proxy.js &
 
