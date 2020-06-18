@@ -53,7 +53,7 @@ exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
   cy.get('#case-type').scrollIntoView().select(caseType);
 };
 
-exports.completeWizardStep3 = filingType => {
+exports.completeWizardStep3 = (filingType, petitionerName) => {
   cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
 
   if (filingType === this.filingTypes.PETITIONER_AND_SPOUSE) {
@@ -66,7 +66,7 @@ exports.completeWizardStep3 = filingType => {
     cy.get('input#secondaryInCareOf').type('Sam');
   }
 
-  cy.get('input#name').scrollIntoView().type('John');
+  cy.get('input#name').scrollIntoView().type(petitionerName);
   cy.get('input[name="contactPrimary.address1"]')
     .scrollIntoView()
     .type('111 South West St.');
