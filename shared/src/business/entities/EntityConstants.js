@@ -82,8 +82,8 @@ const ORDER_DOCUMENT_TYPES = [
 ];
 
 const DOCUMENT_NOTICE_EVENT_CODES = ['NOT'];
-const DOCUMENT_CATEGORIES = Object.keys(documentMapExternal);
-const DOCUMENT_CATEGORY_MAP = documentMapExternal;
+const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(documentMapExternal);
+const DOCUMENT_EXTERNAL_CATEGORIES_MAP = documentMapExternal;
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 const DOCUMENT_INTERNAL_CATEGORY_MAP = documentMapInternal;
 const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
@@ -381,6 +381,20 @@ const US_STATES = {
   WV: 'West Virginia',
   WY: 'Wyoming',
 };
+
+const US_STATES_OTHER = [
+  'AA',
+  'AE',
+  'AP',
+  'AS',
+  'FM',
+  'GU',
+  'MH',
+  'MP',
+  'PR',
+  'PW',
+  'VI',
+];
 
 const PARTY_TYPES = {
   conservator: 'Conservator',
@@ -727,8 +741,8 @@ module.exports = {
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-  DOCUMENT_CATEGORIES,
-  DOCUMENT_CATEGORY_MAP,
+  DOCUMENT_EXTERNAL_CATEGORIES,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_INTERNAL_CATEGORIES,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_NOTICE_EVENT_CODES,
@@ -776,4 +790,5 @@ module.exports = {
   TRIAL_LOCATION_MATCHER,
   TRIAL_STATUS_TYPES,
   US_STATES,
+  US_STATES_OTHER,
 };

@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
-  DOCUMENT_CATEGORY_MAP,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
@@ -134,7 +134,7 @@ Document.isPendingOnCreation = rawDocument => {
 
 Document.getDocumentTypes = () => {
   const allFilingEvents = flatten([
-    ...Object.values(DOCUMENT_CATEGORY_MAP),
+    ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
     ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
@@ -485,7 +485,7 @@ Document.prototype.getQCWorkItem = function () {
 
 Document.prototype.isAutoServed = function () {
   const externalDocumentTypes = flatten(
-    Object.values(DOCUMENT_CATEGORY_MAP),
+    Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
   ).map(t => t.documentType);
 
   const isExternalDocumentType = externalDocumentTypes.includes(
