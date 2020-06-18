@@ -81,5 +81,11 @@ exports.replyToCaseMessageInteractor = async ({
     caseMessage,
   });
 
+  await applicationContext.getPersistenceGateway().markCaseMessageRepliedTo({
+    applicationContext,
+    caseId,
+    messageId: parentMessageId,
+  });
+
   return caseMessage;
 };

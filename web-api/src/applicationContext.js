@@ -655,6 +655,9 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
+  markCaseMessageRepliedTo,
+} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageRepliedTo');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -1249,6 +1252,7 @@ module.exports = appContextUser => {
         incrementCounter,
         indexRecord,
         isFileExists,
+        markCaseMessageRepliedTo,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
