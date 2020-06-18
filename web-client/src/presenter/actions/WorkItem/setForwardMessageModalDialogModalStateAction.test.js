@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { setForwardMessageModalDialogModalStateAction } from './setForwardMessageModalDialogModalStateAction';
 
 describe('setForwardMessageModalDialogModalStateAction', () => {
-  it('should set the modal state for replying to a message', async () => {
+  it('should set the modal state for forwarding a message', async () => {
     const result = await runAction(
       setForwardMessageModalDialogModalStateAction,
       {
