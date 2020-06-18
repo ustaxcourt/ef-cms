@@ -1,4 +1,7 @@
 const createApplicationContext = require('../src/applicationContext');
+const {
+  CaseMessage,
+} = require('../../shared/src/business/entities/CaseMessage');
 const { isCaseMessageRecord, upGenerator } = require('./utilities');
 const applicationContext = createApplicationContext({});
 
@@ -14,7 +17,19 @@ const mutateRecord = async item => {
 
       const caseTitle = applicationContext.getCaseTitle(caseCaption);
 
-      return { ...item, caseStatus: status, caseTitle };
+      const messageAfter = {
+        ...item,
+        caseStatus: status,
+        caseTitle,
+      };
+
+      const caseMessageEntity = new CaseMessage(messageAfter, {
+        applicationContext,
+      })
+        .validate()
+        .toRawObject();
+
+      return { ...item, ...caseMessageEntity };
     }
   }
 };
