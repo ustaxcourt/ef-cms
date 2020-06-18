@@ -241,8 +241,6 @@ describe('Document entity', () => {
         { applicationContext },
       );
 
-      console.log(document.getFormattedValidationErrors());
-
       expect(document.isValid()).toBeTruthy();
     });
 

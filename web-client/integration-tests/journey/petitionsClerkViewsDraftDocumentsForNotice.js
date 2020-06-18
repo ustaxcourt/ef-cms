@@ -16,8 +16,6 @@ export const petitionsClerkViewsDraftDocumentsForNotice = (test, count = 0) => {
       state: test.getState(),
     });
 
-    console.log('0-0-0-0-0-0', formatted.draftDocuments[0]);
-
     expect(formatted.draftDocuments.length).toEqual(count);
     expect(formatted.draftDocuments[0].signedAt).toBeTruthy();
   });
