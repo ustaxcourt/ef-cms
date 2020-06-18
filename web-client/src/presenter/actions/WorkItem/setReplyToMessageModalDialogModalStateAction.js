@@ -4,20 +4,21 @@ import { state } from 'cerebral';
  * set the modal state
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store function
+ * @param {object} providers.props the cerebral props
+ * @param {object} providers.store the cerebral store
  */
 export const setReplyToMessageModalDialogModalStateAction = ({
-  get,
+  props,
   store,
 }) => {
-  const messageDetail = get(state.messageDetail)[0]; //todo in later task
+  const { mostRecentMessage } = props;
   store.set(state.modal.validationErrors, {});
   store.set(state.modal.form, {
-    attachments: messageDetail.attachments,
-    parentMessageId: messageDetail.parentMessageId,
-    subject: messageDetail.subject,
-    to: messageDetail.from,
-    toSection: messageDetail.fromSection,
-    toUserId: messageDetail.fromUserId,
+    attachments: mostRecentMessage.attachments,
+    parentMessageId: mostRecentMessage.parentMessageId,
+    subject: mostRecentMessage.subject,
+    to: mostRecentMessage.from,
+    toSection: mostRecentMessage.fromSection,
+    toUserId: mostRecentMessage.fromUserId,
   });
 };

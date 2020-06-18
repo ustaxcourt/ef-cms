@@ -4,21 +4,21 @@ import { state } from 'cerebral';
  * set the modal state
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props
  * @param {object} providers.store the cerebral store
  */
 export const setForwardMessageModalDialogModalStateAction = ({
-  get,
+  props,
   store,
 }) => {
-  const messageDetail = get(state.messageDetail)[0]; //todo in later task
+  const { mostRecentMessage } = props;
   store.set(state.modal.validationErrors, {});
   store.set(state.modal.form, {
-    attachments: messageDetail.attachments,
-    from: messageDetail.from,
-    fromSection: messageDetail.fromSection,
-    fromUserId: messageDetail.fromUserId,
-    parentMessageId: messageDetail.parentMessageId,
-    subject: messageDetail.subject,
+    attachments: mostRecentMessage.attachments,
+    from: mostRecentMessage.from,
+    fromSection: mostRecentMessage.fromSection,
+    fromUserId: mostRecentMessage.fromUserId,
+    parentMessageId: mostRecentMessage.parentMessageId,
+    subject: mostRecentMessage.subject,
   });
 };
