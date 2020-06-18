@@ -41,16 +41,22 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const baseUserValidation = {
-  judgeFullName: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  judgeTitle: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
+  judgeFullName: joi
+    .string()
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
+  judgeTitle: joi
+    .string()
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
   name: joi.string().max(100).optional(),
   role: joi
     .string()
@@ -67,10 +73,10 @@ const userValidation = {
       address2: joi.string().max(100).optional().allow(null),
       address3: joi.string().max(100).optional().allow(null),
       city: joi.string().max(100).required(),
-      country: joi.when('countryType', {
+      country: joi.string().when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().optional().allow(null),
-        then: joi.string().required(),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
       }),
       countryType: joi
         .string()
@@ -82,14 +88,14 @@ const userValidation = {
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
         then: joi.string().max(100).required(),
       }),
-      state: joi.when('countryType', {
-        is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi
-          .string()
-          .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
-          .required(),
-        then: joi.string().optional().allow(null),
-      }),
+      state: joi
+        .string()
+        .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+        .when('countryType', {
+          is: COUNTRY_TYPES.INTERNATIONAL,
+          otherwise: joi.required(),
+          then: joi.optional().allow(null),
+        }),
     })
     .optional(),
   email: joi.string().max(100).optional(),

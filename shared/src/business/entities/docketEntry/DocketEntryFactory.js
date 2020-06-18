@@ -1,12 +1,14 @@
 const joi = require('@hapi/joi');
 const {
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -88,11 +90,14 @@ function DocketEntryFactory(rawProps) {
     ordinalValue: joi.string().optional(),
     previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().optional(),
-    primaryDocumentFileSize: joi.when('primaryDocumentFile', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional().allow(null),
-      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-    }),
+    primaryDocumentFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+      'primaryDocumentFile',
+      {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
     serviceDate: joiStrictTimestamp.max('now').optional(),
     trialLocation: joi.string().optional(),
   });

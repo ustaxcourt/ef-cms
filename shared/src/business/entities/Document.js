@@ -176,10 +176,10 @@ joiValidationDecorator(
         'A document that was archived instead of added to the Docket Record.',
       ),
     certificateOfService: joi.boolean().optional(),
-    certificateOfServiceDate: joi.when('certificateOfService', {
+    certificateOfServiceDate: joiStrictTimestamp.when('certificateOfService', {
       is: true,
       otherwise: joi.optional(),
-      then: joiStrictTimestamp.required(),
+      then: joi.required(),
     }),
     createdAt: joiStrictTimestamp
       .required()

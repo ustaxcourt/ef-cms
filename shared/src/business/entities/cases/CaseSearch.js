@@ -36,15 +36,16 @@ CaseSearch.schema = joi.object().keys({
   countryType: joi.string().max(500).optional(), // TODO: enum
   petitionerName: joi.string().max(500).required(),
   petitionerState: joi.string().max(500).optional(), // TODO: enum
-  yearFiledMax: joi.when('yearFiledMin', {
-    is: joi.number(),
-    otherwise: joi.number().integer().min(1900).max(new Date().getFullYear()),
-    then: joi
-      .number()
-      .integer()
-      .min(joi.ref('yearFiledMin'))
-      .max(new Date().getFullYear()),
-  }),
+  yearFiledMax: joi
+    .number()
+    .integer()
+    .min(joi.ref('yearFiledMin'))
+    .max(new Date().getFullYear())
+    .when('yearFiledMin', {
+      is: joi.number(),
+      otherwise: joi.number().min(1900),
+      then: joi.number().min(joi.ref('yearFiledMin')),
+    }),
   yearFiledMin: joi.number().integer().min(1900).max(new Date().getFullYear()),
 });
 
