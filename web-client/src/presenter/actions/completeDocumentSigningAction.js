@@ -31,8 +31,6 @@ export const completeDocumentSigningAction = async ({
       signatureData: { scale, x, y },
     } = get(state.pdfForSigning);
 
-    console.log('-----', nameForSigning);
-
     const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     // generate signed document to bytes

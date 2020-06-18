@@ -21,6 +21,7 @@ export const setDocumentToEditAction = ({
       document => document.documentId === documentIdToEdit,
     );
 
+    // TODO - refactor for clarity
     const draftState = documentToEdit.draftState || {};
     draftState.documentIdToEdit = documentIdToEdit;
     draftState.documentType = documentToEdit.documentType;
