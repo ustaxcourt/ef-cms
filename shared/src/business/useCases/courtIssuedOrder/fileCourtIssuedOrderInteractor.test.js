@@ -9,6 +9,7 @@ const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
+  const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -39,19 +40,19 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        userId: mockUserId,
       },
     ],
     filingType: 'Myself',
@@ -106,6 +107,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         caseId: caseRecord.caseId,
         docketNumber: '45678-18',
         documentType: 'Order to Show Cause',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -184,6 +188,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
           editorDelta: 'I am some document contents',
           richText: 'I am some document contents',
         },
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
