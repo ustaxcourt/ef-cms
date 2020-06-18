@@ -324,9 +324,6 @@ jobs:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
-          name: 'Setup SNS Subscription'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api && ./setup-sns-subscriptions.sh ${ENV}"
-      - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
       # - run:
@@ -403,9 +400,6 @@ jobs:
             else
               echo "skipping…"
             fi
-      # - run:
-      #     name: 'Deploy - Cognito Authorizer Check'
-      #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "find web-api/*.yml | ENV=${ENV} xargs node web-api/verify-authorizers.js"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
