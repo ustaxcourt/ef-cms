@@ -31,15 +31,15 @@ export const CaseDetailSubnavTabs = connect(
               tabName="docketRecord"
               title="Docket Record"
             />
-            {caseDetailSubnavHelper.showDeadlinesTab && (
-              <Tab id="tab-deadlines" tabName="deadlines" title="Deadlines" />
-            )}
-            {caseDetailSubnavHelper.showInProgressTab && (
+            {caseDetailSubnavHelper.showTrackedItemsTab && (
               <Tab
-                id="tab-in-progress"
-                tabName="inProgress"
-                title="In Progress"
+                id="tab-tracked-items"
+                tabName="trackedItems"
+                title="Tracked Items"
               />
+            )}
+            {caseDetailSubnavHelper.showDraftsTab && (
+              <Tab id="tab-drafts" tabName="drafts" title="Drafts" />
             )}
             {caseDetailSubnavHelper.showCorrespondenceTab && (
               <Tab
@@ -53,6 +53,13 @@ export const CaseDetailSubnavTabs = connect(
                 id="tab-case-information"
                 tabName="caseInformation"
                 title="Case Information"
+              />
+            )}
+            {caseDetailSubnavHelper.showMessagesTab && (
+              <Tab
+                id="tab-case-messages"
+                tabName="messages"
+                title="Case Messages"
               />
             )}
             {caseDetailSubnavHelper.showNotesTab && (

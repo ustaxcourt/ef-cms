@@ -187,10 +187,11 @@ export const baseState = {
       caseDetailInternalTabs: {
         caseInformation: false,
         correspondence: false,
-        deadlines: false,
         docketRecord: false,
-        inProgress: false,
+        drafts: false,
+        messages: false,
         notes: false,
+        trackedItems: false,
       },
     },
     documentDetail: {

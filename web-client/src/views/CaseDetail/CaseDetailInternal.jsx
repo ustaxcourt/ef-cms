@@ -53,28 +53,13 @@ export const CaseDetailInternal = connect(
               <DocketRecord />
             </>
           )}
-          {caseDetailInternalTabs.deadlines && (
-            <>
-              <div className="title">
-                <h1>Deadlines</h1>
-              </div>
-              <CaseDeadlinesInternal />
-            </>
-          )}
-          {caseDetailInternalTabs.inProgress && (
+          {caseDetailInternalTabs.trackedItems && (
             <Tabs
-              bind="currentViewMetadata.caseDetail.inProgressTab"
+              bind="currentViewMetadata.caseDetail.trackedItemsTab"
               className="classic-horizontal-header3 tab-border"
             >
-              <Tab
-                id="tab-draft-documents"
-                tabName="draftDocuments"
-                title="Draft Documents"
-              >
-                <DraftDocuments />
-              </Tab>
-              <Tab id="tab-messages" tabName="messages" title="Messages">
-                <MessagesInProgress />
+              <Tab id="tab-deadlines" tabName="deadlines" title="Deadlines">
+                <CaseDeadlinesInternal />
               </Tab>
               <Tab
                 id="tab-pending-report"
@@ -82,6 +67,35 @@ export const CaseDetailInternal = connect(
                 title="Pending Report"
               >
                 <CaseDetailPendingReportList />
+              </Tab>
+            </Tabs>
+          )}
+          {caseDetailInternalTabs.drafts && (
+            <>
+              <div className="title">
+                <h1>Draft Documents</h1>
+              </div>
+              <DraftDocuments />
+            </>
+          )}
+          {caseDetailInternalTabs.messages && (
+            <Tabs
+              bind="currentViewMetadata.caseDetail.messagesTab"
+              className="classic-horizontal-header3 tab-border"
+            >
+              <Tab
+                id="tab-messages-in-progress"
+                tabName="messagesInProgress"
+                title="In Progress"
+              >
+                <MessagesInProgress />
+              </Tab>
+              <Tab
+                id="tab-messages-completed"
+                tabName="messagesCompleted"
+                title="Completed"
+              >
+                <span>TODO</span>
               </Tab>
             </Tabs>
           )}
