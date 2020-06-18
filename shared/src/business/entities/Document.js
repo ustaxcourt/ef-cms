@@ -230,11 +230,11 @@ joiValidationDecorator(
       .description('The type of this document.'),
     draftState: joi.alternatives().conditional('signedAt', {
       is: joi.exist().not(null),
-      then: joi.valid(null),
-      otherwise: joi.object().allow(null).optional(), // TODO - define properties for draftState object
+      otherwise: joi.object().allow(null).optional(),
+      then: joi.valid(null), // TODO: define properties for draftState object
     }),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(),
+    eventCode: joi.string().optional(), // TODO: use an enum
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
@@ -319,12 +319,12 @@ joiValidationDecorator(
     signedAt: joi
       .when('draftState', {
         is: joi.exist().not(null),
-        then: joi.valid(null),
         otherwise: joi.when('documentType', {
           is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
           otherwise: joiStrictTimestamp.optional().allow(null),
           then: joiStrictTimestamp.required(),
         }),
+        then: joi.valid(null),
       })
       .description('The time at which the document was signed.'),
     signedByUserId: joi
@@ -348,12 +348,12 @@ joiValidationDecorator(
     signedJudgeName: joi
       .when('draftState', {
         is: joi.exist().not(null),
-        then: joi.string().optional().allow(null),
         otherwise: joi.when('documentType', {
           is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
           otherwise: joi.string().optional().allow(null),
           then: joi.string().required(),
         }),
+        then: joi.string().optional().allow(null),
       })
       .description('The judge who signed the document.'),
     supportingDocument: joi.string().optional().allow(null),
@@ -453,10 +453,10 @@ Document.prototype.generateFiledBy = function (caseDetail, force = false) {
  *
  */
 Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
-  //fixme - should we throw an exception if both arguments are not provided?
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
+  this.draftState = null;
 };
 
 /**
