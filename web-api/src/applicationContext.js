@@ -375,11 +375,11 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
-  getCaseMessageById,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageById');
+  getCaseMessageThreadByParentId,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageThreadByParentId');
 const {
-  getCaseMessageInteractor,
-} = require('../../shared/src/business/useCases/messages/getCaseMessageInteractor');
+  getCaseMessageThreadInteractor,
+} = require('../../shared/src/business/useCases/messages/getCaseMessageThreadInteractor');
 const {
   getCasesByCaseIds,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
@@ -1199,7 +1199,7 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
-        getCaseMessageById,
+        getCaseMessageThreadByParentId,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -1408,7 +1408,7 @@ module.exports = appContextUser => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getCaseMessageInteractor,
+        getCaseMessageThreadInteractor,
         getCasesByUserInteractor,
         getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
