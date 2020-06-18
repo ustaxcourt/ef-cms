@@ -6,16 +6,16 @@ const { CaseMessage } = require('../../entities/CaseMessage');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * gets a case message
+ * gets a case message thread by parent id
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.messageId the id of the message to retrieve
+ * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the case message
  */
-exports.getCaseMessageInteractor = async ({
+exports.getCaseMessageThreadInteractor = async ({
   applicationContext,
-  messageId,
+  parentMessageId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -23,14 +23,14 @@ exports.getCaseMessageInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseMessage = await applicationContext
+  const caseMessages = await applicationContext
     .getPersistenceGateway()
-    .getCaseMessageById({
+    .getCaseMessageThreadByParentId({
       applicationContext,
-      messageId,
+      parentMessageId,
     });
 
-  return new CaseMessage(caseMessage, { applicationContext })
-    .validate()
-    .toRawObject();
+  return CaseMessage.validateRawCollection(caseMessages, {
+    applicationContext,
+  });
 };
