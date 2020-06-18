@@ -13,10 +13,11 @@ export const CaseMessagesSectionInbox = connect(
           <thead>
             <tr>
               <th className="small" colSpan="2">
-                Docket
+                Docket Number
               </th>
               <th className="small">Received</th>
               <th>Message</th>
+              <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
               <th>From</th>
@@ -36,7 +37,7 @@ export const CaseMessagesSectionInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
@@ -50,6 +51,7 @@ export const CaseMessagesSectionInbox = connect(
                       {message.message}
                     </div>
                   </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row from">{message.from}</td>

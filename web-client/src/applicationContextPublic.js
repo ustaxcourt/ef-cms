@@ -1,10 +1,11 @@
 import {
   CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   US_STATES,
+  US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -51,9 +52,10 @@ const applicationContextPublic = {
     deepFreeze({
       ADVANCED_SEARCH_TABS,
       CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-      CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
+      CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: COUNTRY_TYPES,
-      US_STATES: US_STATES,
+      US_STATES,
+      US_STATES_OTHER,
     }),
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,

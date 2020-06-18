@@ -11,8 +11,8 @@ exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createCon
       title: 'Enter title',
     },
     additionalValidation: {
-      secondaryName: joi.string().required(),
-      title: joi.string().optional(),
+      secondaryName: joi.string().max(500).required(),
+      title: joi.string().max(100).optional(),
     },
   },
 );

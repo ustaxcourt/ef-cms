@@ -217,25 +217,25 @@
   },
   {
     "eventCode": "DEC",
-    "documentType": "DEC - Decision Entered,",
+    "documentType": "DEC - Decision Entered",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "OAD",
-    "documentType": "OAD - Order and Decision Entered,",
+    "documentType": "OAD - Order and Decision Entered",
     "documentTitle": "Order and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODJ",
-    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered,",
+    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "SDEC",
-    "documentType": "SDEC - Stipulated Decision Entered,",
+    "documentType": "SDEC - Stipulated Decision Entered",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },

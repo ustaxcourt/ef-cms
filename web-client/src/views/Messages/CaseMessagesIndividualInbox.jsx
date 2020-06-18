@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseMessagesRowAttachments } from './CaseMessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -13,10 +14,11 @@ export const CaseMessagesIndividualInbox = connect(
           <thead>
             <tr>
               <th className="small" colSpan="2">
-                Docket
+                Docket Number
               </th>
               <th className="small">Received</th>
               <th>Message</th>
+              <th>Case Title</th>
               <th>Case Status</th>
               <th>From</th>
               <th className="small">Section</th>
@@ -36,7 +38,7 @@ export const CaseMessagesIndividualInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
@@ -51,12 +53,23 @@ export const CaseMessagesIndividualInbox = connect(
                       {message.message}
                     </div>
                   </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
                     {message.fromSection}
                   </td>
-                  <td></td>
+                  <td>
+                    {message.attachments.length === 0 && (
+                      <span>No attachments</span>
+                    )}
+                    {message.attachments.length > 0 && (
+                      <CaseMessagesRowAttachments
+                        attachments={message.attachments}
+                        caseId={message.caseId}
+                      />
+                    )}
+                  </td>
                 </tr>
               </tbody>
             );

@@ -131,6 +131,7 @@
       type: "string"
       flags: 
         presence: "required"
+        description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
           name: "pattern"

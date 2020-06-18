@@ -32,8 +32,8 @@ function PublicDocument(rawDocument) {
 joiValidationDecorator(
   PublicDocument,
   joi.object().keys({
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(500).optional(),
+    additionalInfo2: joi.string().max(500).optional(),
     caseId: joi
       .string()
       .uuid({
@@ -47,15 +47,15 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    documentTitle: joi.string().optional(),
-    documentType: joi.string().optional(),
-    eventCode: joi.string().optional(),
-    filedBy: joi.string().optional(),
+    documentTitle: joi.string().max(500).optional(),
+    documentType: joi.string().max(500).optional(), // TODO: enum
+    eventCode: joi.string().max(500).optional(), // TODO: enum
+    filedBy: joi.string().max(500).optional(),
     isPaper: joi.boolean().optional(),
-    processingStatus: joi.string().optional(),
+    processingStatus: joi.string().max(500).optional(), // TODO: enum
     receivedAt: joiStrictTimestamp.optional(),
     servedAt: joiStrictTimestamp.optional(),
-    servedParties: joi.array().optional(),
+    servedParties: joi.array().optional(), // TODO: object definition
   }),
   {},
 );
