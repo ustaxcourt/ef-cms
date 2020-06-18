@@ -66,11 +66,11 @@ CaseMessage.VALIDATION_RULES = {
   caseStatus: joi
     .string()
     .valid(...Object.values(CASE_STATUS_TYPES))
-    .optional()
+    .required()
     .description('The status of the associated case.'),
   caseTitle: joi
     .string()
-    .optional()
+    .required()
     .description('The case title for the associated cases.'),
   createdAt: joiStrictTimestamp
     .required()
