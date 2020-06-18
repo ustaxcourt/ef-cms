@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const updateCreateCaseMessageAttachmentsAction = ({
+export const updateCaseMessageModalAttachmentsAction = ({
   get,
   props,
   store,

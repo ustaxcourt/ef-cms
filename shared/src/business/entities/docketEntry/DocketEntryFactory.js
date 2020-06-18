@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi');
 const {
-  DOCUMENT_CATEGORY_MAP,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
@@ -126,7 +126,7 @@ function DocketEntryFactory(rawProps) {
   }
 
   const objectionDocumentTypes = [
-    ...DOCUMENT_CATEGORY_MAP['Motion'].map(entry => {
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
     'Motion to Withdraw Counsel (filed by petitioner)',

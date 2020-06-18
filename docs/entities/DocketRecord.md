@@ -48,7 +48,7 @@
         - 
           name: "max"
           args: 
-            limit: 1000
+            limit: 3000
       allow: 
         - null
       metas: 

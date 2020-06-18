@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const createCaseMessageModalHelper = (get, applicationContext) => {
+export const caseMessageModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const {
     docketRecordWithDocument,

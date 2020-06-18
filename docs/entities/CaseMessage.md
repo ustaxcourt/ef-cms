@@ -23,13 +23,27 @@
     caseStatus: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
         description: "The status of the associated case."
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 500
+      allow: 
+        - "Assigned - Case"
+        - "Assigned - Motion"
+        - "Calendared"
+        - "CAV"
+        - "Closed"
+        - "General Docket - Not at Issue"
+        - "General Docket - At Issue (Ready for Trial)"
+        - "Jurisdiction Retained"
+        - "New"
+        - "On Appeal"
+        - "Rule 155"
+        - "Submitted"
+    caseTitle: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The case title for the associated cases."
     createdAt: 
       type: "date"
       flags: 
