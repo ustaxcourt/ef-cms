@@ -2,12 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { getCaseMessageInteractor } = require('./getCaseMessageInteractor');
+  getCaseMessageThreadInteractor,
+} = require('./getCaseMessageThreadInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
+const { UnauthorizedError } = require('../../../errors/errors');
 
-describe('getCaseMessageInteractor', () => {
+describe('getCaseMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -15,14 +15,14 @@ describe('getCaseMessageInteractor', () => {
     });
 
     await expect(
-      getCaseMessageInteractor({
+      getCaseMessageThreadInteractor({
         applicationContext,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the case message from persistence and returns it', async () => {
-    const caseMessageData = {
+  it('retrieves the case message thread from persistence and returns it', async () => {
+    const mockCaseMessage = {
       attachments: [],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: 'General Docket - Not at Issue',
@@ -36,6 +36,7 @@ describe('getCaseMessageInteractor', () => {
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
+      parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: 'petitions',
@@ -47,16 +48,16 @@ describe('getCaseMessageInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessageById.mockReturnValue(caseMessageData);
+      .getCaseMessageThreadByParentId.mockReturnValue([mockCaseMessage]);
 
-    const returnedMessage = await getCaseMessageInteractor({
+    const returnedMessage = await getCaseMessageThreadInteractor({
       applicationContext,
-      messageId: caseMessageData.messageId,
+      messageId: mockCaseMessage.messageId,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseMessageById,
+      applicationContext.getPersistenceGateway().getCaseMessageThreadByParentId,
     ).toBeCalled();
-    expect(returnedMessage).toEqual(caseMessageData);
+    expect(returnedMessage).toEqual([mockCaseMessage]);
   });
 });

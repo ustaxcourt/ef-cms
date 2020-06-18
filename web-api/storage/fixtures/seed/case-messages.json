@@ -15,6 +15,7 @@
     "messageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "sk": "message|eb0a139a-8951-4de1-8b83-f02a27504105",
+    "parentMessageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
     "subject": "message to myself",
     "to": "Test Petitionsclerk",
     "toSection": "petitions",
