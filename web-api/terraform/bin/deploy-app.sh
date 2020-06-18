@@ -48,6 +48,10 @@ pushd ../template/cron
 npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
 
+pushd ../template/websockets
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
+
 pushd ../../runtimes/puppeteer
 ./build.sh 
 popd
