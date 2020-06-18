@@ -61,7 +61,7 @@ export const CalculatePenaltiesModal = connect(
         {statisticsFormHelper.showAddAnotherPenaltyButton && (
           <Button
             link
-            className="margin-top-2 add-another-penalty-button"
+            className="margin-top-2 modal-button-link"
             icon="plus-circle"
             onClick={() => addPenaltyInputSequence()}
           >

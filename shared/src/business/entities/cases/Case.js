@@ -392,7 +392,7 @@ Case.VALIDATION_RULES = {
     .string()
     .regex(DOCKET_NUMBER_MATCHER)
     .required()
-    .description('Unique case ID in XXXXX-YY format.'),
+    .description('Unique case identifier in XXXXX-YY format.'),
   docketNumberSuffix: joi
     .string()
     .allow(null)
@@ -447,7 +447,7 @@ Case.VALIDATION_RULES = {
     .description('Case caption before modification.'),
   initialDocketNumberSuffix: joi
     .string()
-    .max(2) // TODO: add enumerator
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES), '_')
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
@@ -980,11 +980,15 @@ Case.prototype.getDocumentById = function ({ documentId }) {
   return allCaseDocuments.find(document => document.documentId === documentId);
 };
 
-Case.prototype.getPetitionDocument = function () {
-  return this.documents.find(
+const getPetitionDocumentFromDocuments = function (documents) {
+  return documents.find(
     document =>
       document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
+};
+
+Case.prototype.getPetitionDocument = function () {
+  return getPetitionDocumentFromDocuments(this.documents);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1744,3 +1748,4 @@ Case.prototype.deleteStatistic = function (statisticId) {
 
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
+exports.getPetitionDocumentFromDocuments = getPetitionDocumentFromDocuments;

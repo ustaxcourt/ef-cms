@@ -38,6 +38,18 @@ export const CaseDetail = connect(
             <section className="usa-section grid-container">
               <SuccessNotification />
               <ErrorNotification />
+              {caseDetailHelper.showPetitionProcessingAlert && (
+                <div
+                  aria-live="polite"
+                  className="usa-alert usa-alert--warning"
+                  role="alert"
+                >
+                  <div className="usa-alert__body">
+                    You will be able to file documents after the Petition is
+                    processed.
+                  </div>
+                </div>
+              )}
               {caseDetailSubnavHelper.showCaseInformationTab && (
                 <div className="only-small-screens">
                   <div className="margin-bottom-3">

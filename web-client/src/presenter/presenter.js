@@ -174,6 +174,7 @@ import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumen
 import { openCaseInventoryReportModalSequence } from './sequences/openCaseInventoryReportModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
+import { openCompleteMessageModalSequence } from './sequences/openCompleteMessageModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeleteCorrespondenceModalSequence } from './sequences/openConfirmDeleteCorrespondenceModalSequence';
@@ -199,9 +200,11 @@ import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadl
 import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPractitionersModalSequence';
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openEditPrivatePractitionersModalSequence } from './sequences/openEditPrivatePractitionersModalSequence';
+import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
+import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
@@ -324,11 +327,11 @@ import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvance
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
+import { updateCaseMessageModalAttachmentsSequence } from './sequences/updateCaseMessageModalAttachmentsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
-import { updateCreateCaseMessageAttachmentsSequence } from './sequences/updateCreateCaseMessageAttachmentsSequence';
 import { updateCreateCaseMessageValueInModalSequence } from './sequences/updateCreateCaseMessageValueInModalSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -591,6 +594,7 @@ export const presenter = {
     openCaseInventoryReportModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
+    openCompleteMessageModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeleteCorrespondenceModalSequence,
@@ -616,9 +620,11 @@ export const presenter = {
     openEditIrsPractitionersModalSequence,
     openEditOrderTitleModalSequence,
     openEditPrivatePractitionersModalSequence,
+    openForwardMessageModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
+    openReplyToMessageModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     openTrialSessionPlanningModalSequence,
@@ -739,11 +745,11 @@ export const presenter = {
     updateBatchDownloadProgressSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
+    updateCaseMessageModalAttachmentsSequence,
     updateCaseNoteSequence,
     updateCasePartyTypeSequence,
     updateCompleteFormValueSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
-    updateCreateCaseMessageAttachmentsSequence,
     updateCreateCaseMessageValueInModalSequence,
     updateCreateOrderModalFormValueSequence,
     updateDocketEntryFormValueSequence,

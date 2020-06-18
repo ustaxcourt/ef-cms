@@ -1,12 +1,13 @@
 const joi = require('@hapi/joi');
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
+  CASE_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
   PAYMENT_STATUS,
 } = require('../EntityConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
@@ -124,7 +125,10 @@ const paperRequirements = joi
       },
     ),
     caseCaption: joi.string().max(500).required(),
-    caseType: joi.string().max(500).required(), // TODO: enum
+    caseType: joi
+      .string()
+      .valid(...CASE_TYPES)
+      .required(),
     hasVerifiedIrsNotice: joi.boolean().required(),
     irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),

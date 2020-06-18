@@ -1,15 +1,15 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
-import { createCaseMessageModalHelper as createCaseMessageModalHelperComputed } from './createCaseMessageModalHelper';
+import { caseMessageModalHelper as caseMessageModalHelperComputed } from './caseMessageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const createCaseMessageModalHelper = withAppContextDecorator(
-  createCaseMessageModalHelperComputed,
+const caseMessageModalHelper = withAppContextDecorator(
+  caseMessageModalHelperComputed,
   applicationContext,
 );
 
-describe('createCaseMessageModalHelper', () => {
+describe('caseMessageModalHelper', () => {
   let caseDetail;
 
   beforeAll(() => {
@@ -33,7 +33,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns documents on the docket record', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -53,7 +53,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns draftDocuments from formattedCaseDetail', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -69,7 +69,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm true when the current attachment count is zero', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -85,7 +85,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm true when screenMetadata.showAddDocumentForm is true and the maximum number of attachments has not been met', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -103,7 +103,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm false when screenMetadata.showAddDocumentForm is false and the maximum number of attachments has not been met', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -121,7 +121,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddDocumentForm false when maximum number of attachments have been reached', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -139,7 +139,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddMoreDocumentsButton true when showAddDocumentForm is false and the current attachment count is greater than zero but less than the maximum', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -157,7 +157,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showAddMoreDocumentsButton false when maximum number of attachments have been reached', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -175,7 +175,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showMessageAttachments true when the the form has message attachments', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {
@@ -193,7 +193,7 @@ describe('createCaseMessageModalHelper', () => {
   });
 
   it('returns showMessageAttachments false when the the form has NO message attachments', () => {
-    const result = runCompute(createCaseMessageModalHelper, {
+    const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail,
         modal: {

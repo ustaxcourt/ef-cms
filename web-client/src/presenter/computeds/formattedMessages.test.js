@@ -31,4 +31,40 @@ describe('formattedMessages', () => {
 
     expect(result[0].createdAtFormatted).toEqual('01/01/19');
   });
+
+  it('sorts messages by createdAt', () => {
+    const result = runCompute(formattedMessages, {
+      state: {
+        messages: [
+          {
+            caseId: '1',
+            createdAt: '2019-01-01T16:29:13.122Z',
+            message: 'This is a test message',
+          },
+          {
+            caseId: '3',
+            createdAt: '2019-01-02T17:29:13.122Z',
+            message: 'This is a test message',
+          },
+          {
+            caseId: '2',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            message: 'This is a test message',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject([
+      {
+        caseId: '1',
+      },
+      {
+        caseId: '2',
+      },
+      {
+        caseId: '3',
+      },
+    ]);
+  });
 });

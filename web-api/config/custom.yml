@@ -164,22 +164,6 @@ notifications:
       createRoute53Record: false
       enabled: true
 
-streams:
-  <<: *customDefault
-  serverless-offline:
-    <<: *serverless-offline-default
-    port: 3012
-  serverless-offline-dynamodb-streams:
-    apiVersion: '2013-12-02'
-    endpoint: http://0.0.0.0:8000
-    region: us-east-1
-    accessKeyId: root
-    secretAccessKey: root
-    readInterval: 500
-  customDomain:
-    <<: *customDomainDefault
-    basePath: 'streams'
-
 public-api:
   <<: *customDefault
   serverless-offline:

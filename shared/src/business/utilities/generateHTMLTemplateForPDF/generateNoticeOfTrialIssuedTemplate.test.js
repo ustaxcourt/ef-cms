@@ -28,7 +28,7 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
           postalCode: '12345',
           startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
-          state: 'ST',
+          state: 'AL',
         },
       },
     });
