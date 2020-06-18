@@ -236,6 +236,9 @@ const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
+  replyToCaseMessageLambda,
+} = require('./messages/replyToCaseMessageLambda');
+const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
 const {
@@ -628,6 +631,10 @@ app.post(
 /**
  * messages
  */
+app.post(
+  '/messages/:parentMessageId/reply',
+  lambdaWrapper(replyToCaseMessageLambda),
+);
 app.get(
   '/messages/:parentMessageId',
   lambdaWrapper(getCaseMessageThreadLambda),
