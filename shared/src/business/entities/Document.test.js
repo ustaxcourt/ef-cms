@@ -230,6 +230,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: ORDER_TYPES[0].documentType,
+          draftState: null,
           eventCode: 'TRAN',
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -239,6 +240,9 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
+
+      console.log(document.getFormattedValidationErrors());
+
       expect(document.isValid()).toBeTruthy();
     });
 

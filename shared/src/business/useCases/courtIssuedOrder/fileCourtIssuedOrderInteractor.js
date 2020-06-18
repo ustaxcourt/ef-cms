@@ -118,10 +118,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   documentEntity.setAsProcessingStatusAsCompleted();
 
   //fixme - does it make sense that we added the extra condition?
-  if (
-    documentMetadata.eventCode === 'NOT' ||
-    ORDER_DOCUMENT_TYPES.includes(documentMetadata.eventCode)
-  ) {
+  if (documentMetadata.eventCode === 'NOT') {
     //fixme - dont hardcode judge name
     documentEntity.setSigned(authorizedUser.userId, 'Maurice B. Foley');
   }
