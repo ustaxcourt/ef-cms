@@ -4,10 +4,6 @@ const {
   disconnectLambda,
 } = require('../../../src/notifications/disconnectLambda');
 
-exports.connectHandler = async event => {
-  return connectLambda(event);
-};
+exports.connectHandler = connectLambda(event);
 
-exports.disconnectHandler = async event => {
-  return disconnectLambda(event);
-};
+exports.disconnectHandler = disconnectLambda(event);
