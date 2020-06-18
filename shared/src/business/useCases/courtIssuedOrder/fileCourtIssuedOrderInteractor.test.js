@@ -131,8 +131,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentTitle: 'Order to do anything',
         documentType: 'Order',
-        draftState: {},
         eventCode: 'O',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -159,6 +161,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentTitle: 'Notice to be nice',
         documentType: 'Notice',
         eventCode: 'NOT',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
