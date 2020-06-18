@@ -4,7 +4,8 @@ import { state } from 'cerebral';
  * set the modal state
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store function
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store
  */
 export const setForwardMessageModalDialogModalStateAction = ({
   get,
