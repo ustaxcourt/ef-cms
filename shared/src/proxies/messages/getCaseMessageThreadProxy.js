@@ -1,16 +1,19 @@
 const { get } = require('../requests');
 
 /**
- * getCaseMessageInteractor
+ * getCaseMessageThreadInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.messageId the message id
+ * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCaseMessageInteractor = ({ applicationContext, messageId }) => {
+exports.getCaseMessageThreadInteractor = ({
+  applicationContext,
+  parentMessageId,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/messages/${messageId}`,
+    endpoint: `/messages/${parentMessageId}`,
   });
 };

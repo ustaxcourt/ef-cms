@@ -140,6 +140,9 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
+  getCaseMessageThreadLambda,
+} = require('./messages/getCaseMessageThreadLambda');
+const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
@@ -328,7 +331,6 @@ const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { forwardWorkItemLambda } = require('./workitems/forwardWorkItemLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
-const { getCaseMessageLambda } = require('./messages/getCaseMessageLambda');
 const { getCasesByUserLambda } = require('./cases/getCasesByUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
@@ -626,7 +628,10 @@ app.post(
 /**
  * messages
  */
-app.get('/messages/:messageId', lambdaWrapper(getCaseMessageLambda));
+app.get(
+  '/messages/:parentMessageId',
+  lambdaWrapper(getCaseMessageThreadLambda),
+);
 app.get(
   '/messages/inbox/:userId',
   lambdaWrapper(getInboxCaseMessagesForUserLambda),

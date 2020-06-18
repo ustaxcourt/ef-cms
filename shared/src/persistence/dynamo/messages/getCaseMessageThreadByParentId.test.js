@@ -1,7 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { getCaseMessageById } = require('./getCaseMessageById');
+const {
+  getCaseMessageThreadByParentId,
+} = require('./getCaseMessageThreadByParentId');
 
 const mockCaseMessage = {
   caseId: 'b3f09a45-b27c-4383-acc1-2ab1f99e6725',
@@ -17,7 +19,7 @@ const mockCaseMessage = {
   toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
 };
 
-describe('getCaseMessageById', () => {
+describe('getCaseMessageThreadByParentId', () => {
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
     applicationContext.getDocumentClient().query.mockReturnValue({
@@ -26,11 +28,11 @@ describe('getCaseMessageById', () => {
   });
 
   it('retrieves the case message from persistence', async () => {
-    const retrievedMessage = await getCaseMessageById({
+    const retrievedMessage = await getCaseMessageThreadByParentId({
       applicationContext,
       messageId: mockCaseMessage.messageId,
     });
 
-    expect(retrievedMessage).toEqual(mockCaseMessage);
+    expect(retrievedMessage).toEqual([mockCaseMessage]);
   });
 });
