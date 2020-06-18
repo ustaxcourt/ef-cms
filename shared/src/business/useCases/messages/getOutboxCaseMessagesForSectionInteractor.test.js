@@ -37,6 +37,7 @@ describe('getOutboxCaseMessagesForSectionInteractor', () => {
       from: 'Test Petitionsclerk2',
       fromSection: 'petitions',
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
+      isRepliedTo: false,
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
