@@ -115,7 +115,7 @@ CaseMessage.VALIDATION_RULES = {
     .string()
     .uuid({ version: ['uuidv4'] })
     .required()
-    .description('The ID of the parent message.'),
+    .description('The ID of the initial message in the thread.'),
   subject: joi
     .string()
     .max(250)
