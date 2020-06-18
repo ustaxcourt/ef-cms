@@ -7,6 +7,7 @@ const {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
+  OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
@@ -245,8 +246,14 @@ joiValidationDecorator(
     judge: joi
       .string()
       .allow(null)
-      .optional()
-      .description('The judge associated with the document.'),
+      .description('The judge associated with the document.')
+      .when('documentType', {
+        is: joi
+          .string()
+          .valid(...OPINION_DOCUMENT_TYPES.map(t => t.documentType)),
+        otherwise: joi.optional(),
+        then: joi.required(),
+      }),
     lodged: joi
       .boolean()
       .optional()
