@@ -228,11 +228,8 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
-    draftState: joi.alternatives().conditional('signedAt', {
-      is: joi.exist().not(null),
-      otherwise: joi.object().allow(null).optional(),
-      then: joi.valid(null), // TODO: define properties for draftState object
-    }),
+    //TODO - figure out if draft state being null/ not null relies on signature being present
+    draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
     eventCode: joi.string().optional(), // TODO: use an enum
     filedBy: joi.string().max(500).allow('').optional(),
@@ -317,14 +314,10 @@ joiValidationDecorator(
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joi
-      .when('draftState', {
-        is: joi.exist().not(null),
-        otherwise: joi.when('documentType', {
-          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
-          otherwise: joiStrictTimestamp.optional().allow(null),
-          then: joiStrictTimestamp.required(),
-        }),
-        then: joi.valid(null),
+      .when('documentType', {
+        is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+        otherwise: joiStrictTimestamp.optional().allow(null),
+        then: joiStrictTimestamp.required(),
       })
       .description('The time at which the document was signed.'),
     signedByUserId: joi
