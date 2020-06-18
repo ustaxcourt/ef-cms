@@ -5,11 +5,16 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
     body: {
       query: {
         bool: {
-          must: {
-            match: {
-              'toSection.S': { operator: 'and', query: section },
+          must: [
+            {
+              match: {
+                'toSection.S': { operator: 'and', query: section },
+              },
             },
-          },
+            {
+              match: { 'isRepliedTo.BOOL': false },
+            },
+          ],
         },
       },
       size: 5000,

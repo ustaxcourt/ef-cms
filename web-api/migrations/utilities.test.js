@@ -3,6 +3,7 @@ const {
 } = require('../../shared/src/business/entities/EntityConstants');
 const {
   forAllRecords,
+  isCaseMessageRecord,
   isCaseRecord,
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,
@@ -11,6 +12,26 @@ const {
 } = require('./utilities');
 
 describe('utilities', () => {
+  describe('isCaseMessageRecord', () => {
+    it('should return true if the item is a case message record', () => {
+      const result = isCaseMessageRecord({
+        pk: 'case|',
+        sk: 'message|',
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('should return false if the item is not a case message record', () => {
+      const result = isCaseMessageRecord({
+        pk: 'case|',
+        sk: 'case|',
+      });
+
+      expect(result).toEqual(false);
+    });
+  });
+
   describe('isCaseRecord', () => {
     it('should return true if the item is a case record', () => {
       const result = isCaseRecord({

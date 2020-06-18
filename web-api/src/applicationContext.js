@@ -375,11 +375,11 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
-  getCaseMessageById,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageById');
+  getCaseMessageThreadByParentId,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessageThreadByParentId');
 const {
-  getCaseMessageInteractor,
-} = require('../../shared/src/business/useCases/messages/getCaseMessageInteractor');
+  getCaseMessageThreadInteractor,
+} = require('../../shared/src/business/useCases/messages/getCaseMessageThreadInteractor');
 const {
   getCasesByCaseIds,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
@@ -655,6 +655,9 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
+  markCaseMessageRepliedTo,
+} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageRepliedTo');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -708,6 +711,9 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  replyToCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/replyToCaseMessageInteractor');
 const {
   reprocessFailedRecordsInteractor,
 } = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
@@ -1199,7 +1205,7 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
-        getCaseMessageById,
+        getCaseMessageThreadByParentId,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -1246,6 +1252,7 @@ module.exports = appContextUser => {
         incrementCounter,
         indexRecord,
         isFileExists,
+        markCaseMessageRepliedTo,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1408,7 +1415,7 @@ module.exports = appContextUser => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getCaseMessageInteractor,
+        getCaseMessageThreadInteractor,
         getCasesByUserInteractor,
         getClosedCasesInteractor,
         getConsolidatedCasesByCaseInteractor,
@@ -1459,6 +1466,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        replyToCaseMessageInteractor,
         reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,

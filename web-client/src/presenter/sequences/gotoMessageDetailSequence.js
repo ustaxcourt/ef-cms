@@ -2,7 +2,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getDefaultAttachmentToDisplayAction } from '../actions/getDefaultAttachmentToDisplayAction';
-import { getMessageAction } from '../actions/getMessageAction';
+import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAttachmentDocumentToDisplayAction } from '../actions/setAttachmentDocumentToDisplayAction';
@@ -17,7 +17,7 @@ const gotoMessageDetail = showProgressSequenceDecorator([
   clearErrorAlertsAction,
   getCaseAction,
   setCaseAction,
-  getMessageAction,
+  getMessageThreadAction,
   setMessageAction,
   getDefaultAttachmentToDisplayAction,
   setAttachmentDocumentToDisplayAction,

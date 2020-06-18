@@ -32,6 +32,7 @@ describe('createCaseMessageInteractor', () => {
         },
       ],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
+      isRepliedTo: false,
       message: "How's it going?",
       subject: 'Hey!',
       toSection: 'petitions',
