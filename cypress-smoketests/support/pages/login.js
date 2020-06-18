@@ -34,7 +34,7 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-const getUserToken = async (username, password) => {
+exports.getUserToken = async (username, password) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
@@ -51,27 +51,6 @@ const getUserToken = async (username, password) => {
     .promise();
 };
 
-let token = null;
-
-describe('petitionsclerk can login', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      'Testing1234$',
-    );
-    token = results.AuthenticationResult.IdToken;
-  });
-
-  it('views the section inbox', () => {
-    cy.visit(`/log-in?token=${token}`);
-    cy.get('.button-switch-box').should('exist');
-  });
-
-  it('should verify advanced search works', () => {
-    cy.visit(`/log-in?token=${token}&path=/search`);
-    cy.get('#advanced-search-button').should('exist');
-    cy.get('#petitioner-name').type('THISNAMESHOULDNEVEREXIST');
-    cy.get('#advanced-search-button').click();
-    cy.get('#no-search-results').should('exist');
-  });
-});
+exports.login = token => {
+  cy.visit(`/log-in?token=${token}`);
+};

@@ -14,6 +14,7 @@ export const PractitionerForm = connect(
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     usStates: state.constants.US_STATES,
+    usStatesOther: state.constants.US_STATES_OTHER,
     validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
     validationErrors: state.validationErrors,
   },
@@ -25,6 +26,7 @@ export const PractitionerForm = connect(
     PRACTITIONER_TYPE_OPTIONS,
     updateFormValueSequence,
     usStates,
+    usStatesOther,
     validateAddPractitionerSequence,
     validationErrors,
   }) {
@@ -110,7 +112,6 @@ export const PractitionerForm = connect(
                     />
                   </FormGroup>
                 </div>
-
                 <div className="grid-col-3">
                   <FormGroup>
                     <label className="usa-label" htmlFor="suffix">
@@ -136,7 +137,6 @@ export const PractitionerForm = connect(
                   </FormGroup>
                 </div>
               </div>
-
               <div className="grid-row grid-gap-3">
                 <div className="grid-col-12">
                   <FormGroup errorText={validationErrors.birthYear}>
@@ -170,7 +170,6 @@ export const PractitionerForm = connect(
                       </div>
                     </fieldset>
                   </FormGroup>
-
                   <FormGroup errorText={validationErrors.practitionerType}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Practitioner type</legend>
@@ -201,7 +200,6 @@ export const PractitionerForm = connect(
                       ))}
                     </fieldset>
                   </FormGroup>
-
                   <FormGroup errorText={validationErrors.employer}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Employer</legend>
@@ -240,7 +238,6 @@ export const PractitionerForm = connect(
             </div>
           </div>
         </div>
-
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
             <h2>Contact Information</h2>
@@ -268,7 +265,6 @@ export const PractitionerForm = connect(
                       />
                     </FormGroup>
                   )}
-
                   <PractitionerContactForm
                     bind="form"
                     changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
@@ -292,7 +288,6 @@ export const PractitionerForm = connect(
                     <label className="usa-label" htmlFor="originalBarState">
                       Original bar state
                     </label>
-
                     <select
                       className="usa-select"
                       id="originalBarState"
@@ -319,21 +314,16 @@ export const PractitionerForm = connect(
                         })}
                       </optgroup>
                       <optgroup label="Other">
-                        <option value="AA">AA</option>
-                        <option value="AE">AE</option>
-                        <option value="AP">AP</option>
-                        <option value="AS">AS</option>
-                        <option value="FM">FM</option>
-                        <option value="GU">GU</option>
-                        <option value="MH">MH</option>
-                        <option value="MP">MP</option>
-                        <option value="PW">PW</option>
-                        <option value="PR">PR</option>
-                        <option value="VI">VI</option>
+                        {usStatesOther.map(abbrev => {
+                          return (
+                            <option key={abbrev} value={abbrev}>
+                              {abbrev}
+                            </option>
+                          );
+                        })}
                       </optgroup>
                     </select>
                   </FormGroup>
-
                   {createPractitionerUserHelper.canEditAdmissionStatus ? (
                     <FormGroup errorText={validationErrors.admissionsStatus}>
                       <label className="usa-label" htmlFor="admissionsStatus">
