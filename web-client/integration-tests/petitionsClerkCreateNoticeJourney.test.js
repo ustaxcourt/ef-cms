@@ -5,6 +5,7 @@ import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkAddsNoticeToCase } from './journey/petitionsClerkAddsNoticeToCase';
+import { petitionsClerkAppliesSignatureToDraftDocument } from './journey/petitionsClerkAppliesSignatureToDraftDocument';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsCaseDetailAfterAddingNotice } from './journey/petitionsClerkViewsCaseDetailAfterAddingNotice';
 import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
@@ -26,6 +27,7 @@ describe('Petitions Clerk Create Notice Journey', () => {
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsNoticeToCase(test);
+  petitionsClerkAppliesSignatureToDraftDocument(test);
   petitionsClerkViewsCaseDetailAfterAddingNotice(test);
   petitionsClerkViewsDraftDocumentsForNotice(test, 1);
   petitionsClerkViewsDocumentDetail(test);
