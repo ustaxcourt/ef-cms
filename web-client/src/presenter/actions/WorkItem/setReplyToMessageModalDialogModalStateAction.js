@@ -10,10 +10,11 @@ export const setReplyToMessageModalDialogModalStateAction = ({
   get,
   store,
 }) => {
-  const messageDetail = get(state.messageDetail);
+  const messageDetail = get(state.messageDetail)[0]; //todo in later task
   store.set(state.modal.validationErrors, {});
   store.set(state.modal.form, {
     attachments: messageDetail.attachments,
+    parentMessageId: messageDetail.parentMessageId,
     subject: messageDetail.subject,
     to: messageDetail.from,
     toSection: messageDetail.fromSection,

@@ -42,7 +42,7 @@ export const CaseMessagesSectionOutbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.messageId}`}
+                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>

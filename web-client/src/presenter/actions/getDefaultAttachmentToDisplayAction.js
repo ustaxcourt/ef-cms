@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @returns {object} object containing attachmentDocumentToDisplay
  */
 export const getDefaultAttachmentToDisplayAction = ({ get }) => {
-  const { attachments } = get(state.messageDetail);
+  const { attachments } = get(state.messageDetail)[0]; //todo in later task
   let attachmentDocumentToDisplay = null;
 
   if (attachments && attachments.length) {

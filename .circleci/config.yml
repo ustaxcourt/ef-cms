@@ -324,17 +324,8 @@ jobs:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
-          name: 'Setup SNS Subscription'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api && ./setup-sns-subscriptions.sh ${ENV}"
-      - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
-      - run:
-          name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-east-1"
-      - run:
-          name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
       # - run:
       #     name: 'Deploy - Switch environment color'
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
@@ -344,9 +335,6 @@ jobs:
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0"
-      - run:
-          name: 'Deploy - Web WS - Route53'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./setup-regional-route53-ws.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
@@ -412,9 +400,6 @@ jobs:
             else
               echo "skipping…"
             fi
-      # - run:
-      #     name: 'Deploy - Cognito Authorizer Check'
-      #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "find web-api/*.yml | ENV=${ENV} xargs node web-api/verify-authorizers.js"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 

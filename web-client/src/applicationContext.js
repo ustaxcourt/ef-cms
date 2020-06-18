@@ -111,7 +111,7 @@ import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/pr
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseMessageInteractor } from '../../shared/src/proxies/messages/getCaseMessageProxy';
+import { getCaseMessageThreadInteractor } from '../../shared/src/proxies/messages/getCaseMessageThreadProxy';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
@@ -160,6 +160,7 @@ import { removeCasePendingItemInteractor } from '../../shared/src/proxies/remove
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { replyToCaseMessageInteractor } from '../../shared/src/proxies/messages/replyToCaseMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
@@ -317,7 +318,7 @@ const allUseCases = {
   getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseMessageInteractor,
+  getCaseMessageThreadInteractor,
   getCasesByUserInteractor,
   getClosedCasesInteractor,
   getConsolidatedCasesByCaseInteractor,
@@ -364,6 +365,7 @@ const allUseCases = {
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
+  replyToCaseMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
