@@ -116,11 +116,6 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  // if (documentMetadata.eventCode === 'NOT') {
-  //   //TODO - dont hardcode judge name
-  //   documentEntity.setSigned(authorizedUser.userId, 'Maurice B. Foley');
-  // }
-
   caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
