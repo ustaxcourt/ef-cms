@@ -79,6 +79,7 @@ echo "starting proxy"
 node ./web-api/proxy.js &
 
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/streams-local.js" &
+nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/websockets-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-public-local.js"
 
