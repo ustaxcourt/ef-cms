@@ -9,7 +9,8 @@ AWS.config.region = 'us-east-1';
 
 let token = null;
 
-describe('Petitions clerk', () => {
+// TODO - this has been refactored, will be removed in the next smoketest PR
+describe.skip('Petitions clerk', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
@@ -20,7 +21,7 @@ describe('Petitions clerk', () => {
 
   it('should be able to view the section inbox', () => {
     cy.visit(`/log-in?token=${token}`);
-    cy.get('.button-switch-box').should('exist');
+    cy.get('.progress-indicator').should('not.exist');
   });
 
   it('should be able to QC a petition', () => {
@@ -48,8 +49,6 @@ describe('Petitions clerk', () => {
 
     cy.get('#case-edit-form button#submit-case').click();
 
-    cy.get('#ustc-review-and-serve-form button#submit-case')
-      .scrollIntoView()
-      .click();
+    cy.get('button#submit-case').scrollIntoView().click();
   });
 });
