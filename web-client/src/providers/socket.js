@@ -3,7 +3,7 @@ const createWebSocketClient = token => {
   const connectionUrl = `${notificationsUrl}?token=${token}`;
   const socket = new WebSocket(
     connectionUrl,
-    process.env.USTC_ENV === 'dev' ? 'echo-protocol' : undefined,
+    connectionUrl.indexOf('localhost') !== -1 ? 'echo-protocol' : undefined,
   );
   return socket;
 };
