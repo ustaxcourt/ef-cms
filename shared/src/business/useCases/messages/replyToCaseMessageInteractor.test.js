@@ -23,7 +23,7 @@ describe('replyToCaseMessageInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('creates the case message reply', async () => {
+  it('creates the case message reply and marks the parent message as replied to', async () => {
     const caseMessageData = {
       attachments: [
         {
@@ -85,6 +85,16 @@ describe('replyToCaseMessageInteractor', () => {
       fromSection: 'petitions',
       fromUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       to: 'Test Petitionsclerk2',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().markCaseMessageRepliedTo,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().markCaseMessageRepliedTo.mock
+        .calls[0][0],
+    ).toMatchObject({
+      caseId: caseMessageData.caseId,
+      messageId: caseMessageData.parentMessageId,
     });
   });
 });
