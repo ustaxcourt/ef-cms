@@ -54,7 +54,6 @@ describe('caseDetailSubnavHelper', () => {
       },
     });
     expect(result.showTrackedItemsTab).toBeFalsy();
-    expect(result.showTrackedItemsTab).toBeFalsy();
     expect(result.showDraftsTab).toBeFalsy();
     expect(result.showMessagesTab).toBeFalsy();
     expect(result.showCorrespondenceTab).toBeFalsy();
