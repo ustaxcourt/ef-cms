@@ -34,6 +34,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.from = rawMessage.from;
   this.fromSection = rawMessage.fromSection;
   this.fromUserId = rawMessage.fromUserId;
+  this.isRepliedTo = rawMessage.isRepliedTo || false;
   this.message = rawMessage.message;
   this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
   this.parentMessageId = rawMessage.parentMessageId || this.messageId;
@@ -101,6 +102,10 @@ CaseMessage.VALIDATION_RULES = {
     })
     .required()
     .description('The ID of the user who sent the message.'),
+  isRepliedTo: joi
+    .boolean()
+    .required()
+    .description('Whether the message has been replied to or forwarded.'),
   message: joi.string().max(500).required().description('The message text.'),
   messageId: joi
     .string()
