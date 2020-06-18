@@ -1,12 +1,3 @@
-jest.mock('../src/applicationContext');
-const createApplicationContext = require('../src/applicationContext');
-const {
-  createTestApplicationContext,
-} = require('../../shared/src/business/test/createTestApplicationContext');
-const applicationContext = createTestApplicationContext();
-
-createApplicationContext.mockReturnValue(applicationContext);
-
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00005-case-message-required-fields');
 
@@ -17,14 +8,6 @@ describe('case messages required fields migration', () => {
   let getStub;
 
   let mockCaseMessageItem;
-
-  beforeAll(() => {
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      caseCaption: 'Test Person, Petitioner',
-      caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-      status: 'New',
-    });
-  });
 
   beforeEach(() => {
     mockCaseMessageItem = {
@@ -56,7 +39,11 @@ describe('case messages required fields migration', () => {
 
     getStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        Item: mockCaseMessageItem,
+        Item: {
+          caseCaption: 'Test Person, Petitioner',
+          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+          status: 'New',
+        },
       }),
     });
 
