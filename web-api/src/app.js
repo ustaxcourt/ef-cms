@@ -47,6 +47,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  completeCaseMessageLambda,
+} = require('./messages/completeCaseMessageLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -641,6 +644,10 @@ app.post(
 app.post(
   '/messages/:parentMessageId/forward',
   lambdaWrapper(forwardCaseMessageLambda),
+);
+app.post(
+  '/messages/:parentMessageId/complete',
+  lambdaWrapper(completeCaseMessageLambda),
 );
 app.get(
   '/messages/:parentMessageId',
