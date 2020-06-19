@@ -1,3 +1,5 @@
+const isCaseMessageRecord = item =>
+  item.pk.startsWith('case|') && item.sk.startsWith('message|');
 const isCaseRecord = item => !!item.caseType;
 const isTrialSessionRecord = item =>
   !!item.caseOrder && !!item.trialSessionId && !!item.maxCases;
@@ -51,6 +53,7 @@ const upGenerator = mutateFunction => async (
 
 module.exports = {
   forAllRecords,
+  isCaseMessageRecord,
   isCaseRecord,
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,

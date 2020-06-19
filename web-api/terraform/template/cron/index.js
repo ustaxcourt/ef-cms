@@ -5,10 +5,8 @@ const {
   reprocessFailedRecordsLambda,
 } = require('../../../src/streams/reprocessFailedRecordsLambda');
 
-exports.reprocessFailedRecordsHandler = async event => {
-  return reprocessFailedRecordsLambda(event);
-};
+exports.reprocessFailedRecordsHandler = reprocessFailedRecordsLambda(event);
 
-exports.checkForReadyForTrialCasesHandler = async event => {
-  return checkForReadyForTrialCasesLambda(event);
-};
+exports.checkForReadyForTrialCasesHandler = checkForReadyForTrialCasesLambda(
+  event,
+);

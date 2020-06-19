@@ -486,11 +486,30 @@
         - "Standing Pretrial Notice"
         - "Standing Pretrial Order"
     draftState: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
+      type: "alternatives"
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "signedAt"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "any"
+            flags: 
+              only: true
+            allow: 
+              - null
+          otherwise: 
+            type: "object"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     entityName: 
       type: "string"
       flags: 
@@ -745,33 +764,152 @@
       flags: 
         presence: "optional"
     signedAt: 
-      type: "date"
+      type: "any"
       flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
-      allow: 
-        - null
-    signedByUserId: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
+        description: "The time at which the document was signed."
+      whens: 
         - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
-      allow: 
-        - null
+          ref: 
+            path: 
+              - "draftState"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "any"
+            flags: 
+              only: true
+            allow: 
+              - null
+          otherwise: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "documentType"
+                is: 
+                  type: "string"
+                  flags: 
+                    only: true
+                  allow: 
+                    - "Order"
+                    - "Order of Dismissal for Lack of Jurisdiction"
+                    - "Order of Dismissal"
+                    - "Order of Dismissal and Decision"
+                    - "Order to Show Cause"
+                    - "Order and Decision"
+                    - "Decision"
+                    - "Notice"
+                then: 
+                  type: "date"
+                  flags: 
+                    format: 
+                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                      - "YYYY-MM-DD"
+                    presence: "required"
+                otherwise: 
+                  type: "date"
+                  flags: 
+                    format: 
+                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                      - "YYYY-MM-DD"
+                    presence: "optional"
+                  allow: 
+                    - null
     signedJudgeName: 
-      type: "string"
+      type: "any"
       flags: 
-        presence: "optional"
-      allow: 
-        - null
+        description: "The judge who signed the document."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "draftState"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "string"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+          otherwise: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "documentType"
+                is: 
+                  type: "string"
+                  flags: 
+                    only: true
+                  allow: 
+                    - "Order"
+                    - "Order of Dismissal for Lack of Jurisdiction"
+                    - "Order of Dismissal"
+                    - "Order of Dismissal and Decision"
+                    - "Order to Show Cause"
+                    - "Order and Decision"
+                    - "Decision"
+                    - "Notice"
+                then: 
+                  type: "string"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "string"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - null
+    signedByUserId: 
+      type: "any"
+      flags: 
+        description: "The id of the user who applied the signature."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "signedJudgeName"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "string"
+            flags: 
+              presence: "required"
+            rules: 
+              - 
+                name: "guid"
+                args: 
+                  options: 
+                    version: 
+                      - "uuidv4"
+          otherwise: 
+            type: "string"
+            flags: 
+              presence: "optional"
+            rules: 
+              - 
+                name: "guid"
+                args: 
+                  options: 
+                    version: 
+                      - "uuidv4"
+            allow: 
+              - null
     supportingDocument: 
       type: "string"
       flags: 

@@ -26,7 +26,7 @@ export const ReplyToCaseMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Reply to Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence={() => {}}
+        onConfirmSequence="replyToCaseMessageSequence"
       >
         <FormGroup>
           <span className="usa-label">Recipient</span>
