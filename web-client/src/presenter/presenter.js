@@ -43,6 +43,7 @@ import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalA
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToDocumentQCSequence } from './sequences/closeModalAndReturnToDocumentQCSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
+import { completeCaseMessageSequence } from './sequences/completeCaseMessageSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
@@ -465,6 +466,7 @@ export const presenter = {
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToDocumentQCSequence,
     closeModalAndReturnToTrialSessionsSequence,
+    completeCaseMessageSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,
