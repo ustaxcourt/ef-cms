@@ -601,7 +601,7 @@ describe('ContactFactory', () => {
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  describe.only('Cases with otherPetitioners', () => {
+  describe('Cases with otherPetitioners', () => {
     const partyTypeKeys = Object.keys(PARTY_TYPES);
     partyTypeKeys.forEach(partyType => {
       it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
