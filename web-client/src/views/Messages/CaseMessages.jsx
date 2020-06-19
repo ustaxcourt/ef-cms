@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseMessagesIndividualCompleted } from './CaseMessagesIndividualCompleted';
 import { CaseMessagesIndividualInbox } from './CaseMessagesIndividualInbox';
 import { CaseMessagesIndividualOutbox } from './CaseMessagesIndividualOutbox';
+import { CaseMessagesSectionCompleted } from './CaseMessagesSectionCompleted';
 import { CaseMessagesSectionInbox } from './CaseMessagesSectionInbox';
 import { CaseMessagesSectionOutbox } from './CaseMessagesSectionOutbox';
 import { ErrorNotification } from '../ErrorNotification';
@@ -96,6 +97,9 @@ export const CaseMessages = connect(
               <div id="completed-tab-content">
                 {messagesHelper.showIndividualMessages && (
                   <CaseMessagesIndividualCompleted />
+                )}
+                {messagesHelper.showSectionMessages && (
+                  <CaseMessagesSectionCompleted />
                 )}
               </div>
             </Tab>

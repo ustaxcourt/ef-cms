@@ -408,8 +408,14 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
+  getCompletedCaseMessagesForSectionInteractor,
+} = require('../../shared/src/business/useCases/messages/getCompletedCaseMessagesForSectionInteractor');
+const {
   getCompletedCaseMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedCaseMessagesForUserInteractor');
+const {
+  getCompletedSectionInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getCompletedSectionInboxMessages');
 const {
   getCompletedUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
@@ -1228,6 +1234,7 @@ module.exports = appContextUser => {
         getCasesByLeadCaseId,
         getCasesByUser,
         getClosedCasesByUser,
+        getCompletedSectionInboxMessages,
         getCompletedUserInboxMessages,
         getDocument,
         getDocumentQCInboxForSection,
@@ -1441,6 +1448,7 @@ module.exports = appContextUser => {
         getCaseMessageThreadInteractor,
         getCasesByUserInteractor,
         getClosedCasesInteractor,
+        getCompletedCaseMessagesForSectionInteractor,
         getCompletedCaseMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getDocumentQCInboxForSectionInteractor,
