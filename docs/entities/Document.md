@@ -486,30 +486,11 @@
         - "Standing Pretrial Notice"
         - "Standing Pretrial Order"
     draftState: 
-      type: "alternatives"
-      matches: 
-        - 
-          ref: 
-            path: 
-              - "signedAt"
-          is: 
-            type: "any"
-            flags: 
-              presence: "required"
-            invalid: 
-              - null
-          then: 
-            type: "any"
-            flags: 
-              only: true
-            allow: 
-              - null
-          otherwise: 
-            type: "object"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
+      type: "object"
+      flags: 
+        presence: "optional"
+      allow: 
+        - null
     entityName: 
       type: "string"
       flags: 
@@ -578,10 +559,30 @@
     judge: 
       type: "string"
       flags: 
-        presence: "optional"
         description: "The judge associated with the document."
       allow: 
         - null
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "documentType"
+          is: 
+            type: "string"
+            flags: 
+              only: true
+            allow: 
+              - "MOP - Memorandum Opinion"
+              - "Summary Opinion"
+              - "TCOP - T.C. Opinion"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     lodged: 
       type: "boolean"
       flags: 
@@ -779,9 +780,9 @@
             invalid: 
               - null
           then: 
-            type: "any"
+            type: "string"
             flags: 
-              only: true
+              presence: "optional"
             allow: 
               - null
           otherwise: 
@@ -805,18 +806,12 @@
                     - "Decision"
                     - "Notice"
                 then: 
-                  type: "date"
+                  type: "string"
                   flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
                     presence: "required"
                 otherwise: 
-                  type: "date"
+                  type: "string"
                   flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
                     presence: "optional"
                   allow: 
                     - null
