@@ -27,6 +27,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
+  this.completedAt = rawMessage.completedAt || createISODateString();
   this.completedBy = rawMessage.completedBy;
   this.completedBySection = rawMessage.completedBySection;
   this.completedByUserId = rawMessage.completedByUserId;
@@ -79,6 +80,13 @@ CaseMessage.VALIDATION_RULES = {
     .string()
     .required()
     .description('The case title for the associated cases.'),
+  completedAt: joiStrictTimestamp
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+    .description('Last date that the petitioner is allowed to file before.'),
   completedBy: joi
     .string()
     .max(500)

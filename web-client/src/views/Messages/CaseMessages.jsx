@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseMessagesIndividualCompleted } from './CaseMessagesIndividualCompleted';
 import { CaseMessagesIndividualInbox } from './CaseMessagesIndividualInbox';
 import { CaseMessagesIndividualOutbox } from './CaseMessagesIndividualOutbox';
 import { CaseMessagesSectionInbox } from './CaseMessagesSectionInbox';
@@ -92,7 +93,11 @@ export const CaseMessages = connect(
               </div>
             </Tab>
             <Tab id="completed-tab" tabName="completed" title="Completed">
-              <div id="completed-tab-content"></div>
+              <div id="completed-tab-content">
+                {messagesHelper.showIndividualMessages && (
+                  <CaseMessagesIndividualCompleted />
+                )}
+              </div>
             </Tab>
           </Tabs>
         </section>
