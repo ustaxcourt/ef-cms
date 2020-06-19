@@ -36,7 +36,9 @@ describe('Petitioner', () => {
       'Testing1234$',
     );
     token = results.AuthenticationResult.IdToken;
+  });
 
+  it('should be able to login', () => {
     login(token);
   });
 
@@ -63,7 +65,9 @@ describe('Private practitioner', () => {
       'Testing1234$',
     );
     token = results.AuthenticationResult.IdToken;
+  });
 
+  it('should be able to login', () => {
     login(token);
   });
 
@@ -92,7 +96,9 @@ describe('Petitions clerk', () => {
       'Testing1234$',
     );
     token = results.AuthenticationResult.IdToken;
+  });
 
+  it('should be able to login', () => {
     login(token);
   });
 
