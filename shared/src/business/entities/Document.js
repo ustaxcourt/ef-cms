@@ -312,14 +312,15 @@ joiValidationDecorator(
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
     signedAt: joi
+      .string()
       .when('draftState', {
         is: joi.exist().not(null),
         otherwise: joi.when('documentType', {
-          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
-          otherwise: joi.string().optional().allow(null),
-          then: joi.string().required(),
+          is: joi.valid(...ORDER_TYPES.map(t => t.documentType)),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
         }),
-        then: joi.string().optional().allow(null),
+        then: joi.optional().allow(null),
       })
       .description('The time at which the document was signed.'),
     signedByUserId: joi
