@@ -27,6 +27,10 @@ npm run build:assets
 pushd ../template/cognito-authorizer
 npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
+ 
+pushd ../template/cognito-triggers
+npx parcel build index.js --target node --bundle-node-modules --no-minify
+popd
 
 pushd ../template/log-forwarder
 npx parcel build index.js --target node --bundle-node-modules --no-minify
