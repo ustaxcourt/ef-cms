@@ -1,24 +1,26 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const DeleteCorrespondenceModal = connect(
-  { clearModalSequence: sequences.clearModalSequence },
-  function DeleteCorrespondenceModal() {
+  {
+    correspondenceTitle: state.modal.correspondenceToDelete.documentTitle,
+  },
+  function DeleteCorrespondenceModal({ correspondenceTitle }) {
     return (
       <ConfirmModal
         cancelLabel="No, Take me back"
         confirmLabel="Yes, Delete"
         title={'Are You Sure You Want to Delete This Document?'}
         onCancelSequence="clearModalSequence"
-        onConfirmSequence="clearModalSequence"
+        onConfirmSequence="deleteCorrespondenceDocumentSequence"
       >
         <div className="padding-bottom-1">
           Once deleted, it can’t be restored.
         </div>
         <span className="padding-bottom-1">
-          <strong>Internal Memo</strong>
+          <strong>{correspondenceTitle}</strong>
         </span>
       </ConfirmModal>
     );

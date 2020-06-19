@@ -13,12 +13,12 @@ variable "dns_domain" {
 
 variable "cloudfront_default_ttl" {
   type = "string"
-  default = "0"
+  default = "86400"
 }
 
 variable "cloudfront_max_ttl" {
   type = "string"
-  default = "0"
+  default = "31536000"
 }
 
 variable "dynamsoft_s3_zip_path" {

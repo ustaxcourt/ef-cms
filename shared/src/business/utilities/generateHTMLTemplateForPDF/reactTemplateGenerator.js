@@ -6,6 +6,9 @@ require('@babel/register')({
 
 // Documents
 const {
+  AddressLabelCoverSheet,
+} = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.jsx');
+const {
   CaseInventoryReport,
 } = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
 const {
@@ -33,8 +36,18 @@ const {
   ReportsMetaHeader,
 } = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
 const {
+  StandingPretrialNotice,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialNotice.jsx');
+const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+const {
+  TrialCalendar,
+} = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
+const {
+  TrialSessionPlanningReport,
+} = require('../pdfGenerator/documentTemplates/TrialSessionPlanningReport.jsx');
+const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
 const {
@@ -48,18 +61,23 @@ const React = require('react');
 const ReactDOM = require('react-dom/server');
 
 const components = {
+  AddressLabelCoverSheet,
   CaseInventoryReport,
   ChangeOfAddress,
   DatePrintedFooter,
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  Order,
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
   ReceiptOfFiling,
   ReportsMetaHeader,
+  StandingPretrialNotice,
   StandingPretrialOrder,
+  TrialCalendar,
+  TrialSessionPlanningReport,
 };
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {

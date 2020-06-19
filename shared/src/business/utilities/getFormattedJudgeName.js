@@ -1,4 +1,8 @@
 const formatJudgeName = name => {
+  if (!name) {
+    return '';
+  }
+
   return name.replace(/^Judge\s+/, '');
 };
 

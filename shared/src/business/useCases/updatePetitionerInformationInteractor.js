@@ -13,7 +13,6 @@ const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -34,6 +33,8 @@ exports.updatePetitionerInformationInteractor = async ({
   contactSecondary,
   partyType,
 }) => {
+  const { PDFDocument } = await applicationContext.getPdfLib();
+
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
@@ -167,7 +168,7 @@ exports.updatePetitionerInformationInteractor = async ({
         headerHtml: null,
       });
 
-    const changeOfAddressPdfWithCover = await addCoverToPdf({
+    const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
@@ -224,6 +225,7 @@ exports.updatePetitionerInformationInteractor = async ({
     if (primaryPdf) {
       await copyToNewPdf({
         addressPages,
+        applicationContext,
         newPdfDoc: fullDocument,
         noticeDoc: await PDFDocument.load(primaryPdf),
       });
@@ -231,6 +233,7 @@ exports.updatePetitionerInformationInteractor = async ({
     if (secondaryPdf) {
       await copyToNewPdf({
         addressPages,
+        applicationContext,
         newPdfDoc: fullDocument,
         noticeDoc: await PDFDocument.load(secondaryPdf),
       });

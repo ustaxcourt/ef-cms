@@ -25,7 +25,7 @@ describe('workQueueHelper', () => {
   it('returns the expected state when selected work items are set', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -51,7 +51,7 @@ describe('workQueueHelper', () => {
   it('returns the expected state when selected work items are not set', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -77,7 +77,7 @@ describe('workQueueHelper', () => {
   it('returns My Messages for workQueueTitle if showing individual internal work queue', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -101,7 +101,7 @@ describe('workQueueHelper', () => {
   it('returns Section Messages for workQueueTitle if showing section internal work queue', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -125,7 +125,7 @@ describe('workQueueHelper', () => {
   it('returns My Document QC for workQueueTitle if showing individual non-internal work queue', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -149,7 +149,7 @@ describe('workQueueHelper', () => {
   it('returns Document QC for workQueueTitle if showing section non-internal work queue and current user is not a docket or petitions clerk', () => {
     const user = {
       role: User.ROLES.adc,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -173,7 +173,7 @@ describe('workQueueHelper', () => {
   it('returns Section Document QC for workQueueTitle if showing section non-internal work queue and current user is a docket clerk', () => {
     const user = {
       role: User.ROLES.docketClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -197,7 +197,7 @@ describe('workQueueHelper', () => {
   it('shows the start a case button when role is petitions clerk', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -218,7 +218,7 @@ describe('workQueueHelper', () => {
   it('does not show the start a case button when role is docket clerk', () => {
     const user = {
       role: User.ROLES.docketClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -239,7 +239,7 @@ describe('workQueueHelper', () => {
   it('shows the case status column when role is judge', () => {
     const user = {
       role: User.ROLES.judge,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -258,7 +258,7 @@ describe('workQueueHelper', () => {
   it('shows the case status column when role is chambers', () => {
     const user = {
       role: User.ROLES.chambers,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -277,7 +277,7 @@ describe('workQueueHelper', () => {
   it('shows the from column when role is judge', () => {
     const user = {
       role: User.ROLES.judge,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -296,7 +296,7 @@ describe('workQueueHelper', () => {
   it('shows the from column when role is chambers', () => {
     const user = {
       role: User.ROLES.chambers,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -315,7 +315,7 @@ describe('workQueueHelper', () => {
   it('shows "Received" as filed label on messages inbox', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {
@@ -338,7 +338,7 @@ describe('workQueueHelper', () => {
   it('shows in progress petitions for a petitionsclerk', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
-      userId: '123',
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
     };
     const result = runCompute(workQueueHelper, {
       state: {

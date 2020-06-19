@@ -2,7 +2,6 @@ const {
   generateCoverPagePdf,
 } = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -104,12 +103,15 @@ exports.addCoverToPdf = async ({
   caseEntity,
   documentEntity,
   pdfData,
+  replaceCoversheet = false,
 }) => {
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
     documentEntity,
   });
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData);
 
@@ -127,9 +129,20 @@ exports.addCoverToPdf = async ({
     coverPageDocument.getPageIndices(),
   );
 
-  pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  if (replaceCoversheet) {
+    pdfDoc.removePage(0);
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  } else {
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  }
 
-  return await pdfDoc.save();
+  const newPdfData = await pdfDoc.save();
+  const numberOfPages = pdfDoc.getPages().length;
+
+  return {
+    numberOfPages,
+    pdfData: newPdfData,
+  };
 };
 
 /**
@@ -144,6 +157,7 @@ exports.addCoversheetInteractor = async ({
   applicationContext,
   caseId,
   documentId,
+  replaceCoversheet = false,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -154,9 +168,8 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const documentEntity = caseEntity.documents.find(
-    document => document.documentId === documentId,
-  );
+  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketRecordEntity = caseEntity.getDocketRecordByDocumentId(documentId);
 
   let pdfData;
   try {
@@ -173,22 +186,34 @@ exports.addCoversheetInteractor = async ({
     throw err;
   }
 
-  const newPdfData = await exports.addCoverToPdf({
+  const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
     documentEntity,
     pdfData,
+    replaceCoversheet,
   });
 
   documentEntity.setAsProcessingStatusAsCompleted();
+  documentEntity.setNumberOfPages(numberOfPages);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocumentProcessingStatus({
+  await applicationContext.getPersistenceGateway().updateDocument({
+    applicationContext,
+    caseId,
+    document: documentEntity.validate().toRawObject(),
+    documentId,
+  });
+
+  if (docketRecordEntity) {
+    docketRecordEntity.setNumberOfPages(numberOfPages);
+
+    await applicationContext.getPersistenceGateway().updateDocketRecord({
       applicationContext,
       caseId,
-      documentId,
+      docketRecord: docketRecordEntity.validate().toRawObject(),
+      docketRecordId: docketRecordEntity.docketRecordId,
     });
+  }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,

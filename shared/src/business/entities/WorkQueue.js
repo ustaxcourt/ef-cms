@@ -25,6 +25,7 @@ exports.GUYS_CHAMBERS_SECTION = 'guysChambers';
 exports.HALPERNS_CHAMBERS_SECTION = 'halpernsChambers';
 exports.HOLMES_CHAMBERS_SECTION = 'holmesChambers';
 exports.JACOBS_CHAMBERS_SECTION = 'jacobsChambers';
+exports.JONES_CHAMBERS_SECTION = 'jonesChambers';
 exports.KERRIGANS_CHAMBERS_SECTION = 'kerrigansChambers';
 exports.LAUBERS_CHAMBERS_SECTION = 'laubersChambers';
 exports.LEYDENS_CHAMBERS_SECTION = 'leydensChambers';
@@ -36,6 +37,7 @@ exports.PARIS_CHAMBERS_SECTION = 'parisChambers';
 exports.PUGHS_CHAMBERS_SECTION = 'pughsChambers';
 exports.RUWES_CHAMBERS_SECTION = 'ruwesChambers';
 exports.THORNTONS_CHAMBERS_SECTION = 'thorntonsChambers';
+exports.TOROS_CHAMBERS_SECTION = 'torosChambers';
 exports.URDAS_CHAMBERS_SECTION = 'urdasChambers';
 exports.VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
 exports.WELLS_CHAMBERS_SECTION = 'wellsChambers';
@@ -67,6 +69,7 @@ exports.CHAMBERS_SECTIONS = sortBy([
   exports.HALPERNS_CHAMBERS_SECTION,
   exports.HOLMES_CHAMBERS_SECTION,
   exports.JACOBS_CHAMBERS_SECTION,
+  exports.JONES_CHAMBERS_SECTION,
   exports.KERRIGANS_CHAMBERS_SECTION,
   exports.LAUBERS_CHAMBERS_SECTION,
   exports.LEYDENS_CHAMBERS_SECTION,
@@ -78,6 +81,7 @@ exports.CHAMBERS_SECTIONS = sortBy([
   exports.PUGHS_CHAMBERS_SECTION,
   exports.RUWES_CHAMBERS_SECTION,
   exports.THORNTONS_CHAMBERS_SECTION,
+  exports.TOROS_CHAMBERS_SECTION,
   exports.URDAS_CHAMBERS_SECTION,
   exports.VASQUEZS_CHAMBERS_SECTION,
   exports.WELLS_CHAMBERS_SECTION,

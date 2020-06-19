@@ -14,6 +14,10 @@ const FORMATS = {
   YYYYMMDD: 'YYYY-MM-DD',
 };
 
+const PATTERNS = {
+  'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
+};
+
 const USTC_TZ = 'America/New_York';
 
 const isStringISOFormatted = dateString => {
@@ -193,6 +197,7 @@ const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
 
 module.exports = {
   FORMATS,
+  PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
   calendarDatesCompared,

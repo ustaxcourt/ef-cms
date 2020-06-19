@@ -8,11 +8,11 @@ describe('PendingReport', () => {
   beforeAll(() => {
     pendingItems = [
       {
+        associatedJudgeFormatted: 'Chief Judge',
         caseTitle: 'Test Petitioner',
-        dateFiled: '02/02/20',
         docketNumberWithSuffix: '123-45S',
-        filingsAndProceedings: 'Order',
-        judge: 'Chief Judge',
+        formattedFiledDate: '02/02/20',
+        formattedName: 'Order',
         status: 'closed',
       },
     ];
@@ -36,15 +36,17 @@ describe('PendingReport', () => {
       pendingItems[0].docketNumberWithSuffix,
     );
     expect(tableData.find('tr').at(0).text()).toContain(
-      pendingItems[0].dateFiled,
+      pendingItems[0].formattedFiledDate,
     );
     expect(tableData.find('tr').at(0).text()).toContain(
       pendingItems[0].caseTitle,
     );
     expect(tableData.find('tr').at(0).text()).toContain(
-      pendingItems[0].filingsAndProceedings,
+      pendingItems[0].formattedName,
     );
     expect(tableData.find('tr').at(0).text()).toContain(pendingItems[0].status);
-    expect(tableData.find('tr').at(0).text()).toContain(pendingItems[0].judge);
+    expect(tableData.find('tr').at(0).text()).toContain(
+      pendingItems[0].associatedJudgeFormatted,
+    );
   });
 });

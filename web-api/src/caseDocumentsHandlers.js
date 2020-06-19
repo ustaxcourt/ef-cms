@@ -7,6 +7,8 @@ module.exports = {
     .completeDocketEntryQCLambda,
   createWorkItemLambda: require('./workitems/createWorkItemLambda')
     .createWorkItemLambda,
+  deleteCorrespondenceDocumentLambda: require('./correspondence/deleteCorrespondenceDocumentLambda')
+    .deleteCorrespondenceDocumentLambda,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .downloadPolicyUrlLambda,
   fileCorrespondenceDocumentLambda: require('./correspondence/fileCorrespondenceDocumentLambda')
