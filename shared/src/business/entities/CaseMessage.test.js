@@ -67,6 +67,7 @@ describe('CaseMessage', () => {
       );
       expect(message.isValid()).toBeFalsy();
       expect(Object.keys(message.getFormattedValidationErrors())).toEqual([
+        'completedAt',
         'completedBy',
         'completedBySection',
         'completedByUserId',
@@ -111,6 +112,7 @@ describe('CaseMessage', () => {
         completedBySection: 'petitions',
         completedByUserId: 'f3cf18f9-f1b0-43f7-a4e0-d0e2658e1faa',
         completedMessage: 'the completed message',
+        createdAt: expect.anything(),
         isCompleted: true,
       });
       expect(1).toEqual(1);

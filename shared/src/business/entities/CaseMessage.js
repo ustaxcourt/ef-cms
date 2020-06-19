@@ -27,7 +27,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
-  this.completedAt = rawMessage.completedAt || createISODateString();
+  this.completedAt = rawMessage.completedAt;
   this.completedBy = rawMessage.completedBy;
   this.completedBySection = rawMessage.completedBySection;
   this.completedByUserId = rawMessage.completedByUserId;
@@ -86,7 +86,7 @@ CaseMessage.VALIDATION_RULES = {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     })
-    .description('Last date that the petitioner is allowed to file before.'),
+    .description('When the message was marked as completed.'),
   completedBy: joi
     .string()
     .max(500)
@@ -209,10 +209,11 @@ joiValidationDecorator(
 
 CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
-  this.completedMessage = message;
+  this.completedAt = createISODateString();
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
+  this.completedMessage = message;
 
   return this;
 };

@@ -660,28 +660,28 @@ app.get(
   lambdaWrapper(getCaseMessageThreadLambda),
 );
 app.get(
-  '/messages/inbox/:userId',
-  lambdaWrapper(getInboxCaseMessagesForUserLambda),
-);
-app.get(
   '/messages/inbox/section/:section',
   lambdaWrapper(getInboxCaseMessagesForSectionLambda),
 );
 app.get(
-  '/messages/outbox/:userId',
-  lambdaWrapper(getOutboxCaseMessagesForUserLambda),
+  '/messages/inbox/:userId',
+  lambdaWrapper(getInboxCaseMessagesForUserLambda),
 );
 app.get(
   '/messages/outbox/section/:section',
   lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
 app.get(
-  '/messages/completed/:userId',
-  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
+  '/messages/outbox/:userId',
+  lambdaWrapper(getOutboxCaseMessagesForUserLambda),
 );
 app.get(
   '/messages/completed/section/:section',
   lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
+);
+app.get(
+  '/messages/completed/:userId',
+  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
 );
 app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 

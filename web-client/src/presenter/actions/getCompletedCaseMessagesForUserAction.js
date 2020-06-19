@@ -1,5 +1,5 @@
 /**
- * fetches the inbox case messages for the user
+ * fetches the completed case messages for the user
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{CaseMessage: Array}>} a list of messages
