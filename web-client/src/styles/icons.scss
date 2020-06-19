@@ -70,6 +70,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-primary);
 }
 
+.fa-icon-black {
+  color: color($theme-color-base-darkest);
+}
+
 .fa-file-alt {
   display: inline-block;
   margin-right: 0.5em;
