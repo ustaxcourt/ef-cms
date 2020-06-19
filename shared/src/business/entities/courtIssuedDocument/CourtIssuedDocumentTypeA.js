@@ -29,19 +29,19 @@ CourtIssuedDocumentTypeA.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.when('documentType', {
+  freeText: joi.string().when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
-    then: joi.string().required(),
+    then: joi.required(),
   }),
-  serviceStamp: joi.when('documentType', {
-    is: GENERIC_ORDER_DOCUMENT_TYPE,
-    otherwise: joi.optional().allow(null),
-    then: joi
-      .string()
-      .valid(...SERVICE_STAMP_OPTIONS)
-      .required(),
-  }),
+  serviceStamp: joi
+    .string()
+    .valid(...SERVICE_STAMP_OPTIONS)
+    .when('documentType', {
+      is: GENERIC_ORDER_DOCUMENT_TYPE,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
 };
 
 joiValidationDecorator(

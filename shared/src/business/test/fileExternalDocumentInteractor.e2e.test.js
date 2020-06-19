@@ -77,7 +77,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         attachments: false,
         caseId,
         certificateOfService: false,
-        certificateOfServiceDate: 'undefined-undefined-undefined',
+        certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
@@ -236,7 +236,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 attachments: false,
                 certificateOfService: false,
-                certificateOfServiceDate: 'undefined-undefined-undefined',
+                certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
                 docketNumber: '201-19',
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:

@@ -35,7 +35,11 @@
       flags: 
         presence: "optional"
     certificateOfServiceDate: 
-      type: "any"
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 
@@ -51,16 +55,15 @@
                 override: true
               - true
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "any"
             flags: 
               presence: "optional"
+            allow: 
+              - null
     createdAt: 
       type: "date"
       flags: 
@@ -72,7 +75,9 @@
     date: 
       type: "date"
       flags: 
-        format: "iso"
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
         presence: "optional"
         description: "An optional date used when generating a fully concatenated document title."
       allow: 
@@ -765,7 +770,7 @@
       flags: 
         presence: "optional"
     signedAt: 
-      type: "any"
+      type: "string"
       flags: 
         description: "The time at which the document was signed."
       whens: 
@@ -793,7 +798,7 @@
                   path: 
                     - "documentType"
                 is: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     only: true
                   allow: 
@@ -806,11 +811,12 @@
                     - "Decision"
                     - "Notice"
                 then: 
-                  type: "string"
+
+                  type: "any"
                   flags: 
                     presence: "required"
                 otherwise: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     presence: "optional"
                   allow: 
