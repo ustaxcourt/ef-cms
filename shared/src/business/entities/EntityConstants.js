@@ -735,11 +735,8 @@ const ALL_EVENT_CODES = flatten([
   .map(item => item.eventCode)
   .concat(
     EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES.map(item => item.eventCode),
     OPINION_EVENT_CODES,
-    [
-      TRANSCRIPT_EVENT_CODE,
-      SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
-    ],
     ORDER_DOCUMENT_TYPES,
     ORDER_TYPES.map(item => item.eventCode),
   )
