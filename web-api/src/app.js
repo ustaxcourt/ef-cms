@@ -149,6 +149,12 @@ const {
   getCaseMessageThreadLambda,
 } = require('./messages/getCaseMessageThreadLambda');
 const {
+  getCompletedCaseMessagesForSectionLambda,
+} = require('./messages/getCompletedCaseMessagesForSectionLambda');
+const {
+  getCompletedCaseMessagesForUserLambda,
+} = require('./messages/getCompletedCaseMessagesForUserLambda');
+const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
@@ -654,20 +660,28 @@ app.get(
   lambdaWrapper(getCaseMessageThreadLambda),
 );
 app.get(
+  '/messages/inbox/section/:section',
+  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+);
+app.get(
   '/messages/inbox/:userId',
   lambdaWrapper(getInboxCaseMessagesForUserLambda),
 );
 app.get(
-  '/messages/inbox/section/:section',
-  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+  '/messages/outbox/section/:section',
+  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
 app.get(
   '/messages/outbox/:userId',
   lambdaWrapper(getOutboxCaseMessagesForUserLambda),
 );
 app.get(
-  '/messages/outbox/section/:section',
-  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+  '/messages/completed/section/:section',
+  lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
+);
+app.get(
+  '/messages/completed/:userId',
+  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
 );
 app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 
