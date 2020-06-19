@@ -87,7 +87,19 @@ const DOCUMENT_EXTERNAL_CATEGORIES_MAP = documentMapExternal;
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 const DOCUMENT_INTERNAL_CATEGORY_MAP = documentMapInternal;
 const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
-const OPINION_DOCUMENT_TYPES = ['MOP', 'SOP', 'TCOP'];
+const OPINION_EVENT_CODES = ['MOP', 'SOP', 'TCOP'];
+
+const OPINION_DOCUMENT_TYPES = [
+  {
+    documentType: 'MOP - Memorandum Opinion',
+  },
+  {
+    documentType: 'Summary Opinion',
+  },
+  {
+    documentType: 'TCOP - T.C. Opinion',
+  },
+];
 
 const SCENARIOS = [
   'Standard',
@@ -759,6 +771,7 @@ module.exports = {
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
+  OPINION_EVENT_CODES,
   ORDER_DOCUMENT_TYPES,
   ORDER_TYPES,
   OTHER_TYPES,
