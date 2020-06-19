@@ -1,5 +1,5 @@
 const {
-  OPINION_DOCUMENT_TYPES,
+  OPINION_EVENT_CODES,
 } = require('../../business/entities/EntityConstants');
 const {
   opinionAdvancedSearchInteractor,
@@ -98,7 +98,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
     });
   });
 });

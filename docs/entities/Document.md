@@ -564,10 +564,30 @@
     judge: 
       type: "string"
       flags: 
-        presence: "optional"
         description: "The judge associated with the document."
       allow: 
         - null
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "documentType"
+          is: 
+            type: "string"
+            flags: 
+              only: true
+            allow: 
+              - "MOP - Memorandum Opinion"
+              - "Summary Opinion"
+              - "TCOP - T.C. Opinion"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     lodged: 
       type: "boolean"
       flags: 
@@ -765,7 +785,7 @@
             invalid: 
               - null
           then: 
-            type: "any"
+            type: "string"
             flags: 
               presence: "optional"
             allow: 
@@ -791,6 +811,7 @@
                     - "Decision"
                     - "Notice"
                 then: 
+
                   type: "any"
                   flags: 
                     presence: "required"
