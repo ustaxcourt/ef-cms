@@ -140,7 +140,7 @@ exports.joiValidationDecorator = function (
         .join('; ');
       throw new InvalidEntityError(
         entityConstructor.validationName,
-        ids,
+        `ID: ${ids}; DocketNumber: ${this.docketNumber || ''}`,
         JSON.stringify(this.getFormattedValidationErrors()),
       );
     }
