@@ -82,20 +82,31 @@ CaseMessage.VALIDATION_RULES = {
   completedBy: joi
     .string()
     .max(500)
-    .allow(null)
-    .optional()
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
     .description('The name of the user who completed the message thread'),
   completedBySection: joi
     .string()
     .valid(...SECTIONS, ...CHAMBERS_SECTIONS)
-    .optional()
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
     .description('The section of the user who completed the message thread'),
   completedByUserId: joi
     .string()
     .uuid({
       version: ['uuidv4'],
     })
-    .optional()
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
     .description('The ID of the user who completed the message thread'),
   completedMessage: joi
     .string()

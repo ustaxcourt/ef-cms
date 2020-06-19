@@ -43,6 +43,35 @@ describe('CaseMessage', () => {
       );
       expect(message.isValid()).toBeFalsy();
     });
+
+    it('creates an invalid CaseMessage with isCompleted true and without completedBy fields', () => {
+      const message = new CaseMessage(
+        {
+          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+          caseStatus: 'General Docket - Not at Issue',
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: 'petitions',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isCompleted: true,
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: 'petitions',
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.isValid()).toBeFalsy();
+      expect(Object.keys(message.getFormattedValidationErrors())).toEqual([
+        'completedBy',
+        'completedBySection',
+        'completedByUserId',
+      ]);
+    });
   });
 
   describe('markAsCompleted', () => {

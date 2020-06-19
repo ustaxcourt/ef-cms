@@ -64,6 +64,6 @@ describe('getInboxCaseMessagesForUserInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getUserInboxMessages,
     ).toBeCalled();
-    expect(returnedMessages).toEqual([omit(caseMessageData, 'pk', 'sk')]);
+    expect(returnedMessages).toMatchObject([omit(caseMessageData, 'pk', 'sk')]);
   });
 });
