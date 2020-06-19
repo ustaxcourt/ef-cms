@@ -7,7 +7,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Petition',
     eventCode: 'P',
     processingStatus: 'pending',
-    userId: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
   },
   {
@@ -18,7 +18,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Statement of Taxpayer Identification',
     eventCode: 'STIN',
     processingStatus: 'pending',
-    userId: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
   },
   {
@@ -29,7 +29,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Answer',
     eventCode: 'A',
     processingStatus: 'pending',
-    userId: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
   },
   {
@@ -40,7 +40,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Proposed Stipulated Decision',
     eventCode: 'PSDE',
     processingStatus: 'pending',
-    userId: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
   },
 ];

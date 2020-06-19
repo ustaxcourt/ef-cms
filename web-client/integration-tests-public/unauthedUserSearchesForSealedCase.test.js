@@ -12,6 +12,7 @@ import { ContactFactory } from '../../shared/src/business/entities/contacts/Cont
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForSealedCaseByName } from './journey/unauthedUserSearchesForSealedCaseByName';
+import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unauthedUserSearchesForSealedCasesByDocketNumber';
 import { unauthedUserViewsCaseDetailForSealedCase } from './journey/unauthedUserViewsCaseDetailForSealedCase';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
@@ -59,4 +60,9 @@ describe('Unauthed user searches for a sealed case by name', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesForSealedCaseByName(test);
   unauthedUserViewsPrintableDocketRecord(test);
+});
+
+describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
+  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserSearchesForSealedCasesByDocketNumber(test);
 });

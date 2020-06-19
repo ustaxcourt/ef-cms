@@ -9,12 +9,12 @@ import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SealCaseModal } from './SealCaseModal';
+import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -23,24 +23,16 @@ import React from 'react';
 
 export const CaseDetailInternal = connect(
   {
-    baseUrl: state.baseUrl,
-    caseDetail: state.caseDetail,
     caseDetailInternalTabs:
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
-    formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.modal.showModal,
-    token: state.token,
   },
   function CaseDetailInternal({
-    baseUrl,
-    caseDetail,
     caseDetailInternalTabs,
-    formattedCaseDetail,
     showEditPetition,
     showModal,
-    token,
   }) {
     return (
       <>
@@ -109,6 +101,9 @@ export const CaseDetailInternal = connect(
               <Tab id="tab-overview" tabName="overview" title="Overview">
                 <CaseInformationInternal />
               </Tab>
+              <Tab id="tab-statistics" tabName="statistics" title="Statistics">
+                <Statistics />
+              </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
                 <PetitionerInformation />
               </Tab>
@@ -131,29 +126,6 @@ export const CaseDetailInternal = connect(
           <PaperServiceConfirmModal />
         )}
         {showModal === 'SealCaseModal' && <SealCaseModal />}
-
-        {/* This section below will be removed in a future story */}
-        <section className="usa-section grid-container">
-          {formattedCaseDetail.status === 'General Docket - Not at Issue' && (
-            <>
-              {formattedCaseDetail.contactPrimary && (
-                <a
-                  aria-label="View PDF"
-                  className="usa-button usa-button--unstyled margin-right-1"
-                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${
-                    formattedCaseDetail.docketNumber
-                  }_${formattedCaseDetail.contactPrimary.name.replace(
-                    /\s/g,
-                    '_',
-                  )}.zip/document-download-url?token=${token}`}
-                >
-                  <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                  Batch Zip Download
-                </a>
-              )}
-            </>
-          )}
-        </section>
       </>
     );
   },

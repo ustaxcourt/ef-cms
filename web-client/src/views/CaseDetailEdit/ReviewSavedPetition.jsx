@@ -264,8 +264,12 @@ export const ReviewSavedPetition = connect(
                               (statistic, index) => (
                                 <tr key={index}>
                                   <td>{statistic.formattedDate}</td>
-                                  <td>{statistic.formattedDeficiencyAmount}</td>
-                                  <td>{statistic.formattedTotalPenalties}</td>
+                                  <td>
+                                    {statistic.formattedIrsDeficiencyAmount}
+                                  </td>
+                                  <td>
+                                    {statistic.formattedIrsTotalPenalties}
+                                  </td>
                                 </tr>
                               ),
                             )}

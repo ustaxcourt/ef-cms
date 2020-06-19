@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { addServedStampToDocument } = require('./addServedStampToDocument.js');
 const { PDFDocument } = require('pdf-lib');
-
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 const testPdfDocBytes = () => {
@@ -19,6 +21,7 @@ describe('addServedStampToDocument', () => {
 
   it('adds a served stamp to a pdf document without changing the number of pages', async () => {
     const newPdfData = await addServedStampToDocument({
+      applicationContext,
       pdfData: testPdfDoc,
       serviceStampText: 'Test',
     });

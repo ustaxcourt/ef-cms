@@ -89,6 +89,7 @@ const practitionerValidation = {
   ...userValidation,
   additionalPhone: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
@@ -105,11 +106,13 @@ const practitionerValidation = {
     .description('The Tax Court bar admission status for the practitioner.'),
   alternateEmail: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('An alternate email address for the practitioner.'),
   barNumber: joi
     .string()
+    .max(100)
     .required()
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
@@ -129,24 +132,29 @@ const practitionerValidation = {
   entityName: joi.string().valid('Practitioner').required(),
   firmName: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
   firstName: joi
     .string()
+    .max(100)
     .required()
     .description('The first name of the practitioner.'),
   lastName: joi
     .string()
+    .max(100)
     .required()
     .description('The last name of the practitioner.'),
   middleName: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('The optional middle name of the practitioner.'),
   originalBarState: joi
     .string()
+    .max(100)
     .required()
     .description(
       'The state in which the practitioner passed their bar examination.',
@@ -166,6 +174,7 @@ const practitionerValidation = {
   }),
   suffix: joi
     .string()
+    .max(100)
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),

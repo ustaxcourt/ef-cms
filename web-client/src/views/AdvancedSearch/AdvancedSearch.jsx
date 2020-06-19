@@ -17,6 +17,7 @@ export const AdvancedSearch = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
+    searchTabs: state.constants.ADVANCED_SEARCH_TABS,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence:
@@ -33,6 +34,7 @@ export const AdvancedSearch = connect(
   function AdvancedSearch({
     advancedSearchHelper,
     advancedSearchTabChangeSequence,
+    searchTabs,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
     submitOpinionAdvancedSearchSequence,
@@ -50,12 +52,12 @@ export const AdvancedSearch = connect(
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
-            defaultActiveTab="case"
+            defaultActiveTab={searchTabs.CASE}
             onSelect={() => {
               advancedSearchTabChangeSequence();
             }}
           >
-            <Tab id="tab-case" tabName="case" title="Case">
+            <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
               <p>
                 Anyone can search for a case in our system for cases filed{' '}
                 <span className="text-semibold">on or after May 1, 1986</span>.
@@ -71,13 +73,13 @@ export const AdvancedSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName="order" title="Order">
+            <Tab id="tab-order" tabName={searchTabs.ORDER} title="Order">
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+            <Tab id="tab-opinion" tabName={searchTabs.OPINION} title="Opinion">
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitOpinionAdvancedSearchSequence
@@ -88,7 +90,7 @@ export const AdvancedSearch = connect(
             {advancedSearchHelper.showPractitionerSearch && (
               <Tab
                 id="tab-practitioner"
-                tabName="practitioner"
+                tabName={searchTabs.PRACTITIONER}
                 title="Practitioner"
               >
                 <PractitionerSearchForm

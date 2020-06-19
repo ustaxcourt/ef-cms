@@ -6,6 +6,12 @@ describe('formatJudgeName', () => {
 
     expect(result).toMatch('Rummy');
   });
+
+  it('returns an empty string for undefined values', () => {
+    const result = formatJudgeName(undefined);
+
+    expect(result).toEqual('');
+  });
 });
 
 describe('getJudgeLastName', () => {

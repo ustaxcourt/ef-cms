@@ -64,12 +64,12 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
 
   it('should add mapping for an irsPractitioner', async () => {
     mockCurrentUser = {
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     mockUserById = {
-      name: 'Olivia Jade',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: User.ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };

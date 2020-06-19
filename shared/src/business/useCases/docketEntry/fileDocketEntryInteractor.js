@@ -80,7 +80,7 @@ exports.fileDocketEntryInteractor = async ({
     secondarySupportingDocumentMetadata.eventCode = 'MISL';
   }
 
-  [
+  const documentsToFile = [
     [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
     [
       supportingDocumentFileId,
@@ -93,7 +93,11 @@ exports.fileDocketEntryInteractor = async ({
       secondarySupportingDocumentMetadata,
       'secondarySupportingDocument',
     ],
-  ].forEach(([documentId, metadata, relationship]) => {
+  ];
+
+  for (let document of documentsToFile) {
+    const [documentId, metadata, relationship] = document;
+
     if (documentId && metadata) {
       const documentEntity = new Document(
         {
@@ -130,7 +134,8 @@ exports.fileDocketEntryInteractor = async ({
           isQC: true,
           isRead: user.role !== User.ROLES.privatePractitioner,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
         },
         { applicationContext },
       );
@@ -186,7 +191,7 @@ exports.fileDocketEntryInteractor = async ({
         ),
       );
     }
-  });
+  }
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
