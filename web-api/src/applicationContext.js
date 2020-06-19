@@ -157,6 +157,9 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
+  createPetitionerAccountInteractor,
+} = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
+const {
   createPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
@@ -690,6 +693,9 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
+const {
+  persistUser,
+} = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
   Practitioner,
 } = require('../../shared/src/business/entities/Practitioner');
@@ -1266,6 +1272,7 @@ module.exports = appContextUser => {
         isFileExists,
         markCaseMessageRepliedTo,
         markCaseMessageThreadRepliedTo,
+        persistUser,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1394,6 +1401,7 @@ module.exports = appContextUser => {
         createCaseInteractor,
         createCaseMessageInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
+        createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
