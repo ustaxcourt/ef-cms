@@ -23,6 +23,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getCompletedCaseMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedCaseMessagesForUserProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getUserCaseNoteForCasesInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteForCasesProxy';
 import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
@@ -325,6 +326,7 @@ const allUseCases = {
   getCaseMessageThreadInteractor,
   getCasesByUserInteractor,
   getClosedCasesInteractor,
+  getCompletedCaseMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,

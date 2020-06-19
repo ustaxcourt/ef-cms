@@ -1,6 +1,7 @@
 import { chooseMessageBoxAction } from '../actions/chooseMessageBoxAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { getCompletedCaseMessagesForUserAction } from '../actions/getCompletedCaseMessagesForUserAction';
 import { getInboxCaseMessagesForSectionAction } from '../actions/getInboxCaseMessagesForSectionAction';
 import { getInboxCaseMessagesForUserAction } from '../actions/getInboxCaseMessagesForUserAction';
 import { getOutboxCaseMessagesForSectionAction } from '../actions/getOutboxCaseMessagesForSectionAction';
@@ -16,6 +17,7 @@ const goToCaseMessages = [
   clearErrorAlertsAction,
   chooseMessageBoxAction,
   {
+    mycompleted: [getCompletedCaseMessagesForUserAction],
     myinbox: [getInboxCaseMessagesForUserAction],
     myoutbox: [getOutboxCaseMessagesForUserAction],
     sectioninbox: [getInboxCaseMessagesForSectionAction],
