@@ -149,6 +149,9 @@ const {
   getCaseMessageThreadLambda,
 } = require('./messages/getCaseMessageThreadLambda');
 const {
+  getCompletedCaseMessagesForUserLambda,
+} = require('./messages/getCompletedCaseMessagesForUserLambda');
+const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
@@ -668,6 +671,10 @@ app.get(
 app.get(
   '/messages/outbox/section/:section',
   lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+);
+app.get(
+  '/messages/completed/:userId',
+  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
 );
 app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 
