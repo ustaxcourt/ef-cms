@@ -41,6 +41,25 @@ const SingleMessage = ({ indent, message }) => (
   </>
 );
 
+const CompletedMessage = ({ message }) => (
+  <>
+    <div className="grid-row">
+      <div className="grid-col-2">
+        <span className="text-semibold margin-right-1">Completed</span>{' '}
+        {message.completedAtFormatted}
+      </div>
+      <div className="grid-col-3">
+        <span className="text-semibold margin-right-1">Completed by</span>{' '}
+        {message.completedBy}
+      </div>
+    </div>
+    <div className="grid-row margin-top-2">
+      <span className="text-semibold margin-right-1">Comment</span>{' '}
+      {message.completedMessage || 'There is no comment'}
+    </div>
+  </>
+);
+
 export const MessageDetail = connect(
   {
     attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
@@ -75,40 +94,57 @@ export const MessageDetail = connect(
         <section className="usa-section grid-container message-detail">
           <SuccessNotification />
           <ErrorNotification />
+          {formattedMessageDetail.isCompleted && (
+            <div
+              aria-live="polite"
+              className="usa-alert usa-alert--warning"
+              role="alert"
+            >
+              <div className="usa-alert__body">
+                Message completed on{' '}
+                {formattedMessageDetail.currentMessage.completedAtFormatted} by{' '}
+                {formattedMessageDetail.currentMessage.completedBy}
+              </div>
+            </div>
+          )}
           <div className="grid-row grid-gap">
             <div className="grid-col-8">
               <h1>Message</h1>
             </div>
-            <div className="grid-col-1">
-              <Button
-                link
-                className="action-button"
-                icon="check-circle"
-                onClick={() => openCompleteMessageModalSequence()}
-              >
-                Complete
-              </Button>
-            </div>
-            <div className="grid-col-1">
-              <Button
-                link
-                className="action-button"
-                icon="share-square"
-                onClick={() => openForwardMessageModalSequence()}
-              >
-                Forward
-              </Button>
-            </div>
-            <div className="grid-col-1">
-              <Button
-                link
-                className="action-button"
-                icon="reply"
-                onClick={() => openReplyToMessageModalSequence()}
-              >
-                Reply
-              </Button>
-            </div>
+            {formattedMessageDetail.showActionButtons && (
+              <>
+                <div className="grid-col-1">
+                  <Button
+                    link
+                    className="action-button"
+                    icon="check-circle"
+                    onClick={() => openCompleteMessageModalSequence()}
+                  >
+                    Complete
+                  </Button>
+                </div>
+                <div className="grid-col-1">
+                  <Button
+                    link
+                    className="action-button"
+                    icon="share-square"
+                    onClick={() => openForwardMessageModalSequence()}
+                  >
+                    Forward
+                  </Button>
+                </div>
+                <div className="grid-col-1">
+                  <Button
+                    link
+                    className="action-button"
+                    icon="reply"
+                    onClick={() => openReplyToMessageModalSequence()}
+                  >
+                    Reply
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
 
           {formattedMessageDetail.hasOlderMessages ? (
@@ -126,9 +162,15 @@ export const MessageDetail = connect(
                 }
               >
                 <div className="accordion-item-title padding-left-1">
-                  <SingleMessage
-                    message={formattedMessageDetail.currentMessage}
-                  />
+                  {formattedMessageDetail.isCompleted ? (
+                    <CompletedMessage
+                      message={formattedMessageDetail.currentMessage}
+                    />
+                  ) : (
+                    <SingleMessage
+                      message={formattedMessageDetail.currentMessage}
+                    />
+                  )}
                 </div>
               </button>
             </div>
