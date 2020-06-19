@@ -30,6 +30,7 @@ describe('getCompletedCaseMessagesForSectionInteractor', () => {
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: 'General Docket - Not at Issue',
       caseTitle: 'Bill Burr',
+      completedAt: '2019-05-01T21:40:46.415Z',
       completedBy: 'Test Petitionsclerk',
       completedBySection: 'petitions',
       completedByUserId: '21d7cd77-43e5-4713-92d4-aef69b5f72fd',
