@@ -1,13 +1,15 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { Case } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { CaseInternal } = require('../cases/CaseInternal');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, PAYMENT_STATUS } = require('../EntityConstants');
 
 let caseExternal;
 
-describe('Petition', () => {
+describe('ContactFactory', () => {
   describe('for Corporation Contacts', () => {
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal({
@@ -432,7 +434,6 @@ describe('Petition', () => {
   it('can validate valid Custodian contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'Other',
-
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -529,7 +530,6 @@ describe('Petition', () => {
     });
     expect(caseExternal.isValid()).toEqual(false);
   });
-
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'Other',
@@ -600,5 +600,47 @@ describe('Petition', () => {
     );
 
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  describe('Cases with other petitioners', () => {
+    it('can validate valid contacts for a case with otherPetitioners', () => {
+      let caseWithOtherPetitioners = new Case(
+        {
+          ...MOCK_CASE,
+          otherPetitioners: [
+            {
+              additionalName: 'First Other Petitioner',
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              country: 'USA',
+              countryType: 'domestic',
+              email: 'someone@example.com',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+            {
+              additionalName: 'First Other Petitioner',
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              country: 'USA',
+              countryType: 'domestic',
+              email: 'someone@example.com',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
+          partyType: PARTY_TYPES.transferee,
+        },
+        { applicationContext },
+      );
+
+      expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
+        null,
+      );
+    });
   });
 });

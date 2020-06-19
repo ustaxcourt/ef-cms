@@ -282,12 +282,16 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
+      otherPetitioners: rawCase.otherPetitioners,
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
   });
+
+  this.otherPetitioners = contacts.otherPetitioners;
+
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
 }
@@ -531,6 +535,10 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
+  otherPetitioners: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
+    .description('List of OtherPetitionerContact Entities for the case.'),
   partyType: joi
     .string()
     .valid(...Object.values(PARTY_TYPES))
