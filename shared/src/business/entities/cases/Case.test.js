@@ -168,6 +168,49 @@ describe('Case entity', () => {
     });
   });
 
+  describe('Other Petitioners', () => {
+    it('sets the value of otherPetitioners on the case', () => {
+      const mockOtherPetitioners = [
+        {
+          additionalName: 'First Other Petitioner',
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          additionalName: 'First Other Petitioner',
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherPetitioners: mockOtherPetitioners,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.otherPetitioners).toEqual(mockOtherPetitioners);
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE, {
@@ -2285,6 +2328,29 @@ describe('Case entity', () => {
       title: 'Executor',
     };
 
+    const otherPetitioners = [
+      {
+        additionalName: 'Other Petitioner 1',
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      {
+        additionalName: 'Other Petitioner 1',
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+    ];
+
     const privatePractitioners = [
       {
         name: 'Private Practitioner One',
@@ -2304,6 +2370,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
@@ -2317,6 +2384,7 @@ describe('Case entity', () => {
         contactPrimary,
         contactSecondary,
         irsPractitioners,
+        otherPetitioners,
         privatePractitioners,
       });
     });
@@ -2328,6 +2396,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
@@ -2339,10 +2408,12 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
+        otherPetitioners: true,
       });
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
+        otherPetitioners,
       });
     });
   });
