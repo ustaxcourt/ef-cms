@@ -168,6 +168,17 @@
         - "WI"
         - "WV"
         - "WY"
+        - "AA"
+        - "AE"
+        - "AP"
+        - "AS"
+        - "FM"
+        - "GU"
+        - "MH"
+        - "MP"
+        - "PR"
+        - "PW"
+        - "VI"
     postalCode: 
       type: "string"
       flags: 

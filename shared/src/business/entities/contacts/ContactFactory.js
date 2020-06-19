@@ -4,6 +4,7 @@ const {
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
   US_STATES,
+  US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
   JoiValidationConstants,
@@ -63,7 +64,7 @@ const domesticValidationObject = {
   ...commonValidationRequirements,
   state: joi
     .string()
-    .valid(...Object.keys(US_STATES))
+    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
     .required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
