@@ -1,7 +1,7 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const { sortBy } = require('lodash');
+const { flatten, sortBy } = require('lodash');
 
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
@@ -727,10 +727,29 @@ const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 const CASE_SEARCH_MIN_YEAR = 1986;
 const CASE_SEARCH_PAGE_SIZE = 5;
 
+// TODO: event codes need to be reorganized
+const ALL_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
+])
+  .map(item => item.eventCode)
+  .concat(
+    EVENT_CODES,
+    OPINION_EVENT_CODES,
+    [
+      TRANSCRIPT_EVENT_CODE,
+      SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+    ],
+    ORDER_DOCUMENT_TYPES,
+    ORDER_TYPES.map(item => item.eventCode),
+  )
+  .sort();
+
 module.exports = {
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ALL_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
