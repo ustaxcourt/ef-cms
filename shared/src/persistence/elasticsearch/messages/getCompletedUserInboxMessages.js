@@ -11,7 +11,7 @@ exports.getCompletedUserInboxMessages = async ({
           must: [
             {
               match: {
-                'toUserId.S': { operator: 'and', query: userId },
+                'completedByUserId.S': { operator: 'and', query: userId },
               },
             },
             {
