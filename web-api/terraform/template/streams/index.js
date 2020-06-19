@@ -2,4 +2,4 @@ const {
   processStreamRecordsLambda,
 } = require('../../../src/streams/processStreamRecordsLambda');
 
-exports.handler = processStreamRecordsLambda(event);
+exports.handler = processStreamRecordsLambda;
