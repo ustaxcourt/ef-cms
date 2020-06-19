@@ -16,16 +16,16 @@ exports.markCaseMessageRepliedTo = async ({
 }) => {
   await update({
     ExpressionAttributeNames: {
-      '#repliedTo': 'repliedTo',
+      '#isRepliedTo': 'isRepliedTo',
     },
     ExpressionAttributeValues: {
-      ':repliedTo': true,
+      ':isRepliedTo': true,
     },
     Key: {
       pk: `case|${caseId}`,
       sk: `message|${messageId}`,
     },
-    UpdateExpression: 'SET #repliedTo = :repliedTo',
+    UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
     applicationContext,
   });
 };

@@ -1,8 +1,11 @@
+const {
+  OPINION_DOCUMENT_TYPES,
+  ORDER_TYPES,
+  ROLES,
+} = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
-const { ORDER_TYPES } = require('./EntityConstants');
-const { ROLES } = require('./EntityConstants');
 const { WorkItem } = require('./WorkItem');
 
 const A_VALID_DOCUMENT = {
@@ -208,7 +211,7 @@ describe('Document entity', () => {
       expect(document.secondaryDate).toBeDefined();
     });
 
-    it('should fail validation when the document type is Order but no "signedJudgeName" is provided', () => {
+    it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
       const document = new Document(
         {
           ...A_VALID_DOCUMENT,
@@ -222,6 +225,21 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeFalsy();
       expect(document.signedJudgeName).toBeUndefined();
+    });
+
+    it('should fail validation when the document type is opinion and judge is not provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: OPINION_DOCUMENT_TYPES[0].documentType,
+          eventCode: 'MOP',
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.judge).toBeUndefined();
     });
 
     it('should pass validation when the document type is Order and a "signedAt" is provided', () => {

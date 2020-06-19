@@ -47,6 +47,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  completeCaseMessageLambda,
+} = require('./messages/completeCaseMessageLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -112,6 +115,9 @@ const {
 const {
   fileExternalDocumentToConsolidatedCasesLambda,
 } = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
+const {
+  forwardCaseMessageLambda,
+} = require('./messages/forwardCaseMessageLambda');
 const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
@@ -634,6 +640,14 @@ app.post(
 app.post(
   '/messages/:parentMessageId/reply',
   lambdaWrapper(replyToCaseMessageLambda),
+);
+app.post(
+  '/messages/:parentMessageId/forward',
+  lambdaWrapper(forwardCaseMessageLambda),
+);
+app.post(
+  '/messages/:parentMessageId/complete',
+  lambdaWrapper(completeCaseMessageLambda),
 );
 app.get(
   '/messages/:parentMessageId',
