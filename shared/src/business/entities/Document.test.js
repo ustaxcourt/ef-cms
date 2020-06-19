@@ -1,6 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
+const { ORDER_TYPES } = require('./EntityConstants');
 const { ROLES } = require('./EntityConstants');
 const { WorkItem } = require('./WorkItem');
 
@@ -17,6 +18,7 @@ const caseDetail = {
     name: 'Bill',
   },
 };
+const mockUserId = applicationContext.getUniqueId();
 
 describe('Document entity', () => {
   describe('isPendingOnCreation', () => {
@@ -204,6 +206,94 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
       expect(document.secondaryDate).toBeDefined();
+    });
+
+    it('should fail validation when the document type is Order but no "signedJudgeName" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.signedJudgeName).toBeUndefined();
+    });
+
+    it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          draftState: null,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeTruthy();
+    });
+
+    it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+    });
+
+    it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.signedJudgeName).toBeUndefined();
+    });
+
+    it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
     });
   });
 
