@@ -35,7 +35,11 @@
       flags: 
         presence: "optional"
     certificateOfServiceDate: 
-      type: "any"
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 
@@ -51,16 +55,15 @@
                 override: true
               - true
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "any"
             flags: 
               presence: "optional"
+            allow: 
+              - null
     createdAt: 
       type: "date"
       flags: 
@@ -72,7 +75,9 @@
     date: 
       type: "date"
       flags: 
-        format: "iso"
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
         presence: "optional"
         description: "An optional date used when generating a fully concatenated document title."
       allow: 
@@ -486,30 +491,11 @@
         - "Standing Pretrial Notice"
         - "Standing Pretrial Order"
     draftState: 
-      type: "alternatives"
-      matches: 
-        - 
-          ref: 
-            path: 
-              - "signedAt"
-          is: 
-            type: "any"
-            flags: 
-              presence: "required"
-            invalid: 
-              - null
-          then: 
-            type: "any"
-            flags: 
-              only: true
-            allow: 
-              - null
-          otherwise: 
-            type: "object"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
+      type: "object"
+      flags: 
+        presence: "optional"
+      allow: 
+        - null
     entityName: 
       type: "string"
       flags: 
@@ -779,9 +765,9 @@
             invalid: 
               - null
           then: 
-            type: "any"
+            type: "string"
             flags: 
-              only: true
+              presence: "optional"
             allow: 
               - null
           otherwise: 
@@ -805,18 +791,12 @@
                     - "Decision"
                     - "Notice"
                 then: 
-                  type: "date"
+                  type: "string"
                   flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
                     presence: "required"
                 otherwise: 
-                  type: "date"
+                  type: "string"
                   flags: 
-                    format: 
-                      - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                      - "YYYY-MM-DD"
                     presence: "optional"
                   allow: 
                     - null

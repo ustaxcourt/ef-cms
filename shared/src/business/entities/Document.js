@@ -178,15 +178,13 @@ joiValidationDecorator(
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joiStrictTimestamp.when('certificateOfService', {
       is: true,
-      otherwise: joi.optional(),
+      otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
     createdAt: joiStrictTimestamp
       .required()
       .description('When the Document was added to the system.'),
-    date: joi
-      .date()
-      .iso()
+    date: joiStrictTimestamp
       .optional()
       .allow(null)
       .description(
