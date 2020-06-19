@@ -14,6 +14,6 @@ export const petitionsClerk1ViewsMessageInbox = test => {
     expect(foundMessage).toBeDefined();
 
     test.testMessageDocumentId = foundMessage.attachments[0].documentId;
-    test.messageId = foundMessage.messageId;
+    test.parentMessageId = foundMessage.parentMessageId;
   });
 };

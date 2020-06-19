@@ -143,8 +143,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-drafts to be visible',
+      'click element #tab-drafts',
       'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
       'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
     ],
@@ -182,12 +182,12 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-deadlines to be visible',
-      'click element #tab-deadlines',
+      'wait for #tab-tracked-items to be visible',
+      'click element #tab-tracked-items',
     ],
     notes: 'checks a11y of deadlines tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=deadlines-tab',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=tracked-items-tab',
   },
   {
     actions: [
@@ -216,34 +216,32 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-drafts to be visible',
+      'click element #tab-drafts',
     ],
-    notes: 'checks a11y of in progress tab, draft documents secondary tab',
+    notes: 'checks a11y of the draft documents tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-drafts',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=drafts-tab',
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
-      'wait for #tab-messages to be visible',
-      'click element #tab-messages',
+      'wait for #tab-case-messages to be visible',
+      'click element #tab-case-messages',
     ],
-    notes: 'checks a11y of in progress tab, messages secondary tab',
+    notes: 'checks a11y of case messages tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-messages',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=case-messages-tab',
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-tracked-items to be visible',
+      'click element #tab-tracked-items',
       'wait for #tab-pending-report to be visible',
       'click element #tab-pending-report',
     ],
-    notes: 'checks a11y of in progress tab, pending report secondary tab',
+    notes: 'checks a11y of tracked-items tab, pending report secondary tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-pending-report',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=tracked-items-tab-pending-report',
   },
   {
     actions: [

@@ -228,9 +228,10 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
+    //TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(),
+    eventCode: joi.string().optional(), // TODO: use an enum
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
@@ -312,15 +313,46 @@ joiValidationDecorator(
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
+    signedAt: joi
+      .when('draftState', {
+        is: joi.exist().not(null),
+        otherwise: joi.when('documentType', {
+          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+          otherwise: joi.string().optional().allow(null),
+          then: joi.string().required(),
+        }),
+        then: joi.string().optional().allow(null),
       })
-      .optional()
-      .allow(null),
-    signedJudgeName: joi.string().optional().allow(null),
+      .description('The time at which the document was signed.'),
+    signedByUserId: joi
+      .when('signedJudgeName', {
+        is: joi.exist().not(null),
+        otherwise: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .optional()
+          .allow(null),
+        then: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .required(),
+      })
+      .description('The id of the user who applied the signature.'),
+    signedJudgeName: joi
+      .when('draftState', {
+        is: joi.exist().not(null),
+        otherwise: joi.when('documentType', {
+          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+          otherwise: joi.string().optional().allow(null),
+          then: joi.string().required(),
+        }),
+        then: joi.string().optional().allow(null),
+      })
+      .description('The judge who signed the document.'),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
       .string()
@@ -421,6 +453,7 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
+  this.draftState = null;
 };
 
 /**

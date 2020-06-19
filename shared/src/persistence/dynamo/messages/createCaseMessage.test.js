@@ -11,6 +11,7 @@ const mockCaseMessage = {
   fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
   message: 'hey there',
   messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+  parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
   subject: 'hello',
   to: 'Test Petitionsclerk2',
   toSection: 'petitions',
@@ -37,7 +38,7 @@ describe('createCaseMessage', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
-      gsi1pk: `message|${mockCaseMessage.messageId}`,
+      gsi1pk: `message|${mockCaseMessage.parentMessageId}`,
       pk: `case|${mockCaseMessage.caseId}`,
       sk: `message|${mockCaseMessage.messageId}`,
       ...mockCaseMessage,
