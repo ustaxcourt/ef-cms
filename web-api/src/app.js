@@ -113,6 +113,9 @@ const {
   fileExternalDocumentToConsolidatedCasesLambda,
 } = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
 const {
+  forwardCaseMessageLambda,
+} = require('./messages/forwardCaseMessageLambda');
+const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
@@ -634,6 +637,10 @@ app.post(
 app.post(
   '/messages/:parentMessageId/reply',
   lambdaWrapper(replyToCaseMessageLambda),
+);
+app.post(
+  '/messages/:parentMessageId/forward',
+  lambdaWrapper(forwardCaseMessageLambda),
 );
 app.get(
   '/messages/:parentMessageId',

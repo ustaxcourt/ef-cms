@@ -289,6 +289,9 @@ const {
   formatJudgeName,
 } = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
+  forwardCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/forwardCaseMessageInteractor');
+const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -1397,6 +1400,7 @@ module.exports = appContextUser => {
         fileDocketEntryInteractor,
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
+        forwardCaseMessageInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
         generateNoticeOfTrialIssuedInteractor,
