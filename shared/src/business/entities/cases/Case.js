@@ -614,7 +614,7 @@ Case.VALIDATION_RULES = {
       otherwise: joi.optional(),
       then: joi.when('caseType', {
         is: CASE_TYPES_MAP.deficiency,
-        otherwise: joi.optional(),
+        otherwise: joi.optional(), // TODO: only allow null?
         then: joi.array().min(1).required(),
       }),
     })

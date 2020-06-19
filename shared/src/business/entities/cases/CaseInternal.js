@@ -180,11 +180,13 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    petitionPaymentDate: joi.when('petitionPaymentStatus', {
-      is: PAYMENT_STATUS.PAID,
-      otherwise: joiStrictTimestamp.optional().allow(null),
-      then: joiStrictTimestamp.max('now').required(),
-    }),
+    petitionPaymentDate: joiStrictTimestamp
+      .max('now')
+      .when('petitionPaymentStatus', {
+        is: PAYMENT_STATUS.PAID,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
     petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
     petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
     petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,

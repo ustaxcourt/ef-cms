@@ -750,7 +750,7 @@
       flags: 
         presence: "optional"
     signedAt: 
-      type: "any"
+      type: "string"
       flags: 
         description: "The time at which the document was signed."
       whens: 
@@ -765,7 +765,7 @@
             invalid: 
               - null
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
             allow: 
@@ -778,7 +778,7 @@
                   path: 
                     - "documentType"
                 is: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     only: true
                   allow: 
@@ -791,11 +791,11 @@
                     - "Decision"
                     - "Notice"
                 then: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     presence: "required"
                 otherwise: 
-                  type: "string"
+                  type: "any"
                   flags: 
                     presence: "optional"
                   allow: 
