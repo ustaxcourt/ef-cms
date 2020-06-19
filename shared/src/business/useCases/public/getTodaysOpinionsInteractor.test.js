@@ -10,7 +10,7 @@ const {
 const {
   getTodaysOpinionsInteractor,
 } = require('./getTodaysOpinionsInteractor');
-const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
+const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('getTodaysOpinionsInteractor', () => {
   const mockOpinionSearchResult = [
@@ -63,7 +63,7 @@ describe('getTodaysOpinionsInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
       endDate: currentDateEnd,
       startDate: currentDateStart,
     });
