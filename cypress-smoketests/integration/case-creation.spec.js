@@ -25,7 +25,7 @@ const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
 const { getUserToken, login } = require('../support/pages/login');
-const { goToMySectionInbox } = require('../support/pages/document-qc');
+const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;
 
@@ -44,13 +44,12 @@ describe('Petitioner', () => {
 
   it('should be able to create a case', () => {
     goToStartCreatePetition();
-
     goToWizardStep1();
     completeWizardStep1();
     goToWizardStep2();
     completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
     goToWizardStep3();
-    completeWizardStep3(filingTypes.INDIVIDUAL);
+    completeWizardStep3(filingTypes.INDIVIDUAL, 'Petitioner');
     goToWizardStep4();
     completeWizardStep4();
     goToWizardStep5();
@@ -78,7 +77,10 @@ describe('Private practitioner', () => {
     goToWizardStep2();
     completeWizardStep2(hasIrsNotice.YES, 'Notice of Deficiency');
     goToWizardStep3();
-    completeWizardStep3(filingTypes.PETITIONER_AND_SPOUSE);
+    completeWizardStep3(
+      filingTypes.PETITIONER_AND_SPOUSE,
+      'Private practitioner',
+    );
     goToWizardStep4();
     completeWizardStep4();
     goToWizardStep5();
@@ -98,11 +100,10 @@ describe('Petitions clerk', () => {
 
   it('should be able to login', () => {
     login(token);
-    cy.get('.progress-indicator').should('not.exist');
   });
 
   it('should be able to create a case and save for later', () => {
-    goToMySectionInbox();
+    goToMyDocumentQC();
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
@@ -111,7 +112,7 @@ describe('Petitions clerk', () => {
   });
 
   it('should be able to create a case and serve to IRS', () => {
-    goToMySectionInbox();
+    goToMyDocumentQC();
     goToCreateCase();
     fillInCreateCaseFromPaperForm();
     goToReviewCase();
