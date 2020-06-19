@@ -18,6 +18,7 @@ export const CaseMessagesIndividualCompleted = connect(
               <th className="small">Completed</th>
               <th>Last Message</th>
               <th>Comment</th>
+              <th>Case Title</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -50,6 +51,7 @@ export const CaseMessagesIndividualCompleted = connect(
                   <td className="message-queue-row">
                     {message.completedMessage}
                   </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                 </tr>
               </tbody>
             );
