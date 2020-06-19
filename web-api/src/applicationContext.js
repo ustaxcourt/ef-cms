@@ -106,6 +106,9 @@ const {
   compareStrings,
 } = require('../../shared/src/business/utilities/sortFunctions');
 const {
+  completeCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/completeCaseMessageInteractor');
+const {
   completeDocketEntryQCInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor');
 const {
@@ -1383,6 +1386,7 @@ module.exports = appContextUser => {
         caseAdvancedSearchInteractor,
         casePublicSearchInteractor,
         checkForReadyForTrialCasesInteractor,
+        completeCaseMessageInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
