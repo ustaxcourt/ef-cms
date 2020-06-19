@@ -1489,6 +1489,7 @@ Case.prototype.getCaseContacts = function (shape) {
     'contactSecondary',
     'privatePractitioners',
     'irsPractitioners',
+    'otherPetitioners',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       caseContacts[contact] = this[contact];
