@@ -661,6 +661,9 @@ const {
   markCaseMessageRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markCaseMessageRepliedTo');
 const {
+  markCaseMessageThreadRepliedTo,
+} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -825,6 +828,9 @@ const {
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
+const {
+  updateCaseMessage,
+} = require('../../shared/src/persistence/dynamo/messages/updateCaseMessage');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -1256,6 +1262,7 @@ module.exports = appContextUser => {
         indexRecord,
         isFileExists,
         markCaseMessageRepliedTo,
+        markCaseMessageThreadRepliedTo,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1268,6 +1275,7 @@ module.exports = appContextUser => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
+        updateCaseMessage,
         updateCaseTrialSortMappingRecords,
         updateDocketRecord,
         updateDocument,
