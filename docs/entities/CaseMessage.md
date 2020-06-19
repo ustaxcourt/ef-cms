@@ -44,6 +44,18 @@
       flags: 
         presence: "required"
         description: "The case title for the associated cases."
+    completedMessage: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The message entered when completing the message thread."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      allow: 
+        - null
     createdAt: 
       type: "date"
       flags: 
@@ -147,6 +159,147 @@
             options: 
               version: 
                 - "uuidv4"
+    isCompleted: 
+      type: "boolean"
+      flags: 
+        presence: "required"
+        description: "Whether the message thread has been completed."
+    completedBy: 
+      type: "string"
+      flags: 
+        description: "The name of the user who completed the message thread"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCompleted"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    completedBySection: 
+      type: "string"
+      flags: 
+        only: true
+        description: "The section of the user who completed the message thread"
+      allow: 
+        - "adc"
+        - "admissions"
+        - "chambers"
+        - "clerkofcourt"
+        - "docket"
+        - "petitions"
+        - "trialClerks"
+        - "armensChambers"
+        - "ashfordsChambers"
+        - "buchsChambers"
+        - "carluzzosChambers"
+        - "cohensChambers"
+        - "colvinsChambers"
+        - "copelandsChambers"
+        - "foleysChambers"
+        - "galesChambers"
+        - "gerbersChambers"
+        - "goekesChambers"
+        - "gustafsonsChambers"
+        - "guysChambers"
+        - "halpernsChambers"
+        - "holmesChambers"
+        - "jacobsChambers"
+        - "jonesChambers"
+        - "kerrigansChambers"
+        - "laubersChambers"
+        - "leydensChambers"
+        - "marvelsChambers"
+        - "morrisonsChambers"
+        - "negasChambers"
+        - "panuthosChambers"
+        - "parisChambers"
+        - "pughsChambers"
+        - "ruwesChambers"
+        - "thorntonsChambers"
+        - "urdasChambers"
+        - "vasquezsChambers"
+        - "wellsChambers"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCompleted"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    completedByUserId: 
+      type: "string"
+      flags: 
+        description: "The ID of the user who completed the message thread"
+      rules: 
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCompleted"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     isRepliedTo: 
       type: "boolean"
       flags: 
