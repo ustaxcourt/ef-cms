@@ -533,7 +533,6 @@ describe('ContactFactory', () => {
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'Other',
-
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -602,45 +601,58 @@ describe('ContactFactory', () => {
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  describe('Cases with other petitioners', () => {
-    it('can validate valid contacts for a case with otherPetitioners', () => {
-      let caseWithOtherPetitioners = new Case(
-        {
-          ...MOCK_CASE,
-          otherPetitioners: [
-            {
-              additionalName: 'First Other Petitioner',
-              address1: '876 12th Ave',
-              city: 'Nashville',
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'someone@example.com',
-              name: 'Jimmy Dean',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
+  describe.only('Cases with otherPetitioners', () => {
+    const partyTypeKeys = Object.keys(PARTY_TYPES);
+    partyTypeKeys.forEach(partyType => {
+      it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
+        let caseWithOtherPetitioners = new Case(
+          {
+            ...MOCK_CASE,
+            contactPrimary: {
+              ...MOCK_CASE.contactPrimary,
+              inCareOf: 'Peter Parker',
+              secondaryName: 'Trustee Name',
             },
-            {
-              additionalName: 'First Other Petitioner',
-              address1: '876 12th Ave',
-              city: 'Nashville',
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'someone@example.com',
-              name: 'Jimmy Dean',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
+            contactSecondary: {
+              ...MOCK_CASE.contactPrimary,
+              inCareOf: 'Peter Parker',
+              secondaryName: 'Trustee Name',
             },
-          ],
-          partyType: PARTY_TYPES.transferee,
-        },
-        { applicationContext },
-      );
+            otherPetitioners: [
+              {
+                additionalName: 'First Other Petitioner',
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                country: 'USA',
+                countryType: 'domestic',
+                email: 'someone@example.com',
+                name: 'Jimmy Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                state: 'AK',
+              },
+              {
+                additionalName: 'First Other Petitioner',
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                country: 'USA',
+                countryType: 'domestic',
+                email: 'someone@example.com',
+                name: 'Jimmy Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                state: 'AK',
+              },
+            ],
+            partyType: PARTY_TYPES[partyType],
+          },
+          { applicationContext },
+        );
 
-      expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
-        null,
-      );
+        expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
+          null,
+        );
+      });
     });
   });
 });
