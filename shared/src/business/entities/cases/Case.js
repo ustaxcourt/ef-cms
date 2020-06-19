@@ -1743,6 +1743,14 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
+Case.prototype.isDraftDocument = function (document, docketRecord) {
+  const isDocumentOnDocketRecord = docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+
+  return !isDocumentOnDocketRecord;
+};
+
 exports.Case = Case;
 exports.isAssociatedUser = isAssociatedUser;
 exports.getPetitionDocumentFromDocuments = getPetitionDocumentFromDocuments;

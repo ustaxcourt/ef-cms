@@ -1,11 +1,11 @@
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setReplyToMessageModalDialogModalStateAction } from './setReplyToMessageModalDialogModalStateAction';
+import { setForwardMessageModalDialogModalStateAction } from './setForwardMessageModalDialogModalStateAction';
 
-describe('setReplyToMessageModalDialogModalStateAction', () => {
-  it('should set the modal state for replying to a message', async () => {
+describe('setForwardMessageModalDialogModalStateAction', () => {
+  it('should set the modal state for forwarding a message', async () => {
     const result = await runAction(
-      setReplyToMessageModalDialogModalStateAction,
+      setForwardMessageModalDialogModalStateAction,
       {
         modules: {
           presenter,
@@ -37,11 +37,11 @@ describe('setReplyToMessageModalDialogModalStateAction', () => {
             documentTitle: 'Petition',
           },
         ],
+        from: 'test user 1',
+        fromSection: 'petitions',
+        fromUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
         parentMessageId: '530f9b43-4934-4b2f-9aa4-50dcbe8064fa',
         subject: 'the subject',
-        to: 'test user 1',
-        toSection: 'petitions',
-        toUserId: '589002b0-dacd-4e84-874a-52d9898623c3',
       },
       validationErrors: {},
     });

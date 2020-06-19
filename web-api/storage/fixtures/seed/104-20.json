@@ -44,15 +44,7 @@
           "inProgress": true,
           "caseStatus": "General Docket - Not at Issue",
           "document": {
-            "draftState": {
-              "eventCode": "ODD",
-              "documentType": "Order of Dismissal and Decision",
-              "caseId": "1a92894e-83a5-48ba-9994-3ada44235deb",
-              "documentContents": "Déjà vu, this is a seed order in case 104-20 filed on Apr 13 at 11:01pm ET\n",
-              "documentTitle": "Order of Dismissal and Decision",
-              "richText": "<p>Déjà vu, this is a seed order in case 104-20 filed on Apr 13 at 11:01pm ET</p>",
-              "docketNumber": "104-20"
-            },
+            "draftState": null,
             "attachments": false,
             "documentType": "ODD - Order of Dismissal and Decision Entered",
             "filingDate": "2020-04-14T03:01:15.215Z",
