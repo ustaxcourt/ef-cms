@@ -29,7 +29,9 @@ export const CaseMessagesIndividualCompleted = connect(
                     <CaseLink formattedCase={message} />
                   </td>
                   <td className="message-queue-row small">
-                    <span className="no-wrap">{message.completedAt}</span>
+                    <span className="no-wrap">
+                      {message.completedAtFormatted}
+                    </span>
                   </td>
                   <td className="message-queue-row">
                     <div className="message-document-title">
