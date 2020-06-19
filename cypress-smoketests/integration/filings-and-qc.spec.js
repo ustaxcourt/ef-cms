@@ -3,9 +3,9 @@ const {
   confirmServePetition,
   goToMyDocumentQC,
   goToPetitionNeedingQC,
+  goToPetitionNeedingQCByCaseTitle,
   goToReviewPetition,
   goToSectionDocumentQC,
-  goToSpecificPetitionNeedingQC,
   savePetitionForLater,
   selectCaseType,
   selectTab,
@@ -20,41 +20,41 @@ const { getUserToken, login } = require('../support/pages/login');
 
 let token = null;
 
-// describe('Petitions clerk', () => {
-//   before(async () => {
-//     const results = await getUserToken(
-//       'petitionsclerk1@example.com',
-//       'Testing1234$',
-//     );
-//     token = results.AuthenticationResult.IdToken;
-//
-//     login(token);
-//   });
+describe.skip('Petitions clerk', () => {
+  before(async () => {
+    const results = await getUserToken(
+      'petitionsclerk1@example.com',
+      'Testing1234$',
+    );
+    token = results.AuthenticationResult.IdToken;
 
-//   it('should be able to QC a petition and save for later', () => {
-//     goToMyDocumentQC();
-//     goToSectionDocumentQC();
-//     goToPetitionNeedingQC();
-//     goToReviewPetition();
-//     savePetitionForLater();
-//   });
+    login(token);
+  });
 
-//   it('should be able to QC a petition, add statistics, and serve to IRS', () => {
-//     goToMyDocumentQC();
-//     goToSectionDocumentQC();
-//     goToSpecificPetitionNeedingQC('Petitioner');
-//     selectTab('irs-notice');
-//     // radio button not selected - bug?
-//     cy.get('#has-irs-verified-notice-yes').click();
-//     selectCaseType('Deficiency');
-//     addStatistic('2020', '1000', '10');
-//     goToReviewPetition();
-//     servePetition();
-//     confirmServePetition();
-//   });
-// });
+  it('should be able to QC a petition and save for later', () => {
+    goToMyDocumentQC();
+    goToSectionDocumentQC();
+    goToPetitionNeedingQC();
+    goToReviewPetition();
+    savePetitionForLater();
+  });
 
-describe('Petitioner', () => {
+  it('should be able to QC a petition, add statistics, and serve to IRS', () => {
+    goToMyDocumentQC();
+    goToSectionDocumentQC();
+    goToPetitionNeedingQCByCaseTitle('Petitioner');
+    selectTab('irs-notice');
+    // radio button not selected - bug?
+    cy.get('#has-irs-verified-notice-yes').click();
+    selectCaseType('Deficiency');
+    addStatistic('2020', '1000', '10');
+    goToReviewPetition();
+    servePetition();
+    confirmServePetition();
+  });
+});
+
+describe.skip('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',

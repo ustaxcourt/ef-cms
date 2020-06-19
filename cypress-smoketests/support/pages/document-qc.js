@@ -10,7 +10,7 @@ exports.goToPetitionNeedingQC = () => {
   cy.get('a[href*="petition-qc"]').first().click();
 };
 
-exports.goToSpecificPetitionNeedingQC = caseTitle => {
+exports.goToPetitionNeedingQCByCaseTitle = caseTitle => {
   cy.get(`td:contains(${caseTitle})`)
     .first()
     .parent()
