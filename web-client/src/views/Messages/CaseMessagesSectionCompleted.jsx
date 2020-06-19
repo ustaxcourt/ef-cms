@@ -4,9 +4,9 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const CaseMessagesIndividualCompleted = connect(
+export const CaseMessagesSectionCompleted = connect(
   { formattedMessages: state.formattedMessages },
-  function CaseMessagesIndividualInbox({ formattedMessages }) {
+  function CaseMessagesSectionCompleted({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
@@ -18,6 +18,8 @@ export const CaseMessagesIndividualCompleted = connect(
               <th className="small">Completed</th>
               <th>Last Message</th>
               <th>Comment</th>
+              <th>Completed by</th>
+              <th>Section</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -41,12 +43,17 @@ export const CaseMessagesIndividualCompleted = connect(
                         {message.subject}
                       </Button>
                     </div>
+
                     <div className="message-document-detail">
                       {message.message}
                     </div>
                   </td>
                   <td className="message-queue-row">
                     {message.completedMessage}
+                  </td>
+                  <td className="message-queue-row">{message.completedBy}</td>
+                  <td className="message-queue-row">
+                    {message.completedBySection}
                   </td>
                 </tr>
               </tbody>
