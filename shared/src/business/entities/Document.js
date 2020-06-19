@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
 const {
+  ALL_EVENT_CODES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
@@ -227,10 +228,14 @@ joiValidationDecorator(
       .valid(...Document.getDocumentTypes())
       .required()
       .description('The type of this document.'),
-    //TODO - figure out if draft state being null/ not null relies on signature being present
+    // TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(), // TODO: use an enum
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .allow(null)
+      .optional(),
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
