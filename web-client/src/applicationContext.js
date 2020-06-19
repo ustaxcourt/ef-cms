@@ -62,6 +62,7 @@ import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { completeCaseMessageInteractor } from '../../shared/src/proxies/messages/completeCaseMessageProxy';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
@@ -276,6 +277,7 @@ const allUseCases = {
   canConsolidateInteractor,
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
+  completeCaseMessageInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
