@@ -295,6 +295,11 @@ const getContactConstructors = ({ countryType, isPaper, partyType }) => {
           primary: getPetitionerTrustContact({ countryType, isPaper }),
           secondary: null,
         };
+      default:
+        if (partyType) {
+          console.trace(`Unrecognized party type "${partyType}"`);
+        }
+        return {};
     }
   };
 
