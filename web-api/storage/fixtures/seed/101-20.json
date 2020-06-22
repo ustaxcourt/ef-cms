@@ -35,7 +35,8 @@
         "additionalName": "Rachael Ray, Petitioner",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -47,7 +48,8 @@
         "additionalName": "Guy Fieri",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -59,7 +61,8 @@
         "additionalName": "Bobby Flay",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -71,7 +74,8 @@
         "additionalName": "Kid Rock",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -83,7 +87,8 @@
         "additionalName": "Bill Burr",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -95,7 +100,8 @@
         "additionalName": "Bill Burr",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       },
       {
         "city": "Philadelphia",
@@ -107,7 +113,8 @@
         "additionalName": "Bill Burr",
         "state": "PA",
         "countryType": "domestic",
-        "email": "petitioner"
+        "email": "mayor@flavortown.gov",
+        "title": "Petitioner"
       }
     ],
     "createdAt": "2020-01-02T16:05:45.978Z",
