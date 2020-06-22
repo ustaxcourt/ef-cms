@@ -14,11 +14,14 @@ export const caseInformationHelper = get => {
     !!caseDetail.irsPractitioners.length;
   const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
+  const showOtherPetitioners =
+    caseDetail.otherPetitioners && !!caseDetail.otherPetitioners.length;
 
   return {
     showAddCounsel,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
+    showOtherPetitioners,
     showSealCaseButton,
   };
 };
