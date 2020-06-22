@@ -536,6 +536,16 @@
       flags: 
         presence: "optional"
         description: "Reminder for clerks to review the Order to Show Cause."
+    otherPetitioners: 
+      type: "array"
+      flags: 
+        description: "List of OtherPetitionerContact Entities for the case."
+      items: 
+        - 
+          type: "object"
+          metas: 
+            - 
+              entityName: "OtherPetitionerContact"
     partyType: 
       type: "string"
       flags: 
