@@ -124,7 +124,7 @@ ContactFactory.getErrorToMessageMap = ({
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
-const getContactConstructors = ({ countryType, isPaper, partyType }) => {
+const getContactConstructors = ({ partyType }) => {
   const {
     getNextFriendForIncompetentPersonContact,
   } = require('./NextFriendForIncompetentPersonContact');
@@ -172,132 +172,117 @@ const getContactConstructors = ({ countryType, isPaper, partyType }) => {
     switch (partyType) {
       case PARTY_TYPES.conservator:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerConservatorContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerConservatorContact,
           secondary: null,
         };
       case PARTY_TYPES.corporation:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerCorporationContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerCorporationContact,
           secondary: null,
         };
       case PARTY_TYPES.custodian:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerCustodianContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerCustodianContact,
           secondary: null,
         };
       case PARTY_TYPES.donor:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerPrimaryContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.estate:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerEstateWithExecutorPrimaryContact({
-            countryType,
-            isPaper,
-          }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerEstateWithExecutorPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.estateWithoutExecutor:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerIntermediaryContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerIntermediaryContact,
           secondary: null,
         };
       case PARTY_TYPES.guardian:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerGuardianContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerGuardianContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForIncompetentPerson:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getNextFriendForIncompetentPersonContact({
-            countryType,
-            isPaper,
-          }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getNextFriendForIncompetentPersonContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForMinor:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getNextFriendForMinorContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getNextFriendForMinorContact,
           secondary: null,
         };
 
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPartnershipAsTaxMattersPartnerPrimaryContact({
-            countryType,
-            isPaper,
-          }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPartnershipAsTaxMattersPartnerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipBBA:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPartnershipBBAPrimaryContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPartnershipBBAPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPartnershipOtherThanTaxMattersPrimaryContact({
-            countryType,
-            isPaper,
-          }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPartnershipOtherThanTaxMattersPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.petitioner:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerPrimaryContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.petitionerDeceasedSpouse:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerPrimaryContact({ countryType, isPaper }),
-          secondary: getPetitionerDeceasedSpouseContact({
-            countryType,
-            isPaper,
-          }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
+          secondary: getPetitionerDeceasedSpouseContact,
         };
       case PARTY_TYPES.petitionerSpouse:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerPrimaryContact({ countryType, isPaper }),
-          secondary: getPetitionerSpouseContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
+          secondary: getPetitionerSpouseContact,
         };
       case PARTY_TYPES.survivingSpouse:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getSurvivingSpouseContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getSurvivingSpouseContact,
           secondary: null,
         };
       case PARTY_TYPES.transferee:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerPrimaryContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
           secondary: null,
         };
 
       case PARTY_TYPES.trust:
         return {
-          otherPetitioners: getOtherPetitionerContact({ countryType, isPaper }),
-          primary: getPetitionerTrustContact({ countryType, isPaper }),
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerTrustContact,
           secondary: null,
         };
       default:
         if (partyType) {
-          console.trace(`Unrecognized party type "${partyType}"`);
+          console.warn(`Unrecognized party type "${partyType}"`);
         }
         return {};
     }
@@ -315,26 +300,45 @@ const getContactConstructors = ({ countryType, isPaper, partyType }) => {
  * @returns {object} contains the primary and secondary contacts constructed
  */
 ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
-  const constructorMap = getContactConstructors({
-    countryType: (contactInfo.primary || {}).countryType,
-    isPaper,
-    partyType,
-  });
+  const constructorMap = getContactConstructors({ partyType });
+
+  const constructors = {
+    primary:
+      constructorMap.primary &&
+      constructorMap.primary({
+        countryType: (contactInfo.primary || {}).countryType,
+        isPaper,
+      }),
+    secondary:
+      constructorMap.secondary &&
+      constructorMap.secondary({
+        countryType: (contactInfo.secondary || {}).countryType,
+        isPaper,
+      }),
+  };
 
   let otherPetitioners = [];
   if (Array.isArray(contactInfo.otherPetitioners)) {
     otherPetitioners = contactInfo.otherPetitioners.map(otherPetitioner => {
-      return new constructorMap.otherPetitioners(otherPetitioner);
+      const otherPetitionerConstructor = constructorMap.otherPetitioners
+        ? constructorMap.otherPetitioners({
+            countryType: otherPetitioner.countryType,
+            isPaper,
+          })
+        : undefined;
+      return otherPetitionerConstructor
+        ? new otherPetitionerConstructor(otherPetitioner)
+        : {};
     });
   }
 
   return {
     otherPetitioners,
-    primary: constructorMap.primary
-      ? new constructorMap.primary(contactInfo.primary || {})
+    primary: constructors.primary
+      ? new constructors.primary(contactInfo.primary || {})
       : {},
-    secondary: constructorMap.secondary
-      ? new constructorMap.secondary(contactInfo.secondary || {})
+    secondary: constructors.secondary
+      ? new constructors.secondary(contactInfo.secondary || {})
       : {},
   };
 };
