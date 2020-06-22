@@ -22,6 +22,13 @@ const replyToMessage = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  await applicationContext
+    .getPersistenceGateway()
+    .markCaseMessageThreadRepliedTo({
+      applicationContext,
+      parentMessageId,
+    });
+
   const {
     caseCaption,
     docketNumber,
@@ -65,12 +72,6 @@ const replyToMessage = async ({
   await applicationContext.getPersistenceGateway().createCaseMessage({
     applicationContext,
     caseMessage,
-  });
-
-  await applicationContext.getPersistenceGateway().markCaseMessageRepliedTo({
-    applicationContext,
-    caseId,
-    messageId: parentMessageId,
   });
 
   return caseMessage;
