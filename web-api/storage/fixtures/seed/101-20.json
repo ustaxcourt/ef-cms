@@ -24,6 +24,92 @@
       "countryType": "domestic",
       "email": "petitioner"
     },
+    "otherPetitioners": [
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      },
+      {
+        "city": "Philadelphia",
+        "phone": "1234567890",
+        "serviceIndicator": "None",
+        "address1": "453 Electric Ave",
+        "postalCode": "99999",
+        "name": "Bill Burr",
+        "additionalName": "Bill Burr",
+        "state": "PA",
+        "countryType": "domestic",
+        "email": "petitioner"
+      }
+    ],
     "createdAt": "2020-01-02T16:05:45.978Z",
     "noticeOfAttachments": false,
     "trialTime": "10:00",
