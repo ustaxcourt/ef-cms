@@ -742,10 +742,42 @@ const ALL_EVENT_CODES = flatten([
   )
   .sort();
 
+const ALL_DOCUMENT_TYPES = (() => {
+  const allFilingEvents = flatten([
+    ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+    ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
+  ]);
+  const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
+  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
+  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
+    t => INITIAL_DOCUMENT_TYPES[t].documentType,
+  );
+  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
+    t => SIGNED_DOCUMENT_TYPES[t].documentType,
+  );
+  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
+    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
+  );
+
+  const documentTypes = [
+    ...initialTypes,
+    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+    ...filingEventTypes,
+    ...orderDocTypes,
+    ...courtIssuedDocTypes,
+    ...signedTypes,
+    ...systemGeneratedTypes,
+  ];
+
+  return documentTypes;
+})();
+
 module.exports = {
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,

@@ -164,6 +164,37 @@
       flags: 
         presence: "required"
         description: "Whether the message thread has been completed."
+    completedAt: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+        description: "When the message was marked as completed."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCompleted"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     completedBy: 
       type: "string"
       flags: 
