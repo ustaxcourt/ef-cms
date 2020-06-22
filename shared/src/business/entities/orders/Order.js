@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
 
 /**
  * @param {object} rawOrder the raw order data
@@ -22,8 +23,14 @@ Order.VALIDATION_ERROR_MESSAGES = {
 
 Order.VALIDATION_RULES = {
   documentTitle: joi.string().max(100).required(),
-  documentType: joi.string().required(), // TODO: add enum
-  eventCode: joi.string().optional(), // TODO: add enum
+  documentType: joi
+    .string()
+    .valid(...ALL_DOCUMENT_TYPES)
+    .required(),
+  eventCode: joi
+    .string()
+    .valid(...ALL_EVENT_CODES)
+    .optional(),
   orderBody: joi.string().max(500).required(),
 };
 
