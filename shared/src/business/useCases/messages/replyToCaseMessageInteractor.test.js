@@ -87,14 +87,13 @@ describe('replyToCaseMessageInteractor', () => {
       to: 'Test Petitionsclerk2',
     });
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageRepliedTo,
+      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().markCaseMessageRepliedTo.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().markCaseMessageThreadRepliedTo
+        .mock.calls[0][0],
     ).toMatchObject({
-      caseId: caseMessageData.caseId,
-      messageId: caseMessageData.parentMessageId,
+      parentMessageId: caseMessageData.parentMessageId,
     });
   });
 });
