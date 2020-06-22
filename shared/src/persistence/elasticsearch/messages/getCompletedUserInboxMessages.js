@@ -1,9 +1,18 @@
+const {
+  prepareDateFromString,
+} = require('../../../business/utilities/DateHandler');
 const { search } = require('../searchClient');
 
 exports.getCompletedUserInboxMessages = async ({
   applicationContext,
   userId,
 }) => {
+  const filterDate = prepareDateFromString()
+    .startOf('day')
+    .subtract(7, 'd')
+    .utc()
+    .format();
+
   const query = {
     body: {
       query: {
@@ -16,6 +25,14 @@ exports.getCompletedUserInboxMessages = async ({
             },
             {
               match: { 'isCompleted.BOOL': true },
+            },
+            {
+              range: {
+                'completedAt.S': {
+                  format: 'strict_date_time', // ISO-8601 time stamp
+                  gte: filterDate,
+                },
+              },
             },
           ],
         },
