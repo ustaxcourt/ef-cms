@@ -122,7 +122,7 @@ ContactFactory.getErrorToMessageMap = ({
  * @param {string} options.countryType typically either 'domestic' or 'international'
  * @param {boolean} options.isPaper is paper case
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @returns {object(<string>:<Function>)} the contact constructors map for the primary contact, secondary contact, other petitioner contacts
+ * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
 const getContactConstructors = ({ countryType, isPaper, partyType }) => {
   const {
