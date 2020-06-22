@@ -490,6 +490,7 @@ module.exports = [
     actions: [
       'wait for #button-forward to be visible',
       'click element #button-forward',
+      'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the forward modal',
     url:
@@ -499,6 +500,7 @@ module.exports = [
     actions: [
       'wait for #button-reply to be visible',
       'click element #button-reply',
+      'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the reply modal',
     url:
@@ -508,6 +510,7 @@ module.exports = [
     actions: [
       'wait for #button-complete to be visible',
       'click element #button-reply',
+      'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the complete modal',
     url:
