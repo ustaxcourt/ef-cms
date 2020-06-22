@@ -167,9 +167,16 @@ const getContactConstructors = ({ partyType }) => {
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
   const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
 
-  // switch/case means we execute ONLY the block required by the partyType (unlike behavior of a map)
-  const partyConstructorFetch = partyType => {
-    switch (partyType) {
+  const partyConstructorFetch = partyTypeValue => {
+    switch (partyTypeValue) {
+      case PARTY_TYPES.donor: // fall through
+      case PARTY_TYPES.transferee: // fall through
+      case PARTY_TYPES.petitioner:
+        return {
+          otherPetitioners: getOtherPetitionerContact,
+          primary: getPetitionerPrimaryContact,
+          secondary: null,
+        };
       case PARTY_TYPES.conservator:
         return {
           otherPetitioners: getOtherPetitionerContact,
@@ -186,12 +193,6 @@ const getContactConstructors = ({ partyType }) => {
         return {
           otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCustodianContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.donor:
-        return {
-          otherPetitioners: getOtherPetitionerContact,
-          primary: getPetitionerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.estate:
@@ -243,12 +244,6 @@ const getContactConstructors = ({ partyType }) => {
           primary: getPartnershipOtherThanTaxMattersPrimaryContact,
           secondary: null,
         };
-      case PARTY_TYPES.petitioner:
-        return {
-          otherPetitioners: getOtherPetitionerContact,
-          primary: getPetitionerPrimaryContact,
-          secondary: null,
-        };
       case PARTY_TYPES.petitionerDeceasedSpouse:
         return {
           otherPetitioners: getOtherPetitionerContact,
@@ -267,13 +262,6 @@ const getContactConstructors = ({ partyType }) => {
           primary: getSurvivingSpouseContact,
           secondary: null,
         };
-      case PARTY_TYPES.transferee:
-        return {
-          otherPetitioners: getOtherPetitionerContact,
-          primary: getPetitionerPrimaryContact,
-          secondary: null,
-        };
-
       case PARTY_TYPES.trust:
         return {
           otherPetitioners: getOtherPetitionerContact,
@@ -281,8 +269,8 @@ const getContactConstructors = ({ partyType }) => {
           secondary: null,
         };
       default:
-        if (partyType) {
-          throw new Error(`Unrecognized party type "${partyType}"`);
+        if (partyTypeValue) {
+          throw new Error(`Unrecognized party type "${partyTypeValue}"`);
         }
         return {};
     }
