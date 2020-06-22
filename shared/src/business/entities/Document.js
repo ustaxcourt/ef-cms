@@ -1,18 +1,15 @@
 const joi = require('@hapi/joi');
 const {
-  COURT_ISSUED_EVENT_CODES,
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  DOCUMENT_INTERNAL_CATEGORY_MAP,
   DOCUMENT_RELATIONSHIPS,
-  INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
-  SIGNED_DOCUMENT_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
@@ -133,37 +130,6 @@ Document.isPendingOnCreation = rawDocument => {
   return isPending;
 };
 
-Document.getDocumentTypes = () => {
-  const allFilingEvents = flatten([
-    ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-    ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
-  ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
-  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
-  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
-    t => INITIAL_DOCUMENT_TYPES[t].documentType,
-  );
-  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
-    t => SIGNED_DOCUMENT_TYPES[t].documentType,
-  );
-  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
-    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
-  );
-
-  const documentTypes = [
-    ...initialTypes,
-    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
-    ...filingEventTypes,
-    ...orderDocTypes,
-    ...courtIssuedDocTypes,
-    ...signedTypes,
-    ...systemGeneratedTypes,
-  ];
-
-  return documentTypes;
-};
-
 joiValidationDecorator(
   Document,
   joi.object().keys({
@@ -224,13 +190,17 @@ joiValidationDecorator(
       .description('The title of this document.'),
     documentType: joi
       .string()
-      .valid(...Document.getDocumentTypes())
+      .valid(...ALL_DOCUMENT_TYPES)
       .required()
       .description('The type of this document.'),
-    //TODO - figure out if draft state being null/ not null relies on signature being present
+    // TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(), // TODO: use an enum
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .allow(null)
+      .optional(),
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')

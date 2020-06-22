@@ -303,7 +303,7 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
   let otherPetitioners = [];
   if (Array.isArray(contactInfo.otherPetitioners)) {
     otherPetitioners = otherPetitionersCreation(
-      contactInfo.otherPetitioners || [],
+      contactInfo.otherPetitioners,
       partyType,
     );
   }

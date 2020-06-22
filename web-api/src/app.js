@@ -47,6 +47,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  completeCaseMessageLambda,
+} = require('./messages/completeCaseMessageLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -113,6 +116,9 @@ const {
   fileExternalDocumentToConsolidatedCasesLambda,
 } = require('./documents/fileExternalDocumentToConsolidatedCasesLambda');
 const {
+  forwardCaseMessageLambda,
+} = require('./messages/forwardCaseMessageLambda');
+const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
@@ -140,8 +146,17 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
+  getCaseMessagesForCaseLambda,
+} = require('./messages/getCaseMessagesForCaseLambda');
+const {
   getCaseMessageThreadLambda,
 } = require('./messages/getCaseMessageThreadLambda');
+const {
+  getCompletedCaseMessagesForSectionLambda,
+} = require('./messages/getCompletedCaseMessagesForSectionLambda');
+const {
+  getCompletedCaseMessagesForUserLambda,
+} = require('./messages/getCompletedCaseMessagesForUserLambda');
 const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
@@ -635,25 +650,42 @@ app.post(
   '/messages/:parentMessageId/reply',
   lambdaWrapper(replyToCaseMessageLambda),
 );
+app.post(
+  '/messages/:parentMessageId/forward',
+  lambdaWrapper(forwardCaseMessageLambda),
+);
+app.post(
+  '/messages/:parentMessageId/complete',
+  lambdaWrapper(completeCaseMessageLambda),
+);
 app.get(
   '/messages/:parentMessageId',
   lambdaWrapper(getCaseMessageThreadLambda),
+);
+app.get('/messages/case/:caseId', lambdaWrapper(getCaseMessagesForCaseLambda));
+app.get(
+  '/messages/inbox/section/:section',
+  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
 );
 app.get(
   '/messages/inbox/:userId',
   lambdaWrapper(getInboxCaseMessagesForUserLambda),
 );
 app.get(
-  '/messages/inbox/section/:section',
-  lambdaWrapper(getInboxCaseMessagesForSectionLambda),
+  '/messages/outbox/section/:section',
+  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
 );
 app.get(
   '/messages/outbox/:userId',
   lambdaWrapper(getOutboxCaseMessagesForUserLambda),
 );
 app.get(
-  '/messages/outbox/section/:section',
-  lambdaWrapper(getOutboxCaseMessagesForSectionLambda),
+  '/messages/completed/section/:section',
+  lambdaWrapper(getCompletedCaseMessagesForSectionLambda),
+);
+app.get(
+  '/messages/completed/:userId',
+  lambdaWrapper(getCompletedCaseMessagesForUserLambda),
 );
 app.post('/messages', lambdaWrapper(createCaseMessageLambda));
 

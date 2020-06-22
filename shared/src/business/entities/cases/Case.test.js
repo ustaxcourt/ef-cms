@@ -213,9 +213,12 @@ describe('Case entity', () => {
 
   describe('isValid', () => {
     it('Creates a valid case', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
+      const myCase = new Case(
+        { ...MOCK_CASE, otherPetitioners: undefined },
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeTruthy();
       expect(myCase.entityName).toEqual('Case');
     });
@@ -295,6 +298,33 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           petitioners: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates an invalid case with invalid otherPetitioners', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherPetitioners: [
+            {
+              address1: '982 Oak Boulevard',
+              address2: 'Maxime dolorum quae ',
+              address3: 'Ut numquam ducimus ',
+              city: 'Placeat sed dolorum',
+              countryType: 'domestic',
+              name: 'Keelie Bruce',
+              phone: '+1 (785) 771-2329',
+              postalCode: '17860',
+              secondaryName: 'Logan Fields',
+              serviceIndicator: 'None',
+              state: 'LA',
+            },
+          ],
         },
         {
           applicationContext,

@@ -1,5 +1,7 @@
 const joi = require('@hapi/joi');
 const {
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
@@ -82,8 +84,14 @@ function DocketEntryFactory(rawProps) {
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     dateReceived: joiStrictTimestamp.max('now').required(),
-    documentType: joi.string().optional(),
-    eventCode: joi.string().required(),
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .required(),
     freeText: joi.string().optional(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),

@@ -37,7 +37,7 @@ export const ForwardCaseMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Forward Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence={() => {}}
+        onConfirmSequence="forwardCaseMessageSequence"
       >
         <FormGroup
           errorText={!showChambersSelect && validationErrors.toSection}

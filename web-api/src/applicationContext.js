@@ -106,6 +106,9 @@ const {
   compareStrings,
 } = require('../../shared/src/business/utilities/sortFunctions');
 const {
+  completeCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/completeCaseMessageInteractor');
+const {
   completeDocketEntryQCInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor');
 const {
@@ -153,6 +156,9 @@ const {
   formatNow,
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
+const {
+  createPetitionerAccountInteractor,
+} = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
   createPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
@@ -289,6 +295,9 @@ const {
   formatJudgeName,
 } = require('../../shared/src/business/utilities/getFormattedJudgeName');
 const {
+  forwardCaseMessageInteractor,
+} = require('../../shared/src/business/useCases/messages/forwardCaseMessageInteractor');
+const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -375,6 +384,12 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCaseMessagesByCaseId,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByCaseId');
+const {
+  getCaseMessagesForCaseInteractor,
+} = require('../../shared/src/business/useCases/messages/getCaseMessagesForCaseInteractor');
+const {
   getCaseMessageThreadByParentId,
 } = require('../../shared/src/persistence/dynamo/messages/getCaseMessageThreadByParentId');
 const {
@@ -401,6 +416,18 @@ const {
 const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
+const {
+  getCompletedCaseMessagesForSectionInteractor,
+} = require('../../shared/src/business/useCases/messages/getCompletedCaseMessagesForSectionInteractor');
+const {
+  getCompletedCaseMessagesForUserInteractor,
+} = require('../../shared/src/business/useCases/messages/getCompletedCaseMessagesForUserInteractor');
+const {
+  getCompletedSectionInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getCompletedSectionInboxMessages');
+const {
+  getCompletedUserInboxMessages,
+} = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
@@ -658,6 +685,9 @@ const {
   markCaseMessageRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markCaseMessageRepliedTo');
 const {
+  markCaseMessageThreadRepliedTo,
+} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
+const {
   migrateCaseInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
@@ -681,6 +711,9 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
+const {
+  persistUser,
+} = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
   Practitioner,
 } = require('../../shared/src/business/entities/Practitioner');
@@ -822,6 +855,9 @@ const {
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
+const {
+  updateCaseMessage,
+} = require('../../shared/src/persistence/dynamo/messages/updateCaseMessage');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -1206,10 +1242,13 @@ module.exports = appContextUser => {
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
         getCaseMessageThreadByParentId,
+        getCaseMessagesByCaseId,
         getCasesByCaseIds,
         getCasesByLeadCaseId,
         getCasesByUser,
         getClosedCasesByUser,
+        getCompletedSectionInboxMessages,
+        getCompletedUserInboxMessages,
         getDocument,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
@@ -1253,6 +1292,8 @@ module.exports = appContextUser => {
         indexRecord,
         isFileExists,
         markCaseMessageRepliedTo,
+        markCaseMessageThreadRepliedTo,
+        persistUser,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocumentFromLambda,
@@ -1265,6 +1306,7 @@ module.exports = appContextUser => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
+        updateCaseMessage,
         updateCaseTrialSortMappingRecords,
         updateDocketRecord,
         updateDocument,
@@ -1372,6 +1414,7 @@ module.exports = appContextUser => {
         caseAdvancedSearchInteractor,
         casePublicSearchInteractor,
         checkForReadyForTrialCasesInteractor,
+        completeCaseMessageInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
@@ -1379,6 +1422,7 @@ module.exports = appContextUser => {
         createCaseInteractor,
         createCaseMessageInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
+        createPetitionerAccountInteractor,
         createPractitionerUserInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
@@ -1397,6 +1441,7 @@ module.exports = appContextUser => {
         fileDocketEntryInteractor,
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
+        forwardCaseMessageInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
         generateNoticeOfTrialIssuedInteractor,
@@ -1416,8 +1461,11 @@ module.exports = appContextUser => {
         getCaseInteractor,
         getCaseInventoryReportInteractor,
         getCaseMessageThreadInteractor,
+        getCaseMessagesForCaseInteractor,
         getCasesByUserInteractor,
         getClosedCasesInteractor,
+        getCompletedCaseMessagesForSectionInteractor,
+        getCompletedCaseMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,

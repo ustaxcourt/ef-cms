@@ -27,6 +27,11 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
+  this.completedAt = rawMessage.completedAt;
+  this.completedBy = rawMessage.completedBy;
+  this.completedBySection = rawMessage.completedBySection;
+  this.completedByUserId = rawMessage.completedByUserId;
+  this.completedMessage = rawMessage.completedMessage;
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
@@ -34,6 +39,7 @@ function CaseMessage(rawMessage, { applicationContext }) {
   this.from = rawMessage.from;
   this.fromSection = rawMessage.fromSection;
   this.fromUserId = rawMessage.fromUserId;
+  this.isCompleted = rawMessage.isCompleted || false;
   this.isRepliedTo = rawMessage.isRepliedTo || false;
   this.message = rawMessage.message;
   this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
@@ -74,6 +80,48 @@ CaseMessage.VALIDATION_RULES = {
     .string()
     .required()
     .description('The case title for the associated cases.'),
+  completedAt: joiStrictTimestamp
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+    .description('When the message was marked as completed.'),
+  completedBy: joi
+    .string()
+    .max(500)
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+    .description('The name of the user who completed the message thread'),
+  completedBySection: joi
+    .string()
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS)
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+    .description('The section of the user who completed the message thread'),
+  completedByUserId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .when('isCompleted', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    })
+    .description('The ID of the user who completed the message thread'),
+  completedMessage: joi
+    .string()
+    .max(500)
+    .allow(null)
+    .optional()
+    .description('The message entered when completing the message thread.'),
   createdAt: joiStrictTimestamp
     .required()
     .description('When the message was created.'),
@@ -102,6 +150,10 @@ CaseMessage.VALIDATION_RULES = {
     })
     .required()
     .description('The ID of the user who sent the message.'),
+  isCompleted: joi
+    .boolean()
+    .required()
+    .description('Whether the message thread has been completed.'),
   isRepliedTo: joi
     .boolean()
     .required()
@@ -154,5 +206,16 @@ joiValidationDecorator(
   joi.object().keys(CaseMessage.VALIDATION_RULES),
   CaseMessage.VALIDATION_ERROR_MESSAGES,
 );
+
+CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
+  this.isCompleted = true;
+  this.completedAt = createISODateString();
+  this.completedBy = user.name;
+  this.completedByUserId = user.userId;
+  this.completedBySection = user.section;
+  this.completedMessage = message;
+
+  return this;
+};
 
 module.exports = { CaseMessage };

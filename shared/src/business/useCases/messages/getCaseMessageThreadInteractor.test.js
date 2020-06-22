@@ -59,6 +59,6 @@ describe('getCaseMessageThreadInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseMessageThreadByParentId,
     ).toBeCalled();
-    expect(returnedMessage).toEqual([mockCaseMessage]);
+    expect(returnedMessage).toMatchObject([mockCaseMessage]);
   });
 });
