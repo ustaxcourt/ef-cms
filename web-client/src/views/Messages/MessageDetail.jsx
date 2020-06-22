@@ -118,6 +118,7 @@ export const MessageDetail = connect(
                     link
                     className="action-button"
                     icon="check-circle"
+                    id="button-complete"
                     onClick={() => openCompleteMessageModalSequence()}
                   >
                     Complete
@@ -128,6 +129,7 @@ export const MessageDetail = connect(
                     link
                     className="action-button"
                     icon="share-square"
+                    id="button-forward"
                     onClick={() => openForwardMessageModalSequence()}
                   >
                     Forward
@@ -138,6 +140,7 @@ export const MessageDetail = connect(
                     link
                     className="action-button"
                     icon="reply"
+                    id="button-reply"
                     onClick={() => openReplyToMessageModalSequence()}
                   >
                     Reply
