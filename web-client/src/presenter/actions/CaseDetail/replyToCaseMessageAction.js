@@ -5,7 +5,9 @@ export const replyToCaseMessageAction = async ({ applicationContext, get }) => {
 
   const { caseId } = get(state.caseDetail);
 
-  await applicationContext.getUseCases().replyToCaseMessageInteractor({
+  const {
+    parentMessageId,
+  } = await applicationContext.getUseCases().replyToCaseMessageInteractor({
     applicationContext,
     caseId,
     ...form,
@@ -15,5 +17,6 @@ export const replyToCaseMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
+    parentMessageId,
   };
 };
