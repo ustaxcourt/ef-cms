@@ -1,12 +1,17 @@
 const joi = require('@hapi/joi');
 const {
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
+  OBJECTIONS_OPTIONS,
+  SCENARIOS,
+} = require('./EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
-const { OBJECTIONS_OPTIONS, SCENARIOS } = require('./EntityConstants');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const joiStrictTimestamp = getTimestampSchema();
 const {
@@ -121,8 +126,14 @@ function CaseAssociationRequestFactory(rawProps) {
     certificateOfService: joi.boolean().required(),
     documentTitle: joi.string().max(500).optional(),
     documentTitleTemplate: joi.string().max(500).required(),
-    documentType: joi.string().max(500).required(),
-    eventCode: joi.string().max(500).required(),
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .required(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .required(),
     partyIrsPractitioner: joi.boolean().optional(),
     partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(), // TODO: object definition
