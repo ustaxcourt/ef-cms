@@ -17,7 +17,10 @@ export const completeCaseMessageAction = async ({
   const form = get(state.modal.form);
   const { mostRecentMessage } = props;
 
-  await applicationContext.getUseCases().completeCaseMessageInteractor({
+  const {
+    docketNumber,
+    parentMessageId,
+  } = await applicationContext.getUseCases().completeCaseMessageInteractor({
     applicationContext,
     parentMessageId: mostRecentMessage.parentMessageId,
     ...form,
@@ -27,5 +30,7 @@ export const completeCaseMessageAction = async ({
     alertSuccess: {
       message: 'Your message has been sent.',
     },
+    docketNumber,
+    parentMessageId,
   };
 };
