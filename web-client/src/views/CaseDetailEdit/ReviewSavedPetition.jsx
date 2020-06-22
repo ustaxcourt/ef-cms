@@ -98,11 +98,13 @@ export const ReviewSavedPetition = connect(
                         </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
-                            {AddressDisplay(form.contactPrimary, constants, {
-                              nameOverride:
+                            <AddressDisplay
+                              contact={form.contactPrimary}
+                              nameOverride={
                                 startCaseHelper.showCaseTitleForPrimary &&
-                                startCaseHelper.caseTitle,
-                            })}
+                                startCaseHelper.caseTitle
+                              }
+                            />
                           </address>
                         )}
                       </div>
@@ -115,7 +117,7 @@ export const ReviewSavedPetition = connect(
                             >
                               Spouse’s information
                             </span>
-                            {AddressDisplay(form.contactSecondary, constants)}
+                            <AddressDisplay contact={form.contactSecondary} />
                           </>
                         )}
                       </div>

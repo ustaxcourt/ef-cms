@@ -16,7 +16,6 @@ const PetitionerInformation = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
-    constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     openAddPrivatePractitionerModalSequence:
@@ -32,7 +31,6 @@ const PetitionerInformation = connect(
   function PetitionerInformation({
     caseDetailHelper,
     caseInformationHelper,
-    constants,
     form,
     formattedCaseDetail,
     openAddPrivatePractitionerModalSequence,
@@ -82,15 +80,13 @@ const PetitionerInformation = connect(
 
                   <div className="grid-col-6">
                     <address aria-labelledby="primary-label">
-                      {AddressDisplay(
-                        formattedCaseDetail.contactPrimary,
-                        constants,
-                        {
-                          nameOverride:
-                            formattedCaseDetail.showCaseTitleForPrimary &&
-                            formattedCaseDetail.caseTitle,
-                        },
-                      )}
+                      <AddressDisplay
+                        contact={formattedCaseDetail.contactPrimary}
+                        nameOverride={
+                          formattedCaseDetail.showCaseTitleForPrimary &&
+                          formattedCaseDetail.caseTitle
+                        }
+                      />
                     </address>
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
                       <div className="margin-top-4">
@@ -128,12 +124,11 @@ const PetitionerInformation = connect(
                   </h3>
                   <div>
                     <address aria-labelledby="secondary-label">
-                      {formattedCaseDetail.contactSecondary.name &&
-                        AddressDisplay(
-                          formattedCaseDetail.contactSecondary,
-                          constants,
-                          {},
-                        )}
+                      {formattedCaseDetail.contactSecondary.name && (
+                        <AddressDisplay
+                          contact={formattedCaseDetail.contactSecondary}
+                        />
+                      )}
                     </address>
                     {formattedCaseDetail.contactSecondary.serviceIndicator && (
                       <div className="margin-top-4">
@@ -175,7 +170,7 @@ const PetitionerInformation = connect(
                   >
                     <address aria-labelledby="secondary-label">
                       {otherPetitioner.name &&
-                        OtherPetitionerDisplay(otherPetitioner, constants)}
+                        OtherPetitionerDisplay(otherPetitioner)}
                     </address>
                     {otherPetitioner.serviceIndicator && (
                       <div className="margin-top-4">
@@ -226,17 +221,15 @@ const PetitionerInformation = connect(
                   key={index}
                 >
                   <address aria-labelledby="practitioner-label">
-                    {practitioner.name &&
-                      AddressDisplay(
-                        {
+                    {practitioner.name && (
+                      <AddressDisplay
+                        contact={{
                           ...practitioner,
                           ...practitioner.contact,
-                        },
-                        constants,
-                        {
-                          nameOverride: practitioner.name,
-                        },
-                      )}
+                        }}
+                        nameOverride={practitioner.name}
+                      />
+                    )}
                   </address>
                   {practitioner.serviceIndicator && (
                     <div className="margin-top-4">
