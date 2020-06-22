@@ -138,4 +138,96 @@ describe('case information helper', () => {
     });
     expect(result.showSealCaseButton).toBeFalsy();
   });
+
+  describe('other petitioners', () => {
+    let baseState;
+
+    beforeEach(() => {
+      const user = {
+        role: ROLES.docketClerk, // has SEAL_CASE permission
+        userId: '789',
+      };
+
+      baseState = {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      };
+    });
+
+    it('shows "Hide" display if showingAdditionalPetitioners is true', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+          showingAdditionalPetitioners: true,
+        },
+      });
+
+      expect(result.toggleAdditionalPetitionersDisplay).toEqual('Hide');
+    });
+
+    it('shows "View" display if showingAdditionalPetitioners is false', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+          showingAdditionalPetitioners: false,
+        },
+      });
+
+      expect(result.toggleAdditionalPetitionersDisplay).toEqual('View');
+    });
+
+    it('does not paginate (or show) other petitioners if it is non-existent', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+        },
+      });
+
+      expect(result.formattedOtherPetitioners).toEqual([]);
+      expect(result.showOtherPetitioners).toEqual(false);
+    });
+
+    it('paginates if showingAdditionalPetitioners is false', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+          caseDetail: {
+            otherPetitioners: [
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+            ],
+          },
+          showingAdditionalPetitioners: false,
+        },
+      });
+
+      expect(result.formattedOtherPetitioners.length).toEqual(4);
+      expect(result.showOtherPetitioners).toEqual(true);
+    });
+
+    it('does not paginate (shows all) if showingAdditionalPetitioners is true', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+          caseDetail: {
+            otherPetitioners: [
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+              { a: '1' },
+            ],
+          },
+          showingAdditionalPetitioners: true,
+        },
+      });
+
+      expect(result.formattedOtherPetitioners.length).toEqual(5);
+      expect(result.showOtherPetitioners).toEqual(true);
+    });
+  });
 });
