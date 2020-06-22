@@ -54,7 +54,7 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require event code', () => {
       expect(errors().eventCode).toEqual(VALIDATION_ERROR_MESSAGES.eventCode);
-      rawEntity.eventCode = '345';
+      rawEntity.eventCode = 'P';
       expect(errors().eventCode).toEqual(undefined);
     });
 
