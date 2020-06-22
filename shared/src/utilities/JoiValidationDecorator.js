@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi');
 const { InvalidEntityError } = require('../errors/errors');
-const { isEmpty } = require('lodash');
+const { isEmpty, pick } = require('lodash');
 
 /**
  *
@@ -134,13 +134,14 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      const ids = Object.entries(this)
-        .filter(([key, value]) => value && key.endsWith('Id'))
-        .map(([key, value]) => `${key}: "${value}"`)
-        .join('; ');
+      const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));
+      helpfulKeys.push(
+        'docketNumber',
+        ...Object.keys(this.getFormattedValidationErrors()),
+      );
       throw new InvalidEntityError(
         entityConstructor.validationName,
-        `ID: ${ids}; DocketNumber: ${this.docketNumber || ''}`,
+        JSON.stringify(pick(this, helpfulKeys)),
         JSON.stringify(this.getFormattedValidationErrors()),
       );
     }
