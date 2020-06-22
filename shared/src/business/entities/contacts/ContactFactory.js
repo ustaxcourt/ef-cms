@@ -282,7 +282,7 @@ const getContactConstructors = ({ partyType }) => {
         };
       default:
         if (partyType) {
-          console.warn(`Unrecognized party type "${partyType}"`);
+          throw new Error(`Unrecognized party type "${partyType}"`);
         }
         return {};
     }
