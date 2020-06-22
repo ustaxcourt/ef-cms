@@ -8,7 +8,7 @@ import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 export const closeModalAndReturnToCaseDetailDraftDocumentsSequence = [
   clearModalAction,
   setCasePropFromStateAction,
-  setCaseDetailPageTabActionGenerator('inProgress'),
+  setCaseDetailPageTabActionGenerator('drafts'),
   setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
   navigateToCaseDetailAction,

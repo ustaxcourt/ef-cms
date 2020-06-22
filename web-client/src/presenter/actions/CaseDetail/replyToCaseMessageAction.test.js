@@ -5,10 +5,17 @@ import { runAction } from 'cerebral/test';
 
 describe('replyToCaseMessageAction', () => {
   beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .replyToCaseMessageInteractor.mockReturnValue({
+        docketNumber: '123-45',
+        parentMessageId: '123',
+      });
+
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call replyToCaseMessageInteractor with the expected parameters and return the alertSuccess', async () => {
+  it('should call replyToCaseMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
     const result = await runAction(replyToCaseMessageAction, {
       modules: {
         presenter,
@@ -52,5 +59,6 @@ describe('replyToCaseMessageAction', () => {
       subject: 'Hey!',
     });
     expect(result.output).toHaveProperty('alertSuccess');
+    expect(result.output).toHaveProperty('parentMessageId');
   });
 });

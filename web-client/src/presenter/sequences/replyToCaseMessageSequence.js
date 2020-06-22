@@ -3,9 +3,10 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
-import { navigateToCaseMessagesAction } from '../actions/navigateToCaseMessagesAction';
+import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { replyToCaseMessageAction } from '../actions/CaseDetail/replyToCaseMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setMessageAction } from '../actions/setMessageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -28,7 +29,8 @@ export const replyToCaseMessageSequence = showProgressSequenceDecorator([
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
-      navigateToCaseMessagesAction,
+      getMessageThreadAction,
+      setMessageAction,
     ]),
   },
 ]);
