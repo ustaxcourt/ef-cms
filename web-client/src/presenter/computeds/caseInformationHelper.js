@@ -16,12 +16,23 @@ export const caseInformationHelper = get => {
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
   const showOtherPetitioners =
     caseDetail.otherPetitioners && !!caseDetail.otherPetitioners.length;
+  const showingAdditionalPetitioners =
+    get(state.showingAdditionalPetitioners) || false;
+  const toggleAdditionalPetitionersDisplay = showingAdditionalPetitioners
+    ? 'Hide'
+    : 'View';
+  const otherPetitioners = [...(caseDetail.otherPetitioners || [])];
+  const formattedOtherPetitioners = showingAdditionalPetitioners
+    ? otherPetitioners || []
+    : otherPetitioners.slice(0, 4);
 
   return {
+    formattedOtherPetitioners,
     showAddCounsel,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showOtherPetitioners,
     showSealCaseButton,
+    toggleAdditionalPetitionersDisplay,
   };
 };
