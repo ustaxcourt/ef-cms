@@ -1,10 +1,11 @@
+import { gotoMessageDetailSequence } from './gotoMessageDetailSequence';
+
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { forwardCaseMessageAction } from '../actions/CaseDetail/forwardCaseMessageAction';
-import { navigateToCaseMessagesAction } from '../actions/navigateToCaseMessagesAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -28,7 +29,7 @@ export const forwardCaseMessageSequence = showProgressSequenceDecorator([
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
-      navigateToCaseMessagesAction,
+      ...gotoMessageDetailSequence,
     ]),
   },
 ]);

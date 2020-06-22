@@ -13,7 +13,10 @@ export const forwardCaseMessageAction = async ({ applicationContext, get }) => {
 
   const { caseId } = get(state.caseDetail);
 
-  await applicationContext.getUseCases().forwardCaseMessageInteractor({
+  const {
+    docketNumber,
+    parentMessageId,
+  } = await applicationContext.getUseCases().forwardCaseMessageInteractor({
     applicationContext,
     caseId,
     ...form,
@@ -23,5 +26,7 @@ export const forwardCaseMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
+    docketNumber,
+    parentMessageId,
   };
 };
