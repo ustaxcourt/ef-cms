@@ -14,7 +14,6 @@ const RespondentInformation = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
-    constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     openAddIrsPractitionerModalSequence:
@@ -28,7 +27,6 @@ const RespondentInformation = connect(
   function RespondentInformation({
     caseDetailHelper,
     caseInformationHelper,
-    constants,
     form,
     formattedCaseDetail,
     openAddIrsPractitionerModalSequence,
@@ -50,17 +48,15 @@ const RespondentInformation = connect(
                 key={index}
               >
                 <address aria-labelledby="respondent-label">
-                  {respondent.name &&
-                    AddressDisplay(
-                      {
+                  {respondent.name && (
+                    <AddressDisplay
+                      contact={{
                         ...respondent,
                         ...respondent.contact,
-                      },
-                      constants,
-                      {
-                        nameOverride: respondent.name,
-                      },
-                    )}
+                      }}
+                      nameOverride={respondent.name}
+                    />
+                  )}
                 </address>
                 {respondent.serviceIndicator && (
                   <div className="margin-top-4">
