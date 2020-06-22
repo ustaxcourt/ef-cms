@@ -1,17 +1,11 @@
-const {
-  prepareDateFromString,
-} = require('../../../business/utilities/DateHandler');
+const { calculateISODate } = require('../../../business/utilities/DateHandler');
 const { search } = require('../searchClient');
 
 exports.getCompletedUserInboxMessages = async ({
   applicationContext,
   userId,
 }) => {
-  const filterDate = prepareDateFromString()
-    .startOf('day')
-    .subtract(7, 'd')
-    .utc()
-    .format();
+  const filterDate = calculateISODate({ howMuch: -7 });
 
   const query = {
     body: {
