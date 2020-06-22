@@ -24,6 +24,8 @@ const PetitionerInformation = connect(
     openEditPrivatePractitionersModalSequence:
       sequences.openEditPrivatePractitionersModalSequence,
     showModal: state.modal.showModal,
+    toggleShowAdditionalPetitionersSequence:
+      sequences.toggleShowAdditionalPetitionersSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -36,6 +38,7 @@ const PetitionerInformation = connect(
     openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence,
     showModal,
+    toggleShowAdditionalPetitionersSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -161,30 +164,28 @@ const PetitionerInformation = connect(
               </div>
             </div>
             <div className="grid-row grid-gap-6">
-              {formattedCaseDetail.otherPetitioners.map(
+              {caseInformationHelper.formattedOtherPetitioners.map(
                 (otherPetitioner, idx) => (
-                  <>
-                    <div
-                      className={classNames(
-                        'grid-col-3 other-petitioners-information',
-                        idx > 3 && 'margin-top-4',
-                      )}
-                      key={idx}
-                    >
-                      <address aria-labelledby="secondary-label">
-                        {otherPetitioner.name &&
-                          OtherPetitionerDisplay(otherPetitioner, constants)}
-                      </address>
-                      {otherPetitioner.serviceIndicator && (
-                        <div className="margin-top-4">
-                          <p className="semi-bold margin-bottom-0">
-                            Service preference
-                          </p>
-                          {otherPetitioner.serviceIndicator}
-                        </div>
-                      )}
-                    </div>
-                  </>
+                  <div
+                    className={classNames(
+                      'grid-col-3 other-petitioners-information',
+                      idx > 3 && 'margin-top-4',
+                    )}
+                    key={idx}
+                  >
+                    <address aria-labelledby="secondary-label">
+                      {otherPetitioner.name &&
+                        OtherPetitionerDisplay(otherPetitioner, constants)}
+                    </address>
+                    {otherPetitioner.serviceIndicator && (
+                      <div className="margin-top-4">
+                        <p className="semi-bold margin-bottom-0">
+                          Service preference
+                        </p>
+                        {otherPetitioner.serviceIndicator}
+                      </div>
+                    )}
+                  </div>
                 ),
               )}
             </div>
@@ -194,10 +195,15 @@ const PetitionerInformation = connect(
                   link
                   className="margin-top-3"
                   id="view-additional-petitioners-button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    toggleShowAdditionalPetitionersSequence();
+                  }}
                 >
                   <FontAwesomeIcon icon={['far', 'address-card']} size="sm" />
-                  View Additional Petitioners
+                  {
+                    caseInformationHelper.toggleAdditionalPetitionersDisplay
+                  }{' '}
+                  Additional Petitioners
                 </Button>
               </div>
             </div>
