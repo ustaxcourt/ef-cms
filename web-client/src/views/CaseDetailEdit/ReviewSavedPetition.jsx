@@ -1,4 +1,4 @@
-import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
+import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
