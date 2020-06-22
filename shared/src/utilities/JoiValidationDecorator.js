@@ -141,7 +141,11 @@ exports.joiValidationDecorator = function (
       );
       throw new InvalidEntityError(
         entityConstructor.validationName,
-        JSON.stringify(pick(this, helpfulKeys)),
+        JSON.stringify(pick(this, helpfulKeys), (key, value) =>
+          this.hasOwnProperty(key) && typeof value === 'undefined'
+            ? '<undefined>'
+            : value,
+        ),
         JSON.stringify(this.getFormattedValidationErrors()),
       );
     }
