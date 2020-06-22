@@ -1,4 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 const { validatePetitionInteractor } = require('./validatePetitionInteractor');
 
 describe('validatePetitionInteractor', () => {
@@ -44,9 +45,20 @@ describe('validatePetitionInteractor', () => {
       applicationContext,
       petition: {
         caseType: 'defined',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: 'defined',
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.png'),
         petitionFileSize: 1,
         preferredTrialCity: 'defined',
