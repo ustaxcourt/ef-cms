@@ -560,6 +560,37 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
+  it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
+    expect(() => {
+      caseExternal = new CaseExternal({
+        caseType: 'Other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: 'SOME INVALID PARTY TYPE',
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Chattanooga, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      });
+    }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
+  });
+
   it('does not require phone number for internal cases', () => {
     const caseInternal = new CaseInternal(
       {
