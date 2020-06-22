@@ -1,10 +1,14 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 export const AddressDisplay = connect(
-  { constants: state.constants },
-  function AddressDisplay({ constants, contact, nameOverride } = {}) {
+  {
+    constants: state.constants,
+    contact: props.contact,
+    nameOverride: props.nameOverride || {},
+  },
+  function AddressDisplay({ constants, contact, nameOverride }) {
     return (
       <>
         <p className="margin-top-0 address-name">

@@ -1,12 +1,13 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 const OtherPetitionerDisplay = connect(
   {
     constants: state.constants,
+    petitioner: props.petitioner,
   },
-  function OtherPetitionerDisplay(petitioner, constants) {
+  function OtherPetitionerDisplay({ constants, petitioner }) {
     return (
       <>
         <p className="margin-top-0 address-name">

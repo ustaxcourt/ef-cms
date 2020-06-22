@@ -169,8 +169,9 @@ const PetitionerInformation = connect(
                     key={idx}
                   >
                     <address aria-labelledby="secondary-label">
-                      {otherPetitioner.name &&
-                        OtherPetitionerDisplay(otherPetitioner)}
+                      {otherPetitioner.name && (
+                        <OtherPetitionerDisplay petitioner={otherPetitioner} />
+                      )}
                     </address>
                     {otherPetitioner.serviceIndicator && (
                       <div className="margin-top-4">
@@ -189,15 +190,14 @@ const PetitionerInformation = connect(
                 <Button
                   link
                   className="margin-top-3"
+                  icon={['far', 'address-card']}
+                  iconSize="sm"
                   id="view-additional-petitioners-button"
                   onClick={() => {
                     toggleShowAdditionalPetitionersSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon={['far', 'address-card']} size="sm" />
-                  {
-                    caseInformationHelper.toggleAdditionalPetitionersDisplay
-                  }{' '}
+                  {caseInformationHelper.toggleAdditionalPetitionersDisplay}{' '}
                   Additional Petitioners
                 </Button>
               </div>
