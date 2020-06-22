@@ -1,7 +1,7 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const { sortBy } = require('lodash');
+const { flatten, sortBy } = require('lodash');
 
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
@@ -727,10 +727,58 @@ const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 const CASE_SEARCH_MIN_YEAR = 1986;
 const CASE_SEARCH_PAGE_SIZE = 5;
 
+// TODO: event codes need to be reorganized
+const ALL_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
+])
+  .map(item => item.eventCode)
+  .concat(
+    EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES.map(item => item.eventCode),
+    OPINION_EVENT_CODES,
+    ORDER_DOCUMENT_TYPES,
+    ORDER_TYPES.map(item => item.eventCode),
+  )
+  .sort();
+
+const ALL_DOCUMENT_TYPES = (() => {
+  const allFilingEvents = flatten([
+    ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+    ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
+  ]);
+  const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
+  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
+  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
+    t => INITIAL_DOCUMENT_TYPES[t].documentType,
+  );
+  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
+    t => SIGNED_DOCUMENT_TYPES[t].documentType,
+  );
+  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
+    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
+  );
+
+  const documentTypes = [
+    ...initialTypes,
+    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+    ...filingEventTypes,
+    ...orderDocTypes,
+    ...courtIssuedDocTypes,
+    ...signedTypes,
+    ...systemGeneratedTypes,
+  ];
+
+  return documentTypes;
+})();
+
 module.exports = {
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
