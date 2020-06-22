@@ -1,4 +1,4 @@
-import { AddressDisplay } from './CaseDetail/PetitionerInformation';
+import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';

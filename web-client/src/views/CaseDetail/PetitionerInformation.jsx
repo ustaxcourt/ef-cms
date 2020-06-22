@@ -1,50 +1,16 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
+import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { OtherPetitionerDisplay } from './OtherPetitionerDisplay';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
-
-const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
-  return (
-    <React.Fragment>
-      <p className="margin-top-0 address-name">
-        {nameOverride || contact.name}{' '}
-        {contact.barNumber && `(${contact.barNumber})`}
-        {contact.inCareOf && (
-          <span>
-            <br />
-            c/o {contact.inCareOf}
-          </span>
-        )}
-      </p>
-      <p>
-        <span className="address-line">{contact.address1}</span>
-        {contact.address2 && (
-          <span className="address-line">{contact.address2}</span>
-        )}
-        {contact.address3 && (
-          <span className="address-line">{contact.address3}</span>
-        )}
-        <span className="address-line">
-          {contact.city && `${contact.city}, `}
-          {contact.state} {contact.postalCode}
-        </span>
-        {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <span className="address-line">{contact.country}</span>
-        )}
-        {contact.phone && (
-          <span className="address-line margin-top-1">{contact.phone}</span>
-        )}
-      </p>
-    </React.Fragment>
-  );
-};
 
 const PetitionerInformation = connect(
   {
@@ -179,6 +145,64 @@ const PetitionerInformation = connect(
               </div>
             </div>
           )}
+      </div>
+    );
+
+    const otherPetitionersInformation = () => (
+      <div className="subsection party-information">
+        <div className="card">
+          <div className="content-wrapper">
+            <div className="grid-row header-row">
+              <div
+                className="grid-col-6 display-flex"
+                id="other-petitioners-label"
+              >
+                <h3>Other Petitioners</h3>
+              </div>
+            </div>
+            <div className="grid-row grid-gap-6">
+              {formattedCaseDetail.otherPetitioners.map(
+                (otherPetitioner, idx) => (
+                  <>
+                    <div
+                      className={classNames(
+                        'grid-col-3 other-petitioners-information',
+                        idx > 3 && 'margin-top-4',
+                      )}
+                      key={idx}
+                    >
+                      <address aria-labelledby="secondary-label">
+                        {otherPetitioner.name &&
+                          OtherPetitionerDisplay(otherPetitioner, constants)}
+                      </address>
+                      {otherPetitioner.serviceIndicator && (
+                        <div className="margin-top-4">
+                          <p className="semi-bold margin-bottom-0">
+                            Service preference
+                          </p>
+                          {otherPetitioner.serviceIndicator}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ),
+              )}
+            </div>
+            <div className="grid-row">
+              <div className="grid-col-12 text-right">
+                <Button
+                  link
+                  className="margin-top-3"
+                  id="view-additional-petitioners-button"
+                  onClick={() => {}}
+                >
+                  <FontAwesomeIcon icon={['far', 'address-card']} size="sm" />
+                  View Additional Petitioners
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
 
@@ -329,6 +353,8 @@ const PetitionerInformation = connect(
             </div>
           </div>
         )}
+        {caseInformationHelper.showOtherPetitioners &&
+          otherPetitionersInformation()}
         {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
@@ -344,4 +370,4 @@ const PetitionerInformation = connect(
   },
 );
 
-export { AddressDisplay, PetitionerInformation };
+export { PetitionerInformation };
