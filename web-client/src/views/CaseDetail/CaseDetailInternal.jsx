@@ -3,13 +3,14 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
+import { CaseMessagesCompleted } from './CaseMessagesCompleted';
+import { CaseMessagesInProgress } from './CaseMessagesInProgress';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
-import { MessagesInProgress } from './MessagesInProgress';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
@@ -88,14 +89,14 @@ export const CaseDetailInternal = connect(
                 tabName="messagesInProgress"
                 title="In Progress"
               >
-                <MessagesInProgress />
+                <CaseMessagesInProgress />
               </Tab>
               <Tab
                 id="tab-messages-completed"
                 tabName="messagesCompleted"
                 title="Completed"
               >
-                <span>TODO</span>
+                <CaseMessagesCompleted />
               </Tab>
             </Tabs>
           )}
