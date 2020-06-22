@@ -6,7 +6,6 @@ export const replyToCaseMessageAction = async ({ applicationContext, get }) => {
   const { caseId } = get(state.caseDetail);
 
   const {
-    docketNumber,
     parentMessageId,
   } = await applicationContext.getUseCases().replyToCaseMessageInteractor({
     applicationContext,
@@ -18,7 +17,6 @@ export const replyToCaseMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
-    docketNumber,
     parentMessageId,
   };
 };

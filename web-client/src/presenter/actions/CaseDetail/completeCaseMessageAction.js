@@ -18,7 +18,6 @@ export const completeCaseMessageAction = async ({
   const { mostRecentMessage } = props;
 
   const {
-    docketNumber,
     parentMessageId,
   } = await applicationContext.getUseCases().completeCaseMessageInteractor({
     applicationContext,
@@ -30,7 +29,6 @@ export const completeCaseMessageAction = async ({
     alertSuccess: {
       message: 'Your message has been sent.',
     },
-    docketNumber,
     parentMessageId,
   };
 };
