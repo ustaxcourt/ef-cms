@@ -1,4 +1,5 @@
 import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
+import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
@@ -43,4 +44,5 @@ describe('messages journey', () => {
   loginAs(test, 'docketclerk');
   docketClerkViewsForwardedMessageInInbox(test);
   docketClerkCompletesMessageThread(test);
+  docketClerkViewsCompletedMessagesOnCaseDetail(test);
 });
