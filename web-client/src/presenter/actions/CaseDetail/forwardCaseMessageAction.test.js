@@ -5,10 +5,17 @@ import { runAction } from 'cerebral/test';
 
 describe('forwardCaseMessageAction', () => {
   beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .forwardCaseMessageInteractor.mockReturnValue({
+        docketNumber: '123-45',
+        parentMessageId: '123',
+      });
+
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call forwardCaseMessageInteractor with the expected parameters and return the alertSuccess', async () => {
+  it('should call forwardCaseMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
     const result = await runAction(forwardCaseMessageAction, {
       modules: {
         presenter,
@@ -52,5 +59,6 @@ describe('forwardCaseMessageAction', () => {
       subject: 'Hey!',
     });
     expect(result.output).toHaveProperty('alertSuccess');
+    expect(result.output).toHaveProperty('parentMessageId');
   });
 });
