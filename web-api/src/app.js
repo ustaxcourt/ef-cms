@@ -146,6 +146,9 @@ const {
   getCaseInventoryReportLambda,
 } = require('./reports/getCaseInventoryReportLambda');
 const {
+  getCaseMessagesForCaseLambda,
+} = require('./messages/getCaseMessagesForCaseLambda');
+const {
   getCaseMessageThreadLambda,
 } = require('./messages/getCaseMessageThreadLambda');
 const {
@@ -659,6 +662,7 @@ app.get(
   '/messages/:parentMessageId',
   lambdaWrapper(getCaseMessageThreadLambda),
 );
+app.get('/messages/case/:caseId', lambdaWrapper(getCaseMessagesForCaseLambda));
 app.get(
   '/messages/inbox/section/:section',
   lambdaWrapper(getInboxCaseMessagesForSectionLambda),
