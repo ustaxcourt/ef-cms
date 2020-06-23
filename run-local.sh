@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# Usage
+#   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
 if [[ -z "$CIRCLECI" ]]; then
   echo "killing dynamo if already running"
@@ -56,15 +59,10 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-echo "starting proxy"
-node ./web-api/proxy.js &
-
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/streams-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/websockets-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-public-local.js"
-
-echo "proxy stopped"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"

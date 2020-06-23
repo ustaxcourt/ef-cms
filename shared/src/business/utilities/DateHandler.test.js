@@ -125,6 +125,14 @@ describe('DateHandler', () => {
       });
       expect(result).toEqual('2000-01-21T00:00:00.000Z');
     });
+    it('calculates dates with an hour not at midnight', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-01T20:01:23.212Z',
+        howMuch: 20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-21T20:01:23.212Z');
+    });
     it('calculates dates with negative adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-21T00:00:00.000Z',

@@ -1,4 +1,4 @@
-import { AddressDisplay } from './CaseDetail/PetitionerInformation';
+import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -6,10 +6,9 @@ import React from 'react';
 
 export const MyContactInformation = connect(
   {
-    constants: state.constants,
     user: state.user,
   },
-  function MyContactInformation({ constants, user }) {
+  function MyContactInformation({ user }) {
     return (
       <>
         <div className="case-search">
@@ -17,7 +16,7 @@ export const MyContactInformation = connect(
             <div className="content-wrapper gray">
               <h3>My Contact Information</h3>
               <hr />
-              {AddressDisplay({ ...user, ...user.contact }, constants)}
+              <AddressDisplay contact={{ ...user, ...user.contact }} />
               <p className="margin-bottom-0">
                 <Button link href="/user/contact/edit" icon="edit">
                   Edit

@@ -16,22 +16,27 @@ exports.goToStartCreatePetition = () => {
 
 exports.goToWizardStep1 = () => {
   cy.get('a[href*="file-a-petition/step-1"]').click();
+  cy.url().should('contain', '/file-a-petition/step-1');
 };
 
 exports.goToWizardStep2 = () => {
   cy.get('button#submit-case').click();
+  cy.url().should('contain', '/file-a-petition/step-2');
 };
 
 exports.goToWizardStep3 = () => {
   cy.get('button#submit-case').click();
+  cy.url().should('contain', '/file-a-petition/step-3');
 };
 
 exports.goToWizardStep4 = () => {
   cy.get('button#submit-case').click();
+  cy.url().should('contain', '/file-a-petition/step-4');
 };
 
 exports.goToWizardStep5 = () => {
   cy.get('button#submit-case').click();
+  cy.url().should('contain', '/file-a-petition/step-5');
 };
 
 exports.submitPetition = () => {
@@ -47,13 +52,14 @@ exports.completeWizardStep1 = () => {
 };
 
 exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
+  cy.screenshot();
   cy.upload_file('w3-dummy.pdf', 'input#petition-file');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();
   cy.get('#case-type').scrollIntoView().select(caseType);
 };
 
-exports.completeWizardStep3 = filingType => {
+exports.completeWizardStep3 = (filingType, petitionerName) => {
   cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
 
   if (filingType === this.filingTypes.PETITIONER_AND_SPOUSE) {
@@ -66,7 +72,7 @@ exports.completeWizardStep3 = filingType => {
     cy.get('input#secondaryInCareOf').type('Sam');
   }
 
-  cy.get('input#name').scrollIntoView().type('John');
+  cy.get('input#name').scrollIntoView().type(petitionerName);
   cy.get('input[name="contactPrimary.address1"]')
     .scrollIntoView()
     .type('111 South West St.');

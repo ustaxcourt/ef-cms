@@ -53,4 +53,6 @@ exports.getUserToken = async (username, password) => {
 
 exports.login = token => {
   cy.visit(`/log-in?token=${token}`);
+
+  cy.get('.progress-indicator').should('not.exist');
 };

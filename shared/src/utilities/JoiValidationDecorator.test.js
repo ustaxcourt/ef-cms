@@ -57,7 +57,23 @@ const MockEntity3Schema = joi.object().keys({
   anotherItem: joi.string().required(),
 });
 
-joiValidationDecorator(MockEntity3, MockEntity3Schema, {
+joiValidationDecorator(MockEntity3, MockEntity3Schema, {});
+
+const MockCase = function (raw) {
+  this.caseId = raw.caseId;
+  this.docketNumber = raw.docketNumber;
+  this.somethingId = raw.somethingId;
+  this.title = raw.title;
+};
+
+const MockCaseSchema = joi.object().keys({
+  caseId: joi.string().required(),
+  docketNumber: joi.string().required(),
+  somethingId: joi.string().required(),
+  title: joi.string().required(),
+});
+
+joiValidationDecorator(MockCase, MockCaseSchema, {
   anotherItem: 'Another item is required',
 });
 
@@ -130,6 +146,25 @@ describe('Joi Validation Decorator', () => {
   it('should have access to the schema', () => {
     const obj = new MockEntity2({});
     expect(obj.getSchema()).toEqual(MockEntity2Schema);
+  });
+
+  it('should throw a detailed "InvalidEntityError" when `validate` fails including all keys ending in `Id`, `docketNumber` if it exists, and key/value pairs that failed validation', () => {
+    const obj1 = new MockCase({
+      caseId: 'abc',
+      docketNumber: '123-20',
+      title: 'some title',
+    });
+    let error;
+    try {
+      obj1.validate();
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeDefined();
+    expect(error.message).toContain('\\"somethingId\\" is required');
+    expect(error.message).toContain('"caseId":"abc"');
+    expect(error.message).toContain('"somethingId":"<undefined>"');
+    expect(error.message).toContain('"docketNumber":"123-20"');
   });
 
   it('should have access to the schema without instantiating the entity', () => {

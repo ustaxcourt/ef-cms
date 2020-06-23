@@ -4,8 +4,8 @@ import { runAction } from 'cerebral/test';
 describe('getDefaultAttachmentToDisplayAction', () => {
   it('returns the first item in the attachments array as the attachmentDocumentToDisplay', async () => {
     const result = await runAction(getDefaultAttachmentToDisplayAction, {
-      state: {
-        messageDetail: {
+      props: {
+        mostRecentMessage: {
           attachments: [{ documentId: '1234' }, { documentId: '2345' }],
         },
       },
@@ -17,8 +17,8 @@ describe('getDefaultAttachmentToDisplayAction', () => {
 
   it('returns attachmentDocumentToDisplay null if there are no attachments on the case message', async () => {
     const result = await runAction(getDefaultAttachmentToDisplayAction, {
-      state: {
-        messageDetail: {
+      props: {
+        mostRecentMessage: {
           attachments: [],
         },
       },

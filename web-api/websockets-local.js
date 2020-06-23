@@ -29,7 +29,7 @@ const server = http.createServer(function (request, response) {
 const PORT = 3011;
 
 server.listen(PORT, function () {
-  console.log(new Date() + ' Server is listening on port 8080');
+  console.log(new Date() + ` Server is listening on port ${PORT}`);
 });
 
 const wsServer = new WebSocketServer({

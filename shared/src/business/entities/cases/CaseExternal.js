@@ -57,10 +57,10 @@ CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
   businessType: joi.string().optional().allow(null), // TODO: enum
-  caseType: joi.when('hasIrsNotice', {
+  caseType: joi.string().when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
-    then: joi.string().required(),
+    then: joi.required(),
   }),
   contactPrimary: joi.object().optional(), // TODO: object definition
   contactSecondary: joi.object().optional(), // TODO: object definition
@@ -78,26 +78,41 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-  }),
+  ownershipDisclosureFileSize: joi
+    .number()
+    .integer()
+    .min(1)
+    .max(MAX_FILE_SIZE_BYTES)
+    .when('ownershipDisclosureFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
   partyType: joi.string().required(), // TODO: enum
   petitionFile: joi.object().required(), // TODO: object definition
-  petitionFileSize: joi.when('petitionFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-  }),
+  petitionFileSize: joi
+    .number()
+    .integer()
+    .min(1)
+    .max(MAX_FILE_SIZE_BYTES)
+    .when('petitionFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
   preferredTrialCity: joi.string().required(), // TODO: enum
   procedureType: joi.string().required(), // TODO: enum
   stinFile: joi.object().required(), // TODO: object definition
-  stinFileSize: joi.when('stinFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-  }),
+  stinFileSize: joi
+    .number()
+    .integer()
+    .min(1)
+    .max(MAX_FILE_SIZE_BYTES)
+    .when('stinFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
 };
 
 joiValidationDecorator(

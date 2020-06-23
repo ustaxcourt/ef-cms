@@ -34,7 +34,6 @@ exports.createCaseMessageInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO: Would it be better to just pass this in since case detail is already loaded in the action?
   const {
     caseCaption,
     docketNumber,

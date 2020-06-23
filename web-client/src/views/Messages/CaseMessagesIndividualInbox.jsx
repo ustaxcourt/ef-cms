@@ -6,7 +6,7 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesIndividualInbox = connect(
-  { formattedMessages: state.formattedMessages },
+  { formattedMessages: state.formattedMessages.messages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
@@ -43,7 +43,7 @@ export const CaseMessagesIndividualInbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.messageId}`}
+                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>

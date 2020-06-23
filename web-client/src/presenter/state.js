@@ -42,6 +42,7 @@ import {
   formattedClosedCases,
   formattedOpenCases,
 } from './computeds/formattedCaseDetail';
+import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
@@ -123,6 +124,7 @@ const helpers = {
   fileDocumentHelper,
   fileUploadStatusHelper,
   formattedCaseDetail,
+  formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
   formattedMessageDetail,
@@ -187,10 +189,11 @@ export const baseState = {
       caseDetailInternalTabs: {
         caseInformation: false,
         correspondence: false,
-        deadlines: false,
         docketRecord: false,
-        inProgress: false,
+        drafts: false,
+        messages: false,
         notes: false,
+        trackedItems: false,
       },
     },
     documentDetail: {

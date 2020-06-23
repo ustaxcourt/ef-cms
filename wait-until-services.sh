@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# This script waits for different services to come online before returning
+
+# Usage
+#   wait-until-services.sh
+
+# Requirements
+#   - curl must be installed on your machine
 
 ./wait-until.sh http://localhost:4000/ 404
-./wait-until.sh http://localhost:3011/ 400 true # notifications -- websocket port 3011
