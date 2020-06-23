@@ -16,8 +16,8 @@ describe('run trial session planning report', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -39,7 +39,7 @@ describe('run trial session planning report', () => {
     ).rejects.toThrow();
   });
 
-  it('returns the created pdf', async () => {
+  it('returns the created pdf url', async () => {
     user = {
       role: User.ROLES.petitionsClerk,
       userId: 'petitionsClerk',
@@ -63,22 +63,6 @@ describe('run trial session planning report', () => {
         },
       ]);
 
-    applicationContext
-      .getTemplateGenerators()
-      .generateTrialSessionPlanningReportTemplate.mockImplementation(
-        async ({
-          content: { previousTerms, rows, selectedTerm, selectedYear },
-        }) => {
-          return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;
-        },
-      );
-
-    applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
-        return contentHtml;
-      });
-
     const result = await runTrialSessionPlanningReportInteractor({
       applicationContext,
       term: 'winter',
@@ -87,18 +71,10 @@ describe('run trial session planning report', () => {
 
     expect(result).toBe(mockPdfUrl);
     expect(
-      applicationContext.getTemplateGenerators()
-        .generateTrialSessionPlanningReportTemplate,
+      applicationContext.getDocumentGenerators().trialSessionPlanningReport,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-    ).toBeCalled();
-    expect(applicationContext.getUniqueId).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toBeCalled();
   });
 

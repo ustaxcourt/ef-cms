@@ -27,7 +27,7 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
               <div className="grid-row">
                 <div className="tablet:grid-col-10">
                   <p className="heading-3 usa-alert__heading padding-top-0">
-                    Orders Needed
+                    Orders/Notices Needed
                   </p>
                   {caseInformation.noticeOfAttachments && (
                     <div>Notice of Attachments in the Nature of Evidence</div>

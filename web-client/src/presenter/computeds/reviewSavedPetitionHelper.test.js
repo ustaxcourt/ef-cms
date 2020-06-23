@@ -216,15 +216,15 @@ describe('reviewSavedPetitionHelper', () => {
         form: {
           statistics: [
             {
-              deficiencyAmount: 123,
-              totalPenalties: 30000,
+              irsDeficiencyAmount: 123,
+              irsTotalPenalties: 30000,
               year: '2012',
               yearOrPeriod: 'Year',
             },
             {
-              deficiencyAmount: 0,
+              irsDeficiencyAmount: 0,
+              irsTotalPenalties: 21,
               lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
-              totalPenalties: 21,
               yearOrPeriod: 'Period',
             },
           ],
@@ -235,13 +235,13 @@ describe('reviewSavedPetitionHelper', () => {
     expect(result.formattedStatistics).toMatchObject([
       {
         formattedDate: '2012',
-        formattedDeficiencyAmount: '$123.00',
-        formattedTotalPenalties: '$30,000.00',
+        formattedIrsDeficiencyAmount: '$123.00',
+        formattedIrsTotalPenalties: '$30,000.00',
       },
       {
         formattedDate: '03/01/19',
-        formattedDeficiencyAmount: '$0.00',
-        formattedTotalPenalties: '$21.00',
+        formattedIrsDeficiencyAmount: '$0.00',
+        formattedIrsTotalPenalties: '$21.00',
       },
     ]);
   });

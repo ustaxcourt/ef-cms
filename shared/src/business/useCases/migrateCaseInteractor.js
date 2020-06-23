@@ -36,8 +36,6 @@ exports.migrateCaseInteractor = async ({
     },
   );
 
-  caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
-
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),

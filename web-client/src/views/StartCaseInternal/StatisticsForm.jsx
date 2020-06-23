@@ -13,7 +13,8 @@ export const StatisticsForm = connect(
     showCalculatePenaltiesModalSequence:
       sequences.showCalculatePenaltiesModalSequence,
     statisticsFormHelper: state.statisticsFormHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateStatisticsFormValueSequence:
+      sequences.updateStatisticsFormValueSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
@@ -23,7 +24,7 @@ export const StatisticsForm = connect(
     form,
     showCalculatePenaltiesModalSequence,
     statisticsFormHelper,
-    updateFormValueSequence,
+    updateStatisticsFormValueSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) {
@@ -35,12 +36,12 @@ export const StatisticsForm = connect(
         <DollarsInput
           className="usa-input usa-input-inline"
           id={`deficiency-amount-${index}`}
-          name={`statistics.${index}.deficiencyAmount`}
-          value={form.statistics[index].deficiencyAmount || ''}
+          name={`statistics.${index}.irsDeficiencyAmount`}
+          value={form.statistics[index].irsDeficiencyAmount || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
-            updateFormValueSequence({
-              key: `statistics.${index}.deficiencyAmount`,
+            updateStatisticsFormValueSequence({
+              key: `statistics.${index}.irsDeficiencyAmount`,
               value: values.value,
             });
           }}
@@ -56,12 +57,12 @@ export const StatisticsForm = connect(
         <DollarsInput
           className="usa-input usa-input-inline"
           id={`total-penalties-${index}`}
-          name={`statistics.${index}.totalPenalties`}
-          value={form.statistics[index].totalPenalties || ''}
+          name={`statistics.${index}.irsTotalPenalties`}
+          value={form.statistics[index].irsTotalPenalties || ''}
           onBlur={() => validatePetitionFromPaperSequence()}
           onValueChange={values => {
-            updateFormValueSequence({
-              key: `statistics.${index}.totalPenalties`,
+            updateStatisticsFormValueSequence({
+              key: `statistics.${index}.irsTotalPenalties`,
               value: values.value,
             });
           }}
@@ -70,34 +71,32 @@ export const StatisticsForm = connect(
     );
 
     const getSingleStatisticForm = index => (
-      <React.Fragment key={index}>
+      <div className="statistic-form" key={index}>
         <FormGroup>
-          <fieldset className="usa-fieldset">
-            {['Year', 'Period'].map(option => (
-              <div className="usa-radio usa-radio__inline" key={option}>
-                <input
-                  checked={form.statistics[index].yearOrPeriod === option}
-                  className="usa-radio__input"
-                  id={`year-or-period-${index}-${option}`}
-                  name={`statistics.${index}.yearOrPeriod`}
-                  type="radio"
-                  value={option}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-radio__label"
-                  htmlFor={`year-or-period-${index}-${option}`}
-                >
-                  {option}
-                </label>
-              </div>
-            ))}
-          </fieldset>
+          {['Year', 'Period'].map(option => (
+            <div className="usa-radio usa-radio__inline" key={option}>
+              <input
+                checked={form.statistics[index].yearOrPeriod === option}
+                className="usa-radio__input"
+                id={`year-or-period-${index}-${option}`}
+                name={`statistics.${index}.yearOrPeriod`}
+                type="radio"
+                value={option}
+                onChange={e => {
+                  updateStatisticsFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor={`year-or-period-${index}-${option}`}
+              >
+                {option}
+              </label>
+            </div>
+          ))}
         </FormGroup>
 
         <FormGroup
@@ -117,13 +116,13 @@ export const StatisticsForm = connect(
                   <input
                     className="usa-input usa-input-inline"
                     id={`year-${index}`}
-                    maxLength="25"
+                    maxLength="4"
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}
                     onBlur={() => validatePetitionFromPaperSequence()}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateStatisticsFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -154,7 +153,7 @@ export const StatisticsForm = connect(
                   year: form.statistics[index].lastDateOfPeriodYear,
                 }}
                 onBlur={() => validatePetitionFromPaperSequence()}
-                onChange={updateFormValueSequence}
+                onChange={updateStatisticsFormValueSequence}
               />
               <div className="grid-row grid-gap-2">
                 <div className="grid-col-4">
@@ -175,6 +174,7 @@ export const StatisticsForm = connect(
           onClick={() =>
             showCalculatePenaltiesModalSequence({
               statisticIndex: index,
+              title: 'Calculate Penalties on IRS Notice',
             })
           }
         >
@@ -182,7 +182,7 @@ export const StatisticsForm = connect(
         </Button>
 
         <hr />
-      </React.Fragment>
+      </div>
     );
 
     return (

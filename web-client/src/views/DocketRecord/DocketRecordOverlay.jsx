@@ -115,6 +115,8 @@ export const DocketRecordOverlay = connect(
               </Button>
               <p className="semi-bold label margin-top-3">Date</p>
               <p className="margin-top-0">{document.createdAtFormatted}</p>
+              <p className="semi-bold label margin-top-3">Pages</p>
+              <p className="margin-top-0">{record.numberOfPages}</p>
               <p className="semi-bold label margin-top-3">Filed By</p>
               <p className="margin-top-0">{document && document.filedBy}</p>
               <p className="semi-bold label margin-top-3">Action</p>

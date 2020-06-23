@@ -20,7 +20,7 @@ const mockUser = {
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
   role: User.ROLES.privatePractitioner,
-  userId: 'practitioner1@example.com',
+  userId: '07044afe-641b-4d75-a84f-0698870b7650',
 };
 
 describe('create practitioner user', () => {
@@ -50,7 +50,7 @@ describe('create practitioner user', () => {
   it('throws unauthorized for a non-internal user', async () => {
     testUser = {
       role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      userId: '6a2a8f95-0223-442e-8e55-5f094c6bca15',
     };
 
     await expect(

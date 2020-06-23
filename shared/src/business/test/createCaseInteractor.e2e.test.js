@@ -88,7 +88,8 @@ describe('createCase integration test', () => {
                 },
               ],
               section: 'petitions',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Alex Petitionsclerk',
+              sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
         },
@@ -105,7 +106,7 @@ describe('createCase integration test', () => {
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: false,
+      orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
@@ -147,7 +148,8 @@ describe('createCase integration test', () => {
           },
         ],
         section: 'petitions',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Alex Petitionsclerk',
+        sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
   });

@@ -26,7 +26,7 @@ export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=S3RVER
 export AWS_SECRET_ACCESS_KEY=S3RVER
 export SLS_DEPLOYMENT_BUCKET=S3RVER
-export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000 
+export MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
 export S3_ENDPOINT=http://localhost:9000
 export DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
 export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
@@ -68,6 +68,7 @@ set -- \
   --stage local \
   --stageColor "blue" \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
+  --circleHoneybadgerApiKey noop \
   --elasticsearch_endpoint "http://localhost:9200"
 
 echo "starting public api service"
