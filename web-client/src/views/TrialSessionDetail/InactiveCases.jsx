@@ -20,7 +20,7 @@ export const InactiveCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket No.</th>
+              <th aria-label="Docket Number">Docket No.</th>
               <th>Case Title</th>
               <th>Disposition</th>
               <th>Disposition Date</th>
