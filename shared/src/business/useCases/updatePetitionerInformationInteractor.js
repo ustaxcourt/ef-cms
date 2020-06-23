@@ -151,6 +151,8 @@ exports.updatePetitionerInformationInteractor = async ({
         documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
+        // TODO - who is this?
+        filedBy: user.name,
         processingStatus: 'complete',
         userId: user.userId,
       },

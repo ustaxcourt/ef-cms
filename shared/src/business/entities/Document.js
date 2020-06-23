@@ -208,7 +208,8 @@ joiValidationDecorator(
         otherwise: joi.allow('').optional(),
         then: joi.required(),
       })
-      .description('The judge who signed the document.'),
+      // TODO - fix this
+      .description('.'),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
