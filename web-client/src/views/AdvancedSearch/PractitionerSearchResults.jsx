@@ -23,10 +23,10 @@ export const PractitionerSearchResults = connect(
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
                 <tr>
-                  <th>Bar no.</th>
+                  <th>Bar No.</th>
                   <th>Name</th>
                   <th>State</th>
-                  <th>Admissions status</th>
+                  <th>Admissions Status</th>
                 </tr>
               </thead>
               <tbody>

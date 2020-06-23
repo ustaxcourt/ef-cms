@@ -13,7 +13,7 @@ export const CaseMessagesIndividualCompleted = connect(
           <thead>
             <tr>
               <th className="small" colSpan="2">
-                Docket Number
+                Docket No.
               </th>
               <th className="small">Completed</th>
               <th>Last Message</th>
