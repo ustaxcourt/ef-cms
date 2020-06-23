@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Usage
 #   used for running the API and necessary services (dynamo, s3, elasticsearch) locally

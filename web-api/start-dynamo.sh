@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Usage
 #   downloads and starts the dynamodb local service

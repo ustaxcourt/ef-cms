@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Returns a petitionsclerk JWT token that is used for smoketests
 

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Runs shellcheck over all .sh files in the project
 
