@@ -14,22 +14,20 @@ describe('document required fields test', () => {
   let mockItems = {};
 
   beforeEach(() => {
+    const notADocument = {
+      ...mockDocumentItemWithOnlyServedAt,
+      pk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+    };
+
     mockItems = {
-      notServed: { ...mockDocumentItemNotServed },
       scanList: [
-        {
-          ...mockDocumentItemWithOnlyServedAt,
-          pk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          sk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-        },
+        { ...notADocument },
         { ...mockDocumentItemWithOnlyServedAt },
         { ...mockDocumentItemWithOnlyServedParties },
         { ...mockDocumentItemServed },
         { ...mockDocumentItemNotServed },
       ],
-      served: { ...mockDocumentItemServed },
-      servedAt: { ...mockDocumentItemWithOnlyServedAt },
-      servedParties: { ...mockDocumentItemWithOnlyServedParties },
     };
   });
 
@@ -41,10 +39,10 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       processingStatus: 'pending',
       servedAt: '2018-11-21T20:49:28.192Z',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [],
     };
@@ -56,10 +54,10 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
       processingStatus: 'pending',
       servedParties: [{ name: 'Test Petitioner' }],
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [],
     };
@@ -71,9 +69,9 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
       processingStatus: 'pending',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [],
     };
@@ -85,11 +83,11 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a5',
       processingStatus: 'pending',
       servedAt: '2018-11-21T20:49:28.192Z',
       servedParties: [{ name: 'Test Petitioner' }],
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a5',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [],
     };
@@ -117,40 +115,88 @@ describe('document required fields test', () => {
     };
   });
 
-  it.only('does not mutate non document records', async () => {
+  it('does not mutate non document records', async () => {
     await up(documentClient, '', forAllRecords);
 
-    //have a pair of expect statements for mock calls [0] to be something
-    expect(putStub.mock.calls[0]).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+    // notADocument
+    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
+      pk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+      sk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
     });
-    // expect(putStub).toHaveBeenCalledWith(mockItems.scanList[0]);
+    // mockDocumentItemWithOnlyServedAt
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+    });
   });
 
   it('does not mutate document records that have not been served', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub).not.toHaveBeenCalled();
+    expect(putStub.mock.calls.length).toBe(2);
+    // mockDocumentItemNotServed
+    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+    });
+    // mockDocumentItemWithOnlyServedParties
+    expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+    });
   });
 
   it('does not mutate document records that have both servedAt and servedParties fields defined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub).not.toHaveBeenCalled();
+    expect(putStub.mock.calls.length).toBe(2);
+    // mockDocumentItemServed
+    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+    });
+    // mockDocumentItemWithOnlyServedParties
+    expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+    });
   });
 
   it('mutates document records that have a defined servedAt field when servedParties is undefined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toEqual(1);
-    expect(putStub.mock.calls[0][0].Item).toMatchObject({
-      ...mockItems.scanList[1],
+    expect(putStub.mock.calls.length).toBe(2);
+    // mockDocumentItemWithOnlyServedParties
+    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+    });
+    // mockDocumentItemWithOnlyServedAt
+    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       servedParties: [
         {
           name: 'Served via migration.',
         },
       ],
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+    });
+  });
+
+  it('mutates document records that have a defined servedParties field when servedAt is undefined', async () => {
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls.length).toBe(2);
+    // mockDocumentItemWithOnlyServedAt
+    expect(putStub.mock.calls[1][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+    });
+    // mockDocumentItemWithOnlyServedParties
+    expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+      servedAt: expect.anything(),
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
     });
   });
 });
