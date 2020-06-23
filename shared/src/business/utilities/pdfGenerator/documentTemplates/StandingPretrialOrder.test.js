@@ -46,15 +46,4 @@ describe('StandingPretrialOrder', () => {
     expect(wrapper.text()).toContain(trialInfo.state);
     expect(wrapper.text()).toContain(trialInfo.judge.name);
   });
-
-  it('renders a document with a served date', () => {
-    const wrapper = shallow(
-      <StandingPretrialOrder
-        footerDate="02/02/2020"
-        options={options}
-        trialInfo={trialInfo}
-      />,
-    );
-    expect(wrapper.find('#served-stamp').text()).toEqual('Served 02/02/2020');
-  });
 });

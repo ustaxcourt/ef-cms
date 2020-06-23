@@ -5,7 +5,6 @@ import { StandingPretrialNotice } from './StandingPretrialNotice.jsx';
 describe('StandingPretrialNotice', () => {
   let options;
   let trialInfo;
-  let footerDate = '05/01/2020';
 
   beforeAll(() => {
     options = {
@@ -112,19 +111,5 @@ describe('StandingPretrialNotice', () => {
     const signature = wrapper.find('.signature');
 
     expect(signature.text()).toContain(`(Signed) ${trialInfo.judge.name}`);
-  });
-
-  it('renders the served date', () => {
-    const wrapper = shallow(
-      <StandingPretrialNotice
-        footerDate={footerDate}
-        options={options}
-        trialInfo={trialInfo}
-      />,
-    );
-
-    const servedStamp = wrapper.find('#served-stamp');
-
-    expect(servedStamp.text()).toContain(`Served ${footerDate}`);
   });
 });
