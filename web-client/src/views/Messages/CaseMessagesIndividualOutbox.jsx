@@ -57,7 +57,7 @@ export const CaseMessagesIndividualOutbox = connect(
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row small">
-                    {message.fromSection}
+                    {message.toSection}
                   </td>
                   <td>
                     {message.attachments.length === 0 && (
