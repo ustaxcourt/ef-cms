@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # This script waits for a specified service to come online
 
