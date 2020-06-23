@@ -8,7 +8,6 @@ import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const completeCaseMessageSequence = showProgressSequenceDecorator([
@@ -16,7 +15,6 @@ export const completeCaseMessageSequence = showProgressSequenceDecorator([
   getMostRecentMessageInThreadAction,
   completeCaseMessageAction,
   setAlertSuccessAction,
-  setSaveAlertsForNavigationAction,
   clearScreenMetadataAction,
   clearUsersAction,
   clearModalAction,
