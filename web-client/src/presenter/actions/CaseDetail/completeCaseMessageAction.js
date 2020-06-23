@@ -26,9 +26,6 @@ export const completeCaseMessageAction = async ({
   });
 
   return {
-    alertSuccess: {
-      message: 'Your message has been sent.',
-    },
     parentMessageId,
   };
 };
