@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
+const { ALL_EVENT_CODES } = require('./EntityConstants');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -75,7 +75,7 @@ joiValidationDecorator(
     entityName: joi.string().valid('DocketRecord').required(),
     eventCode: joi
       .string()
-      .valid(...getAllEventCodes())
+      .valid(...ALL_EVENT_CODES)
       .required()
       .description(
         'Code associated with the event that resulted in this item being added to the Docket Record.',

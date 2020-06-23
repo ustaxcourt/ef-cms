@@ -1,17 +1,15 @@
 const joi = require('@hapi/joi');
 const {
-  COURT_ISSUED_EVENT_CODES,
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
-  DOCUMENT_CATEGORY_MAP,
-  DOCUMENT_INTERNAL_CATEGORY_MAP,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_RELATIONSHIPS,
-  INITIAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
+  OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
-  SIGNED_DOCUMENT_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
@@ -132,37 +130,6 @@ Document.isPendingOnCreation = rawDocument => {
   return isPending;
 };
 
-Document.getDocumentTypes = () => {
-  const allFilingEvents = flatten([
-    ...Object.values(DOCUMENT_CATEGORY_MAP),
-    ...Object.values(DOCUMENT_INTERNAL_CATEGORY_MAP),
-  ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
-  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
-  const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
-    t => INITIAL_DOCUMENT_TYPES[t].documentType,
-  );
-  const signedTypes = Object.keys(SIGNED_DOCUMENT_TYPES).map(
-    t => SIGNED_DOCUMENT_TYPES[t].documentType,
-  );
-  const systemGeneratedTypes = Object.keys(SYSTEM_GENERATED_DOCUMENT_TYPES).map(
-    t => SYSTEM_GENERATED_DOCUMENT_TYPES[t].documentType,
-  );
-
-  const documentTypes = [
-    ...initialTypes,
-    ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
-    ...filingEventTypes,
-    ...orderDocTypes,
-    ...courtIssuedDocTypes,
-    ...signedTypes,
-    ...systemGeneratedTypes,
-  ];
-
-  return documentTypes;
-};
-
 joiValidationDecorator(
   Document,
   joi.object().keys({
@@ -176,17 +143,15 @@ joiValidationDecorator(
         'A document that was archived instead of added to the Docket Record.',
       ),
     certificateOfService: joi.boolean().optional(),
-    certificateOfServiceDate: joi.when('certificateOfService', {
+    certificateOfServiceDate: joiStrictTimestamp.when('certificateOfService', {
       is: true,
-      otherwise: joi.optional(),
-      then: joiStrictTimestamp.required(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
     }),
     createdAt: joiStrictTimestamp
       .required()
       .description('When the Document was added to the system.'),
-    date: joi
-      .date()
-      .iso()
+    date: joiStrictTimestamp
       .optional()
       .allow(null)
       .description(
@@ -225,12 +190,17 @@ joiValidationDecorator(
       .description('The title of this document.'),
     documentType: joi
       .string()
-      .valid(...Document.getDocumentTypes())
+      .valid(...ALL_DOCUMENT_TYPES)
       .required()
       .description('The type of this document.'),
+    // TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
-    eventCode: joi.string().optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .allow(null)
+      .optional(),
     filedBy: joi.string().max(500).allow('').optional(),
     filingDate: joiStrictTimestamp
       .max('now')
@@ -244,8 +214,14 @@ joiValidationDecorator(
     judge: joi
       .string()
       .allow(null)
-      .optional()
-      .description('The judge associated with the document.'),
+      .description('The judge associated with the document.')
+      .when('documentType', {
+        is: joi
+          .string()
+          .valid(...OPINION_DOCUMENT_TYPES.map(t => t.documentType)),
+        otherwise: joi.optional(),
+        then: joi.required(),
+      }),
     lodged: joi
       .boolean()
       .optional()
@@ -312,15 +288,47 @@ joiValidationDecorator(
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    signedAt: joiStrictTimestamp.optional().allow(null),
-    signedByUserId: joi
+    signedAt: joi
       .string()
-      .uuid({
-        version: ['uuidv4'],
+      .when('draftState', {
+        is: joi.exist().not(null),
+        otherwise: joi.when('documentType', {
+          is: joi.valid(...ORDER_TYPES.map(t => t.documentType)),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        }),
+        then: joi.optional().allow(null),
       })
-      .optional()
-      .allow(null),
-    signedJudgeName: joi.string().optional().allow(null),
+      .description('The time at which the document was signed.'),
+    signedByUserId: joi
+      .when('signedJudgeName', {
+        is: joi.exist().not(null),
+        otherwise: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .optional()
+          .allow(null),
+        then: joi
+          .string()
+          .uuid({
+            version: ['uuidv4'],
+          })
+          .required(),
+      })
+      .description('The id of the user who applied the signature.'),
+    signedJudgeName: joi
+      .when('draftState', {
+        is: joi.exist().not(null),
+        otherwise: joi.when('documentType', {
+          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+          otherwise: joi.string().optional().allow(null),
+          then: joi.string().required(),
+        }),
+        then: joi.string().optional().allow(null),
+      })
+      .description('The judge who signed the document.'),
     supportingDocument: joi.string().optional().allow(null),
     trialLocation: joi
       .string()
@@ -421,6 +429,7 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
+  this.draftState = null;
 };
 
 /**
@@ -449,7 +458,7 @@ Document.prototype.getQCWorkItem = function () {
 
 Document.prototype.isAutoServed = function () {
   const externalDocumentTypes = flatten(
-    Object.values(DOCUMENT_CATEGORY_MAP),
+    Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
   ).map(t => t.documentType);
 
   const isExternalDocumentType = externalDocumentTypes.includes(

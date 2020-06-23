@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -48,8 +49,14 @@ joiValidationDecorator(
       })
       .optional(),
     documentTitle: joi.string().max(500).optional(),
-    documentType: joi.string().max(500).optional(), // TODO: enum
-    eventCode: joi.string().max(500).optional(), // TODO: enum
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .optional(),
     filedBy: joi.string().max(500).optional(),
     isPaper: joi.boolean().optional(),
     processingStatus: joi.string().max(500).optional(), // TODO: enum

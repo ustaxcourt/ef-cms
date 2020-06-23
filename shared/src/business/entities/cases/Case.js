@@ -282,12 +282,16 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
+      otherPetitioners: rawCase.otherPetitioners,
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
   });
+
+  this.otherPetitioners = contacts.otherPetitioners;
+
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;
 }
@@ -305,43 +309,42 @@ Case.VALIDATION_RULES = {
     .description(
       'Temporarily blocked from trial due to a pending item or due date.',
     ),
-  automaticBlockedDate: joi.when('automaticBlocked', {
+  automaticBlockedDate: joiStrictTimestamp.when('automaticBlocked', {
     is: true,
     otherwise: joi.optional().allow(null),
-    then: joiStrictTimestamp.required(),
+    then: joi.required(),
   }),
-  automaticBlockedReason: joi.when('automaticBlocked', {
-    is: true,
-    otherwise: joi.optional().allow(null),
-    then: joi
-      .string()
-      .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
-      .required()
-      .description('The reason the case was automatically blocked from trial.'),
-  }),
+  automaticBlockedReason: joi
+    .string()
+    .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
+    .description('The reason the case was automatically blocked from trial.')
+    .when('automaticBlocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
   blocked: joi
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Temporarily blocked from trial.'),
-  blockedDate: joi
+  blockedDate: joiStrictTimestamp
     .when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joiStrictTimestamp.required(),
+      then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
   blockedReason: joi
+    .string()
+    .max(250)
+    .description(
+      'Open text field for describing reason for blocking this case from trial.',
+    )
     .when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi
-        .string()
-        .max(250)
-        .required()
-        .description(
-          'Open text field for describing reason for blocking this case from trial.',
-        ),
+      then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
   caseCaption: joi
@@ -367,10 +370,10 @@ Case.VALIDATION_RULES = {
     .string()
     .valid(...CASE_TYPES)
     .required(),
-  closedDate: joi.when('status', {
+  closedDate: joiStrictTimestamp.when('status', {
     is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
-    then: joiStrictTimestamp.required(),
+    then: joi.required(),
   }),
   contactPrimary: joi.object().required(),
   contactSecondary: joi.object().optional().allow(null),
@@ -433,10 +436,12 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] }),
   highPriorityReason: joi
+    .string()
+    .max(250)
     .when('highPriority', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi.string().max(250).required(),
+      then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
   initialCaption: joi
@@ -478,10 +483,12 @@ Case.VALIDATION_RULES = {
     .allow(null)
     .description('Litigation costs for the case.'),
   mailingDate: joi
+    .string()
+    .max(25)
     .when('isPaper', {
       is: true,
-      otherwise: joi.string().max(25).allow(null).optional(),
-      then: joi.string().max(25).required(),
+      otherwise: joi.allow(null).optional(),
+      then: joi.required(),
     })
     .description('Date that petition was mailed to the court.'),
   noticeOfAttachments: joi
@@ -531,23 +538,29 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
+  otherPetitioners: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
+    .description('List of OtherPetitionerContact Entities for the case.'),
   partyType: joi
     .string()
     .valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
-  petitionPaymentDate: joi
+  petitionPaymentDate: joiStrictTimestamp
     .when('petitionPaymentStatus', {
       is: PAYMENT_STATUS.PAID,
-      otherwise: joiStrictTimestamp.optional().allow(null),
-      then: joiStrictTimestamp.required(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
     })
     .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
+    .string()
+    .max(50)
     .when('petitionPaymentStatus', {
       is: PAYMENT_STATUS.PAID,
-      otherwise: joi.string().allow(null).optional(),
-      then: joi.string().max(50).required(),
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
     })
     .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
@@ -555,11 +568,11 @@ Case.VALIDATION_RULES = {
     .valid(...Object.values(PAYMENT_STATUS))
     .required()
     .description('Status of the case fee payment.'),
-  petitionPaymentWaivedDate: joi
+  petitionPaymentWaivedDate: joiStrictTimestamp
     .when('petitionPaymentStatus', {
       is: PAYMENT_STATUS.WAIVED,
-      otherwise: joiStrictTimestamp.allow(null).optional(),
-      then: joiStrictTimestamp.required(),
+      otherwise: joi.allow(null).optional(),
+      then: joi.required(),
     })
     .description('When the case fee was waived.'),
   preferredTrialCity: joi
@@ -602,23 +615,15 @@ Case.VALIDATION_RULES = {
       'A sortable representation of the docket number (auto-generated by constructor).',
     ),
   statistics: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'Statistic' }))
     .when('hasVerifiedIrsNotice', {
       is: true,
-      otherwise: joi
-        .array()
-        .items(joi.object().meta({ entityName: 'Statistic' }))
-        .optional(),
+      otherwise: joi.optional(),
       then: joi.when('caseType', {
         is: CASE_TYPES_MAP.deficiency,
-        otherwise: joi
-          .array()
-          .items(joi.object().meta({ entityName: 'Statistic' }))
-          .optional(),
-        then: joi
-          .array()
-          .min(1)
-          .items(joi.object().meta({ entityName: 'Statistic' }))
-          .required(),
+        otherwise: joi.optional(), // TODO: only allow null?
+        then: joi.array().min(1).required(),
       }),
     })
     .description('List of Statistic Entities for the case.'),
@@ -1481,6 +1486,7 @@ Case.prototype.getCaseContacts = function (shape) {
     'contactSecondary',
     'privatePractitioners',
     'irsPractitioners',
+    'otherPetitioners',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       caseContacts[contact] = this[contact];
@@ -1746,6 +1752,8 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
-exports.Case = Case;
-exports.isAssociatedUser = isAssociatedUser;
-exports.getPetitionDocumentFromDocuments = getPetitionDocumentFromDocuments;
+module.exports = {
+  Case,
+  getPetitionDocumentFromDocuments,
+  isAssociatedUser,
+};

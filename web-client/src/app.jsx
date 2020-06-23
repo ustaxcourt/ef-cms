@@ -11,6 +11,7 @@ import {
   router,
 } from './router';
 
+import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
@@ -149,6 +150,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faAddressCard,
       faCalculator,
       faCalendarAlt,
       faCalendarCheck,

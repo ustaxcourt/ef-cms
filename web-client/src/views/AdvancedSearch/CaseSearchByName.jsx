@@ -14,6 +14,7 @@ export const CaseSearchByName = connect(
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
+    usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
     validationErrors: state.validationErrors,
@@ -26,6 +27,7 @@ export const CaseSearchByName = connect(
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
+    usStatesOther,
     validateCaseAdvancedSearchFormSequence,
     validationErrors,
   }) {
@@ -169,17 +171,13 @@ export const CaseSearchByName = connect(
                           })}
                         </optgroup>
                         <optgroup label="Other">
-                          <option value="AA">AA</option>
-                          <option value="AE">AE</option>
-                          <option value="AP">AP</option>
-                          <option value="AS">AS</option>
-                          <option value="FM">FM</option>
-                          <option value="GU">GU</option>
-                          <option value="MH">MH</option>
-                          <option value="MP">MP</option>
-                          <option value="PW">PW</option>
-                          <option value="PR">PR</option>
-                          <option value="VI">VI</option>
+                          {usStatesOther.map(abbrev => {
+                            return (
+                              <option key={abbrev} value={abbrev}>
+                                {abbrev}
+                              </option>
+                            );
+                          })}
                         </optgroup>
                       </BindedSelect>
                     </div>
