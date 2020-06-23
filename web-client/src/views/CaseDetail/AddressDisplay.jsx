@@ -7,8 +7,9 @@ export const AddressDisplay = connect(
     constants: state.constants,
     contact: props.contact,
     nameOverride: props.nameOverride || {},
+    showEmail: props.showEmail || false,
   },
-  function AddressDisplay({ constants, contact, nameOverride }) {
+  function AddressDisplay({ constants, contact, nameOverride, showEmail }) {
     return (
       <>
         <p className="margin-top-0 address-name">
@@ -38,6 +39,9 @@ export const AddressDisplay = connect(
           )}
           {contact.phone && (
             <span className="address-line margin-top-1">{contact.phone}</span>
+          )}
+          {contact.email && showEmail && (
+            <span className="address-line">{contact.email}</span>
           )}
         </p>
       </>
