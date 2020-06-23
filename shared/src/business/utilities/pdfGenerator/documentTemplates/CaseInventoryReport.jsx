@@ -17,8 +17,8 @@ export const CaseInventoryReport = ({
       <table>
         <thead>
           <tr>
-            <th>Docket</th>
-            <th>Case title</th>
+            <th>Docket No.</th>
+            <th>Case Title</th>
             {showStatusColumn && <th className="status-header">Case Status</th>}
             {showJudgeColumn && <th className="judge-header">Judge</th>}
           </tr>

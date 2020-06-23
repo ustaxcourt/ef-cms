@@ -31,7 +31,7 @@ h3 {
   margin-bottom: 20px;
   font-family: 'nimbus_roman', serif;
   font-family: serif;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   text-decoration: underline;
 
@@ -135,6 +135,10 @@ th {
 .court-header {
   margin-bottom: 30px;
   font-family: serif;
+
+  h1 {
+    font-size: 16px;
+  }
 }
 
 .case-information #caption,
@@ -274,17 +278,17 @@ th {
 }
 
 .court-address {
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
 }
 
 @page {
-  margin: 2cm 1cm;
+  margin: 1.5cm 1cm 2cm 1cm;
   size: 8.5in 11in;
 }
 @page :first {
-  margin-top: 1cm;
-  margin-bottom: 2cm;
+  margin-top: 0;
+  margin-bottom: 2.5cm;
 }
 
 .margin-top-0 {
@@ -326,7 +330,6 @@ th {
 .please-change {
   margin-bottom: 20px;
   font-size: 14px;
-  font-weight: 600;
 }
 
 .extra-margin-top {
@@ -357,7 +360,7 @@ th {
 
   h3 {
     margin-top: 0;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: normal;
     text-decoration: none;
   }
@@ -367,7 +370,7 @@ th {
   #docket-number,
   #document-title,
   #certificate-of-service {
-    font-family: 'nimbus_sans_l', sans-serif !important;
+    font-family: 'nimbus_roman', serif;
   }
 
   #certificate-of-service {
@@ -416,6 +419,10 @@ th {
   }
 }
 
+#order-content {
+  font-size: 14px;
+}
+
 .calendar-icon {
   width: 12px;
   height: 12px;
@@ -429,7 +436,7 @@ th {
 
   .docket {
     position: absolute;
-    top: 0;
+    top: 1cm;
     left: 0;
     padding-left: 0.6in;
   }
