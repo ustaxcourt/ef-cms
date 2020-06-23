@@ -1,10 +1,13 @@
 const createApplicationContext = require('../src/applicationContext');
+const {
+  createISODateString,
+} = require('../../shared/src/business/utilities/DateHandler');
 const { isDocumentRecord, upGenerator } = require('./utilities');
 const { isEmpty } = require('lodash');
 const applicationContext = createApplicationContext({});
 const { Document } = require('../../shared/src/business/entities/Document');
 
-const DEFAULT_SERVED_AT_DATE = new Date().toISOString();
+const DEFAULT_SERVED_AT_DATE = createISODateString(new Date());
 const DEFAULT_SERVED_PARTIES = [
   {
     name: 'Served via migration.',

@@ -104,7 +104,7 @@ describe('document required fields test', () => {
 
     getStub = jest.fn().mockReturnValue({
       promise: async () => ({
-        Item: mockItems.scanList,
+        Item: {},
       }),
     });
 
