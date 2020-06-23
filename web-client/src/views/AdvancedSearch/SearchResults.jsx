@@ -26,14 +26,14 @@ export const SearchResults = connect(
                   <NonMobile>
                     <th>Petitioner(s)</th>
                   </NonMobile>
-                  <th>Docket number</th>
+                  <th>Docket Number</th>
                   <NonMobile>
-                    <th>Date filed</th>
-                    <th>Case title</th>
+                    <th>Date Filed</th>
+                    <th>Case Title</th>
                     <th>State</th>
                   </NonMobile>
                   <Mobile>
-                    <th>Case title</th>
+                    <th>Case Title</th>
                   </Mobile>
                 </tr>
               </thead>

@@ -29,7 +29,7 @@ export const TodaysOpinions = connect(
                 <tr>
                   <th aria-hidden="true" />
                   <th aria-hidden="true" />
-                  <th>Docket Number</th>
+                  <th>Docket No.</th>
                   <th>Case Title</th>
                   <th>Opinion Type</th>
                   <th>Pages</th>

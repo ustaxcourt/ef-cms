@@ -25,13 +25,13 @@ export const DocumentSearchResults = connect(
               ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
 
-            <table className="usa-table search-results responsive-table row-border-only">
+            <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Docket number</th>
-                  <th>Case title</th>
+                  <th>Docket No.</th>
+                  <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>
                   <th>Date</th>

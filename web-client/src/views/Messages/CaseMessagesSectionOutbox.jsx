@@ -13,7 +13,7 @@ export const CaseMessagesSectionOutbox = connect(
           <thead>
             <tr>
               <th className="small" colSpan="2">
-                Docket Number
+                Docket No.
               </th>
               <th className="small">Sent</th>
               <th>Message</th>
