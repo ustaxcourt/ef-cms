@@ -19,14 +19,14 @@ const DEFAULT_SERVED_PARTIES = [
 const DEFAULT_FILED_BY = 'Filed via migration.';
 
 const mutateRecord = async item => {
-  const bothOrNeitherServedAreDefined =
+  const servedPropertiesComplete =
     (!item.servedAt && !item.servedParties) ||
     (item.servedAt && !isEmpty(item.servedParties));
 
   let result;
 
   if (isDocumentRecord(item)) {
-    if (!bothOrNeitherServedAreDefined) {
+    if (!servedPropertiesComplete) {
       result = addMissingServedFieldsToDocument(item);
     }
     if (EXTERNAL_DOCUMENT_TYPES.includes((result || item).documentType)) {
