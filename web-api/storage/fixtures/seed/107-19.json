@@ -423,6 +423,12 @@
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "numberOfPages": 1,
     "servedAt": "2019-08-16T17:30:10.526Z",
+    "servedParties": [
+      {
+        "name": "Tatum Craig",
+        "email": "petitioner"
+      }
+    ],
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "status": "served"
   },
