@@ -1,8 +1,20 @@
-#!/bin/bash
+#!/bin/bash -e
 
-# usage:
+# Usage
 #   ./clear-env.sh $ENV
-#   where $ENV is dev|stg|prod|test|...
+
+# Requirements
+#   - terraform must be installed on your machine
+#   - aws cli must be installed on your machine
+#   - aws credentials must be setup on your machine
+#   - node must be setup on your machine
+
+# Arguments
+#   - $1 - the environment to clear
+
+[ -z "$1" ] && echo "The branch name to check must be provided as the \$1 argument." && exit 1
+
+ENV=$1
 
 if [[ -z "${USTC_ADMIN_PASS}" ]]; then
   echo "You must have USTC_ADMIN_PASS set in your environment"
@@ -15,11 +27,11 @@ if [[ "$?" == "1" ]]; then
   exit 1
 fi
 
-./web-api/clear-elasticsearch-index.sh $1
-./web-api/setup-elasticsearch-index.sh $1
+./web-api/clear-elasticsearch-index.sh $ENV
+./web-api/setup-elasticsearch-index.sh $ENV
 
 pushd web-api
-node clear-dynamodb-table.js $1
-./setup-cognito-users.sh $1
-./setup-court-users.sh $1
+node clear-dynamodb-table.js $ENV
+./setup-cognito-users.sh $ENV
+./setup-court-users.sh $ENV
 popd

@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# Usage
+#   downloads and starts elasticsearch for local use
 
 # download the elasticsearch archive if needed
 if [ -f /.dockerenv ]; then
