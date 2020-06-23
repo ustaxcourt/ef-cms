@@ -199,7 +199,7 @@ export const MessageDetail = connect(
             <div className="grid-col-4">
               <div className="border border-base-lighter message-detail--attachments">
                 {!formattedMessageDetail.attachments.length && (
-                  <span className="padding-2">There are no attachments</span>
+                  <div className="padding-2">There are no attachments</div>
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
@@ -228,9 +228,9 @@ export const MessageDetail = connect(
             <div className="grid-col-8">
               <div className="border border-base-lighter message-detail--attachments">
                 {!attachmentDocumentToDisplay && (
-                  <span className="padding-2">
+                  <div className="padding-2">
                     There are no attachments to preview
-                  </span>
+                  </div>
                 )}
 
                 {!process.env.CI && attachmentDocumentToDisplay && (
