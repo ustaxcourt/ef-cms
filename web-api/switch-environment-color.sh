@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# Usage
+#   downloads and starts elasticsearch for local use
+
+# Arguments
+#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+
+[ -z "$1" ] && echo "The slsStage to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+
 slsStage="${1}"
 
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")

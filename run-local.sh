@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
+
+# Usage
+#   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
 if [[ -z "$CIRCLECI" ]]; then
   echo "killing dynamo if already running"
