@@ -21,7 +21,7 @@ export const OpenCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket No.</th>
+              <th aria-label="docket number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
               <th>Petitioner Counsel</th>
