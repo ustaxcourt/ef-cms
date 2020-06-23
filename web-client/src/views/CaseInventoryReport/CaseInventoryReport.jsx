@@ -107,7 +107,7 @@ export const CaseInventoryReport = connect(
                   <table className="usa-table row-border-only subsection case-inventory">
                     <thead>
                       <tr>
-                        <th>Docket No.</th>
+                        <th aria-label="docket number">Docket No.</th>
                         <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
                           <th>Judge</th>

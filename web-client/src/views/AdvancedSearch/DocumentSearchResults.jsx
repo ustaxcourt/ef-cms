@@ -30,7 +30,7 @@ export const DocumentSearchResults = connect(
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Docket No.</th>
+                  <th aria-label="docket number">Docket No.</th>
                   <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>

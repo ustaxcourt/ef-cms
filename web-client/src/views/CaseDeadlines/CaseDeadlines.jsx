@@ -69,7 +69,7 @@ export const CaseDeadlines = connect(
                   <thead>
                     <tr>
                       <th>Due Date</th>
-                      <th>Docket No.</th>
+                      <th aria-label="docket number">Docket No.</th>
                       <th>Case Title</th>
                       <th>Description</th>
                       <th>Judge</th>
