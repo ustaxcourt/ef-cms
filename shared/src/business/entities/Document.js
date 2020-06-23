@@ -21,6 +21,9 @@ const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
+const EXTERNAL_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+).map(t => t.documentType);
 
 Document.validationName = 'Document';
 
@@ -201,7 +204,16 @@ joiValidationDecorator(
       .valid(...ALL_EVENT_CODES)
       .allow(null)
       .optional(),
-    filedBy: joi.string().max(500).allow('').optional(),
+    filedBy: joi
+      .string()
+      .max(500)
+      .when('documentType', {
+        is: joi.string().valid(...EXTERNAL_DOCUMENT_TYPES),
+        //TODO should we allow an empty string to be stored in our db
+        otherwise: joi.allow('').optional(),
+        then: joi.required(),
+      })
+      .description('The judge who signed the document.'),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
@@ -467,11 +479,7 @@ Document.prototype.getQCWorkItem = function () {
 };
 
 Document.prototype.isAutoServed = function () {
-  const externalDocumentTypes = flatten(
-    Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-  ).map(t => t.documentType);
-
-  const isExternalDocumentType = externalDocumentTypes.includes(
+  const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
     this.documentType,
   );
   const isPractitionerAssociationDocumentType = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(
