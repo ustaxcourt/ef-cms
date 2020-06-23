@@ -3,8 +3,8 @@ const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   DOCKET_NUMBER_MATCHER,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   DOCUMENT_RELATIONSHIPS,
+  EXTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
@@ -16,17 +16,12 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { flatten } = require('lodash');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 const joiStrictTimestamp = getTimestampSchema();
-const EXTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-).map(t => t.documentType);
 
 Document.validationName = 'Document';
-
 /**
  * constructor
  *
