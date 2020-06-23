@@ -1,12 +1,18 @@
 const {
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   ROLES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
+const { flatten } = require('lodash');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
+
+const EXTERNAL_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+).map(t => t.documentType);
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
@@ -209,6 +215,40 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
       expect(document.secondaryDate).toBeDefined();
+    });
+
+    it('should fail validation when the document type is an external document type and "filedBy" is not provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: EXTERNAL_DOCUMENT_TYPES[0],
+          eventCode: 'TRAN',
+          filedBy: undefined,
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.filedBy).toBeUndefined();
+    });
+
+    it('should pass validation when the document type is an external document type and "filedBy" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: EXTERNAL_DOCUMENT_TYPES[0],
+          eventCode: 'TRAN',
+          filedBy: 'Test Petitioner1',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeTruthy();
     });
 
     it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
