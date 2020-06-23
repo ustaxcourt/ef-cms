@@ -1070,17 +1070,57 @@
         presence: "optional"
         description: "A secondary date associated with the document, typically related to time-restricted availability."
     servedAt: 
-      type: "date"
+      type: "alternatives"
       flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
         description: "When the document is served on the parties."
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "servedParties"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "required"
+          otherwise: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "optional"
     servedParties: 
       type: "array"
       flags: 
-        presence: "optional"
+        description: "The parties to whom the document has been served."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "servedAt"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
       items: 
         - 
           type: "object"
