@@ -124,7 +124,7 @@ const docketRecord = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -313,7 +313,7 @@ const pendingReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -404,7 +404,6 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
   const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialNotice',
     data: {
-      footerDate,
       options: {
         caseCaptionExtension,
         caseTitle,
@@ -431,6 +430,16 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     },
   });
 
+  let footerHtml = '';
+  if (footerDate) {
+    footerHtml = reactTemplateGenerator({
+      componentName: 'DateServedFooter',
+      data: {
+        dateServed: footerDate,
+      },
+    });
+  }
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
@@ -438,6 +447,7 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
+      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
@@ -457,7 +467,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
   const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialOrder',
     data: {
-      footerDate,
       options: {
         caseCaptionExtension,
         caseTitle,
@@ -484,6 +493,16 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
+  let footerHtml = '';
+  if (footerDate) {
+    footerHtml = reactTemplateGenerator({
+      componentName: 'DateServedFooter',
+      data: {
+        dateServed: footerDate,
+      },
+    });
+  }
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
@@ -491,6 +510,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
+      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
@@ -526,7 +546,7 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -585,7 +605,7 @@ const trialCalendar = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -635,7 +655,7 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
