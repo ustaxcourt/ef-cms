@@ -23,15 +23,17 @@ graph-generators/node_modules/
 lambda-policy.json
 node_modules/
 parcel-debug-*
+proxy-request-times.json
 puppeteer_lambda_layer.tar.gz
+reports/test-reporter.xml
 shared/coverage
 shared/pdf-tests/*.html
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
 web-api/runtimes/clamav/lib
 web-api/storage/s3/*
-web-api/terraform/template/cognito-triggers/index.js.zip
 web-api/terraform/template/cognito-authorizer/index.js.zip
+web-api/terraform/template/cognito-triggers/index.js.zip
 web-api/terraform/template/log-forwarder/index.js.zip
 web-client/.cache/
 web-client/coverage-e2e
@@ -39,7 +41,5 @@ web-client/coverage-integration/*
 web-client/coverage-unit/*
 web-client/pa11y/pa11y-screenshots
 web-client/reports
-web-client/tests_output/
 web-client/terraform/common/cloudfront-edge/index.js.zip
-proxy-request-times.json
-reports/test-reporter.xml
+web-client/tests_output/

@@ -29,6 +29,7 @@ import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
+import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
@@ -54,6 +55,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   createISODateStringFromObject,
+  dateStringsCompared,
   deconstructDate,
   formatDateString,
   formatNow,
@@ -66,10 +68,12 @@ import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
+import { deleteCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/deleteCorrespondenceDocumentProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
+import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
-import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentInteractor';
+import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
@@ -86,7 +90,6 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
-
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateCourtIssuedDocumentTitleInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitleInteractor';
@@ -118,6 +121,7 @@ import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxi
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getOpenCasesInteractor } from '../../shared/src/proxies/getOpenCasesProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
@@ -171,8 +175,10 @@ import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
+import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
+import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
@@ -189,6 +195,7 @@ import { uploadDocumentInteractor } from '../../shared/src/business/useCases/ext
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
+import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
@@ -244,6 +251,7 @@ const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
+  addDeficiencyStatisticInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
@@ -265,7 +273,9 @@ const allUseCases = {
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
+  deleteCorrespondenceDocumentInteractor,
   deleteCounselFromCaseInteractor,
+  deleteDeficiencyStatisticInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   fetchPendingItemsInteractor,
@@ -309,6 +319,7 @@ const allUseCases = {
   getItemInteractor,
   getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
+  getOpenCasesInteractor,
   getPdfFromUrlInteractor,
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,
@@ -357,8 +368,10 @@ const allUseCases = {
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
+  updateDeficiencyStatisticInteractor,
   updateDocketEntryInteractor,
   updateDocketEntryMetaInteractor,
+  updateOtherStatisticsInteractor,
   updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
@@ -373,6 +386,7 @@ const allUseCases = {
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
+  validateAddDeficiencyStatisticsInteractor,
   validateAddIrsPractitionerInteractor,
   validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
@@ -448,9 +462,9 @@ const applicationContext = {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
   },
-  getPdfStyles: async () => {
-    const pdfStyles = await import('../../shared/src/tools/pdfStyles.js');
-    return pdfStyles;
+  getPdfLib: () => {
+    const pdfLib = import('pdf-lib');
+    return pdfLib;
   },
   getPersistenceGateway: () => {
     return {
@@ -491,6 +505,7 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      dateStringsCompared,
       deconstructDate,
       filterEmptyStrings,
       formatCase,

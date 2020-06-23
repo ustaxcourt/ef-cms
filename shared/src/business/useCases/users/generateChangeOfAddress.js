@@ -172,7 +172,8 @@ exports.generateChangeOfAddress = async ({
           },
           isQC: true,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
         },
         { applicationContext },
       );
@@ -193,7 +194,7 @@ exports.generateChangeOfAddress = async ({
 
       caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-      const docketRecordPdfWithCover = await addCoverToPdf({
+      const { pdfData: docketRecordPdfWithCover } = await addCoverToPdf({
         applicationContext,
         caseEntity,
         documentEntity: changeOfAddressDocument,

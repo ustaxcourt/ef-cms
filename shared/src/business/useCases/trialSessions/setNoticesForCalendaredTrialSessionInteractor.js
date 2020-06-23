@@ -7,7 +7,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
-const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -27,6 +26,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 }) => {
   let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');

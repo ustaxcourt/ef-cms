@@ -10,6 +10,7 @@ import {
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
+import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
@@ -25,6 +26,12 @@ import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
+const ADVANCED_SEARCH_TABS = {
+  CASE: 'case',
+  OPINION: 'opinion',
+  ORDER: 'order',
+};
+
 const applicationContextPublic = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
@@ -33,6 +40,7 @@ const applicationContextPublic = {
   getCognitoLoginUrl,
   getConstants: () =>
     deepFreeze({
+      ADVANCED_SEARCH_TABS,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
@@ -44,6 +52,7 @@ const applicationContextPublic = {
   getUseCases: () => ({
     casePublicSearchInteractor,
     generatePublicDocketRecordPdfInteractor,
+    getCaseForPublicDocketSearchInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     getPublicJudgesInteractor,
     opinionPublicSearchInteractor,

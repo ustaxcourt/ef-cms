@@ -65,6 +65,7 @@
     "eventCode": "P",
     "index": 1,
     "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
+    "numberOfPages": 1,
     "filingDate": "2020-01-02T16:05:45.979Z",
     "filedBy": "Petr. Bill Burr"
   },
@@ -95,6 +96,7 @@
     "sk": "document|0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
+    "numberOfPages": 1,
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
   },
   {
@@ -120,6 +122,7 @@
           "pending": false,
           "partySecondary": false,
           "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
+          "numberOfPages": 1,
           "receivedAt": "2020-01-02T16:05:45.979Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
@@ -129,7 +132,8 @@
         "isInitializeCase": true,
         "assigneeId": null,
         "isQC": true,
-        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitioner",
+        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2020-01-02T16:05:45.979Z",
         "assigneeName": null,
         "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
@@ -156,6 +160,7 @@
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "sk": "document|cb323daf-c541-4645-bb44-232255d03d40",
     "partySecondary": false,
+    "numberOfPages": 1,
     "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
   }

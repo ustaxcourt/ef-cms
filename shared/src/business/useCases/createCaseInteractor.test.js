@@ -90,6 +90,9 @@ describe('createCaseInteractor', () => {
     expect(result).toBeDefined();
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toBeCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).toBeCalled();
   });

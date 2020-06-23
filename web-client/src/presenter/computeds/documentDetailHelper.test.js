@@ -1,4 +1,5 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Correspondence } from '../../../../shared/src/business/entities/Correspondence';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -725,247 +726,403 @@ describe('document detail helper', () => {
     });
   });
 
-  it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketRecord: [],
-          documents: [
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              documentType: 'Proposed Stipulated Decision',
-              processingStatus: 'pending',
-              reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'petitioner',
-              workItems: [
-                {
-                  caseStatus: Case.STATUS_TYPES.new,
-                  completedAt: '2018-11-21T20:49:28.192Z',
-                  completedBy: 'William T. Riker',
-                  document: {
-                    receivedAt: '2018-11-21T20:49:28.192Z',
+  describe('formattedDocument', () => {
+    it('should search for the specified document in the case correspondence list', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            correspondence: [mockCorrespondence],
+            docketRecord: [],
+            documents: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentType: 'Proposed Stipulated Decision',
+                processingStatus: 'pending',
+                reviewDate: '2018-11-21T20:49:28.192Z',
+                userId: 'petitioner',
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    completedAt: '2018-11-21T20:49:28.192Z',
+                    completedBy: 'William T. Riker',
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
                   },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
+                  {
+                    assigneeId: 'abc',
+                    caseStatus: Case.STATUS_TYPES.new,
+                    document: {
+                      documentType: 'Proposed Stipulated Decision',
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
 
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-                {
-                  assigneeId: 'abc',
-                  caseStatus: Case.STATUS_TYPES.new,
-                  document: {
-                    documentType: 'Proposed Stipulated Decision',
-                    receivedAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
                   },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        workQueueToDisplay: { workQueueIsInternal: true },
-      },
-    });
-
-    expect(result.formattedDocument.qcInfo).toMatchObject({
-      date: '11/21/18',
-      name: 'William T. Riker',
-    });
-  });
-
-  it('should indicate QC completed by "qcByUser" on Document if present', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketRecord: [],
-          documents: [
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              documentType: 'Proposed Stipulated Decision',
-              processingStatus: 'pending',
-              qcAt: '2019-10-27T20:49:28.192Z',
-              qcByUser: {
-                name: 'Reginald Barclay',
-                userId: 'xyzzy',
+                ],
               },
-              reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'petitioner',
-              workItems: [
-                {
-                  caseStatus: Case.STATUS_TYPES.new,
-                  completedAt: '2018-11-21T20:49:28.192Z',
-                  completedBy: 'William T. Riker',
-                  document: {
-                    receivedAt: '2018-11-21T20:49:28.192Z',
-                  },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-                {
-                  assigneeId: 'abc',
-                  caseStatus: Case.STATUS_TYPES.new,
-                  document: {
-                    documentType: 'Proposed Stipulated Decision',
-                    receivedAt: '2018-11-21T20:49:28.192Z',
-                  },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+            ],
+          },
+          documentId: '123-abc',
+          workQueueToDisplay: { workQueueIsInternal: true },
         },
+      });
+
+      expect(result.formattedDocument.documentId).toEqual(
+        mockCorrespondence.documentId,
+      );
+    });
+
+    it('should search for the specified document in the case documents list', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const mockDocument = {
+        createdAt: '2018-11-21T20:49:28.192Z',
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        workQueueToDisplay: { workQueueIsInternal: true },
-      },
-    });
+        documentType: 'Proposed Stipulated Decision',
+        processingStatus: 'pending',
+        reviewDate: '2018-11-21T20:49:28.192Z',
+        userId: 'petitioner',
+        workItems: [
+          {
+            caseStatus: Case.STATUS_TYPES.new,
+            completedAt: '2018-11-21T20:49:28.192Z',
+            completedBy: 'William T. Riker',
+            document: {
+              receivedAt: '2018-11-21T20:49:28.192Z',
+            },
+            messages: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
 
-    expect(result.formattedDocument.qcInfo).toMatchObject({
-      date: '10/27/19',
-      name: 'Reginald Barclay',
-    });
-  });
-
-  it('should filter out completed work items with Served on IRS messages', () => {
-    const user = {
-      role: User.ROLES.adc,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketRecord: [],
-          documents: [
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                message: 'Served on IRS',
+              },
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                message: 'Test',
+              },
+            ],
+          },
+          {
+            assigneeId: 'abc',
+            caseStatus: Case.STATUS_TYPES.new,
+            document: {
               documentType: 'Proposed Stipulated Decision',
-              processingStatus: 'pending',
-              reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'petitioner',
-              workItems: [
-                {
-                  caseStatus: Case.STATUS_TYPES.new,
-                  completedAt: '2018-11-21T20:49:28.192Z',
-                  document: {
-                    receivedAt: '2018-11-21T20:49:28.192Z',
-                  },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-                {
-                  assigneeId: 'abc',
-                  caseStatus: Case.STATUS_TYPES.new,
-                  document: {
-                    documentType: 'Proposed Stipulated Decision',
-                    receivedAt: '2018-11-21T20:49:28.192Z',
-                  },
-                  messages: [
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-
-                      message: 'Served on IRS',
-                    },
-                    {
-                      createdAt: '2018-11-21T20:49:28.192Z',
-                      message: 'Test',
-                    },
-                  ],
-                },
-              ],
+              receivedAt: '2018-11-21T20:49:28.192Z',
             },
-          ],
+            messages: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+
+                message: 'Served on IRS',
+              },
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                message: 'Test',
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            correspondence: [mockCorrespondence],
+            docketRecord: [],
+            documents: [mockDocument],
+          },
+          documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          workQueueToDisplay: { workQueueIsInternal: true },
         },
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        workQueueToDisplay: { workQueueIsInternal: true },
-      },
+      });
+
+      expect(result.formattedDocument.documentId).toEqual(
+        mockDocument.documentId,
+      );
     });
 
-    expect(result.formattedDocument.workItems).toHaveLength(1);
-  });
+    it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentType: 'Proposed Stipulated Decision',
+                processingStatus: 'pending',
+                reviewDate: '2018-11-21T20:49:28.192Z',
+                userId: 'petitioner',
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    completedAt: '2018-11-21T20:49:28.192Z',
+                    completedBy: 'William T. Riker',
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
 
-  it("default to empty array when a document's workItems are non-existent", () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketRecord: [],
-          documents: [
-            {
-              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            },
-          ],
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                  {
+                    assigneeId: 'abc',
+                    caseStatus: Case.STATUS_TYPES.new,
+                    document: {
+                      documentType: 'Proposed Stipulated Decision',
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          workQueueToDisplay: { workQueueIsInternal: true },
         },
-        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      },
+      });
+
+      expect(result.formattedDocument.qcInfo).toMatchObject({
+        date: '11/21/18',
+        name: 'William T. Riker',
+      });
     });
 
-    expect(result.formattedDocument.documentId).toEqual(
-      'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    );
-    expect(result.formattedDocument.workItems).toEqual([]);
+    it('should indicate QC completed by "qcByUser" on Document if present', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentType: 'Proposed Stipulated Decision',
+                processingStatus: 'pending',
+                qcAt: '2019-10-27T20:49:28.192Z',
+                qcByUser: {
+                  name: 'Reginald Barclay',
+                  userId: 'xyzzy',
+                },
+                reviewDate: '2018-11-21T20:49:28.192Z',
+                userId: 'petitioner',
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    completedAt: '2018-11-21T20:49:28.192Z',
+                    completedBy: 'William T. Riker',
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                  {
+                    assigneeId: 'abc',
+                    caseStatus: Case.STATUS_TYPES.new,
+                    document: {
+                      documentType: 'Proposed Stipulated Decision',
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          workQueueToDisplay: { workQueueIsInternal: true },
+        },
+      });
+
+      expect(result.formattedDocument.qcInfo).toMatchObject({
+        date: '10/27/19',
+        name: 'Reginald Barclay',
+      });
+    });
+
+    it('should filter out completed work items with Served on IRS messages', () => {
+      const user = {
+        role: User.ROLES.adc,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                createdAt: '2018-11-21T20:49:28.192Z',
+                documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                documentType: 'Proposed Stipulated Decision',
+                processingStatus: 'pending',
+                reviewDate: '2018-11-21T20:49:28.192Z',
+                userId: 'petitioner',
+                workItems: [
+                  {
+                    caseStatus: Case.STATUS_TYPES.new,
+                    completedAt: '2018-11-21T20:49:28.192Z',
+                    document: {
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                  {
+                    assigneeId: 'abc',
+                    caseStatus: Case.STATUS_TYPES.new,
+                    document: {
+                      documentType: 'Proposed Stipulated Decision',
+                      receivedAt: '2018-11-21T20:49:28.192Z',
+                    },
+                    messages: [
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+
+                        message: 'Served on IRS',
+                      },
+                      {
+                        createdAt: '2018-11-21T20:49:28.192Z',
+                        message: 'Test',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          workQueueToDisplay: { workQueueIsInternal: true },
+        },
+      });
+
+      expect(result.formattedDocument.workItems).toHaveLength(1);
+    });
+
+    it("default to empty array when a document's workItems are non-existent", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              },
+            ],
+          },
+          documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        },
+      });
+
+      expect(result.formattedDocument.documentId).toEqual(
+        'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      );
+      expect(result.formattedDocument.workItems).toEqual([]);
+    });
   });
 
   describe('showConfirmEditOrder, showSignedAt, and showRemoveSignature', () => {
