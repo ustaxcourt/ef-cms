@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Returns the honeybadger key defined in each environment
 

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Returns the dynamsoft key defined in each environment
 
