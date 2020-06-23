@@ -25,9 +25,6 @@ exports.headers = headers;
  */
 exports.handle = async (event, fun) => {
   const applicationContext = createApplicationContext({});
-  if (event.source === 'serverless-plugin-warmup') {
-    return exports.sendOk('Lambda is warm!');
-  }
   try {
     let response = await fun();
 
@@ -90,9 +87,6 @@ exports.handle = async (event, fun) => {
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
 exports.redirect = async (event, fun, statusCode = 302) => {
-  if (event.source === 'serverless-plugin-warmup') {
-    return exports.sendOk('Lambda is warm!');
-  }
   try {
     const { url } = await fun();
     return {

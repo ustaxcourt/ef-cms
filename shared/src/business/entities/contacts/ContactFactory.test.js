@@ -1,13 +1,15 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { Case } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { CaseInternal } = require('../cases/CaseInternal');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, PAYMENT_STATUS } = require('../EntityConstants');
 
 let caseExternal;
 
-describe('Petition', () => {
+describe('ContactFactory', () => {
   describe('for Corporation Contacts', () => {
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal({
@@ -432,7 +434,6 @@ describe('Petition', () => {
   it('can validate valid Custodian contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'Other',
-
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -529,11 +530,9 @@ describe('Petition', () => {
     });
     expect(caseExternal.isValid()).toEqual(false);
   });
-
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'Other',
-
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -559,6 +558,37 @@ describe('Petition', () => {
       stinFileSize: 1,
     });
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
+    expect(() => {
+      caseExternal = new CaseExternal({
+        caseType: 'Other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: 'SOME INVALID PARTY TYPE',
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Chattanooga, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      });
+    }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
   it('does not require phone number for internal cases', () => {
@@ -600,5 +630,60 @@ describe('Petition', () => {
     );
 
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  describe('Cases with otherPetitioners', () => {
+    const partyTypeKeys = Object.keys(PARTY_TYPES);
+    partyTypeKeys.forEach(partyType => {
+      it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
+        let caseWithOtherPetitioners = new Case(
+          {
+            ...MOCK_CASE,
+            contactPrimary: {
+              ...MOCK_CASE.contactPrimary,
+              inCareOf: 'Peter Parker',
+              secondaryName: 'Trustee Name',
+            },
+            contactSecondary: {
+              ...MOCK_CASE.contactPrimary,
+              inCareOf: 'Peter Parker',
+              secondaryName: 'Trustee Name',
+            },
+            otherPetitioners: [
+              {
+                additionalName: 'First Other Petitioner',
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                country: 'USA',
+                countryType: 'domestic',
+                email: 'someone@example.com',
+                name: 'Jimmy Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                state: 'AK',
+              },
+              {
+                additionalName: 'First Other Petitioner',
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                country: 'USA',
+                countryType: 'domestic',
+                email: 'someone@example.com',
+                name: 'Jimmy Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                state: 'AK',
+              },
+            ],
+            partyType: PARTY_TYPES[partyType],
+          },
+          { applicationContext },
+        );
+
+        expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
+          null,
+        );
+      });
+    });
   });
 });

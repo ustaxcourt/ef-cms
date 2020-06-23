@@ -108,6 +108,7 @@ describe('setDocumentToEditAction', () => {
     });
     expect(result.state.form).toEqual({
       documentIdToEdit: '321',
+      documentType: 'Petition',
     });
   });
 });

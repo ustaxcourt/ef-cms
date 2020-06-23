@@ -992,11 +992,11 @@ const router = {
 
     registerRoute(
       '/case-messages/*/message-detail/*',
-      ifHasAccess((docketNumber, messageId) => {
+      ifHasAccess((docketNumber, parentMessageId) => {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
-          messageId,
+          parentMessageId,
         });
       }),
     );

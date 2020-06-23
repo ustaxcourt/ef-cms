@@ -5,13 +5,14 @@ import { withAppContextDecorator } from '../../withAppContext';
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 describe('formattedMessages', () => {
-  it('returns a createdAtFormatted', () => {
+  it('returns formatted date strings', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messages: [
           {
             caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
             docketNumber: '123-45',
             docketNumberSuffix: '',
@@ -30,6 +31,7 @@ describe('formattedMessages', () => {
     });
 
     expect(result[0].createdAtFormatted).toEqual('01/01/19');
+    expect(result[0].completedAtFormatted).toEqual('05/01/19');
   });
 
   it('sorts messages by createdAt', () => {
