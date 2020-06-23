@@ -86,6 +86,7 @@ const PetitionerInformation = connect(
                           formattedCaseDetail.showCaseTitleForPrimary &&
                           formattedCaseDetail.caseTitle
                         }
+                        showEmail={true}
                       />
                     </address>
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
