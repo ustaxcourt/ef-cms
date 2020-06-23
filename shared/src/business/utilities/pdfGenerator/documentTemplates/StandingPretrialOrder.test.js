@@ -33,7 +33,7 @@ describe('StandingPretrialOrder', () => {
       options.caseCaptionExtension,
     );
     expect(wrapper.find('#docket-number').text()).toEqual(
-      `Docket Number ${options.docketNumberWithSuffix}`,
+      `Docket No. ${options.docketNumberWithSuffix}`,
     );
   });
 
