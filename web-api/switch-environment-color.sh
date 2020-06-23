@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Usage
-#   downloads and starts elasticsearch for local use
+#   used for changing the environment's api from one color to the next
 
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]

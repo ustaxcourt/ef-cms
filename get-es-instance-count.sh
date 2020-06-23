@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Returns the honeybadger key defined in each environment
+# Returns the elasticsearch instance count defined in each environment
 
 # Usage
 #   ./get-keys.sh develop
