@@ -275,13 +275,23 @@ joiValidationDecorator(
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
-    servedAt: joiStrictTimestamp
-      .optional()
+    servedAt: joi
+      .alternatives()
+      .conditional('servedParties', {
+        is: joi.exist().not(null),
+        otherwise: joiStrictTimestamp.optional(),
+        then: joiStrictTimestamp.required(),
+      })
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
       .items({ name: joi.string().max(500).required() })
-      .optional(),
+      .when('servedAt', {
+        is: joi.exist().not(null),
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description('The parties to whom the document has been served.'),
     serviceDate: joiStrictTimestamp
       .max('now')
       .optional()

@@ -313,6 +313,52 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
     });
+
+    it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          servedAt: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeFalsy();
+      expect(document.getFormattedValidationErrors()).toMatchObject({
+        servedParties: '"servedParties" is required',
+      });
+    });
+
+    it('should fail validation when the document has servedParties and servedAt is not defined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          servedParties: 'Test Petitioner',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeFalsy();
+      expect(document.getFormattedValidationErrors()).toMatchObject({
+        servedAt: '"servedAt" is required',
+      });
+    });
   });
 
   describe('generate filed by string', () => {

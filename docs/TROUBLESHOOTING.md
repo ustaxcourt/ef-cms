@@ -136,3 +136,16 @@ This error occurs when code changes do not cause the checksums of the files to c
 
 Solution: Delete checksums from the environment dynamo table that is failing. For example, if the dev deploy is failing, navigate to the efcms-deploy-dev table in AWS and delete all the check-sum-** items. 
 
+### Terraform Deploy: Provided certificate does not exist
+
+This error happens due to the time it takes for AWS to get their certificates synchronized / checked. Example:
+
+```
+Error: Error applying plan:
+
+1 error occurred:
+	* module.ef-cms_apis.aws_apigatewayv2_domain_name.websockets_domain: 1 error occurred:
+	* aws_apigatewayv2_domain_name.websockets_domain: error creating API Gateway v2 domain name: BadRequestException: The provided certificate does not exist.
+```
+
+When this happens, re-run the deploy.

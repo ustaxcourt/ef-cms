@@ -5,7 +5,7 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesSectionOutbox = connect(
-  { formattedMessages: state.formattedMessages },
+  { formattedMessages: state.formattedMessages.messages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
@@ -57,7 +57,7 @@ export const CaseMessagesSectionOutbox = connect(
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
-                    {message.fromSection}
+                    {message.toSection}
                   </td>
                 </tr>
               </tbody>
