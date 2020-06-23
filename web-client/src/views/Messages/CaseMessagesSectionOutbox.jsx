@@ -5,7 +5,7 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesSectionOutbox = connect(
-  { formattedMessages: state.formattedMessages },
+  { formattedMessages: state.formattedMessages.messages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
