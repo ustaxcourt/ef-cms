@@ -5,7 +5,7 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesIndividualCompleted = connect(
-  { formattedMessages: state.formattedMessages },
+  { formattedMessages: state.formattedMessages.completedMessages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
       <>

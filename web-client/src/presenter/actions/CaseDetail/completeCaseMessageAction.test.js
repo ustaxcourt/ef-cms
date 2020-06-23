@@ -44,7 +44,6 @@ describe('completeCaseMessageAction', () => {
       message: 'the complete message',
       parentMessageId: '08c26c12-a3b0-40e6-abff-08152edeb053',
     });
-    expect(result.output).toHaveProperty('alertSuccess');
     expect(result.output).toHaveProperty('parentMessageId');
   });
 });

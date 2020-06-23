@@ -7,7 +7,6 @@ import { forwardCaseMessageAction } from '../actions/CaseDetail/forwardCaseMessa
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -24,7 +23,6 @@ export const forwardCaseMessageSequence = showProgressSequenceDecorator([
       forwardCaseMessageAction,
       stopShowValidationAction,
       setAlertSuccessAction,
-      setSaveAlertsForNavigationAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
