@@ -278,7 +278,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateFiledLodged).toEqual('04/19/2019');
+      expect(result.dateFiledLodged).toEqual('04/19/19');
     });
 
     it('shows does not show the filing date if the document does not have a valid filingDate', async () => {
@@ -371,7 +371,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateReceived).toEqual('04/19/2019 10:45 am');
+      expect(result.dateReceived).toEqual('04/19/19 10:45 am');
     });
 
     it('shows does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
@@ -418,7 +418,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateReceived).toEqual('04/19/2019');
+      expect(result.dateReceived).toEqual('04/19/19');
     });
 
     it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', async () => {
@@ -467,7 +467,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateServed).toEqual('04/20/2019');
+      expect(result.dateServed).toEqual('04/20/19');
     });
 
     it('does not display the service date if servedAt is not present', async () => {
@@ -515,7 +515,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19');
+      expect(result.docketNumber).toEqual('Docket No.: 102-19');
     });
 
     it('returns the docket number with suffix along with a Docket Number label', async () => {
@@ -540,7 +540,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19S');
+      expect(result.docketNumber).toEqual('Docket No.: 102-19S');
     });
 
     it('displays Electronically Filed when the document is filed electronically', async () => {
@@ -729,7 +729,7 @@ describe('addCoversheetInteractor', () => {
         useInitialData: true,
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19Z');
+      expect(result.docketNumber).toEqual('Docket No.: 102-19Z');
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
   });
