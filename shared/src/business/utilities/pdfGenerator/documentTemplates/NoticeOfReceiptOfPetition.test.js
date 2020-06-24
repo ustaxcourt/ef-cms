@@ -30,7 +30,7 @@ describe('NoticeOfReceiptOfPetition', () => {
     expect(wrapper.find('#caption').text()).toContain(caseTitle);
     expect(wrapper.find('#caption').text()).toContain(caseCaptionExtension);
     expect(wrapper.find('#docket-number').text()).toEqual(
-      `Docket Number ${docketNumberWithSuffix}`,
+      `Docket No. ${docketNumberWithSuffix}`,
     );
     expect(wrapper.find('h3').at(0).text()).toEqual(
       'Notice of Receipt of Petition',

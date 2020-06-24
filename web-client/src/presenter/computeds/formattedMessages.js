@@ -25,7 +25,7 @@ export const getFormattedMessages = ({ applicationContext, messages }) => {
     message => message.isCompleted,
   );
 
-  completedMessages.sort((a, b) => a.completedAt.localeCompare(b.completedAt));
+  completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
 
   return { completedMessages, inProgressMessages, messages: formattedMessages };
 };
