@@ -73,6 +73,72 @@ describe('CaseMessage', () => {
         'completedByUserId',
       ]);
     });
+
+    it('creates a valid CaseMessage with attachments', () => {
+      const message = new CaseMessage(
+        {
+          attachments: [
+            {
+              documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              eventCode: 'P',
+            },
+          ],
+          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+          caseStatus: 'General Docket - Not at Issue',
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: 'petitions',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: 'petitions',
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.isValid()).toBeTruthy();
+      expect(message.attachments).toEqual([
+        {
+          documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
+          documentTitle: 'Petition',
+        },
+      ]);
+    });
+
+    it('creates an invalid CaseMessage with invalid attachments', () => {
+      const message = new CaseMessage(
+        {
+          attachments: [
+            {
+              documentType: 'Petition',
+              eventCode: 'P',
+            },
+          ],
+          caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+          caseStatus: 'General Docket - Not at Issue',
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: 'petitions',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: 'petitions',
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.isValid()).toBeFalsy();
+    });
   });
 
   describe('markAsCompleted', () => {
