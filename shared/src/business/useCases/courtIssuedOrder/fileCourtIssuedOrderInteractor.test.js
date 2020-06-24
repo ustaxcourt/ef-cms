@@ -258,6 +258,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       caseTitle: 'Petitioner',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: caseRecord.docketNumber,
+      docketNumberWithSuffix: caseRecord.docketNumber,
       from: 'Test Petitionsclerk',
       fromSection: 'petitions',
       fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
