@@ -3,15 +3,17 @@ const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const { sortBy } = require('lodash');
 
+// a number (100 to 9999) followed by a - and a 2 digit year
+const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+// city, state, optional unique ID (generated automatically in testing files)
+const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
-
-const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
-
-const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 const CHIEF_JUDGE = 'Chief Judge';
 
