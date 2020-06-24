@@ -135,7 +135,7 @@ describe('update petitioner contact information on a case', () => {
     expect(updateCaseStub).not.toHaveBeenCalled();
   });
 
-  it.only('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
+  it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
