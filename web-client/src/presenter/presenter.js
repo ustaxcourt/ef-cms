@@ -273,6 +273,7 @@ import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequ
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
+import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
@@ -696,6 +697,7 @@ export const presenter = {
     showMoreOpenCasesSequence,
     showMoreResultsSequence,
     signOutSequence,
+    skipSigningOrderSequence,
     startScanSequence,
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
