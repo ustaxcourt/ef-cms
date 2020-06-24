@@ -9,6 +9,8 @@ const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
+const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
+
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
@@ -833,6 +835,7 @@ module.exports = {
   SCAN_MODES,
   SCENARIOS,
   SECTIONS,
+  SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_TERMS,
