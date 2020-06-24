@@ -61,7 +61,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         applicationContext,
         caseId,
       });
-  } else if (Case.isValidDocketNumber(caseId)) {
+  } else {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({

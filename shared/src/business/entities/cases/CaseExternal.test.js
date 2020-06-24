@@ -1,8 +1,5 @@
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { CaseExternal } = require('./CaseExternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
+const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
@@ -10,7 +7,7 @@ describe('CaseExternal entity', () => {
   describe('isValid', () => {
     it('requires ownership disclosure if filing type is a business', () => {
       const caseExternal = new CaseExternal({
-        businessType: ContactFactory.PARTY_TYPES.corporation,
+        businessType: PARTY_TYPES.corporation,
         caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
@@ -46,7 +43,7 @@ describe('CaseExternal entity', () => {
     });
     it('requires stinFile', () => {
       const caseExternal = new CaseExternal({
-        businessType: ContactFactory.PARTY_TYPES.corporation,
+        businessType: PARTY_TYPES.corporation,
         caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
@@ -65,7 +62,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
         preferredTrialCity: 'Chattanooga, Tennessee',
@@ -81,7 +78,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: {},
         petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, Tennessee',
@@ -97,7 +94,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
@@ -111,7 +108,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'testPetitionFile.pdf'),
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
@@ -128,7 +125,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
@@ -144,7 +141,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
@@ -160,7 +157,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
@@ -174,7 +171,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'testStinFile.pdf'),
@@ -193,7 +190,7 @@ describe('CaseExternal entity', () => {
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
         ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
@@ -211,7 +208,7 @@ describe('CaseExternal entity', () => {
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'test.pdf'),
         ownershipDisclosureFileSize: 0,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
@@ -225,7 +222,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
@@ -240,7 +237,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
         preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });

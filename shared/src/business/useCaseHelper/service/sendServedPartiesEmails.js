@@ -2,6 +2,7 @@ const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,
@@ -29,7 +30,7 @@ exports.sendServedPartiesEmails = async ({
     .formatNow('MMMM D, YYYY');
 
   //serve every document on IRS superuser if case has been served to the IRS
-  if (caseEntity.status !== Case.STATUS_TYPES.new) {
+  if (caseEntity.status !== CASE_STATUS_TYPES.new) {
     servedParties.electronic.push({
       email: applicationContext.getIrsSuperuserEmail(),
       name: 'IRS',

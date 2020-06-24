@@ -1,8 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { documents } = MOCK_CASE;
 
 const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
@@ -14,7 +13,7 @@ const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 describe('Get case', () => {
   it('success case by case id', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
     applicationContext
@@ -49,7 +48,7 @@ describe('Get case', () => {
       ],
     };
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
     applicationContext
@@ -88,7 +87,7 @@ describe('Get case', () => {
 
   it('failure case by case id', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
     applicationContext
@@ -108,7 +107,7 @@ describe('Get case', () => {
 
   it('success case by docket number', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
     applicationContext
@@ -128,6 +127,9 @@ describe('Get case', () => {
   });
 
   it('failure case by docket number', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue(undefined);
     await expect(
       getCaseInteractor({
         applicationContext,
@@ -148,7 +150,7 @@ describe('Get case', () => {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             caseType: 'Other',
             createdAt: new Date().toISOString(),
-            docketNumber: '00101-00',
+            docketNumber: '101-00',
             documents,
             petitioners: [{ name: 'Test Petitioner' }],
             preferredTrialCity: 'Washington, District of Columbia',
@@ -179,12 +181,12 @@ describe('Get case', () => {
             docketNumber: '00101-18',
             documents,
             irsPractitioners: [
-              { role: User.ROLES.irsPractitioner, userId: irsPractitionerId },
+              { role: ROLES.irsPractitioner, userId: irsPractitionerId },
             ],
             petitioners: [{ name: 'Test Petitioner' }],
             preferredTrialCity: 'Washington, District of Columbia',
             privatePractitioners: [
-              { role: User.ROLES.privatePractitioner, userId: practitionerId },
+              { role: ROLES.privatePractitioner, userId: practitionerId },
             ],
             procedureType: 'Regular',
             sealedDate: new Date().toISOString(),
@@ -194,7 +196,7 @@ describe('Get case', () => {
 
     it('restricted case by inadequate permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
-        role: User.ROLES.privatePractitioner,
+        role: ROLES.privatePractitioner,
         userId: 'practitioner2',
       });
 
@@ -215,7 +217,7 @@ describe('Get case', () => {
 
     it('full case access via sealed case permissions', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
-        role: User.ROLES.docketClerk,
+        role: ROLES.docketClerk,
         userId: practitioner2Id,
       });
 
@@ -240,7 +242,7 @@ describe('Get case', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
     applicationContext
@@ -250,7 +252,7 @@ describe('Get case', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         caseType: 'Other',
         createdAt: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'Test Petitioner' }],
         preferredTrialCity: 'Washington, District of Columbia',
         procedureType: 'Regular',

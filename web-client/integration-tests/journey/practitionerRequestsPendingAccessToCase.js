@@ -83,6 +83,10 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
     );
     expect(test.getState('validationErrors')).toEqual({});
 
+    expect(test.getState('wizardStep')).toBe('RequestAccessReview');
+
     await test.runSequence('submitCaseAssociationRequestSequence');
+
+    expect(test.getState('wizardStep')).toBeUndefined();
   });
 };

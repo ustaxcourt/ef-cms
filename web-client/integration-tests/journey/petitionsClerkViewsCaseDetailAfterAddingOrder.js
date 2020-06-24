@@ -1,4 +1,4 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkViewsCaseDetailAfterAddingOrder = test => {
   return it('Petitions clerk views case detail after adding order', async () => {
@@ -8,7 +8,7 @@ export const petitionsClerkViewsCaseDetailAfterAddingOrder = test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
+    expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
     expect(test.getState('caseDetail.documents').length).toEqual(3);
     expect(
       test

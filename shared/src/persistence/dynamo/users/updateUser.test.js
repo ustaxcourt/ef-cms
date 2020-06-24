@@ -1,14 +1,14 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 const { updateUser } = require('./updateUser');
-const { User } = require('../../../business/entities/User');
 
 const mockUserId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const mockUser = {
   name: 'Test User',
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: mockUserId,
 };

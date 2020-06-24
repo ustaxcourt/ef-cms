@@ -4,8 +4,8 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('updateDocketEntryMetaInteractor', () => {
   let docketRecord;
@@ -70,7 +70,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
     });
 

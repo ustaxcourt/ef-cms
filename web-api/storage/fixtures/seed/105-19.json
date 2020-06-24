@@ -75,7 +75,8 @@
     "createdAt": "2019-03-27T21:53:00.297Z",
     "docketNumber": "105-19",
     "docketNumberWithSuffix": "105-19",
-    "status": "New"
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",

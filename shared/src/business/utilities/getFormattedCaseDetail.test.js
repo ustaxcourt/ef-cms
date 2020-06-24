@@ -1,4 +1,3 @@
-import { Case } from '../entities/cases/Case';
 import {
   TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
@@ -9,9 +8,13 @@ import {
   getFormattedCaseDetail,
   sortDocketRecords,
 } from './getFormattedCaseDetail';
-import { User } from '../entities/User';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { calculateISODate, createISODateString } from './DateHandler';
+const {
+  CASE_STATUS_TYPES,
+  PAYMENT_STATUS,
+  ROLES,
+} = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -429,7 +432,7 @@ describe('formatCase', () => {
   it('should format trial details if case status is calendared', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.calendared,
+      status: CASE_STATUS_TYPES.calendared,
       trialDate: '2011-11-11',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
@@ -469,7 +472,7 @@ describe('formatCase', () => {
   it('should format trial details with incomplete trial information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.calendared,
+      status: CASE_STATUS_TYPES.calendared,
       trialDate: undefined,
       trialLocation: undefined,
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
@@ -494,7 +497,7 @@ describe('formatCase', () => {
   it('should show not scheduled section if case status is closed', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      status: Case.STATUS_TYPES.closed,
+      status: CASE_STATUS_TYPES.closed,
     });
 
     expect(result).toMatchObject({
@@ -611,7 +614,7 @@ describe('formatDocument', () => {
   it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
     const results = formatDocument(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
-      servedParties: [{ role: User.ROLES.irsSuperuser }],
+      servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
       servedPartiesCode: 'R',
@@ -753,7 +756,7 @@ it('should format filing fee string for a paid petition fee', () => {
       ...mockCaseDetailBase,
       petitionPaymentDate: '2019-03-01T21:40:46.415Z',
       petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
     },
   });
 
@@ -765,7 +768,7 @@ it('should format filing fee string for a waived petition fee', () => {
     applicationContext,
     caseDetail: {
       ...mockCaseDetailBase,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
     },
   });
@@ -778,7 +781,7 @@ it('should format filing fee string for an unpaid petition fee', () => {
     applicationContext,
     caseDetail: {
       ...mockCaseDetailBase,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     },
   });
 

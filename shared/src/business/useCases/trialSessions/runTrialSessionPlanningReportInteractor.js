@@ -3,9 +3,8 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { invert } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { TRIAL_CITIES, US_STATES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const getPreviousTerm = (currentTerm, currentYear) => {
@@ -39,7 +38,7 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const trialCities = [...TrialSession.TRIAL_CITIES.ALL];
+  const trialCities = [...TRIAL_CITIES.ALL];
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
       return applicationContext.getUtilities().compareStrings(a.city, b.city);
@@ -60,9 +59,7 @@ const getTrialSessionPlanningReportData = async ({
   for (const trialLocation of trialCities) {
     const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
     const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
-    const stateAbbreviation = invert(ContactFactory.US_STATES)[
-      trialLocation.state
-    ];
+    const stateAbbreviation = invert(US_STATES)[trialLocation.state];
 
     const eligibleCasesSmall = await applicationContext
       .getPersistenceGateway()

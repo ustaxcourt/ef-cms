@@ -4,6 +4,7 @@ const {
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('./getCaseDeadlinesForCaseInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
@@ -15,7 +16,7 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
 
   const mockUser = new User({
     name: 'Test Petitionsclerk',
-    role: User.ROLES.petitionsClerk,
+    role: ROLES.petitionsClerk,
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   });
 

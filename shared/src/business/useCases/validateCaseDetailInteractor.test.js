@@ -1,17 +1,20 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../test/mockUsers');
-const { User } = require('../entities/User');
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const contactPrimary = {
   address1: '123 Main St',
   city: 'Somewhere',
-  countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType: COUNTRY_TYPES.DOMESTIC,
   name: 'Test Petitioner',
   phone: '1234567890',
   postalCode: '12345',
@@ -72,7 +75,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -81,7 +84,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -89,7 +92,7 @@ describe('validate case detail', () => {
         filingType: 'Myself',
         hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
@@ -134,7 +137,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -143,7 +146,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -151,7 +154,7 @@ describe('validate case detail', () => {
         filingType: 'Other',
         hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
@@ -184,7 +187,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -193,7 +196,7 @@ describe('validate case detail', () => {
             docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
             workItems: [],
           },
@@ -201,7 +204,7 @@ describe('validate case detail', () => {
         filingType: 'Other',
         hasVerifiedIrsNotice: false,
         irsNoticeDate: null,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',

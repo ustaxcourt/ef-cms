@@ -4,8 +4,8 @@ const {
 const {
   uploadOrderDocumentInteractor,
 } = require('./uploadOrderDocumentInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
@@ -20,7 +20,7 @@ describe('uploadOrderDocumentInteractor', () => {
 
   it('uploads documents on behalf of authorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'admin',
     });
 

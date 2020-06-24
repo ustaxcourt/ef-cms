@@ -1,4 +1,4 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { DOCUMENT_CATEGORY_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -6,7 +6,7 @@ import { selectDocumentTypeHelper as selectDocumentTypeHelperComputed } from './
 import { withAppContextDecorator } from '../../withAppContext';
 
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
-Document.CATEGORY_MAP['Miscellaneous'].push({
+DOCUMENT_CATEGORY_MAP['Miscellaneous'].push({
   category: 'Miscellaneous',
   documentTitle: '[First, Second, etc.] Something to [anything]',
   documentType: 'Something [anything]',
@@ -18,7 +18,7 @@ Document.CATEGORY_MAP['Miscellaneous'].push({
   scenario: 'Nonstandard I',
 });
 
-Document.CATEGORY_MAP['Decision'].push({
+DOCUMENT_CATEGORY_MAP['Decision'].push({
   category: 'Decision',
   documentTitle: 'Stipulated Decision Entered [judge] [anything]',
   documentType: 'Stipulated Decision Entered',
@@ -37,7 +37,7 @@ const selectDocumentTypeHelper = withAppContextDecorator(
     getConstants: () => {
       return {
         ...applicationContext.getConstants(),
-        CATEGORY_MAP: Document.CATEGORY_MAP,
+        CATEGORY_MAP: DOCUMENT_CATEGORY_MAP,
       };
     },
   },
