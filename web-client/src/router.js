@@ -457,13 +457,13 @@ const router = {
 
     registerRoute(
       '/case-detail/*/create-order/*',
-      ifHasAccess((docketNumber, messageId) => {
+      ifHasAccess((docketNumber, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
-          messageId,
+          parentMessageId,
         });
       }),
     );
@@ -537,6 +537,19 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*/sign/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoSignOrderForMessageSequence');
+        return sequence({
+          docketNumber,
+          documentId,
+          parentMessageId,
         });
       }),
     );
