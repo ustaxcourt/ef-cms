@@ -74,7 +74,7 @@ describe('update primary contact on a case', () => {
     const changeOfAddressDocument = updatedCase.documents.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-    expect(updatedCase.primaryContact).toMatchObject({
+    expect(updatedCase.contactPrimary).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
       countryType: 'domestic',
