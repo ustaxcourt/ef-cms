@@ -1,11 +1,10 @@
 import { state } from 'cerebral';
 
 /**
- * redirects to the draft documents page
+ * redirects to the message detail
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
- *
  * @returns {object} object with a path and alert success
  */
 export const skipSigningOrderForMessageAction = ({ get }) => {
