@@ -14,7 +14,7 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     });
 
     await test.runSequence('openCreateOrderChooseTypeModalSequence', {
-      messageId: test.messageId,
+      parentMessageId: test.parentMessageId,
     });
 
     await test.runSequence('updateCreateOrderModalFormValueSequence', {
