@@ -8,14 +8,14 @@ const caseMessageModalHelper = withAppContextDecorator(
   caseMessageModalHelperComputed,
 );
 
-export const petitionsClerkCreatesNewMessageOnCase = test => {
+export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
   const getHelper = () => {
     return runCompute(caseMessageModalHelper, {
       state: test.getState(),
     });
   };
 
-  return it('petitions clerk creates new message on a case', async () => {
+  return it('petitions clerk creates new message on a case with the maximum allowed attachments', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -43,11 +43,22 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
       messageDocument.documentType,
     );
 
-    test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    // Add four more attachments to reach the maximum of five.
+    for (let i = 0; i < 4; i++) {
+      // currently doesn't matter if we add the same document over and over
+      await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+        documentId: messageDocument.documentId,
+      });
+    }
+
+    const helper = getHelper();
+    expect(helper.showAddDocumentForm).toEqual(false);
+    expect(helper.showAddMoreDocumentsButton).toEqual(false);
+    expect(helper.showMessageAttachments).toEqual(true);
 
     await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
       key: 'subject',
-      value: test.testMessageSubject,
+      value: 'what kind of bear is best?',
     });
 
     await test.runSequence('createCaseMessageSequence');
