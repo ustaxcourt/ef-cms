@@ -1,16 +1,34 @@
 const joi = require('@hapi/joi');
 const {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+  ANSWER_DOCUMENT_CODES,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_CAPTION_POSTFIX,
+  CASE_STATUS_TYPES,
+  CASE_TYPES,
+  CASE_TYPES_MAP,
+  CHIEF_JUDGE,
+  COURT_ISSUED_EVENT_CODES,
+  DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
+  FILING_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  MAX_FILE_SIZE_MB,
+  ORDER_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
+  ROLES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_LOCATION_MATCHER,
+} = require('../EntityConstants');
+const {
   calculateDifferenceInDays,
   createISODateString,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
-const {
-  CHIEF_JUDGE,
-  DOCKET_NUMBER_MATCHER,
-  TRIAL_LOCATION_MATCHER,
-} = require('./CaseConstants');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -25,127 +43,10 @@ const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
-const { Order } = require('../orders/Order');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
-const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 const joiStrictTimestamp = getTimestampSchema();
-const orderDocumentTypes = Order.ORDER_TYPES.map(
-  orderType => orderType.documentType,
-);
-const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
-  courtIssuedDoc => courtIssuedDoc.documentType,
-);
-
-Case.PAYMENT_STATUS = {
-  PAID: 'Paid',
-  UNPAID: 'Not Paid',
-  WAIVED: 'Waived',
-};
-
-Case.STATUS_TYPES = {
-  assignedCase: 'Assigned - Case', // Case has been assigned to a judge
-  assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
-  calendared: 'Calendared', // Case has been scheduled for trial
-  cav: 'CAV', // Core alternative valuation
-  closed: 'Closed', // Judge has made a ruling to close the case
-  generalDocket: 'General Docket - Not at Issue', // Submitted to the IRS
-  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)', // Case is ready for trial
-  jurisdictionRetained: 'Jurisdiction Retained', // Jurisdiction of a case is retained by a specific judge — usually after the case is on a judge’s trial calendar
-  new: 'New', // Case has not been QCed
-  onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
-  rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
-  submitted: 'Submitted', // Submitted to the judge for decision
-};
-
-Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  Case.STATUS_TYPES.assignedCase,
-  Case.STATUS_TYPES.assignedMotion,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.jurisdictionRetained,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.submitted,
-];
-
-Case.STATUS_TYPES_MANUAL_UPDATE = [
-  Case.STATUS_TYPES.assignedCase,
-  Case.STATUS_TYPES.assignedMotion,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.closed,
-  Case.STATUS_TYPES.generalDocket,
-  Case.STATUS_TYPES.generalDocketReadyForTrial,
-  Case.STATUS_TYPES.jurisdictionRetained,
-  Case.STATUS_TYPES.onAppeal,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.submitted,
-];
-
-Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS = 45;
-Case.ANSWER_CUTOFF_UNIT = 'day';
-
-Case.CASE_TYPES_MAP = {
-  cdp: 'CDP (Lien/Levy)',
-  deficiency: 'Deficiency',
-  djExemptOrg: 'Declaratory Judgment (Exempt Organization)',
-  djRetirementPlan: 'Declaratory Judgment (Retirement Plan)',
-  innocentSpouse: 'Innocent Spouse',
-  interestAbatement: 'Interest Abatement',
-  other: 'Other',
-  partnershipSection1101: 'Partnership (BBA Section 1101)',
-  partnershipSection6226: 'Partnership (Section 6226)',
-  partnershipSection6228: 'Partnership (Section 6228)',
-  passport: 'Passport',
-  whistleblower: 'Whistleblower',
-  workerClassification: 'Worker Classification',
-};
-
-Case.CASE_TYPES = Object.values(Case.CASE_TYPES_MAP);
-
-// This is the order that they appear in the UI
-Case.PROCEDURE_TYPES = ['Regular', 'Small'];
-
-Case.FILING_TYPES = {
-  [User.ROLES.petitioner]: [
-    'Myself',
-    'Myself and my spouse',
-    'A business',
-    'Other',
-  ],
-  [User.ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
-  ],
-};
-
-Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
-
-Case.ANSWER_DOCUMENT_CODES = [
-  'A',
-  'AAAP',
-  'AAPN',
-  'AATP',
-  'AATS',
-  'AATT',
-  'APA',
-  'ASAP',
-  'ASUP',
-  'ATAP',
-  'ATSP',
-];
-
-Case.AUTOMATIC_BLOCKED_REASONS = {
-  dueDate: 'Due Date',
-  pending: 'Pending Item',
-  pendingAndDueDate: 'Pending Item and Due Date',
-};
-
-Case.CHIEF_JUDGE = CHIEF_JUDGE;
-
-Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -241,7 +142,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
+    this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
     this.automaticBlocked = rawCase.automaticBlocked;
     this.automaticBlockedDate = rawCase.automaticBlockedDate;
     this.automaticBlockedReason = rawCase.automaticBlockedReason;
@@ -254,7 +155,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.highPriorityReason = rawCase.highPriorityReason;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.status = rawCase.status || Case.STATUS_TYPES.new;
+    this.status = rawCase.status || CASE_STATUS_TYPES.new;
     this.userId = rawCase.userId;
 
     if (Array.isArray(rawCase.statistics)) {
@@ -271,7 +172,9 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.caseType = rawCase.caseType;
   this.closedDate = rawCase.closedDate;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.docketNumber = rawCase.docketNumber;
+  if (rawCase.docketNumber) {
+    this.docketNumber = rawCase.docketNumber.replace(/^0+/, ''); // strip leading zeroes
+  }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
@@ -284,7 +187,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
   this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
   this.petitionPaymentStatus =
-    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+    rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
@@ -389,7 +292,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.contactSecondary = contacts.secondary;
 }
 
-Case.validationRules = {
+Case.VALIDATION_RULES = {
   associatedJudge: joi
     .string()
     .max(50)
@@ -412,7 +315,7 @@ Case.validationRules = {
     otherwise: joi.optional().allow(null),
     then: joi
       .string()
-      .valid(...Object.values(Case.AUTOMATIC_BLOCKED_REASONS))
+      .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
       .required()
       .description('The reason the case was automatically blocked from trial.'),
   }),
@@ -462,10 +365,10 @@ Case.validationRules = {
     .meta({ tags: ['Restricted'] }),
   caseType: joi
     .string()
-    .valid(...Case.CASE_TYPES)
+    .valid(...CASE_TYPES)
     .required(),
   closedDate: joi.when('status', {
-    is: Case.STATUS_TYPES.closed,
+    is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
     then: joiStrictTimestamp.required(),
   }),
@@ -493,7 +396,7 @@ Case.validationRules = {
   docketNumberSuffix: joi
     .string()
     .allow(null)
-    .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
   docketNumberWithSuffix: joi
     .string()
@@ -514,8 +417,8 @@ Case.validationRules = {
   filingType: joi
     .string()
     .valid(
-      ...Case.FILING_TYPES[User.ROLES.petitioner],
-      ...Case.FILING_TYPES[User.ROLES.privatePractitioner],
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
     )
     .optional(),
   hasVerifiedIrsNotice: joi
@@ -630,31 +533,31 @@ Case.validationRules = {
     .description('Reminder for clerks to review the Order to Show Cause.'),
   partyType: joi
     .string()
-    .valid(...Object.values(ContactFactory.PARTY_TYPES))
+    .valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
   petitionPaymentDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joiStrictTimestamp.optional().allow(null),
       then: joiStrictTimestamp.required(),
     })
     .description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
+      is: PAYMENT_STATUS.PAID,
       otherwise: joi.string().allow(null).optional(),
       then: joi.string().max(50).required(),
     })
     .description('How the petitioner paid the case fee.'),
   petitionPaymentStatus: joi
     .string()
-    .valid(...Object.values(Case.PAYMENT_STATUS))
+    .valid(...Object.values(PAYMENT_STATUS))
     .required()
     .description('Status of the case fee payment.'),
   petitionPaymentWaivedDate: joi
     .when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
+      is: PAYMENT_STATUS.WAIVED,
       otherwise: joiStrictTimestamp.allow(null).optional(),
       then: joiStrictTimestamp.required(),
     })
@@ -662,7 +565,7 @@ Case.validationRules = {
   preferredTrialCity: joi
     .alternatives()
     .try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+      joi.string().valid(...TRIAL_CITY_STRINGS, null),
       joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
@@ -673,7 +576,7 @@ Case.validationRules = {
     .description('List of private practitioners associated with the case.'),
   procedureType: joi
     .string()
-    .valid(...Case.PROCEDURE_TYPES)
+    .valid(...PROCEDURE_TYPES)
     .required()
     .description('Procedure type of the case.'),
   qcCompleteForTrial: joi
@@ -706,7 +609,7 @@ Case.validationRules = {
         .items(joi.object().meta({ entityName: 'Statistic' }))
         .optional(),
       then: joi.when('caseType', {
-        is: Case.CASE_TYPES_MAP.deficiency,
+        is: CASE_TYPES_MAP.deficiency,
         otherwise: joi
           .array()
           .items(joi.object().meta({ entityName: 'Statistic' }))
@@ -721,7 +624,7 @@ Case.validationRules = {
     .description('List of Statistic Entities for the case.'),
   status: joi
     .string()
-    .valid(...Object.values(Case.STATUS_TYPES))
+    .valid(...Object.values(CASE_STATUS_TYPES))
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
@@ -732,7 +635,7 @@ Case.validationRules = {
   trialLocation: joi
     .alternatives()
     .try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+      joi.string().valid(...TRIAL_CITY_STRINGS, null),
       joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
     )
     .optional()
@@ -774,8 +677,13 @@ Case.validationRules = {
 
 joiValidationDecorator(
   Case,
-  joi.object().keys(Case.validationRules),
+  joi.object().keys(Case.VALIDATION_RULES),
   Case.VALIDATION_ERROR_MESSAGES,
+);
+
+const orderDocumentTypes = ORDER_TYPES.map(orderType => orderType.documentType);
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
 /**
@@ -787,56 +695,56 @@ joiValidationDecorator(
 Case.getCaseCaption = function (rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
-    case ContactFactory.PARTY_TYPES.corporation:
-    case ContactFactory.PARTY_TYPES.petitioner:
+    case PARTY_TYPES.corporation:
+    case PARTY_TYPES.petitioner:
       caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.petitionerSpouse:
+    case PARTY_TYPES.petitionerSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Petitioners`;
       break;
-    case ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse:
+    case PARTY_TYPES.petitionerDeceasedSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
-    case ContactFactory.PARTY_TYPES.estate:
+    case PARTY_TYPES.estate:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
-    case ContactFactory.PARTY_TYPES.estateWithoutExecutor:
+    case PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.trust:
+    case PARTY_TYPES.trust:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
       break;
-    case ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner:
+    case PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters:
+    case PARTY_TYPES.partnershipOtherThanTaxMatters:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.partnershipBBA:
+    case PARTY_TYPES.partnershipBBA:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
-    case ContactFactory.PARTY_TYPES.conservator:
+    case PARTY_TYPES.conservator:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.guardian:
+    case PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Guardian, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.custodian:
+    case PARTY_TYPES.custodian:
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Custodian, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.nextFriendForMinor:
+    case PARTY_TYPES.nextFriendForMinor:
       caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson:
+    case PARTY_TYPES.nextFriendForIncompetentPerson:
       caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.donor:
+    case PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.transferee:
+    case PARTY_TYPES.transferee:
       caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
-    case ContactFactory.PARTY_TYPES.survivingSpouse:
+    case PARTY_TYPES.survivingSpouse:
       caseCaption = `${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
@@ -970,7 +878,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function (document) {
 
 Case.prototype.closeCase = function () {
   this.closedDate = createISODateString();
-  this.status = Case.STATUS_TYPES.closed;
+  this.status = CASE_STATUS_TYPES.closed;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
   return this;
@@ -982,7 +890,7 @@ Case.prototype.closeCase = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
-  this.status = Case.STATUS_TYPES.generalDocket;
+  this.status = CASE_STATUS_TYPES.generalDocket;
 
   return this;
 };
@@ -1001,7 +909,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     const result = caseCaptionRegex.exec(docketRecord.description);
     if (result) {
       const [, , changedCaption] = result;
-      lastCaption = changedCaption.replace(` ${Case.CASE_CAPTION_POSTFIX}`, '');
+      lastCaption = changedCaption.replace(` ${CASE_CAPTION_POSTFIX}`, '');
     }
   });
 
@@ -1012,7 +920,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
     this.addDocketRecord(
       new DocketRecord(
         {
-          description: `Caption of case is amended from '${lastCaption} ${Case.CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${Case.CASE_CAPTION_POSTFIX}'`,
+          description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
           eventCode: 'MINC',
           filingDate: createISODateString(),
         },
@@ -1075,8 +983,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
 Case.prototype.getPetitionDocument = function () {
   return this.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 };
 
@@ -1107,8 +1014,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
       new DocketRecord(
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
-          eventCode:
-            Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
           filingDate: this.receivedAt || this.createdAt,
         },
         { applicationContext },
@@ -1205,20 +1111,6 @@ Case.isValidCaseId = caseId =>
   );
 
 /**
- * isValidDocketNumber
- *
- * @param {string} docketNumber the docket number to validate
- * @returns {*|boolean} true if the docketNumber is valid, false otherwise
- */
-Case.isValidDocketNumber = docketNumber => {
-  return (
-    docketNumber &&
-    DOCKET_NUMBER_MATCHER.test(docketNumber) &&
-    parseInt(docketNumber.split('-')[0]) > 100
-  );
-};
-
-/**
  * stripLeadingZeros
  *
  * @param {string} docketNumber the docket number
@@ -1252,12 +1144,12 @@ Case.prototype.checkForReadyForTrial = function () {
   const currentDate = prepareDateFromString().toISOString();
 
   const isCaseGeneralDocketNotAtIssue =
-    this.status === Case.STATUS_TYPES.generalDocket;
+    this.status === CASE_STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
       const isAnswerDocument = includes(
-        Case.ANSWER_DOCUMENT_CODES,
+        ANSWER_DOCUMENT_CODES,
         document.eventCode,
       );
 
@@ -1267,10 +1159,10 @@ Case.prototype.checkForReadyForTrial = function () {
       );
 
       const requiredTimeElapsedSinceFiling =
-        daysElapsedSinceDocumentWasFiled > Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS;
+        daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
-        this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+        this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
   }
@@ -1365,7 +1257,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.trialTime = trialSessionEntity.startTime;
   this.trialLocation = trialSessionEntity.trialLocation;
   if (trialSessionEntity.isCalendared === true) {
-    this.status = Case.STATUS_TYPES.calendared;
+    this.status = CASE_STATUS_TYPES.calendared;
   }
   return this;
 };
@@ -1386,7 +1278,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
 
-  const isIrsSuperuser = user.role === User.ROLES.irsSuperuser;
+  const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
   const petitionDocument = (caseRaw.documents || []).find(
     doc => doc.documentType === 'Petition',
@@ -1407,7 +1299,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isCalendared = function () {
-  return this.status === Case.STATUS_TYPES.calendared;
+  return this.status === CASE_STATUS_TYPES.calendared;
 };
 
 /**
@@ -1416,7 +1308,7 @@ Case.prototype.isCalendared = function () {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isReadyForTrial = function () {
-  return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
+  return this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial;
 };
 
 /**
@@ -1455,11 +1347,11 @@ Case.prototype.updateAutomaticBlocked = function ({ caseDeadlines }) {
   const hasPendingItems = this.doesHavePendingItems();
   let automaticBlockedReason;
   if (hasPendingItems && !isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
   } else if (hasPendingItems) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.pending;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
   } else if (!isEmpty(caseDeadlines)) {
-    automaticBlockedReason = Case.AUTOMATIC_BLOCKED_REASONS.dueDate;
+    automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
   }
   if (automaticBlockedReason) {
     this.automaticBlocked = true;
@@ -1502,8 +1394,8 @@ Case.prototype.unsetAsHighPriority = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.removeFromTrial = function () {
-  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = Case.CHIEF_JUDGE;
+  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
+  this.associatedJudge = CHIEF_JUDGE;
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
@@ -1550,12 +1442,12 @@ Case.prototype.setCaseStatus = function (caseStatus) {
   this.status = caseStatus;
   if (
     [
-      Case.STATUS_TYPES.generalDocket,
-      Case.STATUS_TYPES.generalDocketReadyForTrial,
+      CASE_STATUS_TYPES.generalDocket,
+      CASE_STATUS_TYPES.generalDocketReadyForTrial,
     ].includes(caseStatus)
   ) {
-    this.associatedJudge = Case.CHIEF_JUDGE;
-  } else if (caseStatus === Case.STATUS_TYPES.closed) {
+    this.associatedJudge = CHIEF_JUDGE;
+  } else if (caseStatus === CASE_STATUS_TYPES.closed) {
     this.closeCase();
   }
   return this;
@@ -1649,10 +1541,10 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
  */
 Case.prototype.canConsolidate = function (caseToConsolidate) {
   const ineligibleStatusTypes = [
-    Case.STATUS_TYPES.new,
-    Case.STATUS_TYPES.generalDocket,
-    Case.STATUS_TYPES.closed,
-    Case.STATUS_TYPES.onAppeal,
+    CASE_STATUS_TYPES.new,
+    CASE_STATUS_TYPES.generalDocket,
+    CASE_STATUS_TYPES.closed,
+    CASE_STATUS_TYPES.onAppeal,
   ];
 
   const caseToCheck = caseToConsolidate || this;

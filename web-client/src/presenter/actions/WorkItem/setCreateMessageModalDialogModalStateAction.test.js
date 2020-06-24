@@ -16,7 +16,9 @@ describe('setCreateMessageModalDialogModalStateAction', () => {
     );
 
     expect(result.state.modal).toEqual({
-      form: {},
+      form: {
+        attachments: [],
+      },
       validationErrors: {},
     });
   });

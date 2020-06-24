@@ -10,37 +10,71 @@ import React from 'react';
 
 export const CaseListPractitioner = connect(
   {
+    caseType: state.openClosedCases.caseType,
+    closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     dashboardExternalHelper: state.dashboardExternalHelper,
-    formattedCases: state.formattedCases,
-    getCasesByStatusForUserSequence: sequences.getCasesByStatusForUserSequence,
+    externalUserCasesHelper: state.externalUserCasesHelper,
+    openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
+    setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
+    showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
   },
   function CaseListPractitioner({
+    caseType,
+    closedTab,
     dashboardExternalHelper,
-    formattedCases,
-    getCasesByStatusForUserSequence,
+    externalUserCasesHelper,
+    openTab,
+    setCaseTypeToDisplaySequence,
+    showMoreClosedCasesSequence,
+    showMoreOpenCasesSequence,
   }) {
-    const renderTable = () => (
-      <table className="usa-table responsive-table dashboard" id="case-list">
-        <thead>
-          <tr>
-            <th>
-              <span className="usa-sr-only">Lead Case Indicator</span>
-            </th>
-            <th>Docket number</th>
-            <th>Case title</th>
-            <th>Date filed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {formattedCases.map(item => (
-            <CaseListRowExternal
-              onlyLinkIfRequestedUserAssociated
-              formattedCase={item}
-              key={item.caseId}
-            />
-          ))}
-        </tbody>
-      </table>
+    const renderTable = (
+      cases,
+      showLoadMore,
+      showMoreResultsSequence,
+      tabName,
+    ) => (
+      <>
+        {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
+        {cases.length > 0 && (
+          <table
+            className="usa-table responsive-table dashboard"
+            id="case-list"
+          >
+            <thead>
+              <tr>
+                <th>
+                  <span className="usa-sr-only">Lead Case Indicator</span>
+                </th>
+                <th>Docket number</th>
+                <th>Case title</th>
+                <th>Date filed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cases.map(item => (
+                <CaseListRowExternal
+                  onlyLinkIfRequestedUserAssociated
+                  formattedCase={item}
+                  key={item.caseId}
+                />
+              ))}
+            </tbody>
+          </table>
+        )}
+        {showLoadMore && (
+          <Button
+            secondary
+            className="margin-bottom-20"
+            onClick={() => {
+              showMoreResultsSequence();
+            }}
+          >
+            Load More
+          </Button>
+        )}
+      </>
     );
 
     const renderStartButton = () => (
@@ -63,16 +97,31 @@ export const CaseListPractitioner = connect(
                 <Tabs
                   bind="currentViewMetadata.caseList.tab"
                   className="classic-horizontal-header3 no-border-bottom"
-                  defaultActiveTab="Open"
-                  onSelect={() => {
-                    getCasesByStatusForUserSequence();
-                  }}
+                  defaultActiveTab={openTab}
                 >
-                  <Tab id="tab-open" tabName="Open" title="Open">
-                    {renderTable()}
+                  <Tab
+                    id="tab-open"
+                    tabName={openTab}
+                    title={`Open Cases (${externalUserCasesHelper.openCasesCount})`}
+                  >
+                    {renderTable(
+                      externalUserCasesHelper.openCaseResults,
+                      externalUserCasesHelper.showLoadMoreOpenCases,
+                      showMoreOpenCasesSequence,
+                      openTab,
+                    )}
                   </Tab>
-                  <Tab id="tab-closed" tabName="Closed" title="Closed">
-                    {renderTable()}
+                  <Tab
+                    id="tab-closed"
+                    tabName={closedTab}
+                    title={`Closed Cases (${externalUserCasesHelper.closedCasesCount})`}
+                  >
+                    {renderTable(
+                      externalUserCasesHelper.closedCaseResults,
+                      externalUserCasesHelper.showLoadMoreClosedCases,
+                      showMoreClosedCasesSequence,
+                      closedTab,
+                    )}
                   </Tab>
                   <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
                     {renderStartButton()}
@@ -90,25 +139,37 @@ export const CaseListPractitioner = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row">{renderStartButton()}</div>
             <div className="grid-row">
-              <Tabs
-                bind="currentViewMetadata.caseList.tab"
-                className="classic-horizontal-header3 no-border-bottom"
-                defaultActiveTab="Open"
-                onSelect={() => {
-                  getCasesByStatusForUserSequence();
+              <select
+                aria-label="additional case info"
+                className="usa-select"
+                id="mobile-case-type-tab-selector"
+                onChange={e => {
+                  setCaseTypeToDisplaySequence({ tabName: e.target.value });
                 }}
               >
-                <Tab id="tab-open" tabName="Open" title="Open">
-                  {renderTable()}
-                </Tab>
-                <Tab id="tab-closed" tabName="Closed" title="Closed">
-                  {renderTable()}
-                </Tab>
-              </Tabs>
+                <option value={openTab}>
+                  Open Cases ({externalUserCasesHelper.openCasesCount})
+                </option>
+                <option value={closedTab}>
+                  Closed Cases ({externalUserCasesHelper.closedCasesCount})
+                </option>
+              </select>
             </div>
-            <div className="grid-row">
-              {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
-              <MyContactInformation />
+            <div className="grid-row margin-top-1">
+              {caseType === closedTab &&
+                renderTable(
+                  externalUserCasesHelper.closedCaseResults,
+                  externalUserCasesHelper.showLoadMoreClosedCases,
+                  showMoreClosedCasesSequence,
+                  closedTab,
+                )}
+              {caseType === openTab &&
+                renderTable(
+                  externalUserCasesHelper.openCaseResults,
+                  externalUserCasesHelper.showLoadMoreOpenCases,
+                  showMoreOpenCasesSequence,
+                  openTab,
+                )}
             </div>
           </div>
         </Mobile>

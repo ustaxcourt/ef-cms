@@ -1,8 +1,6 @@
-const {
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/cases/CaseConstants');
 const { Case } = require('../../entities/cases/Case');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UserCase } = require('../../entities/UserCase');
 
 /**

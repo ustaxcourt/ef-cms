@@ -88,7 +88,7 @@ export const StandingPretrialNotice = ({ footerDate, options, trialInfo }) => {
             </li>
           </ul>
         </li>
-        <li style={{ paddingTop: '10px' }}>
+        <li>
           <strong>WHAT TO DO THE DAY OF THE TRIAL SESSION</strong>
           <ul>
             <li>

@@ -1,12 +1,12 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsClerkCompletesAndSetsTrialSession';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
@@ -28,14 +28,14 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     contactSecondary: {
       address1: '123 Paper St.',
       city: 'Paper City',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Richard Papers',
       phone: '1231231234',
       postalCode: '12345',
       state: 'IA',
     },
     hasPaper: true,
-    partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    partyType: PARTY_TYPES.petitionerSpouse,
     preferredTrialCity: trialLocation,
     procedureType: 'Small', // should generate a Standing Pretrial Notice
     trialLocation,

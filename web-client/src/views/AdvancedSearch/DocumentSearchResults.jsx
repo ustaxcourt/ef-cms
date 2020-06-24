@@ -9,14 +9,12 @@ export const DocumentSearchResults = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     baseUrl: state.baseUrl,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     token: state.token,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
     baseUrl,
-    pageSize,
     showMoreResultsSequence,
     token,
   }) {
@@ -92,10 +90,10 @@ export const DocumentSearchResults = connect(
         {advancedDocumentSearchHelper.showLoadMore && (
           <Button
             secondary
-            aria-label={`load ${pageSize} more results`}
+            aria-label={'load more results'}
             onClick={() => showMoreResultsSequence()}
           >
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedDocumentSearchHelper.showNoMatches && (

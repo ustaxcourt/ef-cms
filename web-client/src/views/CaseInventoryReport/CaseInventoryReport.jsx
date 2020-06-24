@@ -140,7 +140,7 @@ export const CaseInventoryReport = connect(
                     <Button
                       onClick={() => caseInventoryReportLoadMoreSequence()}
                     >
-                      Load {caseInventoryReportHelper.nextPageSize} More
+                      Load More
                     </Button>
                   )}
                 </div>

@@ -4,7 +4,6 @@ const {
 
 describe('Filing an Answer', function () {
   before(() => {
-    cy.task('seed');
     cy.login('irsPractitioner', '/case-detail/102-19');
   });
 
@@ -43,6 +42,9 @@ describe('Filing an Answer', function () {
   });
 
   it('reflects changes to 102-19 by showing it in irsPractitioner case list', () => {
+    // wait for elasticsearch to refresh
+    cy.wait(1000);
+
     navigateToDashboard('irsPractitioner');
     cy.get('table#case-list').find('a').should('contain', '102-19');
   });

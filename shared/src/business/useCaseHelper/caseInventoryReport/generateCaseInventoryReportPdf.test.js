@@ -4,7 +4,7 @@ const {
 const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const mockCases = [
   {
@@ -23,7 +23,7 @@ describe('generateCaseInventoryReportPdf', () => {
   let user;
 
   beforeEach(() => {
-    user = { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
+    user = { role: ROLES.petitionsClerk, userId: 'petitionsClerk' };
 
     applicationContext.getCurrentUser.mockReturnValue(user);
 
@@ -35,7 +35,7 @@ describe('generateCaseInventoryReportPdf', () => {
   });
 
   it('throws an error if the user is unauthorized', async () => {
-    user = { role: User.ROLES.petitioner, userId: 'petitioner' };
+    user = { role: ROLES.petitioner, userId: 'petitioner' };
 
     applicationContext.getCurrentUser.mockReturnValue(user);
     await expect(

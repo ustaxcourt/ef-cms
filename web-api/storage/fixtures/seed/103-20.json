@@ -235,7 +235,8 @@
     "createdAt": "2020-01-23T21:45:34.520Z",
     "docketNumber": "103-20",
     "docketNumberWithSuffix": "103-20L",
-    "status": "Calendared"
+    "status": "Calendared",
+    "entityName": "UserCase"
   },
   {
     "associatedJudge": "Judge Armen",

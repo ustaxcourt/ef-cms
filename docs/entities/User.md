@@ -178,6 +178,25 @@
         presence: "required"
       allow: 
         - "User"
+    section: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    token: 
+      type: "string"
+      flags: 
+        presence: "optional"
+    userId: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     name: 
       type: "string"
       flags: 
@@ -270,75 +289,5 @@
               presence: "optional"
             allow: 
               - null
-    section: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "optional"
-      allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "petitions"
-        - "trialClerks"
-        - "armensChambers"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "gerbersChambers"
-        - "goekesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jacobsChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "wellsChambers"
-        - "admin"
-        - "admissionsclerk"
-        - "docketclerk"
-        - "floater"
-        - "inactivePractitioner"
-        - "irsPractitioner"
-        - "irsSuperuser"
-        - "judge"
-        - "petitioner"
-        - "petitionsclerk"
-        - "privatePractitioner"
-        - "trialclerk"
-    token: 
-      type: "string"
-      flags: 
-        presence: "optional"
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
 
  ```

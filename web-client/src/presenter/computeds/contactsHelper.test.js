@@ -1,5 +1,7 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  PARTY_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import { runCompute } from 'cerebral/test';
@@ -11,10 +13,10 @@ const contactsHelper = withAppContextDecorator(
 );
 
 const petitionerUser = {
-  role: User.ROLES.petitioner,
+  role: ROLES.petitioner,
 };
 const practitionerUser = {
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
 };
 
 describe('contactsHelper', () => {
@@ -22,7 +24,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.conservator },
+        form: { partyType: PARTY_TYPES.conservator },
       },
     });
     expect(result).toMatchObject({
@@ -39,7 +41,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.corporation },
+        form: { partyType: PARTY_TYPES.corporation },
       },
     });
     expect(result).toMatchObject({
@@ -55,7 +57,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.custodian },
+        form: { partyType: PARTY_TYPES.custodian },
       },
     });
     expect(result).toMatchObject({
@@ -72,7 +74,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.donor },
+        form: { partyType: PARTY_TYPES.donor },
       },
     });
     expect(result).toMatchObject({
@@ -88,7 +90,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estate,
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
@@ -109,7 +111,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
@@ -127,7 +129,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.guardian,
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -146,7 +148,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
       },
     });
@@ -166,7 +168,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -185,7 +187,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -204,7 +206,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -224,7 +226,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -243,7 +245,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -260,7 +262,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -283,7 +285,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -304,7 +306,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -323,7 +325,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.transferee,
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -340,7 +342,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.trust,
+          partyType: PARTY_TYPES.trust,
         },
       },
     });
@@ -358,7 +360,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.conservator },
+        form: { partyType: PARTY_TYPES.conservator },
       },
     });
     expect(result).toMatchObject({
@@ -375,7 +377,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.corporation },
+        form: { partyType: PARTY_TYPES.corporation },
       },
     });
     expect(result).toMatchObject({
@@ -391,7 +393,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.custodian },
+        form: { partyType: PARTY_TYPES.custodian },
       },
     });
     expect(result).toMatchObject({
@@ -408,7 +410,7 @@ describe('contactsHelper', () => {
     applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.donor },
+        form: { partyType: PARTY_TYPES.donor },
       },
     });
     expect(result).toMatchObject({
@@ -424,7 +426,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estate,
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
@@ -445,7 +447,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
@@ -463,7 +465,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.guardian,
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -482,7 +484,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
       },
     });
@@ -502,7 +504,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -521,7 +523,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -540,7 +542,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -559,7 +561,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -578,7 +580,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -595,7 +597,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -618,7 +620,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -639,7 +641,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -658,7 +660,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.transferee,
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -675,7 +677,7 @@ describe('contactsHelper', () => {
     const result = runCompute(contactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.trust,
+          partyType: PARTY_TYPES.trust,
         },
       },
     });

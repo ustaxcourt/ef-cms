@@ -5,6 +5,7 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { Document } = require('../entities/Document');
+const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { Message } = require('../entities/Message');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -140,8 +141,8 @@ exports.createCaseFromPaperInteractor = async ({
     {
       createdAt: caseToAdd.receivedAt,
       documentId: petitionFileId,
-      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.receivedAt,
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
@@ -167,7 +168,7 @@ exports.createCaseFromPaperInteractor = async ({
   if (applicationForWaiverOfFilingFeeFileId) {
     let {
       documentTitle,
-    } = Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
+    } = INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
       {
@@ -175,11 +176,9 @@ exports.createCaseFromPaperInteractor = async ({
         documentId: applicationForWaiverOfFilingFeeFileId,
         documentTitle,
         documentType:
-          Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
-            .documentType,
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
         eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
-            .eventCode,
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
@@ -201,9 +200,7 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   if (requestForPlaceOfTrialFileId) {
-    let {
-      documentTitle,
-    } = Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
+    let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
     if (caseToAdd.preferredTrialCity) {
       documentTitle = replaceBracketed(
         documentTitle,
@@ -217,9 +214,8 @@ exports.createCaseFromPaperInteractor = async ({
         documentId: requestForPlaceOfTrialFileId,
         documentTitle,
         documentType:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
@@ -245,8 +241,8 @@ exports.createCaseFromPaperInteractor = async ({
       {
         createdAt: caseToAdd.receivedAt,
         documentId: stinFileId,
-        documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-        eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
@@ -272,10 +268,8 @@ exports.createCaseFromPaperInteractor = async ({
       {
         createdAt: caseToAdd.receivedAt,
         documentId: ownershipDisclosureFileId,
-        documentType:
-          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.receivedAt,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,

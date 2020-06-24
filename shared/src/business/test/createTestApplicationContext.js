@@ -110,6 +110,7 @@ const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -240,8 +241,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFileUint8Array),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+    coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -383,7 +386,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return new User(
         user || {
           name: 'richard',
-          role: User.ROLES.petitioner,
+          role: ROLES.petitioner,
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       );

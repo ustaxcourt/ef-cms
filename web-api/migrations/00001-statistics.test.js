@@ -1,4 +1,6 @@
-const { Case } = require('../../shared/src/business/entities/cases/Case');
+const {
+  CASE_TYPES_MAP,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 const { up } = require('./00001-statistics');
@@ -54,7 +56,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.cdp,
+            caseType: CASE_TYPES_MAP.cdp,
           },
         ],
       }),
@@ -71,7 +73,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: false,
           },
         ],
@@ -89,7 +91,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: true,
           },
         ],
@@ -117,7 +119,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: true,
             statistics: [],
           },
@@ -146,7 +148,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: true,
             statistics: [
               {
@@ -182,7 +184,7 @@ describe('case statistics migration', () => {
         Items: [
           {
             ...mockCaseWithKeys,
-            caseType: Case.CASE_TYPES_MAP.deficiency,
+            caseType: CASE_TYPES_MAP.deficiency,
             hasVerifiedIrsNotice: true,
             statistics: [
               {

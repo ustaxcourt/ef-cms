@@ -1,4 +1,4 @@
-import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -11,7 +11,7 @@ const caseDetail = {
   contactPrimary: {
     address1: 'address 1',
     city: 'City',
-    countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+    countryType: COUNTRY_TYPES.DOMESTIC,
     name: 'Test Petitioner',
     phone: '123-123-1234',
     postalCode: '12345',
@@ -58,7 +58,7 @@ const caseDetail = {
     },
   ],
   irsPractitioners: [],
-  partyType: ContactFactory.PARTY_TYPES.petitioner,
+  partyType: PARTY_TYPES.petitioner,
   privatePractitioners: [],
 };
 

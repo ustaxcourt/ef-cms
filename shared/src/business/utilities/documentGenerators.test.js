@@ -11,8 +11,10 @@ const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
   order,
   pendingReport,
   receiptOfFiling,
@@ -164,6 +166,38 @@ describe('documentGenerators', () => {
     });
   });
 
+  describe('coverSheet', () => {
+    it('Generates a CoverSheet document', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner',
+          caseTitle: 'Test Person',
+          certificateOfService: true,
+          dateFiledLodged: '01/01/2020',
+          dateFiledLodgedLabel: 'Filed',
+          dateReceived: '01/02/2020',
+          dateServed: '01/03/2020',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+          electronicallyFiled: true,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CoverSheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('docketRecord', () => {
     it('Generates a Printable Docket Record document', async () => {
       const pdf = await docketRecord({
@@ -257,7 +291,7 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfDocketChange', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates a Notice of Docket Change document', async () => {
       const pdf = await noticeOfDocketChange({
         applicationContext,
         data: {
@@ -275,6 +309,42 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Of_Docket_Change', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('noticeOfReceiptOfPetition', () => {
+    it('generates a Notice of Receipt of Petition document', async () => {
+      const pdf = await noticeOfReceiptOfPetition({
+        applicationContext,
+        data: {
+          address: {
+            address1: '123 Some St.',
+            city: 'Somecity',
+            countryName: '',
+            name: 'Test Petitioner',
+            postalCode: '80008',
+            state: 'ZZ',
+          },
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          preferredTrialCity: 'Birmingham, AL',
+          receivedAtFormatted: 'December 1, 2019',
+          servedDate: 'June 3, 2020',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Receipt_Petition', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

@@ -2,24 +2,28 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  NOTICE_OF_TRIAL,
+  STANDING_PRETRIAL_NOTICE,
+  STANDING_PRETRIAL_ORDER,
+} = require('../../entities/EntityConstants');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
-const { Document } = require('../../entities/Document');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.documents.find(
-    document => document.documentType === Document.NOTICE_OF_TRIAL.documentType,
+    document => document.documentType === NOTICE_OF_TRIAL.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.documents.find(
     document =>
-      document.documentType ===
-        Document.STANDING_PRETRIAL_NOTICE.documentType ||
-      document.documentType === Document.STANDING_PRETRIAL_ORDER.documentType,
+      document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
+      document.documentType === STANDING_PRETRIAL_ORDER.documentType,
   );
 };
 
@@ -72,7 +76,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     user = new User({
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -133,7 +137,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
     user = new User({
       name: 'Petitioner',
-      role: User.ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
+      role: ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -205,7 +209,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketRecord.find(
-        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+        entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };
 
@@ -345,7 +349,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketRecord.find(
-        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+        entry => entry.description === NOTICE_OF_TRIAL.documentType,
       );
     };
 

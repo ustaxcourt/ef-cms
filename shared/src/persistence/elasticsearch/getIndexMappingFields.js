@@ -1,8 +1,8 @@
 /**
- * @param {object} args deconstructed arguments
- * @param {object} args.applicationContext the application context
- * @param {string} args.index the index we're querying
- * @return {object} the mapping properties of the specified index
+ * @param {object} arguments deconstructed arguments
+ * @param {object} arguments.applicationContext the application context
+ * @param {string} arguments.index the index we're querying
+ * @returns {object} the mapping properties of the specified index
  */
 exports.getIndexMappingFields = async ({ applicationContext, index }) => {
   const searchClient = applicationContext.getSearchClient();

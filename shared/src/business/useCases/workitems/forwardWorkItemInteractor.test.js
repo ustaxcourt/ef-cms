@@ -1,15 +1,15 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const mockPetitionsClerk = {
   name: 'Petitionsclerk',
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
 };
@@ -28,7 +28,7 @@ const mockCase = {
           assigneeId: null,
           assigneeName: null,
           caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
           docketNumberSuffix: null,
@@ -66,7 +66,7 @@ const mockCase = {
           assigneeId: null,
           assigneeName: null,
           caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
           docketNumberSuffix: null,
@@ -188,7 +188,7 @@ describe('forwardWorkItemInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     const mockTaxPayer = {
       name: 'Tax Payer',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
     applicationContext.getCurrentUser.mockReturnValue(mockTaxPayer);

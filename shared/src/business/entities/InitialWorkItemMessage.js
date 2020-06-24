@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { CHAMBERS_SECTIONS, SECTIONS } = require('./WorkQueue');
+const { CHAMBERS_SECTIONS, SECTIONS } = require('./EntityConstants');
 
 InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES = {
   assigneeId: 'Select a recipient',

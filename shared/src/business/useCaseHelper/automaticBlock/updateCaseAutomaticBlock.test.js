@@ -2,6 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
@@ -31,7 +35,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -55,7 +59,7 @@ describe('updateCaseAutomaticBlock', () => {
     expect(updatedCase).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -118,7 +122,7 @@ describe('updateCaseAutomaticBlock', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
-        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       {
         applicationContext,

@@ -1,6 +1,3 @@
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 const { Case } = require('../entities/cases/Case');
 
 /**
@@ -10,22 +7,23 @@ const { Case } = require('../entities/cases/Case');
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
  * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
  * @returns {object} the key/value pairs of computed strings
  */
 exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
   documentEntity,
+  useInitialData,
 }) => {
   const isLodged = documentEntity.lodged;
-  const { isPaper } = documentEntity;
+  const { certificateOfService, isPaper } = documentEntity;
 
   const dateServedFormatted =
     (documentEntity.servedAt &&
-      'Served ' +
-        applicationContext
-          .getUtilities()
-          .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+      applicationContext
+        .getUtilities()
+        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -53,7 +51,15 @@ exports.generateCoverSheetData = ({
         .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
     '';
 
-  const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
+  const caseCaptionToUse = useInitialData
+    ? caseEntity.initialCaption
+    : caseEntity.caseCaption;
+
+  const docketNumberSuffixToUse = useInitialData
+    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    : caseEntity.docketNumberSuffix;
+
+  const caseCaption = caseCaptionToUse || Case.getCaseCaption(caseEntity);
   let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {
@@ -68,22 +74,19 @@ exports.generateCoverSheetData = ({
   }
 
   const docketNumberWithSuffix =
-    caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
+    caseEntity.docketNumber + (docketNumberSuffixToUse || '');
 
   const coverSheetData = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService:
-      documentEntity.certificateOfService === true
-        ? 'Certificate of Service'
-        : '',
+    certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
     docketNumber: `Docket Number: ${docketNumberWithSuffix}`,
     documentTitle,
-    electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
+    electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',
   };
   return coverSheetData;
@@ -104,11 +107,13 @@ exports.addCoverToPdf = async ({
   documentEntity,
   pdfData,
   replaceCoversheet = false,
+  useInitialData = false,
 }) => {
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
     documentEntity,
+    useInitialData,
   });
 
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -118,10 +123,12 @@ exports.addCoverToPdf = async ({
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
-  const coverPagePdf = await generateCoverPagePdf({
-    applicationContext,
-    content: coverSheetData,
-  });
+  const coverPagePdf = await applicationContext
+    .getDocumentGenerators()
+    .coverSheet({
+      applicationContext,
+      data: coverSheetData,
+    });
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
   const coverPageDocumentPages = await pdfDoc.copyPages(
@@ -158,6 +165,7 @@ exports.addCoversheetInteractor = async ({
   caseId,
   documentId,
   replaceCoversheet = false,
+  useInitialData = false,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -192,6 +200,7 @@ exports.addCoversheetInteractor = async ({
     documentEntity,
     pdfData,
     replaceCoversheet,
+    useInitialData,
   });
 
   documentEntity.setAsProcessingStatusAsCompleted();

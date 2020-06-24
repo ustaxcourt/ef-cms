@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { runCompute } from 'cerebral/test';
 import { trialSessionsSummaryHelper as trialSessionsSummaryHelperComputed } from './trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -12,7 +12,7 @@ const trialSessionsSummaryHelper = withAppContextDecorator(
   trialSessionsSummaryHelperComputed,
   {
     getConstants: () => ({
-      USER_ROLES: User.ROLES,
+      USER_ROLES: ROLES,
     }),
     getCurrentUser: () => currentUser,
   },
@@ -21,7 +21,7 @@ const trialSessionsSummaryHelper = withAppContextDecorator(
 describe('trialSessionsSummaryHelper', () => {
   beforeEach(() => {
     currentUser = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: judgeId,
     };
   });
@@ -36,14 +36,14 @@ describe('trialSessionsSummaryHelper', () => {
 
   it('should return the judeUserId as the chambers judge associated with the logged in user', () => {
     currentUser = {
-      role: User.ROLES.chambers,
+      role: ROLES.chambers,
       userId: chambersId,
     };
 
     const result = runCompute(trialSessionsSummaryHelper, {
       state: {
         judgeUser: {
-          role: User.ROLES.judge,
+          role: ROLES.judge,
           userId: judgeId,
         },
       },
