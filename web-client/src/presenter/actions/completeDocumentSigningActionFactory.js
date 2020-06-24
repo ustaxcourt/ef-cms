@@ -10,11 +10,9 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get helper function
  * @returns {object} object with new document id
  */
-export const completeDocumentSigningAction = async ({
-  applicationContext,
-  get,
-}) => {
-  const messageId = get(state.currentViewMetadata.messageId);
+export const completeDocumentSigningActionFactory = ({
+  successMessage,
+}) => async ({ applicationContext, get }) => {
   const originalDocumentId = get(state.pdfForSigning.documentId);
   const caseId = get(state.caseDetail.caseId);
   const caseDetail = get(state.caseDetail);
@@ -79,22 +77,8 @@ export const completeDocumentSigningAction = async ({
     });
   }
 
-  if (messageId) {
-    const workItemIdToClose = document.workItems.find(workItem =>
-      workItem.messages.find(message => message.messageId === messageId),
-    ).workItemId;
-
-    await applicationContext.getUseCases().completeWorkItemInteractor({
-      applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
-      workItemId: workItemIdToClose,
-    });
-  }
-
   return {
-    alertSuccess: {
-      message: 'Signature added.',
-    },
+    alertSuccess: { message: successMessage },
     caseId,
     documentId: documentIdToReturn,
     tab: 'docketRecord',
