@@ -18,9 +18,9 @@ export const CaseMessagesRowAttachments = connect(
     return (
       <>
         {attachments &&
-          attachments.map(attachment => {
+          attachments.map((attachment, idx) => {
             return (
-              <div className="margin-bottom-1" key={attachment.documentId}>
+              <div className="margin-bottom-1" key={idx}>
                 <Button
                   link
                   icon="file-pdf"

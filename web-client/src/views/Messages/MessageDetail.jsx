@@ -150,8 +150,8 @@ export const MessageDetail = connect(
                   id="button-create-order"
                   onClick={() =>
                     openCreateOrderChooseTypeModalSequence({
-                      messageId:
-                        formattedMessageDetail.currentMessage.messageId,
+                      parentMessageId:
+                        formattedMessageDetail.currentMessage.parentMessageId,
                     })
                   }
                 >
@@ -214,7 +214,7 @@ export const MessageDetail = connect(
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
-                  formattedMessageDetail.attachments.map(attachment => {
+                  formattedMessageDetail.attachments.map((attachment, idx) => {
                     const active =
                       attachmentDocumentToDisplay === attachment
                         ? 'active'
@@ -222,7 +222,7 @@ export const MessageDetail = connect(
                     return (
                       <Button
                         className={`usa-button--unstyled attachment-viewer-button ${active}`}
-                        key={attachment.documentId}
+                        key={idx}
                         onClick={() => {
                           setAttachmentDocumentToDisplaySequence({
                             attachmentDocumentToDisplay: attachment,
