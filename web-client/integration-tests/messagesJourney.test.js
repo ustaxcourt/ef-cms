@@ -6,12 +6,18 @@ import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1Replie
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewMessageOnCase } from './journey/petitionsClerkCreatesNewMessageOnCase';
+import { petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments';
+import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
 import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
 import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/petitionsClerkViewsInProgressMessagesOnCaseDetail';
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const test = setupTest();
+const test = setupTest({
+  useCases: {
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  },
+});
 
 describe('messages journey', () => {
   beforeAll(() => {
@@ -28,6 +34,7 @@ describe('messages journey', () => {
   });
 
   loginAs(test, 'petitionsclerk');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
   petitionsClerkCreatesNewMessageOnCase(test);
   petitionsClerkViewsSentMessagesBox(test);
 
@@ -38,6 +45,7 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk');
   petitionsClerkViewsReplyInInbox(test);
+  petitionsClerkCreatesOrderFromMessage(test);
   petitionsClerkForwardsMessageToDocketClerk(test);
   petitionsClerkViewsInProgressMessagesOnCaseDetail(test);
 

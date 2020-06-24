@@ -9,6 +9,8 @@ const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
+const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
+
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
@@ -648,6 +650,7 @@ const PARIS_CHAMBERS_SECTION = 'parisChambers';
 const PUGHS_CHAMBERS_SECTION = 'pughsChambers';
 const RUWES_CHAMBERS_SECTION = 'ruwesChambers';
 const THORNTONS_CHAMBERS_SECTION = 'thorntonsChambers';
+const TOROS_CHAMBERS_SECTION = 'torosChambers';
 const URDAS_CHAMBERS_SECTION = 'urdasChambers';
 const VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
 const WELLS_CHAMBERS_SECTION = 'wellsChambers';
@@ -693,6 +696,7 @@ const CHAMBERS_SECTIONS = sortBy([
   THORNTONS_CHAMBERS_SECTION,
   URDAS_CHAMBERS_SECTION,
   VASQUEZS_CHAMBERS_SECTION,
+  TOROS_CHAMBERS_SECTION,
   WELLS_CHAMBERS_SECTION,
 ]);
 
@@ -838,6 +842,7 @@ module.exports = {
   SCAN_MODES,
   SCENARIOS,
   SECTIONS,
+  SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_TERMS,
