@@ -61,7 +61,7 @@ import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
-import { SignOrder } from './SignOrder';
+import { SignOrderFactory } from './SignOrderFactory';
 import { SignStipDecision } from './SignStipDecision';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
@@ -139,7 +139,14 @@ const pages = {
   ReviewSavedPetition,
   SecondaryContactEdit,
   SelectDocumentType,
-  SignOrder,
+  SignOrder: SignOrderFactory({
+    skipSequence: 'skipSigningOrderSequence',
+    submitSequence: 'saveDocumentSigningSequence',
+  }),
+  SignOrderForMessage: SignOrderFactory({
+    skipSequence: 'skipSigningOrderForMessageSequence',
+    submitSequence: 'saveDocumentSigningForMessageSequence',
+  }),
   SignStipDecision,
   SimplePdfPreviewPage,
   StartCaseInternal,
