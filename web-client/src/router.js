@@ -444,6 +444,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/create-order/*',
+      ifHasAccess((docketNumber, messageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
+        return app.getSequence('gotoCreateOrderSequence')({
+          docketNumber,
+          messageId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-court-issued',
       ifHasAccess(docketNumber => {
         setPageTitle(
