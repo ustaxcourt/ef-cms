@@ -1,4 +1,17 @@
 #!/bin/bash -e
+
+# Usage
+#   uploads the court logo to cognito and some custom css
+
+# Requirements
+#   - aws cli must be installed on your machine
+#   - aws credentials must be setup on your machine
+
+# Arguments
+#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+
+[ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+
 ENV=$1
 REGION="us-east-1"
 
