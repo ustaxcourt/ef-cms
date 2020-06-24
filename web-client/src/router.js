@@ -147,6 +147,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/draft-documents',
+      ifHasAccess(docketNumber => {
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'drafts',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-petitioner-information',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
