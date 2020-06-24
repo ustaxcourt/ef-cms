@@ -81,16 +81,16 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
       </div>
 
       <h4 className="text-center" id="cases-count">
-        Open Cases ({cases.length})
+        Open cases ({cases.length})
       </h4>
 
       <table>
         <thead>
           <tr>
-            <th>Docket no.</th>
+            <th>Docket No.</th>
             <th>Case Title</th>
-            <th>Petitioner counsel</th>
-            <th>Respondent counsel</th>
+            <th>Petitioner Counsel</th>
+            <th>Respondent Counsel</th>
           </tr>
         </thead>
         <tbody>

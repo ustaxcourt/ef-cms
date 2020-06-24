@@ -56,14 +56,6 @@ pushd ../template/websockets
 npx parcel build index.js --target node --bundle-node-modules --no-minify
 popd
 
-pushd ../../runtimes/puppeteer
-./build.sh 
-popd
-
-pushd ../../runtimes/clamav
-./build.sh 
-popd
-
 # exit on any failure
 set -eo pipefail
 

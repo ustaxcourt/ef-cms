@@ -11,11 +11,11 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
       <table>
         <thead>
           <tr>
-            <th>Docket</th>
+            <th>Docket No.</th>
             <th>Date Filed</th>
-            <th>Case name</th>
-            <th>Filings and proceedings</th>
-            <th>Case status</th>
+            <th>Case Name</th>
+            <th>Filings and Proceedings</th>
+            <th>Case Status</th>
             <th>Judge</th>
           </tr>
         </thead>
