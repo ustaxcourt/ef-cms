@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -122,6 +123,29 @@ exports.fileCourtIssuedOrderInteractor = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  if (documentMetadata.messageId) {
+    const message = await applicationContext
+      .getPersistenceGateway()
+      .getCaseMessage({
+        applicationContext,
+        caseId,
+        messageId: documentMetadata.messageId,
+      });
+
+    const caseMessageEntity = new CaseMessage(message, {
+      applicationContext,
+    }).validate();
+    caseMessageEntity.addAttachment({
+      documentId: documentEntity.documentId,
+      documentTitle: documentEntity.documentTitle,
+    });
+
+    await applicationContext.getPersistenceGateway().updateCaseMessage({
+      applicationContext,
+      caseMessage: caseMessageEntity.validate().toRawObject(),
+    });
+  }
 
   return caseEntity.toRawObject();
 };

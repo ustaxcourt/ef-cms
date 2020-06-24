@@ -218,4 +218,10 @@ CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
   return this;
 };
 
+CaseMessage.prototype.addAttachment = function (attachmentToAdd) {
+  this.attachments.push(attachmentToAdd);
+
+  return this;
+};
+
 module.exports = { CaseMessage };
