@@ -78,7 +78,11 @@ exports.fileExternalDocumentInteractor = async ({
   }
 
   const documentsToAdd = [
-    [documentIds.shift(), primaryDocumentMetadata, 'primaryDocument'],
+    [
+      documentIds.shift(),
+      { ...primaryDocumentMetadata, secondaryDocument },
+      'primaryDocument',
+    ],
   ];
 
   if (supportingDocuments) {

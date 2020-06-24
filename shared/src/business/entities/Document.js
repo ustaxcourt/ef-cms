@@ -94,6 +94,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
   this.secondaryDate = rawDocument.secondaryDate;
+  this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
