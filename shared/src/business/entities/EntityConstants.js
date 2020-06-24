@@ -3,17 +3,19 @@ const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy } = require('lodash');
 
+// a number (100 to 9999) followed by a - and a 2 digit year
+const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
+
+// city, state, optional unique ID (generated automatically in testing files)
+const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
+
+const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
-
-const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
-
-const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
-
-const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 const CHIEF_JUDGE = 'Chief Judge';
 
@@ -691,6 +693,7 @@ const CHAMBERS_SECTIONS = sortBy([
   RUWES_CHAMBERS_SECTION,
   THORNTONS_CHAMBERS_SECTION,
   URDAS_CHAMBERS_SECTION,
+  TOROS_CHAMBERS_SECTION,
   VASQUEZS_CHAMBERS_SECTION,
   TOROS_CHAMBERS_SECTION,
   WELLS_CHAMBERS_SECTION,
