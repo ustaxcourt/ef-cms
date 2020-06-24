@@ -11,7 +11,6 @@ export const SignOrder = connect(
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
-    messageDetail: state.messageDetail,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
