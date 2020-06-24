@@ -3,7 +3,7 @@ import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setupSignOrder } from './gotoSignOrderSequence';
 
 export const gotoSignOrderForMessageSequence = [
-  ...setupSignOrder,
+  setupSignOrder,
   setParentMessageIdAction,
   setCurrentPageAction('SignOrderForMessage'),
 ];

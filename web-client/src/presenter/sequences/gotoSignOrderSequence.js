@@ -23,6 +23,6 @@ export const setupSignOrder = [
 ];
 
 export const gotoSignOrderSequence = [
-  ...setupSignOrder,
+  setupSignOrder,
   setCurrentPageAction('SignOrder'),
 ];
