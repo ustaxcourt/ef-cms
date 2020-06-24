@@ -1,14 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * Uses state-side signature data (coordinates, page number, PDFJS Object) to apply
- * the signature to a new PDF and upload to S3, then calls a use case to attach the
- * new document to the associated case.
+ * calls use case to complete work item for the pdf after signing
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext object
  * @param {Function} providers.get the cerebral get helper function
- * @returns {object} object with new document id
  */
 export const completeWorkItemForDocumentSigningAction = async ({
   applicationContext,
