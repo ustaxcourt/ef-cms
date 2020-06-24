@@ -101,21 +101,21 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '1',
-          createdAt: '2019-01-01T16:29:13.122Z',
+          caseId: '2',
+          createdAt: '2019-01-01T17:29:13.122Z',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '2',
-          createdAt: '2019-01-01T17:29:13.122Z',
+          caseId: '1',
+          createdAt: '2019-01-01T16:29:13.122Z',
           isCompleted: true,
           message: 'This is a test message',
         },
       ]);
     });
 
-    it('returns completedMessages in order of completedAt', () => {
+    it('returns completedMessages in descending order of completedAt', () => {
       const result = getFormattedMessages({
         applicationContext,
         messages: [
@@ -127,14 +127,14 @@ describe('formattedMessages', () => {
             message: 'This is a test message',
           },
           {
-            caseId: '3',
+            caseId: '2',
             completedAt: '2019-01-01T16:29:13.122Z', // completed first
             createdAt: '2019-01-02T17:29:13.122Z',
             isCompleted: true,
             message: 'This is a test message',
           },
           {
-            caseId: '2',
+            caseId: '3',
             completedAt: '2019-01-02T16:29:13.122Z', // completed second
             createdAt: '2019-01-01T17:29:13.122Z',
             isCompleted: true,
@@ -145,23 +145,23 @@ describe('formattedMessages', () => {
 
       expect(result.completedMessages).toMatchObject([
         {
-          caseId: '3',
-          completedAt: '2019-01-01T16:29:13.122Z',
-          createdAt: '2019-01-02T17:29:13.122Z',
+          caseId: '1',
+          completedAt: '2019-01-03T16:29:13.122Z',
+          createdAt: '2019-01-01T16:29:13.122Z',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '2',
+          caseId: '3',
           completedAt: '2019-01-02T16:29:13.122Z',
           createdAt: '2019-01-01T17:29:13.122Z',
           isCompleted: true,
           message: 'This is a test message',
         },
         {
-          caseId: '1',
-          completedAt: '2019-01-03T16:29:13.122Z',
-          createdAt: '2019-01-01T16:29:13.122Z',
+          caseId: '2',
+          completedAt: '2019-01-01T16:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
           isCompleted: true,
           message: 'This is a test message',
         },
