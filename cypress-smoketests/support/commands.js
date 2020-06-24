@@ -26,6 +26,11 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.config(
+  'baseUrl',
+  `https://ui-${Cypress.env('ENV')}.${Cypress.env('EFCMS_DOMAIN')}`,
+);
+
 // https://github.com/cypress-io/cypress/issues/170
 // Usage: cy.upload_file('building.jpg', '#building [type="file"]');
 Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
