@@ -91,6 +91,10 @@ const DOCUMENT_INTERNAL_CATEGORY_MAP = documentMapInternal;
 const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 const OPINION_EVENT_CODES = ['MOP', 'SOP', 'TCOP'];
 
+const EXTERNAL_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+).map(t => t.documentType);
+
 const OPINION_DOCUMENT_TYPES = [
   {
     documentType: 'MOP - Memorandum Opinion',
@@ -814,6 +818,7 @@ module.exports = {
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
   EVENT_CODES,
+  EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
