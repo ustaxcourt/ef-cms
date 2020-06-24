@@ -134,6 +134,7 @@ import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePen
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
+import { gotoSignOrderForMessageSequence } from './sequences/gotoSignOrderForMessageSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
@@ -233,6 +234,7 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
+import { saveDocumentSigningForMessageSequence } from './sequences/saveDocumentSigningForMessageSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
@@ -273,6 +275,7 @@ import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequ
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
+import { skipSigningOrderForMessageSequence } from './sequences/skipSigningOrderForMessageSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
@@ -559,6 +562,7 @@ export const presenter = {
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
     gotoSecondaryContactEditSequence,
+    gotoSignOrderForMessageSequence,
     gotoSignOrderSequence,
     gotoSignPDFDocumentSequence,
     gotoStartCaseWizardSequence,
@@ -658,6 +662,7 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
+    saveDocumentSigningForMessageSequence,
     saveDocumentSigningSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
@@ -697,6 +702,7 @@ export const presenter = {
     showMoreOpenCasesSequence,
     showMoreResultsSequence,
     signOutSequence,
+    skipSigningOrderForMessageSequence,
     skipSigningOrderSequence,
     startScanSequence,
     submitAddConsolidatedCaseSequence,

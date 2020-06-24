@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setCreateOrderModalDataOnFormAction = ({ get, store }) => {
-  const { documentTitle, documentType, eventCode, messageId } = get(
+  const { documentTitle, documentType, eventCode, parentMessageId } = get(
     state.modal,
   );
 
@@ -16,6 +16,6 @@ export const setCreateOrderModalDataOnFormAction = ({ get, store }) => {
     store.set(state.form.documentTitle, documentTitle);
     store.set(state.form.documentType, documentType);
     store.set(state.form.eventCode, eventCode);
-    store.set(state.form.messageId, messageId);
+    store.set(state.form.parentMessageId, parentMessageId);
   }
 };
