@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { ALL_EVENT_CODES } = require('./EntityConstants');
+const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -99,7 +99,7 @@ joiValidationDecorator(
     numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
-      .valid('R', 'B', '')
+      .valid(...SERVED_PARTIES_CODES)
       .allow(null)
       .optional()
       .description('Served parties code to override system-computed code.'),
