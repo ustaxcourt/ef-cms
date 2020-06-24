@@ -20,7 +20,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 
   if (advancedSearchTab === searchTabs.OPINION) {
     showSealedIcon = false;
-    documentTypeVerbiage = `${documentTypeVerbiage} type`;
+    documentTypeVerbiage = `${documentTypeVerbiage} Type`;
   }
 
   if (searchResults) {
