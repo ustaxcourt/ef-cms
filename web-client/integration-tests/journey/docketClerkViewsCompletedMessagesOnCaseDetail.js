@@ -12,12 +12,12 @@ export const docketClerkViewsCompletedMessagesOnCaseDetail = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('caseDetail.messages').length).toEqual(3);
+    expect(test.getState('caseDetail.messages').length).toEqual(4);
 
     const caseMessagesFormatted = runCompute(formattedCaseMessages, {
       state: test.getState(),
     });
-    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(0);
+    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(1);
     expect(caseMessagesFormatted.completedMessages.length).toEqual(1);
   });
 };

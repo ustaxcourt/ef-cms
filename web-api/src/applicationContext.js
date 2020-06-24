@@ -42,6 +42,9 @@ const {
   trialSessionPlanningReport,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
+  addServedStampToDocument,
+} = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -1388,6 +1391,7 @@ module.exports = appContextUser => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
