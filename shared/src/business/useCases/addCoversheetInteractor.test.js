@@ -31,6 +31,7 @@ describe('addCoversheetInteractor', () => {
         createdAt: '2019-04-19T14:45:15.595Z',
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        filedBy: 'Test Petitioner',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
         processingStatus: 'pending',
@@ -59,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+        filedBy: 'Test Petitioner1',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
         lodged: true,
