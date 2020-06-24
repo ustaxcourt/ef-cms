@@ -34,7 +34,7 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toEqual({
-      documentTypeVerbiage: 'Opinion type',
+      documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
       showSealedIcon: false,
     });

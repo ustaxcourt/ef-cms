@@ -106,7 +106,7 @@ describe('TrialCalendar', () => {
     );
 
     expect(wrapper.find('#cases-count').text()).toEqual(
-      `Open Cases (${cases.length})`,
+      `Open cases (${cases.length})`,
     );
   });
 

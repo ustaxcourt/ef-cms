@@ -12,8 +12,8 @@ export const CaseMessagesSectionInbox = connect(
         <table className="usa-table work-queue subsection">
           <thead>
             <tr>
-              <th className="small" colSpan="2">
-                Docket Number
+              <th aria-label="Docket Number" className="small" colSpan="2">
+                Docket No.
               </th>
               <th className="small">Received</th>
               <th>Message</th>
