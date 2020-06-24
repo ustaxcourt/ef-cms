@@ -208,8 +208,9 @@ joiValidationDecorator(
         otherwise: joi.allow('').optional(),
         then: joi.required(),
       })
-      // TODO - fix this
-      .description('.'),
+      .description(
+        'The party who filed the document, either the petitioner or respondent on the case.',
+      ),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
