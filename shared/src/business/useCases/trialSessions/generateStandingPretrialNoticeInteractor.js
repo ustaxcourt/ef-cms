@@ -53,7 +53,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  return await applicationContext
+  const pdfData = await applicationContext
     .getDocumentGenerators()
     .standingPretrialNotice({
       applicationContext,
@@ -70,4 +70,9 @@ exports.generateStandingPretrialNoticeInteractor = async ({
         },
       },
     });
+
+  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
+    applicationContext,
+    pdfData,
+  });
 };

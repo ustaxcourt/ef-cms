@@ -13,6 +13,5 @@ export const petitionsClerkViewsReplyInInbox = test => {
 
     expect(foundMessage).toBeDefined();
     expect(foundMessage.from).toEqual('Test Petitionsclerk1');
-    test.messageId = foundMessage.messageId;
   });
 };
