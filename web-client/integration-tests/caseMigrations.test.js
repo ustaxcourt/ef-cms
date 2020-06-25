@@ -39,22 +39,16 @@ const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Third Migrated Case',
-  caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
+  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
   correspondence: [
     {
-      documentId: 'f3662346-c38b-4729-b3cf-6621f78d33ef',
+      documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
       documentTitle: 'Receipt',
       filingDate: '2014-01-14T09:53:55.513-05:00',
       userId: '337d6ccc-0f5f-447d-a688-a925da37f252',
     },
-    {
-      documentId: '686211b8-bd2c-4e0b-9381-c66a895cfdfd',
-      documentTitle: 'Correspondence',
-      filingDate: '2014-01-14T09:53:55.523-05:00',
-      userId: '28ca4d90-3c85-4006-8154-46a4b517be1b',
-    },
   ],
-  docketNumber: '102-22',
+  docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
   status: 'Calendared',
 };
@@ -89,6 +83,6 @@ describe('Case journey', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: correspondenceCase.docketNumber,
     });
-    expect(test.getState('caseDetail.correspondence').length).toBe(2);
+    expect(test.getState('caseDetail.correspondence').length).toBe(1);
   });
 });
