@@ -58,6 +58,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
@@ -66,6 +67,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
@@ -74,6 +76,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {

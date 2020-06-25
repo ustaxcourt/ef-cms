@@ -4,10 +4,12 @@ import { runAction } from 'cerebral/test';
 
 const caseDetailMock = jest.fn();
 const documentDetailMock = jest.fn();
+const messageDetailMock = jest.fn();
 
 presenter.providers.path = {
   CaseDetail: caseDetailMock,
   DocumentDetail: documentDetailMock,
+  MessageDetail: messageDetailMock,
 };
 
 describe('getEditDocumentEntryPointAction', () => {
@@ -31,5 +33,17 @@ describe('getEditDocumentEntryPointAction', () => {
       state: {},
     });
     expect(documentDetailMock).toHaveBeenCalled();
+  });
+
+  it('returns the MessageDetail path if state.parentMessageId is set', async () => {
+    await runAction(getEditDocumentEntryPointAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        parentMessageId: '123',
+      },
+    });
+    expect(messageDetailMock).toHaveBeenCalled();
   });
 });
