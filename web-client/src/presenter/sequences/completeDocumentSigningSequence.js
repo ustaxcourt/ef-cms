@@ -5,8 +5,11 @@ import { completeDocumentSigningActionFactory } from '../actions/completeDocumen
 import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -27,6 +30,7 @@ export const completeDocumentSigningSequence = [
         successMessage: 'Signature added.',
       }),
       completeWorkItemForDocumentSigningAction,
+      parallel([setDocumentIdAction, setDocumentDetailTabAction]),
       updateWorkItemFromPropsOrModalOrFormAction,
       validateInitialWorkItemMessageAction,
       {
