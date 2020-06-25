@@ -126,4 +126,15 @@ describe('generateStandingPretrialNoticeInteractor', () => {
     expect(data.trialInfo.startDay).toEqual('Monday');
     expect(data.trialInfo.startTime).toEqual('09:00 AM');
   });
+
+  it('should add a served stamp to the document', async () => {
+    await generateStandingPretrialNoticeInteractor({
+      applicationContext,
+      docketNumber: '234-56',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().addServedStampToDocument,
+    ).toHaveBeenCalled();
+  });
 });

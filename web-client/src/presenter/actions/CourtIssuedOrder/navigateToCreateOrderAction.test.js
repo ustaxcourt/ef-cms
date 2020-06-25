@@ -38,7 +38,9 @@ describe('navigateToCreateOrderAction', () => {
         docketNumber: '123-20',
       },
       state: {
-        messageId: '02bb9dd7-391b-4aa7-9647-489184084e8b',
+        modal: {
+          parentMessageId: '02bb9dd7-391b-4aa7-9647-489184084e8b',
+        },
       },
     });
 

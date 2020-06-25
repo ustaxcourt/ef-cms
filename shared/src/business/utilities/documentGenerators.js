@@ -397,7 +397,6 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    footerDate,
     trialInfo,
   } = data;
 
@@ -430,16 +429,6 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     },
   });
 
-  let footerHtml = '';
-  if (footerDate) {
-    footerHtml = reactTemplateGenerator({
-      componentName: 'DateServedFooter',
-      data: {
-        dateServed: footerDate,
-      },
-    });
-  }
-
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
@@ -447,7 +436,6 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
-      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
@@ -460,7 +448,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    footerDate,
     trialInfo,
   } = data;
 
@@ -493,16 +480,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  let footerHtml = '';
-  if (footerDate) {
-    footerHtml = reactTemplateGenerator({
-      componentName: 'DateServedFooter',
-      data: {
-        dateServed: footerDate,
-      },
-    });
-  }
-
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
@@ -510,7 +487,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
-      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
