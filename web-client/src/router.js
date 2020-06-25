@@ -147,6 +147,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/draft-documents',
+      ifHasAccess(docketNumber => {
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'drafts',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-petitioner-information',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -444,6 +456,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/create-order/*',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
+        return app.getSequence('gotoCreateOrderSequence')({
+          docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-court-issued',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -512,6 +537,19 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*/sign/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoSignOrderForMessageSequence');
+        return sequence({
+          docketNumber,
+          documentId,
+          parentMessageId,
         });
       }),
     );

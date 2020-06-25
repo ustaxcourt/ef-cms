@@ -3361,4 +3361,42 @@ describe('Case entity', () => {
       expect(caseEntity.statistics.length).toEqual(2);
     });
   });
+
+  describe('isSealed', () => {
+    it('marks case as sealed if it has at least one document with isSealed = true', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            ...MOCK_DOCUMENTS,
+            {
+              ...MOCK_DOCUMENTS[0],
+              isSealed: true,
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isSealed).toBeTruthy();
+    });
+
+    it('marks case as sealed if it has at least one document with isLegacySealed = true', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          documents: [
+            ...MOCK_DOCUMENTS,
+            {
+              ...MOCK_DOCUMENTS[0],
+              isLegacySealed: true,
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isSealed).toBeTruthy();
+    });
+  });
 });

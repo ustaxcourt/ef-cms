@@ -42,6 +42,9 @@ const {
   trialSessionPlanningReport,
 } = require('../../shared/src/business/utilities/documentGenerators');
 const {
+  addServedStampToDocument,
+} = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
+const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
@@ -383,6 +386,9 @@ const {
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
+const {
+  getCaseMessage,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessage');
 const {
   getCaseMessagesByCaseId,
 } = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByCaseId');
@@ -1241,6 +1247,7 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseInventoryReport,
+        getCaseMessage,
         getCaseMessageThreadByParentId,
         getCaseMessagesByCaseId,
         getCasesByCaseIds,
@@ -1384,6 +1391,7 @@ module.exports = appContextUser => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         fetchPendingItems,
@@ -1599,7 +1607,7 @@ module.exports = appContextUser => {
         console.timeEnd(key);
       },
     },
-    notifyHoneybadger: async message => {
+    notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
       const notifyAsync = message => {
@@ -1609,6 +1617,19 @@ module.exports = appContextUser => {
       };
 
       if (honeybadger) {
+        const { role, userId } = getCurrentUser() || {};
+
+        const errorContext = {
+          role,
+          userId,
+        };
+
+        if (context) {
+          Object.assign(errorContext, context);
+        }
+
+        honeybadger.setContext(errorContext);
+
         await notifyAsync(message);
       }
     },

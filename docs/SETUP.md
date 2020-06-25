@@ -76,7 +76,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
 11. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
-12. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
 13. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
 14. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
 15. Update CircleCI to have all the new environment variables needed:

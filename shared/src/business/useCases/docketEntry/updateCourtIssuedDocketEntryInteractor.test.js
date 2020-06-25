@@ -41,18 +41,21 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
           documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
+          filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
         {

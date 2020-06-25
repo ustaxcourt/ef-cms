@@ -12,8 +12,8 @@ export const CaseMessagesIndividualCompleted = connect(
         <table className="usa-table work-queue subsection">
           <thead>
             <tr>
-              <th className="small" colSpan="2">
-                Docket Number
+              <th aria-label="Docket Number" className="small" colSpan="2">
+                Docket No.
               </th>
               <th className="small">Completed</th>
               <th>Last Message</th>
