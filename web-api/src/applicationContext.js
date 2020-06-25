@@ -1607,7 +1607,7 @@ module.exports = appContextUser => {
         console.timeEnd(key);
       },
     },
-    notifyHoneybadger: async message => {
+    notifyHoneybadger: async (message, context) => {
       const honeybadger = initHoneybadger();
 
       const notifyAsync = message => {
@@ -1617,6 +1617,19 @@ module.exports = appContextUser => {
       };
 
       if (honeybadger) {
+        const { role, userId } = getCurrentUser() || {};
+
+        const errorContext = {
+          role,
+          userId,
+        };
+
+        if (context) {
+          Object.assign(errorContext, context);
+        }
+
+        honeybadger.setContext(errorContext);
+
         await notifyAsync(message);
       }
     },
