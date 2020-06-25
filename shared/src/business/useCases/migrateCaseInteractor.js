@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { Correspondence } = require('../entities/Correspondence');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -40,6 +41,15 @@ exports.migrateCaseInteractor = async ({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+
+  for (const myCorrespondence of caseToAdd.correspondence) {
+    const correspondenceEntity = new Correspondence(myCorrespondence);
+    await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
+      applicationContext,
+      caseId: caseToAdd.caseId,
+      correspondence: correspondenceEntity.validate().toRawObject(),
+    });
+  }
 
   // when part of a consolidated case, run the update use case
   // which will link the cases together in DynamoDB
