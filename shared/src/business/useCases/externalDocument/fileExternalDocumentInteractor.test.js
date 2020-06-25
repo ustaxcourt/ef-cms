@@ -129,7 +129,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
-  it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
+  it('should set secondary document and secondary supporting documents to lodged', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
       documentIds: [
@@ -179,11 +179,11 @@ describe('fileExternalDocumentInteractor', () => {
         lodged: undefined,
       },
       {
-        eventCode: 'MISL', //secondary document
+        eventCode: 'M121', //secondary document
         lodged: true,
       },
       {
-        eventCode: 'MISL', // secondary supporting document
+        eventCode: 'M135', // secondary supporting document
         lodged: true,
       },
     ]);

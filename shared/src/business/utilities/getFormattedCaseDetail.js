@@ -172,6 +172,10 @@ const formatDocketRecordWithDocument = (
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
       }
+
+      if (formattedDocument.lodged) {
+        record.eventCode = 'MISCL';
+      }
     }
 
     return { document: formattedDocument, index, record };

@@ -137,6 +137,45 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('docketRecordWithDocument');
   });
 
+  it('should format only lodged docket entries with overridden eventCode MISCL', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          eventCode: 'M115',
+          index: '1',
+        },
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          eventCode: 'ADMR',
+          index: '2',
+        },
+      ],
+      documents: [
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: false,
+        },
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Administrative Record',
+          eventCode: 'ADMR',
+          lodged: true,
+        },
+      ],
+    });
+
+    expect(result.docketRecordWithDocument[0].record.eventCode).not.toEqual(
+      'MISCL',
+    );
+    expect(result.docketRecordWithDocument[1].record.eventCode).toEqual(
+      'MISCL',
+    );
+  });
+
   it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
