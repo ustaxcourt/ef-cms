@@ -431,6 +431,10 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    isSealed: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     leadCaseId: 
       type: "string"
       flags: 

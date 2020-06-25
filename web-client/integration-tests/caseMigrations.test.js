@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
   timeout: 1000,
 });
 
-const firstCase = {
+const firstConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The First Migrated Case',
@@ -24,7 +24,7 @@ const firstCase = {
   preferredTrialCity: 'Washington, District of Columbia',
   status: 'Calendared',
 };
-const secondCase = {
+const secondConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Second Migrated Case',
@@ -35,33 +35,54 @@ const secondCase = {
   status: 'Calendared',
 };
 
-describe('Case journey', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-    global.window = {
-      ...global.window,
-      localStorage: {
-        removeItem: () => null,
-        setItem: () => null,
-      },
-    };
-  });
+const correspondenceCase = {
+  ...MOCK_CASE,
+  associatedJudge: 'Chief Judge',
+  caseCaption: 'The Third Migrated Case',
+  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  correspondence: [
+    {
+      documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
+      documentTitle: 'Receipt',
+      filingDate: '2014-01-14T09:53:55.513-05:00',
+      userId: '337d6ccc-0f5f-447d-a688-a925da37f252',
+    },
+  ],
+  docketNumber: '106-15',
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: 'Calendared',
+};
 
+describe('Case journey', () => {
   it('should migrate cases', async () => {
-    await axiosInstance.post('http://localhost:4000/migrate/case', firstCase);
-    await axiosInstance.post('http://localhost:4000/migrate/case', secondCase);
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      firstConsolidatedCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      secondConsolidatedCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      correspondenceCase,
+    );
   });
 
   loginAs(test, 'docketclerk');
 
   it('Docketclerk views both consolidated case details', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: firstCase.docketNumber,
+      docketNumber: firstConsolidatedCase.docketNumber,
     });
     expect(test.getState('caseDetail.consolidatedCases').length).toBe(2);
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: secondCase.docketNumber,
+      docketNumber: secondConsolidatedCase.docketNumber,
     });
     expect(test.getState('caseDetail.consolidatedCases').length).toBe(2);
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: correspondenceCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.correspondence').length).toBe(1);
   });
 });
