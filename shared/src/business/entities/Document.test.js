@@ -6,7 +6,6 @@ const {
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
-const { flatten } = require('lodash');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
