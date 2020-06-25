@@ -289,6 +289,15 @@ describe('getAuthHeader', () => {
     expect(response).toEqual(undefined);
     expect(error).toBeDefined();
   });
+
+  it('should return null if header is not set correctly', () => {
+    let response;
+    response = getAuthHeader({
+      headers: {},
+      query: {},
+    });
+    expect(response).toEqual(null);
+  });
 });
 
 describe('getUserFromAuthHeader', () => {
@@ -308,6 +317,13 @@ describe('getUserFromAuthHeader', () => {
       headers: {
         Authorization: 'Bearer 123',
       },
+    });
+    expect(user).toEqual(null);
+  });
+
+  it('should return null if the user token is not defined', () => {
+    const user = getUserFromAuthHeader({
+      headers: {},
     });
     expect(user).toEqual(null);
   });
