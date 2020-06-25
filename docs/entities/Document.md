@@ -1123,6 +1123,8 @@
                     only: true
                   allow: 
                     - "Notice of Change of Address"
+                    - "Notice of Change of Telephone Number"
+                    - "Notice of Change of Address and Telephone Number"
                 then: 
                   type: "any"
                   whens: 
