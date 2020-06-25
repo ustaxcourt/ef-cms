@@ -228,9 +228,11 @@ function Case(rawCase, { applicationContext, filtered = false }) {
       .map(document => new Document(document, { applicationContext }))
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    this.isSealed = this.documents.some(
-      document => document.isSealed || document.isLegacySealed,
-    );
+    this.isSealed =
+      this.isSealed ||
+      this.documents.some(
+        document => document.isSealed || document.isLegacySealed,
+      );
   } else {
     this.documents = [];
   }
