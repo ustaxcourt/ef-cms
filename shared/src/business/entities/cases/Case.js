@@ -227,6 +227,12 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.documents = rawCase.documents
       .map(document => new Document(document, { applicationContext }))
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+
+    this.isSealed =
+      this.isSealed ||
+      this.documents.some(
+        document => document.isSealed || document.isLegacySealed,
+      );
   } else {
     this.documents = [];
   }
@@ -468,6 +474,7 @@ Case.VALIDATION_RULES = {
       'List of IRS practitioners (also known as respondents) associated with the case.',
     ),
   isPaper: joi.boolean().optional(),
+  isSealed: joi.boolean().optional(),
   leadCaseId: joi
     .string()
     .uuid({
