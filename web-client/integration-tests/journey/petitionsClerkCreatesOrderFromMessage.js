@@ -1,6 +1,11 @@
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedMessageDetail as formattedMessageDetailComputed } from '../../src/presenter/computeds/formattedMessageDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
@@ -49,5 +54,21 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     expect(messageDetailFormatted.attachments[1]).toMatchObject({
       documentTitle: 'Order',
     });
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    const draftOrder = caseDetailFormatted.formattedDraftDocuments.find(
+      document =>
+        document.documentTitle === 'Order' &&
+        document.draftState.richText === '<p>This is a test order.</p>',
+    );
+
+    expect(draftOrder).toBeTruthy();
   });
 };
