@@ -1,18 +1,13 @@
 const {
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  EXTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   ROLES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
-const { flatten } = require('lodash');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
-
-const EXTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-).map(t => t.documentType);
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
