@@ -182,45 +182,4 @@ describe('uploadExternalDocumentsAction', () => {
       },
     });
   });
-
-  it('should set filedBy on the document to the name of the currently authenticated user', async () => {
-    const mockCurrentUserName = 'Test User';
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: mockCurrentUserName,
-    });
-    uploadExternalDocumentsInteractor.mockReturnValue({
-      ...MOCK_CASE,
-      documents: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          processingStatus: 'pending',
-          userId: 'petitioner',
-          workItems: [],
-        },
-      ],
-    });
-
-    await runAction(uploadExternalDocumentsAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: MOCK_CASE,
-        form: {
-          attachments: true,
-          primaryDocumentFile: { data: 'something' },
-        },
-      },
-    });
-
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
-      documentMetadata: {
-        filedBy: mockCurrentUserName,
-      },
-    });
-  });
 });
