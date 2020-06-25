@@ -7,6 +7,7 @@ import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrder
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
+import { navigateToMessageDetailAction } from '../actions/navigateToMessageDetailAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
@@ -31,6 +32,7 @@ const onFileUploadedSuccess = [
       {
         CaseDetail: navigateToCaseDetailAction,
         DocumentDetail: navigateToDocumentDetailAction,
+        MessageDetail: navigateToMessageDetailAction,
       },
     ],
     yes: navigateToSignOrderAction,
