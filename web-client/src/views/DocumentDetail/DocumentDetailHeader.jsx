@@ -47,6 +47,9 @@ export const DocumentDetailHeader = connect(
               Served {documentDetailHelper.formattedDocument.servedAtFormatted}
             </div>
           )}
+          {documentDetailHelper.formattedDocument.showLegacySealed && (
+            <div>Sealed in Blackstone</div>
+          )}
         </div>
         <div>
           {documentDetailHelper.isDraftDocument && (
