@@ -65,7 +65,7 @@ export const WorkingCopySessionList = connect(
                       sort === 'docket' && 'sortActive',
                     )}
                   >
-                    Docket number
+                    Docket No.
                   </span>
                   {(sort === 'docket' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
@@ -73,7 +73,7 @@ export const WorkingCopySessionList = connect(
                 </Button>
               </th>
               <th aria-label="manually added indicator"></th>
-              <th className="no-wrap">Case title</th>
+              <th className="no-wrap">Case Title</th>
               <th className="no-wrap">
                 <Button
                   link
@@ -90,16 +90,16 @@ export const WorkingCopySessionList = connect(
                       sort === 'practitioner' && 'sortActive',
                     )}
                   >
-                    Petitioner counsel
+                    Petitioner Counsel
                   </span>
                   {(sort === 'practitioner' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </Button>
               </th>
-              <th className="no-wrap">Respondent counsel</th>
+              <th className="no-wrap">Respondent Counsel</th>
               <th className="no-wrap" colSpan="2">
-                Trial status
+                Trial Status
               </th>
             </tr>
           </thead>

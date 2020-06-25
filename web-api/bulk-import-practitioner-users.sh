@@ -1,4 +1,15 @@
 #!/bin/bash -e
+
+#
+# This script is used for importing a list of practitioner users from a provided .csv file
+#
+# Arguments
+#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   - $2 - the path to the CSV file to import.  See the practitioner_users.csv for an example
+
+[ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+[ -z "$2" ] && echo "The FILE_NAME must be provided as the \$2 argument.  An example value of this includes './practitioner_users.csv'" && exit 1
+
 ENV=$1
 REGION="us-east-1"
 FILE_NAME=$2

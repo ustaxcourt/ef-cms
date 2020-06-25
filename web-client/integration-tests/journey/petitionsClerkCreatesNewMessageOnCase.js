@@ -43,19 +43,6 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
       messageDocument.documentType,
     );
 
-    // Add four more attachments to reach the maximum of five.
-    for (let i = 0; i < 4; i++) {
-      // currently doesn't matter if we add the same document over and over
-      await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
-        documentId: messageDocument.documentId,
-      });
-    }
-
-    const helper = getHelper();
-    expect(helper.showAddDocumentForm).toEqual(false);
-    expect(helper.showAddMoreDocumentsButton).toEqual(false);
-    expect(helper.showMessageAttachments).toEqual(true);
-
     test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
 
     await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
