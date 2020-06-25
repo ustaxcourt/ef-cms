@@ -70,6 +70,8 @@ export const MessageDetail = connect(
     isExpanded: state.isExpanded,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
+    openCreateOrderChooseTypeModalSequence:
+      sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
     setAttachmentDocumentToDisplaySequence:
@@ -83,6 +85,7 @@ export const MessageDetail = connect(
     iframeSrc,
     isExpanded,
     openCompleteMessageModalSequence,
+    openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
     setAttachmentDocumentToDisplaySequence,
@@ -108,45 +111,53 @@ export const MessageDetail = connect(
             </div>
           )}
           <div className="grid-row grid-gap">
-            <div className="grid-col-8">
-              <h1>Message</h1>
+            <div className="grid-col-6">
+              <h1 className="margin-bottom-3">Message</h1>
             </div>
             {formattedMessageDetail.showActionButtons && (
-              <>
-                <div className="grid-col-1">
-                  <Button
-                    link
-                    className="action-button"
-                    icon="check-circle"
-                    id="button-complete"
-                    onClick={() => openCompleteMessageModalSequence()}
-                  >
-                    Complete
-                  </Button>
-                </div>
-                <div className="grid-col-1">
-                  <Button
-                    link
-                    className="action-button"
-                    icon="share-square"
-                    id="button-forward"
-                    onClick={() => openForwardMessageModalSequence()}
-                  >
-                    Forward
-                  </Button>
-                </div>
-                <div className="grid-col-1">
-                  <Button
-                    link
-                    className="action-button"
-                    icon="reply"
-                    id="button-reply"
-                    onClick={() => openReplyToMessageModalSequence()}
-                  >
-                    Reply
-                  </Button>
-                </div>
-              </>
+              <div className="grid-col-6 display-flex flex-row flex-justify-end">
+                <Button
+                  link
+                  className="action-button"
+                  icon="check-circle"
+                  id="button-complete"
+                  onClick={() => openCompleteMessageModalSequence()}
+                >
+                  Complete
+                </Button>
+                <Button
+                  link
+                  className="action-button margin-left-3"
+                  icon="share-square"
+                  id="button-forward"
+                  onClick={() => openForwardMessageModalSequence()}
+                >
+                  Forward
+                </Button>
+                <Button
+                  link
+                  className="action-button margin-left-3"
+                  icon="reply"
+                  id="button-reply"
+                  onClick={() => openReplyToMessageModalSequence()}
+                >
+                  Reply
+                </Button>
+                <Button
+                  link
+                  className="action-button margin-left-3 margin-right-0"
+                  icon="clipboard-list"
+                  id="button-create-order"
+                  onClick={() =>
+                    openCreateOrderChooseTypeModalSequence({
+                      parentMessageId:
+                        formattedMessageDetail.currentMessage.parentMessageId,
+                    })
+                  }
+                >
+                  Create Order
+                </Button>
+              </div>
             )}
           </div>
 
@@ -203,7 +214,7 @@ export const MessageDetail = connect(
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
-                  formattedMessageDetail.attachments.map(attachment => {
+                  formattedMessageDetail.attachments.map((attachment, idx) => {
                     const active =
                       attachmentDocumentToDisplay === attachment
                         ? 'active'
@@ -211,7 +222,7 @@ export const MessageDetail = connect(
                     return (
                       <Button
                         className={`usa-button--unstyled attachment-viewer-button ${active}`}
-                        key={attachment.documentId}
+                        key={idx}
                         onClick={() => {
                           setAttachmentDocumentToDisplaySequence({
                             attachmentDocumentToDisplay: attachment,

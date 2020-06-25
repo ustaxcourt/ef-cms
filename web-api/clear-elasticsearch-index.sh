@@ -1,4 +1,19 @@
 #!/bin/bash -e
+
+# 
+# This script is script part of the clear-env.sh script.  It is used for deleting the elasticsearch index
+# so that data can be reseeded if needed.
+
+# Requirements
+#   - terraform must be installed on your machine
+#   - node must be installed on your machine
+#   - AWS credentials must be setup on your machine
+#
+# Arguments
+#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+
+[ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+
 ENV=$1
 
 pushd ./web-api/terraform/main

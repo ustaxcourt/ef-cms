@@ -37,6 +37,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Petition',
         documentType: 'Petition',
+        filedBy: 'Test Petitioner',
         processingStatus: 'pending',
         userId: 'd13d017b-28d1-45b6-aa7d-f54865b0121b',
       },
