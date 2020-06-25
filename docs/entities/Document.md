@@ -1205,10 +1205,73 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    isLegacySealed: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Indicates whether or not the legacy document was sealed prior to being migrated to the new system."
+    isLegacy: 
+      type: "boolean"
+      flags: 
+        description: "Indicates whether or not the document belongs to a legacy case that has been migrated to the new system."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacySealed"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+              only: true
+            allow: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     isPaper: 
       type: "boolean"
       flags: 
         presence: "optional"
+    isSealed: 
+      type: "boolean"
+      flags: 
+        description: "Indicates whether or not the document is sealed."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacySealed"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+              only: true
+            allow: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     judge: 
       type: "string"
       flags: 
