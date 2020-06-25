@@ -225,7 +225,6 @@ const EVENT_CODES = [
   NOTICE_OF_TRIAL.eventCode,
   STANDING_PRETRIAL_NOTICE.eventCode,
   STANDING_PRETRIAL_ORDER.eventCode,
-  'MISL',
   'FEE',
   'FEEW',
   'MGRTED',
