@@ -42,6 +42,7 @@ const formatDocument = (applicationContext, document) => {
       .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
   }
 
+  result.showLegacySealed = !!result.isLegacySealed;
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = !!result.servedAt;
   result.isPetition =
