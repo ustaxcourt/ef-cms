@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
   timeout: 1000,
 });
 
-const firstCase = {
+const firstConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The First Migrated Case',
@@ -24,7 +24,7 @@ const firstCase = {
   preferredTrialCity: 'Washington, District of Columbia',
   status: 'Calendared',
 };
-const secondCase = {
+const secondConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Second Migrated Case',
@@ -35,33 +35,60 @@ const secondCase = {
   status: 'Calendared',
 };
 
-describe('Case journey', () => {
-  beforeEach(() => {
-    jest.setTimeout(30000);
-    global.window = {
-      ...global.window,
-      localStorage: {
-        removeItem: () => null,
-        setItem: () => null,
-      },
-    };
-  });
+const correspondenceCase = {
+  ...MOCK_CASE,
+  associatedJudge: 'Chief Judge',
+  caseCaption: 'The Third Migrated Case',
+  caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
+  correspondence: [
+    {
+      documentId: 'f3662346-c38b-4729-b3cf-6621f78d33ef',
+      documentTitle: 'Receipt',
+      filingDate: '2014-01-14T09:53:55.513-05:00',
+      userId: '337d6ccc-0f5f-447d-a688-a925da37f252',
+    },
+    {
+      documentId: '686211b8-bd2c-4e0b-9381-c66a895cfdfd',
+      documentTitle: 'Correspondence',
+      filingDate: '2014-01-14T09:53:55.523-05:00',
+      userId: '28ca4d90-3c85-4006-8154-46a4b517be1b',
+    },
+  ],
+  docketNumber: '102-22',
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: 'Calendared',
+};
 
+describe('Case journey', () => {
   it('should migrate cases', async () => {
-    await axiosInstance.post('http://localhost:4000/migrate/case', firstCase);
-    await axiosInstance.post('http://localhost:4000/migrate/case', secondCase);
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      firstConsolidatedCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      secondConsolidatedCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      correspondenceCase,
+    );
   });
 
   loginAs(test, 'docketclerk');
 
   it('Docketclerk views both consolidated case details', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: firstCase.docketNumber,
+      docketNumber: firstConsolidatedCase.docketNumber,
     });
     expect(test.getState('caseDetail.consolidatedCases').length).toBe(2);
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: secondCase.docketNumber,
+      docketNumber: secondConsolidatedCase.docketNumber,
     });
     expect(test.getState('caseDetail.consolidatedCases').length).toBe(2);
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: correspondenceCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.correspondence').length).toBe(2);
   });
 });
