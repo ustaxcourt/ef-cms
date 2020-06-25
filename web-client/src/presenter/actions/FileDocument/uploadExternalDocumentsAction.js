@@ -17,10 +17,16 @@ export const uploadExternalDocumentsAction = async ({
   path,
   store,
 }) => {
+  const currentUser = applicationContext.getCurrentUser();
   const { caseId, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  const documentMetadata = { ...form, caseId, docketNumber };
+  const documentMetadata = {
+    ...form,
+    caseId,
+    docketNumber,
+    filedBy: currentUser.name,
+  };
 
   const documentFiles = {
     primary: form.primaryDocumentFile,
