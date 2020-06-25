@@ -1,7 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
-import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
+import { completeDocumentSigningActionFactory } from '../actions/completeDocumentSigningActionFactory';
+import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
 import { getGotoAfterSigningAction } from '../actions/getGotoAfterSigningAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
@@ -15,7 +16,8 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   setSaveAlertsForNavigationAction,
-  completeDocumentSigningAction,
+  completeDocumentSigningActionFactory({ successMessage: 'Signature added.' }),
+  completeWorkItemForDocumentSigningAction,
   parallel([setDocumentIdAction, setDocumentDetailTabAction]),
   clearPDFSignatureDataAction,
   clearFormAction,
