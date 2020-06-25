@@ -5,6 +5,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
+const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -124,16 +125,17 @@ exports.fileCourtIssuedOrderInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  if (documentMetadata.messageId) {
-    const message = await applicationContext
+  if (documentMetadata.parentMessageId) {
+    const messages = await applicationContext
       .getPersistenceGateway()
-      .getCaseMessage({
+      .getCaseMessageThreadByParentId({
         applicationContext,
-        caseId,
-        messageId: documentMetadata.messageId,
+        parentMessageId: documentMetadata.parentMessageId,
       });
 
-    const caseMessageEntity = new CaseMessage(message, {
+    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+    const caseMessageEntity = new CaseMessage(mostRecentMessage, {
       applicationContext,
     }).validate();
     caseMessageEntity.addAttachment({
