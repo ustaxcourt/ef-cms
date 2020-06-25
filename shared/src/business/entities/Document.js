@@ -83,6 +83,8 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
+  this.isLegacy = rawDocument.isLegacy;
+  this.isSealed = rawDocument.isSealed;
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
@@ -210,7 +212,23 @@ joiValidationDecorator(
     freeText2: joi.string().max(500).optional(),
     hasSupportingDocuments: joi.boolean().optional(),
     isFileAttached: joi.boolean().optional(),
+    isLegacy: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates whether or not the document belongs to a legacy case that has been migrated to the new system.',
+      ),
     isPaper: joi.boolean().optional(),
+    isSealed: joi
+      .boolean()
+      .when('isLegacy', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description(
+        'Indicates whether or not the case to which the document belongs is sealed.',
+      ),
     judge: joi
       .string()
       .allow(null)

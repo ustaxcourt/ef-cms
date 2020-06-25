@@ -211,6 +211,54 @@ describe('Document entity', () => {
       expect(document.secondaryDate).toBeDefined();
     });
 
+    it('should pass validation when "isLegacy" is false and "isSealed" is undefined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          draftState: {},
+          eventCode: 'O',
+          isLegacy: false,
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+      expect(document.isSealed).toBeUndefined();
+    });
+
+    it('should fail validation when "isLegacy" is true and "isSealed" is undefined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          isLegacy: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.getFormattedValidationErrors()).toMatchObject({
+        isSealed: '"isSealed" is required',
+      });
+    });
+
+    it('should pass validation when "isLegacy" is true and "isSealed" is defined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          isLegacy: true,
+          isSealed: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+    });
+
     it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
       const document = new Document(
         {
