@@ -1,7 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
-import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
+import { completeDocumentSigningActionFactory } from '../actions/completeDocumentSigningActionFactory';
+import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { parallel } from 'cerebral';
@@ -25,7 +26,10 @@ export const completeDocumentSigningSequence = [
     success: [
       setCurrentPageAction('Interstitial'),
       () => ({ message: '' }),
-      completeDocumentSigningAction,
+      completeDocumentSigningActionFactory({
+        successMessage: 'Signature added.',
+      }),
+      completeWorkItemForDocumentSigningAction,
       parallel([setDocumentIdAction, setDocumentDetailTabAction]),
       updateWorkItemFromPropsOrModalOrFormAction,
       validateInitialWorkItemMessageAction,

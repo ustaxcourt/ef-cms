@@ -204,6 +204,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocumentTypeForAddressChange: jest.fn(),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()

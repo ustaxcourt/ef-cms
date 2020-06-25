@@ -8,6 +8,30 @@
       flags: 
         presence: "optional"
         description: "Array of document metadata objects attached to the message."
+      items: 
+        - 
+          type: "object"
+          keys: 
+            documentId: 
+              type: "string"
+              flags: 
+                presence: "required"
+              rules: 
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
+            documentTitle: 
+              type: "string"
+              flags: 
+                presence: "required"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    limit: 500
     caseId: 
       type: "string"
       flags: 
@@ -76,15 +100,13 @@
     docketNumberWithSuffix: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
         description: "The docket number and suffix for the associated case."
       rules: 
         - 
           name: "max"
           args: 
-            limit: 500
-      allow: 
-        - null
+            limit: 20
     entityName: 
       type: "string"
       flags: 
