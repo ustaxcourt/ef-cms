@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { Correspondence } = require('../entities/Correspondence');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -37,13 +36,14 @@ exports.migrateCaseInteractor = async ({
     },
   );
 
+  const caseValidatedRaw = caseToAdd.validate().toRawObject();
+
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
-    caseToCreate: caseToAdd.validate().toRawObject(),
+    caseToCreate: caseValidatedRaw,
   });
 
-  for (const myCorrespondence of caseToAdd.correspondence) {
-    const correspondenceEntity = new Correspondence(myCorrespondence);
+  for (const correspondenceEntity of caseToAdd.correspondence) {
     await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
       applicationContext,
       caseId: caseToAdd.caseId,
@@ -56,9 +56,9 @@ exports.migrateCaseInteractor = async ({
   if (caseToAdd.leadCaseId) {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
-      caseToUpdate: caseToAdd.validate().toRawObject(),
+      caseToUpdate: caseValidatedRaw,
     });
   }
 
-  return new Case(caseToAdd, { applicationContext }).toRawObject();
+  return caseValidatedRaw;
 };
