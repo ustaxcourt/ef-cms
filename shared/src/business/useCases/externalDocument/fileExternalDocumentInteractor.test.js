@@ -46,6 +46,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -53,6 +54,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -60,6 +62,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
@@ -98,6 +101,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
+          filedBy: 'Test Petitioner',
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -113,6 +117,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'A',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -144,16 +149,19 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
+        filedBy: 'Test Petitioner',
         secondaryDocument: {
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
           eventCode: 'M121',
+          filedBy: 'Test Petitioner',
         },
         secondarySupportingDocuments: [
           {
             documentTitle: 'Motion for in Camera Review',
             documentType: 'Motion for in Camera Review',
             eventCode: 'M135',
+            filedBy: 'Test Petitioner',
           },
         ],
         supportingDocuments: [
@@ -161,6 +169,7 @@ describe('fileExternalDocumentInteractor', () => {
             documentTitle: 'Civil Penalty Approval Form',
             documentType: 'Civil Penalty Approval Form',
             eventCode: 'CIVP',
+            filedBy: 'Test Petitioner',
           },
         ],
       },
@@ -203,6 +212,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
         },
       });
     } catch (err) {
@@ -236,6 +246,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -262,6 +273,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
+        filedBy: 'test Petitioner',
       },
     });
 
@@ -287,6 +299,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -323,6 +336,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
+        filedBy: 'Test Petitioner',
       },
     });
 

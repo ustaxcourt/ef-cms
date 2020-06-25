@@ -1,4 +1,5 @@
 const {
+  EXTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   ROLES,
@@ -209,6 +210,192 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
       expect(document.secondaryDate).toBeDefined();
+    });
+
+    describe('handling of sealed legacy documents', () => {
+      it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            isLegacySealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.getFormattedValidationErrors()).toMatchObject({
+          isLegacy: '"isLegacy" is required',
+          isSealed: '"isSealed" is required',
+        });
+      });
+
+      it('should pass validation when "isLegacy" is true, "isSealed" and "isLegacy" are true', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacy: true,
+            isLegacySealed: true,
+            isOrder: true,
+            isSealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when "isLegacy" is false, "isSealed" and "isLegacy" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacySealed: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+    });
+
+    describe('filedBy scenarios', () => {
+      let mockDocumentData = {
+        ...A_VALID_DOCUMENT,
+        documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+        draftState: null,
+        secondaryDate: '2019-03-01T21:40:46.415Z',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      };
+
+      describe('documentType is not external', () => {
+        it('should pass validation when filedBy is undefined', () => {
+          let internalDocument = new Document(
+            { ...mockDocumentData, documentType: 'Petition' },
+            { applicationContext },
+          );
+
+          expect(internalDocument.isValid()).toBeTruthy();
+        });
+      });
+
+      describe('documentType is external', () => {
+        // when documentType
+        describe('external documents that are not "Notice Of Change of Address"', () => {
+          it('should fail validation when "filedBy" is not provided', () => {
+            const document = new Document(
+              {
+                ...A_VALID_DOCUMENT,
+                documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                documentType: EXTERNAL_DOCUMENT_TYPES[0],
+                eventCode: 'TRAN',
+                filedBy: undefined,
+                isOrder: true,
+                secondaryDate: '2019-03-01T21:40:46.415Z',
+              },
+              { applicationContext },
+            );
+            expect(document.isValid()).toBeFalsy();
+            expect(document.filedBy).toBeUndefined();
+          });
+
+          it('should pass validation when "filedBy" is provided', () => {
+            const document = new Document(
+              {
+                ...A_VALID_DOCUMENT,
+                documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                documentType: EXTERNAL_DOCUMENT_TYPES[0],
+                eventCode: 'TRAN',
+                filedBy: 'Test Petitioner1',
+                isOrder: true,
+                secondaryDate: '2019-03-01T21:40:46.415Z',
+              },
+              { applicationContext },
+            );
+
+            expect(document.isValid()).toBeTruthy();
+          });
+        });
+
+        describe('external documents that are autogenerated', () => {
+          // is: joi.string().valid('Notice of Change of Address'),
+          it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
+            // then: joi.when('isAutoGenerated'  is: false,
+            const document = new Document(
+              {
+                ...A_VALID_DOCUMENT,
+                documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                documentType: 'Notice of Change of Address',
+                eventCode: 'NCA',
+                isAutoGenerated: true,
+                isOrder: true,
+                secondaryDate: '2019-03-01T21:40:46.415Z',
+              },
+              { applicationContext },
+            );
+
+            expect(document.filedBy).toBeUndefined();
+            expect(document.isValid()).toBeTruthy();
+          });
+
+          it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
+            // then: joi.when('isAutoGenerated'  is: false,
+            const document = new Document(
+              {
+                ...A_VALID_DOCUMENT,
+                documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                documentType: 'Notice of Change of Address',
+                eventCode: 'NCA',
+                secondaryDate: '2019-03-01T21:40:46.415Z',
+              },
+              { applicationContext },
+            );
+
+            expect(document.filedBy).toBeUndefined();
+            expect(document.isValid()).toBeTruthy();
+          });
+
+          it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
+            // otherwise when('isAutoGenerated'  is: true,
+            const document = new Document(
+              {
+                ...A_VALID_DOCUMENT,
+                documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                documentType: 'Notice of Change of Address',
+                eventCode: 'NCA',
+                isAutoGenerated: false,
+                isOrder: true,
+                secondaryDate: '2019-03-01T21:40:46.415Z',
+              },
+              { applicationContext },
+            );
+
+            expect(document.isValid()).toBeFalsy();
+          });
+        });
+      });
     });
 
     it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {

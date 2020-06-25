@@ -33,6 +33,19 @@ describe('getShouldRedirectToSigningAction', () => {
     expect(yesMock).toHaveBeenCalled();
   });
 
+  it('should call the no path if a parentMessageId is set on props', async () => {
+    await runAction(getShouldRedirectToSigningAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        parentMessageId: '123',
+      },
+      state: {},
+    });
+    expect(noMock).toHaveBeenCalled();
+  });
+
   it('should call the no path for court issued documents that have a Notice event code', async () => {
     await runAction(getShouldRedirectToSigningAction, {
       modules: {
