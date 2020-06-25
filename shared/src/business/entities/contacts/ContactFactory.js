@@ -280,12 +280,13 @@ const getContactConstructors = ({ partyType }) => {
 };
 
 /**
- * used for instantiating the primary and secondary contact objects which are later used in the Case entity.
+ * used for instantiating the primary, secondary, other contact objects which are later used in the Case entity.
  *
  * @param {object} options the options object
+ * @param {object} options.contactInfo information on party contacts (primary, secondary, other)
+ * @param {boolean} options.isPaper whether service is paper
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @param {string} options. object which should contain primary and secondary used for creating the contact entities
- * @returns {object} contains the primary and secondary contacts constructed
+ * @returns {object} contains the primary, secondary, and other contact instances
  */
 ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
   const constructorMap = getContactConstructors({ partyType });
