@@ -85,6 +85,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.isPaper = rawDocument.isPaper;
   this.isLegacy = rawDocument.isLegacy;
   this.isSealed = rawDocument.isSealed;
+  this.isLegacySealed = rawDocument.isLegacySealed;
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
@@ -214,21 +215,29 @@ joiValidationDecorator(
     isFileAttached: joi.boolean().optional(),
     isLegacy: joi
       .boolean()
-      .optional()
+      .when('isLegacySealed', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required().valid(true),
+      })
       .description(
         'Indicates whether or not the document belongs to a legacy case that has been migrated to the new system.',
+      ),
+    isLegacySealed: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates whether or not the legacy document was sealed prior to being migrated to the new system.',
       ),
     isPaper: joi.boolean().optional(),
     isSealed: joi
       .boolean()
-      .when('isLegacy', {
+      .when('isLegacySealed', {
         is: true,
         otherwise: joi.optional(),
-        then: joi.required(),
+        then: joi.required().valid(true),
       })
-      .description(
-        'Indicates whether or not the case to which the document belongs is sealed.',
-      ),
+      .description('Indicates whether or not the document is sealed.'),
     judge: joi
       .string()
       .allow(null)
