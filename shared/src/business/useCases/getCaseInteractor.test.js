@@ -41,6 +41,7 @@ describe('Get case', () => {
           documentType: 'Petition',
           draftState: {},
           eventCode: 'P',
+          filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: petitionerId,
           workItems: [],
