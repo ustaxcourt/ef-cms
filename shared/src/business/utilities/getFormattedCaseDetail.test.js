@@ -70,6 +70,7 @@ describe('formatCase', () => {
           documentId: 'd-1-2-3',
           documentType: 'Petition',
           eventCode: 'P',
+          isLegacySealed: true,
           servedAt: getDateISO(),
           workItems: [
             {
@@ -103,7 +104,9 @@ describe('formatCase', () => {
     expect(result.documents[0]).toHaveProperty('isStatusServed');
     expect(result.documents[0]).toHaveProperty('isPetition');
     expect(result.documents[0]).toHaveProperty('servedPartiesCode');
+    expect(result.documents[0].showLegacySealed).toBeTruthy();
 
+    expect(result.documents[1].showLegacySealed).toBeFalsy();
     expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
   });
 
