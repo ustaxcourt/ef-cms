@@ -392,16 +392,11 @@
         - "Amended [Document Name]"
         - "Appellate Filing Fee Received"
         - "Bond"
-        - "Bounced Electronic Service"
         - "Evidence"
-        - "Hearing Exhibits"
         - "Letter"
         - "Miscellaneous"
         - "Miscellaneous (Lodged)"
         - "Reference List of Redacted Information"
-        - "Returned Mail"
-        - "Trial Exhibits"
-        - "U.S.C.A. [Anything]"
         - "Motion"
         - "Motion for Review By the Full Court"
         - "Motion for Review En Banc"
@@ -485,6 +480,11 @@
         - "TRAN - Transcript"
         - "SPTO - Standing Pre-Trial Order"
         - "MISC - Miscellaneous"
+        - "Bounced Electronic Service"
+        - "Hearing Exhibits"
+        - "Returned Mail"
+        - "Trial Exhibits"
+        - "U.S.C.A. [Anything]"
         - "Stipulated Decision"
         - "Notice of Docket Change"
         - "Notice of Trial"
@@ -1110,6 +1110,39 @@
               - "Declaration in Support"
               - "Memorandum in Support"
               - "Unsworn Declaration under Penalty of Perjury in Support"
+              - "Entry of Appearance"
+              - "Substitution of Counsel"
+              - "Application"
+              - "Application for Examination Pursuant to Rule 73"
+              - "Amended [Document Name]"
+              - "Appellate Filing Fee Received"
+              - "Bond"
+              - "Evidence"
+              - "Letter"
+              - "Miscellaneous"
+              - "Miscellaneous (Lodged)"
+              - "Reference List of Redacted Information"
+              - "Motion"
+              - "Motion for Review By the Full Court"
+              - "Motion for Review En Banc"
+              - "Motion to Be Exempt from E-Filing"
+              - "Motion to Change Place of Hearing of Disclosure Case"
+              - "Motion to File Document Under Seal"
+              - "Motion to Intervene"
+              - "Motion to Proceed Anonymously"
+              - "Notice"
+              - "Notice of Change of Counsel for Non-Party"
+              - "Notice of Election to Intervene"
+              - "Notice of Election to Participate"
+              - "Notice of Intervention"
+              - "Petition"
+              - "Ratification of Petition"
+              - "Request"
+              - "Objection [anything]"
+              - "Opposition [anything]"
+              - "Response [anything]"
+              - "Supplement To [anything]"
+              - "Supplemental [anything]"
           then: 
             type: "any"
             whens: 
@@ -1125,6 +1158,7 @@
                     - "Notice of Change of Address"
                     - "Notice of Change of Telephone Number"
                     - "Notice of Change of Address and Telephone Number"
+                    - "Request for Place of Trial "
                 then: 
                   type: "any"
                   whens: 
@@ -1205,10 +1239,73 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    isLegacySealed: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Indicates whether or not the legacy document was sealed prior to being migrated to the new system."
+    isLegacy: 
+      type: "boolean"
+      flags: 
+        description: "Indicates whether or not the document belongs to a legacy case that has been migrated to the new system."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacySealed"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+              only: true
+            allow: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     isPaper: 
       type: "boolean"
       flags: 
         presence: "optional"
+    isSealed: 
+      type: "boolean"
+      flags: 
+        description: "Indicates whether or not the document is sealed."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacySealed"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+              only: true
+            allow: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     judge: 
       type: "string"
       flags: 
