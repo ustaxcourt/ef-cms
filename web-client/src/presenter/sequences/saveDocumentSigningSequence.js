@@ -3,11 +3,10 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { completeDocumentSigningActionFactory } from '../actions/completeDocumentSigningActionFactory';
 import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
-import { getGotoAfterSigningAction } from '../actions/getGotoAfterSigningAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
+import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -22,9 +21,6 @@ export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearPDFSignatureDataAction,
   clearFormAction,
   setAlertSuccessAction,
-  getGotoAfterSigningAction,
-  {
-    CaseDetail: [navigateToCaseDetailAction],
-    DocumentDetail: [navigateToDocumentDetailAction],
-  },
+  setCaseDetailPageTabActionGenerator('drafts'),
+  navigateToDraftDocumentsAction,
 ]);

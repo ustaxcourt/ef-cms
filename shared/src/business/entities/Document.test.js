@@ -1,18 +1,13 @@
 const {
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  EXTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   ROLES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
-const { flatten } = require('lodash');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
-
-const EXTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-).map(t => t.documentType);
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
@@ -215,6 +210,73 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
       expect(document.secondaryDate).toBeDefined();
+    });
+
+    describe('handling of sealed legacy documents', () => {
+      it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            isLegacySealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.getFormattedValidationErrors()).toMatchObject({
+          isLegacy: '"isLegacy" is required',
+          isSealed: '"isSealed" is required',
+        });
+      });
+
+      it('should pass validation when "isLegacy" is true, "isSealed" and "isLegacy" are true', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacy: true,
+            isLegacySealed: true,
+            isOrder: true,
+            isSealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when "isLegacy" is false, "isSealed" and "isLegacy" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacySealed: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
     });
 
     describe('filedBy scenarios', () => {
