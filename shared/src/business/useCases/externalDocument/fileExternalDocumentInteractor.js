@@ -117,8 +117,11 @@ exports.fileExternalDocumentInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
-          partyPrimary: documentMetadata.representingPrimary,
-          partySecondary: documentMetadata.representingSecondary,
+          partyPrimary:
+            baseMetadata.partyPrimary || documentMetadata.representingPrimary,
+          partySecondary:
+            baseMetadata.partySecondary ||
+            documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
