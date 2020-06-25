@@ -556,7 +556,6 @@
         - "MIND"
         - "MISC"
         - "MISCL"
-        - "MISL"
         - "MISP"
         - "MOP"
         - "NAJA"
