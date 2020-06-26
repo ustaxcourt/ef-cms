@@ -168,3 +168,12 @@ a:hover {
 .submit-reminders {
   font-size: 17px;
 }
+
+.stricken-docket-record {
+  text-decoration: line-through;
+
+  &.usa-button,
+  &.view-pdf-link {
+    text-decoration: underline line-through;
+  }
+}
