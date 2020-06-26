@@ -1835,14 +1835,14 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'success',
+        processingStatus: 'complete',
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('success');
+      ).toEqual('complete');
     });
 
     it('should update a correspondence document', () => {
