@@ -17,7 +17,12 @@ export const getShouldRedirectToSigningAction = ({
   props,
   store,
 }) => {
-  const { documentId, eventCode } = props;
+  const { documentId, eventCode, parentMessageId } = props;
+
+  if (parentMessageId) {
+    return path.no();
+  }
+
   const { NOTICE_EVENT_CODES } = applicationContext.getConstants();
 
   const isNotice = NOTICE_EVENT_CODES.includes(eventCode);

@@ -8,8 +8,6 @@ const targets = [
   'shared/src/business/utilities/htmlGenerator/index.scss',
   'shared/src/business/utilities/generateHTMLTemplateForPDF/noticeOfTrialIssued.pug',
   'shared/static/images/ustc_seal.png',
-  'shared/src/business/utilities/generateHTMLTemplateForPDF/changeOfAddress.pug',
-  'shared/src/business/utilities/generateHTMLTemplateForPDF/changeOfAddress.scss',
 ];
 
 // specify mime-types for supported base64 encodings here.
