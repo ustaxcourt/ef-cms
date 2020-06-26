@@ -15,7 +15,11 @@ export const MessageDocument = connect(
     messageDocumentHelper,
   }) {
     return (
-      <div className="message-detail--attachments">
+      <div
+        className={`message-detail--attachments ${
+          attachmentDocumentToDisplay ? '' : 'border border-base-lighter'
+        }`}
+      >
         {!attachmentDocumentToDisplay && (
           <div className="padding-2">There are no attachments to preview</div>
         )}
