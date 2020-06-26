@@ -55,6 +55,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
@@ -139,6 +140,7 @@ const helpers = {
   internalTypesHelper,
   loadingHelper,
   menuHelper,
+  messageDocumentHelper,
   messagesHelper,
   orderTypesHelper,
   pdfPreviewModalHelper,
