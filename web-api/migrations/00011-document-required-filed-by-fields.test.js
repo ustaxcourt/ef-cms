@@ -3,7 +3,9 @@ const {
   INTERNAL_DOCUMENT_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
-const { up } = require('./00009-document-required-fields');
+const { MOCK_DOCUMENTS } = require('../../shared/src/test/mockDocuments');
+const { omit } = require('lodash');
+const { up } = require('./00011-document-required-filed-by-fields');
 
 describe('document required fields test', () => {
   let documentClient;
@@ -11,18 +13,16 @@ describe('document required fields test', () => {
   let putStub;
   let getStub;
 
-  let mockDocumentItemWithOnlyServedAt;
-  let mockDocumentItemWithOnlyServedParties;
-  let mockDocumentItemNotServed;
-  let mockDocumentItemServed;
-  let mockExternalDocumentNotFiledBy;
+  let mockExternalDocumentWithoutFiledBy;
   let mockExternalDocumentWithFiledBy;
-  let mockInternalDocumentNotFiledBy;
+  let mockInternalDocumentWithoutFiledBy;
+  let mockInternalDocumentWithFiledBy;
+  let mockDocumentFiledByNotRequired;
   let mockItems = {};
 
   beforeEach(() => {
     const notADocument = {
-      ...mockDocumentItemWithOnlyServedAt,
+      ...omit(mockExternalDocumentWithFiledBy, 'filedBy'),
       pk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       sk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
     };
@@ -30,102 +30,50 @@ describe('document required fields test', () => {
     mockItems = {
       scanList: [
         { ...notADocument },
-        { ...mockDocumentItemWithOnlyServedAt },
-        { ...mockDocumentItemWithOnlyServedParties },
-        { ...mockDocumentItemServed },
-        { ...mockDocumentItemNotServed },
-        { ...mockExternalDocumentNotFiledBy },
+        { ...mockExternalDocumentWithoutFiledBy },
         { ...mockExternalDocumentWithFiledBy },
-        { ...mockInternalDocumentNotFiledBy },
+        { ...mockInternalDocumentWithoutFiledBy },
+        { ...mockInternalDocumentWithFiledBy },
+        { ...mockDocumentFiledByNotRequired },
       ],
     };
   });
 
   beforeAll(() => {
-    mockDocumentItemWithOnlyServedAt = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketNumber: '101-18',
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentTitle: 'Petition',
-      documentType: 'Petition',
-      eventCode: 'P',
-      filedBy: 'Test Petitioner',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-      processingStatus: 'pending',
-      servedAt: '2018-11-21T20:49:28.192Z',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      workItems: [],
-    };
-
-    mockDocumentItemWithOnlyServedParties = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketNumber: '101-18',
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentTitle: 'Petition',
-      documentType: 'Petition',
-      eventCode: 'P',
-      filedBy: 'Test Petitioner',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-      processingStatus: 'pending',
-      servedParties: [{ name: 'Test Petitioner' }],
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      workItems: [],
-    };
-
-    mockDocumentItemNotServed = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketNumber: '101-18',
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentTitle: 'Petition',
-      documentType: 'Petition',
-      eventCode: 'P',
-      filedBy: 'Test Petitioner',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-      processingStatus: 'pending',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      workItems: [],
-    };
-
-    mockDocumentItemServed = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketNumber: '101-18',
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentTitle: 'Petition',
-      documentType: 'Petition',
-      eventCode: 'P',
-      filedBy: 'Test Petitioner',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a5',
-      processingStatus: 'pending',
-      servedAt: '2018-11-21T20:49:28.192Z',
-      servedParties: [{ name: 'Test Petitioner' }],
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a5',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      workItems: [],
-    };
-
-    mockExternalDocumentNotFiledBy = {
-      ...mockDocumentItemServed,
+    mockExternalDocumentWithoutFiledBy = {
+      ...omit(MOCK_DOCUMENTS[0], 'filedBy'),
       documentType: EXTERNAL_DOCUMENT_TYPES[0],
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
       sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
     };
 
-    mockInternalDocumentNotFiledBy = {
-      ...mockDocumentItemServed,
+    mockInternalDocumentWithoutFiledBy = {
+      ...omit(MOCK_DOCUMENTS[0], 'filedBy'),
       documentType: INTERNAL_DOCUMENT_TYPES[0],
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',
       sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',
     };
 
     mockExternalDocumentWithFiledBy = {
-      ...mockDocumentItemServed,
+      ...MOCK_DOCUMENTS[0],
       documentType: EXTERNAL_DOCUMENT_TYPES[0],
       filedBy: 'Test Petitioner',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
       sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
+    };
+
+    mockInternalDocumentWithFiledBy = {
+      ...MOCK_DOCUMENTS[0],
+      documentType: INTERNAL_DOCUMENT_TYPES[0],
+      filedBy: 'Test Petitioner',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
+    };
+
+    mockDocumentFiledByNotRequired = {
+      ...MOCK_DOCUMENTS[1],
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
     };
 
     scanStub = jest.fn().mockReturnValue({
@@ -159,30 +107,14 @@ describe('document required fields test', () => {
       pk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       sk: 'not-a-document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
     });
-    // mockDocumentItemWithOnlyServedAt
+    // mockInternalDocumentWithoutFiledBy
     expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
     });
   });
 
-  it('does not mutate document records that have not been served and are not external', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub.mock.calls.length).toBe(4);
-    // mockDocumentItemNotServed
-    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-    });
-    // mockDocumentItemWithOnlyServedParties
-    expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-    });
-  });
-
-  it('does not mutate document records that have not been served and are external when filedBy is defined', async () => {
+  it('does not mutate document records that are external when filedBy is defined', async () => {
     await up(documentClient, '', forAllRecords);
 
     // mockExternalDocumentWithFiledBy
@@ -192,77 +124,46 @@ describe('document required fields test', () => {
     });
   });
 
-  it('does mutate document records that are external when filedBy is undefined and it is required for that documentType', async () => {
+  it('does not mutate document records that are internal when filedBy is defined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    // mockExternalDocumentNotFiledBy
-    expect(putStub.mock.calls[2][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-    });
-  });
-
-  it('does mutate document records that are internal when filedBy is undefined and it is required for that documentType', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    // mockExternalDocumentNotFiledBy
-    expect(putStub.mock.calls[2][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-    });
-  });
-
-  it('does not mutate internal document records that have both servedAt and servedParties fields defined', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub.mock.calls.length).toBe(4);
-    // mockDocumentItemServed
+    // mockInternalDocumentWithFiledBy
     expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-    });
-    // mockDocumentItemWithOnlyServedParties
-    expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a31',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
     });
   });
 
-  it('mutates document records that have a defined servedAt field when servedParties is undefined', async () => {
+  it('does mutate external document records when filedBy is undefined and it is required for that documentType', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
-    // mockDocumentItemWithOnlyServedParties
-    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
-    });
-    // mockDocumentItemWithOnlyServedAt
+    // mockExternalDocumentWithoutFiledBy
     expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-      servedParties: [
-        {
-          name: 'Served via migration.',
-        },
-      ],
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
     });
   });
 
-  it('mutates document records that have a defined servedParties field when servedAt is undefined', async () => {
+  it('does mutate internal document records when filedBy is undefined and it is required for that documentType', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
-    // mockDocumentItemWithOnlyServedAt
-    expect(putStub.mock.calls[1][0]['Item']).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
-    });
-    // mockDocumentItemWithOnlyServedParties
+    // mockInternalocumentWithoutFiledBy
     expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
-      servedAt: expect.anything(),
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',
+    });
+  });
+
+  it('does not mutate document records when filedBy is undefined and it is not required for that documentType', async () => {
+    await up(documentClient, '', forAllRecords);
+    //     mockDocumentFiledByNotRequired
+    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+    });
+    expect(putStub.mock.calls[1][0]['Item']).not.toMatchObject({
+      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
+      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
     });
   });
 });
