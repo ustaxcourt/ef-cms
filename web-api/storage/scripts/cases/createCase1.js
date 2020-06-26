@@ -70,9 +70,13 @@ module.exports.createCase1 = async () => {
       });
     };
 
+    const coversheets = [];
+
     for (const document of caseDetail.documents) {
-      await addCoversheet(document);
+      coversheets.push(addCoversheet(document));
     }
+
+    await Promise.all(coversheets);
   });
 
   await asUserFromEmail('docketclerk', async applicationContext => {
