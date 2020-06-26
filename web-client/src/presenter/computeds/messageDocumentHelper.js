@@ -8,10 +8,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const documentIsSigned =
     attachmentDocumentToDisplay && !!attachmentDocumentToDisplay.signedAt;
 
-  const isDocumentOnDocketRecord = caseDetail.docketRecord.find(
-    docketEntry =>
-      docketEntry.documentId === attachmentDocumentToDisplay.documentId,
-  );
+  const isDocumentOnDocketRecord =
+    attachmentDocumentToDisplay &&
+    caseDetail.docketRecord.find(
+      docketEntry =>
+        docketEntry.documentId === attachmentDocumentToDisplay.documentId,
+    );
 
   const isInternalUser = applicationContext
     .getUtilities()
