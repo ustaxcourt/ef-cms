@@ -62,7 +62,12 @@ export const DocketRecord = connect(
                       {entry.index}
                     </td>
                     <td>
-                      <span className="no-wrap">
+                      <span
+                        className={classNames(
+                          entry.isStricken && 'stricken-docket-record',
+                          'no-wrap',
+                        )}
+                      >
                         {entry.createdAtFormatted}
                       </span>
                     </td>
