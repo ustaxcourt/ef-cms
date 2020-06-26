@@ -69,6 +69,23 @@
 * Completed message displays in My Messages > Completed and Section Messages > Completed
 * Message thread displays as Completed on Message Detail screen
 
+## Create Order/Notice From Message
+**On click of "Create Order"**
+* User selects the title of the order and continues
+* User enter/pastes Order text and saves
+
+#### Apply Signature
+* On click of Save, app navigates to the Apply Signature screen for all Orders; for Notice, the app navigates back to the Message Detail (because the Clerk of the Court signature is automatically applied)
+* User can skip signature and be brought back to the Message Detail
+* User can apply and save signature
+
+**On click of Skip or Save Signature**
+* App navigates back to Message Detail screen with success message displayed
+* Order is added to Drafts documents table
+* Order is attached to Message
+* Order is displayed as attachment on Message Detail screen
+* If signature was added, Edit Signature action is displayed
+* If signature was skipped, Apply Signature action is displayed
 
 ## Message Thread
 * If there is more than one message in a thread, messages are displayed in accordion
