@@ -1490,4 +1490,86 @@ describe('Document entity', () => {
       );
     });
   });
+
+  describe('secondaryDocument validation', () => {
+    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+          secondaryDocument: {},
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(
+        Object.keys(createdDocument.getFormattedValidationErrors()),
+      ).toEqual(['secondaryDocument']);
+    });
+
+    it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+          secondaryDocument: undefined,
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should be valid if secondaryDocument is not present and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: undefined,
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should be valid if secondaryDocument is present and its contents are valid and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+          },
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should not be valid if secondaryDocument is present and it is missing fields and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {},
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(
+        Object.keys(createdDocument.getFormattedValidationErrors()),
+      ).toEqual(['documentType', 'eventCode']);
+    });
+  });
 });
