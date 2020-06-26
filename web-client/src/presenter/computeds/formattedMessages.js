@@ -2,7 +2,7 @@ import { formatDateIfToday } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
 export const getFormattedMessages = ({ applicationContext, messages }) => {
-  const formattedMessages = messages
+  const formattedCaseMessages = messages
     .map(message => ({
       ...message,
       completedAtFormatted: formatDateIfToday(
@@ -18,16 +18,20 @@ export const getFormattedMessages = ({ applicationContext, messages }) => {
       return a.createdAt.localeCompare(b.createdAt);
     });
 
-  const inProgressMessages = formattedMessages.filter(
+  const inProgressMessages = formattedCaseMessages.filter(
     message => !message.isRepliedTo,
   );
-  const completedMessages = formattedMessages.filter(
+  const completedMessages = formattedCaseMessages.filter(
     message => message.isCompleted,
   );
 
   completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
 
-  return { completedMessages, inProgressMessages, messages: formattedMessages };
+  return {
+    completedMessages,
+    inProgressMessages,
+    messages: formattedCaseMessages,
+  };
 };
 
 export const formattedMessages = (get, applicationContext) => {
