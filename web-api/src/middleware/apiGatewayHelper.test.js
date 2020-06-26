@@ -290,13 +290,16 @@ describe('getAuthHeader', () => {
     expect(error).toBeDefined();
   });
 
-  it('should return null if header is not set correctly', () => {
+  it('should not return the user token and should throw an error if token is not present in query or anywhere else', () => {
+    let error;
     let response;
-    response = getAuthHeader({
-      headers: {},
-      query: {},
-    });
+    try {
+      response = getAuthHeader({});
+    } catch (err) {
+      error = err;
+    }
     expect(response).toEqual(null);
+    expect(error).toBeUndefined();
   });
 });
 
@@ -321,10 +324,8 @@ describe('getUserFromAuthHeader', () => {
     expect(user).toEqual(null);
   });
 
-  it('should return null if the user token is not defined', () => {
-    const user = getUserFromAuthHeader({
-      headers: {},
-    });
+  it('should return null if there is no token', () => {
+    const user = getUserFromAuthHeader({});
     expect(user).toEqual(null);
   });
 });
