@@ -4,6 +4,7 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const FilingsAndProceedings = connect(
   {
@@ -33,6 +34,9 @@ export const FilingsAndProceedings = connect(
             <Button
               link
               aria-label={`View PDF: ${entry.description}`}
+              className={classNames(
+                entry.isStricken && 'stricken-docket-record',
+              )}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
                   caseId: caseDetail.caseId,
@@ -85,6 +89,10 @@ export const FilingsAndProceedings = connect(
         {entry.showDocumentEditLink && (
           <a
             aria-label="View PDF"
+            className={classNames(
+              entry.isStricken && 'stricken-docket-record',
+              'view-pdf-link',
+            )}
             href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
           >
             {entry.isPaper && (
@@ -96,13 +104,19 @@ export const FilingsAndProceedings = connect(
           </a>
         )}
 
-        {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        <span
+          className={classNames(entry.isStricken && 'stricken-docket-record')}
+        >
+          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        </span>
 
         <span> {entry.signatory}</span>
 
         <span className="filings-and-proceedings">
           {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
+
+        {entry.isStricken && <span>(STRICKEN)</span>}
       </>
     );
   },
