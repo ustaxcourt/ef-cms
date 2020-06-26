@@ -99,6 +99,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
   this.secondaryDate = rawDocument.secondaryDate;
+  this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
   this.servedParties = rawDocument.servedParties;
@@ -335,6 +336,31 @@ joiValidationDecorator(
       .description(
         'A secondary date associated with the document, typically related to time-restricted availability.',
       ),
+    secondaryDocument: joi
+      .object()
+      .keys({
+        documentTitle: joi
+          .string()
+          .max(500)
+          .optional()
+          .description('The title of the secondary document.'),
+        documentType: joi
+          .string()
+          .valid(...ALL_DOCUMENT_TYPES)
+          .required()
+          .description('The type of the secondary document.'),
+        eventCode: joi
+          .string()
+          .valid(...ALL_EVENT_CODES)
+          .required()
+          .description('The event code of the secondary document.'),
+      })
+      .when('scenario', {
+        is: 'Nonstandard H',
+        otherwise: joi.forbidden(),
+        then: joi.optional(),
+      })
+      .description('The secondary document.'),
     servedAt: joi
       .alternatives()
       .conditional('servedParties', {
