@@ -172,11 +172,7 @@ export const SignOrderFactory = ({ skipSequence, submitSequence }) =>
 
                     <Button
                       className="margin-right-0"
-                      onClick={() =>
-                        saveDocumentSigningSequence({
-                          gotoAfterSigning: 'DocumentDetail',
-                        })
-                      }
+                      onClick={() => saveDocumentSigningSequence()}
                     >
                       Save Signature
                     </Button>

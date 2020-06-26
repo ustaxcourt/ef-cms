@@ -9,6 +9,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
@@ -20,6 +21,7 @@ const gotoCreateOrder = [
   stopShowValidationAction,
   clearFormAction,
   setCasePropFromStateAction,
+  setParentMessageIdAction,
   setCreateOrderModalDataOnFormAction,
   ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
