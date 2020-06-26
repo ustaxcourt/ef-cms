@@ -1505,6 +1505,10 @@ button.change-scanner-button {
 
 .message-detail--attachments {
   height: 1000px;
+
+  iframe {
+    border: none;
+  }
 }
 
 .message-detail .usa-accordion__heading .accordion-item-title {
