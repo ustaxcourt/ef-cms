@@ -150,6 +150,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
         filedBy: 'Test Petitioner',
+        scenario: 'Nonstandard H',
         secondaryDocument: {
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
