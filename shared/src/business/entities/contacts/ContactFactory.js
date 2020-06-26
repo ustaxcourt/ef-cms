@@ -69,12 +69,16 @@ const domesticValidationObject = {
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
+ContactFactory.domesticValidationObject = domesticValidationObject;
+
 const internationalValidationObject = {
   country: joi.string().max(500).required(),
   countryType: joi.string().valid(COUNTRY_TYPES.INTERNATIONAL).required(),
   ...commonValidationRequirements,
   postalCode: joi.string().max(100).required(),
 };
+
+ContactFactory.internationalValidationObject = internationalValidationObject;
 
 /* eslint-enable sort-keys-fix/sort-keys-fix */
 
@@ -124,7 +128,7 @@ ContactFactory.getErrorToMessageMap = ({
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
-const getContactConstructors = ({ partyType }) => {
+ContactFactory.getContactConstructors = ({ partyType }) => {
   const {
     getNextFriendForIncompetentPersonContact,
   } = require('./NextFriendForIncompetentPersonContact');
@@ -289,7 +293,7 @@ const getContactConstructors = ({ partyType }) => {
  * @returns {object} contains the primary, secondary, and other contact instances
  */
 ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
-  const constructorMap = getContactConstructors({ partyType });
+  const constructorMap = ContactFactory.getContactConstructors({ partyType });
 
   const constructors = {
     primary:
