@@ -4,8 +4,8 @@ const {
 const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 const mockUser = {
   admissionsDate: '2019-03-01T21:40:46.415Z',
@@ -20,8 +20,8 @@ const mockUser = {
   name: 'Test Attorney',
   originalBarState: 'Oklahoma',
   practitionerType: 'Attorney',
-  role: User.ROLES.privatePractitioner,
-  userId: 'practitioner1@example.com',
+  role: ROLES.privatePractitioner,
+  userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 
 describe('update practitioner user', () => {
@@ -67,7 +67,7 @@ describe('update practitioner user', () => {
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
         ...mockUser,
-        userId: '2',
+        userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
       });
 
     await expect(
@@ -78,7 +78,7 @@ describe('update practitioner user', () => {
           ...mockUser,
           barNumber: 'AB1111',
           email: 'bc@example.com',
-          userId: '1',
+          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
         },
       }),
     ).rejects.toThrow('Bar number does not match user data.');
@@ -86,7 +86,7 @@ describe('update practitioner user', () => {
 
   it('throws unauthorized for a non-internal user', async () => {
     testUser = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 

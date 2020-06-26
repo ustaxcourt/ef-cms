@@ -1,7 +1,6 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-const { Case } = require('../../entities/cases/Case');
+const { CHIEF_JUDGE, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -19,7 +18,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: User.ROLES.petitioner,
+            role: ROLES.petitioner,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -45,7 +44,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: User.ROLES.petitionsClerk,
+            role: ROLES.petitionsClerk,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -75,7 +74,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: User.ROLES.petitionsClerk,
+            role: ROLES.petitionsClerk,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -107,7 +106,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     const latestCase = await addCaseToTrialSessionInteractor({
       applicationContext: {
         getCurrentUser: () => ({
-          role: User.ROLES.petitionsClerk,
+          role: ROLES.petitionsClerk,
           userId: '8675309b-18d0-43ec-bafb-654e83405411',
         }),
         getPersistenceGateway: () => ({
@@ -129,7 +128,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     });
 
     expect(latestCase).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       status: 'Calendared',
       trialDate: '2025-12-01T00:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
@@ -144,7 +143,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor({
       applicationContext: {
         getCurrentUser: () => ({
-          role: User.ROLES.petitionsClerk,
+          role: ROLES.petitionsClerk,
           userId: '8675309b-18d0-43ec-bafb-654e83405411',
         }),
         getPersistenceGateway: () => ({

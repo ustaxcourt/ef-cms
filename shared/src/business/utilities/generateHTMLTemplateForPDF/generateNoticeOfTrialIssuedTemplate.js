@@ -5,6 +5,7 @@ const {
   formatNow,
 } = require('../DateHandler');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
@@ -45,7 +46,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   });
 
   const templateContent = {
-    caseCaptionWithPostfix: `${caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
+    caseCaptionWithPostfix: `${caseCaption} ${CASE_CAPTION_POSTFIX}`,
     docketNumberWithSuffix,
     main,
   };

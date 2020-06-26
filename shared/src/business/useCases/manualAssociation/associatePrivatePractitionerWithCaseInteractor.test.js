@@ -4,7 +4,7 @@ const {
 const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -38,7 +38,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
         documentTitle: 'Petition',
         documentType: 'Petition',
         processingStatus: 'pending',
-        userId: 'petitioner',
+        userId: 'd13d017b-28d1-45b6-aa7d-f54865b0121b',
       },
     ],
     filingType: 'Myself',
@@ -59,16 +59,16 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
   it('should add mapping for a practitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.adc,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => {
         return {
-          name: 'Olivia Jade',
-          role: User.ROLES.privatePractitioner,
+          name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          role: ROLES.privatePractitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       });

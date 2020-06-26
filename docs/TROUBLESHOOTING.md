@@ -116,3 +116,12 @@ To revert your `serverless-prune-plugin`, just change `before` back to `after` o
 This error often occurs when we are indexing too many dynamic keys or nested objects with Elasticsearch and reach our total field limit.
 
 The script will output data related to the mapping for the environment and can help pinpoint areas to look into further. To filter data from indexing, add fields or keys to the filtering functions in `processStreamRecordsInteractor.js`.
+
+
+### NotFoundException when calling the GetDomainName
+
+This error occurs when code changes do not cause the checksums of the files to change. In order to redeploy, the file must have a different checksum than what is recorded in the database. 
+
+#### Solution
+
+Delete checksums from the environment dynamo table that is failing. For example, if the dev deploy is failing, navigate to the efcms-deploy-dev table in AWS and delete all the check-sum-** items. 

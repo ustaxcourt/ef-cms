@@ -1,8 +1,12 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import {
+  formatDateIfToday,
   formatWorkItem,
   formattedWorkQueue as formattedWorkQueueComputed,
   getWorkItemDocumentLink,
@@ -29,13 +33,13 @@ const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
 const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'abc',
 };
 
 const docketClerkUser = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   section: 'docket',
   userId: 'abc',
 };
@@ -51,7 +55,7 @@ const FORMATTED_WORK_ITEM = {
   assigneeId: 'abc',
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: Case.STATUS_TYPES.generalDocket,
+  caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAtFormatted: '12/27/18',
   currentMessage: {
     createdAtFormatted: '12/27/18',
@@ -111,7 +115,7 @@ describe('formatted work queue computed', () => {
     assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: Case.STATUS_TYPES.generalDocket,
+    caseStatus: CASE_STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -435,7 +439,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for a given judge or chambers user', () => {
     const judgeUser = {
       name: 'Test Judge',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: JUDGE_USER_ID_1,
     };
 
@@ -460,7 +464,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -479,7 +483,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for an adc user', () => {
     const adcUser = {
       name: 'Test ADC',
-      role: User.ROLES.adc,
+      role: ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -503,7 +507,7 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             workItemId: WORK_ITEM_ID_4,
           },
         ],
@@ -523,7 +527,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on in progress cases for a petitionsclerk', () => {
     const petitionsClerkUser = {
       name: 'Test PetitionsClerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -547,9 +551,9 @@ describe('formatted work queue computed', () => {
           },
           {
             ...qcWorkItem,
-            associatedJudge: Case.CHIEF_JUDGE,
+            associatedJudge: CHIEF_JUDGE,
             caseIsInProgress: true,
-            caseStatus: Case.STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.new,
             document: {
               ...qcWorkItem.document,
               status: 'processing',
@@ -761,9 +765,11 @@ describe('formatted work queue computed', () => {
       message: 'Petition filed by Ori Petersen is ready for review.',
       messageId: '9ad0fceb-41be-4902-8294-9f505fb7a353',
     };
+    const baseWorkItemEditLink =
+      '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
 
-    it('should return editLink as default document detail page if document is petition and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
-      const permissions = getBaseState(petitionsClerkUser);
+    it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
+      const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
         applicationContext,
@@ -787,7 +793,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('');
+      expect(result).toEqual('/case-detail/114-19/petition-qc');
     });
 
     it('should return /edit-court-issued if document is court-issued and not served and user is docketclerk', () => {
@@ -815,7 +821,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/edit-court-issued');
+      expect(result).toEqual(`${baseWorkItemEditLink}/edit-court-issued`);
     });
 
     it('should return editLink as default document detail page if document is court-issued and not served and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
@@ -843,7 +849,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('');
+      expect(result).toEqual(baseWorkItemEditLink);
     });
 
     it('should return /complete if document is in progress and user is docketclerk', () => {
@@ -878,7 +884,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/complete');
+      expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
     });
 
     it('should return default edit link if document is in progress and user is petitionsClerk', () => {
@@ -913,7 +919,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('');
+      expect(result).toEqual(baseWorkItemEditLink);
     });
 
     it("should return /edit if document is an external doc that has not been qc'd (isQC is true) and user is docketclerk", () => {
@@ -946,7 +952,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/edit');
+      expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
     });
 
     it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk and viewing a messages box (workQueueIsInternal=true)", () => {
@@ -1047,7 +1053,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/edit');
+      expect(result).toEqual(`${baseWorkItemEditLink}/edit`);
     });
 
     it('should return editLink as /review if the box is my inProgress and user is petitionsClerk', () => {
@@ -1076,7 +1082,7 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual('/review');
+      expect(result).toEqual(`${baseWorkItemEditLink}/review`);
     });
   });
 
@@ -1453,6 +1459,44 @@ describe('formatted work queue computed', () => {
       expect(result.document.descriptionDisplay).toEqual(
         'Document Title with Additional Info',
       );
+    });
+  });
+
+  describe('formatDateIfToday', () => {
+    it('returns a time if the date is today', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const result = formatDateIfToday(currentTime, applicationContext);
+
+      expect(result).toContain(':');
+      expect(result).toContain('ET');
+      expect(result).not.toContain('/');
+    });
+
+    it('returns "Yesterday" if the date is yesterday', () => {
+      const currentTime = applicationContext
+        .getUtilities()
+        .createISODateString();
+
+      const yesterday = applicationContext
+        .getUtilities()
+        .calculateISODate({ dateString: currentTime, howMuch: -1 });
+
+      const result = formatDateIfToday(yesterday, applicationContext);
+
+      expect(result).toEqual('Yesterday');
+    });
+
+    it('returns the formatted date if older than one day', () => {
+      const date = applicationContext
+        .getUtilities()
+        .formatDateString('2019-01-01T17:29:13.122Z');
+
+      const result = formatDateIfToday(date, applicationContext);
+
+      expect(result).toContain('01/01/19');
     });
   });
 });

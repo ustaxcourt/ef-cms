@@ -2,6 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CHAMBERS_SECTIONS, SECTIONS } = require('./EntityConstants');
 
 InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES = {
   assigneeId: 'Select a recipient',
@@ -29,8 +30,11 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .required(),
-    message: joi.string().required(),
-    section: joi.string().required(),
+    message: joi.string().max(500).required(),
+    section: joi
+      .string()
+      .valid(...SECTIONS, ...CHAMBERS_SECTIONS)
+      .required(),
   }),
   InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES,
 );

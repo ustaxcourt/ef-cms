@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ develop, experimental, master ]
+    branches: [ develop, experimental1, master ]
   pull_request:
-    branches: [ develop, experimental, master ]
+    branches: [ develop, experimental1, master ]
 
 jobs:
   linting:
@@ -26,4 +26,3 @@ jobs:
       run: npm run lint
     - name: Shellcheck
       run: ./run-shellcheck.sh
-

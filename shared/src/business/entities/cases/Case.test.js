@@ -1,4 +1,16 @@
 const {
+  ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+  ANSWER_CUTOFF_UNIT,
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  ROLES,
+} = require('../EntityConstants');
+const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
@@ -7,15 +19,15 @@ const {
 } = require('../../../test/mockCase');
 const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
-const { Document } = require('../Document');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
+const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
-const { User } = require('../User');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -172,6 +184,17 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case from an already existing case json when the docketNumber has leading zeroes', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, docketNumber: '00101-20' },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+      expect(myCase.docketNumber).toBe('101-20');
+    });
+
     it('Creates an invalid case with an invalid nested contact object', () => {
       const myCase = new Case(
         {
@@ -243,8 +266,8 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           statistics: [
             {
-              deficiencyAmount: 1,
-              totalPenalties: 1,
+              irsDeficiencyAmount: 1,
+              irsTotalPenalties: 1,
               year: '2001',
               yearOrPeriod: 'Year',
             },
@@ -255,6 +278,19 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates an invalid case with an invalid trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '91:30',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
@@ -327,13 +363,26 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with a trial time', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          trialTime: '9:30',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     it('Creates a valid case with automaticBlocked set to true and a valid automaticBlockedReason and automaticBlockedDate', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
           automaticBlocked: true,
           automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-          automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
         {
           applicationContext,
@@ -388,7 +437,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           applicationContext,
@@ -405,7 +454,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           closedDate: '2019-03-01T21:40:46.415Z',
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
         {
           applicationContext,
@@ -432,7 +481,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+            petitionPaymentStatus: PAYMENT_STATUS.PAID,
           },
           {
             applicationContext,
@@ -448,7 +497,7 @@ describe('Case entity', () => {
         const myCase = new Case(
           {
             ...MOCK_CASE,
-            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+            petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           },
           {
             applicationContext,
@@ -527,16 +576,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isValidDocketNumber', () => {
-    it('returns true if a valid docketNumber', () => {
-      expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
-    });
-
-    it('returns false if an invalid docket number', () => {
-      expect(Case.isValidDocketNumber('00')).toBeFalsy();
-    });
-  });
-
   describe('markAsSentToIRS', () => {
     it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(
@@ -561,7 +600,7 @@ describe('Case entity', () => {
         },
       );
       caseRecord.markAsSentToIRS();
-      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseRecord.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
   });
 
@@ -577,7 +616,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Petitioners',
@@ -590,7 +629,7 @@ describe('Case entity', () => {
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       });
       expect(caseCaption).toEqual(
         'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
@@ -600,7 +639,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estate,
+        partyType: PARTY_TYPES.estate,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -612,7 +651,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Petitioner',
@@ -622,7 +661,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.trust,
+        partyType: PARTY_TYPES.trust,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -634,7 +673,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
       });
       expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
@@ -642,7 +681,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -654,7 +693,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -666,7 +705,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+        partyType: PARTY_TYPES.partnershipBBA,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -678,7 +717,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.conservator,
+        partyType: PARTY_TYPES.conservator,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -690,7 +729,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.guardian,
+        partyType: PARTY_TYPES.guardian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -702,7 +741,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.custodian,
+        partyType: PARTY_TYPES.custodian,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -714,7 +753,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+        partyType: PARTY_TYPES.nextFriendForMinor,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -726,7 +765,7 @@ describe('Case entity', () => {
     it('party type Legally Incompetent Person', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+        partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -738,7 +777,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.donor,
+        partyType: PARTY_TYPES.donor,
       });
       expect(caseCaption).toEqual('Test Petitioner, Donor, Petitioner');
     });
@@ -746,7 +785,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseCaption = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.transferee,
+        partyType: PARTY_TYPES.transferee,
       });
       expect(caseCaption).toEqual('Test Petitioner, Transferee, Petitioner');
     });
@@ -754,7 +793,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const mockCase = {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+        partyType: PARTY_TYPES.survivingSpouse,
       };
       mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
@@ -982,7 +1021,7 @@ describe('Case entity', () => {
         {
           docketNumber: '123-19',
           isPaper: false,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1001,7 +1040,7 @@ describe('Case entity', () => {
         {
           docketNumber: '123-19',
           isPaper: true,
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1042,7 +1081,7 @@ describe('Case entity', () => {
                 "Docket Number is amended from '123-19B' to '123-19P'",
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1107,7 +1146,7 @@ describe('Case entity', () => {
         {
           caseCaption: 'A New Caption',
           initialCaption: 'Caption',
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1159,7 +1198,7 @@ describe('Case entity', () => {
             },
           ],
           initialCaption: 'Caption',
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1186,10 +1225,10 @@ describe('Case entity', () => {
       );
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
@@ -1203,10 +1242,10 @@ describe('Case entity', () => {
       expect(workItems.length).toEqual(1);
       expect(workItems).toMatchObject([
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: Case.STATUS_TYPES.new,
+          caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
           document: {},
@@ -1222,13 +1261,13 @@ describe('Case entity', () => {
       const caseToCheck = new Case(
         {
           documents: [],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if an answer document has been filed, but the cutoff has not elapsed', () => {
@@ -1240,13 +1279,13 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if a non answer document has been filed before the cutoff', () => {
@@ -1260,13 +1299,13 @@ describe('Case entity', () => {
               eventCode: 'ZZZs',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.generalDocket);
     });
 
     it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
@@ -1281,15 +1320,12 @@ describe('Case entity', () => {
           documents: [
             {
               createdAt: prepareDateFromString()
-                .subtract(
-                  Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS,
-                  Case.ANSWER_CUTOFF_UNIT,
-                )
+                .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS, ANSWER_CUTOFF_UNIT)
                 .toISOString(),
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1297,16 +1333,13 @@ describe('Case entity', () => {
       ).checkForReadyForTrial();
 
       expect(caseToCheck.status).not.toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1317,22 +1350,19 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
         {
           applicationContext,
         },
       ).checkForReadyForTrial();
 
-      expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.new);
+      expect(caseToCheck.status).toEqual(CASE_STATUS_TYPES.new);
     });
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
       const createdAt = prepareDateFromString()
-        .subtract(
-          Case.ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10,
-          Case.ANSWER_CUTOFF_UNIT,
-        )
+        .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case(
@@ -1343,7 +1373,7 @@ describe('Case entity', () => {
               eventCode: 'A',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1351,7 +1381,7 @@ describe('Case entity', () => {
       ).checkForReadyForTrial();
 
       expect(caseToCheck.status).toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
     });
   });
@@ -1516,7 +1546,7 @@ describe('Case entity', () => {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
       expect(myCase.trialSessionId).toBeTruthy();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
     });
 
     it('should set case as calendared with all trial session fields if the trial session is calendared', () => {
@@ -1543,7 +1573,7 @@ describe('Case entity', () => {
       );
       myCase.setAsCalendared(trialSession);
 
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(myCase.trialDate).toBeTruthy();
       expect(myCase.associatedJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
@@ -1575,9 +1605,9 @@ describe('Case entity', () => {
       );
       myCase.setAsCalendared(trialSession);
 
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1607,7 +1637,7 @@ describe('Case entity', () => {
         closedDate: expect.anything(),
         highPriority: false,
         highPriorityReason: undefined,
-        status: Case.STATUS_TYPES.closed,
+        status: CASE_STATUS_TYPES.closed,
       });
     });
   });
@@ -1622,6 +1652,26 @@ describe('Case entity', () => {
       });
       expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
     });
+
+    it('should get a correspondence document by id', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = myCase.getDocumentById({
+        documentId: mockCorrespondence.documentId,
+      });
+
+      expect(result.documentId).toEqual(mockCorrespondence.documentId);
+    });
   });
 
   describe('getPetitionDocument', () => {
@@ -1631,7 +1681,7 @@ describe('Case entity', () => {
       });
       const result = myCase.getPetitionDocument();
       expect(result.documentType).toEqual(
-        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+        INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
     });
   });
@@ -1709,15 +1759,42 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
+
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
         processingStatus: 'success',
       });
+
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
       ).toEqual('success');
+    });
+
+    it('should update a correspondence document', () => {
+      const mockCorrespondence = new Correspondence({
+        documentId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      myCase.updateDocument({
+        documentId: mockCorrespondence.documentId,
+        documentTitle: 'updated title',
+      });
+
+      expect(
+        myCase.correspondence.find(
+          d => d.documentId === mockCorrespondence.documentId,
+        ).documentTitle,
+      ).toEqual('updated title');
     });
   });
 
@@ -1902,7 +1979,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.automaticBlocked).toEqual(true);
       expect(caseToUpdate.automaticBlockedReason).toEqual(
-        Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        AUTOMATIC_BLOCKED_REASONS.pending,
       );
       expect(caseToUpdate.automaticBlockedDate).toBeDefined();
       expect(caseToUpdate.isValid()).toBeTruthy();
@@ -1999,7 +2076,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2009,10 +2086,10 @@ describe('Case entity', () => {
       caseToUpdate.removeFromTrial();
 
       expect(caseToUpdate.status).toEqual(
-        Case.STATUS_TYPES.generalDocketReadyForTrial,
+        CASE_STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(caseToUpdate.associatedJudge).toEqual(CHIEF_JUDGE);
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
@@ -2044,7 +2121,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2084,7 +2161,7 @@ describe('Case entity', () => {
       );
       caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
@@ -2142,10 +2219,10 @@ describe('Case entity', () => {
         },
       );
 
-      updatedCase.setCaseStatus(Case.STATUS_TYPES.generalDocket);
+      updatedCase.setCaseStatus(CASE_STATUS_TYPES.generalDocket);
 
-      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.generalDocket);
-      expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.generalDocket);
+      expect(updatedCase.associatedJudge).toEqual(CHIEF_JUDGE);
     });
 
     it('should update the case status, leave the associated judge unchanged, and call closeCase if the new status is Closed', () => {
@@ -2161,9 +2238,9 @@ describe('Case entity', () => {
         },
       );
 
-      updatedCase.setCaseStatus(Case.STATUS_TYPES.closed);
+      updatedCase.setCaseStatus(CASE_STATUS_TYPES.closed);
 
-      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(updatedCase.associatedJudge).toEqual('Judge Buch');
       expect(closeCaseSpy).toBeCalled();
       closeCaseSpy.mockRestore();
@@ -2191,7 +2268,7 @@ describe('Case entity', () => {
     const contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'TN',
@@ -2201,7 +2278,7 @@ describe('Case entity', () => {
     const contactSecondary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Contact Secondary',
       postalCode: '12345',
       state: 'TN',
@@ -2227,7 +2304,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {
@@ -2251,7 +2328,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
         {
@@ -2795,7 +2872,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2814,7 +2891,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2828,7 +2905,7 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity,
         user: {
-          role: User.ROLES.irsSuperuser,
+          role: ROLES.irsSuperuser,
           userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
         },
       });
@@ -2899,7 +2976,7 @@ describe('Case entity', () => {
   });
 
   describe('Statistics', () => {
-    it('should be required for deficiency cases', () => {
+    it('should be required for deficiency cases when hasVerifiedIrsNotice is true', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -2920,7 +2997,7 @@ describe('Case entity', () => {
       });
     });
 
-    it('should be required for deficiency cases', () => {
+    it('should not be required for deficiency cases when hasVerifiedIrsNotice is false', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -2967,6 +3044,220 @@ describe('Case entity', () => {
       });
 
       expect(caseEntity.correspondence.length).toEqual(1);
+    });
+  });
+
+  describe('statistics', () => {
+    it('should successfully add a statistic', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.addStatistic(statisticToAdd);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+    });
+
+    it('should throw an error if the max number of statistics for a case has already been reached', () => {
+      const statisticsWithMaxLength = new Array(12); // 12 is the maximum number of statistics
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: statisticsWithMaxLength,
+        },
+        { applicationContext },
+      );
+
+      const statisticToAdd = new Statistic(
+        {
+          determinationDeficiencyAmount: 567,
+          determinationTotalPenalties: 789,
+          irsDeficiencyAmount: 11.2,
+          irsTotalPenalties: 66.87,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      let error;
+      try {
+        caseEntity.addStatistic(statisticToAdd);
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).toBeDefined();
+      expect(error.toString()).toEqual(
+        'Error: maximum number of statistics reached',
+      );
+      expect(caseEntity.statistics.length).toEqual(12);
+    });
+
+    it('should successfully update a statistic', () => {
+      const statisticId = '2db9f2b6-d65b-4f71-8ddc-c218d0787e15';
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [
+            {
+              determinationDeficiencyAmount: 567,
+              determinationTotalPenalties: 789,
+              irsDeficiencyAmount: 11.2,
+              irsTotalPenalties: 66.87,
+              statisticId,
+              year: 2012,
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.updateStatistic(statisticToUpdate, statisticId);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toEqual(statisticToUpdate);
+    });
+
+    it('should not update a statistic if its id is not present on the case', () => {
+      const originalStatistic = {
+        determinationDeficiencyAmount: 567,
+        determinationTotalPenalties: 789,
+        irsDeficiencyAmount: 11.2,
+        irsTotalPenalties: 66.87,
+        statisticId: '2db9f2b6-d65b-4f71-8ddc-c218d0787e15',
+        year: 2012,
+        yearOrPeriod: 'Year',
+      };
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: [originalStatistic],
+        },
+        { applicationContext },
+      );
+
+      const statisticToUpdate = new Statistic(
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        { applicationContext },
+      );
+
+      caseEntity.updateStatistic(
+        statisticToUpdate,
+        '9f23dac6-4a9d-4e66-aafc-b6d3c892d907',
+      );
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0]).toMatchObject(originalStatistic);
+    });
+
+    it('should successfully delete a statistic', () => {
+      const statistic0Id = 'cc0f6102-3537-4047-b951-74c21b1aab76';
+      const statistic1Id = 'f4c00a75-f6d9-4e63-9cc7-ca1deee8a949';
+      const originalStatistics = [
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: statistic0Id,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        {
+          determinationDeficiencyAmount: 2,
+          determinationTotalPenalties: 2,
+          irsDeficiencyAmount: 2,
+          irsTotalPenalties: 2,
+          statisticId: statistic1Id,
+          year: 2013,
+          yearOrPeriod: 'Year',
+        },
+      ];
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: originalStatistics,
+        },
+        { applicationContext },
+      );
+
+      caseEntity.deleteStatistic(statistic0Id);
+
+      expect(caseEntity.statistics.length).toEqual(1);
+      expect(caseEntity.statistics[0].statisticId).toEqual(statistic1Id);
+    });
+
+    it('should not delete a statistic if its statisticId is not present on the case', () => {
+      const statistic0Id = 'cc0f6102-3537-4047-b951-74c21b1aab76';
+      const statistic1Id = 'f4c00a75-f6d9-4e63-9cc7-ca1deee8a949';
+      const originalStatistics = [
+        {
+          determinationDeficiencyAmount: 1,
+          determinationTotalPenalties: 1,
+          irsDeficiencyAmount: 1,
+          irsTotalPenalties: 1,
+          statisticId: statistic0Id,
+          year: 2012,
+          yearOrPeriod: 'Year',
+        },
+        {
+          determinationDeficiencyAmount: 2,
+          determinationTotalPenalties: 2,
+          irsDeficiencyAmount: 2,
+          irsTotalPenalties: 2,
+          statisticId: statistic1Id,
+          year: 2013,
+          yearOrPeriod: 'Year',
+        },
+      ];
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          statistics: originalStatistics,
+        },
+        { applicationContext },
+      );
+
+      caseEntity.deleteStatistic('16fc02bc-f00a-453c-a19c-e5597a8850ba');
+
+      expect(caseEntity.statistics.length).toEqual(2);
     });
   });
 });

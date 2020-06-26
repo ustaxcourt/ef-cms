@@ -5,6 +5,7 @@ const {
 const {
   fileCourtIssuedOrderInteractor,
 } = require('./fileCourtIssuedOrderInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -38,42 +39,42 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'irsPractitioner',
+        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
       },
     ],
     filingType: 'Myself',
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    role: User.ROLES.petitioner,
-    userId: 'petitioner',
+    role: ROLES.petitioner,
+    userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
-        name: 'Olivia Jade',
-        role: User.ROLES.petitionsClerk,
+        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        role: ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     );
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
-        name: 'Olivia Jade',
-        role: User.ROLES.petitionsClerk,
+        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        role: ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     );
@@ -188,8 +189,11 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      useTempBucket: false,
+    });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.documents[3].documentContents,

@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.form to the pros.value passed in
+ * sets the state.form to the props.value passed in
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store

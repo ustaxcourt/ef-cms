@@ -2,18 +2,21 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileCorrespondenceDocumentInteractor,
 } = require('./fileCorrespondenceDocumentInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { User } = require('../../entities/User');
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockDocumentId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const mockUser = {
     name: 'Docket Clerk',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
   const mockCase = {
@@ -23,7 +26,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'contact@example.com',
       name: 'Contact Primary',
       phone: '123123134',
@@ -65,7 +68,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
@@ -82,14 +85,14 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should throw an Unauthorized error if the user role does not have theCASE_CORRESPONDENCE permission', async () => {
-    const user = { ...mockUser, role: User.ROLES.petitioner };
+    const user = { ...mockUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
       fileCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '123' },
-        primaryDocumentFileId: '111',
+        documentMetadata: { caseId: '2cb1e611-df1c-4c15-bfc2-491248551672' },
+        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -102,10 +105,12 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     await expect(
       fileCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '123' },
-        primaryDocumentFileId: '111',
+        documentMetadata: { caseId: '2cb1e611-df1c-4c15-bfc2-491248551672' },
+        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
-    ).rejects.toThrow('Case 123 was not found');
+    ).rejects.toThrow(
+      'Case 2cb1e611-df1c-4c15-bfc2-491248551672 was not found',
+    );
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
@@ -120,19 +125,19 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     await fileCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '123',
+        caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
         documentTitle: 'A title',
         filingDate: '2001-02-01',
       },
-      primaryDocumentFileId: '111',
+      primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
     });
     expect(
       applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
       correspondence: {
-        documentId: '111',
+        documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
         documentTitle: 'A title',
         filedBy: mockUser.name,
         filingDate: '2001-02-01',
@@ -149,17 +154,17 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     const result = await fileCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '123',
+        caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
         documentTitle: 'A title',
         filingDate: '2001-02-01',
       },
-      primaryDocumentFileId: '111',
+      primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
     });
     expect(result).toMatchObject({
       ...mockCase,
       correspondence: [
         {
-          documentId: '111',
+          documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
           documentTitle: 'A title',
           filedBy: mockUser.name,
           filingDate: '2001-02-01',

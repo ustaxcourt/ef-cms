@@ -51,6 +51,7 @@
     "eventCode": "P",
     "index": 1,
     "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "numberOfPages": 1,
     "filingDate": "2019-12-11T16:02:31.174Z",
     "filedBy": "Petr. Letti Toretto",
     "docketRecordId": "e4932867-0312-4f82-a1d2-2ddba4679db6",
@@ -63,6 +64,7 @@
     "index": 2,
     "filingDate": "2019-12-11T16:02:31.173Z",
     "docketRecordId": "4760bafd-e75e-4924-8072-bdbef4739011",
+
     "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
     "sk": "docket-record|4760bafd-e75e-4924-8072-bdbef4739011"
   },
@@ -72,7 +74,16 @@
   },
   {
     "sk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-12-11T16:02:31.173Z",
+    "caseCaption": "Letti Toretto, Petitioner",
+    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "docketNumber": "113-19",
+    "docketNumberWithSuffix": "113-19L",
+    "status": "Submitted",
+    "entityName": "UserCase"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
@@ -91,6 +102,7 @@
     "sk": "document|3cf1f474-1dcd-47aa-8455-8f9a93d80183",
     "partySecondary": false,
     "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
+    "numberOfPages": 1,
     "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b"
   },
   {
@@ -124,7 +136,8 @@
         "isInitializeCase": true,
         "assigneeId": null,
         "isQC": true,
-        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitioner",
+        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-12-11T16:02:31.175Z",
         "assigneeName": null,
         "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
@@ -152,6 +165,7 @@
     "sk": "document|6d83425c-8ef3-4c66-b776-6c7957c53f4d",
     "partySecondary": false,
     "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "numberOfPages": 1,
     "pk": "case|cbe6e7dc-a209-4d5f-90d1-9bf7025b705b"
   }
 ]

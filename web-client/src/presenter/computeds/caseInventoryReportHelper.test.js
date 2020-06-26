@@ -1,12 +1,15 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
+
 import { applicationContext } from '../../applicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 applicationContext.getCurrentUser = () => ({
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
 });
 
@@ -32,7 +35,7 @@ describe('caseInventoryReportHelper', () => {
       },
     });
 
-    expect(result.caseStatuses).toEqual(Object.values(Case.STATUS_TYPES));
+    expect(result.caseStatuses).toEqual(Object.values(CASE_STATUS_TYPES));
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -101,15 +104,18 @@ describe('caseInventoryReportHelper', () => {
         caseInventoryReportData: {
           foundCases: [
             {
+              correspondence: [],
               docketNumber: '123-20',
               docketNumberWithSuffix: '123-20',
             },
             {
+              correspondence: [],
               docketNumber: '123-19',
               docketNumberSuffix: 'L',
               docketNumberWithSuffix: '123-19L',
             },
             {
+              correspondence: [],
               docketNumber: '135-19',
               docketNumberWithSuffix: '135-19',
             },
@@ -252,7 +258,7 @@ describe('caseInventoryReportHelper', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         caseInventoryReportData: {
-          foundCases: [{ docketNumber: '123-20' }],
+          foundCases: [{ correspondence: [], docketNumber: '123-20' }],
           totalCount: 1,
         },
         screenMetadata: {

@@ -42,6 +42,8 @@ createAccount() {
   judgeFullName=$5
   judgeTitle=$6
 
+  node ../shared/src/tools/validateUser.js "${email}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}"
+
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \

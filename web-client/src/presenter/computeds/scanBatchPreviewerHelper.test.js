@@ -1,5 +1,7 @@
-import { Scan } from '../../../../shared/src/business/entities/Scan';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  ROLES,
+  SCAN_MODES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { scanBatchPreviewerHelper as scanBatchPreviewerHelperComputed } from './scanBatchPreviewerHelper';
@@ -11,15 +13,13 @@ const state = {
   },
 };
 
-const { SCAN_MODES } = Scan;
-
 const scanBatchPreviewerHelper = withAppContextDecorator(
   scanBatchPreviewerHelperComputed,
   applicationContext,
 );
 
 applicationContext.getCurrentUser = () => ({
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
 });
 applicationContext.getConstants = () => ({ SCAN_MODES });
 

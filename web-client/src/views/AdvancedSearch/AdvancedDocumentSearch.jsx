@@ -47,7 +47,7 @@ export const AdvancedDocumentSearch = connect(
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value.toUpperCase(),
                       });
                     }}
                   />
@@ -205,7 +205,7 @@ export const AdvancedDocumentSearch = connect(
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value.toUpperCase(),
                       });
                     }}
                   />

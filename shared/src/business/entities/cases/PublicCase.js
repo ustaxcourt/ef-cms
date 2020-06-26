@@ -1,11 +1,15 @@
 const joi = require('@hapi/joi');
 const {
+  COURT_ISSUED_EVENT_CODES,
+  ORDER_TYPES,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Document } = require('../Document');
+const { compareStrings } = require('../../utilities/sortFunctions');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { map } = require('lodash');
-const { Order } = require('../orders/Order');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
@@ -25,7 +29,9 @@ function PublicCase(rawCase, { applicationContext }) {
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
-  this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
+  this.docketNumberWithSuffix =
+    rawCase.docketNumberWithSuffix ||
+    `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.receivedAt = rawCase.receivedAt;
   this.isSealed = !!rawCase.sealedDate;
 
@@ -45,7 +51,7 @@ function PublicCase(rawCase, { applicationContext }) {
   this.documents = (rawCase.documents || [])
     .map(document => new PublicDocument(document, { applicationContext }))
     .filter(document => !isDraftDocument(document, this.docketRecord))
-    .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+    .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
 const publicCaseSchema = {
@@ -85,9 +91,9 @@ joiValidationDecorator(
 );
 
 const isDraftDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES,
     'documentType',
   );
 
@@ -107,14 +113,14 @@ const isDraftDocument = function (document, docketRecord) {
 };
 
 const isPrivateDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
   const courtIssuedDocumentTypes = map(
-    Document.COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES,
     'documentType',
   );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isTranscript = document.eventCode === Document.TRANSCRIPT_EVENT_CODE;
+  const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
   const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
     document.documentType,

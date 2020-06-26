@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import {
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from './caseDetailEditHelper';
 import { runCompute } from 'cerebral/test';
@@ -15,7 +17,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.conservator,
+          partyType: PARTY_TYPES.conservator,
         },
       },
     });
@@ -26,7 +28,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.conservator,
+          partyType: PARTY_TYPES.conservator,
         },
       },
     });
@@ -38,7 +40,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });
@@ -50,7 +52,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.custodian,
+          partyType: PARTY_TYPES.custodian,
         },
       },
     });
@@ -62,7 +64,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.donor,
+          partyType: PARTY_TYPES.donor,
         },
       },
     });
@@ -74,7 +76,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estate,
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
@@ -86,7 +88,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
@@ -98,7 +100,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.guardian,
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -110,7 +112,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
       },
     });
@@ -122,7 +124,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -134,7 +136,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -146,7 +148,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -158,7 +160,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -170,7 +172,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -182,7 +184,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -194,7 +196,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -206,7 +208,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -218,7 +220,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.transferee,
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -230,7 +232,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.trust,
+          partyType: PARTY_TYPES.trust,
         },
       },
     });
@@ -248,7 +250,7 @@ describe('case detail edit computed', () => {
               documentType: 'Ownership Disclosure Statement',
             },
           ],
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });
@@ -268,7 +270,7 @@ describe('case detail edit computed', () => {
               documentType: 'Petition',
             },
           ],
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });
@@ -279,7 +281,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -290,7 +292,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
           preferredTrialCity: 'Fresno, California',
         },
       },
@@ -312,7 +314,7 @@ describe('case detail edit computed', () => {
             },
           ],
           isPaper: true,
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -329,7 +331,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         },
       },
     });
@@ -340,7 +342,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
     });
@@ -351,10 +353,21 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
     });
     expect(result.showOrderForFilingFee).toBeFalsy();
+  });
+
+  it('sets receivedAtFormatted to formatted string', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        form: {
+          receivedAt: '2001-12-01T20:00:00.000Z',
+        },
+      },
+    });
+    expect(result.receivedAtFormatted).toEqual('12/01/2001');
   });
 });

@@ -6,7 +6,8 @@ const {
 const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
+
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('completeDocketEntryQCInteractor', () => {
@@ -31,7 +32,8 @@ describe('completeDocketEntryQCInteractor', () => {
       },
       isQC: true,
       section: 'docket',
-      sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sentBy: 'Test User',
+      sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       updatedAt: new Date().toISOString(),
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -88,7 +90,7 @@ describe('completeDocketEntryQCInteractor', () => {
       partyType: 'Petitioner',
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -96,23 +98,20 @@ describe('completeDocketEntryQCInteractor', () => {
       compile: () => () => '',
     }));
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.docketClerk,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.docketClerk,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(caseRecord);
-    applicationContext
-      .getUseCaseHelpers()
-      .generatePaperServiceAddressPagePdf.mockReturnValue(testPdfDoc);
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );

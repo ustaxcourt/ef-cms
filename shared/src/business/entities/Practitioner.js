@@ -1,25 +1,20 @@
 const joi = require('@hapi/joi');
 const {
+  ADMISSIONS_STATUS_OPTIONS,
+  EMPLOYER_OPTIONS,
+  PRACTITIONER_TYPE_OPTIONS,
+  ROLES,
+} = require('./EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
-const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
-const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
-const ADMISSIONS_STATUS_OPTIONS = [
-  'Active',
-  'Suspended',
-  'Disbarred',
-  'Resigned',
-  'Deceased',
-  'Inactive',
-];
 
 /**
  * constructor
@@ -32,9 +27,9 @@ function Practitioner(rawUser) {
 }
 
 const roleMap = {
-  DOJ: User.ROLES.irsPractitioner,
-  IRS: User.ROLES.irsPractitioner,
-  Private: User.ROLES.privatePractitioner,
+  DOJ: ROLES.irsPractitioner,
+  IRS: ROLES.irsPractitioner,
+  Private: ROLES.privatePractitioner,
 };
 
 Practitioner.prototype.init = function (rawUser) {
@@ -56,7 +51,7 @@ Practitioner.prototype.init = function (rawUser) {
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
-    this.role = User.ROLES.inactivePractitioner;
+    this.role = ROLES.inactivePractitioner;
   }
   this.suffix = rawUser.suffix;
   this.section = this.role;
@@ -89,6 +84,7 @@ const practitionerValidation = {
   ...userValidation,
   additionalPhone: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
@@ -105,11 +101,13 @@ const practitionerValidation = {
     .description('The Tax Court bar admission status for the practitioner.'),
   alternateEmail: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('An alternate email address for the practitioner.'),
   barNumber: joi
     .string()
+    .max(100)
     .required()
     .description(
       'A unique identifier comprising of the practitioner initials, date, and series number.',
@@ -129,24 +127,29 @@ const practitionerValidation = {
   entityName: joi.string().valid('Practitioner').required(),
   firmName: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('The firm name for the practitioner.'),
   firstName: joi
     .string()
+    .max(100)
     .required()
     .description('The first name of the practitioner.'),
   lastName: joi
     .string()
+    .max(100)
     .required()
     .description('The last name of the practitioner.'),
   middleName: joi
     .string()
+    .max(100)
     .optional()
     .allow(null)
     .description('The optional middle name of the practitioner.'),
   originalBarState: joi
     .string()
+    .max(100)
     .required()
     .description(
       'The state in which the practitioner passed their bar examination.',
@@ -158,14 +161,15 @@ const practitionerValidation = {
     .description('The type of practitioner - either Attorney or Non-Attorney.'),
   role: joi.alternatives().conditional('admissionsStatus', {
     is: joi.valid('Active'),
-    otherwise: joi.string().valid(User.ROLES.inactivePractitioner).required(),
+    otherwise: joi.string().valid(ROLES.inactivePractitioner).required(),
     then: joi
       .string()
-      .valid(...[User.ROLES.irsPractitioner, User.ROLES.privatePractitioner])
+      .valid(...[ROLES.irsPractitioner, ROLES.privatePractitioner])
       .required(),
   }),
   suffix: joi
     .string()
+    .max(100)
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),
@@ -180,12 +184,8 @@ joiValidationDecorator(
 );
 
 Practitioner.validationName = 'Practitioner';
-
-Practitioner.PRACTITIONER_TYPE_OPTIONS = PRACTITIONER_TYPE_OPTIONS;
-Practitioner.EMPLOYER_OPTIONS = EMPLOYER_OPTIONS;
 Practitioner.validationRules = practitionerValidation;
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-Practitioner.ADMISSIONS_STATUS_OPTIONS = ADMISSIONS_STATUS_OPTIONS;
 
 /**
  * returns the full concatenated name for the given practitioner data

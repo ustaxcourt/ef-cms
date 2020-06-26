@@ -2,7 +2,7 @@ const createApplicationContext = require('../../../../../web-api/src/application
 const {
   generatePrintableDocketRecordTemplate,
 } = require('./generatePrintableDocketRecordTemplate');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 
 const applicationContext = createApplicationContext({});
 
@@ -29,7 +29,7 @@ describe('generatePrintableDocketRecordTemplate', () => {
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf(data.caseTitle)).toBeGreaterThan(-1);
     expect(result.indexOf(data.caseCaptionExtension)).toBeGreaterThan(-1);
-    expect(result.indexOf(Case.CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
+    expect(result.indexOf(CASE_CAPTION_POSTFIX)).toBeGreaterThan(-1);
     expect(result.indexOf(data.docketNumberWithSuffix)).toBeGreaterThan(-1);
     expect(result.indexOf('<div class="party-info"')).toBeGreaterThan(-1);
     expect(result.indexOf('<table id="documents">')).toBeGreaterThan(-1);

@@ -103,6 +103,10 @@
   svg {
     margin-right: 5px;
   }
+
+  &.usa-button--unstyled:visited {
+    color: $color-white;
+  }
 }
 
 .recall-button-box {
@@ -135,4 +139,10 @@
 .button-icon {
   border: none;
   background-color: rgba(0, 0, 0, 0);
+}
+
+.add-deficiency-statistics-form .calculate-penalties {
+  position: absolute;
+  top: 50px;
+  left: 180px;
 }

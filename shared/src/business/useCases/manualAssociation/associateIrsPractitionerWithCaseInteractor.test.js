@@ -4,11 +4,9 @@ const {
 const {
   associateIrsPractitionerWithCaseInteractor,
 } = require('./associateIrsPractitionerWithCaseInteractor');
-const {
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/cases/CaseConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -64,13 +62,13 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
 
   it('should add mapping for an irsPractitioner', async () => {
     mockCurrentUser = {
-      name: 'Olivia Jade',
-      role: User.ROLES.adc,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     mockUserById = {
-      name: 'Olivia Jade',
-      role: User.ROLES.irsPractitioner,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     applicationContext

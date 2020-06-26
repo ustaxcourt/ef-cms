@@ -15,6 +15,8 @@ exports.MOCK_CASE = {
     state: 'TN',
     title: 'Executor',
   },
+  correspondence: [],
+  createdAt: '2018-03-01T21:40:46.415Z',
   docketNumber: '101-18',
   docketNumberWithSuffix: '101-18',
   docketRecord: [

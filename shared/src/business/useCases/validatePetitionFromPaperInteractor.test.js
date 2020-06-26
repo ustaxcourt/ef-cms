@@ -2,7 +2,7 @@ const {
   validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { PAYMENT_STATUS } = require('../entities/EntityConstants');
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
@@ -35,7 +35,7 @@ describe('validate petition from paper', () => {
         partyType: 'testing',
         petitionFile: {},
         petitionFileSize: 100,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         procedureType: 'testing',
         receivedAt: new Date().toISOString(),
       },

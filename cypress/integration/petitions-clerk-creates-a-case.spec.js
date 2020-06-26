@@ -9,8 +9,6 @@ const {
 
 describe('Create case and submit to IRS', function () {
   before(() => {
-    cy.task('seed');
-
     navigateToDocumentQC('petitionsclerk');
 
     getCreateACaseButton().click();
@@ -28,5 +26,10 @@ describe('Create case and submit to IRS', function () {
     cy.get('@postPaperCase').should(xhr => {
       expect(xhr.responseBody).to.have.property('docketNumber');
     });
+  });
+
+  it('should display a confirmation modal when the user clicks cancel on the review page', () => {
+    cy.get('button#cancel-create-case').scrollIntoView().click();
+    cy.get('div.modal-header').should('exist');
   });
 });
