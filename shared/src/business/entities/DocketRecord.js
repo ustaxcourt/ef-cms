@@ -30,6 +30,8 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
+  this.isLegacy = rawDocketRecord.isLegacy;
+  this.isStricken = rawDocketRecord.isStricken;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -96,6 +98,22 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    isLegacy: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system.',
+      ),
+    isStricken: joi
+      .boolean()
+      .when('isLegacy', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description(
+        'Indicates the item has been removed from the docket record.',
+      ),
     numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
