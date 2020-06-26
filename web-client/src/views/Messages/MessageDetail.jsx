@@ -3,6 +3,7 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
+import { MessageDocument } from './MessageDocument';
 import { ReplyToCaseMessageModalDialog } from './ReplyToCaseMessageModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -66,7 +67,6 @@ export const MessageDetail = connect(
     cerebralBindSimpleSetStateSequence:
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
-    iframeSrc: state.iframeSrc,
     isExpanded: state.isExpanded,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
@@ -82,7 +82,6 @@ export const MessageDetail = connect(
     attachmentDocumentToDisplay,
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
-    iframeSrc,
     isExpanded,
     openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
@@ -237,20 +236,7 @@ export const MessageDetail = connect(
             </div>
 
             <div className="grid-col-8">
-              <div className="border border-base-lighter message-detail--attachments">
-                {!attachmentDocumentToDisplay && (
-                  <div className="padding-2">
-                    There are no attachments to preview
-                  </div>
-                )}
-
-                {!process.env.CI && attachmentDocumentToDisplay && (
-                  <iframe
-                    src={iframeSrc}
-                    title={attachmentDocumentToDisplay.documentTitle}
-                  />
-                )}
-              </div>
+              <MessageDocument />
             </div>
           </div>
         </section>

@@ -91,6 +91,8 @@
     "workItems": [],
     "partyPrimary": true,
     "pending": false,
+    "isLegacy": true,
+    "isStricken": true,
     "receivedAt": "2020-06-25T20:58:55.420Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
@@ -126,7 +128,9 @@
     "description": "Petition",
     "index": 1,
     "documentId": "d1d5ea49-bbe5-4a63-bdff-20de1fed05d7",
-    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898"
+    "pk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",
+    "isLegacy": true,
+    "isStricken": true
   },
   {
     "associatedJudge": "Chief Judge",
