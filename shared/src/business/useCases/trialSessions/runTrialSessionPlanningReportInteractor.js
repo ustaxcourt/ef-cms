@@ -2,9 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { capitalize } = require('lodash');
 const { invert } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { TRIAL_CITIES, US_STATES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const getPreviousTerm = (currentTerm, currentYear) => {
@@ -38,7 +38,7 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const trialCities = [...TrialSession.TRIAL_CITIES.ALL];
+  const trialCities = [...TRIAL_CITIES.ALL];
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
       return applicationContext.getUtilities().compareStrings(a.city, b.city);
@@ -59,9 +59,7 @@ const getTrialSessionPlanningReportData = async ({
   for (const trialLocation of trialCities) {
     const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
     const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
-    const stateAbbreviation = invert(ContactFactory.US_STATES)[
-      trialLocation.state
-    ];
+    const stateAbbreviation = invert(US_STATES)[trialLocation.state];
 
     const eligibleCasesSmall = await applicationContext
       .getPersistenceGateway()
@@ -154,44 +152,22 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     year,
   });
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateTrialSessionPlanningReportTemplate({
+  const trialSessionPlanningReport = await applicationContext
+    .getDocumentGenerators()
+    .trialSessionPlanningReport({
       applicationContext,
-      content: {
+      data: {
+        locationData: reportData.trialLocationData,
         previousTerms: reportData.previousTerms,
-        rows: reportData.trialLocationData,
-        selectedTerm: term,
-        selectedYear: year,
+        term: `${capitalize(term)} ${year}`,
       },
     });
 
-  const pdf = await applicationContext
-    .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
-      contentHtml,
-      headerHtml: ' ',
-    });
-
-  const trialSessionPlanningReportPdfId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    document: pdf,
-    documentId: trialSessionPlanningReportPdfId,
+    file: trialSessionPlanningReport,
     useTempBucket: true,
   });
-
-  const trialSessionPlanningReportPdfUrl = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      documentId: trialSessionPlanningReportPdfId,
-      useTempBucket: true,
-    });
-
-  return trialSessionPlanningReportPdfUrl;
 };
 
 exports.getPreviousTerm = getPreviousTerm;

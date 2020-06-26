@@ -7,35 +7,49 @@ const {
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
     new PrivatePractitioner({
-      role: User.ROLES.privatePractitioner,
-      userId: '456',
+      role: ROLES.privatePractitioner,
+      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
     }),
     new PrivatePractitioner({
-      role: User.ROLES.privatePractitioner,
-      userId: '789',
+      role: ROLES.privatePractitioner,
+      userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     }),
     new PrivatePractitioner({
-      role: User.ROLES.privatePractitioner,
-      userId: '012',
+      role: ROLES.privatePractitioner,
+      userId: '4cae261f-3653-4d2f-8d8c-31f03df62e54',
     }),
   ];
 
   const mockIrsPractitioners = [
-    new IrsPractitioner({ role: User.ROLES.irsPractitioner, userId: '654' }),
-    new IrsPractitioner({ role: User.ROLES.irsPractitioner, userId: '987' }),
-    new IrsPractitioner({ role: User.ROLES.irsPractitioner, userId: '210' }),
+    new IrsPractitioner({
+      role: ROLES.irsPractitioner,
+      userId: '9a4390b3-9d1a-4987-b918-312675956bcc',
+    }),
+    new IrsPractitioner({
+      role: ROLES.irsPractitioner,
+      userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
+    }),
+    new IrsPractitioner({
+      role: ROLES.irsPractitioner,
+      userId: 'dd60c66f-2f82-4f8f-824a-d15a3e8e49a3',
+    }),
   ];
 
-  const mockPetitioners = [{ role: User.ROLES.petitioner, userId: '111' }];
+  const mockPetitioners = [
+    {
+      role: ROLES.petitioner,
+      userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
+    },
+  ];
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '001',
     });
     applicationContext
@@ -92,7 +106,7 @@ describe('updateCounselOnCaseInteractor', () => {
         userData: {
           representingPrimary: true,
         },
-        userIdToUpdate: '789',
+        userIdToUpdate: '9d914ca2-7876-43a7-acfa-ccb645717e11',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -106,7 +120,7 @@ describe('updateCounselOnCaseInteractor', () => {
         representingSecondary: false,
         serviceIndicator: 'Electronic',
       },
-      userIdToUpdate: '789',
+      userIdToUpdate: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     });
 
     expect(
@@ -123,7 +137,7 @@ describe('updateCounselOnCaseInteractor', () => {
         representingSecondary: false,
         serviceIndicator: 'Electronic',
       },
-      userIdToUpdate: '987',
+      userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
 
     expect(
@@ -141,13 +155,13 @@ describe('updateCounselOnCaseInteractor', () => {
         representingSecondary: false,
         serviceIndicator: 'Electronic',
       },
-      userIdToUpdate: '987',
+      userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
 
     const updatedPractitioner = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.irsPractitioners.find(
-        p => p.userId === '987',
+        p => p.userId === '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       );
     expect(updatedPractitioner.email).toBeUndefined();
     expect(updatedPractitioner.representingPrimary).toBe(true);
@@ -163,7 +177,7 @@ describe('updateCounselOnCaseInteractor', () => {
         userData: {
           email: 'petitioner@example.com',
         },
-        userIdToUpdate: '111',
+        userIdToUpdate: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
       }),
     ).rejects.toThrow('User is not a practitioner');
   });

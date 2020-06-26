@@ -1,14 +1,17 @@
 const {
+  CASE_STATUS_TYPES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('fileExternalDocumentInteractor integration test', () => {
@@ -19,7 +22,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Test Petitioner',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
@@ -55,7 +58,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         ],
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -169,7 +172,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       documents: [
         {
-          caseId,
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
           filedBy: 'Petr. Test Petitioner',
@@ -179,7 +181,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -198,13 +200,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 },
               ],
               section: 'petitions',
-              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
         },
         {
-          caseId,
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: 'Statement of Taxpayer Identification',
           filedBy: 'Petr. Test Petitioner',
@@ -213,7 +214,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         {
           attachments: false,
-          caseId,
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -230,12 +230,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
                 attachments: false,
-                caseId,
                 certificateOfService: false,
                 certificateOfServiceDate: 'undefined-undefined-undefined',
                 docketNumber: '201-19',
@@ -258,12 +257,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 },
               ],
               section: 'docket',
-              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Test Petitioner',
             },
           ],
         },
         {
-          caseId,
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle: 'Brief in Support of Amended Answer',
           documentType: 'Brief in Support',
@@ -279,7 +277,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -303,7 +301,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 },
               ],
               section: 'docket',
-              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -321,7 +319,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -343,7 +341,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 },
               ],
               section: 'docket',
-              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -364,7 +362,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -389,7 +387,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 },
               ],
               section: 'docket',
-              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Test Petitioner',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -402,22 +400,22 @@ describe('fileExternalDocumentInteractor integration test', () => {
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: false,
+      orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Aberdeen, South Dakota',
       privatePractitioners: [],
       procedureType: 'Small',
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Test Docketclerk',
-        role: User.ROLES.docketClerk,
+        role: ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
@@ -433,12 +431,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
           attachments: false,
-          caseId,
           certificateOfService: false,
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
@@ -460,13 +457,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Test Petitioner',
       },
       {
         assigneeId: null,
         assigneeName: null,
-        caseId,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -490,13 +486,13 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -518,13 +514,13 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Test Petitioner',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -549,7 +545,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Test Petitioner',
       },
     ]);
   });

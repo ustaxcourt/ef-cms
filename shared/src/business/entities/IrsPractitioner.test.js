@@ -1,5 +1,5 @@
 const { IrsPractitioner } = require('./IrsPractitioner');
-const { User } = require('./User');
+const { ROLES } = require('./EntityConstants');
 
 describe('IrsPractitioner', () => {
   it('Creates a valid IrsPractitioner', () => {
@@ -17,8 +17,8 @@ describe('IrsPractitioner', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.irsPractitioner,
-      userId: 'petitioner',
+      role: ROLES.irsPractitioner,
+      userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
     });
 
     expect(user.isValid()).toBeTruthy();
@@ -27,7 +27,7 @@ describe('IrsPractitioner', () => {
 
   it('Creates an invalid', () => {
     const user = new IrsPractitioner({
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
     });
 
     expect(user.isValid()).toBeFalsy();

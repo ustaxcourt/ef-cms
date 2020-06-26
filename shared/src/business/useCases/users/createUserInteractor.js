@@ -6,6 +6,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Practitioner } = require('../../entities/Practitioner');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -28,9 +29,9 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
 
   if (
     [
-      User.ROLES.privatePractitioner,
-      User.ROLES.irsPractitioner,
-      User.ROLES.inactivePractitioner,
+      ROLES.privatePractitioner,
+      ROLES.irsPractitioner,
+      ROLES.inactivePractitioner,
     ].includes(user.role)
   ) {
     userEntity = new Practitioner(

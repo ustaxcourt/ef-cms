@@ -10,6 +10,34 @@ const {
   generatePrintableDocketRecordTemplate,
 } = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
 
+const addressLabelCoverSheet = async ({ applicationContext, data }) => {
+  const addressLabelCoverSheetTemplate = reactTemplateGenerator({
+    componentName: 'AddressLabelCoverSheet',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: addressLabelCoverSheetTemplate },
+    options: {
+      overwriteMain: true,
+      title: '',
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const changeOfAddress = async ({ applicationContext, content }) => {
   const pdfContentHtml = await generateChangeOfAddressTemplate({
     applicationContext,
@@ -39,20 +67,68 @@ const changeOfAddress = async ({ applicationContext, content }) => {
   return pdf;
 };
 
+const coverSheet = async ({ applicationContext, data }) => {
+  const coverSheetTemplate = reactTemplateGenerator({
+    componentName: 'CoverSheet',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: coverSheetTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Cover Sheet',
+    },
+  });
+
+  let footerHtml = '';
+  if (data.dateServed) {
+    footerHtml = reactTemplateGenerator({
+      componentName: 'DateServedFooter',
+      data: {
+        dateServed: data.dateServed,
+      },
+    });
+  }
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: data.docketNumberWithSuffix,
+      footerHtml,
+      headerHtml: '',
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const docketRecord = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generatePrintableDocketRecordTemplate({
     applicationContext,
     data,
   });
 
-  const docketNumber = data.caseDetail.docketNumberWithSuffix;
-
   const headerHtml = reactTemplateGenerator({
     componentName: 'PageMetaHeaderDocket',
     data: {
-      docketNumber,
+      docketNumber: data.docketNumberWithSuffix,
     },
   });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
+  const docketNumber = data.caseDetail.docketNumberWithSuffix;
 
   const pdf = await applicationContext
     .getUseCases()
@@ -61,6 +137,7 @@ const docketRecord = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber,
+      footerHtml,
       headerHtml,
       overwriteHeader: true,
     });
@@ -78,7 +155,7 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
     filingsAndProceedings,
   } = data;
 
-  const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
+  const NoticeOfDocketChangeTemplate = reactTemplateGenerator({
     componentName: 'NoticeOfDocketChange',
     data: {
       docketEntryIndex,
@@ -95,7 +172,7 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
-    content: { main: reactStandingPretrialOrderTemplate },
+    content: { main: NoticeOfDocketChangeTemplate },
     options: {
       overwriteMain: true,
       title: 'Notice of Docket Change',
@@ -114,8 +191,99 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
+  const reactNoticeReceiptPetitionTemplate = reactTemplateGenerator({
+    componentName: 'NoticeOfReceiptOfPetition',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactNoticeReceiptPetitionTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Notice of Receipt of Petition',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: data.docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: data.docketNumberWithSuffix,
+      headerHtml,
+    });
+
+  return pdf;
+};
+
+const order = async ({ applicationContext, data }) => {
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    orderContent,
+    orderTitle,
+    signatureText,
+  } = data;
+
+  const reactOrderTemplate = reactTemplateGenerator({
+    componentName: 'Order',
+    data: {
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      orderContent,
+      orderTitle,
+      signatureText,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactOrderTemplate },
+    options: {
+      overwriteMain: true,
+      title: orderTitle,
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: docketNumberWithSuffix,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const pendingReport = async ({ applicationContext, data }) => {
-  const { docketNumberWithSuffix, pendingItems, subtitle } = data;
+  const { pendingItems, subtitle } = data;
 
   const pendingReportTemplate = reactTemplateGenerator({
     componentName: 'PendingReport',
@@ -155,7 +323,6 @@ const pendingReport = async ({ applicationContext, data }) => {
       applicationContext,
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
-      docketNumber: docketNumberWithSuffix,
       footerHtml,
       headerHtml,
       overwriteHeader: true,
@@ -198,6 +365,59 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
     applicationContext,
     // TODO: Remove main prop when index.pug can be refactored to remove header logic
     content: { main: reactReceiptOfFilingTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Receipt of Filing',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      docketNumber: docketNumberWithSuffix,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
+const standingPretrialNotice = async ({ applicationContext, data }) => {
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    footerDate,
+    trialInfo,
+  } = data;
+
+  const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
+    componentName: 'StandingPretrialNotice',
+    data: {
+      footerDate,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      trialInfo,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: reactStandingPretrialNoticeTemplate },
     options: {
       overwriteMain: true,
       title: 'Standing Pre-trial Order',
@@ -334,12 +554,118 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const trialCalendar = async ({ applicationContext, data }) => {
+  const { cases, sessionDetail } = data;
+
+  const trialCalendarTemplate = reactTemplateGenerator({
+    componentName: 'TrialCalendar',
+    data: {
+      cases,
+      sessionDetail,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: trialCalendarTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Trial Calendar',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: `Trial Calendar: ${sessionDetail.trialLocation} - ${sessionDetail.startDate} ${sessionDetail.sessionType}`,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
+const trialSessionPlanningReport = async ({ applicationContext, data }) => {
+  const { locationData, previousTerms, term } = data;
+
+  const trialSessionPlanningReportTemplate = reactTemplateGenerator({
+    componentName: 'TrialSessionPlanningReport',
+    data: {
+      locationData,
+      previousTerms,
+      term,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: trialSessionPlanningReportTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Trial Session Planning Report',
+    },
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: `Trial Session Planning Report: ${term}`,
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 module.exports = {
+  addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
+  order,
   pendingReport,
   receiptOfFiling,
+  standingPretrialNotice,
   standingPretrialOrder,
+  trialCalendar,
+  trialSessionPlanningReport,
 };

@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -17,7 +17,7 @@ describe('updateOrderForOdsAction', () => {
       props: { key: 'partyType' },
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });
@@ -33,7 +33,7 @@ describe('updateOrderForOdsAction', () => {
       props: { key: 'partyType' },
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -50,7 +50,7 @@ describe('updateOrderForOdsAction', () => {
       state: {
         form: {
           ownershipDisclosureFile: 'the file!',
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });
@@ -67,7 +67,7 @@ describe('updateOrderForOdsAction', () => {
       state: {
         form: {
           orderForOds: false,
-          partyType: ContactFactory.PARTY_TYPES.corporation,
+          partyType: PARTY_TYPES.corporation,
         },
       },
     });

@@ -33,6 +33,15 @@ module.exports = {
         'promise/catch-or-return': 'off',
       },
     },
+    {
+      files: [
+        'web-client/integration-tests/**/*.js',
+        'web-client/integration-tests-public/**/*.js',
+      ],
+      rules: {
+        'jest/expect-expect': 'off',
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -218,6 +227,7 @@ module.exports = {
           'dynamsoft',
           'efcms',
           'elasticsearch',
+          'enum',
           'eslint',
           'falsy',
           'fieldset',
@@ -324,6 +334,7 @@ module.exports = {
           'textarea',
           'thorton',
           'thortons',
+          'todays',
           'touchmove',
           'transferee',
           'truthy',

@@ -59,6 +59,7 @@
     "description": "Petition",
     "eventCode": "P",
     "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+    "numberOfPages": 1,
     "filingDate": "2019-03-05T17:34:13.490Z",
     "filedBy": "Test Petitioner",
     "index": 1,
@@ -79,6 +80,7 @@
     "description": "Ownership Disclosure Statement",
     "eventCode": "DISC",
     "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "numberOfPages": 1,
     "filingDate": "2019-03-05T17:34:13.491Z",
     "filedBy": "Test Petitioner",
     "index": 3,
@@ -88,7 +90,15 @@
   },
   {
     "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseCaption": "Mufutau Wade, Petitioner",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "createdAt": "2019-03-05T17:34:13.490Z",
+    "docketNumber": "104-19",
+    "docketNumberWithSuffix": "104-19L",
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
@@ -106,6 +116,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -146,6 +157,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "filingDate": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -229,6 +241,7 @@
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "document|add36745-8e77-450b-a8dd-6f34272fe1d5",
     "documentId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "numberOfPages": 1,
     "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
@@ -245,6 +258,7 @@
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "numberOfPages": 1,
     "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05"
   },
   {
@@ -260,6 +274,7 @@
         "document": {
           "createdAt": "2019-03-05T17:34:13.490Z",
           "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+          "numberOfPages": 1,
           "documentTitle": "Petition",
           "documentType": "Petition",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -297,6 +312,7 @@
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "sk": "document|c63be3f2-2240-451e-b6bd-8206d52a070b",
     "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+    "numberOfPages": 1,
     "pk": "case|5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "documentTitle": "Petition"
   }

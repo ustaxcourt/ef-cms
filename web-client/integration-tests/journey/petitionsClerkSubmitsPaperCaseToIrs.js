@@ -1,5 +1,8 @@
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../shared/src/business/entities/User';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -64,14 +67,14 @@ export const petitionsClerkSubmitsPaperCaseToIrs = test => {
       '2017-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.generalDocket,
+      CASE_STATUS_TYPES.generalDocket,
     );
     //check that documents were served
     const documents = test.getState('caseDetail.documents');
     for (const document of documents) {
       expect(document.servedAt).toBeDefined();
       expect(document.servedParties.length).toEqual(1);
-      expect(document.servedParties[0].role).toEqual(User.ROLES.irsSuperuser);
+      expect(document.servedParties[0].role).toEqual(ROLES.irsSuperuser);
     }
   });
 };

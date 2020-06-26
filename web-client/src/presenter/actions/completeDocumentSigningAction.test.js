@@ -18,7 +18,7 @@ describe('completeDocumentSigningAction', () => {
     presenter.providers.applicationContext = applicationContext;
 
     applicationContext.getCurrentUser.mockReturnValue({
-      userId: '1',
+      userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
     });
 
     global.window = {

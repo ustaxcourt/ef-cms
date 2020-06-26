@@ -5,14 +5,10 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('./generatePrintablePendingReportInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('generatePrintablePendingReportInteractor', () => {
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
-
     applicationContext.getStorageClient.mockReturnValue({
       upload: jest.fn((params, callback) => callback()),
     });
@@ -21,12 +17,15 @@ describe('generatePrintablePendingReportInteractor', () => {
       {
         associatedJudge: 'Judge Armen',
         caseCaption: 'Test Caption, Petitioner',
+        docketNumber: '123-45',
         documentTitle: 'Test Document Title',
         receivedAt: '2020-01-01T12:00:00.000Z',
       },
       {
         associatedJudge: 'Judge Buch',
         caseCaption: 'Test Caption Two, Petitioner(s)',
+        docketNumber: '234-56',
+        docketNumberSuffix: 'S',
         documentType: 'Test Document Type',
         receivedAt: '2020-02-02T12:00:00.000Z',
       },
@@ -39,9 +38,13 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
   });
 
   afterEach(() => {
@@ -50,7 +53,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   it('should throw an unauthorized error if the user does not have access', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
 
@@ -93,6 +96,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         associatedJudge: 'Judge Armen',
         associatedJudgeFormatted: 'Armen',
         caseTitle: 'Test Caption',
+        docketNumberWithSuffix: '123-45',
         formattedFiledDate: '01/01/20',
         formattedName: 'Test Document Title',
       },
@@ -100,6 +104,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         associatedJudge: 'Judge Buch',
         associatedJudgeFormatted: 'Buch',
         caseTitle: 'Test Caption Two',
+        docketNumberWithSuffix: '234-56S',
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
       },
@@ -140,6 +145,21 @@ describe('generatePrintablePendingReportInteractor', () => {
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
 
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}`);
+  });
+
+  it('should generate a subtitle with the docket number suffix if present', async () => {
+    MOCK_CASE.docketNumberSuffix = 'W';
+
+    await generatePrintablePendingReportInteractor({
+      applicationContext,
+      caseId: '123',
+    });
+
+    const {
+      subtitle,
+    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+
+    expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}W`);
   });
 
   it('calls the document generator function', async () => {

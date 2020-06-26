@@ -2,25 +2,25 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('Get internal users', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
     applicationContext
       .getPersistenceGateway()
       .getInternalUsers.mockReturnValue([
         {
-          userId: 'abc',
+          userId: '343db562-5187-49e3-97fe-90f5fa70b9d4',
         },
         {
-          userId: '123',
+          userId: 'a34fd25c-a2d0-4f89-b495-c52805c9fdd0',
         },
         {
-          userId: 'gg',
+          userId: 'bed3b49a-283c-491b-a1c5-0ece5832c6f4',
         },
       ]);
   });
@@ -29,20 +29,20 @@ describe('Get internal users', () => {
     const users = await getInternalUsersInteractor({ applicationContext });
     expect(users).toMatchObject([
       {
-        userId: 'abc',
+        userId: '343db562-5187-49e3-97fe-90f5fa70b9d4',
       },
       {
-        userId: '123',
+        userId: 'a34fd25c-a2d0-4f89-b495-c52805c9fdd0',
       },
       {
-        userId: 'gg',
+        userId: 'bed3b49a-283c-491b-a1c5-0ece5832c6f4',
       },
     ]);
   });
 
   it('throws unauthorized error for unauthorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     let error;

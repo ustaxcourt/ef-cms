@@ -5,17 +5,17 @@ const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
 const {
+  ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/cases/CaseConstants');
+} = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { User } = require('../../entities/User');
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
 
   const practitionerUser = {
-    name: 'Olivia Jade',
-    role: User.ROLES.privatePractitioner,
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+    role: ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
@@ -62,7 +62,7 @@ describe('associatePrivatePractitionerToCase', () => {
           documentTitle: 'Petition',
           documentType: 'Petition',
           processingStatus: 'pending',
-          userId: 'petitioner',
+          userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
         },
       ],
       filingType: 'Myself',

@@ -8,14 +8,9 @@ import React from 'react';
 export const SearchResults = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  function SearchResults({
-    advancedSearchHelper,
-    pageSize,
-    showMoreResultsSequence,
-  }) {
+  function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
@@ -91,7 +86,7 @@ export const SearchResults = connect(
         )}
         {advancedSearchHelper.showLoadMore && (
           <Button secondary onClick={() => showMoreResultsSequence()}>
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (

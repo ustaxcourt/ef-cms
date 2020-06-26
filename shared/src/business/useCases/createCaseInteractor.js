@@ -8,10 +8,12 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
+const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 const { Message } = require('../entities/Message');
-const { PETITIONS_SECTION } = require('../entities/WorkQueue');
+const { PETITIONS_SECTION } = require('../entities/EntityConstants');
+const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+const { UserCase } = require('../entities/UserCase');
 const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentToCase = ({
@@ -38,7 +40,8 @@ const addPetitionDocumentToCase = ({
       isInitializeCase: true,
       isQC: true,
       section: PETITIONS_SECTION,
-      sentBy: user.userId,
+      sentBy: user.name,
+      sentByUserId: user.userId,
     },
     { applicationContext },
   );
@@ -103,7 +106,7 @@ exports.createCaseInteractor = async ({
   );
 
   let privatePractitioners = [];
-  if (user.role === User.ROLES.privatePractitioner) {
+  if (user.role === ROLES.privatePractitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({
@@ -134,6 +137,7 @@ exports.createCaseInteractor = async ({
     {
       docketNumber,
       isPaper: false,
+      orderForFilingFee: true,
       ...petitionEntity.toRawObject(),
       privatePractitioners,
       userId: user.userId,
@@ -144,12 +148,13 @@ exports.createCaseInteractor = async ({
   );
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  caseToAdd.initialCaption = caseToAdd.caseCaption;
 
   const petitionDocumentEntity = new Document(
     {
       documentId: petitionFileId,
-      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
@@ -174,8 +179,7 @@ exports.createCaseInteractor = async ({
     new DocketRecord(
       {
         description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: caseToAdd.createdAt,
       },
       { applicationContext },
@@ -185,8 +189,8 @@ exports.createCaseInteractor = async ({
   const stinDocumentEntity = new Document(
     {
       documentId: stinFileId,
-      documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,
       partyPrimary: true,
       partySecondary,
@@ -206,10 +210,8 @@ exports.createCaseInteractor = async ({
     const odsDocumentEntity = new Document(
       {
         documentId: ownershipDisclosureFileId,
-        documentType:
-          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-        eventCode:
-          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,
         partyPrimary: true,
         partySecondary,
@@ -229,6 +231,15 @@ exports.createCaseInteractor = async ({
   await applicationContext.getPersistenceGateway().createCase({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  const userCaseEntity = new UserCase(caseToAdd);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    caseId: caseToAdd.caseId,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
   });
 
   await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({

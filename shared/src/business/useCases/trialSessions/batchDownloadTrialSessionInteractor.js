@@ -4,6 +4,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { formatDateString } = require('../../../business/utilities/DateHandler');
 const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -55,7 +56,7 @@ const batchDownloadTrialSessionInteractor = async ({
     .replace(/,/g, ''); // TODO - create a sanitize utility for s3 ids // TODO - should we make these unique somehow?
 
   sessionCases = sessionCases
-    .filter(caseToFilter => caseToFilter.status !== Case.STATUS_TYPES.closed)
+    .filter(caseToFilter => caseToFilter.status !== CASE_STATUS_TYPES.closed)
     .map(caseToBatch => {
       const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
       const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;

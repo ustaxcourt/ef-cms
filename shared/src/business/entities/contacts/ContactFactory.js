@@ -1,122 +1,17 @@
 const joi = require('@hapi/joi');
-
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../EntityConstants');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { SERVICE_INDICATOR_TYPES } = require('../cases/CaseConstants');
+
 const ContactFactory = {};
-
-ContactFactory.COUNTRY_TYPES = {
-  DOMESTIC: 'domestic',
-  INTERNATIONAL: 'international',
-};
-
-ContactFactory.US_STATES = {
-  AK: 'Alaska',
-  AL: 'Alabama',
-  AR: 'Arkansas',
-  AZ: 'Arizona',
-  CA: 'California',
-  CO: 'Colorado',
-  CT: 'Connecticut',
-  DC: 'District of Columbia',
-  DE: 'Delaware',
-  FL: 'Florida',
-  GA: 'Georgia',
-  HI: 'Hawaii',
-  IA: 'Iowa',
-  ID: 'Idaho',
-  IL: 'Illinois',
-  IN: 'Indiana',
-  KS: 'Kansas',
-  KY: 'Kentucky',
-  LA: 'Louisiana',
-  MA: 'Massachusetts',
-  MD: 'Maryland',
-  ME: 'Maine',
-  MI: 'Michigan',
-  MN: 'Minnesota',
-  MO: 'Missouri',
-  MS: 'Mississippi',
-  MT: 'Montana',
-  NC: 'North Carolina',
-  ND: 'North Dakota',
-  NE: 'Nebraska',
-  NH: 'New Hampshire',
-  NJ: 'New Jersey',
-  NM: 'New Mexico',
-  NV: 'Nevada',
-  NY: 'New York',
-  OH: 'Ohio',
-  OK: 'Oklahoma',
-  OR: 'Oregon',
-  PA: 'Pennsylvania',
-  RI: 'Rhode Island',
-  SC: 'South Carolina',
-  SD: 'South Dakota',
-  TN: 'Tennessee',
-  TX: 'Texas',
-  UT: 'Utah',
-  VA: 'Virginia',
-  VT: 'Vermont',
-  WA: 'Washington',
-  WI: 'Wisconsin',
-  WV: 'West Virginia',
-  WY: 'Wyoming',
-};
-
-ContactFactory.PARTY_TYPES = {
-  conservator: 'Conservator',
-  corporation: 'Corporation',
-  custodian: 'Custodian',
-  donor: 'Donor',
-  estate: 'Estate with an executor/personal representative/fiduciary/etc.',
-  estateWithoutExecutor:
-    'Estate without an executor/personal representative/fiduciary/etc.',
-  guardian: 'Guardian',
-  nextFriendForIncompetentPerson:
-    'Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)',
-  nextFriendForMinor:
-    'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
-  partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
-  partnershipOtherThanTaxMatters:
-    'Partnership (as a partner other than Tax Matters Partner)',
-  petitioner: 'Petitioner',
-  petitionerDeceasedSpouse: 'Petitioner & deceased spouse',
-  petitionerSpouse: 'Petitioner & spouse',
-  survivingSpouse: 'Surviving spouse',
-  transferee: 'Transferee',
-  trust: 'Trust',
-};
-
-ContactFactory.BUSINESS_TYPES = {
-  corporation: ContactFactory.PARTY_TYPES.corporation,
-  partnershipAsTaxMattersPartner:
-    ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-  partnershipBBA: ContactFactory.PARTY_TYPES.partnershipBBA,
-  partnershipOtherThanTaxMatters:
-    ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
-};
-
-ContactFactory.ESTATE_TYPES = {
-  estate: ContactFactory.PARTY_TYPES.estate,
-  estateWithoutExecutor: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
-  trust: ContactFactory.PARTY_TYPES.trust,
-};
-
-ContactFactory.OTHER_TYPES = {
-  conservator: ContactFactory.PARTY_TYPES.conservator,
-  custodian: ContactFactory.PARTY_TYPES.custodian,
-  guardian: ContactFactory.PARTY_TYPES.guardian,
-  nextFriendForIncompetentPerson:
-    ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
-  nextFriendForMinor: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-};
 
 ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
@@ -163,10 +58,7 @@ const commonValidationRequirements = {
     .optional(),
 };
 const domesticValidationObject = {
-  countryType: joi
-    .string()
-    .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
-    .required(),
+  countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
   ...commonValidationRequirements,
   state: joi.string().required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
@@ -174,10 +66,7 @@ const domesticValidationObject = {
 
 const internationalValidationObject = {
   country: joi.string().required(),
-  countryType: joi
-    .string()
-    .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
-    .required(),
+  countryType: joi.string().valid(COUNTRY_TYPES.INTERNATIONAL).required(),
   ...commonValidationRequirements,
   postalCode: joi.string().required(),
 };
@@ -192,11 +81,11 @@ const internationalValidationObject = {
  * @returns {object} the joi validation object
  */
 ContactFactory.getValidationObject = ({
-  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType = COUNTRY_TYPES.DOMESTIC,
   isPaper = false,
 }) => {
   const baseValidationObject =
-    countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
+    countryType === COUNTRY_TYPES.DOMESTIC
       ? domesticValidationObject
       : internationalValidationObject;
 
@@ -214,9 +103,9 @@ ContactFactory.getValidationObject = ({
  * @returns {object} the error message map object which maps errors to custom messages
  */
 ContactFactory.getErrorToMessageMap = ({
-  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  countryType = COUNTRY_TYPES.DOMESTIC,
 }) => {
-  return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
+  return countryType === COUNTRY_TYPES.DOMESTIC
     ? ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES
     : ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 };
@@ -278,87 +167,87 @@ const getContactConstructor = ({
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
   const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
   return {
-    [ContactFactory.PARTY_TYPES.petitioner]: {
+    [PARTY_TYPES.petitioner]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.transferee]: {
+    [PARTY_TYPES.transferee]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.donor]: {
+    [PARTY_TYPES.donor]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse]: {
+    [PARTY_TYPES.petitionerDeceasedSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: getPetitionerDeceasedSpouseContact({ countryType, isPaper }),
     }[contactType],
-    [ContactFactory.PARTY_TYPES.survivingSpouse]: {
+    [PARTY_TYPES.survivingSpouse]: {
       primary: getSurvivingSpouseContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.petitionerSpouse]: {
+    [PARTY_TYPES.petitionerSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: getPetitionerSpouseContact({ countryType, isPaper }),
     }[contactType],
-    [ContactFactory.PARTY_TYPES.corporation]: {
+    [PARTY_TYPES.corporation]: {
       primary: getPetitionerCorporationContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.estateWithoutExecutor]: {
+    [PARTY_TYPES.estateWithoutExecutor]: {
       primary: getPetitionerIntermediaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner]: {
+    [PARTY_TYPES.partnershipAsTaxMattersPartner]: {
       primary: getPartnershipAsTaxMattersPartnerPrimaryContact({
         countryType,
         isPaper,
       }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters]: {
+    [PARTY_TYPES.partnershipOtherThanTaxMatters]: {
       primary: getPartnershipOtherThanTaxMattersPrimaryContact({
         countryType,
         isPaper,
       }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.nextFriendForMinor]: {
+    [PARTY_TYPES.nextFriendForMinor]: {
       primary: getNextFriendForMinorContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson]: {
+    [PARTY_TYPES.nextFriendForIncompetentPerson]: {
       primary: getNextFriendForIncompetentPersonContact({
         countryType,
         isPaper,
       }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.estate]: {
+    [PARTY_TYPES.estate]: {
       primary: getPetitionerEstateWithExecutorPrimaryContact({
         countryType,
         isPaper,
       }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.partnershipBBA]: {
+    [PARTY_TYPES.partnershipBBA]: {
       primary: getPartnershipBBAPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.trust]: {
+    [PARTY_TYPES.trust]: {
       primary: getPetitionerTrustContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.conservator]: {
+    [PARTY_TYPES.conservator]: {
       primary: getPetitionerConservatorContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.guardian]: {
+    [PARTY_TYPES.guardian]: {
       primary: getPetitionerGuardianContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
-    [ContactFactory.PARTY_TYPES.custodian]: {
+    [PARTY_TYPES.custodian]: {
       primary: getPetitionerCustodianContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],

@@ -9,14 +9,12 @@ export const DocumentSearchResults = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     baseUrl: state.baseUrl,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     token: state.token,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
     baseUrl,
-    pageSize,
     showMoreResultsSequence,
     token,
   }) {
@@ -35,7 +33,7 @@ export const DocumentSearchResults = connect(
                   <th aria-hidden="true" className="small-column"></th>
                   <th>Docket number</th>
                   <th>Case title</th>
-                  <th>Order</th>
+                  <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>
                   <th>Date</th>
                   <th>Judge</th>
@@ -49,14 +47,15 @@ export const DocumentSearchResults = connect(
                         {idx + 1}
                       </td>
                       <td aria-hidden="true" className="small-column">
-                        {result.isSealed && (
-                          <Icon
-                            aria-label="sealed"
-                            className="iconSealed"
-                            icon={['fa', 'lock']}
-                            size="1x"
-                          />
-                        )}
+                        {advancedDocumentSearchHelper.showSealedIcon &&
+                          result.isSealed && (
+                            <Icon
+                              aria-label="sealed"
+                              className="iconSealed"
+                              icon={['fa', 'lock']}
+                              size="1x"
+                            />
+                          )}
                       </td>
                       <td>
                         <CaseLink formattedCase={result} />
@@ -91,10 +90,10 @@ export const DocumentSearchResults = connect(
         {advancedDocumentSearchHelper.showLoadMore && (
           <Button
             secondary
-            aria-label={`load ${pageSize} more results`}
+            aria-label={'load more results'}
             onClick={() => showMoreResultsSequence()}
           >
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedDocumentSearchHelper.showNoMatches && (

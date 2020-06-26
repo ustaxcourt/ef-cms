@@ -5,9 +5,11 @@ const {
   createTrialSessionWorkingCopy,
 } = require('./createTrialSessionWorkingCopy');
 
+const userId = 'a66ac519-fd1a-44ac-8226-b4a53d348677';
+
 const mockTrialSessionWorkingCopy = {
   trialSessionId: '456',
-  userId: '123',
+  userId,
 };
 
 describe('createTrialSessionWorkingCopy', () => {
@@ -26,9 +28,9 @@ describe('createTrialSessionWorkingCopy', () => {
     ).toMatchObject({
       Item: {
         pk: 'trial-session-working-copy|456',
-        sk: 'user|123',
+        sk: `user|${userId}`,
         trialSessionId: '456',
-        userId: '123',
+        userId,
       },
       TableName: 'efcms-dev',
     });

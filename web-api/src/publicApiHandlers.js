@@ -3,6 +3,8 @@ module.exports = {
     .casePublicSearchLambda,
   generatePublicDocketRecordPdfLambda: require('./public-api/generatePublicDocketRecordPdfLambda')
     .generatePublicDocketRecordPdfLambda,
+  getCaseForPublicDocketSearch: require('./public-api/getCaseForPublicDocketSearchLambda')
+    .getCaseForPublicDocketSearch,
   getPublicCaseLambda: require('./public-api/getPublicCaseLambda')
     .getPublicCaseLambda,
   getPublicDocumentDownloadUrlLambda: require('./public-api/getPublicDocumentDownloadUrlLambda')
@@ -13,4 +15,6 @@ module.exports = {
     .opinionPublicSearchLambda,
   orderPublicSearchLambda: require('./public-api/orderPublicSearchLambda')
     .orderPublicSearchLambda,
+  todaysOpinionsLambda: require('./public-api/todaysOpinionsLambda')
+    .todaysOpinionsLambda,
 };

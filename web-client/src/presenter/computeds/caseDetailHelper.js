@@ -105,6 +105,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
+    showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,

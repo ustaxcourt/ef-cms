@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
   createISODateString,
   formatDateString,
@@ -11,35 +9,20 @@ const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
+let { applicationContext } = require('../test/createTestApplicationContext');
 
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-
-const testPdfDocBytes = () => {
-  // sample.pdf is a 1 page document
-  return new Uint8Array(
-    new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf')),
-  );
-};
-
-let testPdfDoc;
-
-testPdfDoc = testPdfDocBytes();
 
 const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
-const generatePaperServiceAddressPagePdfMock = jest
-  .fn()
-  .mockResolvedValue(testPdfDoc);
 const sendServedPartiesEmailsMock = jest.fn();
 
 let persistenceGateway = {
@@ -62,11 +45,13 @@ const useCases = {
 
 const userData = {
   name: 'administrator',
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 let userObj = userData;
-const applicationContext = {
+
+applicationContext = {
+  ...applicationContext,
   environment: { stage: 'local' },
   getCaseTitle: Case.getCaseTitle,
   getChromiumBrowser: () => ({
@@ -92,7 +77,6 @@ const applicationContext = {
   },
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   getUseCaseHelpers: () => ({
-    generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
     sendServedPartiesEmails: sendServedPartiesEmailsMock,
   }),
   getUseCases: () => useCases,
@@ -129,7 +113,7 @@ describe('update petitioner contact information on a case', () => {
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
@@ -143,7 +127,7 @@ describe('update petitioner contact information on a case', () => {
         caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactPrimary: MOCK_CASE.contactPrimary,
         contactSecondary: { countryType: 'domestic' },
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
       }),
     ).rejects.toThrow();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -166,7 +150,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
@@ -189,7 +173,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -210,7 +194,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
 
     const result = await updatePetitionerInformationInteractor({
@@ -227,7 +211,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
@@ -244,7 +228,7 @@ describe('update petitioner contact information on a case', () => {
         ...MOCK_CASE.contactPrimary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
@@ -261,7 +245,7 @@ describe('update petitioner contact information on a case', () => {
         ...MOCK_CASE.contactPrimary,
         email: 'test@example.com',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(
@@ -279,7 +263,7 @@ describe('update petitioner contact information on a case', () => {
           countryType: 'alien',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
       }),
     ).rejects.toThrow('The Case entity was invalid');
     expect(updateCaseStub).not.toHaveBeenCalled();
@@ -289,7 +273,7 @@ describe('update petitioner contact information on a case', () => {
     persistenceGateway.getCaseByCaseId = async () => ({
       ...MOCK_CASE,
     });
-    userObj.role = User.ROLES.petitioner;
+    userObj.role = ROLES.petitioner;
     await expect(
       updatePetitionerInformationInteractor({
         applicationContext,

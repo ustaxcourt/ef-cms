@@ -1,14 +1,14 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
-const { User } = require('../entities/User');
 
 describe('unprioritizeCaseInteractor', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
-      userId: 'petitionsclerk',
+      role: ROLES.petitionsClerk,
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
     });
   });
 
@@ -18,7 +18,7 @@ describe('unprioritizeCaseInteractor', () => {
         ...MOCK_CASE,
         highPriority: true,
         highPriorityReason: 'because',
-        status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       }),
     );
 
@@ -51,7 +51,7 @@ describe('unprioritizeCaseInteractor', () => {
         ...MOCK_CASE,
         highPriority: true,
         highPriorityReason: 'because',
-        status: Case.STATUS_TYPES.new,
+        status: CASE_STATUS_TYPES.new,
       }),
     );
 

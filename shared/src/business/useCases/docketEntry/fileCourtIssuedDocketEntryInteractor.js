@@ -5,11 +5,12 @@ const {
 const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -57,9 +58,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let secondaryDate;
-  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
+  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
     secondaryDate = documentMeta.date;
   }
+
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({ applicationContext, documentId });
 
   const documentEntity = new Document(
     {
@@ -73,6 +78,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       freeText: documentMeta.freeText,
       isFileAttached: true,
       judge: documentMeta.judge,
+      numberOfPages,
       scenario: documentMeta.scenario,
       secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
@@ -100,7 +106,8 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       inProgress: true,
       isQC: true,
       section: DOCKET_SECTION,
-      sentBy: user.userId,
+      sentBy: user.name,
+      sentByUserId: user.userId,
     },
     { applicationContext },
   );
@@ -137,6 +144,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
         editState: JSON.stringify(documentMeta),
         eventCode: documentEntity.eventCode,
         filingDate: documentEntity.filingDate || createISODateString(),
+        numberOfPages,
       },
       { applicationContext },
     ),

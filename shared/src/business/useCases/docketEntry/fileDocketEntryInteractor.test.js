@@ -1,15 +1,14 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
-const { User } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
-    name: 'Olivia Jade',
-    role: User.ROLES.docketClerk,
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+    role: ROLES.docketClerk,
     section: 'docket',
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
@@ -39,7 +38,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
           docketNumber: '45678-18',
@@ -47,7 +46,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
           docketNumber: '45678-18',
@@ -55,15 +54,15 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      role: ROLES.petitioner,
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 
     applicationContext
@@ -104,6 +103,7 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -141,16 +141,19 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISL',
+        isFileAttached: true,
         lodged: true,
         secondaryDocument: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
         secondarySupportingDocumentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISL',
+          isFileAttached: true,
         },
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -195,7 +198,7 @@ describe('fileDocketEntryInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -228,7 +231,7 @@ describe('fileDocketEntryInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()

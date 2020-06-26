@@ -74,7 +74,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
+                        href={item.editLink}
                         onClick={e => {
                           e.stopPropagation();
                         }}

@@ -58,6 +58,7 @@
           "freeText": "Order that this case is sealed",
           "signedAt": "2020-04-29T15:52:05.726Z",
           "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+          "numberOfPages": 1,
           "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
           "servedAt": "2020-04-29T15:52:16.484Z",
           "docketNumber": "105-20",
@@ -99,6 +100,7 @@
     "freeText": "Order that this case is sealed",
     "signedAt": "2020-04-29T15:52:05.726Z",
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "numberOfPages": 1,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-04-29T15:52:16.484Z",
@@ -115,6 +117,7 @@
     "description": "Order that this case is sealed",
     "index": 3,
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "numberOfPages": 1,
     "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
@@ -209,6 +212,7 @@
                 "freeText": "Some very strong opinions about sunglasses",
                 "signedAt": "2020-05-13T14:50:04.930Z",
                 "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
+                "numberOfPages": 1,
                 "judge": "Judge Armen",
                 "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
                 "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
@@ -325,6 +329,7 @@
           "filedBy": "Petr. Astra Santiago",
           "partySecondary": false,
           "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+          "numberOfPages": 1,
           "privatePractitioners": []
         },
         "caseTitle": "Astra Santiago",
@@ -334,7 +339,8 @@
         "assigneeId": null,
         "isQC": true,
         "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitioner",
+        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2020-04-29T15:50:41.698Z",
         "assigneeName": null,
         "entityName": "WorkItem",
@@ -367,6 +373,7 @@
     "sk": "document|af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
     "partySecondary": false,
     "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+    "numberOfPages": 1,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
@@ -388,13 +395,15 @@
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
       "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+      "numberOfPages": 1,
       "privatePractitioners": []
     },
     "gsi1pk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
     "section": "petitions",
     "workItemId": "332026fb-8844-49b6-bb13-66eff6882f00",
     "isQC": true,
-    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitioner",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
@@ -482,6 +491,7 @@
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
             "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+            "numberOfPages": 1,
             "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "Order that this case is sealed",
             "relationship": "primaryDocument",
@@ -522,6 +532,7 @@
       "freeText": "Order that this case is sealed",
       "signedAt": "2020-04-29T15:52:05.726Z",
       "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+      "numberOfPages": 1,
       "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
       "servedAt": "2020-04-29T15:52:16.484Z",
       "docketNumber": "105-20",
@@ -562,7 +573,15 @@
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "caseCaption": "Astra Santiago, Petitioner",
+    "createdAt": "2020-04-29T15:50:41.686Z",
+    "docketNumber": "105-20",
+    "docketNumberWithSuffix": "105-20L",
+    "status": "General Docket - Not at Issue",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
@@ -570,7 +589,15 @@
   },
   {
     "sk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "caseCaption": "Astra Santiago, Petitioner",
+    "createdAt": "2020-04-29T15:50:41.686Z",
+    "docketNumber": "105-20",
+    "docketNumberWithSuffix": "105-20L",
+    "status": "General Docket - Not at Issue",
+    "entityName": "UserCase"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -586,7 +613,7 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "receivedAt": "2020-04-29T15:51:28.572Z",
-    "caseType": "CDP (Lien/Levy)",
+    "caseType": "Deficiency",
     "orderDesignatingPlaceOfTrial": false,
     "createdAt": "2020-04-29T15:50:41.686Z",
     "contactPrimary": {
@@ -619,13 +646,32 @@
     "preferredTrialCity": "New York City, New York",
     "initialCaption": "Astra Santiago, Petitioner",
     "hasPendingItems": false,
+    "hasVerifiedIrsNotice": true,
     "petitionPaymentDate": null,
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "docketNumber": "105-20",
     "docketNumberWithSuffix": "105-20L",
     "petitionPaymentWaivedDate": null,
-    "status": "General Docket - Not at Issue"
+    "status": "General Docket - Not at Issue",
+    "statistics": [
+      {
+        "yearOrPeriod": "Year",
+        "year": "2018",
+        "irsTotalPenalties": 1234,
+        "irsDeficiencyAmount": 5678,
+        "statisticId": "cb557361-50ee-4440-aaff-0a9f1bfa30ed"
+      },
+      {
+        "yearOrPeriod": "Year",
+        "year": "2019",
+        "irsTotalPenalties": 99,
+        "irsDeficiencyAmount": 55,
+        "statisticId": "ab557361-50ee-4440-aaff-0a9f1bfa30ed"
+      }
+    ],
+    "damages": 9999,
+    "litigationCosts": 19824.99
   },
   {
     "eventCode": "TCOP",
@@ -636,6 +682,7 @@
     "description": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
     "index": 4,
     "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
+    "numberOfPages": 1,
     "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"TCOP - T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
@@ -649,6 +696,7 @@
     "description": "Petition",
     "index": 1,
     "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+    "numberOfPages": 1,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
@@ -686,6 +734,7 @@
     "sk": "document|abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
+    "numberOfPages": 1,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
@@ -783,6 +832,7 @@
             "freeText": "Order that this case is sealed",
             "signedAt": "2020-04-29T15:52:05.726Z",
             "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+            "numberOfPages": 1,
             "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "Order that this case is sealed",
             "relationship": "primaryDocument",
@@ -823,6 +873,7 @@
       "freeText": "Order that this case is sealed",
       "signedAt": "2020-04-29T15:52:05.726Z",
       "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+      "numberOfPages": 1,
       "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
       "servedAt": "2020-04-29T15:52:16.484Z",
       "docketNumber": "105-20",
@@ -881,6 +932,7 @@
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
       "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
+      "numberOfPages": 1,
       "privatePractitioners": []
     },
     "caseTitle": "Astra Santiago",
@@ -890,7 +942,8 @@
     "assigneeId": null,
     "isQC": true,
     "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitioner",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",
@@ -974,6 +1027,7 @@
             "freeText": "Some very strong opinions about sunglasses",
             "signedAt": "2020-05-13T14:50:04.930Z",
             "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
+            "numberOfPages": 1,
             "judge": "Judge Armen",
             "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
@@ -1114,6 +1168,7 @@
             "freeText": "Some very strong opinions about sunglasses",
             "signedAt": "2020-05-13T14:50:04.930Z",
             "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
+            "numberOfPages": 1,
             "judge": "Judge Armen",
             "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
             "documentTitle": "T.C. Opinion Judge Armen Some very strong opinions about sunglasses",
@@ -1207,6 +1262,7 @@
       "entityName": "Document",
       "filedBy": "Petr. Astra Santiago",
       "partySecondary": false,
+      "numberOfPages": 1,
       "documentId": "af9e2d43-1255-4e3d-80d0-63f0aedfab5a",
       "privatePractitioners": []
     },
@@ -1214,7 +1270,8 @@
     "section": "petitions",
     "workItemId": "332026fb-8844-49b6-bb13-66eff6882f00",
     "isQC": true,
-    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitioner",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2020-04-29T15:50:41.698Z",
     "assigneeName": null,
     "entityName": "WorkItem",

@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { caseInformationHelper } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -12,7 +12,7 @@ const getBaseState = user => {
 describe('case information helper', () => {
   it('should show add counsel section if user is an internal user', () => {
     const user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -27,7 +27,7 @@ describe('case information helper', () => {
 
   it('should not show add counsel section if user is an external user', () => {
     const user = {
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseInformationHelper, {
@@ -42,7 +42,7 @@ describe('case information helper', () => {
 
   it('should show edit privatePractitioners and irsPractitioners buttons if user is an internal user and there are privatePractitioners and irsPractitioners on the case', () => {
     const user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -61,7 +61,7 @@ describe('case information helper', () => {
 
   it('should not show edit privatePractitioners or irsPractitioners buttons if user is an internal user and there are not privatePractitioners and irsPractitioners on the case', () => {
     const user = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -77,7 +77,7 @@ describe('case information helper', () => {
 
   it('should not show edit privatePractitioners or irsPractitioners buttons if user is not an internal user', () => {
     const user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -96,7 +96,7 @@ describe('case information helper', () => {
 
   it('should not show Seal Case button if user does not have SEAL_CASE permission', () => {
     const user = {
-      role: User.ROLES.petitionsClerk, // does not have SEAL_CASE permission
+      role: ROLES.petitionsClerk, // does not have SEAL_CASE permission
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -111,7 +111,7 @@ describe('case information helper', () => {
 
   it('should show Seal Case button if user has SEAL_CASE permission and case is not already sealed', () => {
     const user = {
-      role: User.ROLES.docketClerk, // has SEAL_CASE permission
+      role: ROLES.docketClerk, // has SEAL_CASE permission
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {
@@ -126,7 +126,7 @@ describe('case information helper', () => {
 
   it('should not show Seal Case button if user has SEAL_CASE permission and case is already sealed', () => {
     const user = {
-      role: User.ROLES.docketClerk, // has SEAL_CASE permission
+      role: ROLES.docketClerk, // has SEAL_CASE permission
       userId: '789',
     };
     const result = runCompute(caseInformationHelper, {

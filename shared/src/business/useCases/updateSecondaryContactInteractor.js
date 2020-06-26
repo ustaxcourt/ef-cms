@@ -4,7 +4,7 @@ const {
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
-const { DOCKET_SECTION } = require('../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { Document } = require('../entities/Document');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { Message } = require('../entities/Message');
@@ -150,7 +150,8 @@ exports.updateSecondaryContactInteractor = async ({
         },
         isQC: true,
         section: DOCKET_SECTION,
-        sentBy: user.userId,
+        sentBy: user.name,
+        sentByUserId: user.userId,
       },
       { applicationContext },
     );
@@ -171,7 +172,7 @@ exports.updateSecondaryContactInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-    const docketRecordPdfWithCover = await addCoverToPdf({
+    const { pdfData: docketRecordPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
