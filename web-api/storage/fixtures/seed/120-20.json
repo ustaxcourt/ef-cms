@@ -91,6 +91,8 @@
     "workItems": [],
     "partyPrimary": true,
     "pending": false,
+    "isLegacy": true,
+    "isStricken": true,
     "receivedAt": "2020-06-25T20:58:55.420Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
