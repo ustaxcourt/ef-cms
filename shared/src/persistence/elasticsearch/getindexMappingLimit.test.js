@@ -26,7 +26,7 @@ describe('getIndexMappingLimit', () => {
     expect(results).toEqual(479);
   });
 
-  it('returns a default index mapping limit if index info cannot be found', async () => {
+  it('throws an error if index info cannot be found', async () => {
     await expect(
       getIndexMappingLimit({
         applicationContext,
