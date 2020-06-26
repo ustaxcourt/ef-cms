@@ -336,7 +336,7 @@ describe('documentGenerators', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
-          preferredTrialCity: 'Birmingham, AL',
+          preferredTrialCity: 'Birmingham, Alabama',
           receivedAtFormatted: 'December 1, 2019',
           servedDate: 'June 3, 2020',
         },
@@ -485,7 +485,7 @@ describe('documentGenerators', () => {
           reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
 
           <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
-          
+
           <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
           remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
 
@@ -494,7 +494,7 @@ describe('documentGenerators', () => {
           reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
 
           <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
-          
+
           <p>ORDERED that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
 
           <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
@@ -505,7 +505,7 @@ describe('documentGenerators', () => {
           reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
 
           <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
-          
+
           <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
           remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
 

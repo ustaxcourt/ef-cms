@@ -2501,7 +2501,7 @@ describe('Case entity', () => {
         leadCaseEntity = new Case(
           {
             ...MOCK_CASE,
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2511,7 +2511,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             docketNumber: '102-19',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2636,7 +2636,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             preferredTrialCity: 'Birmingham, Alabama',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2654,7 +2654,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
             preferredTrialCity: 'Birmingham, Alabama',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
