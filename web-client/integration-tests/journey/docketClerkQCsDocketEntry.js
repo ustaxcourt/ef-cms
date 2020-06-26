@@ -30,6 +30,8 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
+
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
