@@ -292,7 +292,6 @@ export const uploadExternalDecisionDocument = async test => {
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: {},
     serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
@@ -319,7 +318,6 @@ export const uploadProposedStipulatedDecision = async test => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: { certificateOfServiceDate: null },
     serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
