@@ -1,8 +1,5 @@
-const {
-  EXTERNAL_DOCUMENT_TYPES,
-} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
-const { up } = require('./00009-document-required-fields');
+const { up } = require('./00009-document-required-served-fields');
 
 describe('document required fields test', () => {
   let documentClient;
@@ -14,8 +11,6 @@ describe('document required fields test', () => {
   let mockDocumentItemWithOnlyServedParties;
   let mockDocumentItemNotServed;
   let mockDocumentItemServed;
-  let mockExternalDocumentNotFiledBy;
-  let mockExternalDocumentWithFiledBy;
   let mockItems = {};
 
   beforeEach(() => {
@@ -32,8 +27,6 @@ describe('document required fields test', () => {
         { ...mockDocumentItemWithOnlyServedParties },
         { ...mockDocumentItemServed },
         { ...mockDocumentItemNotServed },
-        { ...mockExternalDocumentNotFiledBy },
-        { ...mockExternalDocumentWithFiledBy },
       ],
     };
   });
@@ -103,20 +96,6 @@ describe('document required fields test', () => {
       workItems: [],
     };
 
-    mockExternalDocumentNotFiledBy = {
-      ...mockDocumentItemServed,
-      documentType: EXTERNAL_DOCUMENT_TYPES[0],
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-    };
-    mockExternalDocumentWithFiledBy = {
-      ...mockDocumentItemServed,
-      documentType: EXTERNAL_DOCUMENT_TYPES[0],
-      filedBy: 'Test Petitioner',
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
-    };
-
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
         Items: mockItems.scanList,
@@ -155,10 +134,10 @@ describe('document required fields test', () => {
     });
   });
 
-  it('does not mutate document records that have not been served and are not external', async () => {
+  it('does not mutate document records that have not been served', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
+    expect(putStub.mock.calls.length).toBe(2);
     // mockDocumentItemNotServed
     expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
@@ -171,30 +150,10 @@ describe('document required fields test', () => {
     });
   });
 
-  it('does not mutate document records that have not been served and are external when filedBy is defined', async () => {
+  it('does not mutate document records that have both servedAt and servedParties fields defined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    // mockExternalDocumentWithFiledBy
-    expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a3',
-    });
-  });
-
-  it('does mutate document records that are external when filedBy is undefined', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    // mockExternalDocumentNotFiledBy
-    expect(putStub.mock.calls[2][0]['Item']).toMatchObject({
-      pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-      sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
-    });
-  });
-
-  it('does not mutate internal document records that have both servedAt and servedParties fields defined', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub.mock.calls.length).toBe(4);
+    expect(putStub.mock.calls.length).toBe(2);
     // mockDocumentItemServed
     expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
@@ -210,7 +169,7 @@ describe('document required fields test', () => {
   it('mutates document records that have a defined servedAt field when servedParties is undefined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
+    expect(putStub.mock.calls.length).toBe(2);
     // mockDocumentItemWithOnlyServedParties
     expect(putStub.mock.calls[0][0]['Item']).not.toMatchObject({
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
@@ -231,7 +190,7 @@ describe('document required fields test', () => {
   it('mutates document records that have a defined servedParties field when servedAt is undefined', async () => {
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub.mock.calls.length).toBe(4);
+    expect(putStub.mock.calls.length).toBe(2);
     // mockDocumentItemWithOnlyServedAt
     expect(putStub.mock.calls[1][0]['Item']).not.toMatchObject({
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
