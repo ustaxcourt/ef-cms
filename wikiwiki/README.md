@@ -35,10 +35,11 @@
 
 * [Case Detail](./Case-Detail.md)
   * [Docket Record](./Docket-Record.md)
-
-* [Document Detail](./Document-Detail.md)
+  * [Case Information](./Case-Information.md)
+  * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)
 * [Correspondence](./Correspondence.md)
+* [Consolidated Cases](./Consolidated-Cases.md)
 
 #### Petitioners
 * [External Filings](./External-Filings.md)
