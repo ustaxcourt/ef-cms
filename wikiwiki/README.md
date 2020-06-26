@@ -35,7 +35,7 @@
 
 * [Case Detail](./Case-Detail.md)
   * [Docket Record](./Docket-Record.md)
-
+  * [Statistics](./Statistics.md)
 * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)
 * [Correspondence](./Correspondence.md)
