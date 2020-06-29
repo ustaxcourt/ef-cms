@@ -183,7 +183,8 @@
   background-color: color($theme-color-primary);
 
   button,
-  a {
+  a,
+  a:visited {
     height: 40px;
     border-left: 1px solid $color-white;
     margin-top: 5px;
