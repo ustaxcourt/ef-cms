@@ -11,7 +11,7 @@ import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
 
-const gotoEditOrder = [
+export const setupEditOrder = [
   unset(state.documentToEdit),
   clearModalAction,
   setCurrentPageAction('Interstitial'),
@@ -21,8 +21,9 @@ const gotoEditOrder = [
   setCaseAction,
   setDocumentToEditAction,
   convertHtml2PdfSequence,
-  setCurrentPageAction('CreateOrder'),
 ];
+
+const gotoEditOrder = [setupEditOrder, setCurrentPageAction('CreateOrder')];
 
 export const gotoEditOrderSequence = [
   isLoggedInAction,

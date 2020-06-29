@@ -34,16 +34,4 @@ describe('getEditDocumentEntryPointAction', () => {
     });
     expect(documentDetailMock).toHaveBeenCalled();
   });
-
-  it('returns the MessageDetail path if state.parentMessageId is set', async () => {
-    await runAction(getEditDocumentEntryPointAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        parentMessageId: '123',
-      },
-    });
-    expect(messageDetailMock).toHaveBeenCalled();
-  });
 });
