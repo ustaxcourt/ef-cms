@@ -17,5 +17,6 @@ export const setCreateOrderModalDataOnFormAction = ({ get, store }) => {
     store.set(state.form.documentType, documentType);
     store.set(state.form.eventCode, eventCode);
     store.set(state.form.parentMessageId, parentMessageId);
+    store.set(state.parentMessageId, parentMessageId);
   }
 };
