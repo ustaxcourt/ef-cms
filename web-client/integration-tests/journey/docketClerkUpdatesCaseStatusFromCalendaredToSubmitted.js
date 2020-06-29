@@ -1,4 +1,4 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
   return it('Docket clerk updates case status from Calendared to Submitted with an associated judge', async () => {
@@ -9,7 +9,7 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
     });
 
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.calendared,
+      CASE_STATUS_TYPES.calendared,
     );
 
     await test.runSequence('openUpdateCaseModalSequence');
@@ -17,16 +17,16 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
     expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
 
     expect(test.getState('modal.caseStatus')).toEqual(
-      Case.STATUS_TYPES.calendared,
+      CASE_STATUS_TYPES.calendared,
     );
 
     await test.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
-      value: Case.STATUS_TYPES.submitted,
+      value: CASE_STATUS_TYPES.submitted,
     });
 
     expect(test.getState('modal.caseStatus')).toEqual(
-      Case.STATUS_TYPES.submitted,
+      CASE_STATUS_TYPES.submitted,
     );
 
     // the current judge on the case is selected by default.
@@ -53,7 +53,7 @@ export const docketClerkUpdatesCaseStatusFromCalendaredToSubmitted = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.submitted,
+      CASE_STATUS_TYPES.submitted,
     );
     expect(test.getState('caseDetail.associatedJudge')).toEqual('Judge Buch');
     expect(test.getState('modal')).toEqual({});

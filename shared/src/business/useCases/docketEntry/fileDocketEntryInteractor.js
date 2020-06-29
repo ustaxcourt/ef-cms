@@ -4,12 +4,12 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -132,7 +132,7 @@ exports.fileDocketEntryInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           isQC: true,
-          isRead: user.role !== User.ROLES.privatePractitioner,
+          isRead: user.role !== ROLES.privatePractitioner,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,

@@ -107,6 +107,8 @@ echo "starting reports service"
 npx sls offline start "$@" --config web-api/serverless-reports.yml &
 echo "starting practitioners service"
 npx sls offline start "$@" --config web-api/serverless-practitioners.yml &
+echo "starting messages service"
+npx sls offline start "$@" --config web-api/serverless-messages.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js

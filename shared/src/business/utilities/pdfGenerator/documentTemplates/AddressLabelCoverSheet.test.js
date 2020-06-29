@@ -1,10 +1,10 @@
 const React = require('react');
 const { AddressLabelCoverSheet } = require('./AddressLabelCoverSheet.jsx');
-const { shallow } = require('enzyme');
+const { mount } = require('enzyme');
 
 describe('AddressLabelCoverSheet', () => {
   it('renders the docket number with suffix', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <AddressLabelCoverSheet docketNumberWithSuffix="123-45S" />,
     );
 
@@ -12,7 +12,7 @@ describe('AddressLabelCoverSheet', () => {
   });
 
   it('renders the name and address', () => {
-    const wrapper = shallow(
+    const wrapper = mount(
       <AddressLabelCoverSheet
         address1="123 Some Street"
         city="Some City"
@@ -30,24 +30,5 @@ describe('AddressLabelCoverSheet', () => {
     expect(wrapper.text()).toContain('Test Person');
     expect(wrapper.text()).toContain('89890');
     expect(wrapper.text()).toContain('ZZ');
-  });
-
-  it('renders optional address information if present', () => {
-    const wrapper = shallow(
-      <AddressLabelCoverSheet
-        address1="123 Some Street"
-        address2="address two"
-        address3="address three"
-        city="Some City"
-        docketNumberWithSuffix="123-45S"
-        name="Test Person"
-        postalCode="89890"
-        state="ZZ"
-      />,
-    );
-
-    expect(wrapper.text()).toContain('address two');
-    expect(wrapper.text()).toContain('address three');
-    expect(wrapper.text()).not.toContain('USA');
   });
 });

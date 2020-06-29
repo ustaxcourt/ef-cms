@@ -1065,11 +1065,55 @@
         }
       }
     },
-    "/cases/open-cases": {
+    "/cases/open": {
       "get": {
         "tags": ["cases"],
         "summary": "Retrieve open cases",
         "description": "Retrieve open cases.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/closed": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "Retrieve closed cases",
+        "description": "Retrieve closed cases.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -5453,6 +5497,354 @@
           }
         }
       }
+    },
+    "/messages": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "create a case message",
+        "description": "Create a message.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{messageId}": {
+      "parameters": [
+        {
+          "name": "messageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the message for the specific id",
+        "description": "Gets the message for the specific id.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/inbox/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the inbox messages for the specific user id",
+        "description": "Gets the inbox messages for the specific user id.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/inbox/section/{section}": {
+      "parameters": [
+        {
+          "name": "section",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the inbox messages for the specific section",
+        "description": "Gets the inbox messages for the specific user section.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/outbox/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the outbox messages for the specific user id",
+        "description": "Gets the outbox messages for the specific user id.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/outbox/section/{section}": {
+      "parameters": [
+        {
+          "name": "section",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the outbox messages for the specific section",
+        "description": "Gets the outbox messages for the specific user section.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/public-api/todays-opinions": {
+      "get": {
+        "tags": ["case-documents"],
+        "summary": "returns the opinions created for the current date",
+        "description": "Returns the opinions created for the current date.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -5818,6 +6210,72 @@
         }
       },
       "description": "a case procedural note"
+    },
+    "caseMessage": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "description": "id of the associated case"
+        },
+        "caseStatus": {
+          "type": "string",
+          "description": "status of the associated case"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "message created time"
+        },
+        "docketNumber": {
+          "type": "string",
+          "description": "docket number of the associated case"
+        },
+        "docketNumberWithSuffix": {
+          "type": "string",
+          "description": "docket number of the associated case with its suffix"
+        },
+        "entityName": {
+          "type": "string",
+          "description": "the name of the entity - CaseMessage"
+        },
+        "from": {
+          "type": "string",
+          "description": "the name of the user who sent the message"
+        },
+        "fromSection": {
+          "type": "string",
+          "description": "the section of the user who sent the message"
+        },
+        "fromUserId": {
+          "type": "string",
+          "description": "the ID of the user who sent the message"
+        },
+        "message": {
+          "type": "string",
+          "description": "the message text"
+        },
+        "messageId": {
+          "type": "string",
+          "description": "the unique ID generated by the system to represent the message"
+        },
+        "subject": {
+          "type": "string",
+          "description": "the subject line of the message"
+        },
+        "to": {
+          "type": "string",
+          "description": "the name of the user who is the recipient of the message"
+        },
+        "toSection": {
+          "type": "string",
+          "description": "the section of the user who is the recipient of the message"
+        },
+        "toUserId": {
+          "type": "string",
+          "description": "the ID of the user who is the recipient of the message"
+        }
+      },
+      "description": "a case deadline"
     }
   }
 }

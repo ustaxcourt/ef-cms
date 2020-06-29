@@ -4,9 +4,8 @@ const {
 const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('./fileExternalDocumentForConsolidatedInteractor');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { User } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
@@ -41,10 +40,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'petitioner',
       },
       {
@@ -67,10 +66,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'petitioner',
       },
       {
@@ -93,10 +92,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
-        role: User.ROLES.petitioner,
+        role: ROLES.petitioner,
         userId: 'petitioner',
       },
     ];

@@ -1,15 +1,11 @@
-import { setupTest } from './helpers';
-
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import {
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
-
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-
-// Public User
-import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
+import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForSealedCaseByName } from './journey/unauthedUserSearchesForSealedCaseByName';
 import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unauthedUserSearchesForSealedCasesByDocketNumber';
@@ -37,7 +33,7 @@ describe('Petitioner creates cases to search for', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

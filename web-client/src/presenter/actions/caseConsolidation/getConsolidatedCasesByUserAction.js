@@ -1,4 +1,4 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -17,18 +17,16 @@ export const getConsolidatedCasesByUserAction = async ({
   const status = get(state.currentViewMetadata.caseList.tab);
 
   let caseList;
-  if (status !== Case.STATUS_TYPES.closed) {
-    caseList = await applicationContext.getUseCases().getOpenCasesInteractor({
+  if (status !== CASE_STATUS_TYPES.closed) {
+    caseList = await applicationContext
+      .getUseCases()
+      .getOpenConsolidatedCasesInteractor({
+        applicationContext,
+      });
+  } else {
+    caseList = await applicationContext.getUseCases().getClosedCasesInteractor({
       applicationContext,
     });
-  } else {
-    //TODO implement this when working on displaying closed cases
-    // caseList = await applicationContext
-    //   .getUseCases()
-    //   .getClosedConsolidatedCasesByUserInteractor({
-    //     applicationContext,
-    //     userId,
-    //   });
   }
   caseList = orderBy(caseList, 'createdAt', 'desc');
   return { caseList };

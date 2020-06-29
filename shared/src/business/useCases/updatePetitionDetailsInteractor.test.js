@@ -2,11 +2,11 @@ const {
   updatePetitionDetailsInteractor,
 } = require('./updatePetitionDetailsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { PAYMENT_STATUS } = require('../entities/EntityConstants');
+const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
 
 describe('updatePetitionDetailsInteractor', () => {
   let mockCase;
@@ -19,7 +19,7 @@ describe('updatePetitionDetailsInteractor', () => {
     mockCase = cloneDeep(MOCK_CASE);
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 
@@ -57,7 +57,7 @@ describe('updatePetitionDetailsInteractor', () => {
       caseId: mockCase.caseId,
       petitionDetails: {
         ...mockCase,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       },
     });
 
@@ -67,7 +67,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentDate).toBe(null);
-    expect(result.petitionPaymentStatus).toEqual(Case.PAYMENT_STATUS.UNPAID);
+    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.UNPAID);
   });
 
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
@@ -78,7 +78,7 @@ describe('updatePetitionDetailsInteractor', () => {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
-        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
     });
 
@@ -88,7 +88,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
     expect(result.petitionPaymentMethod).toEqual('check');
-    expect(result.petitionPaymentStatus).toEqual(Case.PAYMENT_STATUS.PAID);
+    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
   });
 
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
@@ -97,7 +97,7 @@ describe('updatePetitionDetailsInteractor', () => {
       caseId: mockCase.caseId,
       petitionDetails: {
         ...mockCase,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
     });
@@ -107,7 +107,7 @@ describe('updatePetitionDetailsInteractor', () => {
     ).toHaveBeenCalled();
     expect(result.petitionPaymentDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
-    expect(result.petitionPaymentStatus).toEqual(Case.PAYMENT_STATUS.WAIVED);
+    expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
     expect(result.petitionPaymentWaivedDate).toEqual(
       '2019-11-30T09:10:11.000Z',
     );
@@ -116,7 +116,7 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should create a docket entry when moved from unpaid to waived', async () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...mockCase,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
 
     const result = await updatePetitionDetailsInteractor({
@@ -124,7 +124,7 @@ describe('updatePetitionDetailsInteractor', () => {
       caseId: mockCase.caseId,
       petitionDetails: {
         ...mockCase,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
     });
@@ -147,7 +147,7 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should create a docket entry when moved from unpaid to paid', async () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...MOCK_CASE,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
 
     const result = await updatePetitionDetailsInteractor({
@@ -157,7 +157,7 @@ describe('updatePetitionDetailsInteractor', () => {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
-        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
     });
 

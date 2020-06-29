@@ -23,7 +23,7 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
         applicationContext,
         docketNumber,
       });
-  } else if (Case.isValidDocketNumber(docketNumber)) {
+  } else {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({

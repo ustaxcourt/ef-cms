@@ -1,3 +1,4 @@
+const { ROLES } = require('./EntityConstants');
 const { User } = require('./User');
 
 describe('User entity', () => {
@@ -16,7 +17,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -36,7 +37,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -54,7 +55,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -64,7 +65,7 @@ describe('User entity', () => {
     const user = new User({
       firstName: 'firstName',
       lastName: 'lastName',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -76,7 +77,7 @@ describe('User entity', () => {
       barNumber: 'gg',
       firstName: 'firstName',
       lastName: 'bob',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       token: 'abc',
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
@@ -85,7 +86,7 @@ describe('User entity', () => {
 
   it('Creates a valid irsPractitioner user', () => {
     const user = new User({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -98,45 +99,45 @@ describe('User entity', () => {
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
-    expect(user.role).toBe(User.ROLES.petitioner);
+    expect(user.role).toBe(ROLES.petitioner);
   });
 
   describe('isExternalUser', () => {
     it('should return true when the user role is petitioner', () => {
-      expect(User.isExternalUser(User.ROLES.petitioner)).toEqual(true);
+      expect(User.isExternalUser(ROLES.petitioner)).toEqual(true);
     });
     it('should return true when the user role is privatePractitioner', () => {
-      expect(User.isExternalUser(User.ROLES.privatePractitioner)).toEqual(true);
+      expect(User.isExternalUser(ROLES.privatePractitioner)).toEqual(true);
     });
     it('should return true when the user role is irsPractitioner', () => {
-      expect(User.isExternalUser(User.ROLES.irsPractitioner)).toEqual(true);
+      expect(User.isExternalUser(ROLES.irsPractitioner)).toEqual(true);
     });
   });
 
   describe('isInternalUser', () => {
     it('should return true when the user role is docketclerk', () => {
-      expect(User.isInternalUser(User.ROLES.docketClerk)).toEqual(true);
+      expect(User.isInternalUser(ROLES.docketClerk)).toEqual(true);
     });
     it('should return true when the user role is petitionsclerk', () => {
-      expect(User.isInternalUser(User.ROLES.petitionsClerk)).toEqual(true);
+      expect(User.isInternalUser(ROLES.petitionsClerk)).toEqual(true);
     });
     it('should return true when the user role is judge', () => {
-      expect(User.isInternalUser(User.ROLES.judge)).toEqual(true);
+      expect(User.isInternalUser(ROLES.judge)).toEqual(true);
     });
     it('should return true when the user role is adc', () => {
-      expect(User.isInternalUser(User.ROLES.adc)).toEqual(true);
+      expect(User.isInternalUser(ROLES.adc)).toEqual(true);
     });
     it('should return true when the user role is admissionsclerk', () => {
-      expect(User.isInternalUser(User.ROLES.admissionsClerk)).toEqual(true);
+      expect(User.isInternalUser(ROLES.admissionsClerk)).toEqual(true);
     });
     it('should return true when the user role is chambers', () => {
-      expect(User.isInternalUser(User.ROLES.chambers)).toEqual(true);
+      expect(User.isInternalUser(ROLES.chambers)).toEqual(true);
     });
     it('should return true when the user role is clerkofcourt', () => {
-      expect(User.isInternalUser(User.ROLES.clerkOfCourt)).toEqual(true);
+      expect(User.isInternalUser(ROLES.clerkOfCourt)).toEqual(true);
     });
     it('should return true when the user role is trialclerk', () => {
-      expect(User.isInternalUser(User.ROLES.trialClerk)).toEqual(true);
+      expect(User.isInternalUser(ROLES.trialClerk)).toEqual(true);
     });
   });
 });

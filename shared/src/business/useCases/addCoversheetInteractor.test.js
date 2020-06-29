@@ -5,12 +5,7 @@ const {
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-
-jest.mock('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -42,7 +37,7 @@ describe('addCoversheetInteractor', () => {
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
     ],
-    partyType: ContactFactory.PARTY_TYPES.petitioner,
+    partyType: PARTY_TYPES.petitioner,
   };
 
   const optionalTestingCaseData = {
@@ -69,13 +64,11 @@ describe('addCoversheetInteractor', () => {
         lodged: true,
       },
     ],
-    partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+    partyType: PARTY_TYPES.petitionerSpouse,
   };
 
   beforeAll(() => {
     jest.setTimeout(30000);
-
-    generateCoverPagePdf.mockImplementation(testPdfDocBytes);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
@@ -98,6 +91,9 @@ describe('addCoversheetInteractor', () => {
     await addCoversheetInteractor(params);
 
     expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
   });
@@ -116,6 +112,9 @@ describe('addCoversheetInteractor', () => {
 
     await addCoversheetInteractor(params);
 
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
@@ -211,7 +210,7 @@ describe('addCoversheetInteractor', () => {
           lodged: true,
         },
       ],
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     };
 
     it('displays Certificate of Service when the document is filed with a certificate of service', async () => {
@@ -234,7 +233,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.certificateOfService).toEqual('Certificate of Service');
+      expect(result.certificateOfService).toEqual(true);
     });
 
     it('does NOT display Certificate of Service when the document is filed without a certificate of service', async () => {
@@ -256,7 +255,7 @@ describe('addCoversheetInteractor', () => {
           isPaper: true,
         },
       });
-      expect(result.certificateOfService).toEqual('');
+      expect(result.certificateOfService).toEqual(false);
     });
 
     it('generates correct filed date', async () => {
@@ -446,7 +445,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('');
     });
 
-    it('displays the date served if present in MMDDYYYY format along with a Served label', async () => {
+    it('displays the date served if present in MMDDYYYY format', async () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -468,7 +467,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateServed).toEqual('Served 04/20/2019');
+      expect(result.dateServed).toEqual('04/20/2019');
     });
 
     it('does not display the service date if servedAt is not present', async () => {
@@ -564,7 +563,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.electronicallyFiled).toEqual('Electronically Filed');
+      expect(result.electronicallyFiled).toEqual(true);
     });
 
     it('does NOT display Electronically Filed when the document is filed by paper', async () => {
@@ -587,7 +586,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.electronicallyFiled).toEqual('');
+      expect(result.electronicallyFiled).toEqual(false);
     });
 
     it('returns the mailing date if present', async () => {
@@ -704,6 +703,34 @@ describe('addCoversheetInteractor', () => {
       });
 
       expect(result.caseCaptionExtension).toEqual('');
+    });
+
+    it('preserves the original case caption and docket number when the useInitialData is true', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+          docketNumberSuffix: 'S',
+          initialCaption: 'Janie and Jackie Petitioner, Petitioners',
+          initialDocketNumberSuffix: 'Z',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          isPaper: false,
+          lodged: true,
+        },
+        useInitialData: true,
+      });
+
+      expect(result.docketNumber).toEqual('Docket Number: 102-19Z');
+      expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
   });
 });

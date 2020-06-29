@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} = require('../../entities/EntityConstants');
+const {
   removeCaseFromTrialInteractor,
 } = require('./removeCaseFromTrialInteractor');
-const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('remove case from trial session', () => {
   const MOCK_TRIAL_SESSION = {
@@ -28,7 +31,7 @@ describe('remove case from trial session', () => {
 
   beforeEach(() => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
 
@@ -51,7 +54,7 @@ describe('remove case from trial session', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
     mockTrialSession = MOCK_TRIAL_SESSION;
@@ -120,9 +123,9 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
     });
@@ -175,9 +178,9 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      associatedJudge: Case.CHIEF_JUDGE,
+      associatedJudge: CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
     });

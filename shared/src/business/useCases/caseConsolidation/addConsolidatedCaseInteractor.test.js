@@ -5,7 +5,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 let mockCases;
 
@@ -61,7 +61,7 @@ describe('addConsolidatedCaseInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
     });
     applicationContext
       .getPersistenceGateway()
@@ -84,7 +84,7 @@ describe('addConsolidatedCaseInteractor', () => {
     let error;
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
     });
 
     try {

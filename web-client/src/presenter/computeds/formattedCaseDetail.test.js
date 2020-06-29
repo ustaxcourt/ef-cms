@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -26,15 +28,15 @@ const getBaseState = user => {
 };
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   userId: '123',
 };
 const docketClerkUser = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '234',
 };
 const judgeUser = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: '345',
 };
 
@@ -473,7 +475,7 @@ describe('formattedCaseDetail', () => {
           workItems: [{ isQC: true }],
         },
       ],
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -543,7 +545,7 @@ describe('formattedCaseDetail', () => {
         },
       ],
       isPaper: true,
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -873,7 +875,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -896,7 +898,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1136,7 +1138,7 @@ describe('formattedCaseDetail', () => {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
             petitioners: [{ name: 'Bobby Flay' }],
-            status: Case.STATUS_TYPES.calendared,
+            status: CASE_STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
             trialSessionId: '123',
@@ -1144,7 +1146,7 @@ describe('formattedCaseDetail', () => {
         ],
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1167,7 +1169,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
