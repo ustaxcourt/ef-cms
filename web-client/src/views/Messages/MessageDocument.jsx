@@ -56,7 +56,11 @@ export const MessageDocument = connect(
               )}
 
               {messageDocumentHelper.showAddDocketEntryButton && (
-                <Button link icon="plus-circle" onClick={() => null}>
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${attachmentDocumentToDisplay.documentId}/add-court-issued-docket-entry/${parentMessageId}`}
+                  icon="plus-circle"
+                >
                   Add Docket Entry
                 </Button>
               )}
