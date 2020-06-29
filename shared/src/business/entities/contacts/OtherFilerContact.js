@@ -10,6 +10,9 @@ exports.getOtherFilerContact = ContactFactory.createContactFactory({
     otherFilerType: 'Select a filer type',
   },
   additionalValidation: {
-    otherFilerType: joi.string().valid(...OTHER_FILER_TYPES),
+    otherFilerType: joi
+      .string()
+      .valid(...OTHER_FILER_TYPES)
+      .required(),
   },
 });

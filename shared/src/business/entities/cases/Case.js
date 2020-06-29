@@ -556,11 +556,13 @@ Case.VALIDATION_RULES = {
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
         b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
     )
-    .description('List of OtherFilerContact Entities for the case.'),
+    .description('List of OtherFilerContact Entities for the case.')
+    .optional(),
   otherPetitioners: joi
     .array()
     .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
-    .description('List of OtherPetitionerContact Entities for the case.'),
+    .description('List of OtherPetitionerContact Entities for the case.')
+    .optional(),
   partyType: joi
     .string()
     .valid(...Object.values(PARTY_TYPES))
