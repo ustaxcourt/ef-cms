@@ -540,10 +540,27 @@
       flags: 
         presence: "optional"
         description: "Reminder for clerks to review the Order to Show Cause."
+    otherFilers: 
+      type: "array"
+      flags: 
+        description: "List of OtherFilerContact Entities for the case."
+        presence: "optional"
+      rules: 
+        - 
+          name: "unique"
+          args: 
+            comparator: [object Function]
+      items: 
+        - 
+          type: "object"
+          metas: 
+            - 
+              entityName: "OtherFilerContact"
     otherPetitioners: 
       type: "array"
       flags: 
         description: "List of OtherPetitionerContact Entities for the case."
+        presence: "optional"
       items: 
         - 
           type: "object"
