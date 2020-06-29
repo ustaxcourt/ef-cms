@@ -27,5 +27,8 @@ describe('setCreateOrderModalDataOnFormAction', () => {
     expect(result.state.form.parentMessageId).toEqual(
       '9400ee05-40bd-41a0-afbe-4d18d3c85317',
     );
+    expect(result.state.parentMessageId).toEqual(
+      '9400ee05-40bd-41a0-afbe-4d18d3c85317',
+    );
   });
 });

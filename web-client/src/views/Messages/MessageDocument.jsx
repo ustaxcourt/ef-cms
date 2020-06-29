@@ -50,7 +50,11 @@ export const MessageDocument = connect(
               )}
 
               {messageDocumentHelper.showApplySignatureButton && (
-                <Button link icon="pencil-alt" onClick={() => null}>
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+                  icon="pencil-alt"
+                >
                   Apply Signature
                 </Button>
               )}
@@ -71,7 +75,11 @@ export const MessageDocument = connect(
               )}
 
               {messageDocumentHelper.showAddDocketEntryButton && (
-                <Button link icon="plus-circle" onClick={() => null}>
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${attachmentDocumentToDisplay.documentId}/add-court-issued-docket-entry/${parentMessageId}`}
+                  icon="plus-circle"
+                >
                   Add Docket Entry
                 </Button>
               )}
