@@ -25,22 +25,22 @@ npm run build:assets
 
 # build the cognito authorizer using parcel
 pushd ../template/cognito-authorizer
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/cognito-triggers
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/log-forwarder
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/api
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
@@ -50,22 +50,22 @@ for pid in ${pids[*]}; do
 done
 
 pushd ../template/api-public
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/streams
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/cron
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
 pushd ../template/websockets
-npx parcel build index.js --target node --bundle-node-modules --no-minify &
+npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
