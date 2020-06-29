@@ -6,9 +6,16 @@ import React from 'react';
 export const MessageDocument = connect(
   {
     attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
+    caseDetail: state.caseDetail,
     iframeSrc: state.iframeSrc,
+    parentMessageId: state.parentMessageId,
   },
-  function MessageDocument({ attachmentDocumentToDisplay, iframeSrc }) {
+  function MessageDocument({
+    attachmentDocumentToDisplay,
+    caseDetail,
+    iframeSrc,
+    parentMessageId,
+  }) {
     return (
       <div className="message-detail--attachments">
         {!attachmentDocumentToDisplay && (
@@ -18,7 +25,11 @@ export const MessageDocument = connect(
         {!process.env.CI && attachmentDocumentToDisplay && (
           <>
             <div className="message-document-actions">
-              <Button link icon="edit" onClick={() => null}>
+              <Button
+                link
+                href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/${parentMessageId}`}
+                icon="edit"
+              >
                 Edit
               </Button>
 

@@ -11,6 +11,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
 import { setMessageAction } from '../actions/setMessageAction';
+import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 const gotoMessageDetail = showProgressSequenceDecorator([
@@ -19,6 +20,7 @@ const gotoMessageDetail = showProgressSequenceDecorator([
   clearErrorAlertsAction,
   getCaseAction,
   setCaseAction,
+  setParentMessageIdAction,
   getMessageThreadAction,
   setMessageAction,
   getMostRecentMessageInThreadAction,

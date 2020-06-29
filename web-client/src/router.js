@@ -461,7 +461,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
-        return app.getSequence('gotoCreateOrderSequence')({
+        return app.getSequence('gotoCreateOrderForMessageSequence')({
           docketNumber,
           parentMessageId,
         });
@@ -525,6 +525,19 @@ const router = {
         return sequence({
           docketNumber,
           documentIdToEdit,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*/*',
+      ifHasAccess((docketNumber, documentIdToEdit, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoEditOrderForMessageSequence');
+        return sequence({
+          docketNumber,
+          documentIdToEdit,
+          parentMessageId,
         });
       }),
     );
