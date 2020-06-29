@@ -16,7 +16,7 @@ describe('computeFormDateAction', () => {
     expect(result.output.computedDate).toEqual('2002-02-01');
   });
 
-  it('should return null if month is not defined', async () => {
+  it('should return null if year or day is not defined', async () => {
     const result = await runAction(computeFormDateAction, {
       state: {
         form: {

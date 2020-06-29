@@ -3,6 +3,8 @@ import { state } from 'cerebral';
 /**
  * set the success message in props for successful document signing
  *
+ * @param {object} params the params object
+ * @param {object} params.get the cerebral get function
  * @returns {object} the props with the message
  */
 export const setSuccessFromDocumentTitleAction = ({ get }) => {
