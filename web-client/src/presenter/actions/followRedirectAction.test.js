@@ -26,7 +26,7 @@ describe('followRedirectAction', () => {
     expect(presenter.providers.router.route).toHaveBeenCalledWith(
       '/example-path',
     );
-    expect(result.state.redirectUrl).toEqual(null);
+    expect(result.state.redirectUrl).toBeUndefined();
   });
 
   it('calls the default path if no redirectUrl', async () => {

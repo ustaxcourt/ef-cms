@@ -14,7 +14,7 @@ export const followRedirectAction = async ({ get, path, router, store }) => {
   const redirectUrl = get(state.redirectUrl);
 
   if (redirectUrl) {
-    store.set('redirectUrl', null);
+    store.unset('redirectUrl');
 
     await router.route(redirectUrl);
     return path.success();
