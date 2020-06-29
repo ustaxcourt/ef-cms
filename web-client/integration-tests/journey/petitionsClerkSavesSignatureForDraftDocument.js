@@ -4,6 +4,8 @@ export const petitionsClerkSavesSignatureForDraftDocument = test => {
       gotoAfterSigning: 'DocumentDetail',
     });
 
-    expect(test.getState('alertSuccess.message')).toEqual('Signature added.');
+    expect(test.getState('alertSuccess.message')).toEqual(
+      'Order of Dismissal and Decision updated.',
+    );
   });
 };

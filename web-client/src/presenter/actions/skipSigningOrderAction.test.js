@@ -12,7 +12,14 @@ describe('skipSigningOrderAction', () => {
       state: {
         caseDetail: {
           caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order',
+            },
+          ],
         },
+        documentId: 'abc',
       },
     });
     expect(result.output.path).toEqual('/case-detail/abc-123/draft-documents');
@@ -27,9 +34,16 @@ describe('skipSigningOrderAction', () => {
       state: {
         caseDetail: {
           caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order',
+            },
+          ],
         },
+        documentId: 'abc',
       },
     });
-    expect(result.output.alertSuccess.message).toEqual('Document saved.');
+    expect(result.output.alertSuccess.message).toEqual('Order updated.');
   });
 });
