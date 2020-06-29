@@ -591,6 +591,21 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence(
+          'gotoAddCourtIssuedDocketEntrySequence',
+        );
+        return sequence({
+          docketNumber,
+          documentId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/printable-docket-record',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
