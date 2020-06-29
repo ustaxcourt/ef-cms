@@ -274,6 +274,32 @@ Valid Case object example:
 	        "serviceIndicator": "None",
 	        "state": "LA"
     	}
-    ]
+    ],
+    "otherFilers": [
+        {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: 'Intervenor',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: 'Participant',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ]
 }
 ```
