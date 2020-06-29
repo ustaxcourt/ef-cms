@@ -2,8 +2,9 @@ import { AddressDisplay } from './AddressDisplay';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
-const OtherFilerInformation = connect(
+export const OtherFilerInformation = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
   },
@@ -26,7 +27,13 @@ const OtherFilerInformation = connect(
                       {formattedCaseDetail.otherFilers.map(
                         (otherFiler, idx) => {
                           return (
-                            <div className="grid-col-6" key={idx}>
+                            <div
+                              className={classNames(
+                                'grid-col-3',
+                                idx > 3 && 'margin-top-4',
+                              )}
+                              key={idx}
+                            >
                               <address aria-labelledby="primary-label">
                                 <AddressDisplay
                                   contact={otherFiler}
@@ -57,5 +64,3 @@ const OtherFilerInformation = connect(
     );
   },
 );
-
-export { OtherFilerInformation };
