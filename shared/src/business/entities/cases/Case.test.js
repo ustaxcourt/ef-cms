@@ -217,7 +217,6 @@ describe('Case entity', () => {
     it('sets a valid value of otherFilers on the case', () => {
       const mockOtherFilers = [
         {
-          additionalName: 'First Other Filer',
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
@@ -230,7 +229,6 @@ describe('Case entity', () => {
           state: 'AK',
         },
         {
-          additionalName: 'Second Other Filer',
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
@@ -260,7 +258,6 @@ describe('Case entity', () => {
     it('fails validation with more than one unique filer type', () => {
       const mockOtherFilers = [
         {
-          additionalName: 'First Other Filer',
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
@@ -273,14 +270,13 @@ describe('Case entity', () => {
           state: 'AK',
         },
         {
-          additionalName: 'Second Other Filer',
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
           countryType: 'domestic',
           email: 'mayor@flavortown.com',
           name: 'Guy Fieri',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
@@ -306,7 +302,6 @@ describe('Case entity', () => {
     it('fails validation with an invalid otherFilerType', () => {
       const mockOtherFilers = [
         {
-          additionalName: 'First Other Filer',
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
           country: 'USA',
@@ -319,7 +314,6 @@ describe('Case entity', () => {
           state: 'AK',
         },
         {
-          additionalName: 'Second Other Filer',
           address1: '1337 12th Ave',
           city: 'Flavortown',
           country: 'USA',
@@ -2523,6 +2517,29 @@ describe('Case entity', () => {
       },
     ];
 
+    const otherFilers = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        otherFilerType: OTHER_FILER_TYPES[1],
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+    ];
+
     const privatePractitioners = [
       {
         name: 'Private Practitioner One',
@@ -2542,6 +2559,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
@@ -2556,6 +2574,7 @@ describe('Case entity', () => {
         contactPrimary,
         contactSecondary,
         irsPractitioners,
+        otherFilers,
         otherPetitioners,
         privatePractitioners,
       });
@@ -2568,6 +2587,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
@@ -2580,11 +2600,13 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
+        otherFilers: true,
         otherPetitioners: true,
       });
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
+        otherFilers,
         otherPetitioners,
       });
     });
