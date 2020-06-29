@@ -182,7 +182,8 @@
   justify-content: flex-end;
   background-color: color($theme-color-primary);
 
-  button {
+  button,
+  a {
     height: 40px;
     border-left: 1px solid $color-white;
     margin-top: 5px;

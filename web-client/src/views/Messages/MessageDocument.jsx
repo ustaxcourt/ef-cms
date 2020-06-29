@@ -7,13 +7,17 @@ import classNames from 'classnames';
 export const MessageDocument = connect(
   {
     attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
+    caseDetail: state.caseDetail,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
+    parentMessageId: state.parentMessageId,
   },
   function MessageDocument({
     attachmentDocumentToDisplay,
+    caseDetail,
     iframeSrc,
     messageDocumentHelper,
+    parentMessageId,
   }) {
     return (
       <div
@@ -30,7 +34,11 @@ export const MessageDocument = connect(
           <>
             <div className="message-document-actions">
               {messageDocumentHelper.showEditButton && (
-                <Button link icon="edit" onClick={() => null}>
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/${parentMessageId}`}
+                  icon="edit"
+                >
                   Edit
                 </Button>
               )}
