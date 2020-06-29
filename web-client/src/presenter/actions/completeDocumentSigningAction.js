@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {string} providers.get the cerebral get function
+ * @param {string} providers.applicationContext the applicationContext
  * @returns {Function} the action to complete the document signing
  */
 export const completeDocumentSigningAction = async ({
