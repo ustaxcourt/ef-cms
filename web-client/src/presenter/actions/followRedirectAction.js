@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @param {object} providers.router the riot.router object that is used for changing the route
  * @param {object} providers.store the cerebral store object
+ * @returns {Function} the path to take
  */
-
 export const followRedirectAction = async ({ get, path, router, store }) => {
   const redirectUrl = get(state.redirectUrl);
 

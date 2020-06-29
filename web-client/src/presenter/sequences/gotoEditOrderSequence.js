@@ -7,11 +7,12 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
+import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
 
-export const setupEditOrder = [
+const gotoEditOrder = [
   unset(state.documentToEdit),
   clearModalAction,
   setCurrentPageAction('Interstitial'),
@@ -20,10 +21,10 @@ export const setupEditOrder = [
   getCaseAction,
   setCaseAction,
   setDocumentToEditAction,
+  setParentMessageIdAction,
   convertHtml2PdfSequence,
+  setCurrentPageAction('CreateOrder'),
 ];
-
-const gotoEditOrder = [setupEditOrder, setCurrentPageAction('CreateOrder')];
 
 export const gotoEditOrderSequence = [
   isLoggedInAction,
