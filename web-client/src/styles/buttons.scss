@@ -184,10 +184,13 @@
 
   button {
     height: 40px;
-    padding-left: 20px !important;
     border-left: 1px solid $color-white;
     margin-top: 5px;
     color: $color-white;
+
+    &.usa-button--unstyled {
+      padding-left: 20px;
+    }
 
     &:hover {
       color: $color-primary-alt;

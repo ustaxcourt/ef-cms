@@ -2,7 +2,11 @@ const joi = require('@hapi/joi');
 const {
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
+  PARTY_TYPES,
+  PROCEDURE_TYPES,
   ROLES,
+  TRIAL_CITY_STRINGS,
+  TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
   joiValidationDecorator,
@@ -88,7 +92,10 @@ CaseExternal.commonRequirements = {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-  partyType: joi.string().required(), // TODO: enum
+  partyType: joi
+    .string()
+    .valid(...Object.values(PARTY_TYPES))
+    .required(),
   petitionFile: joi.object().required(), // TODO: object definition
   petitionFileSize: joi
     .number()
@@ -100,8 +107,17 @@ CaseExternal.commonRequirements = {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-  preferredTrialCity: joi.string().required(), // TODO: enum
-  procedureType: joi.string().required(), // TODO: enum
+  preferredTrialCity: joi
+    .alternatives()
+    .try(
+      joi.string().valid(...TRIAL_CITY_STRINGS, null),
+      joi.string().pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+    )
+    .required(),
+  procedureType: joi
+    .string()
+    .valid(...PROCEDURE_TYPES)
+    .required(),
   stinFile: joi.object().required(), // TODO: object definition
   stinFileSize: joi
     .number()

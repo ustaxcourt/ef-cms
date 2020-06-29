@@ -21,6 +21,7 @@ const {
   ROLES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -288,6 +289,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
 
   const contacts = ContactFactory.createContacts({
     contactInfo: {
+      otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
@@ -296,6 +298,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     partyType: rawCase.partyType,
   });
 
+  this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
   this.contactPrimary = contacts.primary;
@@ -545,10 +548,21 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
+  otherFilers: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'OtherFilerContact' }))
+    .unique(
+      (a, b) =>
+        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
+        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
+    )
+    .description('List of OtherFilerContact Entities for the case.')
+    .optional(),
   otherPetitioners: joi
     .array()
     .items(joi.object().meta({ entityName: 'OtherPetitionerContact' }))
-    .description('List of OtherPetitionerContact Entities for the case.'),
+    .description('List of OtherPetitionerContact Entities for the case.')
+    .optional(),
   partyType: joi
     .string()
     .valid(...Object.values(PARTY_TYPES))
@@ -1494,6 +1508,7 @@ Case.prototype.getCaseContacts = function (shape) {
     'privatePractitioners',
     'irsPractitioners',
     'otherPetitioners',
+    'otherFilers',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       caseContacts[contact] = this[contact];
