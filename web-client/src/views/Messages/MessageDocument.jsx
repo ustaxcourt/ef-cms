@@ -47,7 +47,11 @@ export const MessageDocument = connect(
               )}
 
               {messageDocumentHelper.showApplySignatureButton && (
-                <Button link icon="pencil-alt" onClick={() => null}>
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+                  icon="pencil-alt"
+                >
                   Apply Signature
                 </Button>
               )}
