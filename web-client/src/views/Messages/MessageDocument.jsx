@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const MessageDocument = connect(
   {
@@ -16,9 +17,10 @@ export const MessageDocument = connect(
   }) {
     return (
       <div
-        className={`message-detail--attachments ${
-          attachmentDocumentToDisplay ? '' : 'border border-base-lighter'
-        }`}
+        className={classNames(
+          'message-detail--attachments',
+          !attachmentDocumentToDisplay && 'border border-base-lighter',
+        )}
       >
         {!attachmentDocumentToDisplay && (
           <div className="padding-2">There are no attachments to preview</div>
