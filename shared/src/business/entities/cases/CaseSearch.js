@@ -1,8 +1,13 @@
 const joi = require('@hapi/joi');
 const {
+  CASE_SEARCH_MIN_YEAR,
+  COUNTRY_TYPES,
+  US_STATES,
+  US_STATES_OTHER,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { CASE_SEARCH_MIN_YEAR } = require('../EntityConstants');
 
 CaseSearch.validationName = 'CaseSearch';
 
@@ -33,9 +38,15 @@ CaseSearch.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseSearch.schema = joi.object().keys({
-  countryType: joi.string().max(500).optional(), // TODO: enum
+  countryType: joi
+    .string()
+    .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
+    .optional(),
   petitionerName: joi.string().max(500).required(),
-  petitionerState: joi.string().max(500).optional(), // TODO: enum
+  petitionerState: joi
+    .string()
+    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+    .optional(),
   yearFiledMax: joi
     .number()
     .integer()
