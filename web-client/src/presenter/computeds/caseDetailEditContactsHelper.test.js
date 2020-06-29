@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailEditContactsHelper as caseDetailEditContactsHelperComputed } from './caseDetailEditContactsHelper';
 import { runCompute } from 'cerebral/test';
@@ -13,7 +13,7 @@ describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Conservator', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.conservator },
+        form: { partyType: PARTY_TYPES.conservator },
       },
     });
     expect(result).toMatchObject({
@@ -29,7 +29,7 @@ describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Corporation', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.corporation },
+        form: { partyType: PARTY_TYPES.corporation },
       },
     });
     expect(result).toMatchObject({
@@ -44,7 +44,7 @@ describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Custodian', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.custodian },
+        form: { partyType: PARTY_TYPES.custodian },
       },
     });
     expect(result).toMatchObject({
@@ -60,7 +60,7 @@ describe('caseDetailEditContactsHelper', () => {
   it('should validate form view information for party type Donor', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
-        form: { partyType: ContactFactory.PARTY_TYPES.donor },
+        form: { partyType: PARTY_TYPES.donor },
       },
     });
     expect(result).toMatchObject({
@@ -75,7 +75,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estate,
+          partyType: PARTY_TYPES.estate,
         },
       },
     });
@@ -94,7 +94,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
         },
       },
     });
@@ -111,7 +111,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.guardian,
+          partyType: PARTY_TYPES.guardian,
         },
       },
     });
@@ -129,7 +129,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
         },
       },
     });
@@ -147,7 +147,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+          partyType: PARTY_TYPES.nextFriendForMinor,
         },
       },
     });
@@ -165,7 +165,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
+          partyType: PARTY_TYPES.partnershipBBA,
         },
       },
     });
@@ -183,7 +183,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
       },
     });
@@ -201,7 +201,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
       },
     });
@@ -219,7 +219,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -235,7 +235,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -259,7 +259,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         },
       },
     });
@@ -279,7 +279,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
+          partyType: PARTY_TYPES.survivingSpouse,
         },
       },
     });
@@ -297,7 +297,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.transferee,
+          partyType: PARTY_TYPES.transferee,
         },
       },
     });
@@ -313,7 +313,7 @@ describe('caseDetailEditContactsHelper', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         form: {
-          partyType: ContactFactory.PARTY_TYPES.trust,
+          partyType: PARTY_TYPES.trust,
         },
       },
     });

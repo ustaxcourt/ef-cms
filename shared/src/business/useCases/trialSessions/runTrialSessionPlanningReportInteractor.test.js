@@ -6,8 +6,7 @@ const {
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { User } = require('../../entities/User');
+const { ROLES, TRIAL_CITIES } = require('../../entities/EntityConstants');
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
@@ -22,7 +21,7 @@ describe('run trial session planning report', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -41,7 +40,7 @@ describe('run trial session planning report', () => {
 
   it('returns the created pdf url', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     };
 
@@ -128,7 +127,7 @@ describe('run trial session planning report', () => {
         },
       ];
       user = {
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'petitionsClerk',
       };
 
@@ -154,9 +153,7 @@ describe('run trial session planning report', () => {
         { term: 'spring', year: '2019' },
         { term: 'winter', year: '2019' },
       ]);
-      expect(results.trialLocationData.length).toEqual(
-        TrialSession.TRIAL_CITIES.ALL.length,
-      );
+      expect(results.trialLocationData.length).toEqual(TRIAL_CITIES.ALL.length);
       expect(results.trialLocationData[0]).toMatchObject({
         allCaseCount: 4,
         previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],

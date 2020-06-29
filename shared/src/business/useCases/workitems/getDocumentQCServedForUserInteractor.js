@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -31,7 +31,7 @@ exports.getDocumentQCServedForUserInteractor = async ({
     });
 
   const filteredWorkItems = workItems.filter(workItem =>
-    user.role === User.ROLES.petitionsClerk ? !!workItem.section : true,
+    user.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
 
   return WorkItem.validateRawCollection(filteredWorkItems, {

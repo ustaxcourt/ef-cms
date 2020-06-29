@@ -73,7 +73,8 @@
     "caseCaption": "Brett Osborne, Petitioner",
     "docketNumber": "101-19",
     "docketNumberWithSuffix": "101-19W",
-    "status": "New"
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",

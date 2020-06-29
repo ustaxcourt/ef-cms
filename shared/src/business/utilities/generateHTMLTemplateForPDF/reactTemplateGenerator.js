@@ -15,14 +15,23 @@ const {
   ChangeOfAddress,
 } = require('../pdfGenerator/documentTemplates/ChangeOfAddress.jsx');
 const {
+  CoverSheet,
+} = require('../pdfGenerator/documentTemplates/CoverSheet.jsx');
+const {
   DatePrintedFooter,
 } = require('../pdfGenerator/components/DatePrintedFooter.jsx');
+const {
+  DateServedFooter,
+} = require('../pdfGenerator/components/DateServedFooter.jsx');
 const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
+const {
+  NoticeOfReceiptOfPetition,
+} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.jsx');
 const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
@@ -64,10 +73,13 @@ const components = {
   AddressLabelCoverSheet,
   CaseInventoryReport,
   ChangeOfAddress,
+  CoverSheet,
   DatePrintedFooter,
+  DateServedFooter,
   DocketRecord,
   DocumentService,
   NoticeOfDocketChange,
+  NoticeOfReceiptOfPetition,
   Order,
   PageMetaHeaderDocket,
   PendingReport,

@@ -49,19 +49,35 @@ const {
   getSurvivingSpouseContact,
 } = require('../business/entities/contacts/SurvivingSpouseContact');
 const {
+  InitialWorkItemMessage,
+} = require('../business/entities/InitialWorkItemMessage');
+const {
+  OrderWithoutBody,
+} = require('../business/entities/orders/OrderWithoutBody');
+const {
   PrivatePractitioner,
 } = require('../business/entities/PrivatePractitioner');
 const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
+const { CaseMessage } = require('../business/entities/CaseMessage');
 const { Correspondence } = require('../business/entities/Correspondence');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 const { ForwardMessage } = require('../business/entities/ForwardMessage');
+const { IrsPractitioner } = require('../business/entities/IrsPractitioner');
+const { Message } = require('../business/entities/Message');
+const { NewCaseMessage } = require('../business/entities/NewCaseMessage');
+const { NewPractitioner } = require('../business/entities/NewPractitioner');
+const { Note } = require('../business/entities/notes/Note');
+const { Order } = require('../business/entities/orders/Order');
 const { Practitioner } = require('../business/entities/Practitioner');
 const { PublicUser } = require('../business/entities/PublicUser');
+const { Scan } = require('../business/entities/Scan');
 const { Statistic } = require('../business/entities/Statistic');
 const { User } = require('../business/entities/User');
+const { UserCase } = require('../business/entities/UserCase');
+const { UserCaseNote } = require('../business/entities/notes/UserCaseNote');
 const { WorkItem } = require('../business/entities/WorkItem');
 
 const generateMarkdownSchema = (entity, entityName) => {
@@ -204,13 +220,25 @@ generateMarkdownSchema(
 generateMarkdownSchema(Batch, 'Batch');
 generateMarkdownSchema(Case, 'Case');
 generateMarkdownSchema(CaseDeadline, 'CaseDeadline');
+generateMarkdownSchema(CaseMessage, 'CaseMessage');
 generateMarkdownSchema(Correspondence, 'Correspondence');
 generateMarkdownSchema(DocketRecord, 'DocketRecord');
 generateMarkdownSchema(Document, 'Document');
 generateMarkdownSchema(ForwardMessage, 'ForwardMessage');
+generateMarkdownSchema(InitialWorkItemMessage, 'InitialWorkItemMessage');
+generateMarkdownSchema(IrsPractitioner, 'IrsPractitioner');
+generateMarkdownSchema(Message, 'Message');
+generateMarkdownSchema(NewCaseMessage, 'NewCaseMessage');
+generateMarkdownSchema(NewPractitioner, 'NewPractitioner');
+generateMarkdownSchema(Note, 'Note');
+generateMarkdownSchema(Order, 'Order');
+generateMarkdownSchema(OrderWithoutBody, 'OrderWithoutBody');
 generateMarkdownSchema(Practitioner, 'Practitioner');
 generateMarkdownSchema(PrivatePractitioner, 'PrivatePractitioner');
 generateMarkdownSchema(PublicUser, 'PublicUser');
+generateMarkdownSchema(Scan, 'Scan');
 generateMarkdownSchema(Statistic, 'Statistic');
 generateMarkdownSchema(User, 'User');
+generateMarkdownSchema(UserCase, 'UserCase');
+generateMarkdownSchema(UserCaseNote, 'UserCaseNote');
 generateMarkdownSchema(WorkItem, 'WorkItem');

@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 
 describe('sendServedPartiesEmails', () => {
@@ -18,7 +18,7 @@ describe('sendServedPartiesEmails', () => {
         caseCaption: 'A Caption',
         docketNumber: '123-20',
         docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
       documentEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
@@ -53,7 +53,7 @@ describe('sendServedPartiesEmails', () => {
         caseCaption: 'A Caption',
         docketNumber: '123-20',
         docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
-        status: Case.STATUS_TYPES.new,
+        status: CASE_STATUS_TYPES.new,
       },
       documentEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
@@ -84,7 +84,7 @@ describe('sendServedPartiesEmails', () => {
         caseCaption: 'A Caption',
         docketNumber: '123-20',
         docketRecord: [{ documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360' }],
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
       documentEntity: {
         documentId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',

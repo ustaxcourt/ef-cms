@@ -5,6 +5,7 @@ const {
 const {
   fileCourtIssuedOrderInteractor,
 } = require('./fileCourtIssuedOrderInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -57,7 +58,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
 
@@ -65,7 +66,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     );
@@ -73,7 +74,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     );

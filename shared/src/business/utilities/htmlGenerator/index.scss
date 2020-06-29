@@ -78,8 +78,16 @@ th {
   width: 49%;
 }
 
+.margin-top-40 {
+  margin-top: 40px;
+}
+
 .margin-top-80 {
   margin-top: 80px;
+}
+
+.margin-top-200 {
+  margin-top: 200px;
 }
 
 .margin-top-5 {
@@ -139,6 +147,10 @@ th {
   border-right: 1px dashed;
   font-size: 14px;
   line-height: 18px;
+
+  &.border-none {
+    border: none;
+  }
 
   #caption-extension,
   #caption-v,
@@ -350,6 +362,20 @@ th {
     text-decoration: none;
   }
 }
+#document-cover-sheet {
+  .case-information,
+  #docket-number,
+  #document-title,
+  #certificate-of-service {
+    font-family: 'nimbus_sans_l', sans-serif !important;
+  }
+
+  #certificate-of-service {
+    position: absolute;
+    bottom: 60px;
+    left: 60;
+  }
+}
 
 #document-docket-record {
   // TODO: These are basically cards, and could be refactored for more reusability
@@ -408,7 +434,7 @@ th {
     padding-left: 0.6in;
   }
 
-  .address {
+  .address-label {
     position: absolute;
     bottom: 0in;
     left: 0.5in;

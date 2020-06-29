@@ -1,7 +1,10 @@
+const {
+  CASE_SEARCH_MIN_YEAR,
+  COUNTRY_TYPES,
+  US_STATES,
+} = require('../entities/EntityConstants');
 const { aggregateCommonQueryParams } = require('./aggregateCommonQueryParams');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CaseSearch } = require('../entities/cases/CaseSearch');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { formatNow } = require('./DateHandler');
 
 describe('aggregateCommonQueryParams', () => {
@@ -108,7 +111,7 @@ describe('aggregateCommonQueryParams', () => {
   it('should include search params for countryType if present in query', () => {
     const queryParams = {
       applicationContext,
-      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      countryType: COUNTRY_TYPES.DOMESTIC,
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -120,14 +123,12 @@ describe('aggregateCommonQueryParams', () => {
             should: [
               {
                 match: {
-                  'contactPrimary.M.countryType.S':
-                    ContactFactory.COUNTRY_TYPES.DOMESTIC,
+                  'contactPrimary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
                 },
               },
               {
                 match: {
-                  'contactSecondary.M.countryType.S':
-                    ContactFactory.COUNTRY_TYPES.DOMESTIC,
+                  'contactSecondary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
                 },
               },
             ],
@@ -144,7 +145,7 @@ describe('aggregateCommonQueryParams', () => {
   it('should include search params for petitionerState if present in query', () => {
     const queryParams = {
       applicationContext,
-      petitionerState: ContactFactory.US_STATES.AR,
+      petitionerState: US_STATES.AR,
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -156,12 +157,12 @@ describe('aggregateCommonQueryParams', () => {
             should: [
               {
                 match: {
-                  'contactPrimary.M.state.S': ContactFactory.US_STATES.AR,
+                  'contactPrimary.M.state.S': US_STATES.AR,
                 },
               },
               {
                 match: {
-                  'contactSecondary.M.state.S': ContactFactory.US_STATES.AR,
+                  'contactSecondary.M.state.S': US_STATES.AR,
                 },
               },
             ],
@@ -241,7 +242,7 @@ describe('aggregateCommonQueryParams', () => {
           range: {
             'receivedAt.S': {
               format: 'yyyy',
-              gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
+              gte: `${CASE_SEARCH_MIN_YEAR}||/y`,
               lte: '2019||/y',
             },
           },

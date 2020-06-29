@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { defaultUpdateCaseModalValuesAction } from './defaultUpdateCaseModalValuesAction';
 import { runAction } from 'cerebral/test';
 
@@ -9,7 +9,7 @@ describe('defaultUpdateCaseModalValuesAction', () => {
         caseDetail: {
           associatedJudge: 'Chief Judge',
           caseCaption: 'A case caption',
-          status: Case.STATUS_TYPES.new,
+          status: CASE_STATUS_TYPES.new,
         },
         modal: {},
       },
@@ -18,7 +18,7 @@ describe('defaultUpdateCaseModalValuesAction', () => {
     expect(result.state.modal).toMatchObject({
       associatedJudge: 'Chief Judge',
       caseCaption: 'A case caption',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
     });
   });
 });

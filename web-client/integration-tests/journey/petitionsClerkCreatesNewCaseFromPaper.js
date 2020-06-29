@@ -1,6 +1,8 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
+import {
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -90,7 +92,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'partyType',
-      value: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+      value: PARTY_TYPES.petitionerDeceasedSpouse,
     },
     {
       key: 'contactPrimary.countryType',
@@ -131,7 +133,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.WAIVED,
+      value: PAYMENT_STATUS.WAIVED,
     },
     {
       key: 'paymentDateWaivedDay',

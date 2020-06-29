@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
@@ -13,7 +13,7 @@ describe('getCaseAssociation', () => {
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
 
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: '123',
     });
   });
@@ -41,7 +41,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -67,7 +67,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: '1234',
     });
 
@@ -93,7 +93,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: '789',
     });
 
@@ -119,7 +119,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: '789',
     });
 
@@ -145,7 +145,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '123',
     });
     const results = await runAction(getCaseAssociationAction, {
@@ -170,7 +170,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '789',
     });
 
@@ -196,7 +196,7 @@ describe('getCaseAssociation', () => {
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '123',
     });
 
@@ -219,7 +219,7 @@ describe('getCaseAssociation', () => {
 
   it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsSuperuser,
+      role: ROLES.irsSuperuser,
       userId: '123',
     });
 
@@ -242,7 +242,7 @@ describe('getCaseAssociation', () => {
 
   it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsSuperuser,
+      role: ROLES.irsSuperuser,
       userId: '123',
     });
 

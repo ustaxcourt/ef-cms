@@ -1,5 +1,5 @@
 const { Practitioner } = require('./Practitioner');
-const { User } = require('./User');
+const { ROLES } = require('./EntityConstants');
 
 describe('Practitioner', () => {
   it('Creates a valid Practitioner with all required fields', () => {
@@ -26,7 +26,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
@@ -34,7 +34,7 @@ describe('Practitioner', () => {
 
   it('Creates an invalid Practitioner with missing required fields', () => {
     const user = new Practitioner({
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -61,7 +61,7 @@ describe('Practitioner', () => {
       lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Attorney',
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeFalsy();
@@ -90,7 +90,7 @@ describe('Practitioner', () => {
       lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Purple',
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
@@ -119,7 +119,7 @@ describe('Practitioner', () => {
       lastName: 'Practitioner',
       name: 'Test Practitioner',
       practitionerType: 'Purple',
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
@@ -129,7 +129,7 @@ describe('Practitioner', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
       employer: 'IRS',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
     });
 
     expect(user.isValid()).toBeFalsy();
@@ -159,7 +159,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
@@ -190,7 +190,7 @@ describe('Practitioner', () => {
       name: 'Test Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
@@ -202,7 +202,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'IRS',
     });
-    expect(user.role).toEqual(User.ROLES.irsPractitioner);
+    expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
   it('should set the role to "irsPractitioner" when employer is "DOJ" and admissionsStatus is Active', () => {
@@ -210,7 +210,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'DOJ',
     });
-    expect(user.role).toEqual(User.ROLES.irsPractitioner);
+    expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
   it('should set the role to "privatePractitioner" when employer is "Private" and admissionsStatus is Active', () => {
@@ -218,7 +218,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'Private',
     });
-    expect(user.role).toEqual(User.ROLES.privatePractitioner);
+    expect(user.role).toEqual(ROLES.privatePractitioner);
   });
 
   it('should set the role to "inactivePractitioner" when employer is "Private" and admissionsStatus is Inactive', () => {
@@ -226,7 +226,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Inactive',
       employer: 'Private',
     });
-    expect(user.role).toEqual(User.ROLES.inactivePractitioner);
+    expect(user.role).toEqual(ROLES.inactivePractitioner);
   });
 
   it('Combines firstName, middleName, lastName, and suffix properties to set the name property', () => {
@@ -253,7 +253,7 @@ describe('Practitioner', () => {
       middleName: 'Middle',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.Practitioner,
+      role: ROLES.Practitioner,
       suffix: 'Sfx',
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
@@ -286,7 +286,7 @@ describe('Practitioner', () => {
         lastName: 'Practitioner',
         originalBarState: 'Illinois',
         practitionerType: 'Attorney',
-        role: User.ROLES.Practitioner,
+        role: ROLES.Practitioner,
         userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
       };
     });

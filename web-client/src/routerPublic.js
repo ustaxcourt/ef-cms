@@ -35,6 +35,11 @@ const router = {
       });
     });
 
+    route('/todays-opinions', () => {
+      setPageTitle('Today’s Opinions');
+      app.getSequence('gotoTodaysOpinionsSequence')();
+    });
+
     route('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();

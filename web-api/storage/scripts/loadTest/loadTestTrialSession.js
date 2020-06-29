@@ -18,7 +18,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   let petitionerUser;
   let docketClerkUser;
 
-  var apigateway = new AWS.APIGateway({
+  const apigateway = new AWS.APIGateway({
     region: process.env.REGION,
   });
   const { items: apis } = await apigateway

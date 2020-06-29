@@ -4,7 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throw unauthorized error if user is not associated with case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -51,7 +51,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throw unauthorized error if user is associated with the case but the document is not available for viewing at this time', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -86,7 +86,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('returns the expected policy url for a petitioner who is associated with the case and viewing an available document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -103,7 +103,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('returns the expected policy url for a petitioner who is associated with the case and viewing a case confirmation pdf', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -120,7 +120,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throws an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
     applicationContext
@@ -138,7 +138,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
     applicationContext
@@ -155,7 +155,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throws an error if the user role is irsSuperuser and the petition document on the case is not served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsSuperuser,
+      role: ROLES.irsSuperuser,
       userId: 'irsSuperuser',
     });
 
@@ -179,7 +179,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('returns the url if the user role is irsSuperuser and the petition document on the case is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsSuperuser,
+      role: ROLES.irsSuperuser,
       userId: 'irsSuperuser',
     });
 

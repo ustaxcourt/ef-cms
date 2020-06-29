@@ -2,9 +2,10 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const { getOpenCasesByUser } = require('./getOpenCasesByUser');
-const { User } = require('../../../business/entities/User');
-jest.mock('./getCasesByUser', () => ({
-  getCasesByUser: jest.fn().mockReturnValue([
+const { ROLES } = require('../../../business/entities/EntityConstants');
+
+jest.mock('./getUserCases', () => ({
+  getUserCases: jest.fn().mockReturnValue([
     {
       caseId: '123',
       pk: 'case|123',
@@ -21,7 +22,7 @@ jest.mock('./getCasesByUser', () => ({
 }));
 
 const user = {
-  role: User.ROLES.petitioner,
+  role: ROLES.petitioner,
   userId: '522573b0-dc40-47f7-96fd-64758da315f5',
 };
 
