@@ -6,9 +6,11 @@ const {
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  OTHER_FILER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
+  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   applicationContext,
@@ -208,6 +210,146 @@ describe('Case entity', () => {
       );
 
       expect(myCase.otherPetitioners).toEqual(mockOtherPetitioners);
+    });
+  });
+
+  describe('Other Filers', () => {
+    it('sets a valid value of otherFilers on the case', () => {
+      const mockOtherFilers = [
+        {
+          additionalName: 'First Other Filer',
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          additionalName: 'Second Other Filer',
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: OTHER_FILER_TYPES[1],
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.toRawObject().otherFilers).toEqual(mockOtherFilers);
+    });
+
+    it('fails validation with more than one unique filer type', () => {
+      const mockOtherFilers = [
+        {
+          additionalName: 'First Other Filer',
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          additionalName: 'Second Other Filer',
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = myCase.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        'otherFilers[1]': '"otherFilers[1]" contains a duplicate value',
+      });
+    });
+
+    it('fails validation with an invalid otherFilerType', () => {
+      const mockOtherFilers = [
+        {
+          additionalName: 'First Other Filer',
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: null,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          additionalName: 'Second Other Filer',
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = myCase.getFormattedValidationErrors();
+      expect(errors.otherFilers).toMatchObject([
+        {
+          index: 0,
+          otherFilerType: 'Select a filer type',
+        },
+      ]);
     });
   });
 
