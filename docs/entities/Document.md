@@ -1399,7 +1399,11 @@
     processingStatus: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "pending"
+        - "complete"
     qcAt: 
       type: "date"
       flags: 
