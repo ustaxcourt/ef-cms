@@ -9,10 +9,13 @@ import { state } from 'cerebral';
  * @returns object with a path
  */
 export const skipSigningOrderAction = ({ get }) => {
-  const { caseId } = get(state.caseDetail);
+  const { caseId, documents } = get(state.caseDetail);
+  const documentId = get(state.documentId);
+  const order = documents.find(d => d.documentId === documentId);
+
   return {
     alertSuccess: {
-      message: 'Document saved.',
+      message: `${order.documentTitle} updated.`,
     },
     path: `/case-detail/${caseId}/draft-documents`,
   };
