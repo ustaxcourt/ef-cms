@@ -98,7 +98,6 @@ import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryRe
 import { gotoCaseMessagesSequence } from './sequences/gotoCaseMessagesSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
-import { gotoCreateOrderForMessageSequence } from './sequences/gotoCreateOrderForMessageSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -108,7 +107,6 @@ import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCour
 import { gotoEditDeficiencyStatisticSequence } from './sequences/gotoEditDeficiencyStatisticSequence';
 import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
-import { gotoEditOrderForMessageSequence } from './sequences/gotoEditOrderForMessageSequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditOtherStatisticsSequence } from './sequences/gotoEditOtherStatisticsSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
@@ -530,7 +528,6 @@ export const presenter = {
     gotoCaseMessagesSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoCompleteDocketEntrySequence,
-    gotoCreateOrderForMessageSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
     gotoDashboardSequence,
@@ -540,7 +537,6 @@ export const presenter = {
     gotoEditDeficiencyStatisticSequence,
     gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,
-    gotoEditOrderForMessageSequence,
     gotoEditOrderSequence,
     gotoEditOtherStatisticsSequence,
     gotoEditPetitionDetailsSequence,

@@ -16,7 +16,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseMessages } from './Messages/CaseMessages';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
-import { CreateOrderFactory } from './CreateOrder/CreateOrderFactory';
+import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
@@ -98,12 +98,7 @@ const pages = {
   CaseMessages,
   CaseSearchNoMatches,
   CourtIssuedDocketEntry,
-  CreateOrder: CreateOrderFactory({
-    submitSequence: 'submitCourtIssuedOrderSequence',
-  }),
-  CreateOrderForMessage: CreateOrderFactory({
-    submitSequence: 'submitCourtIssuedOrderForMessageSequence',
-  }),
+  CreateOrder,
   CreatePractitionerUser,
   DashboardChambers,
   DashboardInactive,
