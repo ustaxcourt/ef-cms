@@ -534,11 +534,12 @@ const router = {
       '/case-detail/*/edit-order/*/sign/*',
       ifHasAccess((docketNumber, documentId, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
-        const sequence = app.getSequence('gotoSignOrderForMessageSequence');
+        const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
           docketNumber,
           documentId,
           parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );

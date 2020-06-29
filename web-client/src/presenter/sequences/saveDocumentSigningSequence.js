@@ -3,6 +3,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
 import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -23,6 +24,12 @@ export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearPDFSignatureDataAction,
   clearFormAction,
   setAlertSuccessAction,
-  setCaseDetailPageTabActionGenerator('drafts'),
-  navigateToDraftDocumentsAction,
+  followRedirectAction,
+  {
+    default: [
+      setCaseDetailPageTabActionGenerator('drafts'),
+      navigateToDraftDocumentsAction,
+    ],
+    success: [],
+  },
 ]);
