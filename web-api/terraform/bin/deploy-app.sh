@@ -65,8 +65,11 @@ pids[${i}]=$!
 popd
 
 for pid in ${pids[*]}; do
-    wait $pid
+  echo "waiting on ${pid}"
+  wait $pid
 done
+
+echo "done waiting!"
 
 # exit on any failure
 set -eo pipefail
