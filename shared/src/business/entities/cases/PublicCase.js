@@ -78,6 +78,7 @@ const publicCaseSchema = {
   isSealed: joi.boolean(),
   receivedAt: joiStrictTimestamp.optional(),
 };
+
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
   caseId: joi.string().uuid({
@@ -86,8 +87,11 @@ const sealedCaseSchemaRestricted = {
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
-  docketNumber: joi.string().max(500).required(), // TODO: regex
-  docketNumberSuffix: joi.string().optional(), // TODO: enum
+  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumberSuffix: joi
+    .string()
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .optional(),
   docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),

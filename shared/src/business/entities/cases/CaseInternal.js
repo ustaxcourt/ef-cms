@@ -3,6 +3,7 @@ const {
   CASE_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PROCEDURE_TYPES,
 } = require('../EntityConstants');
 const {
   JoiValidationConstants,
@@ -170,7 +171,10 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    partyType: joi.string().max(500).required(), // TODO: enum
+    partyType: joi
+      .string()
+      .valid(...Object.values(PARTY_TYPES))
+      .required(),
     petitionFile: joi.object().required(), // TODO: object definition
     petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'petitionFile',
@@ -197,7 +201,10 @@ const paperRequirements = joi
         otherwise: joi.optional().allow(null),
         then: joi.string().required(),
       }),
-    procedureType: joi.string().max(500).required(), // TODO: enum
+    procedureType: joi
+      .string()
+      .valid(...PROCEDURE_TYPES)
+      .required(),
     receivedAt: joiStrictTimestamp.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()

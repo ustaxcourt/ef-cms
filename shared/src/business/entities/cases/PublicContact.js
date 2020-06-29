@@ -2,6 +2,8 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { US_STATES, US_STATES_OTHER } = require('../EntityConstants');
+
 /**
  * PublicContact
  * Represents the view of the public case.
@@ -18,7 +20,10 @@ joiValidationDecorator(
   PublicContact,
   joi.object().keys({
     name: joi.string().max(500).optional(),
-    state: joi.string().max(500).optional(), // TODO: enum
+    state: joi
+      .string()
+      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+      .optional(),
   }),
   {},
 );
