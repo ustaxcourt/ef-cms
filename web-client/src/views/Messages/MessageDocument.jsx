@@ -13,6 +13,8 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     parentMessageId: state.parentMessageId,
+    removeSignatureAndGotoEditSignatureSequence:
+      sequences.removeSignatureAndGotoEditSignatureSequence,
   },
   function MessageDocument({
     attachmentDocumentToDisplay,
@@ -21,6 +23,7 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     openCaseDocumentDownloadUrlSequence,
     parentMessageId,
+    removeSignatureAndGotoEditSignatureSequence,
   }) {
     return (
       <div
@@ -55,8 +58,13 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showEditSignatureButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/sign/${parentMessageId}`}
                   icon="pencil-alt"
+                  onClick={() =>
+                    removeSignatureAndGotoEditSignatureSequence({
+                      caseDetail,
+                      documentIdToEdit: attachmentDocumentToDisplay.documentId,
+                    })
+                  }
                 >
                   Edit Signature
                 </Button>
