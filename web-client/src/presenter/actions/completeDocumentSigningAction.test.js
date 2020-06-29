@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { completeDocumentSigningActionFactory } from './completeDocumentSigningActionFactory';
+import { completeDocumentSigningAction } from './completeDocumentSigningAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('completeDocumentSigningActionFactory', () => {
+describe('completeDocumentSigningAction', () => {
   const {
     generateSignedDocumentInteractor,
     getInboxMessagesForUserInteractor,
@@ -47,7 +47,7 @@ describe('completeDocumentSigningActionFactory', () => {
 
   it('should sign a document via executing various use cases', async () => {
     const result = await runAction(
-      completeDocumentSigningActionFactory({ successMessage: 'successful!' }),
+      completeDocumentSigningAction({ successMessage: 'successful!' }),
       {
         modules: {
           presenter,
@@ -102,7 +102,7 @@ describe('completeDocumentSigningActionFactory', () => {
 
   it('should NOT sign a document without signature data', async () => {
     const result = await runAction(
-      completeDocumentSigningActionFactory({ successMessage: 'successful!' }),
+      completeDocumentSigningAction({ successMessage: 'successful!' }),
       {
         modules: {
           presenter,
