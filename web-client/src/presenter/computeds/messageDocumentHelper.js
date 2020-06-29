@@ -6,9 +6,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const attachmentDocumentToDisplay = get(state.attachmentDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
-  const caseDocument = caseDetail.documents.find(
-    d => d.documentId === attachmentDocumentToDisplay.documentId,
-  );
+  const caseDocument =
+    attachmentDocumentToDisplay &&
+    caseDetail.documents.find(
+      d => d.documentId === attachmentDocumentToDisplay.documentId,
+    );
 
   const documentIsSigned =
     attachmentDocumentToDisplay && !!caseDocument.signedAt;
