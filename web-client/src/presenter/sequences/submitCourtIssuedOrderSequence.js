@@ -1,4 +1,5 @@
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntryPointAction';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
@@ -21,10 +22,16 @@ const redirectAfterSubmit = [
   getShouldRedirectToSigningAction,
   {
     no: [
-      getEditDocumentEntryPointAction,
+      followRedirectAction,
       {
-        CaseDetail: navigateToCaseDetailAction,
-        DocumentDetail: navigateToDocumentDetailAction,
+        default: [
+          getEditDocumentEntryPointAction,
+          {
+            CaseDetail: navigateToCaseDetailAction,
+            DocumentDetail: navigateToDocumentDetailAction,
+          },
+        ],
+        success: [],
       },
     ],
     yes: navigateToSignOrderAction,
