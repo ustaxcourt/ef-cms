@@ -53,6 +53,68 @@ const correspondenceCase = {
   status: 'Calendared',
 };
 
+const otherFilersCase = {
+  ...MOCK_CASE,
+  associatedJudge: 'Chief Judge',
+  caseCaption: 'The Fourth Migrated Case',
+  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  docketNumber: '187-20',
+  otherFilers: [
+    {
+      address1: '42 Lamb Sauce Blvd',
+      city: 'Nashville',
+      country: 'USA',
+      countryType: 'domestic',
+      email: 'gordon@thelambsauce.com',
+      name: 'Gordon Ramsay',
+      otherFilerType: 'Intervenor',
+      phone: '1234567890',
+      postalCode: '05198',
+      state: 'AK',
+    },
+    {
+      address1: '1337 12th Ave',
+      city: 'Flavortown',
+      country: 'USA',
+      countryType: 'domestic',
+      email: 'mayor@flavortown.com',
+      name: 'Guy Fieri',
+      otherFilerType: 'Participant',
+      phone: '1234567890',
+      postalCode: '05198',
+      state: 'AK',
+    },
+  ],
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: 'Calendared',
+};
+
+const otherPetitionersCase = {
+  ...MOCK_CASE,
+  associatedJudge: 'Chief Judge',
+  caseCaption: 'The Fifth Migrated Case',
+  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  docketNumber: '162-20',
+  otherPetitioners: [
+    {
+      additionalName: 'Test Other Petitioner',
+      address1: '982 Oak Boulevard',
+      address2: 'Maxime dolorum quae ',
+      address3: 'Ut numquam ducimus ',
+      city: 'Placeat sed dolorum',
+      countryType: 'domestic',
+      name: 'Keelie Bruce',
+      phone: '+1 (785) 771-2329',
+      postalCode: '17860',
+      secondaryName: 'Logan Fields',
+      serviceIndicator: 'None',
+      state: 'LA',
+    },
+  ],
+  preferredTrialCity: 'Washington, District of Columbia',
+  status: 'Calendared',
+};
+
 describe('Case journey', () => {
   it('should migrate cases', async () => {
     await axiosInstance.post(
@@ -66,6 +128,14 @@ describe('Case journey', () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       correspondenceCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      otherPetitionersCase,
+    );
+    await axiosInstance.post(
+      'http://localhost:4000/migrate/case',
+      otherFilersCase,
     );
   });
 
