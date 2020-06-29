@@ -98,7 +98,6 @@ import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryRe
 import { gotoCaseMessagesSequence } from './sequences/gotoCaseMessagesSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
-import { gotoCreateOrderForMessageSequence } from './sequences/gotoCreateOrderForMessageSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -108,7 +107,6 @@ import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCour
 import { gotoEditDeficiencyStatisticSequence } from './sequences/gotoEditDeficiencyStatisticSequence';
 import { gotoEditDocketEntryMetaSequence } from './sequences/gotoEditDocketEntryMetaSequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
-import { gotoEditOrderForMessageSequence } from './sequences/gotoEditOrderForMessageSequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditOtherStatisticsSequence } from './sequences/gotoEditOtherStatisticsSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
@@ -294,7 +292,6 @@ import { submitCaseSearchForConsolidationSequence } from './sequences/submitCase
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
-import { submitCourtIssuedOrderForMessageSequence } from './sequences/submitCourtIssuedOrderForMessageSequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
@@ -530,7 +527,6 @@ export const presenter = {
     gotoCaseMessagesSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoCompleteDocketEntrySequence,
-    gotoCreateOrderForMessageSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
     gotoDashboardSequence,
@@ -540,7 +536,6 @@ export const presenter = {
     gotoEditDeficiencyStatisticSequence,
     gotoEditDocketEntryMetaSequence,
     gotoEditDocketEntrySequence,
-    gotoEditOrderForMessageSequence,
     gotoEditOrderSequence,
     gotoEditOtherStatisticsSequence,
     gotoEditPetitionDetailsSequence,
@@ -724,7 +719,6 @@ export const presenter = {
     submitCaseSearchSequence,
     submitCompleteSequence,
     submitCourtIssuedDocketEntrySequence,
-    submitCourtIssuedOrderForMessageSequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
