@@ -6,9 +6,11 @@ const {
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  OTHER_FILER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
+  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   applicationContext,
@@ -208,6 +210,140 @@ describe('Case entity', () => {
       );
 
       expect(myCase.otherPetitioners).toEqual(mockOtherPetitioners);
+    });
+  });
+
+  describe('Other Filers', () => {
+    it('sets a valid value of otherFilers on the case', () => {
+      const mockOtherFilers = [
+        {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: OTHER_FILER_TYPES[1],
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(myCase.toRawObject().otherFilers).toEqual(mockOtherFilers);
+    });
+
+    it('fails validation with more than one unique filer type', () => {
+      const mockOtherFilers = [
+        {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = myCase.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        'otherFilers[1]': '"otherFilers[1]" contains a duplicate value',
+      });
+    });
+
+    it('fails validation with an invalid otherFilerType', () => {
+      const mockOtherFilers = [
+        {
+          address1: '42 Lamb Sauce Blvd',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'gordon@thelambsauce.com',
+          name: 'Gordon Ramsay',
+          otherFilerType: null,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        {
+          address1: '1337 12th Ave',
+          city: 'Flavortown',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'mayor@flavortown.com',
+          name: 'Guy Fieri',
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+      ];
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          otherFilers: mockOtherFilers,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = myCase.getFormattedValidationErrors();
+      expect(errors.otherFilers).toMatchObject([
+        {
+          index: 0,
+          otherFilerType: 'Select a filer type',
+        },
+      ]);
     });
   });
 
@@ -1835,14 +1971,14 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'success',
+        processingStatus: 'complete',
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('success');
+      ).toEqual('complete');
     });
 
     it('should update a correspondence document', () => {
@@ -2381,6 +2517,29 @@ describe('Case entity', () => {
       },
     ];
 
+    const otherFilers = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        otherFilerType: OTHER_FILER_TYPES[1],
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+    ];
+
     const privatePractitioners = [
       {
         name: 'Private Practitioner One',
@@ -2400,6 +2559,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
@@ -2414,6 +2574,7 @@ describe('Case entity', () => {
         contactPrimary,
         contactSecondary,
         irsPractitioners,
+        otherFilers,
         otherPetitioners,
         privatePractitioners,
       });
@@ -2426,6 +2587,7 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
+          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
@@ -2438,11 +2600,13 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
+        otherFilers: true,
         otherPetitioners: true,
       });
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
+        otherFilers,
         otherPetitioners,
       });
     });
@@ -2501,7 +2665,7 @@ describe('Case entity', () => {
         leadCaseEntity = new Case(
           {
             ...MOCK_CASE,
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2511,7 +2675,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             docketNumber: '102-19',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2636,7 +2800,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             preferredTrialCity: 'Birmingham, Alabama',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
@@ -2654,7 +2818,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
             preferredTrialCity: 'Birmingham, Alabama',
-            procedureType: 'regular',
+            procedureType: 'Regular',
             status: 'Submitted',
           },
           { applicationContext },
