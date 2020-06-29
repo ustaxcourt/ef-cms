@@ -286,7 +286,7 @@ Valid Case object example:
           "otherFilerType": "Intervenor",
           "phone": "1234567890",
           "postalCode": "05198",
-          "state": "AK",
+          "state": "AK"
         },
         {
           "address1": "1337 12th Ave",
@@ -298,8 +298,8 @@ Valid Case object example:
           "otherFilerType": "Participant",
           "phone": "1234567890",
           "postalCode": "05198",
-          "state": "AK",
+          "state": "AK"
         },
-      ]
+    ]
 }
 ```
