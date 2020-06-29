@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -10,6 +10,8 @@ export const MessageDocument = connect(
     caseDetail: state.caseDetail,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     parentMessageId: state.parentMessageId,
   },
   function MessageDocument({
@@ -17,6 +19,7 @@ export const MessageDocument = connect(
     caseDetail,
     iframeSrc,
     messageDocumentHelper,
+    openCaseDocumentDownloadUrlSequence,
     parentMessageId,
   }) {
     return (
@@ -65,7 +68,12 @@ export const MessageDocument = connect(
                 link
                 icon="file-pdf"
                 iconColor="white"
-                onClick={() => null}
+                onClick={() =>
+                  openCaseDocumentDownloadUrlSequence({
+                    caseId: caseDetail.caseId,
+                    documentId: attachmentDocumentToDisplay.documentId,
+                  })
+                }
               >
                 View Full PDF
               </Button>
