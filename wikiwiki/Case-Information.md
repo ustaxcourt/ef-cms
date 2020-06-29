@@ -20,8 +20,7 @@
 * Petitioner's Council Mapping: [name][barnumber] (RT6789) [address1] [address2] [address3] [city], [state] [postalCode] [phone number]  Service email [Service Preference] Representing [petitioner]
 
 **Other Petitioners**
-* Petitioner Contact tile size spans full width when no spouse contact available
-displays under the main petitioner contact tile
+* Petitioner Contact tile size spans full width when no spouse contact available displays under the main petitioner contact tile
 * Can display 4 contacts across if available
 * View additional Petitioners link will expand the other petitioner info tile to display the rest of the other petitioners if available
 * When the other petitioner info tile is expanded view additional petitioners link changes to * * Hide Additional petitioners

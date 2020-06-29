@@ -4,7 +4,7 @@
 
 * Cases are consolidated to save time and money in court proceedings
 * Consolidated cases are scheduled together for court trials
-* Petitioner or practitioner needs to submit a document to the court in order to be considered for consolidating cases.
+* Petitioner or practitioner needs to submit a document to the court in order to be considered for consolidating cases
 * A judge needs to approve and submit an order before cases can become consolidated
 * A Docket Clerk can consolidate cases
 * Cases can only be consolidated if:
@@ -29,5 +29,5 @@ on the consolidated cases tab click on add cases
 
 **On a petitioner/practitioner dashboard users will see:**
 * Consolidated cases on the open/closed case tabs display a yellow lock double paper icon next to the lead case
-* The lead case has the lowest docket number. the rest of the cases will display indented below the lead case in ascending order.
-* Consolidated cases will display links if the user is a party to that case.
+* The lead case has the lowest docket number. The rest of the cases will display indented below the lead case in ascending order
+* Consolidated cases will display links if the user is a party to that case
