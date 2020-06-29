@@ -11,6 +11,7 @@ import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
+import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
@@ -124,6 +125,9 @@ export const CaseDetailInternal = connect(
               </Tab>
               <Tab id="tab-respondent" tabName="respondent" title="Respondent">
                 <RespondentInformation />
+              </Tab>
+              <Tab id="tab-other-filer" tabName="otherFiler" title="Other">
+                <OtherFilerInformation />
               </Tab>
             </Tabs>
           )}
