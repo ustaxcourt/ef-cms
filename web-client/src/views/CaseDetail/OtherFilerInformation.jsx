@@ -22,34 +22,31 @@ const OtherFilerInformation = connect(
                     <h3 className="underlined" id="primary-label">
                       Other Filer Info
                     </h3>
-                    {formattedCaseDetail.contactPrimary && (
-                      <div className="grid-row">
-                        <div className="grid-col-6">
-                          <address aria-labelledby="primary-label">
-                            <AddressDisplay
-                              contact={formattedCaseDetail.contactPrimary}
-                              nameOverride={
-                                formattedCaseDetail.showCaseTitleForPrimary &&
-                                formattedCaseDetail.caseTitle
-                              }
-                              showEmail={true}
-                            />
-                          </address>
-                          {formattedCaseDetail.contactPrimary
-                            .serviceIndicator && (
-                            <div className="margin-top-4">
-                              <p className="semi-bold margin-bottom-0">
-                                Service preference
-                              </p>
-                              {
-                                formattedCaseDetail.contactPrimary
-                                  .serviceIndicator
-                              }
+                    <div className="grid-row">
+                      {formattedCaseDetail.otherFilers.map(
+                        (otherFiler, idx) => {
+                          return (
+                            <div className="grid-col-6" key={idx}>
+                              <address aria-labelledby="primary-label">
+                                <AddressDisplay
+                                  contact={otherFiler}
+                                  nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
+                                  showEmail={true}
+                                />
+                              </address>
+                              {otherFiler.serviceIndicator && (
+                                <div className="margin-top-4">
+                                  <p className="semi-bold margin-bottom-0">
+                                    Service preference
+                                  </p>
+                                  {otherFiler.serviceIndicator}
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                          );
+                        },
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
