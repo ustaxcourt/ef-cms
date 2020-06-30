@@ -1,11 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * creates the default success alert object
+ * creates the success alert object
  *
  * @param {object} providers the providers object
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
- * @returns {object} the alertSuccess object with default strings
+ * @param {object} providers.store the cerebral store object
+ * @returns {object} the alertSuccess object
  */
 export const getFileExternalDocumentAlertSuccessAction = ({
   get,

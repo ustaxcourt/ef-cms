@@ -4,8 +4,8 @@ import { state } from 'cerebral';
  * redirects to the draft documents page
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- *
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store
  * @returns {object} object with a path
  */
 export const skipSigningOrderAction = ({ get, store }) => {
