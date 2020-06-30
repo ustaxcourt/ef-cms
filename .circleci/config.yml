@@ -297,6 +297,7 @@ jobs:
   deploy:
     machine:
       docker_layer_caching: true
+    resource_class: xlarge
     steps:
       - checkout
       - run:
