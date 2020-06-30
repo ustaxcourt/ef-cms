@@ -92,28 +92,20 @@ exports.generateChangeOfAddress = async ({
         caseDetail,
       );
 
-      const pdfContentHtml = await applicationContext
-        .getTemplateGenerators()
-        .generateChangeOfAddressTemplate({
+      const changeOfAddressPdf = await applicationContext
+        .getDocumentGenerators()
+        .changeOfAddress({
           applicationContext,
           content: {
             caseCaptionExtension,
             caseTitle,
+            docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
             documentTitle: documentType.title,
             name: `${name} (${user.barNumber})`,
             newData,
             oldData,
           },
-        });
-
-      const docketRecordPdf = await applicationContext
-        .getUseCases()
-        .generatePdfFromHtmlInteractor({
-          applicationContext,
-          contentHtml: pdfContentHtml,
-          displayHeaderFooter: false,
-          docketNumber: caseDetail.docketNumber,
         });
 
       const newDocumentId = applicationContext.getUniqueId();
@@ -196,16 +188,16 @@ exports.generateChangeOfAddress = async ({
 
       caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-      const { pdfData: docketRecordPdfWithCover } = await addCoverToPdf({
+      const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
         applicationContext,
         caseEntity,
         documentEntity: changeOfAddressDocument,
-        pdfData: docketRecordPdf,
+        pdfData: changeOfAddressPdf,
       });
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
-        document: docketRecordPdfWithCover,
+        document: changeOfAddressPdfWithCover,
         documentId: newDocumentId,
       });
 
