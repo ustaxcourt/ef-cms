@@ -26,6 +26,9 @@
 [ -z "$4" ] && echo "The role of the user must be provided as the \$4 argument." && exit 1
 [ -z "$5" ] && echo "The section of the usermust be provided as the \$5 argument." && exit 1
 [ -z "$6" ] && echo "The name of the user to must be provided as the \$6 argument." && exit 1
+[ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
+[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
+[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 
 ENV=$1
 REGION="us-east-1"
@@ -113,17 +116,6 @@ createAccount() {
       --session "${session}"
   fi
 }
-
-if [[ "$#" -ne 6 ]]; then
-  echo "Error: Insufficient number of parameters"
-  echo "$#"
-  exit 1
-fi
-
-if [[ -z "$USTC_ADMIN_PASS" ]]; then
-  echo "Error: USTC_ADMIN_PASS not set as an environment variable"
-  exit 1
-fi
 
 email=$2
 password=$3
