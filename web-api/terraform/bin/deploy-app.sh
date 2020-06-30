@@ -28,13 +28,6 @@ pushd ../template/lambdas
 npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
 popd
 
-for pid in ${pids[*]}; do
-  echo "waiting on ${pid}, round 2"
-  wait $pid
-done
-
-echo "done waiting!"
-
 # exit on any failure
 set -eo pipefail
 
