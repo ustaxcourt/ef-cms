@@ -1,9 +1,11 @@
 const AWS = require('aws-sdk');
 
+const awsRegion = 'us-east-1';
+
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = Cypress.env('AWS_ACCESS_KEY_ID');
 AWS.config.secretAccessKey = Cypress.env('AWS_SECRET_ACCESS_KEY');
-AWS.config.region = 'us-east-1';
+AWS.config.region = awsRegion;
 
 const ENV = Cypress.env('ENV');
 
@@ -55,4 +57,24 @@ exports.login = token => {
   cy.visit(`/log-in?token=${token}`);
 
   cy.get('.progress-indicator').should('not.exist');
+};
+
+exports.getRestApi = async () => {
+  let apigateway = new AWS.APIGateway({
+    region: awsRegion,
+  });
+  const { items: apis } = await apigateway
+    .getRestApis({ limit: 200 })
+    .promise();
+
+  const services = apis
+    .filter(api => api.name.includes(`gateway_api_${ENV}`))
+    .reduce((obj, api) => {
+      obj[
+        api.name.replace(`_${ENV}`, '')
+      ] = `https://${api.id}.execute-api.${awsRegion}.amazonaws.com/${ENV}`;
+      return obj;
+    }, {});
+
+  return services['gateway_api'];
 };

@@ -36,6 +36,7 @@ import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
+import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
@@ -134,7 +135,6 @@ import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePen
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
-import { gotoSignOrderForMessageSequence } from './sequences/gotoSignOrderForMessageSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
@@ -186,6 +186,7 @@ import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openC
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
+import { openConfirmEditSignatureModalSequence } from './sequences/openConfirmEditSignatureModalSequence';
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
@@ -225,6 +226,7 @@ import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetai
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
+import { removeSignatureAndGotoEditSignatureSequence } from './sequences/removeSignatureAndGotoEditSignatureSequence';
 import { removeSignatureFromOrderSequence } from './sequences/removeSignatureFromOrderSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToCaseMessageSequence } from './sequences/replyToCaseMessageSequence';
@@ -234,7 +236,6 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
-import { saveDocumentSigningForMessageSequence } from './sequences/saveDocumentSigningForMessageSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
@@ -275,7 +276,6 @@ import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequ
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
-import { skipSigningOrderForMessageSequence } from './sequences/skipSigningOrderForMessageSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
@@ -464,6 +464,7 @@ export const presenter = {
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
+    clearOpenClosedCasesCurrentPageSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
@@ -562,7 +563,6 @@ export const presenter = {
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
     gotoSecondaryContactEditSequence,
-    gotoSignOrderForMessageSequence,
     gotoSignOrderSequence,
     gotoSignPDFDocumentSequence,
     gotoStartCaseWizardSequence,
@@ -614,6 +614,7 @@ export const presenter = {
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence,
     openConfirmInitiateServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
@@ -653,6 +654,7 @@ export const presenter = {
     removeCaseFromTrialSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
+    removeSignatureAndGotoEditSignatureSequence,
     removeSignatureFromOrderSequence,
     removeSupportingDocumentSequence,
     replyToCaseMessageSequence,
@@ -662,7 +664,6 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
-    saveDocumentSigningForMessageSequence,
     saveDocumentSigningSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
@@ -702,7 +703,6 @@ export const presenter = {
     showMoreOpenCasesSequence,
     showMoreResultsSequence,
     signOutSequence,
-    skipSigningOrderForMessageSequence,
     skipSigningOrderSequence,
     startScanSequence,
     submitAddConsolidatedCaseSequence,

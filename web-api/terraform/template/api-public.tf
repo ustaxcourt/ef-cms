@@ -1,14 +1,14 @@
 data "archive_file" "zip_api_public" {
   type        = "zip"
-  output_path = "${path.module}/api-public/index.js.zip"
-  source_file = "${path.module}/api-public/dist/index.js"
+  output_path = "${path.module}/lambdas/api-public.js.zip"
+  source_file = "${path.module}/lambdas/dist/api-public.js"
 }
 
 resource "aws_lambda_function" "api_public_lambda" {
   filename      = "${data.archive_file.zip_api_public.output_path}"
   function_name = "api_public_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.handler"
+  handler       = "api-public.handler"
   source_code_hash = "${data.archive_file.zip_api_public.output_base64sha256}"
   timeout = "10"
   memory_size = "3008"

@@ -72,7 +72,6 @@ module.exports = [
       'set field #select-case-inventory-judge to Chief Judge',
       'check field #select-case-inventory-judge',
       'click element .modal-button-confirm',
-      'screen capture case-inventory-report-1.png',
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',

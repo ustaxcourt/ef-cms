@@ -11,7 +11,7 @@ import { state } from 'cerebral';
  */
 export const navigateToSignOrderAction = async ({ get, props, router }) => {
   const { caseId, documentId } = props;
-  const { parentMessageId } = get(state.form);
+  const parentMessageId = get(state.parentMessageId);
   let route = `/case-detail/${caseId}/edit-order/${documentId}/sign`;
   if (parentMessageId) {
     route += `/${parentMessageId}`;

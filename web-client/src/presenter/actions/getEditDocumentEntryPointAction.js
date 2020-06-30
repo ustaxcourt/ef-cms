@@ -15,10 +15,5 @@ export const getEditDocumentEntryPointAction = async ({ get, path, store }) => {
 
   store.unset(state.editDocumentEntryPoint);
 
-  const parentMessageId = get(state.parentMessageId);
-  if (parentMessageId) {
-    editDocumentEntryPoint = 'MessageDetail';
-  }
-
   return path[editDocumentEntryPoint]();
 };

@@ -38,7 +38,10 @@ describe('Petitions Clerk Create Notice Journey', () => {
   petitionsClerkViewsCaseDetailAfterAddingNotice(test);
   petitionsClerkViewsSignDraftDocument(test);
   petitionsClerkAppliesSignatureToDraftDocument(test);
-  petitionsClerkSavesSignatureForDraftDocument(test);
+  petitionsClerkSavesSignatureForDraftDocument(
+    test,
+    'Notice to Need a Nap updated.',
+  );
   petitionsClerkViewsDraftDocumentsForNotice(test, 1);
   petitionsClerkViewsDocumentDetail(test);
   petitionsClerkAddsDocketEntryFromOrder(test);
