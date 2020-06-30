@@ -14,7 +14,7 @@ describe('getPublicCaseAction', () => {
         presenter,
       },
       props: {
-        caseId: '02581f2b-5e55-489f-afae-09ce29553078',
+        docketNumber: '123-20',
       },
     });
 
