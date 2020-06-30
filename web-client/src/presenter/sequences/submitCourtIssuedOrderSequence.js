@@ -18,7 +18,13 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
-const redirectAfterSubmit = [
+const onFileUploadedSuccess = [
+  submitCourtIssuedOrderAction,
+  setCaseAction,
+  getFileExternalDocumentAlertSuccessAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  getEditedDocumentDetailParamsAction,
   getShouldRedirectToSigningAction,
   {
     no: [
@@ -38,41 +44,27 @@ const redirectAfterSubmit = [
   },
 ];
 
-const onFileUploadedSuccess = [
-  submitCourtIssuedOrderAction,
-  setCaseAction,
-  getFileExternalDocumentAlertSuccessAction,
-  setAlertSuccessAction,
-  setSaveAlertsForNavigationAction,
-  getEditedDocumentDetailParamsAction,
-];
-
-export const submitCourtIssuedOrderSequenceFactory = afterSubmit =>
-  showProgressSequenceDecorator([
-    isFormPristineAction,
-    {
-      no: convertHtml2PdfSequence,
-      yes: [],
-    },
-    isEditingOrderAction,
-    {
-      no: [
-        uploadOrderFileAction,
-        {
-          error: [openFileUploadErrorModal],
-          success: [onFileUploadedSuccess, afterSubmit],
-        },
-      ],
-      yes: [
-        overwriteOrderFileAction,
-        {
-          error: [openFileUploadErrorModal],
-          success: [onFileUploadedSuccess, afterSubmit],
-        },
-      ],
-    },
-  ]);
-
-export const submitCourtIssuedOrderSequence = submitCourtIssuedOrderSequenceFactory(
-  redirectAfterSubmit,
-);
+export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
+  isFormPristineAction,
+  {
+    no: convertHtml2PdfSequence,
+    yes: [],
+  },
+  isEditingOrderAction,
+  {
+    no: [
+      uploadOrderFileAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: [onFileUploadedSuccess],
+      },
+    ],
+    yes: [
+      overwriteOrderFileAction,
+      {
+        error: [openFileUploadErrorModal],
+        success: [onFileUploadedSuccess],
+      },
+    ],
+  },
+]);
