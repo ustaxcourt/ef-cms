@@ -25,7 +25,7 @@ describe('skipSigningOrderAction', () => {
     expect(result.output.path).toEqual('/case-detail/abc-123/draft-documents');
   });
 
-  it('should set a success message', async () => {
+  it('should set a success message with documentTitle', async () => {
     const result = await runAction(skipSigningOrderAction, {
       modules: {
         presenter,
@@ -38,6 +38,28 @@ describe('skipSigningOrderAction', () => {
             {
               documentId: 'abc',
               documentTitle: 'Order',
+            },
+          ],
+        },
+        documentId: 'abc',
+      },
+    });
+    expect(result.output.alertSuccess.message).toEqual('Order updated.');
+  });
+
+  it('should set a success message with documentType if documentTitle is not set', async () => {
+    const result = await runAction(skipSigningOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: { openModal: 'SomeModal' },
+      state: {
+        caseDetail: {
+          caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Order',
             },
           ],
         },
