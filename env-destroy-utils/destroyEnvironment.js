@@ -22,20 +22,32 @@ const environmentWest = {
 };
 
 const teardownEnvironment = async () => {
-  await Promise.all([
-    deleteCustomDomains({ environment: environmentEast }),
-    deleteCustomDomains({ environment: environmentWest }),
-  ]);
+  try {
+    await Promise.all([
+      deleteCustomDomains({ environment: environmentEast }),
+      deleteCustomDomains({ environment: environmentWest }),
+    ]);
+  } catch (e) {
+    console.error('Error while deleting custom domains: ', e);
+  }
 
-  await Promise.all([
-    deleteStacks({ environment: environmentEast }),
-    deleteStacks({ environment: environmentWest }),
-  ]);
+  try {
+    await Promise.all([
+      deleteStacks({ environment: environmentEast }),
+      deleteStacks({ environment: environmentWest }),
+    ]);
+  } catch (e) {
+    console.error('Error while deleting stacks: ', e);
+  }
 
-  await Promise.all([
-    deleteS3Buckets({ environment: environmentEast }),
-    deleteS3Buckets({ environment: environmentWest }),
-  ]);
+  try {
+    await Promise.all([
+      deleteS3Buckets({ environment: environmentEast }),
+      deleteS3Buckets({ environment: environmentWest }),
+    ]);
+  } catch (e) {
+    console.error('Error while deleting s3 bnuckets: ', e);
+  }
 
   const webClientTerraformDestroy = exec(
     `cd web-client/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
