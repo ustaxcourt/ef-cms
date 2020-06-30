@@ -1,14 +1,14 @@
 data "archive_file" "zip_api" {
   type        = "zip"
-  output_path = "${path.module}/api/index.js.zip"
-  source_file = "${path.module}/api/dist/index.js"
+  output_path = "${path.module}/lambdas/api.js.zip"
+  source_file = "${path.module}/lambdas/dist/api.js"
 }
 
 resource "aws_lambda_function" "api_lambda" {
   filename      = "${data.archive_file.zip_api.output_path}"
   function_name = "api_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.handler"
+  handler       = "api.handler"
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
   timeout = "29"
   memory_size = "3008"
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "api_clamav_lambda" {
   filename      = "${data.archive_file.zip_api.output_path}"
   function_name = "api_clamav_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.handler"
+  handler       = "api.handler"
   source_code_hash = "${data.archive_file.zip_api.output_base64sha256}"
   timeout = "29"
   memory_size = "3008"
