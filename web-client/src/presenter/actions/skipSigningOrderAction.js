@@ -6,9 +6,20 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  *
- * @returns object with a path
+ * @returns {object} object with a path
  */
-export const skipSigningOrderAction = ({ get }) => {
+export const skipSigningOrderAction = ({ get, store }) => {
+  const isCreatingOrder = get(state.isCreatingOrder);
+  if (isCreatingOrder) {
+    store.unset(state.isCreatingOrder);
+    return {
+      alertSuccess: {
+        message:
+          'Your document has been successfully created and attached to this message',
+      },
+    };
+  }
+
   const { caseId, documents } = get(state.caseDetail);
   const documentId = get(state.documentId);
   const order = documents.find(d => d.documentId === documentId);
