@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
+import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
  * sets the state.caseId based on what the search term in the input box was

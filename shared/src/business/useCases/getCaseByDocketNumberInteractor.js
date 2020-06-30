@@ -1,4 +1,5 @@
 const { getCase } = require('./getCaseInteractor');
+const { NotFoundError } = require('../../errors/errors');
 
 /**
  * getCaseByDocketNumberInteractor
@@ -18,6 +19,12 @@ exports.getCaseByDocketNumberInteractor = async ({
       applicationContext,
       docketNumber,
     });
+
+  if (!caseRecord) {
+    const error = new NotFoundError(`Case ${docketNumber} was not found.`);
+    error.skipLogging = true;
+    throw error;
+  }
 
   return await getCase({ applicationContext, caseId: caseRecord.caseId });
 };
