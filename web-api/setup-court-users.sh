@@ -18,6 +18,11 @@
 ENV=$1
 REGION="us-east-1"
 
+if [[ -z "${USTC_ADMIN_PASS}" ]]; then
+  echo "You must have USTC_ADMIN_PASS set in your environment"
+  exit 1
+fi
+
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
 restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='gateway_api_${ENV}'].id" --output text)
