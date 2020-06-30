@@ -5,7 +5,7 @@ const { getCase } = require('./getCaseInteractor');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get
+ * @param {string} providers.docketNumber the docket number of the case to retrieve
  * @returns {object} the case data
  */
 exports.getCaseByDocketNumberInteractor = async ({
