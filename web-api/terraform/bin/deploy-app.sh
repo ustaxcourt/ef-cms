@@ -1,36 +1,31 @@
 #!/bin/bash
 
-ENVIRONMENT=$1
+# ENVIRONMENT=$1
 
-BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-KEY="documents-${ENVIRONMENT}.tfstate"
-LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+# BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+# KEY="documents-${ENVIRONMENT}.tfstate"
+# LOCK_TABLE=efcms-terraform-lock
+# REGION=us-east-1
 
-rm -rf .terraform
-echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
-sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
+# rm -rf .terraform
+# echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
+# sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
-echo "checking for the dynamodb lock table..."
-aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
-result=$?
-if [ ${result} -ne 0 ]; then
-  echo "dynamodb lock does not exist, creating"
-  sh ../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
-else
-  echo "dynamodb lock table already exists"
-fi
+# echo "checking for the dynamodb lock table..."
+# aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
+# result=$?
+# if [ ${result} -ne 0 ]; then
+#   echo "dynamodb lock does not exist, creating"
+#   sh ../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
+# else
+#   echo "dynamodb lock table already exists"
+# fi
 
 npm run build:assets
 
-# build the cognito authorizer using parcel
-pushd ../template/cognito-authorizer
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/cognito-triggers
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
+# build the cognito authorizer, api, and api-public with parcel
+pushd ../template/lambdas
+npx parcel build cognito-triggers.js index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
@@ -39,20 +34,10 @@ npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-nod
 pids[${i}]=$!
 popd
 
-pushd ../template/api
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
 # wait for the 4 processes above before moving on so we don't overload
 for pid in ${pids[*]}; do
   wait $pid
 done
-
-pushd ../template/api-public
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
 
 pushd ../template/streams
 npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
@@ -77,5 +62,5 @@ done
 # exit on any failure
 set -eo pipefail
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}" -var "irs_superuser_email=${IRS_SUPERUSER_EMAIL}"
+# terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+# TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}" -var "irs_superuser_email=${IRS_SUPERUSER_EMAIL}"
