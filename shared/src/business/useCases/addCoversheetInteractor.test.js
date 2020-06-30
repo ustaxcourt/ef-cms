@@ -517,7 +517,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket No.: 102-19');
+      expect(result.docketNumberWithSuffix).toEqual('102-19');
     });
 
     it('returns the docket number with suffix along with a Docket Number label', async () => {
@@ -542,7 +542,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket No.: 102-19S');
+      expect(result.docketNumberWithSuffix).toEqual('102-19S');
     });
 
     it('displays Electronically Filed when the document is filed electronically', async () => {
@@ -731,7 +731,7 @@ describe('addCoversheetInteractor', () => {
         useInitialData: true,
       });
 
-      expect(result.docketNumber).toEqual('Docket No.: 102-19Z');
+      expect(result.docketNumberWithSuffix).toEqual('102-19Z');
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
   });

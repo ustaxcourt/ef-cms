@@ -84,7 +84,7 @@ exports.generateCoverSheetData = ({
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
-    docketNumber: `Docket No.: ${docketNumberWithSuffix}`,
+    docketNumberWithSuffix,
     documentTitle,
     electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',

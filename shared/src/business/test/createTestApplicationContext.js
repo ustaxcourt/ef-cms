@@ -59,6 +59,9 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
+  getDocumentTypeForAddressChange,
+} = require('../utilities/generateChangeOfAddressTemplate');
+const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
 const {
@@ -204,7 +207,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
-    getDocumentTypeForAddressChange: jest.fn(),
+    getDocumentTypeForAddressChange: jest
+      .fn()
+      .mockImplementation(getDocumentTypeForAddressChange),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
