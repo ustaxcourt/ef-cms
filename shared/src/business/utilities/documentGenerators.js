@@ -4,9 +4,6 @@ const {
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 const {
-  generateChangeOfAddressTemplate,
-} = require('./generateHTMLTemplateForPDF/generateChangeOfAddressTemplate');
-const {
   generatePrintableDocketRecordTemplate,
 } = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
 
@@ -39,9 +36,43 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
 };
 
 const changeOfAddress = async ({ applicationContext, content }) => {
-  const pdfContentHtml = await generateChangeOfAddressTemplate({
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    documentTitle,
+    name,
+    newData,
+    oldData,
+  } = content;
+
+  const changeOfAddressTemplate = reactTemplateGenerator({
+    componentName: 'ChangeOfAddress',
+    data: {
+      name,
+      newData,
+      oldData,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        h3: documentTitle,
+        showAddressAndPhoneChange:
+          documentTitle === 'Notice of Change of Address and Telephone Number',
+        showOnlyPhoneChange:
+          documentTitle === 'Notice of Change of Telephone Number',
+      },
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    content,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: changeOfAddressTemplate },
+    options: {
+      overwriteMain: true,
+      title: documentTitle,
+    },
   });
 
   const { docketNumber } = content;
