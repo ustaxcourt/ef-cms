@@ -111,4 +111,30 @@ describe('setDocumentToEditAction', () => {
       documentType: 'Petition',
     });
   });
+
+  it('returns editUrl with parentMessageId appended if state.parentMessageId is set', async () => {
+    const result = await runAction(setDocumentToEditAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {
+          caseId: 'c123',
+          documents: [
+            {
+              documentId: '321',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        documentIdToEdit: '321',
+      },
+      state: {
+        parentMessageId: '09a41e75-cdbb-42a0-a602-e59d50a3ba6e',
+      },
+    });
+    expect(result.output.path).toContain(
+      '/09a41e75-cdbb-42a0-a602-e59d50a3ba6e',
+    );
+  });
 });

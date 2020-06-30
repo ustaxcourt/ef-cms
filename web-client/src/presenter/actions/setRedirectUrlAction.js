@@ -8,7 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.redirectUrl
  */
 export const setRedirectUrlAction = ({ props, store }) => {
-  if (props.redirectUrl) {
-    store.set(state.redirectUrl, props.redirectUrl);
-  }
+  store.set(state.redirectUrl, props.redirectUrl);
 };
