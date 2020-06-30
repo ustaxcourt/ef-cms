@@ -6,7 +6,6 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set, unset } from 'cerebral/factories';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -14,6 +13,7 @@ import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unset } from 'cerebral/factories';
 
 export const gotoCaseDetailWithModal = [
   ...openCreateOrderChooseTypeModalSequence,
@@ -38,7 +38,6 @@ export const gotoCreateOrderSequence = [
           setCreateOrderModalDataOnFormAction,
           ...convertHtml2PdfSequence,
           setIsCreatingOrderAction,
-          set(state.isCreatingOrder, true),
           setCurrentPageAction('CreateOrder'),
         ],
       },
