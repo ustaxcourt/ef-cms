@@ -126,14 +126,15 @@ exports.updatePetitionerInformationInteractor = async ({
   }) => {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-    const pdfContentHtml = await applicationContext
-      .getTemplateGenerators()
-      .generateChangeOfAddressTemplate({
+    const changeOfAddressPdf = await applicationContext
+      .getDocumentGenerators()
+      .changeOfAddress({
         applicationContext,
         content: {
           caseCaptionExtension,
           caseTitle,
-          docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
           name: contactName,
           newData,
@@ -159,16 +160,6 @@ exports.updatePetitionerInformationInteractor = async ({
       { applicationContext },
     );
     changeOfAddressDocument.setAsServed(servedParties.all);
-
-    const changeOfAddressPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
-        applicationContext,
-        contentHtml: pdfContentHtml,
-        displayHeaderFooter: false,
-        docketNumber: caseEntity.docketNumber,
-        headerHtml: null,
-      });
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
