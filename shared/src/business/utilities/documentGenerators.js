@@ -3,9 +3,7 @@ const {
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
-const {
-  generatePrintableDocketRecordTemplate,
-} = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
+const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 
 const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   const addressLabelCoverSheetTemplate = reactTemplateGenerator({
@@ -140,9 +138,36 @@ const coverSheet = async ({ applicationContext, data }) => {
 };
 
 const docketRecord = async ({ applicationContext, data }) => {
-  const pdfContentHtml = await generatePrintableDocketRecordTemplate({
+  const {
+    caseCaptionExtension,
+    caseDetail,
+    caseTitle,
+    docketNumberWithSuffix,
+    entries,
+  } = data;
+
+  const docketRecordTemplate = reactTemplateGenerator({
+    componentName: 'DocketRecord',
+    data: {
+      caseDetail,
+      countryTypes: COUNTRY_TYPES,
+      entries,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    data,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: docketRecordTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Printable Docket Record',
+    },
   });
 
   const headerHtml = reactTemplateGenerator({
