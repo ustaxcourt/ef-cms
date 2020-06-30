@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -25,23 +25,17 @@ export const AccountMenu = connect(
               isExpanded && 'usa-nav__submenu--open',
             )}
           >
-            <button
+            <Button
               aria-expanded={isExpanded}
               className={classNames(
                 'usa-accordion__button usa-nav__link hidden-underline',
               )}
+              icon={['far', 'user']}
               title={`Hello, ${headerHelper.userName}`}
               onClick={() => {
                 toggleMenuSequence({ openMenu: 'AccountMenu' });
               }}
-            >
-              <span>
-                <FontAwesomeIcon
-                  className="account-menu-icon"
-                  icon={['far', 'user']}
-                />
-              </span>
-            </button>
+            />
             {isExpanded && (
               <ul className="usa-nav__submenu position-right-0">
                 <li className="usa-nav__submenu-item">
