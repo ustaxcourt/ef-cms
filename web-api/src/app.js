@@ -140,6 +140,9 @@ const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
+  getCaseByDocketNumberLambda,
+} = require('./cases/getCaseByDocketNumberLambda');
+const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
 const {
@@ -613,6 +616,10 @@ app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
 app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
 app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
+app.get(
+  '/cases/docket/:docketNumber',
+  lambdaWrapper(getCaseByDocketNumberLambda),
+);
 app.delete(
   '/cases/:caseId/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
