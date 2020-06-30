@@ -25,7 +25,7 @@ npm run build:assets
 
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build cognito-triggers.js index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
+npx parcel build cognito-authorizer.js cognito-triggers.js api-public.js api.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
