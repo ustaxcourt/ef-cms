@@ -1,29 +1,14 @@
 const {
-  createISODateString,
-  formatDateString,
-} = require('../utilities/DateHandler');
-const {
-  getDocumentTypeForAddressChange,
-} = require('../utilities/generateChangeOfAddressTemplate');
-const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
-const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 let { applicationContext } = require('../test/createTestApplicationContext');
 
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
 const updateCaseStub = jest.fn();
-const generateChangeOfAddressTemplateStub = jest.fn();
-const generatePdfFromHtmlInteractorStub = jest.fn();
-const getAddressPhoneDiffStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
-const sendServedPartiesEmailsMock = jest.fn();
 
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
@@ -35,14 +20,6 @@ let persistenceGateway = {
   updateCase: updateCaseStub,
 };
 
-const useCases = {
-  generatePdfFromHtmlInteractor: () => {
-    generatePdfFromHtmlInteractorStub();
-    return fakeData;
-  },
-  userIsAssociated: () => true,
-};
-
 const userData = {
   name: 'administrator',
   role: ROLES.docketClerk,
@@ -50,58 +27,8 @@ const userData = {
 };
 let userObj = userData;
 
-applicationContext = {
-  ...applicationContext,
-  environment: { stage: 'local' },
-  getCaseTitle: Case.getCaseTitle,
-  getChromiumBrowser: () => ({
-    close: () => null,
-    newPage: () => ({
-      pdf: () => fakeData,
-      setContent: () => null,
-    }),
-  }),
-  getCurrentUser: () => {
-    return new User(userObj);
-  },
-  getPersistenceGateway: () => {
-    return persistenceGateway;
-  },
-  getTemplateGenerators: () => {
-    return {
-      generateChangeOfAddressTemplate: async () => {
-        generateChangeOfAddressTemplateStub();
-        return '<html></html>';
-      },
-    };
-  },
-  getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  getUseCaseHelpers: () => ({
-    sendServedPartiesEmails: sendServedPartiesEmailsMock,
-  }),
-  getUseCases: () => useCases,
-  getUtilities: () => {
-    return {
-      createISODateString,
-      formatDateString,
-      getAddressPhoneDiff: () => {
-        getAddressPhoneDiffStub();
-        return {
-          address1: {
-            newData: 'new test',
-            oldData: 'old test',
-          },
-        };
-      },
-      getDocumentTypeForAddressChange,
-    };
-  },
-  logger: {
-    error: e => console.log(e),
-    time: () => null,
-    timeEnd: () => null,
-  },
-};
+applicationContext.getCurrentUser.mockImplementation(() => new User(userObj));
+applicationContext.getPersistenceGateway.mockReturnValue(persistenceGateway);
 
 describe('update petitioner contact information on a case', () => {
   beforeEach(() => {
@@ -115,8 +42,9 @@ describe('update petitioner contact information on a case', () => {
       contactPrimary: MOCK_CASE.contactPrimary,
       partyType: PARTY_TYPES.petitioner,
     });
-    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
@@ -130,8 +58,9 @@ describe('update petitioner contact information on a case', () => {
         partyType: PARTY_TYPES.petitionerSpouse,
       }),
     ).rejects.toThrow();
-    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
     expect(updateCaseStub).not.toHaveBeenCalled();
   });
 
@@ -161,9 +90,12 @@ describe('update petitioner contact information on a case', () => {
       isAutoGenerated: true,
     });
     expect(updateCaseStub).toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
-    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
   });
 
   it('updates petitioner contact when secondary contact info changes and does not generate or serve a notice if the secondary contact was not previously present', async () => {
@@ -184,9 +116,12 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
-    expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
   });
 
   it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
@@ -222,9 +157,12 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
-    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('https://www.example.com');
   });
 
@@ -239,9 +177,12 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
-    expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
-    expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
-    expect(sendServedPartiesEmailsMock).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
   });
 

@@ -76,29 +76,20 @@ exports.updateSecondaryContactInteractor = async ({
   if (documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-    const pdfContentHtml = await applicationContext
-      .getTemplateGenerators()
-      .generateChangeOfAddressTemplate({
+    const changeOfAddressPdf = await applicationContext
+      .getDocumentGenerators()
+      .changeOfAddress({
         applicationContext,
         content: {
           caseCaptionExtension,
           caseTitle,
+          docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
-          name: caseToUpdate.contactSecondary.name,
+          name: contactInfo.name,
           newData: editableFields,
           oldData: caseToUpdate.contactSecondary,
         },
-      });
-
-    const docketRecordPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
-        applicationContext,
-        contentHtml: pdfContentHtml,
-        displayHeaderFooter: false,
-        docketNumber: caseEntity.docketNumber,
-        headerHtml: null,
       });
 
     const newDocumentId = applicationContext.getUniqueId();
@@ -174,16 +165,16 @@ exports.updateSecondaryContactInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument, { applicationContext });
 
-    const { pdfData: docketRecordPdfWithCover } = await addCoverToPdf({
+    const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
-      pdfData: docketRecordPdf,
+      pdfData: changeOfAddressPdf,
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
-      document: docketRecordPdfWithCover,
+      document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
