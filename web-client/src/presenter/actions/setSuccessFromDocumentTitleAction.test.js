@@ -38,7 +38,7 @@ describe('setSuccessFromDocumentTitleAction,', () => {
     expect(result.output.alertSuccess.message).toEqual('Order updated.');
   });
 
-  it('sets the success message if state.isCreatingOrder is true', async () => {
+  it('sets the created document success message if state.isCreatingOrder is true', async () => {
     const result = await runAction(setSuccessFromDocumentTitleAction, {
       state: {
         caseDetail: {
