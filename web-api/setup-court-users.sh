@@ -94,7 +94,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-let i=1
+(( i=1 ))
 
 while read -r line
 do
@@ -110,7 +110,6 @@ do
   judgeFullName="${ADDR[8]/$'\r'}"
   judgeTitle="${ADDR[9]/$'\r'}"
   createAccount "${fakeEmail}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}" &
-  pids[${i}]=$!
 
   if [[ "$i" == "20" ]]; then
     wait
