@@ -24,20 +24,23 @@ const environmentWest = {
 
 const pathToTerraformTemplates = process.cwd() + '/web-api/terraform/template';
 
-const addMissingIndexFiles = source => {
+const directoriesRequiringIndexFiles = source => {
   return readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
 };
 
-const teardownEnvironment = async () => {
-  addMissingIndexFiles(pathToTerraformTemplates).map(
-    async dir =>
-      await exec(
-        `mkdir -p "${pathToTerraformTemplates}/${dir}/dist" && touch ${pathToTerraformTemplates}/${dir}/dist/index.js`,
-      ),
+const addMissingIndexFiles = () => {
+  directoriesRequiringIndexFiles(pathToTerraformTemplates).map(dir =>
+    exec(
+      `mkdir -p "${pathToTerraformTemplates}/${dir}/dist" && touch ${pathToTerraformTemplates}/${dir}/dist/index.js`,
+    ),
   );
+};
 
+const teardownEnvironment = async () => {
+  addMissingIndexFiles();
+  // todo remove these method calls once the envs that use these resources are dealt with
   try {
     await Promise.all([
       deleteCustomDomains({ environment: environmentEast }),
@@ -47,6 +50,7 @@ const teardownEnvironment = async () => {
     console.error('Error while deleting custom domains: ', e);
   }
 
+  // todo remove these method calls once the envs that use these resources are dealt with
   try {
     await Promise.all([
       deleteStacks({ environment: environmentEast }),
@@ -56,6 +60,7 @@ const teardownEnvironment = async () => {
     console.error('Error while deleting stacks: ', e);
   }
 
+  // todo remove these method calls once the envs that use these resources are dealt with
   try {
     await Promise.all([
       deleteS3Buckets({ environment: environmentEast }),
