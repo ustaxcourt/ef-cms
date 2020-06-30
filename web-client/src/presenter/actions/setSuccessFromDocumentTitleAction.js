@@ -13,7 +13,7 @@ export const setSuccessFromDocumentTitleAction = ({ get }) => {
   const order = documents.find(d => d.documentId === documentId);
   return {
     alertSuccess: {
-      message: `${order.documentTitle} updated.`,
+      message: `${order.documentTitle || order.documentType} updated.`,
     },
   };
 };
