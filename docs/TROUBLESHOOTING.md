@@ -73,6 +73,14 @@ Error: Error applying plan:
 
 If this occurs, rerun the build.
 
+### Issues with deleting lambdas during environment teardown
+
+```
+Error: Error deleting replication function:security_header_function_exp2
+
+Solution: Manually delete the specified lambda(s) in AWS.
+```
+
 ### Lambda Code Storage Size Exceeded
 
 ```
