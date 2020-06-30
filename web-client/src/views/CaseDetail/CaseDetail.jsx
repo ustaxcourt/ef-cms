@@ -4,6 +4,7 @@ import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { OtherFilerInformation } from './OtherFilerInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -114,6 +115,13 @@ export const CaseDetail = connect(
                           title="Respondent"
                         >
                           <RespondentInformation />
+                        </Tab>
+                        <Tab
+                          id="tab-other-filer"
+                          tabName="otherFiler"
+                          title="Other"
+                        >
+                          <OtherFilerInformation />
                         </Tab>
                       </Tabs>
                     </NonMobile>

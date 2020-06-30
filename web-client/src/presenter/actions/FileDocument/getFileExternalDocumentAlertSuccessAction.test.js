@@ -47,4 +47,29 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
       },
     });
   });
+
+  it('should return changes saved message if documentToEdit is set', async () => {
+    const result = await runAction(getFileExternalDocumentAlertSuccessAction, {
+      state: { documentToEdit: '123' },
+    });
+
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message: 'Changes saved.',
+      },
+    });
+  });
+
+  it('should return created document success message if isCreatingOrder is set', async () => {
+    const result = await runAction(getFileExternalDocumentAlertSuccessAction, {
+      state: { isCreatingOrder: true },
+    });
+
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message:
+          'Your document has been successfully created and attached to this message',
+      },
+    });
+  });
 });

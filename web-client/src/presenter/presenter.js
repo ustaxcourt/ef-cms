@@ -36,6 +36,7 @@ import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
+import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
@@ -185,6 +186,7 @@ import { openConfirmDeleteOtherStatisticsModalSequence } from './sequences/openC
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
+import { openConfirmEditSignatureModalSequence } from './sequences/openConfirmEditSignatureModalSequence';
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
@@ -462,6 +464,7 @@ export const presenter = {
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
+    clearOpenClosedCasesCurrentPageSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
@@ -611,6 +614,7 @@ export const presenter = {
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence,
     openConfirmInitiateServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,

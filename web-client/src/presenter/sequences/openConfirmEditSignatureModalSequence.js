@@ -1,11 +1,9 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setConfirmEditModalStateAction } from '../actions/setConfirmEditModalStateAction';
-import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openConfirmEditModalSequence = [
+export const openConfirmEditSignatureModalSequence = [
   clearModalStateAction,
   setConfirmEditModalStateAction,
-  setRedirectUrlAction,
-  setShowModalFactoryAction('ConfirmEditModal'),
+  setShowModalFactoryAction('ConfirmEditSignatureModal'),
 ];
