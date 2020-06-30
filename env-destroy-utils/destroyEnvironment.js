@@ -2,6 +2,7 @@ const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { deleteS3Buckets } = require('./deleteS3Buckets');
 const { deleteStacks } = require('./deleteStacks');
 const { exec } = require('child_process');
+const { readdirSync } = require('fs');
 
 const environmentName = process.argv[2] || 'exp1';
 
@@ -21,10 +22,22 @@ const environmentWest = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
-//loop through all folders in /web-api/terraform/template
-//mkdir -p "./dist" && touch "./dist/index.js
+const pathToTerraformTemplates = process.cwd() + '/web-api/terraform/template';
+
+const addMissingIndexFiles = source => {
+  return readdirSync(source, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+};
 
 const teardownEnvironment = async () => {
+  addMissingIndexFiles(pathToTerraformTemplates).map(
+    async dir =>
+      await exec(
+        `mkdir -p "${pathToTerraformTemplates}/${dir}/dist" && touch ${pathToTerraformTemplates}/${dir}/dist/index.js`,
+      ),
+  );
+
   try {
     await Promise.all([
       deleteCustomDomains({ environment: environmentEast }),
