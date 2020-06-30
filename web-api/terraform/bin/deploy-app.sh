@@ -23,56 +23,10 @@ fi
 
 npm run build:assets
 
-# build the cognito authorizer using parcel
-pushd ../template/cognito-authorizer
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
+# build the cognito authorizer, api, and api-public with parcel
+pushd ../template/lambdas
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
 popd
-
-pushd ../template/cognito-triggers
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/log-forwarder
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/api
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-# wait for the 4 processes above before moving on so we don't overload
-for pid in ${pids[*]}; do
-  wait $pid
-done
-
-pushd ../template/api-public
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/streams
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/cron
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/websockets
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-# wait for the last processes above
-for pid in ${pids[*]}; do
-  wait $pid
-done
 
 # exit on any failure
 set -eo pipefail
