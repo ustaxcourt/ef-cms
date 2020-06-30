@@ -12,7 +12,14 @@ describe('skipSigningOrderAction', () => {
       state: {
         caseDetail: {
           caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order',
+            },
+          ],
         },
+        documentId: 'abc',
       },
     });
     expect(result.output.path).toEqual('/case-detail/abc-123/draft-documents');
@@ -27,9 +34,41 @@ describe('skipSigningOrderAction', () => {
       state: {
         caseDetail: {
           caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order',
+            },
+          ],
         },
+        documentId: 'abc',
       },
     });
-    expect(result.output.alertSuccess.message).toEqual('Document saved.');
+    expect(result.output.alertSuccess.message).toEqual('Order updated.');
+  });
+
+  it('should set created document success message if isCreatingOrder is set', async () => {
+    const result = await runAction(skipSigningOrderAction, {
+      modules: {
+        presenter,
+      },
+      props: { openModal: 'SomeModal' },
+      state: {
+        caseDetail: {
+          caseId: 'abc-123',
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order',
+            },
+          ],
+        },
+        documentId: 'abc',
+        isCreatingOrder: true,
+      },
+    });
+    expect(result.output.alertSuccess.message).toEqual(
+      'Your document has been successfully created and attached to this message',
+    );
   });
 });

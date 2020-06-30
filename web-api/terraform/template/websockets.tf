@@ -20,15 +20,15 @@ resource "aws_apigatewayv2_route" "disconnect" {
 
 data "archive_file" "zip_websockets" {
   type        = "zip"
-  output_path = "${path.module}/websockets/index.js.zip"
-  source_file = "${path.module}/websockets/dist/index.js"
+  output_path = "${path.module}/lambdas/websockets.js.zip"
+  source_file = "${path.module}/lambdas/dist/websockets.js"
 }
 
 resource "aws_lambda_function" "websockets_connect_lambda" {
   filename      = "${data.archive_file.zip_websockets.output_path}"
   function_name = "websockets_connect_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.connectHandler"
+  handler       = "websockets.connectHandler"
   source_code_hash = "${data.archive_file.zip_websockets.output_base64sha256}"
   timeout = "29"
   memory_size = "3008"
@@ -45,7 +45,7 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   filename      = "${data.archive_file.zip_websockets.output_path}"
   function_name = "websockets_disconnect_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.disconnectHandler"
+  handler       = "websockets.disconnectHandler"
   source_code_hash = "${data.archive_file.zip_websockets.output_base64sha256}"
   timeout = "29"
   memory_size = "3008"

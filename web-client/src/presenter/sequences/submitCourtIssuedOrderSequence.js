@@ -1,4 +1,5 @@
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntryPointAction';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
@@ -7,7 +8,6 @@ import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrder
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
-import { navigateToMessageDetailAction } from '../actions/navigateToMessageDetailAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
@@ -28,11 +28,16 @@ const onFileUploadedSuccess = [
   getShouldRedirectToSigningAction,
   {
     no: [
-      getEditDocumentEntryPointAction,
+      followRedirectAction,
       {
-        CaseDetail: navigateToCaseDetailAction,
-        DocumentDetail: navigateToDocumentDetailAction,
-        MessageDetail: navigateToMessageDetailAction,
+        default: [
+          getEditDocumentEntryPointAction,
+          {
+            CaseDetail: navigateToCaseDetailAction,
+            DocumentDetail: navigateToDocumentDetailAction,
+          },
+        ],
+        success: [],
       },
     ],
     yes: navigateToSignOrderAction,
@@ -51,14 +56,14 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
       uploadOrderFileAction,
       {
         error: [openFileUploadErrorModal],
-        success: onFileUploadedSuccess,
+        success: [onFileUploadedSuccess],
       },
     ],
     yes: [
       overwriteOrderFileAction,
       {
         error: [openFileUploadErrorModal],
-        success: onFileUploadedSuccess,
+        success: [onFileUploadedSuccess],
       },
     ],
   },

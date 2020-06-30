@@ -323,6 +323,18 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
+      'wait for #tab-other-filer to be visible',
+      'click element #tab-other-filer',
+      'wait for #tabContent-otherFiler to be visible',
+    ],
+    notes: 'checks the case detail => case information => other tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
       'wait for #tab-statistics to be visible',
       'click element #tab-statistics',
       'wait for #tabContent-statistics to be visible',

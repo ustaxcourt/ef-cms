@@ -1,3 +1,4 @@
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -7,5 +8,6 @@ export const skipSigningOrderSequence = [
   skipSigningOrderAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
-  navigateToPathAction,
+  followRedirectAction,
+  { default: navigateToPathAction, success: [] },
 ];

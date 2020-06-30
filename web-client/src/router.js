@@ -464,6 +464,7 @@ const router = {
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
           parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -518,18 +519,6 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/edit-order/*',
-      ifHasAccess((docketNumber, documentIdToEdit) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
-        const sequence = app.getSequence('gotoEditOrderSequence');
-        return sequence({
-          docketNumber,
-          documentIdToEdit,
-        });
-      }),
-    );
-
-    registerRoute(
       '/case-detail/*/edit-order/*/sign',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
@@ -545,11 +534,38 @@ const router = {
       '/case-detail/*/edit-order/*/sign/*',
       ifHasAccess((docketNumber, documentId, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
-        const sequence = app.getSequence('gotoSignOrderForMessageSequence');
+        const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
           docketNumber,
           documentId,
           parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*',
+      ifHasAccess((docketNumber, documentIdToEdit) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoEditOrderSequence');
+        return sequence({
+          docketNumber,
+          documentIdToEdit,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*/*',
+      ifHasAccess((docketNumber, documentIdToEdit, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoEditOrderSequence');
+        return sequence({
+          docketNumber,
+          documentIdToEdit,
+          parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -573,6 +589,23 @@ const router = {
         return app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
           docketNumber,
           documentId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        const sequence = app.getSequence(
+          'gotoAddCourtIssuedDocketEntrySequence',
+        );
+        return sequence({
+          docketNumber,
+          documentId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );

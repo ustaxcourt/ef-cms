@@ -5,8 +5,15 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const attachmentDocumentToDisplay = get(state.attachmentDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
+
+  const caseDocument =
+    attachmentDocumentToDisplay &&
+    caseDetail.documents.find(
+      d => d.documentId === attachmentDocumentToDisplay.documentId,
+    );
+
   const documentIsSigned =
-    attachmentDocumentToDisplay && !!attachmentDocumentToDisplay.signedAt;
+    attachmentDocumentToDisplay && !!caseDocument.signedAt;
 
   const isDocumentOnDocketRecord =
     attachmentDocumentToDisplay &&

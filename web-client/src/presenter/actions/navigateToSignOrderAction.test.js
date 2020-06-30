@@ -43,7 +43,7 @@ describe('navigateToSignOrderAction', () => {
         documentId: DOCUMENT_ID,
       },
       state: {
-        form: { parentMessageId: PARENT_MESSAGE_ID },
+        parentMessageId: PARENT_MESSAGE_ID,
       },
     });
 

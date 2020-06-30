@@ -5,8 +5,6 @@ const request = require('request');
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
 
-let keys;
-
 const generatePolicy = (principalId, effect, resource) => {
   const authResponse = {};
   authResponse.principalId = principalId;
@@ -45,7 +43,9 @@ const verify = (methodArn, token, keys, kid, cb) => {
   });
 };
 
-module.exports.handler = (event, context, cb) => {
+let keys;
+
+exports.handler = (event, context, cb) => {
   console.log('Auth function invoked');
 
   let requestToken = null;

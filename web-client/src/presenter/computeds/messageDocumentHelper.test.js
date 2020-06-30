@@ -22,6 +22,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -41,6 +46,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -60,6 +70,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -79,6 +94,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
             {
               documentId: '123',
             },
@@ -106,6 +126,11 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -129,6 +154,11 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -148,6 +178,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -167,6 +202,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -184,10 +224,15 @@ describe('messageDocumentHelper', () => {
       state: {
         attachmentDocumentToDisplay: {
           documentId: '123',
-          signedAt: '2020-06-25T20:49:28.192Z',
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
         },
       },
     });
@@ -208,6 +253,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -225,10 +275,15 @@ describe('messageDocumentHelper', () => {
       state: {
         attachmentDocumentToDisplay: {
           documentId: '123',
-          signedAt: '2020-06-25T20:49:28.192Z',
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
         },
       },
     });
@@ -253,6 +308,11 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -270,13 +330,15 @@ describe('messageDocumentHelper', () => {
       state: {
         attachmentDocumentToDisplay: {
           documentId: '123',
-          signedAt: '2020-06-25T20:49:28.192Z',
         },
         caseDetail: {
           docketRecord: [
             {
               documentId: '123',
             },
+          ],
+          documents: [
+            { documentId: '123', signedAt: '2020-06-25T20:49:28.192Z' },
           ],
         },
       },
@@ -298,6 +360,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -317,6 +384,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
         },
       },
     });
@@ -336,6 +408,11 @@ describe('messageDocumentHelper', () => {
         },
         caseDetail: {
           docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
             {
               documentId: '123',
             },
