@@ -1,12 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * sets the document to be edited from the current caseDetail
+ * sets the props from state for removing signature from a document
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- * @returns {void} sets the documentToEdit on state
+ * @param {Function} providers.get the cerebral get function
+ * @returns {object} the props needed for removing signature
  */
 export const setPropsForRemoveSignatureAction = ({ get }) => {
   const caseDetail = get(state.caseDetail);
