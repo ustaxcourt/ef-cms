@@ -7,10 +7,13 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setMessageIdAction } from '../actions/setMessageIdAction';
 import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
+import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 
-export const setupSignOrder = [
+export const gotoSignOrderSequence = [
   setCurrentPageAction('Interstitial'),
+  setRedirectUrlAction,
   getCaseAction,
   setCaseAction,
   setDocumentIdAction,
@@ -20,9 +23,6 @@ export const setupSignOrder = [
   setSignatureNameForPdfSigningAction,
   setPDFForSigningAction,
   setPDFPageForSigningAction,
-];
-
-export const gotoSignOrderSequence = [
-  setupSignOrder,
+  setParentMessageIdAction,
   setCurrentPageAction('SignOrder'),
 ];
