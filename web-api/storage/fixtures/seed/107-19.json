@@ -162,6 +162,34 @@
       "countryType": "domestic",
       "email": "petitioner"
     },
+    "otherFilers": [
+      {
+        "address1": "42 Lamb Sauce Blvd",
+        "city": "Nashville",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Gordon Ramsay",
+        "otherFilerType": "Intervenor",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Participant"
+      },
+      {
+        "address1": "1337 12th Ave",
+        "city": "Flavortown",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Guy Fieri",
+        "otherFilerType": "Participant",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Intervenor"
+      }
+    ],
     "createdAt": "2019-08-16T17:29:10.132Z",
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,

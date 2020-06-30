@@ -12,9 +12,10 @@ export const MessageDocument = connect(
     messageDocumentHelper: state.messageDocumentHelper,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence:
+      sequences.openConfirmEditSignatureModalSequence,
     parentMessageId: state.parentMessageId,
-    removeSignatureAndGotoEditSignatureSequence:
-      sequences.removeSignatureAndGotoEditSignatureSequence,
   },
   function MessageDocument({
     attachmentDocumentToDisplay,
@@ -22,8 +23,9 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     openCaseDocumentDownloadUrlSequence,
+    openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence,
     parentMessageId,
-    removeSignatureAndGotoEditSignatureSequence,
   }) {
     return (
       <div
@@ -42,8 +44,15 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showEditButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/${parentMessageId}`}
                   icon="edit"
+                  onClick={() =>
+                    openConfirmEditModalSequence({
+                      docketNumber: caseDetail.docketNumber,
+                      documentIdToEdit: attachmentDocumentToDisplay.documentId,
+                      parentMessageId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    })
+                  }
                 >
                   Edit
                 </Button>
@@ -64,8 +73,7 @@ export const MessageDocument = connect(
                   link
                   icon="pencil-alt"
                   onClick={() =>
-                    removeSignatureAndGotoEditSignatureSequence({
-                      caseDetail,
+                    openConfirmEditSignatureModalSequence({
                       documentIdToEdit: attachmentDocumentToDisplay.documentId,
                     })
                   }
