@@ -1,14 +1,14 @@
 data "archive_file" "zip_streams" {
   type        = "zip"
-  output_path = "${path.module}/streams/index.js.zip"
-  source_file = "${path.module}/streams/dist/index.js"
+  output_path = "${path.module}/lambdas/streams.js.zip"
+  source_file = "${path.module}/lambdas/dist/streams.js"
 }
 
 resource "aws_lambda_function" "zip_streams" {
   filename      = "${data.archive_file.zip_streams.output_path}"
   function_name = "streams_${var.environment}"
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "index.handler"
+  handler       = "streams.handler"
   source_code_hash = "${data.archive_file.zip_streams.output_base64sha256}"
   timeout = "29"
   memory_size = "3008"

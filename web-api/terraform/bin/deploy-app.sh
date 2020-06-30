@@ -25,12 +25,7 @@ npm run build:assets
 
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build cognito-authorizer.js cognito-triggers.js api-public.js api.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
-
-pushd ../template/log-forwarder
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
+npx parcel build streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
 pids[${i}]=$!
 popd
 
@@ -38,11 +33,6 @@ popd
 for pid in ${pids[*]}; do
   wait $pid
 done
-
-pushd ../template/streams
-npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
-pids[${i}]=$!
-popd
 
 pushd ../template/cron
 npx parcel build index.js --cache-dir ../shared-cache --target node --bundle-node-modules --no-minify &
