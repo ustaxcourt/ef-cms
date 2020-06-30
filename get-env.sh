@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Returns the environment associated with each branch
 

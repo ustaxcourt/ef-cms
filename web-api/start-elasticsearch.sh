@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Usage
 #   downloads and starts elasticsearch for local use

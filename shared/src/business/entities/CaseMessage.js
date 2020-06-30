@@ -11,6 +11,9 @@ const {
   DOCKET_NUMBER_MATCHER,
   SECTIONS,
 } = require('./EntityConstants');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 
 /**
  * constructor
@@ -23,7 +26,10 @@ function CaseMessage(rawMessage, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.attachments = rawMessage.attachments || [];
+  this.attachments = (rawMessage.attachments || []).map(attachment => ({
+    documentId: attachment.documentId,
+    documentTitle: attachment.documentTitle,
+  }));
   this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
@@ -62,6 +68,12 @@ CaseMessage.VALIDATION_ERROR_MESSAGES = {
 CaseMessage.VALIDATION_RULES = {
   attachments: joi
     .array()
+    .items(
+      joi.object().keys({
+        documentId: JoiValidationConstants.UUID.required(),
+        documentTitle: joi.string().max(500).required(),
+      }),
+    )
     .optional()
     .description('Array of document metadata objects attached to the message.'),
   caseId: joi
@@ -128,9 +140,8 @@ CaseMessage.VALIDATION_RULES = {
   docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
   docketNumberWithSuffix: joi
     .string()
-    .max(500)
-    .allow(null)
-    .optional()
+    .max(20)
+    .required()
     .description('The docket number and suffix for the associated case.'),
   entityName: joi.string().valid('CaseMessage').required(),
   from: joi
@@ -207,6 +218,13 @@ joiValidationDecorator(
   CaseMessage.VALIDATION_ERROR_MESSAGES,
 );
 
+/**
+ * marks the case message as completed by the user at the current time
+ *
+ * @param {string} message the message provided when completing the thread
+ * @param {object} user the user who completed the thread
+ * @returns {CaseMessage} the updated case message
+ */
 CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
   this.completedAt = createISODateString();
@@ -214,6 +232,18 @@ CaseMessage.prototype.markAsCompleted = function ({ message, user }) {
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
   this.completedMessage = message;
+
+  return this;
+};
+
+/**
+ * adds the attachment to the attachments array on the case message
+ *
+ * @param {object} attachmentToAdd the attachment to add to the case message
+ * @returns {CaseMessage} the updated case message
+ */
+CaseMessage.prototype.addAttachment = function (attachmentToAdd) {
+  this.attachments.push(attachmentToAdd);
 
   return this;
 };

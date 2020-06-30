@@ -68,9 +68,9 @@ export const CaseDeadlines = connect(
                 <table className="usa-table row-border-only subsection work-queue deadlines">
                   <thead>
                     <tr>
-                      <th>Due date</th>
-                      <th>Docket number</th>
-                      <th>Case title</th>
+                      <th>Due Date</th>
+                      <th aria-label="docket number">Docket No.</th>
+                      <th>Case Title</th>
                       <th>Description</th>
                       <th>Judge</th>
                     </tr>

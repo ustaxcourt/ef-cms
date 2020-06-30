@@ -1,5 +1,5 @@
 const { forAllRecords } = require('./utilities');
-const { up } = require('./00009-document-required-fields');
+const { up } = require('./00009-document-required-served-fields');
 
 describe('document required fields test', () => {
   let documentClient;
@@ -39,6 +39,7 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
+      filedBy: 'Test Petitioner',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       processingStatus: 'pending',
       servedAt: '2018-11-21T20:49:28.192Z',
@@ -54,6 +55,7 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
+      filedBy: 'Test Petitioner',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a7',
       processingStatus: 'pending',
       servedParties: [{ name: 'Test Petitioner' }],
@@ -69,6 +71,7 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
+      filedBy: 'Test Petitioner',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
       processingStatus: 'pending',
       sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a6',
@@ -83,6 +86,7 @@ describe('document required fields test', () => {
       documentTitle: 'Petition',
       documentType: 'Petition',
       eventCode: 'P',
+      filedBy: 'Test Petitioner',
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a5',
       processingStatus: 'pending',
       servedAt: '2018-11-21T20:49:28.192Z',

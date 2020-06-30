@@ -12,12 +12,12 @@ export const petitionsClerkViewsInProgressMessagesOnCaseDetail = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('caseDetail.messages').length).toEqual(3);
+    expect(test.getState('caseDetail.messages').length).toEqual(4);
 
     const caseMessagesFormatted = runCompute(formattedCaseMessages, {
       state: test.getState(),
     });
-    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(1);
+    expect(caseMessagesFormatted.inProgressMessages.length).toEqual(2);
     expect(caseMessagesFormatted.completedMessages.length).toEqual(0);
   });
 };

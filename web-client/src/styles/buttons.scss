@@ -175,3 +175,27 @@
     margin-right: 3px;
   }
 }
+
+.message-document-actions {
+  display: flex;
+  height: 50px;
+  justify-content: flex-end;
+  background-color: color($theme-color-primary);
+
+  button,
+  a,
+  a:visited {
+    height: 40px;
+    border-left: 1px solid $color-white;
+    margin-top: 5px;
+    color: $color-white;
+
+    &.usa-button--unstyled {
+      padding-left: 20px;
+    }
+
+    &:hover {
+      color: $color-primary-alt;
+    }
+  }
+}

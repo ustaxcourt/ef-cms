@@ -14,7 +14,7 @@ export const CompressedDocketHeader = ({
           Revenue, Respondent
         </div>
         <div className="condensed" id="docket-number">
-          Docket Number {docketNumberWithSuffix}
+          Docket No. {docketNumberWithSuffix}
         </div>
         <div className="clear"></div>
         {h3 && <h3>{h3}</h3>}

@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {object} object containing pdfUrl
  */
-export const getFormDocumentUrlForPreviewAction = ({
+export const getFormDocumentUrlForPreviewAction = async ({
   applicationContext,
   get,
 }) => {
@@ -41,11 +41,13 @@ export const getFormDocumentUrlForPreviewAction = ({
   if (selectedDocument) {
     const {
       url,
-    } = applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-      applicationContext,
-      caseId,
-      documentId: selectedDocument.documentId,
-    });
+    } = await applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor({
+        applicationContext,
+        caseId,
+        documentId: selectedDocument.documentId,
+      });
 
     pdfUrl = url;
   }

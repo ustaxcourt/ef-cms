@@ -124,7 +124,7 @@ const docketRecord = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -313,7 +313,7 @@ const pendingReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -397,14 +397,12 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    footerDate,
     trialInfo,
   } = data;
 
   const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialNotice',
     data: {
-      footerDate,
       options: {
         caseCaptionExtension,
         caseTitle,
@@ -450,14 +448,12 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    footerDate,
     trialInfo,
   } = data;
 
   const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialOrder',
     data: {
-      footerDate,
       options: {
         caseCaptionExtension,
         caseTitle,
@@ -526,7 +522,7 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -585,7 +581,7 @@ const trialCalendar = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 
@@ -635,7 +631,7 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YYYY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
     },
   });
 

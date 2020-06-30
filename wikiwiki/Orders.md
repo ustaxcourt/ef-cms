@@ -14,7 +14,7 @@
 * Docket clerk / Clerk of Court/ Petitions Clerks can add a docket entry for the court-issued document
 * Docket clerk / Clerk of Court - Doc type list includes all court-issued document (not external document) event codes  
 * Petitions Clerk - Doc type only includes "O" event code
-* Add Docket Entry screen for court-issued documents prepopulates the selected document type
+* Add Docket Entry screen for court-issued documents pre-populates the selected document type
 * Docket clerk / Clerk of Court/ Petitions clerk saves the order but does not serve, at that point it appears on the docket record and is no longer in draft documents tab. Docket clerk clicks into it and goes to the Edit Docket Entry screen. Any other internal user clicks into it and goes to a doc detail page where they see just the PDF and messages.
 
 ## Serve Order
