@@ -21,6 +21,9 @@ const environmentWest = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
+//loop through all folders in /web-api/terraform/template
+//mkdir -p "./dist" && touch "./dist/index.js
+
 const teardownEnvironment = async () => {
   try {
     await Promise.all([
@@ -46,7 +49,7 @@ const teardownEnvironment = async () => {
       deleteS3Buckets({ environment: environmentWest }),
     ]);
   } catch (e) {
-    console.error('Error while deleting s3 bnuckets: ', e);
+    console.error('Error while deleting s3 bucket: ', e);
   }
 
   const webClientTerraformDestroy = exec(
