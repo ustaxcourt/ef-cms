@@ -38,7 +38,10 @@ export const validatePetitionerInformationFormAction = ({
     });
 
   if (
-    ['Paper', 'None'].includes(oldContactPrimary.serviceIndicator) &&
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldContactPrimary.serviceIndicator) &&
     contactPrimary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactPrimary = {
@@ -49,7 +52,10 @@ export const validatePetitionerInformationFormAction = ({
 
   if (
     oldContactSecondary &&
-    ['Paper', 'None'].includes(oldContactSecondary.serviceIndicator) &&
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldContactSecondary.serviceIndicator) &&
     contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactSecondary = {

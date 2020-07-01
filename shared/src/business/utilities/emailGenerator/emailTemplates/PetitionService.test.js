@@ -29,7 +29,7 @@ describe('PetitionService', () => {
     city: 'Somecity',
     name: 'Secondary Petitioner',
     postalCode: '12345',
-    serviceIndicator: 'Paper',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     state: 'AL',
   };
 
