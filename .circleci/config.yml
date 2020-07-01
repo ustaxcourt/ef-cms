@@ -21,7 +21,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Lint
           command: |
@@ -71,7 +71,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -113,7 +113,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
@@ -150,7 +150,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -175,21 +175,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+      - attach_workspace:
+          at: ~/
       - run:
           name: Combine Coverage
           command: |
@@ -247,7 +234,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -295,7 +282,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -347,7 +334,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
