@@ -24,28 +24,23 @@ describe('caseExistsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        code: '123',
-      },
       state: {},
     });
 
     expect(
-      applicationContext.getUseCases().getCaseInteractor.mock.calls.length,
+      applicationContext.getUseCases().getCaseByDocketNumberInteractor.mock
+        .calls.length,
     ).toEqual(1);
   });
 
   it('calls the success path when the interactor runs successfully', async () => {
     applicationContext
       .getUseCases()
-      .getCaseInteractor.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumberInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(caseExistsAction, {
       modules: {
         presenter,
-      },
-      props: {
-        code: '123',
       },
       state: {},
     });
@@ -56,16 +51,13 @@ describe('caseExistsAction', () => {
   it('calls the error path when an error is encountered', async () => {
     applicationContext
       .getUseCases()
-      .getCaseInteractor.mockImplementation(() => {
+      .getCaseByDocketNumberInteractor.mockImplementation(() => {
         throw new Error('Nope!');
       });
 
     await runAction(caseExistsAction, {
       modules: {
         presenter,
-      },
-      props: {
-        code: '123',
       },
       state: {},
     });

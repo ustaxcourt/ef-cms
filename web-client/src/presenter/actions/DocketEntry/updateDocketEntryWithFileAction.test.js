@@ -36,7 +36,8 @@ describe('updateDocketEntryWithFileAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail: mockCaseDetail,
-      caseId: mockCaseDetail.docketNumber,
+      caseId: mockCaseDetail.caseId,
+      docketNumber: mockCaseDetail.docketNumber,
     });
   });
 });
