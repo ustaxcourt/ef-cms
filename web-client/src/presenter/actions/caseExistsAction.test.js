@@ -28,15 +28,14 @@ describe('caseExistsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseByDocketNumberInteractor.mock
-        .calls.length,
+      applicationContext.getUseCases().getCaseInteractor.mock.calls.length,
     ).toEqual(1);
   });
 
   it('calls the success path when the interactor runs successfully', async () => {
     applicationContext
       .getUseCases()
-      .getCaseByDocketNumberInteractor.mockReturnValue(MOCK_CASE);
+      .getCaseInteractor.mockReturnValue(MOCK_CASE);
 
     await runAction(caseExistsAction, {
       modules: {
@@ -51,7 +50,7 @@ describe('caseExistsAction', () => {
   it('calls the error path when an error is encountered', async () => {
     applicationContext
       .getUseCases()
-      .getCaseByDocketNumberInteractor.mockImplementation(() => {
+      .getCaseInteractor.mockImplementation(() => {
         throw new Error('Nope!');
       });
 
