@@ -11,9 +11,9 @@ export const caseExistsAction = async ({ applicationContext, path, props }) => {
   try {
     const caseDetail = await applicationContext
       .getUseCases()
-      .getCaseInteractor({
+      .getCaseByDocketNumberInteractor({
         applicationContext,
-        caseId: props.docketNumber,
+        docketNumber: props.docketNumber,
       });
 
     return path.success({ caseDetail });
