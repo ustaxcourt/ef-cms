@@ -1129,18 +1129,6 @@ Case.prototype.updateDocument = function (updatedDocument) {
 };
 
 /**
- * isValidCaseId
- *
- * @param {string} caseId the case id to validate
- * @returns {*|boolean} true if the caseId is valid, false otherwise
- */
-Case.isValidCaseId = caseId =>
-  caseId &&
-  /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(
-    caseId,
-  );
-
-/**
  * stripLeadingZeros
  *
  * @param {string} docketNumber the docket number
