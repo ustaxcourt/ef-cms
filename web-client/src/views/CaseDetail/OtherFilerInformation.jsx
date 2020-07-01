@@ -35,11 +35,7 @@ export const OtherFilerInformation = connect(
                           (otherFiler, idx) => {
                             return (
                               <div
-                                className={classNames(
-                                  'grid-col-12',
-                                  'margin-top-1',
-                                  'margin-bottom-1',
-                                )}
+                                className="grid-col-12 margin-top-1 margin-bottom-1"
                                 key={idx}
                               >
                                 <address aria-labelledby="primary-label">
