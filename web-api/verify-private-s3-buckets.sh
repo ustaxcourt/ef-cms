@@ -32,8 +32,8 @@ for bucket in ${BUCKETS[@]}; do
   blockPublicPolicy=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicPolicy")
   restrictPublicBuckets=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.RestrictPublicBuckets")
 
-  [ "${blockPublicAcls}" != "true" ] && exit 1
-  [ "${ignorePublicAcls}" != "true" ] && exit 1
-  [ "${blockPublicPolicy}" != "true" ] && exit 1
-  [ "${restrictPublicBuckets}" != "true" ] && exit 1
+  [ "${blockPublicAcls}" != "true" ] && echo "bucket not fully private: BlockPublicAcls must be set to true" && exit 1
+  [ "${ignorePublicAcls}" != "true" ] && echo "bucket not fully private: IgnorePublicAcls must be set to true" && exit 1
+  [ "${blockPublicPolicy}" != "true" ] && echo "bucket not fully private: BlockPublicPolicy must be set to true" && exit 1
+  [ "${restrictPublicBuckets}" != "true" ] && echo "bucket not fully private: RestrictPublicBuckets must be set to true" && exit 1
 done
