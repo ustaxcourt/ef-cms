@@ -453,7 +453,6 @@ describe('Case entity', () => {
               address3: 'Ut numquam ducimus ',
               city: 'Placeat sed dolorum',
               countryType: 'domestic',
-              name: 'Keelie Bruce',
               phone: '+1 (785) 771-2329',
               postalCode: '17860',
               secondaryName: 'Logan Fields',
