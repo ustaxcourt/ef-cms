@@ -64,6 +64,7 @@ export const CaseDetail = connect(
                             'overview',
                             'petitioner',
                             'respondent',
+                            'otherFiler',
                           ].includes(e.target.value),
                           tab: e.target.value,
                         });
@@ -74,6 +75,7 @@ export const CaseDetail = connect(
                         <option value="overview">Overview</option>
                         <option value="petitioner">Petitioner</option>
                         <option value="respondent">Respondent</option>
+                        <option value="otherFiler">Other</option>
                       </optgroup>
                     </select>
                   </div>
@@ -155,6 +157,15 @@ export const CaseDetail = connect(
                             title="Respondent"
                           >
                             <RespondentInformation />
+                          </Tab>
+                        )}
+                        {caseInformationTab === 'otherFiler' && (
+                          <Tab
+                            id="tab-other-filer"
+                            tabName="otherFiler"
+                            title="Other"
+                          >
+                            <OtherFilerInformation />
                           </Tab>
                         )}
                       </Tabs>

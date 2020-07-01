@@ -27,7 +27,7 @@ export const AdvancedDocumentSearch = connect(
       <>
         <NonMobile>
           <div className="grid-col" id="document-advanced">
-            <h4>Narrow your search (optional)</h4>
+            <h4>Narrow your Search (optional)</h4>
             <FormGroup
               className="margin-bottom-0"
               errorText={validationErrors.chooseOneValue}
@@ -185,7 +185,7 @@ export const AdvancedDocumentSearch = connect(
 
         <Mobile>
           <div className="grid-row" id="document-advanced">
-            <h4>Narrow your search (optional)</h4>
+            <h4>Narrow your Search (optional)</h4>
             <FormGroup
               className="margin-bottom-0"
               errorText={validationErrors.chooseOneValue}
