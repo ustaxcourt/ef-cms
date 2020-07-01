@@ -9,7 +9,7 @@
 export const getPublicCaseAction = async ({ applicationContext, props }) => {
   const caseDetail = await applicationContext.getUseCases().getCaseInteractor({
     applicationContext,
-    caseId: props.docketNumber,
+    docketNumber: props.docketNumber,
   });
 
   return {
