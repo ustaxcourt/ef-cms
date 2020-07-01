@@ -1,8 +1,10 @@
 # EF-CMS Documentation
 
-## Setup CircleCI CI/CD Pipeline
+## Setting up, updating, and tearing down environments
 
-The CI/CD process is performed within CircleCI, which runs all tests and deploys the site to AWS. The process of configuring CircleCI, AWS, and SonarCloud is documented in [`SETUP.md`](SETUP.md).
+1. [Initial environment setup](environments/setup.md)
+2. Continuous release process with CircleCI
+3. Environment teardown
 
 ## JavaScript API documentation
 
