@@ -20,7 +20,7 @@ resource "aws_s3_bucket" "deployment_us_east_1" {
   region = "us-east-1"
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "deployment_us_west_2" {
   acl = "private"
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 }
 
@@ -55,7 +55,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 
   replication_configuration {
@@ -66,7 +66,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
       prefix = ""
 
       destination {
-        bucket        = "${aws_s3_bucket.documents_us_west_1.arn}"
+        bucket        = aws_s3_bucket.documents_us_west_1.arn
         storage_class = "STANDARD"
       }
     }
@@ -75,7 +75,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 
 
 resource "aws_s3_bucket_public_access_block" "block_documents_east" {
-  bucket = "${aws_s3_bucket.documents_us_east_1.id}"
+  bucket = aws_s3_bucket.documents_us_east_1.id
 
   block_public_acls = true
   block_public_policy = true
@@ -101,12 +101,12 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   }
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_documents_west" {
-  bucket = "${aws_s3_bucket.documents_us_west_1.id}"
+  bucket = aws_s3_bucket.documents_us_west_1.id
 
   block_public_acls = true
   block_public_policy = true
@@ -132,7 +132,7 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
   }
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 
   lifecycle_rule {
@@ -145,7 +145,7 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_temp_east" {
-  bucket = "${aws_s3_bucket.temp_documents_us_east_1.id}"
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
 
   block_public_acls = true
   block_public_policy = true
@@ -171,7 +171,7 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
   }
 
   tags {
-    environment = "${var.environment}"
+    environment = var.environment
   }
 
   lifecycle_rule {
@@ -184,7 +184,7 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_temp_west" {
-  bucket = "${aws_s3_bucket.temp_documents_us_west_1.id}"
+  bucket = aws_s3_bucket.temp_documents_us_west_1.id
 
   block_public_acls = true
   block_public_policy = true
