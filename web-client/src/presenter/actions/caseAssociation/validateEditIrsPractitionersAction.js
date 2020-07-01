@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -24,7 +25,7 @@ export const validateEditIrsPractitionersAction = ({ get, path }) => {
     );
     if (
       ['Paper', 'None'].includes(oldRespondent.serviceIndicator) &&
-      respondent.serviceIndicator === 'Electronic'
+      respondent.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       error.serviceIndicator = serviceIndicatorError;
     }

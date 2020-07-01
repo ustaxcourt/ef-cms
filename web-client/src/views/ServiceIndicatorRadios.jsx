@@ -5,6 +5,7 @@ import React from 'react';
 
 export const ServiceIndicatorRadios = connect(
   {
+    ELECTRONIC: state.constants.SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     bindKey: props.bind,
     bindObject: state[props.bind],
     getValidationError: props.getValidationError,
@@ -14,6 +15,7 @@ export const ServiceIndicatorRadios = connect(
   function ServiceIndicatorRadios({
     bindKey,
     bindObject,
+    ELECTRONIC,
     getValidationError,
     updateStateSequence,
     validateSequence,
@@ -38,7 +40,7 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={bindObject.serviceIndicator === 'Electronic'}
+              checked={bindObject.serviceIndicator === ELECTRONIC}
               className="usa-radio__input"
               id={`service-type-electronic-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}
