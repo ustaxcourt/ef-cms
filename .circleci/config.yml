@@ -1,7 +1,6 @@
 version: 2.1
 jobs:
-  bundle:
-    resource_class: large
+  build-api:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -23,20 +22,6 @@ jobs:
       - run:
           name: NPM - Install
           command: npm ci && npm rebuild node-sass
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project
-
-  build-api:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    steps:
-      - attach_workspace:
-          at: ~/
       - run:
           name: Lint
           command: |
@@ -72,8 +57,21 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -101,8 +99,21 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
@@ -125,8 +136,21 @@ jobs:
     resource_class: xlarge
     parallelism: 5
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -151,8 +175,21 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Combine Coverage
           command: |
@@ -196,8 +233,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -231,8 +281,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -270,8 +333,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -424,28 +500,13 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - bundle
-      - build-shared:
-          requires:
-            - bundle
-      - build-api:
-          requires:
-            - bundle
-      - build-client-unit:
-          requires:
-            - bundle
-      - build-client-integration:
-          requires:
-            - bundle
-      - e2e-pa11y:
-          requires:
-            - bundle
-      - e2e-cypress:
-          requires:
-            - bundle
-      - e2e-cypress-public:
-          requires:
-            - bundle
+      - build-SHARED_SONAR_TOKEN
+      - build-apiSHARED_SONAR_TOKEN
+      - build-client-unitSHARED_SONAR_TOKEN
+      - build-client-integrationSHARED_SONAR_TOKEN
+      - e2e-pa11ySHARED_SONAR_TOKEN
+      - e2e-cypressSHARED_SONAR_TOKEN
+      - e2e-cypress-publicSHARED_SONAR_TOKEN
       - build-client-coverage:
           requires:
             - build-shared
@@ -467,56 +528,37 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - bundle:
-          filters:
-            branches:
-              ignore:
-                - develop
       - build-shared:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-api:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-unit:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-integration:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-pa11y:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-cypress:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-cypress-public:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
