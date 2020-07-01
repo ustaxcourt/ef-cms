@@ -30,7 +30,7 @@ export const NoticeOfTrialIssued = ({
           </div>
         </div>
 
-        <div className="info-box info-box-trial" id="judge-info">
+        <div className="info-box info-box-judge" id="judge-info">
           <div className="info-box-header">Judge:</div>
           <div className="info-box-content">{trialInfo.judgeName}</div>
         </div>
