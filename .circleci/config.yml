@@ -166,6 +166,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
+            - project/web-client
             - project/web-client/coverage-integration-*
 
   build-client-coverage:
