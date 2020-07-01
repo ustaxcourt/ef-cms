@@ -3,7 +3,7 @@ import { first } from 'lodash';
 import { wait } from '../helpers';
 
 export const petitionsClerkCreateOrder = test => {
-  return it('Petitions clerk adds Order to case', async () => {
+  return it('Petitions clerk creates order', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
