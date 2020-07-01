@@ -86,8 +86,9 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
 
   return path.success({
     caseDetail: currentCase,
-    caseId: docketNumber,
+    caseId,
     consolidatedCases: cases,
+    docketNumber,
     documentsFiled: documentMetadata,
   });
 };

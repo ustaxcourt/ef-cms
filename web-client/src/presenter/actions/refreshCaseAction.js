@@ -11,9 +11,11 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const refreshCaseAction = async ({ applicationContext, get, store }) => {
-  const caseDetail = await applicationContext.getUseCases().getCaseInteractor({
-    applicationContext,
-    caseId: get(state.caseDetail.caseId),
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .getCaseByDocketNumberInteractor({
+      applicationContext,
+      docketNumber: get(state.caseDetail.docketNumber),
+    });
   store.set(state.caseDetail, caseDetail);
 };
