@@ -25,4 +25,3 @@ if [[ "$response" != "403" ]]; then
   echo "expected endpoint to throw Unauthorized error with invalid token"
   exit 1
 fi
-
