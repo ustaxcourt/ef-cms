@@ -35,6 +35,8 @@ describe('documentGenerators', () => {
     fs.writeFileSync(path, data);
   };
 
+  let PARTY_TYPES;
+
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
       applicationContext.getChromiumBrowser.mockImplementation(
@@ -57,6 +59,7 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
+    ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
   describe('addressLabelCoverSheet', () => {
@@ -171,7 +174,7 @@ describe('documentGenerators', () => {
       const pdf = await coverSheet({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner',
+          caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
           certificateOfService: true,
           dateFiledLodged: '01/01/20',
@@ -232,7 +235,7 @@ describe('documentGenerators', () => {
                 name: 'Test IRS Practitioner',
               },
             ],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
             privatePractitioners: [
               {
                 barNumber: 'PT20001',

@@ -1,5 +1,8 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
@@ -137,7 +140,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'partyType',
-      value: 'Petitioner',
+      value: PARTY_TYPES.petitioner,
     });
 
     await test.runSequence('updateFormValueSequence', {

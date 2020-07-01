@@ -1,6 +1,7 @@
 const faker = require('faker');
 const {
   FILING_TYPES,
+  PARTY_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   TRIAL_CITY_STRINGS,
@@ -130,7 +131,7 @@ const createCase = async ({
         },
         filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
         procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },
