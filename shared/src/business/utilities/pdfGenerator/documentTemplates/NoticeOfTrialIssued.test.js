@@ -9,7 +9,7 @@ describe('NoticeOfTrialIssued', () => {
   const trialInfo = {
     address1: '123 Some St.',
     city: 'Somecity',
-    judgeName: 'Judge Dredd',
+    judge: 'Judge Dredd',
     postalCode: '80008',
     startDate: '02/02/2020',
     startTime: '9:00 AM',
@@ -83,7 +83,7 @@ describe('NoticeOfTrialIssued', () => {
       />,
     );
 
-    expect(wrapper.find('#judge-info').text()).toContain(trialInfo.judgeName);
+    expect(wrapper.find('#judge-info').text()).toContain(trialInfo.judge);
   });
 
   it('renders the start date and time', () => {
