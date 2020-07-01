@@ -500,13 +500,13 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - build-SHARED_SONAR_TOKEN
-      - build-apiSHARED_SONAR_TOKEN
-      - build-client-unitSHARED_SONAR_TOKEN
-      - build-client-integrationSHARED_SONAR_TOKEN
-      - e2e-pa11ySHARED_SONAR_TOKEN
-      - e2e-cypressSHARED_SONAR_TOKEN
-      - e2e-cypress-publicSHARED_SONAR_TOKEN
+      - build-shared
+      - build-api
+      - build-client-unit
+      - build-client-integration
+      - e2e-pa11y
+      - e2e-cypress
+      - e2e-cypress-public
       - build-client-coverage:
           requires:
             - build-shared
