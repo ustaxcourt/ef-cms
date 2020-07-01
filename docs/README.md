@@ -3,7 +3,7 @@
 ## Setting up, updating, and tearing down environments
 
 1. [Initial environment setup](environments/setup.md)
-2. Continuous release process with CircleCI
+2. [Continuous release process with CircleCI](environments/release.md)
 3. Environment teardown
 
 ## JavaScript API documentation
