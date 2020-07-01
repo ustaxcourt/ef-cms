@@ -199,36 +199,55 @@ const INITIAL_DOCUMENT_TYPES = {
   },
 };
 
-const NOTICE_OF_DOCKET_CHANGE = {
-  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
-  documentType: 'Notice of Docket Change',
-  eventCode: 'NODC',
-};
-
-const NOTICE_OF_TRIAL = {
-  documentTitle: 'Notice of Trial on [Date] at [Time]',
-  documentType: 'Notice of Trial',
-  eventCode: 'NDT',
-};
-
-const STANDING_PRETRIAL_NOTICE = {
-  documentTitle: 'Standing Pretrial Notice',
-  documentType: 'Standing Pretrial Notice',
-  eventCode: 'SPTN',
-};
-
-const STANDING_PRETRIAL_ORDER = {
-  documentTitle: 'Standing Pretrial Order',
-  documentType: 'Standing Pretrial Order',
-  eventCode: 'SPTO',
+const MINUTE_ENTRIES_MAP = {
+  captionOfCaseIsAmmended: {
+    // description: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
+    eventCode: 'MINC',
+  },
+  dockedNumberIsAmmended: {
+    // description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+    eventCode: 'MIND',
+  },
+  filingFeePaid: {
+    description: 'Filing Fee Paid',
+    eventCode: 'FEE',
+  },
+  filingFeeWaived: {
+    description: 'Filing Fee Waived',
+    eventCode: 'FEEW',
+  },
 };
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfDocketChange: NOTICE_OF_DOCKET_CHANGE,
-  noticeOfTrial: NOTICE_OF_TRIAL,
-  standingPretrialNotice: STANDING_PRETRIAL_NOTICE,
-  standingPretrialOrder: STANDING_PRETRIAL_ORDER,
+  noticeOfDocketChange: {
+    documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+    documentType: 'Notice of Docket Change',
+    eventCode: 'NODC',
+  },
+  noticeOfTrial: {
+    documentTitle: 'Notice of Trial on [Date] at [Time]',
+    documentType: 'Notice of Trial',
+    eventCode: 'NDT',
+  },
+  standingPretrialNotice: {
+    documentTitle: 'Standing Pretrial Notice',
+    documentType: 'Standing Pretrial Notice',
+    eventCode: 'SPTN',
+  },
+  standingPretrialOrder: {
+    documentTitle: 'Standing Pretrial Order',
+    documentType: 'Standing Pretrial Order',
+    eventCode: 'SPTO',
+  },
 };
+
+const NOTICE_OF_DOCKET_CHANGE =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange;
+const NOTICE_OF_TRIAL = SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial;
+const STANDING_PRETRIAL_NOTICE =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice;
+const STANDING_PRETRIAL_ORDER =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder;
 
 const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
@@ -240,23 +259,6 @@ const SIGNED_DOCUMENT_TYPES = {
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = [
   'Entry of Appearance',
   'Substitution of Counsel',
-];
-
-const EVENT_CODES = [
-  INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
-  INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-  INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-  INITIAL_DOCUMENT_TYPES.stin.eventCode,
-  NOTICE_OF_DOCKET_CHANGE.eventCode,
-  NOTICE_OF_TRIAL.eventCode,
-  STANDING_PRETRIAL_NOTICE.eventCode,
-  STANDING_PRETRIAL_ORDER.eventCode,
-  'FEE',
-  'FEEW',
-  'MGRTED',
-  'MIND',
-  'MINC',
 ];
 
 const PAYMENT_STATUS = {
@@ -760,15 +762,12 @@ const CASE_SEARCH_PAGE_SIZE = 5;
 const ALL_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(INITIAL_DOCUMENT_TYPES),
+  ...Object.values(MINUTE_ENTRIES_MAP),
+  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES),
 ])
   .map(item => item.eventCode)
-  .concat(
-    EVENT_CODES,
-    COURT_ISSUED_EVENT_CODES.map(item => item.eventCode),
-    OPINION_EVENT_CODES,
-    ORDER_DOCUMENT_TYPES,
-    ORDER_TYPES.map(item => item.eventCode),
-  )
+  .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
   .sort();
 
 const ALL_DOCUMENT_TYPES = (() => {
@@ -798,7 +797,6 @@ const ALL_DOCUMENT_TYPES = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
   ];
-
   return documentTypes;
 })();
 
@@ -844,7 +842,6 @@ module.exports = {
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
-  EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -852,6 +849,7 @@ module.exports = {
   IRS_SYSTEM_SECTION,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  MINUTE_ENTRIES_MAP,
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
