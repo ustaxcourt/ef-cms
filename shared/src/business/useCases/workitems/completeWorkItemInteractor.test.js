@@ -20,17 +20,15 @@ describe('completeWorkItemInteractor', () => {
   };
 
   let PARTY_TYPES;
-  let ROLES;
+  let USER_ROLES;
+
+  ({ PARTY_TYPES, USER_ROLES } = applicationContext.getConstants());
 
   const mockPetitionerUser = {
     name: PARTY_TYPES.petitioner,
-    role: ROLES.petitioner,
+    role: USER_ROLES.petitioner,
     userId: 'petitioner',
   };
-
-  beforeAll(() => {
-    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
-  });
 
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);

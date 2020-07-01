@@ -42,11 +42,11 @@ let user;
 let calendaredCases;
 let trialSession;
 let PARTY_TYPES;
-let ROLES;
+let USER_ROLES;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
-    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
+    ({ PARTY_TYPES, USER_ROLES } = applicationContext.getConstants());
 
     const case0 = {
       // should get electronic service
@@ -79,7 +79,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     user = new User({
       name: 'Docket Clerk',
-      role: ROLES.docketClerk,
+      role: USER_ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -140,7 +140,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
     user = new User({
       name: PARTY_TYPES.petitioner,
-      role: ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
+      role: USER_ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

@@ -20,10 +20,10 @@ let user;
 
 describe('setTrialSessionCalendarInteractor', () => {
   let PARTY_TYPES;
-  let ROLES;
+  let USER_ROLES;
 
   beforeEach(() => {
-    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
+    ({ PARTY_TYPES, USER_ROLES } = applicationContext.getConstants());
 
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
@@ -35,7 +35,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('throws an exception when there is a permissions issue', async () => {
     user = new User({
       name: PARTY_TYPES.petitioner,
-      role: ROLES.petitioner,
+      role: USER_ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext
@@ -67,7 +67,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
     user = new User({
       name: 'petitionsClerk',
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -113,7 +113,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
     user = new User({
       name: 'petitionsClerk',
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -153,7 +153,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('should set work items as high priority for each case that is calendared', async () => {
     user = new User({
       name: 'petitionsClerk',
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext
