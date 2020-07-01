@@ -1,4 +1,3 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -16,6 +15,10 @@ export const validateEditPrivatePractitionersAction = ({
   get,
   path,
 }) => {
+  let SERVICE_INDICATOR_TYPES;
+
+  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+
   const { privatePractitioners } = get(state.modal);
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 

@@ -1,10 +1,12 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import {
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+
+let PARTY_TYPES;
+let PAYMENT_STATUS;
+
+({ PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants());
 
 export const petitionsClerkCreatesNewCase = (
   test,

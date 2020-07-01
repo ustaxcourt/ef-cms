@@ -6,6 +6,7 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 const {
   addressLabelCoverSheet,
@@ -35,8 +36,6 @@ describe('documentGenerators', () => {
     fs.writeFileSync(path, data);
   };
 
-  let PARTY_TYPES;
-
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
       applicationContext.getChromiumBrowser.mockImplementation(
@@ -59,7 +58,6 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
-    ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
   describe('addressLabelCoverSheet', () => {

@@ -1,5 +1,5 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -18,6 +18,10 @@ const test = setupTest({
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
+
+let SERVICE_INDICATOR_TYPES;
+
+({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
 
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',
