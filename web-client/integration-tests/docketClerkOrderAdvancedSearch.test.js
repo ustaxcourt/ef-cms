@@ -1,4 +1,5 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -28,7 +29,7 @@ const seedData = {
     countryType: 'international',
     name: 'Hanan Al Hroub',
     postalCode: '123456',
-    serviceIndicator: 'Paper',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   },
   contactSecondary: {},
   docketNumber: '104-20',

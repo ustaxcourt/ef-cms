@@ -24,7 +24,10 @@ export const validateEditIrsPractitionersAction = ({ get, path }) => {
       foundRespondent => foundRespondent.userId === respondent.userId,
     );
     if (
-      ['Paper', 'None'].includes(oldRespondent.serviceIndicator) &&
+      [
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      ].includes(oldRespondent.serviceIndicator) &&
       respondent.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       error.serviceIndicator = serviceIndicatorError;

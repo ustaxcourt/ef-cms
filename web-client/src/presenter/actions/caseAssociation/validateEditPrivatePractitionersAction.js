@@ -37,7 +37,10 @@ export const validateEditPrivatePractitionersAction = ({
       foundPractitioner => foundPractitioner.userId === practitioner.userId,
     );
     if (
-      ['Paper', 'None'].includes(oldPractitioner.serviceIndicator) &&
+      [
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      ].includes(oldPractitioner.serviceIndicator) &&
       practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       error = {
