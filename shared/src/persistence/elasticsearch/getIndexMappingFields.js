@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+const { get } = require('lodash');
 /**
  * @param {object} arguments deconstructed arguments
  * @param {object} arguments.applicationContext the application context
