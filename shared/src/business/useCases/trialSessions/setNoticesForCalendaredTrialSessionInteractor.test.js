@@ -46,7 +46,7 @@ let ROLES;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
-    ({ PARTY_TYPES, ROLES } = applicationContect.getConstants());
+    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
 
     const case0 = {
       // should get electronic service
