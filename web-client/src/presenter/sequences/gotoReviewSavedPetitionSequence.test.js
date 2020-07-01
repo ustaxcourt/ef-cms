@@ -14,7 +14,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getCaseByDocketNumberInteractor.mockReturnValue(MOCK_CASE);
+      .getCaseInteractor.mockReturnValue(MOCK_CASE);
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoReviewSavedPetitionSequence,
@@ -35,7 +35,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseByDocketNumberInteractor,
+      applicationContext.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
     expect(test.getState('caseDetail')).toMatchObject(MOCK_CASE);

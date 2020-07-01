@@ -140,9 +140,6 @@ const {
   getCalendaredCasesForTrialSessionLambda,
 } = require('./trialSessions/getCalendaredCasesForTrialSessionLambda');
 const {
-  getCaseByDocketNumberLambda,
-} = require('./cases/getCaseByDocketNumberLambda');
-const {
   getCaseDeadlinesForCaseLambda,
 } = require('./caseDeadline/getCaseDeadlinesForCaseLambda');
 const {
@@ -616,10 +613,6 @@ app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
 app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
 app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
-app.get(
-  '/cases/docket/:docketNumber',
-  lambdaWrapper(getCaseByDocketNumberLambda),
-);
 app.delete(
   '/cases/:caseId/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
@@ -630,7 +623,7 @@ app.get(
 );
 app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
 app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
-app.get('/cases/:caseId', lambdaWrapper(getCaseLambda));
+app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
 
 /**

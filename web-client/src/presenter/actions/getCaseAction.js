@@ -10,11 +10,9 @@ import { state } from 'cerebral';
  */
 export const getCaseAction = async ({ applicationContext, get, props }) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .getCaseByDocketNumberInteractor({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await applicationContext.getUseCases().getCaseInteractor({
+    applicationContext,
+    docketNumber,
+  });
   return { caseDetail };
 };
