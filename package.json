@@ -226,7 +226,8 @@
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
     "watch": "nodemon -e yml --exec sls offline start",
-    "verify-authorizers": "./web-api/verify-authorizers.sh"
+    "verify-authorizers": "./web-api/verify-authorizers.sh",
+    "verify-private-s3-buckets": "./web-api/verify-private-s3-buckets.sh"
   },
   "staticFiles": {
     "staticPath": [
