@@ -35,9 +35,9 @@ OSC,ORDER *ANYTHING*,Order to Show Cause ,Type A ,[Anything],,,,,Order [Anything
 OSCP,"ORDER petr(s) by *DATE* show cause why ""S"" should not be removed *ANYTHING*","Order petr(s) to show cause why ""S"" should not be removed ",Type D,[Anything],,[Date],,,"OSCP - Order petr(s) by [Date] to show cause why ""S"" should not be removed [Anything]",Served
 OST,ORDER of Service of Transcript (Bench Opinion) *ANYTHING*,Order of Service of Transcript (Bench Opinion),Type A ,[Anything],,,,,Order of Service of Transcript (Bench Opinion) [Anything],Served
 OSUB,ORDER that case is submitted to *JUDGE*. *ANYTHING*,Order that case is submitted,Type B,[Anything],[Judge name],,,,Order that case is submitted to [Judge Name] [Anything],Served
-DEC,"DECISION Entered,, *JUDGE* *ANYTHING*","Decision Entered, ",Type B,[Anything],[Judge name],,,,"Decision Entered, [Judge Name] [Anything]",Entered and Served 
-OAD,"ORDER AND DECISION Entered,, *ANY* *JUDGE*. *ANYTHING*",Order and Decision Entered,Type B,[Anything],[Judge name],,,,"Order and Decision Entered, [Judge Name] [Anything]",Entered and Served 
-ODJ,"ORDER OF DISMISSAL FOR LACK OF JURISDICTION Entered,, *JUDGE*. *ANYTHING*",Order of Dismissal for Lack of Jurisdiction Entered,Type B,[Anything],[Judge name],,,,"Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",Entered and Served 
+DEC,"DECISION Entered, *JUDGE* *ANYTHING*",Decision Entered ,Type B,[Anything],[Judge name],,,,"Decision Entered, [Judge Name] [Anything]",Entered and Served 
+OAD,"ORDER AND DECISION Entered, *ANY* *JUDGE*. *ANYTHING*",Order and Decision Entered,Type B,[Anything],[Judge name],,,,"Order and Decision Entered, [Judge Name] [Anything]",Entered and Served 
+ODJ,"ORDER OF DISMISSAL FOR LACK OF JURISDICTION Entered, *JUDGE*. *ANYTHING*",Order of Dismissal for Lack of Jurisdiction Entered,Type B,[Anything],[Judge name],,,,"Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",Entered and Served 
 SDEC,"STIPULATED DECISION Entered, *JUDGE*. *ANYTHING*",Stipulated Decision Entered,Type B,[Anything],[Judge name],,,,"Stipulated Decision Entered, [Judge Name] [Anything]",Entered and Served 
 MOP ,Memorandum Opinion [judge],Memorandum Opinion ,Type B,[Anything],[Judge name],,,,Memorandum Opinion [judge],
 NOT ,Notice [Anything],Notice ,Type A ,[Anything],,,,,Notice [Anything],
