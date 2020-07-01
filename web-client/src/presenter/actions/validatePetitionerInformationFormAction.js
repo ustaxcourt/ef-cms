@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -38,7 +39,7 @@ export const validatePetitionerInformationFormAction = ({
 
   if (
     ['Paper', 'None'].includes(oldContactPrimary.serviceIndicator) &&
-    contactPrimary.serviceIndicator === 'Electronic'
+    contactPrimary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactPrimary = {
       ...errors.contactPrimary,
@@ -49,7 +50,7 @@ export const validatePetitionerInformationFormAction = ({
   if (
     oldContactSecondary &&
     ['Paper', 'None'].includes(oldContactSecondary.serviceIndicator) &&
-    contactSecondary.serviceIndicator === 'Electronic'
+    contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactSecondary = {
       ...errors.contactSecondary,

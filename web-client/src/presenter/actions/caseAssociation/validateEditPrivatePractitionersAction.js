@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -37,7 +38,7 @@ export const validateEditPrivatePractitionersAction = ({
     );
     if (
       ['Paper', 'None'].includes(oldPractitioner.serviceIndicator) &&
-      practitioner.serviceIndicator === 'Electronic'
+      practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       error = {
         ...error,
