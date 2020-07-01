@@ -13,13 +13,11 @@
 #   - $1 - the environment to clear
 
 [ -z "$1" ] && echo "The branch name to check must be provided as the \$1 argument." && exit 1
+[ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
+[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
+[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 
 ENV=$1
-
-if [[ -z "${USTC_ADMIN_PASS}" ]]; then
-  echo "You must have USTC_ADMIN_PASS set in your environment"
-  exit 1
-fi
 
 $(which terraform) > /dev/null
 if [[ "$?" == "1" ]]; then

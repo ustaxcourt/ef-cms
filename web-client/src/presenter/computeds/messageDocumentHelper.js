@@ -49,7 +49,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyEditSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
-    showEditButton: showEditButtonForRole && showEditButtonForDocument,
+    showEditButtonNotSigned:
+      showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
+    showEditButtonSigned:
+      showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
     showEditSignatureButton:
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
   };

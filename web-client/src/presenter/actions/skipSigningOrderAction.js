@@ -26,7 +26,7 @@ export const skipSigningOrderAction = ({ get, store }) => {
 
   return {
     alertSuccess: {
-      message: `${order.documentTitle} updated.`,
+      message: `${order.documentTitle || order.documentType} updated.`,
     },
     path: `/case-detail/${caseId}/draft-documents`,
   };
