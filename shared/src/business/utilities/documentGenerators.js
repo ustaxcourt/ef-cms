@@ -3,12 +3,7 @@ const {
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
-const {
-  generateChangeOfAddressTemplate,
-} = require('./generateHTMLTemplateForPDF/generateChangeOfAddressTemplate');
-const {
-  generatePrintableDocketRecordTemplate,
-} = require('./generateHTMLTemplateForPDF/generatePrintableDocketRecordTemplate');
+const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 
 const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   const addressLabelCoverSheetTemplate = reactTemplateGenerator({
@@ -39,9 +34,43 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
 };
 
 const changeOfAddress = async ({ applicationContext, content }) => {
-  const pdfContentHtml = await generateChangeOfAddressTemplate({
+  const {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumberWithSuffix,
+    documentTitle,
+    name,
+    newData,
+    oldData,
+  } = content;
+
+  const changeOfAddressTemplate = reactTemplateGenerator({
+    componentName: 'ChangeOfAddress',
+    data: {
+      name,
+      newData,
+      oldData,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        h3: documentTitle,
+        showAddressAndPhoneChange:
+          documentTitle === 'Notice of Change of Address and Telephone Number',
+        showOnlyPhoneChange:
+          documentTitle === 'Notice of Change of Telephone Number',
+      },
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    content,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: changeOfAddressTemplate },
+    options: {
+      overwriteMain: true,
+      title: documentTitle,
+    },
   });
 
   const { docketNumber } = content;
@@ -109,9 +138,36 @@ const coverSheet = async ({ applicationContext, data }) => {
 };
 
 const docketRecord = async ({ applicationContext, data }) => {
-  const pdfContentHtml = await generatePrintableDocketRecordTemplate({
+  const {
+    caseCaptionExtension,
+    caseDetail,
+    caseTitle,
+    docketNumberWithSuffix,
+    entries,
+  } = data;
+
+  const docketRecordTemplate = reactTemplateGenerator({
+    componentName: 'DocketRecord',
+    data: {
+      caseDetail,
+      countryTypes: COUNTRY_TYPES,
+      entries,
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    data,
+    // TODO: Remove main prop when index.pug can be refactored to remove header logic
+    content: { main: docketRecordTemplate },
+    options: {
+      overwriteMain: true,
+      title: 'Printable Docket Record',
+    },
   });
 
   const headerHtml = reactTemplateGenerator({

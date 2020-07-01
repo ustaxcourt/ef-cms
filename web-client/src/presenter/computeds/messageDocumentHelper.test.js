@@ -348,7 +348,32 @@ describe('messageDocumentHelper', () => {
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showEditButton true for an internal user and a document that is not on the docket record', () => {
+  it('return showEditButtonSigned true for an internal user and a document that is not on the docket record and is signed', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        attachmentDocumentToDisplay: {
+          documentId: '123',
+        },
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '123',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(true);
+  });
+
+  it('return showEditButtonNotSigned true for an internal user and a document that is not on the docket record and is not signed', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: USER_ROLES.docketClerk,
     });
@@ -369,10 +394,10 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditButton).toEqual(true);
+    expect(result.showEditButtonNotSigned).toEqual(true);
   });
 
-  it('return showEditButton false for an external user and a document that is not on the docket record', () => {
+  it('return showEditButtonSigned false for an external user and a document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: USER_ROLES.petitioner,
     });
@@ -393,10 +418,10 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditButton).toEqual(false);
+    expect(result.showEditButtonSigned).toEqual(false);
   });
 
-  it('return showEditButton false for an internal user and a document that is already on the docket record', () => {
+  it('return showEditButtonSigned false for an internal user and a document that is already on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: USER_ROLES.docketClerk,
     });
@@ -421,6 +446,6 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditButton).toEqual(false);
+    expect(result.showEditButtonSigned).toEqual(false);
   });
 });

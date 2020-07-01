@@ -41,7 +41,17 @@ export const MessageDocument = connect(
         {!process.env.CI && attachmentDocumentToDisplay && (
           <>
             <div className="message-document-actions">
-              {messageDocumentHelper.showEditButton && (
+              {messageDocumentHelper.showEditButtonNotSigned && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/${parentMessageId}`}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              )}
+
+              {messageDocumentHelper.showEditButtonSigned && (
                 <Button
                   link
                   icon="edit"
