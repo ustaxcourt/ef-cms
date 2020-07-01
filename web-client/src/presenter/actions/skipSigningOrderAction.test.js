@@ -11,7 +11,7 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          caseId: 'abc-123',
+          docketNumber: '123-19',
           documents: [
             {
               documentId: 'abc',
@@ -22,7 +22,7 @@ describe('skipSigningOrderAction', () => {
         documentId: 'abc',
       },
     });
-    expect(result.output.path).toEqual('/case-detail/abc-123/draft-documents');
+    expect(result.output.path).toEqual('/case-detail/123-19/draft-documents');
   });
 
   it('should set a success message with documentTitle', async () => {
@@ -33,7 +33,7 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          caseId: 'abc-123',
+          docketNumber: '123-19',
           documents: [
             {
               documentId: 'abc',
@@ -55,7 +55,7 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          caseId: 'abc-123',
+          docketNumber: '123-19',
           documents: [
             {
               documentId: 'abc',
@@ -77,7 +77,7 @@ describe('skipSigningOrderAction', () => {
       props: { openModal: 'SomeModal' },
       state: {
         caseDetail: {
-          caseId: 'abc-123',
+          docketNumber: '123-19',
           documents: [
             {
               documentId: 'abc',
