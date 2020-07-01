@@ -4,7 +4,6 @@ const {
 const {
   getCalendaredCasesForTrialSessionInteractor,
 } = require('./getCalendaredCasesForTrialSessionInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -17,9 +16,13 @@ const mockJudge = {
 };
 
 let user;
+let PARTY_TYPES;
+let ROLES;
 
 describe('getCalendaredCasesForTrialSessionInteractor', () => {
   beforeEach(() => {
+    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
+
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
@@ -31,7 +34,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
 
   it('throws an exception when the user is unauthorized', async () => {
     user = new User({
-      name: 'Petitioner',
+      name: PARTY_TYPES.petitioner,
       role: ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
