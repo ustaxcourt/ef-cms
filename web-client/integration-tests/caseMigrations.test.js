@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest } from './helpers';
 import axios from 'axios';
 
@@ -107,7 +108,7 @@ const otherPetitionersCase = {
       phone: '+1 (785) 771-2329',
       postalCode: '17860',
       secondaryName: 'Logan Fields',
-      serviceIndicator: 'None',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'LA',
     },
   ],
