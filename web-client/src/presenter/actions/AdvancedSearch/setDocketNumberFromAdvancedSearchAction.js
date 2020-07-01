@@ -19,5 +19,6 @@ export const setDocketNumberFromAdvancedSearchAction = ({ get, store }) => {
   store.set(state.caseId, docketNumber);
   return {
     caseId: docketNumber,
+    docketNumber,
   };
 };
