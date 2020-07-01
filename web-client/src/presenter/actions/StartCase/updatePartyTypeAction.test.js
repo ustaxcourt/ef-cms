@@ -64,7 +64,7 @@ describe('updatePartyTypeAction', () => {
       updatePartyTypeAction,
       getFixtures({
         key: 'otherType',
-        value: 'Donor',
+        value: PARTY_TYPES.donor,
       }),
     );
     expect(state.form.partyType).toEqual(PARTY_TYPES.donor);
@@ -112,7 +112,7 @@ describe('updatePartyTypeAction', () => {
           value: 'A business',
         },
         {
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       ),
     );

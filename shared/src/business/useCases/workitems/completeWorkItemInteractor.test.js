@@ -2,7 +2,6 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('completeWorkItemInteractor', () => {
   let mockWorkItem = {
@@ -20,11 +19,18 @@ describe('completeWorkItemInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
+  let PARTY_TYPES;
+  let ROLES;
+
   const mockPetitionerUser = {
-    name: 'Petitioner',
+    name: PARTY_TYPES.petitioner,
     role: ROLES.petitioner,
     userId: 'petitioner',
   };
+
+  beforeAll(() => {
+    ({ PARTY_TYPES, ROLES } = applicationContext.getConstants());
+  });
 
   it('throws an error if the user does not have access to the interactor', async () => {
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionerUser);
