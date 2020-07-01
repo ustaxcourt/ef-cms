@@ -32,7 +32,7 @@ OPX,ORDER time is extended to *DATE* for petr(s) to file Amended Petition.,Order
 ORAP,ORDER for Amendment to Petition by *DATE*. *ANYTHING*,Order for Amendment to Petition ,Type D,[Anything],,[Date],,,Order for Amendment to Petition by [Date] [Anything],Served
 OROP,ORDER for Ratification of Petition by *DATE*. *ANYTHING*,Order for Ratification of Petition ,Type D,[Anything],,[Date],,,Order for Ratification of Petition by [Date] [Anything],Served
 OSC,ORDER *ANYTHING*,Order to Show Cause ,Type A ,[Anything],,,,,Order [Anything],Served
-OSCP,"ORDER petr(s) by *DATE* show cause why ""S"" should not be removed *ANYTHING*","Order petr(s) to show cause why ""S"" should not be removed ",Type D,[Anything],,[Date],,,"OSCP - Order petr(s) by [Date] to show cause why ""S"" should not be removed [Anything]",Served
+OSCP,"ORDER petr(s) by *DATE* show cause why ""S"" should not be removed *ANYTHING*","Order petr(s) to show cause why ""S"" should not be removed ",Type D,[Anything],,[Date],,,"Order petr(s) by [Date] to show cause why ""S"" should not be removed [Anything]",Served
 OST,ORDER of Service of Transcript (Bench Opinion) *ANYTHING*,Order of Service of Transcript (Bench Opinion),Type A ,[Anything],,,,,Order of Service of Transcript (Bench Opinion) [Anything],Served
 OSUB,ORDER that case is submitted to *JUDGE*. *ANYTHING*,Order that case is submitted,Type B,[Anything],[Judge name],,,,Order that case is submitted to [Judge Name] [Anything],Served
 DEC,"DECISION Entered, *JUDGE* *ANYTHING*",Decision Entered ,Type B,[Anything],[Judge name],,,,"Decision Entered, [Judge Name] [Anything]",Entered and Served 
