@@ -308,16 +308,14 @@ const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
-  generateChangeOfAddressTemplate,
-  generateNoticeOfTrialIssuedTemplate,
-  generatePrintableDocketRecordTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
-const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+const {
+  generateNoticeOfTrialIssuedTemplate,
+} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -1385,9 +1383,7 @@ module.exports = appContextUser => {
     // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
-        generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
-        generatePrintableDocketRecordTemplate,
       };
     },
     getUniqueId,
