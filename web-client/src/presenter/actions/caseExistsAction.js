@@ -13,7 +13,7 @@ export const caseExistsAction = async ({ applicationContext, path, props }) => {
       .getUseCases()
       .getCaseInteractor({
         applicationContext,
-        docketNumber: props.caseId,
+        caseId: props.docketNumber,
       });
 
     return path.success({ caseDetail });

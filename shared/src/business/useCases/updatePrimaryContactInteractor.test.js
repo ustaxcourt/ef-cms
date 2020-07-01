@@ -157,8 +157,7 @@ describe('update primary contact on a case', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getTemplateGenerators()
-        .generateChangeOfAddressTemplate,
+      applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,

@@ -1,16 +1,19 @@
 const { get } = require('./requests');
 
 /**
- * getCaseInteractor
+ * getCaseByDocketNumberInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to retrieve
+ * @param {string} providers.docketNumber the docket number of the case to retrieve
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCaseInteractor = ({ applicationContext, caseId }) => {
+exports.getCaseByDocketNumberInteractor = ({
+  applicationContext,
+  docketNumber,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${caseId}`,
+    endpoint: `/cases/docket/${docketNumber}`,
   });
 };
