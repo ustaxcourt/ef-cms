@@ -7,6 +7,7 @@ describe('resetContactsAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   it('clears the contactPrimary except for countryType for a domestic address', async () => {
     const { state } = await runAction(resetContactsAction, {
       modules: { presenter },
@@ -42,7 +43,7 @@ describe('resetContactsAction', () => {
             address1: '123 Abc Ln',
             city: 'Bobville',
             country: 'Germany',
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             name: 'Bob',
             phone: '1234567890',
             zip: '12345',

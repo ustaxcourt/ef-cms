@@ -4,15 +4,16 @@ import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const { USER_ROLES } = applicationContext.getConstants();
+
 let user = {
-  role: 'docketclerk',
+  role: USER_ROLES.docketClerk,
 };
 
 const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
   addCourtIssuedDocketEntryHelperComputed,
   {
     ...applicationContext,
-
     getConstants: () => {
       return {
         COURT_ISSUED_EVENT_CODES: [

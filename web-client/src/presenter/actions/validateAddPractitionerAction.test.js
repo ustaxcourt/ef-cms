@@ -75,7 +75,7 @@ describe('validateAddPractitionerAction', () => {
           contact: {
             address1: '123 Some St.',
             city: 'Some City',
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             phone: '123-123-1234',
             postalCode: '12345',
           },
@@ -109,7 +109,7 @@ describe('validateAddPractitionerAction', () => {
           contact: {
             address1: '123 Some St.',
             city: 'Some City',
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             phone: '123-123-1234',
             postalCode: '12345',
           },

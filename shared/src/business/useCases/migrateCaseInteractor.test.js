@@ -1,5 +1,9 @@
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
 const { User } = require('../entities/User');
@@ -16,7 +20,7 @@ describe('migrateCaseInteractor', () => {
 
     adminUser = new User({
       name: 'Joe Exotic',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
