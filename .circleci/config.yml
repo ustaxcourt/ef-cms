@@ -24,8 +24,7 @@ jobs:
           command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Lint
-          command: |
-            npm run lint
+          command: npm run lint
       - run:
           name: Shellcheck
           command: |
