@@ -40,6 +40,10 @@ describe('documentGenerators', () => {
 
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
+      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
+        if (err) throw err;
+      });
+
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );

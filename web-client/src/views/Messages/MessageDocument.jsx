@@ -6,7 +6,6 @@ import classNames from 'classnames';
 
 export const MessageDocument = connect(
   {
-    attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
     caseDetail: state.caseDetail,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
@@ -16,9 +15,9 @@ export const MessageDocument = connect(
     openConfirmEditSignatureModalSequence:
       sequences.openConfirmEditSignatureModalSequence,
     parentMessageId: state.parentMessageId,
+    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
-    attachmentDocumentToDisplay,
     caseDetail,
     iframeSrc,
     messageDocumentHelper,
@@ -26,25 +25,26 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
     parentMessageId,
+    viewerDocumentToDisplay,
   }) {
     return (
       <div
         className={classNames(
-          'message-detail--attachments',
-          !attachmentDocumentToDisplay && 'border border-base-lighter',
+          'document-viewer--documents',
+          !viewerDocumentToDisplay && 'border border-base-lighter',
         )}
       >
-        {!attachmentDocumentToDisplay && (
+        {!viewerDocumentToDisplay && (
           <div className="padding-2">There are no attachments to preview</div>
         )}
 
-        {!process.env.CI && attachmentDocumentToDisplay && (
+        {!process.env.CI && viewerDocumentToDisplay && (
           <>
             <div className="message-document-actions">
               {messageDocumentHelper.showEditButtonNotSigned && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/${parentMessageId}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
                   icon="edit"
                 >
                   Edit
@@ -58,7 +58,7 @@ export const MessageDocument = connect(
                   onClick={() =>
                     openConfirmEditModalSequence({
                       docketNumber: caseDetail.docketNumber,
-                      documentIdToEdit: attachmentDocumentToDisplay.documentId,
+                      documentIdToEdit: viewerDocumentToDisplay.documentId,
                       parentMessageId,
                       redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
                     })
@@ -71,7 +71,7 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showApplySignatureButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${attachmentDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign/${parentMessageId}`}
                   icon="pencil-alt"
                 >
                   Apply Signature
@@ -84,7 +84,7 @@ export const MessageDocument = connect(
                   icon="pencil-alt"
                   onClick={() =>
                     openConfirmEditSignatureModalSequence({
-                      documentIdToEdit: attachmentDocumentToDisplay.documentId,
+                      documentIdToEdit: viewerDocumentToDisplay.documentId,
                     })
                   }
                 >
@@ -95,7 +95,7 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showAddDocketEntryButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/documents/${attachmentDocumentToDisplay.documentId}/add-court-issued-docket-entry/${parentMessageId}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.documentId}/add-court-issued-docket-entry/${parentMessageId}`}
                   icon="plus-circle"
                 >
                   Add Docket Entry
@@ -109,7 +109,7 @@ export const MessageDocument = connect(
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
                     caseId: caseDetail.caseId,
-                    documentId: attachmentDocumentToDisplay.documentId,
+                    documentId: viewerDocumentToDisplay.documentId,
                   })
                 }
               >
@@ -118,7 +118,7 @@ export const MessageDocument = connect(
             </div>
             <iframe
               src={iframeSrc}
-              title={attachmentDocumentToDisplay.documentTitle}
+              title={viewerDocumentToDisplay.documentTitle}
             />
           </>
         )}
