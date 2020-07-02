@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -36,7 +37,7 @@ describe('generateChangeOfAddress', () => {
             representingPrimary: true,
             role: 'privatePractitioner',
             section: 'privatePractitioner',
-            serviceIndicator: 'Electronic',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
             userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
           },
         ],
@@ -75,7 +76,7 @@ describe('generateChangeOfAddress', () => {
         representingPrimary: true,
         role: 'privatePractitioner',
         section: 'privatePractitioner',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     });
@@ -125,7 +126,7 @@ describe('generateChangeOfAddress', () => {
         representingPrimary: true,
         role: 'privatePractitioner',
         section: 'privatePractitioner',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     });

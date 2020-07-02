@@ -5,11 +5,15 @@ import { presenter } from '../presenter-mock';
 
 describe('gotoReviewSavedPetitionSequence', () => {
   let test;
+  let PARTY_TYPES;
+
+  ({ PARTY_TYPES } = applicationContext.getConstants());
+
   const MOCK_CASE = {
     caseId: 'foo-bar-baz',
     docketNumber: '105-15',
     documents: [{ documentId: '123', documentType: 'Petition' }],
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
   };
   beforeAll(() => {
     applicationContext
@@ -27,7 +31,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
     test.setState('form', { partyType: 'petitioner' });
     test.setState('caseDetail', {
       docketNumber: '199-99',
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
     });
 
     await test.runSequence('gotoReviewSavedPetitionSequence', {
