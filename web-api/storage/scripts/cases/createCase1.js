@@ -1,3 +1,6 @@
+const {
+  COUNTRY_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
 const { asUserFromEmail } = require('../createUsers');
 
 module.exports.createCase1 = async () => {
@@ -47,7 +50,7 @@ module.exports.createCase1 = async () => {
           address2: 'Suscipit animi solu',
           address3: 'Architecto assumenda',
           city: 'Aspernatur nostrum s',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner',
           name: 'Brett Osborne',
           phone: '+1 (537) 235-6147',

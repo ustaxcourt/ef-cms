@@ -1,5 +1,8 @@
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../business/entities/EntityConstants');
 const { MOCK_DOCUMENTS } = require('./mockDocuments');
-const { PARTY_TYPES } = require('../business/entities/EntityConstants');
 
 exports.MOCK_CASE = {
   caseCaption: 'Test Petitioner, Petitioner',
@@ -8,7 +11,7 @@ exports.MOCK_CASE = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
     phone: '1234567',
@@ -63,7 +66,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
     phone: '1234567',
@@ -113,7 +116,7 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
     phone: '1234567',
