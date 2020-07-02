@@ -54,7 +54,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.country',
@@ -90,7 +90,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       address1: '123 Abc Ln',
       city: 'Cityville',
       country: 'Switzerland',
-      countryType: 'international',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',

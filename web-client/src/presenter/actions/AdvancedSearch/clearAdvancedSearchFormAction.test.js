@@ -15,7 +15,7 @@ describe('clearAdvancedSearchFormAction', () => {
       state: {
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             petitionerName: 'bob',
             petitionerState: 'TN',
             sure: 'yes',
@@ -32,7 +32,7 @@ describe('clearAdvancedSearchFormAction', () => {
 
     expect(result.state.advancedSearchForm).toEqual({
       caseSearchByName: {
-        countryType: 'international',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
         petitionerName: 'bob',
         petitionerState: 'TN',
         sure: 'yes',
@@ -50,7 +50,7 @@ describe('clearAdvancedSearchFormAction', () => {
       state: {
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             petitionerName: 'bob',
             petitionerState: 'TN',
             sure: 'yes',

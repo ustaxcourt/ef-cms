@@ -3,9 +3,9 @@ import { presenter } from '../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
-
 describe('resetContactsAction', () => {
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -47,7 +47,7 @@ describe('resetContactsAction', () => {
             address1: '123 Abc Ln',
             city: 'Bobville',
             country: 'Germany',
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             email: 'test@example.com',
             name: 'Bob',
             phone: '1234567890',
