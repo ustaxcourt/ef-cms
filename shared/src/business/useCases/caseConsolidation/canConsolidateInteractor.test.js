@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { canConsolidateInteractor } = require('./canConsolidateInteractor');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('canConsolidateInteractor', () => {
