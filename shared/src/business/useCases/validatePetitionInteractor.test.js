@@ -1,5 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 const { validatePetitionInteractor } = require('./validatePetitionInteractor');
 
 describe('validatePetitionInteractor', () => {
@@ -49,7 +49,7 @@ describe('validatePetitionInteractor', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',

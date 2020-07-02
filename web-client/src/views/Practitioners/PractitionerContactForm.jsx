@@ -8,6 +8,7 @@ import React from 'react';
 
 export const PractitionerContactForm = connect(
   {
+    COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
@@ -22,6 +23,7 @@ export const PractitionerContactForm = connect(
   function PractitionerContactForm({
     bind,
     changeCountryTypeSequence,
+    COUNTRY_TYPES,
     createPractitionerUserHelper,
     form,
     onBlurSequenceName,
@@ -40,7 +42,7 @@ export const PractitionerContactForm = connect(
           onChange={onChangeSequenceName}
           onChangeCountryType={changeCountryTypeSequence}
         />
-        {form.contact.countryType === 'domestic' ? (
+        {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
           <Address
             bind={bind}
             type={type}

@@ -4,9 +4,12 @@ const {
 const {
   associateIrsPractitionerWithCaseInteractor,
 } = require('./associateIrsPractitionerWithCaseInteractor');
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { ROLES } = require('../../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -16,7 +19,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',

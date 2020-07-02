@@ -1,7 +1,7 @@
 const {
   validatePetitionerInformationFormInteractor,
 } = require('./validatePetitionerInformationFormInteractor');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('validatePetition', () => {
   it('returns the expected errors object when contactPrimary is missing fields', () => {
@@ -20,7 +20,7 @@ describe('validatePetition', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '1234567',
@@ -39,7 +39,7 @@ describe('validatePetition', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '1234567',
@@ -50,7 +50,7 @@ describe('validatePetition', () => {
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '1234567',

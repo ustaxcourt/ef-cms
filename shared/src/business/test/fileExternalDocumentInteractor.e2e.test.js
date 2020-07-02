@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -39,7 +40,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
@@ -134,7 +135,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         address2: 'Ad cumque quidem lau',
         address3: 'Anim est dolor animi',
         city: 'Rerum eaque cupidata',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '+1 (599) 681-5435',
@@ -563,7 +564,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
