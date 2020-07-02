@@ -5,7 +5,9 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import {
+  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -48,10 +50,13 @@ const seedData = {
 const signedByJudge = 'Maurice B. Foley';
 let caseDetail;
 
-describe.skip('docket clerk order advanced search', () => {
+describe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
   describe('performing data entry', () => {
@@ -70,6 +75,7 @@ describe.skip('docket clerk order advanced search', () => {
       signedAtFormatted: '01/02/2020',
     });
     docketClerkAddsDocketEntryFromOrder(test, 0);
+    docketClerkSignsOrder(test, 0);
     docketClerkServesDocument(test, 0);
 
     docketClerkCreatesAnOrder(test, {
@@ -85,6 +91,7 @@ describe.skip('docket clerk order advanced search', () => {
       expectedDocumentType: 'Order of Dismissal',
     });
     docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
+    docketClerkSignsOrder(test, 2);
     docketClerkServesDocument(test, 2);
 
     docketClerkCreatesAnOrder(test, {
@@ -93,6 +100,7 @@ describe.skip('docket clerk order advanced search', () => {
       expectedDocumentType: 'Order',
     });
     docketClerkAddsDocketEntryFromOrder(test, 3);
+    docketClerkSignsOrder(test, 3);
     docketClerkServesDocument(test, 3);
     docketClerkSealsCase(test);
   });
@@ -361,7 +369,7 @@ describe.skip('docket clerk order advanced search', () => {
       expect(test.getState('searchResults')).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            documentId: test.draftOrders[2].documentId,
+            documentId: test.draftOrders[1].documentId,
           }),
         ]),
       );
