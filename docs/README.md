@@ -57,4 +57,4 @@ At the end of each sprint, the vendor files a pull request back to the U.S. Tax 
 
 1. [Initial environment setup](environments/setup.md)
 2. [Continuous release process with CircleCI](environments/release.md)
-3. Environment teardown
+3. [Environment teardown](environments/teardown.md)
