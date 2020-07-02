@@ -10,10 +10,9 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
+const { STATUS_TYPES } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey', () => {
-  const { CASE_STATUS_TYPES } = applicationContext.getConstants();
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -179,7 +178,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
       expect(test.getState('caseDetail').highPriority).toBeFalsy();
 
@@ -219,7 +218,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
       expect(test.getState('caseDetail').highPriority).toBeTruthy();
 
@@ -286,7 +285,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(test.getState('caseDetail.status')).toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
       expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
       expect(test.getState('caseDetail.trialDate')).toEqual(
@@ -301,7 +300,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[1],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
@@ -312,7 +311,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[2],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
 
       //Case #4 - assigned
@@ -320,7 +319,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[3],
       });
       expect(test.getState('caseDetail.status')).toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
 
       //Case #5 - assigned
@@ -328,7 +327,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[4],
       });
       expect(test.getState('caseDetail.status')).toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
     });
 
@@ -354,7 +353,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -371,7 +370,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(test.getState('caseDetail.status')).not.toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
 
       await test.runSequence('addCaseToTrialSessionSequence');
@@ -390,7 +389,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(test.getState('caseDetail.status')).toEqual(
-        CASE_STATUS_TYPES.calendared,
+        STATUS_TYPES.calendared,
       );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
