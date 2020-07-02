@@ -1,9 +1,8 @@
 const {
   reactTemplateGenerator,
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-
 const { COUNTRY_TYPES } = require('../entities/EntityConstants');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   const addressLabelCoverSheetTemplate = reactTemplateGenerator({

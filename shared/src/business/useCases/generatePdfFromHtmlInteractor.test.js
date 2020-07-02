@@ -1,7 +1,6 @@
 const {
   generatePdfFromHtmlInteractor,
 } = require('./generatePdfFromHtmlInteractor.js');
-
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 let pageContent = '';
