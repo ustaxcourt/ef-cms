@@ -17,7 +17,7 @@ export const caseExistsAndIsNotSealedAction = async ({
       .getUseCases()
       .getCaseForPublicDocketSearchInteractor({
         applicationContext,
-        docketNumber: props.caseId,
+        docketNumber: props.docketNumber,
       });
 
     return path.success({ caseDetail });

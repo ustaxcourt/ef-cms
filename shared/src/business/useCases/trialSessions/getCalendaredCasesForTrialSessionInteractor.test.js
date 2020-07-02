@@ -4,11 +4,10 @@ const {
 const {
   getCalendaredCasesForTrialSessionInteractor,
 } = require('./getCalendaredCasesForTrialSessionInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
-
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 const mockJudge = {
   role: 'judge',

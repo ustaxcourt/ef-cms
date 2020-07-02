@@ -249,7 +249,6 @@
         - "M136"
         - "M218"
         - "MEMO"
-        - "MGRTED"
         - "MINC"
         - "MIND"
         - "MISC"

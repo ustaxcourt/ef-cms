@@ -3,7 +3,6 @@ import {
   castToISO,
   getCaseDetailFormWithComputedDatesAction,
 } from './getCaseDetailFormWithComputedDatesAction';
-
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 

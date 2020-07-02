@@ -6,9 +6,7 @@ import {
 } from '../utils/useCerebralState';
 import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
-
 import React, { useState } from 'react';
-
 import classNames from 'classnames';
 
 let FontAwesomeIcon;

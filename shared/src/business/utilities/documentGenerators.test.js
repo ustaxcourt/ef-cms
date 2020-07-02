@@ -1,12 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-
 const fs = require('fs');
 const path = require('path');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('./getChromiumBrowser');
-
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -15,6 +8,7 @@ const {
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
+  noticeOfTrialIssued,
   order,
   pendingReport,
   receiptOfFiling,
@@ -23,6 +17,11 @@ const {
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -345,6 +344,42 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Receipt_Petition', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('noticeOfTrialIssued', () => {
+    it('generates a Notice of Trial Issued document', async () => {
+      const pdf = await noticeOfTrialIssued({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          trialInfo: {
+            address1: '123 Some St.',
+            address2: 'Suite B',
+            city: 'Somecity',
+            courthouseName: 'Test Courthouse Name',
+            judge: 'Judge Dredd',
+            postalCode: '80008',
+            startDate: '02/02/2020',
+            startTime: '9:00 AM',
+            state: 'ZZ',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Trial_Issued', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
