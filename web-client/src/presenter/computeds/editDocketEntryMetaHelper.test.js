@@ -11,12 +11,18 @@ const editDocketEntryMetaHelper = withAppContextDecorator(
 );
 
 describe('editDocketEntryMetaHelper', () => {
+  let PARTY_TYPES;
+
+  beforeAll(() => {
+    ({ PARTY_TYPES } = applicationContext.getConstants());
+  });
+
   describe('showObjection', () => {
     it('should show objection field if the documentType allows (e.g. Motions)', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -32,7 +38,7 @@ describe('editDocketEntryMetaHelper', () => {
         state: {
           caseDetail: {
             documents: [],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -52,7 +58,7 @@ describe('editDocketEntryMetaHelper', () => {
         state: {
           caseDetail: {
             documents: [],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -71,7 +77,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -88,7 +94,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -105,7 +111,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -122,7 +128,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -139,7 +145,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -185,7 +191,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',

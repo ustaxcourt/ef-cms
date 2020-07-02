@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
+const { getChromiumBrowser } = require('./getChromiumBrowser');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
+
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -17,11 +23,7 @@ const {
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../useCases/generatePdfFromHtmlInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -170,7 +172,7 @@ describe('documentGenerators', () => {
       const pdf = await coverSheet({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner',
+          caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
           certificateOfService: true,
           dateFiledLodged: '01/01/20',
@@ -231,7 +233,7 @@ describe('documentGenerators', () => {
                 name: 'Test IRS Practitioner',
               },
             ],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
             privatePractitioners: [
               {
                 barNumber: 'PT20001',
