@@ -3,10 +3,11 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-let PARTY_TYPES;
-let PAYMENT_STATUS;
-
-({ PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants());
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} = applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCase = (
   test,
@@ -147,7 +148,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
 
     await test.runSequence('updateFormValueSequence', {

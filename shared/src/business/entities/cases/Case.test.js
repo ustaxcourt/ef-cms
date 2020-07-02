@@ -752,7 +752,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           contactPrimary: {},
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
         {
           applicationContext,

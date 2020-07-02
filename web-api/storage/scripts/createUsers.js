@@ -19,7 +19,7 @@ module.exports.createUsers = async () => {
   usersByEmail = {};
 
   const user = {
-    role: 'admin',
+    role: ROLES.admin,
   };
 
   const applicationContext = createApplicationContext(user);

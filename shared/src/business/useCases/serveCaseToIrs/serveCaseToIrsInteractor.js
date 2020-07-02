@@ -5,6 +5,7 @@ const {
 const {
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -97,7 +98,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       initialDocument.setAsServed([
         {
           name: 'IRS',
-          role: 'irsSuperuser',
+          role: ROLES.irsSuperuser,
         },
       ]);
       caseEntity.updateDocument(initialDocument);

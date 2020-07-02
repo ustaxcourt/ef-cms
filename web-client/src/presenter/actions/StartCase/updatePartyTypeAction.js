@@ -44,7 +44,7 @@ export const updatePartyTypeAction = async ({
       case PARTY_TYPES.donor:
         partyType = PARTY_TYPES.donor;
         break;
-      case 'Transferee':
+      case PARTY_TYPES.transferee:
         partyType = PARTY_TYPES.transferee;
         break;
       case 'Deceased Spouse':

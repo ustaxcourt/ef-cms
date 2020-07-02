@@ -106,13 +106,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Guy Fieri',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Guy Fieri',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 

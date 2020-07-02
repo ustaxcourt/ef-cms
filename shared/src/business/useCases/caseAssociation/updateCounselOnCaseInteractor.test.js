@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   COUNTRY_TYPES,
+  PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -93,7 +94,7 @@ describe('updateCounselOnCaseInteractor', () => {
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         irsPractitioners: mockIrsPractitioners,
-        partyType: 'Petitioner',
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         privatePractitioners: mockPrivatePractitioners,
         procedureType: 'Regular',
