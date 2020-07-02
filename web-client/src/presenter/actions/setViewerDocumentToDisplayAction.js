@@ -1,24 +1,25 @@
 import { state } from 'cerebral';
 
 /**
- * sets the attachmentDocumentToDisplay from props
+ * sets the viewerDocumentToDisplay from props
  *
  * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const setAttachmentDocumentToDisplayAction = async ({
+export const setViewerDocumentToDisplayAction = async ({
   applicationContext,
   get,
   props,
   store,
 }) => {
-  const { attachmentDocumentToDisplay } = props;
+  const { viewerDocumentToDisplay } = props;
   const { caseId } = get(state.caseDetail);
 
-  store.set(state.attachmentDocumentToDisplay, attachmentDocumentToDisplay);
+  store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
-  if (attachmentDocumentToDisplay) {
+  if (viewerDocumentToDisplay) {
     const {
       url,
     } = await applicationContext
@@ -26,7 +27,7 @@ export const setAttachmentDocumentToDisplayAction = async ({
       .getDocumentDownloadUrlInteractor({
         applicationContext,
         caseId,
-        documentId: attachmentDocumentToDisplay.documentId,
+        documentId: viewerDocumentToDisplay.documentId,
         isPublic: false,
       });
 

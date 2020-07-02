@@ -119,7 +119,7 @@ joiValidationDecorator(
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object()).required(),
+    messages: joi.array().items(joi.object().instance(Message)).required(),
     section: joi
       .string()
       .valid(

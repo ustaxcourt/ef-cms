@@ -64,7 +64,6 @@ const CompletedMessage = ({ message }) => (
 
 export const MessageDetail = connect(
   {
-    attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
     cerebralBindSimpleSetStateSequence:
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
@@ -75,12 +74,12 @@ export const MessageDetail = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setAttachmentDocumentToDisplaySequence:
-      sequences.setAttachmentDocumentToDisplaySequence,
+    setViewerDocumentToDisplaySequence:
+      sequences.setViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
+    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
-    attachmentDocumentToDisplay,
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
@@ -88,8 +87,9 @@ export const MessageDetail = connect(
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setAttachmentDocumentToDisplaySequence,
+    setViewerDocumentToDisplaySequence,
     showModal,
+    viewerDocumentToDisplay,
   }) {
     return (
       <>
@@ -208,7 +208,7 @@ export const MessageDetail = connect(
 
           <div className="grid-row grid-gap-5">
             <div className="grid-col-4">
-              <div className="border border-base-lighter message-detail--attachments">
+              <div className="border border-base-lighter document-viewer--documents">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}
@@ -216,16 +216,14 @@ export const MessageDetail = connect(
                 {formattedMessageDetail.attachments.length > 0 &&
                   formattedMessageDetail.attachments.map((attachment, idx) => {
                     const active =
-                      attachmentDocumentToDisplay === attachment
-                        ? 'active'
-                        : '';
+                      viewerDocumentToDisplay === attachment ? 'active' : '';
                     return (
                       <Button
                         className={`usa-button--unstyled attachment-viewer-button ${active}`}
                         key={idx}
                         onClick={() => {
-                          setAttachmentDocumentToDisplaySequence({
-                            attachmentDocumentToDisplay: attachment,
+                          setViewerDocumentToDisplaySequence({
+                            viewerDocumentToDisplay: attachment,
                           });
                         }}
                       >
