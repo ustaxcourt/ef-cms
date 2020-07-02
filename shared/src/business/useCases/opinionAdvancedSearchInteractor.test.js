@@ -1,5 +1,6 @@
 const {
   OPINION_EVENT_CODES,
+  ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
   opinionAdvancedSearchInteractor,
@@ -9,7 +10,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 describe('opinionAdvancedSearchInteractor', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
+      role: ROLES.petitionsClerk,
     });
 
     applicationContext
@@ -43,7 +44,7 @@ describe('opinionAdvancedSearchInteractor', () => {
 
   it('returns an unauthorized error on petitioner user role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitioner',
+      role: ROLES.petitioner,
     });
 
     await expect(

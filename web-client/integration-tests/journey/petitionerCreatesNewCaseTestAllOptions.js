@@ -54,7 +54,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.country',
@@ -90,7 +90,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       address1: '123 Abc Ln',
       city: 'Cityville',
       country: 'Switzerland',
-      countryType: 'international',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
@@ -402,7 +402,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'estateType',
-      value: 'Trust',
+      value: PARTY_TYPES.trust,
     });
 
     result = runCompute(startCaseHelper, {
@@ -605,14 +605,14 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'Transferee',
+      value: PARTY_TYPES.transferee,
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(test.getState('form.partyType')).toEqual('Transferee');
+    expect(test.getState('form.partyType')).toEqual(PARTY_TYPES.transferee);
 
     // surviving spouse party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -635,7 +635,9 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
-    expect(test.getState('form.partyType')).toEqual('Surviving spouse');
+    expect(test.getState('form.partyType')).toEqual(
+      PARTY_TYPES.survivingSpouse,
+    );
 
     await test.runSequence('submitFilePetitionSequence');
 

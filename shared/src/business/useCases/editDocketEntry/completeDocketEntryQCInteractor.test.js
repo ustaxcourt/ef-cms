@@ -6,7 +6,11 @@ const {
 const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
@@ -91,7 +95,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,

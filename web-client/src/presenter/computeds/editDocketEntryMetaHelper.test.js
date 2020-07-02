@@ -161,7 +161,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner & spouse',
+            partyType: PARTY_TYPES.petitionerSpouse,
           },
           form: {
             documentId: '123',
@@ -176,7 +176,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner & deceased spouse',
+            partyType: PARTY_TYPES.petitionerDeceasedSpouse,
           },
           form: {
             documentId: '123',

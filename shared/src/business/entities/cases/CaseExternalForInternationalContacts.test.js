@@ -1,6 +1,6 @@
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { PARTY_TYPES } = require('../EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../EntityConstants');
 
 const contactErrorMessages =
   ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
@@ -13,7 +13,7 @@ describe('CaseExternal', () => {
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
-          countryType: 'international',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',
@@ -44,7 +44,7 @@ describe('CaseExternal', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'international',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',

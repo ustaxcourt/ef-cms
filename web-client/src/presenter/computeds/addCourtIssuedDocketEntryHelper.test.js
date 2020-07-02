@@ -4,15 +4,16 @@ import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const { USER_ROLES } = applicationContext.getConstants();
+
 let user = {
-  role: 'docketclerk',
+  role: USER_ROLES.docketClerk,
 };
 
 const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
   addCourtIssuedDocketEntryHelperComputed,
   {
     ...applicationContext,
-
     getConstants: () => {
       return {
         COURT_ISSUED_EVENT_CODES: [
@@ -21,7 +22,7 @@ const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
         ],
         USER_ROLES: {
-          petitionsClerk: 'petitionsclerk',
+          petitionsClerk: USER_ROLES.petitionsClerk,
         },
       };
     },
@@ -149,7 +150,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   });
 
   it('should not show service stamp if user is petitions clerk', () => {
-    user.role = 'petitionsclerk';
+    user.role = USER_ROLES.petitionsClerk;
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.showServiceStamp).toEqual(false);
   });
