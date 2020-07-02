@@ -1,9 +1,12 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -12,6 +15,7 @@ jest.mock('../addCoversheetInteractor', () => ({
 
 describe('generateChangeOfAddress', () => {
   beforeAll(() => {
+    const { COUNTRY_TYPES } = applicationContext.getConstants();
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'docketclerk',
       userId: 'docketclerk',
@@ -27,7 +31,7 @@ describe('generateChangeOfAddress', () => {
               address2: 'Apartment 4',
               address3: 'Under the stairs',
               city: 'Chicago',
-              countryType: 'domestic',
+              countryType: COUNTRY_TYPES.DOMESTIC,
               phone: '+1 (555) 555-5555',
               postalCode: '61234',
               state: 'IL',
@@ -54,7 +58,7 @@ describe('generateChangeOfAddress', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -66,7 +70,7 @@ describe('generateChangeOfAddress', () => {
           address2: 'Apartment 4',
           address3: 'Under the stairs',
           city: 'Chicago',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           phone: '+1 (555) 555-5555',
           postalCode: '61234',
           state: 'IL',
@@ -104,7 +108,7 @@ describe('generateChangeOfAddress', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -116,7 +120,7 @@ describe('generateChangeOfAddress', () => {
           address2: 'Apartment 4',
           address3: 'Under the stairs',
           city: 'Chicago',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           phone: '+1 (555) 555-5555',
           postalCode: '61234',
           state: 'IL',

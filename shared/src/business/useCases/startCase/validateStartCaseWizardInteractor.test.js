@@ -4,6 +4,7 @@ const {
 const {
   validateStartCaseWizardInteractor,
 } = require('./validateStartCaseWizardInteractor');
+const { COUNTRY_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('validateStartCaseWizardInteractor', () => {
@@ -33,7 +34,7 @@ describe('validateStartCaseWizardInteractor', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Primary',
           phone: '1234567890',
           postalCode: '12345',

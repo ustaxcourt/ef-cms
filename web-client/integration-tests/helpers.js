@@ -359,6 +359,8 @@ export const uploadPetition = async (
     sub: userMap[loginUsername].userId,
   };
 
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   const petitionMetadata = {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -366,7 +368,7 @@ export const uploadPetition = async (
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',
       city: 'Et id aut est velit',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: user.email,
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',

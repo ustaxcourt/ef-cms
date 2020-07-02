@@ -15,9 +15,10 @@ const axiosInstance = axios.create({
   timeout: 1000,
 });
 
-let SERVICE_INDICATOR_TYPES;
-
-({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = applicationContext.getConstants();
 
 const firstConsolidatedCase = {
   ...MOCK_CASE,
@@ -69,7 +70,7 @@ const otherFilersCase = {
       address1: '42 Lamb Sauce Blvd',
       city: 'Nashville',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'gordon@thelambsauce.com',
       name: 'Gordon Ramsay',
       otherFilerType: 'Intervenor',
@@ -81,7 +82,7 @@ const otherFilersCase = {
       address1: '1337 12th Ave',
       city: 'Flavortown',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'mayor@flavortown.com',
       name: 'Guy Fieri',
       otherFilerType: 'Participant',
@@ -107,7 +108,7 @@ const otherPetitionersCase = {
       address2: 'Maxime dolorum quae ',
       address3: 'Ut numquam ducimus ',
       city: 'Placeat sed dolorum',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Keelie Bruce',
       phone: '+1 (785) 771-2329',
       postalCode: '17860',

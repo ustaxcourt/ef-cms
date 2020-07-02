@@ -8,6 +8,7 @@ import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDe
 import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
+import { getDefaultDocketViewerDocumentToDisplayAction } from '../actions/getDefaultDocketViewerDocumentToDisplayAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { parallel, set } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -20,6 +21,7 @@ import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTa
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
@@ -28,6 +30,8 @@ const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
   showModalFromQueryAction,
+  getDefaultDocketViewerDocumentToDisplayAction,
+  setViewerDocumentToDisplayAction,
   getCaseDeadlinesForCaseAction,
   getCaseMessagesForCaseAction,
   setCurrentPageAction('CaseDetailInternal'),

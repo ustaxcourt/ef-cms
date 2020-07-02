@@ -7,6 +7,8 @@ describe('validateAddPractitionerAction', () => {
   let successMock;
   let errorMock;
 
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     successMock = jest.fn();
     errorMock = jest.fn();
@@ -36,7 +38,7 @@ describe('validateAddPractitionerAction', () => {
           contact: {
             address1: '123 Some St.',
             city: 'Some City',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             phone: '123-123-1234',
             postalCode: '12345',
             state: 'AL',

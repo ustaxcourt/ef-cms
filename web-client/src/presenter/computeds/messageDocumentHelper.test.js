@@ -17,9 +17,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -27,6 +24,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -41,9 +41,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -51,6 +48,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -65,9 +65,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -75,6 +72,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -89,9 +89,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -103,6 +100,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -117,9 +117,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -131,6 +128,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -145,9 +145,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -159,6 +156,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -173,9 +173,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -183,6 +180,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -197,9 +197,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -207,6 +204,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -222,9 +222,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -233,6 +230,9 @@ describe('messageDocumentHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -248,9 +248,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -258,6 +255,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -273,9 +273,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -284,6 +281,9 @@ describe('messageDocumentHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -299,9 +299,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -313,6 +310,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -328,9 +328,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -340,6 +337,9 @@ describe('messageDocumentHelper', () => {
           documents: [
             { documentId: '123', signedAt: '2020-06-25T20:49:28.192Z' },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -355,9 +355,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -366,6 +363,9 @@ describe('messageDocumentHelper', () => {
               signedAt: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -380,9 +380,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -390,6 +387,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -404,9 +404,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [],
           documents: [
@@ -414,6 +411,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });
@@ -428,9 +428,6 @@ describe('messageDocumentHelper', () => {
 
     const result = runCompute(messageDocumentHelper, {
       state: {
-        attachmentDocumentToDisplay: {
-          documentId: '123',
-        },
         caseDetail: {
           docketRecord: [
             {
@@ -442,6 +439,9 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
             },
           ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
         },
       },
     });

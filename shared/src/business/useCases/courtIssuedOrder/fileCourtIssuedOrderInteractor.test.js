@@ -5,7 +5,7 @@ const {
 const {
   fileCourtIssuedOrderInteractor,
 } = require('./fileCourtIssuedOrderInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -17,7 +17,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',

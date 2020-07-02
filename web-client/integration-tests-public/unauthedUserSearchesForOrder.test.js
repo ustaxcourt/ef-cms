@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
@@ -22,6 +22,7 @@ const testClient = setupTestClient({
   },
 });
 testClient.draftOrders = [];
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitioner creates case', () => {
   beforeAll(() => {
@@ -35,7 +36,7 @@ describe('Petitioner creates case', () => {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'NOTAREALNAMEFORTESTINGPUBLIC',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',

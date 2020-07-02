@@ -1,4 +1,9 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   forwardWorkItemInteractor,
 } = require('../useCases/workitems/forwardWorkItemInteractor');
 const {
@@ -10,7 +15,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('forwardWorkItemInteractor integration test', () => {
@@ -31,7 +35,7 @@ describe('forwardWorkItemInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
