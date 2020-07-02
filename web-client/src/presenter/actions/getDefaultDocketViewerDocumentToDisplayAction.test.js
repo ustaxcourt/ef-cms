@@ -111,4 +111,44 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
       viewerDocumentToDisplay: null,
     });
   });
+
+  it('returns the correct docket record entry if props.documentId is set', async () => {
+    const result = await runAction(
+      getDefaultDocketViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: { documentId: '234' },
+        state: {
+          caseDetail: {
+            docketRecord: [
+              {
+                documentId: '123',
+                index: 1,
+              },
+              {
+                index: 2,
+              },
+              {
+                documentId: '234',
+                index: 3,
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+              },
+              {
+                documentId: '234',
+              },
+            ],
+          },
+        },
+      },
+    );
+    expect(result.output).toMatchObject({
+      viewerDocumentToDisplay: { documentId: '234' },
+    });
+  });
 });
