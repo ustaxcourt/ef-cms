@@ -4,7 +4,7 @@ const {
 const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -43,7 +43,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

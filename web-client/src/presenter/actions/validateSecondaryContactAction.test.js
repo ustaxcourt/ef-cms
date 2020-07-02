@@ -18,6 +18,8 @@ describe('validateSecondaryContactAction', () => {
     };
   });
 
+  const { PARTY_TYPES } = applicationContext.getConstants();
+
   it('runs validation on the secondary contact with a successful result', async () => {
     applicationContext
       .getUseCases()
@@ -30,7 +32,7 @@ describe('validateSecondaryContactAction', () => {
       state: {
         form: {
           contactSecondary: {},
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -60,7 +62,7 @@ describe('validateSecondaryContactAction', () => {
             postalCode: '12345',
             state: 'TN',
           },
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });

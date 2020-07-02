@@ -4,7 +4,7 @@ const {
 const {
   updateDocketEntryInteractor,
 } = require('./updateDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
@@ -77,7 +77,7 @@ describe('updateDocketEntryInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,

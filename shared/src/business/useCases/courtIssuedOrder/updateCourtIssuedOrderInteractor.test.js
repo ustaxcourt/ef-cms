@@ -4,7 +4,7 @@ const {
 const {
   updateCourtIssuedOrderInteractor,
 } = require('./updateCourtIssuedOrderInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('updateCourtIssuedOrderInteractor', () => {
@@ -62,7 +62,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,

@@ -5,7 +5,7 @@ const {
   associateIrsPractitionerWithCaseInteractor,
 } = require('./associateIrsPractitionerWithCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
@@ -27,7 +27,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     docketRecord: MOCK_CASE.docketRecord,
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

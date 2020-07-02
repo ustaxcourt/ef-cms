@@ -5,6 +5,7 @@ const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
 const {
+  PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -67,7 +68,7 @@ describe('associatePrivatePractitionerToCase', () => {
         },
       ],
       filingType: 'Myself',
-      partyType: 'Petitioner & spouse',
+      partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     };
