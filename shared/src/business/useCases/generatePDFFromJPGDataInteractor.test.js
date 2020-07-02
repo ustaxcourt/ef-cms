@@ -3,9 +3,8 @@ const path = require('path');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('./generatePDFFromJPGDataInteractor.js');
-const { PDFDocument } = require('pdf-lib');
-
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');

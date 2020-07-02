@@ -3,7 +3,7 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
-import { SCAN_MODES } from '../../business/entities/EntityConstants';
+const { SCAN_MODES } = require('../../business/entities/EntityConstants');
 
 describe('getScannerInterface', () => {
   const jsdom = new JSDOM('');

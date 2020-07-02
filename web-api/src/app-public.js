@@ -45,7 +45,7 @@ const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
  * public-api
  */
 app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
-app.get('/public-api/cases/:caseId', lambdaWrapper(getPublicCaseLambda));
+app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
 app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));

@@ -12,7 +12,7 @@ const formattedMessageDetail = withAppContextDecorator(
 );
 
 export const docketClerkEditsOrderFromMessage = test => {
-  return it('docket clerk edits an order from a message', async () => {
+  return it('docket clerk edits a signed order from a message', async () => {
     await test.runSequence('gotoMessageDetailSequence', {
       docketNumber: test.docketNumber,
       parentMessageId: test.parentMessageId,
@@ -34,6 +34,7 @@ export const docketClerkEditsOrderFromMessage = test => {
     await test.runSequence('navigateToEditOrderSequence');
 
     expect(test.getState('currentPage')).toEqual('CreateOrder');
+    expect(test.getState('form.documentTitle')).toEqual('Order');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
@@ -61,5 +62,6 @@ export const docketClerkEditsOrderFromMessage = test => {
       d => d.documentId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);
+    expect(caseOrderDocument.documentTitle).toBeDefined();
   });
 };

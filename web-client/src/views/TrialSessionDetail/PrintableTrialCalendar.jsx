@@ -1,11 +1,10 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
-
-import { Button } from '../../ustc-ui/Button/Button';
-import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableTrialCalendar = connect(
   {
