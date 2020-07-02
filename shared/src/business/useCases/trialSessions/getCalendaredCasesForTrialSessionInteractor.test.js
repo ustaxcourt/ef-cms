@@ -5,7 +5,7 @@ const {
   getCalendaredCasesForTrialSessionInteractor,
 } = require('./getCalendaredCasesForTrialSessionInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 

@@ -5,7 +5,7 @@ const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../../entities/User');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
