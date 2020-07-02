@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -33,7 +34,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',

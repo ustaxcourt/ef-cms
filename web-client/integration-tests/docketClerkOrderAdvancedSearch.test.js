@@ -323,6 +323,8 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
+      await refreshElasticsearchIndex();
+
       await wait(5000);
 
       expect(test.getState('searchResults')).toEqual(

@@ -1,8 +1,12 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   getAllCaseDeadlinesInteractor,
 } = require('./getAllCaseDeadlinesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('getAllCaseDeadlinesInteractor', () => {
@@ -24,7 +28,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',

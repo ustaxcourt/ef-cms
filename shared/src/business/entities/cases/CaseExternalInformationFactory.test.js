@@ -1,8 +1,12 @@
 const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
+const {
+  COUNTRY_TYPES,
+  MAX_FILE_SIZE_BYTES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
@@ -439,7 +443,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Primary',
           phone: '1234567890',
           postalCode: '12345',
@@ -448,7 +452,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactSecondary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary',
           phone: '1234567890',
           postalCode: '12345',

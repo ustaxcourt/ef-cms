@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
   OPINION_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -19,7 +20,7 @@ describe('opinionPublicSearchInteractor', () => {
         address2: 'Ut culpa cum sint ',
         address3: 'In laboris hic volup',
         city: 'Omnis dignissimos at',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner',
         name: 'Reuben Blair',
         phone: '+1 (338) 996-7072',

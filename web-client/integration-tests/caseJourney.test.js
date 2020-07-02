@@ -1,5 +1,4 @@
 import { adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete } from './journey/adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete';
-import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
 import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
 import { adcViewsMessages } from './journey/adcViewsMessages';
 import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
@@ -101,7 +100,6 @@ describe('Case journey', () => {
 
   loginAs(test, 'adc');
   adcViewsMessages(test);
-  adcViewsCaseDetail(test);
   adcViewsDocumentDetail(test);
   adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete(test);
   adcViewsMessagesAfterComplete(test);
