@@ -3,6 +3,7 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
@@ -22,6 +23,13 @@ const test = setupTest({
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
+  beforeAll(() => {
+    jest.setTimeout(40000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
+  });
+
   loginAs(test, 'petitioner');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
@@ -52,8 +60,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsDraftOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
+  docketClerkSignsOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
+  docketClerkSignsOrder(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
 });
