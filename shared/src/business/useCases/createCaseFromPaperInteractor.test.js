@@ -4,8 +4,8 @@ const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { PARTY_TYPES, PAYMENT_STATUS } = require('../entities/EntityConstants');
-const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -75,7 +75,7 @@ describe('createCaseFromPaperInteractor', () => {
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
@@ -122,7 +122,7 @@ describe('createCaseFromPaperInteractor', () => {
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
@@ -169,7 +169,7 @@ describe('createCaseFromPaperInteractor', () => {
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
@@ -217,7 +217,7 @@ describe('createCaseFromPaperInteractor', () => {
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',

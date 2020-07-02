@@ -1,5 +1,6 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest } from './helpers';
 import axios from 'axios';
 

@@ -1,5 +1,6 @@
 const faker = require('faker');
 const {
+  COUNTRY_TYPES,
   FILING_TYPES,
   PARTY_TYPES,
   PROCEDURE_TYPES,
@@ -122,7 +123,7 @@ const createCase = async ({
           address2: faker.address.secondaryAddress(),
           address3: faker.address.streetSuffix(),
           city: faker.address.city(),
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: faker.internet.email(),
           name: petitionerName,
           phone: faker.phone.phoneNumber(),

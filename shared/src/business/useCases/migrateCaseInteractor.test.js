@@ -1,7 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -49,7 +49,7 @@ describe('migrateCaseInteractor', () => {
         address2: 'Address 2',
         address3: 'Address 3',
         city: 'Some City',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner1@example.com',
         name: 'Diana Prince',
         phone: '+1 (215) 128-6587',
