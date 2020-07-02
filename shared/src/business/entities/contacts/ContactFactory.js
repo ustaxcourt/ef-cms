@@ -65,7 +65,7 @@ const commonValidationRequirements = {
   hasEAccess: joi
     .boolean()
     .optional()
-    .description('Flag that indicates if the contact has eAccess.'),
+    .description('Flag that indicates if the contact has "eAccess" login credentials to the legacy system.'),
 };
 
 const domesticValidationObject = {
