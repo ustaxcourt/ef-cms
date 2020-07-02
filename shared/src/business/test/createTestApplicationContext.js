@@ -50,6 +50,9 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getCaseByDocketNumber,
+} = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
+const {
   getCaseDeadlinesByCaseId,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
 const {
@@ -310,6 +313,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
+    getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),

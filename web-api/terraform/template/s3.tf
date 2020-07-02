@@ -107,7 +107,7 @@ resource "aws_s3_bucket" "documents_us_west_1" {
 
 resource "aws_s3_bucket_public_access_block" "block_documents_west" {
   bucket = "${aws_s3_bucket.documents_us_west_1.id}"
-
+  provider = "aws.us-west-1"
   block_public_acls = true
   block_public_policy = true
   ignore_public_acls = true
@@ -185,7 +185,7 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 
 resource "aws_s3_bucket_public_access_block" "block_temp_west" {
   bucket = "${aws_s3_bucket.temp_documents_us_west_1.id}"
-
+  provider = "aws.us-west-1"
   block_public_acls = true
   block_public_policy = true
   ignore_public_acls = true

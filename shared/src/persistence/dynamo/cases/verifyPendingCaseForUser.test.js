@@ -1,9 +1,8 @@
 const client = require('../../dynamodbClientService');
-const { verifyPendingCaseForUser } = require('./verifyPendingCaseForUser');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { verifyPendingCaseForUser } = require('./verifyPendingCaseForUser');
 
 const userId = '123';
 const caseId = 'abc';

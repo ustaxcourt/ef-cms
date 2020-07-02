@@ -1,7 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getEligibleCasesForTrialSessionAction } from './getEligibleCasesForTrialSessionAction';
 import { presenter } from '../../presenter-mock';
-
 import { runAction } from 'cerebral/test';
 
 describe('getEligibleCasesForTrialSessionAction', () => {

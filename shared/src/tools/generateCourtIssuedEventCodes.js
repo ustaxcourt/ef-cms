@@ -6,7 +6,6 @@
 
 const fs = require('fs');
 const parse = require('csv-parse');
-
 const { gatherRecords, getCsvOptions } = require('./helpers');
 
 let exportColumns;

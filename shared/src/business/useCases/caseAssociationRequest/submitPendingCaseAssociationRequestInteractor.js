@@ -1,9 +1,8 @@
-const { UnauthorizedError } = require('../../../errors/errors');
-
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * submitPendingCaseAssociationRequestInteractor

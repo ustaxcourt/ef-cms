@@ -1,8 +1,7 @@
-const { updateWorkItemInCase } = require('./updateWorkItemInCase');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { updateWorkItemInCase } = require('./updateWorkItemInCase');
 
 describe('updateWorkItemInCase', () => {
   let updateStub;
