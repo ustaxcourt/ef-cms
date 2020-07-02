@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   COUNTRY_TYPES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
@@ -17,7 +18,7 @@ describe('generateChangeOfAddress', () => {
   beforeAll(() => {
     const { COUNTRY_TYPES } = applicationContext.getConstants();
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'docketclerk',
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
     applicationContext.getPersistenceGateway().getCasesByUser.mockReturnValue([
