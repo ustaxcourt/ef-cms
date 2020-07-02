@@ -1,4 +1,5 @@
 const { caseSealedFormatter, caseSearchFilter } = require('./caseFilter');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -53,7 +54,7 @@ describe('caseFilter', () => {
 
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = caseSearchFilter(caseSearchResults, {
-        role: 'irsPractitioner',
+        role: ROLES.irsPractitioner,
         userId: 'some other respondent',
       });
       expect(result.length).toEqual(1);
