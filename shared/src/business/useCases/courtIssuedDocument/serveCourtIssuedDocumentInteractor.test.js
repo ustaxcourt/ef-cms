@@ -119,15 +119,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documents: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'O - Order',
+          documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItems: [mockWorkItem],
         },
         {
           documentId: mockDocumentId,
-          documentType: 'OAJ - Order that case is assigned',
+          documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItems: [mockWorkItem],
@@ -170,6 +173,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           eventCode: 'O',
           filingDate: createISODateString(),
           index: 0,
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
         },
         {
           description: 'Docket Record 0',
@@ -184,15 +190,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documents: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'O - Order',
+          documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItems: [mockWorkItem],
         },
         {
           documentId: mockDocumentId,
-          documentType: 'OAJ - Order that case is assigned',
+          documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItems: [mockWorkItem],
