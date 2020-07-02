@@ -9,7 +9,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-
 import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const test = setupTest();

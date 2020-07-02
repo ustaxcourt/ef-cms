@@ -1,7 +1,9 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-import { getJudgeForUserChambersInteractor } from './getJudgeForUserChambersInteractor';
+const {
+  getJudgeForUserChambersInteractor,
+} = require('./getJudgeForUserChambersInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
 
 let currentUser;

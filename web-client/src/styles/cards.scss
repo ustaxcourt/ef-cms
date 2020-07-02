@@ -144,6 +144,10 @@
     &.representing-label {
       margin-top: 20px;
     }
+
+    &.no-margin {
+      margin: 0;
+    }
   }
 
   @media only screen and (max-width: $medium-screen) {

@@ -1,5 +1,3 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-
 import {
   fakeFile,
   loginAs,
@@ -9,6 +7,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 

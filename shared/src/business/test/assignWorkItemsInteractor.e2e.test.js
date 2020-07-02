@@ -22,7 +22,7 @@ describe('assignWorkItemsInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       caseCaption: 'Caption',
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
@@ -69,7 +69,7 @@ describe('assignWorkItemsInteractor integration test', () => {
 
     const createdCase = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     const workItem = createdCase.documents.find(
@@ -128,7 +128,7 @@ describe('assignWorkItemsInteractor integration test', () => {
 
     const caseAfterAssign = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     expect(

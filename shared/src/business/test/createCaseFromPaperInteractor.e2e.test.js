@@ -43,7 +43,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       state: 'CA',
     };
 
-    const { caseId } = await createCaseFromPaperInteractor({
+    const { docketNumber } = await createCaseFromPaperInteractor({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
@@ -68,7 +68,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     const createdCase = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     expect(createdCase).toMatchObject({

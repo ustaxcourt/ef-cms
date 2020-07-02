@@ -29,7 +29,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { caseId, docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -123,7 +123,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const caseAfterDocument = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     expect(caseAfterDocument).toMatchObject({
@@ -553,7 +553,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { caseId, docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -647,7 +647,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const caseAfterDocument = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
     const filedDocument = caseAfterDocument.documents.find(
       d => d.documentType === 'Motion for Leave to File',

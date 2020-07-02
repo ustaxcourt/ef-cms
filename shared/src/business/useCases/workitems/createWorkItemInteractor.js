@@ -1,13 +1,11 @@
-const { Case } = require('../../entities/cases/Case');
-const { Message } = require('../../entities/Message');
-const { WorkItem } = require('../../entities/WorkItem');
-
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-
+const { Case } = require('../../entities/cases/Case');
+const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * createWorkItemInteractor

@@ -1,10 +1,10 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
-import { setCaseIdFromModalSearchAction } from '../actions/caseConsolidation/setCaseIdFromModalSearchAction';
 import { setCaseModalSearchAction } from '../actions/caseConsolidation/setCaseModalSearchAction';
+import { setDocketNumberFromModalSearchAction } from '../actions/caseConsolidation/setDocketNumberFromModalSearchAction';
 import { setNoCaseFoundModalSearchAction } from '../actions/caseConsolidation/setNoCaseFoundModalSearchAction';
 
 export const submitCaseSearchForConsolidationSequence = [
-  setCaseIdFromModalSearchAction,
+  setDocketNumberFromModalSearchAction,
   caseExistsAction,
   {
     error: [setNoCaseFoundModalSearchAction],

@@ -1,5 +1,4 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
-
 import {
   createCourtIssuedDocketEntry,
   createMessage,

@@ -1,5 +1,4 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
-
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 
 const test = setupTest({
