@@ -42,7 +42,7 @@ describe('getPractitionersByNameInteractor', () => {
         {
           barNumber: 'PT1234',
           name: 'Test Practitioner1',
-          role: 'irsPractitioner',
+          role: ROLES.irsPractitioner,
           userId: '8190d648-e643-4964-988e-141e4e0db861',
         },
         {
@@ -62,7 +62,7 @@ describe('getPractitionersByNameInteractor', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner1',
-        role: 'irsPractitioner',
+        role: ROLES.irsPractitioner,
         userId: '8190d648-e643-4964-988e-141e4e0db861',
       },
       {

@@ -2,6 +2,7 @@ const {
   caseAdvancedSearchInteractor,
 } = require('./caseAdvancedSearchInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('caseAdvancedSearchInteractor', () => {
   let mockUser;
@@ -59,7 +60,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
   it('filters out sealed cases for non associated, non authorized users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'irsPractitioner',
+      role: ROLES.irsPractitioner,
     });
 
     applicationContext
@@ -81,7 +82,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
   it('returns results if practitioner is associated', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'irsPractitioner',
+      role: ROLES.irsPractitioner,
       userId: 'abc',
     });
 
@@ -119,7 +120,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
   it('returns results for petitionsclerk or internal user always', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
+      role: ROLES.petitionsClerk,
     });
 
     applicationContext
