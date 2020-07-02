@@ -1,9 +1,12 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -12,6 +15,7 @@ jest.mock('../addCoversheetInteractor', () => ({
 
 describe('generateChangeOfAddress', () => {
   beforeAll(() => {
+    const { COUNTRY_TYPES } = applicationContext.getConstants();
     applicationContext.getCurrentUser.mockReturnValue({
       role: 'docketclerk',
       userId: 'docketclerk',
