@@ -1,6 +1,3 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-
-// docketClerk
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
@@ -10,14 +7,13 @@ import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './jou
 import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
-// petitionsClerk
-import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
-// petitioner
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
+import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const test = setupTest({
   useCases: {

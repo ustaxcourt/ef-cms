@@ -73,6 +73,16 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 }
 
+
+resource "aws_s3_bucket_public_access_block" "block_documents_east" {
+  bucket = "${aws_s3_bucket.documents_us_east_1.id}"
+
+  block_public_acls = true
+  block_public_policy = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket" "documents_us_west_1" {
   provider = "aws.us-west-1"
   region = "us-west-1"
@@ -93,6 +103,15 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   tags {
     environment = "${var.environment}"
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "block_documents_west" {
+  bucket = "${aws_s3_bucket.documents_us_west_1.id}"
+  provider = "aws.us-west-1"
+  block_public_acls = true
+  block_public_policy = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
@@ -125,6 +144,15 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "block_temp_east" {
+  bucket = "${aws_s3_bucket.temp_documents_us_east_1.id}"
+
+  block_public_acls = true
+  block_public_policy = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket" "temp_documents_us_west_1" {
   provider = "aws.us-west-1"
   region = "us-west-1"
@@ -153,4 +181,13 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
       days = 1
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "block_temp_west" {
+  bucket = "${aws_s3_bucket.temp_documents_us_west_1.id}"
+  provider = "aws.us-west-1"
+  block_public_acls = true
+  block_public_policy = true
+  ignore_public_acls = true
+  restrict_public_buckets = true
 }

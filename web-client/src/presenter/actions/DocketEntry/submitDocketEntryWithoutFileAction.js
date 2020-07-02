@@ -42,6 +42,7 @@ export const submitDocketEntryWithoutFileAction = async ({
 
   return {
     caseDetail,
-    caseId: docketNumber,
+    caseId,
+    docketNumber,
   };
 };
