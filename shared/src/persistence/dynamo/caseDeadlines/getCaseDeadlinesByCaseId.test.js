@@ -1,9 +1,8 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const { getCaseDeadlinesByCaseId } = require('./getCaseDeadlinesByCaseId');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { getCaseDeadlinesByCaseId } = require('./getCaseDeadlinesByCaseId');
 
 const mockCaseDeadline = {
   caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',

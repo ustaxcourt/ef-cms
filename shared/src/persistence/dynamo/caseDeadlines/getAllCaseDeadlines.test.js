@@ -1,10 +1,9 @@
 const client = require('../../dynamodbClientService');
-const { getAllCaseDeadlines } = require('./getAllCaseDeadlines');
-const { MOCK_CASE } = require('../../../test/mockCase');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { getAllCaseDeadlines } = require('./getAllCaseDeadlines');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getAllCaseDeadlines', () => {
   const mockDeadlines = [

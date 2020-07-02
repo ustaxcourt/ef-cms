@@ -1,18 +1,31 @@
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const AddressDisplay = connect(
   {
     constants: state.constants,
     contact: props.contact,
     nameOverride: props.nameOverride || {},
+    noMargin: props.noMargin || false,
     showEmail: props.showEmail || false,
   },
-  function AddressDisplay({ constants, contact, nameOverride, showEmail }) {
+  function AddressDisplay({
+    constants,
+    contact,
+    nameOverride,
+    noMargin,
+    showEmail,
+  }) {
     return (
       <>
-        <p className="margin-top-0 address-name">
+        <p
+          className={classNames(
+            noMargin ? 'no-margin' : 'margin-top-0',
+            'address-name',
+          )}
+        >
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           {contact.inCareOf && (
@@ -22,7 +35,7 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-        <p>
+        <p className={classNames(noMargin && 'no-margin')}>
           <span className="address-line">{contact.address1}</span>
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>
@@ -38,7 +51,14 @@ export const AddressDisplay = connect(
             <span className="address-line">{contact.country}</span>
           )}
           {contact.phone && (
-            <span className="address-line margin-top-1">{contact.phone}</span>
+            <span
+              className={classNames(
+                noMargin ? 'no-margin' : 'margin-top-1',
+                'address-line',
+              )}
+            >
+              {contact.phone}
+            </span>
           )}
           {contact.email && showEmail && (
             <span className="address-line">{contact.email}</span>
