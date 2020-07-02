@@ -1,7 +1,10 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { clearAdvancedSearchFormAction } from './clearAdvancedSearchFormAction';
 import { runAction } from 'cerebral/test';
 
 describe('clearAdvancedSearchFormAction', () => {
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   it('should clear the advanced search form ONLY for the props.formType', async () => {
     const result = await runAction(clearAdvancedSearchFormAction, {
       props: { formType: 'practitionerSearchByName' },
@@ -58,7 +61,7 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      caseSearchByName: { countryType: 'domestic' },
+      caseSearchByName: { countryType: COUNTRY_TYPES.DOMESTIC },
       currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
