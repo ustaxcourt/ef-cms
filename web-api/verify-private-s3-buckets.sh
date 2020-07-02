@@ -6,7 +6,7 @@
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
 
-[ -z "$1" ] && echo "The env to run smoketest to \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+[ -z "$1" ] && echo "ERROR: The env to run smoketest to \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 
 ENV=$1
 
@@ -23,7 +23,7 @@ for bucket in ${BUCKETS[@]}; do
   $(aws s3api get-bucket-policy --bucket $bucket)
   code=$?
   if [ "${code}" == "0" ]; then
-    echo "ustc-case-mgmt.flexion.us-documents-$ENV-us-east-1 is not private; it has a bucket policy when it should not"
+    echo "ERROR: the bucket of $bucket is not private; it has a bucket policy when it should not"
     exit 1
   fi
 
@@ -34,10 +34,10 @@ for bucket in ${BUCKETS[@]}; do
   blockPublicPolicy=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicPolicy")
   restrictPublicBuckets=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.RestrictPublicBuckets")
 
-  [ "${blockPublicAcls}" != "true" ] && echo "bucket not fully private: BlockPublicAcls must be set to true" && exit 1
-  [ "${ignorePublicAcls}" != "true" ] && echo "bucket not fully private: IgnorePublicAcls must be set to true" && exit 1
-  [ "${blockPublicPolicy}" != "true" ] && echo "bucket not fully private: BlockPublicPolicy must be set to true" && exit 1
-  [ "${restrictPublicBuckets}" != "true" ] && echo "bucket not fully private: RestrictPublicBuckets must be set to true" && exit 1
+  [ "${blockPublicAcls}" != "true" ] && echo "ERROR: the bucket of $bucket is not fully private: BlockPublicAcls must be set to true" && exit 1
+  [ "${ignorePublicAcls}" != "true" ] && echo "ERROR: the bucket of $bucket is not fully private: IgnorePublicAcls must be set to true" && exit 1
+  [ "${blockPublicPolicy}" != "true" ] && echo "ERROR: the bucket of $bucket is not fully private: BlockPublicPolicy must be set to true" && exit 1
+  [ "${restrictPublicBuckets}" != "true" ] && echo "ERROR: the bucket of $bucket is not fully private: RestrictPublicBuckets must be set to true" && exit 1
 done
 
 echo "all buckets are private"
