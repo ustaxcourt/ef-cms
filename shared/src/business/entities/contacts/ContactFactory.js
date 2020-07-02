@@ -62,7 +62,10 @@ const commonValidationRequirements = {
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .optional(),
-  hasEAccess: joi.boolean().optional(),
+  hasEAccess: joi
+    .boolean()
+    .optional()
+    .description('Flag that indicates if the contact has eAccess.'),
 };
 
 const domesticValidationObject = {
