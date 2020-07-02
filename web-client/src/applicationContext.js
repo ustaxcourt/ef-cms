@@ -94,6 +94,7 @@ import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEm
 import {
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
@@ -545,6 +546,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
+      formatDocketRecordWithDocument,
       formatDocument,
       formatDollars,
       formatJudgeName,

@@ -6,16 +6,27 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {object} object containing viewerDocumentToDisplay
  */
-export const getDefaultDocketViewerDocumentToDisplayAction = ({ get }) => {
+export const getDefaultDocketViewerDocumentToDisplayAction = ({
+  applicationContext,
+  get,
+}) => {
   let viewerDocumentToDisplay = null;
-  const { formattedDocketEntries } = get(state.formattedCaseDetail);
+  const caseDetail = get(state.caseDetail);
 
-  const entriesWithDocument = formattedDocketEntries.filter(
-    entry => entry.hasDocument,
+  const formattedDocketRecordWithDocument = applicationContext
+    .getUtilities()
+    .formatDocketRecordWithDocument(
+      applicationContext,
+      caseDetail.docketRecord,
+      caseDetail.documents,
+    );
+
+  const entriesWithDocument = formattedDocketRecordWithDocument.filter(
+    entry => !!entry.document,
   );
 
   if (entriesWithDocument && entriesWithDocument.length) {
-    viewerDocumentToDisplay = entriesWithDocument[0];
+    viewerDocumentToDisplay = entriesWithDocument[0].document;
   }
 
   return {
