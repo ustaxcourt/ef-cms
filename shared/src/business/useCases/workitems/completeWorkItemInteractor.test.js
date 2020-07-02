@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
-import { PARTY_TYPES, ROLES } from '../../entities/EntityConstants';
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('completeWorkItemInteractor', () => {
   let mockWorkItem = {
