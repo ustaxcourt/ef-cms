@@ -48,7 +48,7 @@ describe('getPractitionersByNameInteractor', () => {
         {
           barNumber: 'PT5432',
           name: 'Test Practitioner2',
-          role: 'privatePractitioner',
+          role: ROLES.privatePractitioner,
           userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
         },
       ]);
@@ -68,7 +68,7 @@ describe('getPractitionersByNameInteractor', () => {
       {
         barNumber: 'PT5432',
         name: 'Test Practitioner2',
-        role: 'privatePractitioner',
+        role: ROLES.privatePractitioner,
         userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
       },
     ]);

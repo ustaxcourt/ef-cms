@@ -9,7 +9,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
   beforeEach(() => {
     mockUser = {
-      role: 'petitionsclerk',
+      role: ROLES.petitionsClerk,
     };
 
     applicationContext.environment.stage = 'local';
@@ -21,7 +21,7 @@ describe('caseAdvancedSearchInteractor', () => {
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
-    mockUser.role = 'petitioner';
+    mockUser.role = ROLES.petitioner;
 
     await expect(
       caseAdvancedSearchInteractor({
