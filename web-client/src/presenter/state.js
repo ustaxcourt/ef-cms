@@ -29,6 +29,7 @@ import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
+import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
@@ -115,6 +116,7 @@ const helpers = {
   docketRecordHelper,
   documentDetailHelper,
   documentSigningHelper,
+  documentViewerHelper,
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
