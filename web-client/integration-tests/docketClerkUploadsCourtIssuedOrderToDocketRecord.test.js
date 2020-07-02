@@ -1,7 +1,6 @@
 import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
 import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
-import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
@@ -32,11 +31,9 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   petitionsClerkViewsDraftOrder(test, 0);
 
   loginAs(test, 'docketclerk');
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
   docketClerkAddsDocketEntryFromDraft(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
 
   loginAs(test, 'petitioner');
   petitionerViewsCaseDetail(test, { documentCount: 3 });
