@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -7,6 +7,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   test,
@@ -109,7 +110,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     expect(result.showPrimaryContact).toBeTruthy();
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'domestic',
+      value: COUNTRY_TYPES.DOMESTIC,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
@@ -149,7 +150,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
@@ -689,7 +690,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
@@ -731,7 +732,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',

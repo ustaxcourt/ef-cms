@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
@@ -13,6 +13,7 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Modify Petitioner Contact Information', () => {
   beforeAll(() => {
@@ -27,7 +28,7 @@ describe('Modify Petitioner Contact Information', () => {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',

@@ -1,3 +1,7 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
+const { COUNTRY_TYPES } = applicationContext.getConstants();
+
 export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
   return it('petitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
@@ -72,11 +76,12 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
+
     expect(test.getState('form.contactPrimary')).toEqual({
       address1: '123 Abc Ln',
       address2: 'Apt 2',
       city: 'Cityville',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name:
         'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
