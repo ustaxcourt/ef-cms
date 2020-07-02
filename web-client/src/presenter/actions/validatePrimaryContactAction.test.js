@@ -6,6 +6,7 @@ import { validatePrimaryContactAction } from './validatePrimaryContactAction';
 describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
+  let PARTY_TYPES;
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -16,6 +17,8 @@ describe('validatePrimaryContactAction', () => {
       success: successStub,
     };
     presenter.providers.applicationContext = applicationContext;
+
+    ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
   it('runs validation on the primary contact with a successful result', async () => {
@@ -30,7 +33,7 @@ describe('validatePrimaryContactAction', () => {
       state: {
         form: {
           contactPrimary: {},
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -60,7 +63,7 @@ describe('validatePrimaryContactAction', () => {
             postalCode: '12345',
             state: 'TN',
           },
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
