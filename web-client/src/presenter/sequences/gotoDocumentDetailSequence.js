@@ -6,7 +6,6 @@ import { getInternalUsersAction } from '../actions/getInternalUsersAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { parallel, set } from 'cerebral/factories';
-
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentDetailPageTitleAction } from '../actions/setDocumentDetailPageTitleAction';

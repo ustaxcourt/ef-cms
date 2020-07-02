@@ -1,15 +1,14 @@
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import {
   getEmailsForAddress,
   loginAs,
   setupTest,
   uploadPetition,
 } from './helpers';
-
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
-import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
-import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 
 const test = setupTest({
   useCases: {

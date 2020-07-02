@@ -4,7 +4,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();

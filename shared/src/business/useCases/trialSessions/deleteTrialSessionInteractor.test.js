@@ -4,10 +4,9 @@ const {
 const {
   deleteTrialSessionInteractor,
 } = require('./deleteTrialSessionInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
-
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 const MOCK_TRIAL = {
   caseOrder: [{ caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb' }],
