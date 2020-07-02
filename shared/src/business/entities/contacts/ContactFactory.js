@@ -48,7 +48,7 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
-  email: joi.string().email().max(500).when('hasEAccess', {
+  email: joi.string().max(500).when('hasEAccess', {
     is: true,
     then: joi.required(),
     otherwise: joi.optional(),
