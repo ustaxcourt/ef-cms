@@ -18,7 +18,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throw unauthorized error on invalid role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'petitioner',
     });
 
