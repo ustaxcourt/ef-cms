@@ -770,20 +770,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isValidCaseId', () => {
-    it('returns true if a valid uuid', () => {
-      expect(
-        Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeTruthy();
-    });
-
-    it('returns false if a invalid uuid', () => {
-      expect(
-        Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeFalsy();
-    });
-  });
-
   describe('markAsSentToIRS', () => {
     it('updates case status to general docket not at issue', () => {
       const caseRecord = new Case(

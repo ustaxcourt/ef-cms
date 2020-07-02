@@ -4,11 +4,10 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAssignsWorkItemToSelf } from './journey/petitionsClerkAssignsWorkItemToSelf';
+import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
 import { petitionsClerkSelectsFirstPetitionOnMyDocumentQC } from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
-
-import { petitionsClerkEditsPetitionInQCIRSNotice } from './journey/petitionsClerkEditsPetitionInQCIRSNotice';
 
 const test = setupTest();
 

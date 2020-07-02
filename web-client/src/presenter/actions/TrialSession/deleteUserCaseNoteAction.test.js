@@ -1,7 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext.js';
 import { deleteUserCaseNoteAction } from './deleteUserCaseNoteAction';
 import { presenter } from '../../presenter-mock';
-
 import { runAction } from 'cerebral/test';
 
 describe('deleteUserCaseNoteAction', () => {

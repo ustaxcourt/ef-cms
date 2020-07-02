@@ -1,13 +1,12 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
-
 import { generatePdfFromScanSessionAction } from '../actions/generatePdfFromScanSessionAction';
 import { getFormValueDocumentAction } from '../actions/getFormValueDocumentAction';
 import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentSizeAction';
 import { resetScanSessionAction } from '../actions/resetScanSessionAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
+import { set } from 'cerebral/factories';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { state } from 'cerebral';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';

@@ -24,4 +24,16 @@ for bucket in ${BUCKETS[@]}; do
     echo "ustc-case-mgmt.flexion.us-documents-$ENV-us-east-1 is not private; it has a bucket policy when it should not"
     exit 1;
   fi
+
+  # there should be a public access block defined for the buckets
+  blocks=$(aws s3api get-public-access-block --bucket $bucket)
+  blockPublicAcls=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicAcls")
+  ignorePublicAcls=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.IgnorePublicAcls")
+  blockPublicPolicy=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicPolicy")
+  restrictPublicBuckets=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.RestrictPublicBuckets")
+
+  [ "${blockPublicAcls}" != "true" ] && echo "bucket not fully private: BlockPublicAcls must be set to true" && exit 1
+  [ "${ignorePublicAcls}" != "true" ] && echo "bucket not fully private: IgnorePublicAcls must be set to true" && exit 1
+  [ "${blockPublicPolicy}" != "true" ] && echo "bucket not fully private: BlockPublicPolicy must be set to true" && exit 1
+  [ "${restrictPublicBuckets}" != "true" ] && echo "bucket not fully private: RestrictPublicBuckets must be set to true" && exit 1
 done
