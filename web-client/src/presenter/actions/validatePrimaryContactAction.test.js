@@ -6,7 +6,8 @@ import { validatePrimaryContactAction } from './validatePrimaryContactAction';
 describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
-  let PARTY_TYPES;
+
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -17,8 +18,6 @@ describe('validatePrimaryContactAction', () => {
       success: successStub,
     };
     presenter.providers.applicationContext = applicationContext;
-
-    ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
   it('runs validation on the primary contact with a successful result', async () => {
@@ -57,7 +56,7 @@ describe('validatePrimaryContactAction', () => {
             address1: '',
             address2: 'asdf',
             city: 'Flavortown',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',

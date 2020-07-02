@@ -3,6 +3,9 @@ const axios = require('axios');
 const fs = require('fs');
 const parse = require('csv-parse');
 const {
+  COUNTRY_TYPES,
+} = require('../shared/src/business/entities/EntityConstants');
+const {
   createISODateString,
 } = require('../shared/src/business/utilities/DateHandler');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
@@ -50,7 +53,7 @@ const formatRecord = record => {
     address1: record.address1,
     address2: record.address2,
     city: record.city,
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     phone: record.phone,
     postalCode: record.postalCode,
     state: record.state,

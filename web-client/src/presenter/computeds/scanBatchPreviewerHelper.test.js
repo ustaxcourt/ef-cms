@@ -1,7 +1,3 @@
-import {
-  ROLES,
-  SCAN_MODES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { scanBatchPreviewerHelper as scanBatchPreviewerHelperComputed } from './scanBatchPreviewerHelper';
@@ -13,17 +9,16 @@ const state = {
   },
 };
 
-const scanBatchPreviewerHelper = withAppContextDecorator(
-  scanBatchPreviewerHelperComputed,
-  applicationContext,
-);
-
-applicationContext.getCurrentUser = () => ({
-  role: ROLES.privatePractitioner,
-});
-applicationContext.getConstants = () => ({ SCAN_MODES });
-
 describe('scanBatchPreviewerHelper', () => {
+  const scanBatchPreviewerHelper = withAppContextDecorator(
+    scanBatchPreviewerHelperComputed,
+    applicationContext,
+  );
+
+  applicationContext.getCurrentUser = () => ({
+    role: applicationContext.getConstants().ROLES.privatePractitioner,
+  });
+
   beforeEach(() => {
     state.form = {};
   });
@@ -42,7 +37,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: SCAN_MODES.FEEDER,
+          scanMode: applicationContext.getConstants().SCAN_MODES.FEEDER,
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -59,7 +54,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: SCAN_MODES.DUPLEX,
+          scanMode: applicationContext.getConstants().SCAN_MODES.DUPLEX,
           scannerSourceName: 'Some Scanner 247',
         },
       };
