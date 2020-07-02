@@ -63,7 +63,8 @@ export const submitCorrespondenceAction = async ({
 
   return {
     caseDetail,
-    caseId: docketNumber,
+    caseId,
+    docketNumber,
     documentId,
   };
 };

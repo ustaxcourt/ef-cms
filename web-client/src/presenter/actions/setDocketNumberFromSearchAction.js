@@ -12,17 +12,15 @@ export const trimDocketNumberSearch = searchTerm => {
 };
 
 /**
- * sets the state.docketNumber based on what the search term in the input box was
+ * sets the docket number from the search form in props
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function used for getting state.header.searchTerm
- * @param {object} providers.store the cerebral store used for setting the state.docketNumber
  * @returns {object} the docketNumber provided in the search term
  */
-export const setDocketNumberFromSearchAction = ({ get, store }) => {
+export const setDocketNumberFromSearchAction = ({ get }) => {
   const searchTerm = get(state.header.searchTerm);
   const docketNumber = trimDocketNumberSearch(searchTerm);
-  store.set(state.docketNumber, docketNumber);
   return {
     docketNumber,
   };

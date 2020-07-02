@@ -1,8 +1,7 @@
 import { ActionError } from '../errors/ActionError';
 import { state } from 'cerebral';
-import jwt from 'jsonwebtoken';
-
 import { userMap } from '../../../../shared/src/test/mockUserTokenMap';
+import jwt from 'jsonwebtoken';
 
 /**
  * this is used for creating a jwt token to login locally only

@@ -23,13 +23,11 @@ import { presenter } from '../src/presenter/presenter';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
-import jwt from 'jsonwebtoken';
-
 import { withAppContextDecorator } from '../src/withAppContext';
-import axios from 'axios';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);

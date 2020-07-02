@@ -1,5 +1,4 @@
 const React = require('react');
-
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
