@@ -2669,7 +2669,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = 'Calendared';
+        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2722,8 +2722,8 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are both ineligible', () => {
-        leadCaseEntity.status = 'Closed';
-        pendingCaseEntity.status = 'Closed';
+        leadCaseEntity.status = CASE_STATUS_TYPES.closed;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2737,7 +2737,7 @@ describe('Case entity', () => {
 
       it('should only return the ineligible failure if the pending case status is ineligible', () => {
         leadCaseEntity.status = 'Submitted';
-        pendingCaseEntity.status = 'Closed';
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';

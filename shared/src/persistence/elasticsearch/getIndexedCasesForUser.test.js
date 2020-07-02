@@ -59,7 +59,7 @@ describe('getIndexedCasesForUser', () => {
             },
             {
               match: {
-                'status.S': 'Calendared',
+                'status.S': CASE_STATUS_TYPES.calendared,
               },
             },
           ],

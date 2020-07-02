@@ -7,8 +7,8 @@ const {
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
+const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getCompletedCaseMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -28,7 +28,7 @@ describe('getCompletedCaseMessagesForUserInteractor', () => {
     const caseMessageData = {
       attachments: [],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
-      caseStatus: 'General Docket - Not at Issue',
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       completedAt: '2019-05-01T21:40:46.415Z',
       completedBy: 'Test Petitionsclerk',

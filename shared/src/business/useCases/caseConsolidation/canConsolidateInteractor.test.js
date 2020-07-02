@@ -36,7 +36,7 @@ describe('canConsolidateInteractor', () => {
   });
 
   it('should return false when cases are not consolidatable', () => {
-    caseToConsolidate.status = 'Closed';
+    caseToConsolidate.status = CASE_STATUS_TYPES.closed;
 
     const result = canConsolidateInteractor({
       applicationContext,
