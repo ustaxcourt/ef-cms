@@ -54,7 +54,7 @@ export const CaseDetailInternal = connect(
               className="classic-horizontal-header3 tab-border"
             >
               <Tab
-                id="tab-docket-record"
+                id="tab-docket-sub-record"
                 tabName="docketRecord"
                 title="Docket Record"
               >
