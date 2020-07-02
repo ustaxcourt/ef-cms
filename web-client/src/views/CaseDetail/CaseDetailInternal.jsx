@@ -47,13 +47,27 @@ export const CaseDetailInternal = connect(
         >
           <SuccessNotification />
           <ErrorNotification />
+
           {caseDetailInternalTabs.docketRecord && (
-            <>
-              <div className="title">
-                <h1>Docket Record</h1>
-              </div>
-              <DocketRecord />
-            </>
+            <Tabs
+              bind="currentViewMetadata.caseDetail.docketRecordTab"
+              className="classic-horizontal-header3 tab-border"
+            >
+              <Tab
+                id="tab-docket-sub-record"
+                tabName="docketRecord"
+                title="Docket Record"
+              >
+                <DocketRecord />
+              </Tab>
+              <Tab
+                id="tab-document-view"
+                tabName="documentView"
+                title="Document View"
+              >
+                {/* TODO <DocumentView /> */}
+              </Tab>
+            </Tabs>
           )}
           {caseDetailInternalTabs.trackedItems && (
             <Tabs
