@@ -3,6 +3,7 @@ const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const {
   CASE_TYPES,
+  COUNTRY_TYPES,
   PARTY_TYPES,
   PROCEDURE_TYPES,
   TRIAL_CITIES,
@@ -54,7 +55,7 @@ const main = () => {
         contactPrimary: {
           address1: faker.address.streetAddress(),
           city: faker.address.city(),
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: faker.name.findName(),
           phone: faker.phone.phoneNumber(),
           postalCode: faker.address.zipCode(),
@@ -63,13 +64,13 @@ const main = () => {
         contactSecondary: {
           address1: faker.address.streetAddress(),
           city: faker.address.city(),
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: faker.name.findName(),
           phone: faker.phone.phoneNumber(),
           postalCode: faker.address.zipCode(),
           state: faker.address.stateAbbr(),
         },
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         filingType: 'Myself and my spouse',
         hasIrsNotice: faker.random.boolean(),
         partyType: PARTY_TYPES.petitionerSpouse,

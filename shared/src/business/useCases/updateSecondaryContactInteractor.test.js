@@ -1,16 +1,20 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   updateSecondaryContactInteractor,
 } = require('./updateSecondaryContactInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('updateSecondaryContactInteractor', () => {
   const mockContactSecondary = {
     address1: 'nothing',
     city: 'Somewhere',
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'secondary@example.com',
     name: 'Secondary Party',
     phone: '9876543210',
@@ -70,7 +74,7 @@ describe('updateSecondaryContactInteractor', () => {
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'secondary@example.com',
         name: 'New Secondary',
         phone: '1234567890',
@@ -87,7 +91,7 @@ describe('updateSecondaryContactInteractor', () => {
     expect(updatedCase.contactSecondary).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: mockContactSecondary.email,
       name: mockContactSecondary.name,
       phone: '1234567890',
@@ -145,7 +149,7 @@ describe('updateSecondaryContactInteractor', () => {
         // Matches current contact info
         address1: 'nothing',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'secondary@example.com',
         name: 'Secondary Party',
         phone: '9876543210',
@@ -178,7 +182,7 @@ describe('updateSecondaryContactInteractor', () => {
       contactInfo: {
         address1: 'nothing',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'hello123@example.com',
         name: 'Secondary Party Name Changed',
         phone: '9876543210',

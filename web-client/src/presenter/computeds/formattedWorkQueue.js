@@ -202,6 +202,8 @@ export const getWorkItemDocumentLink = ({
       });
       if (editLinkExtension) {
         editLink += editLinkExtension;
+      } else {
+        editLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
       }
     } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
       if (result.caseIsInProgress) {

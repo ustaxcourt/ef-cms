@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
@@ -8,6 +8,7 @@ import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsCler
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitions Clerk Counsel Association Journey', () => {
   beforeAll(() => {
@@ -20,7 +21,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',

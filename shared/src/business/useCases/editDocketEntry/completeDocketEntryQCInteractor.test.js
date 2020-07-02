@@ -6,7 +6,11 @@ const {
 const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
@@ -46,7 +50,7 @@ describe('completeDocketEntryQCInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
@@ -183,7 +187,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
       phone: '1234567890',
@@ -292,7 +296,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'AK',
@@ -331,7 +335,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'AK',
@@ -370,7 +374,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
       postalCode: '12345',
