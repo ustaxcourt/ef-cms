@@ -3,7 +3,6 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesOrderWithPaperService } from './journey/docketClerkServesOrderWithPaperService';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
-import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
@@ -31,10 +30,8 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(test, 'docketclerk');
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 0);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 0);
   docketClerkServesOrderWithPaperService(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
     test,

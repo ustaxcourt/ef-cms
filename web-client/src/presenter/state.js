@@ -34,7 +34,6 @@ import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import {
@@ -121,7 +120,6 @@ const helpers = {
   editPetitionerInformationHelper,
   editStatisticFormHelper,
   externalUserCasesHelper,
-  extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
   fileUploadStatusHelper,
   formattedCaseDetail,
