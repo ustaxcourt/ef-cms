@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   assignWorkItems,
   findWorkItemByCaseId,
@@ -14,6 +14,7 @@ import {
 } from './helpers';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Create a work item', () => {
   beforeEach(() => {
@@ -44,7 +45,7 @@ describe('Create a work item', () => {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',

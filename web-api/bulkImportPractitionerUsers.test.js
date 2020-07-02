@@ -1,3 +1,6 @@
+const {
+  COUNTRY_TYPES,
+} = require('../shared/src/business/entities/EntityConstants');
 const { formatRecord } = require('./bulkImportPractitionerUsers');
 
 describe('formatRecord', () => {
@@ -104,7 +107,7 @@ describe('formatRecord', () => {
       contact: {
         address1: 'knows how to party',
         city: 'the city of Compton',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '1234567890',
         postalCode: '11111',
         state: 'CA',

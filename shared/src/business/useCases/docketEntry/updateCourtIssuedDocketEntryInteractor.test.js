@@ -2,8 +2,12 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -17,7 +21,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',

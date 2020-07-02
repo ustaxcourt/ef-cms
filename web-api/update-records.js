@@ -1,6 +1,9 @@
 // this could potentially be used for the start of a migration script
 
 const AWS = require('aws-sdk');
+const {
+  COUNTRY_TYPES,
+} = require('../shared/src/business/entities/EntityConstants');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
@@ -32,7 +35,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
                 address2: 'Apartment 4',
                 address3: 'Under the stairs',
                 city: 'Chicago',
-                countryType: 'domestic',
+                countryType: COUNTRY_TYPES.DOMESTIC,
                 phone: '+1 (555) 555-5555',
                 postalCode: '61234',
                 state: 'IL',
@@ -49,7 +52,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
                   address2: 'Apartment 4',
                   address3: 'Under the stairs',
                   city: 'Chicago',
-                  countryType: 'domestic',
+                  countryType: COUNTRY_TYPES.DOMESTIC,
                   phone: '+1 (555) 555-5555',
                   postalCode: '61234',
                   state: 'IL',

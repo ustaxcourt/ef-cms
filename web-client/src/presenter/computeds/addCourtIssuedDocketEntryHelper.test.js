@@ -148,14 +148,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     );
   });
 
-  it('petitionsclerk should only have 1 element in the document types of Order "O"', () => {
-    user.role = 'petitionsclerk';
-    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
-    expect(result.documentTypes).toMatchObject([
-      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
-    ]);
-  });
-
   it('should not show service stamp if user is petitions clerk', () => {
     user.role = 'petitionsclerk';
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
