@@ -1,3 +1,4 @@
+const { cloneDeep } = require('lodash');
 import { state } from 'cerebral';
 /**
  * gets the first docket entry document from the current case detail to set as the default viewerDocumentToDisplay
@@ -11,14 +12,14 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   get,
 }) => {
   let viewerDocumentToDisplay = null;
-  const caseDetail = get(state.caseDetail);
+  const { docketRecord, documents } = get(state.caseDetail);
 
   const formattedDocketRecordWithDocument = applicationContext
     .getUtilities()
     .formatDocketRecordWithDocument(
       applicationContext,
-      caseDetail.docketRecord,
-      caseDetail.documents,
+      cloneDeep(docketRecord),
+      cloneDeep(documents),
     );
 
   const entriesWithDocument = formattedDocketRecordWithDocument.filter(
