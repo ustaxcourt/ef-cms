@@ -277,7 +277,7 @@
   },
   {
     "eventCode": "HEAR",
-    "documentType": "Hearing before ...",
+    "documentType": "Hearing before",
     "documentTitle": "Hearing before [Judge] at [Place]",
     "scenario": "Type F"
   },
