@@ -24,7 +24,7 @@ const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
         { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
       ],
       USER_ROLES: {
-        petitionsClerk: 'petitionsclerk',
+        petitionsClerk: USER_ROLES.petitionsClerk,
       },
     };
   },
@@ -42,7 +42,7 @@ describe('orderTypesHelper', () => {
   });
 
   it('should filter out and only return type O for petitionsclerk', () => {
-    user.role = 'petitionsclerk';
+    user.role = USER_ROLES.petitionsClerk;
     const result = runCompute(orderTypesHelper, {});
     expect(result.orderTypes).toEqual([
       {

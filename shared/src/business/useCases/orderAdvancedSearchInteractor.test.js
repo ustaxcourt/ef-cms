@@ -1,5 +1,6 @@
 const {
   ORDER_DOCUMENT_TYPES,
+  ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
   orderAdvancedSearchInteractor,
@@ -9,7 +10,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitionsclerk',
+      role: ROLES.petitionsClerk,
     });
 
     applicationContext
@@ -41,7 +42,7 @@ describe('orderAdvancedSearchInteractor', () => {
 
   it('returns an unauthorized error on petitioner user role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitioner',
+      role: ROLES.petitioner,
     });
 
     await expect(
