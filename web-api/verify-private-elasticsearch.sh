@@ -16,6 +16,6 @@ endpoint=$(aws es describe-elasticsearch-domain --domain "efcms-search-$ENV" | j
 response=$(curl -I "https://$endpoint" | head -n 1 | cut -d$' ' -f2)
 
 if [[ "$response" != "403" ]]; then
-  echo "expected elasticsearch endpoint to thbe private"
+  echo "expected elasticsearch endpoint to the private"
   exit 1
 fi
