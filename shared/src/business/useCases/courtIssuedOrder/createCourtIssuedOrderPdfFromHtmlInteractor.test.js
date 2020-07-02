@@ -4,6 +4,7 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -22,7 +23,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'docketclerk',
+      role: ROLES.docketClerk,
       userId: '321',
     });
   });
