@@ -1,6 +1,7 @@
 const React = require('react');
 const { CoverSheet } = require('./CoverSheet.jsx');
 const { shallow } = require('enzyme');
+import { PARTY_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 
 describe('CoverSheet', () => {
   it('renders a document header with case information', () => {
@@ -13,7 +14,9 @@ describe('CoverSheet', () => {
     );
 
     expect(wrapper.find('#caption-title').text()).toEqual('Captain Fantastic');
-    expect(wrapper.find('#caption-extension').text()).toEqual('Petitioner');
+    expect(wrapper.find('#caption-extension').text()).toEqual(
+      PARTY_TYPES.petitioner,
+    );
     expect(wrapper.find('#docket-number').text()).toContain(
       'Docket No. 123-45S',
     );

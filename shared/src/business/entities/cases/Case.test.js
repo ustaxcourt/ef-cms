@@ -10,6 +10,7 @@ const {
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
@@ -456,7 +457,7 @@ describe('Case entity', () => {
               phone: '+1 (785) 771-2329',
               postalCode: '17860',
               secondaryName: 'Logan Fields',
-              serviceIndicator: 'None',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
               state: 'LA',
             },
           ],

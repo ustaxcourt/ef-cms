@@ -1,4 +1,5 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -18,6 +19,10 @@ const test = setupTest({
   },
 });
 
+let SERVICE_INDICATOR_TYPES;
+
+({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',
   caseId: '1a92894e-83a5-48ba-9994-3ada44235deb',
@@ -28,7 +33,7 @@ const seedData = {
     countryType: 'international',
     name: 'Hanan Al Hroub',
     postalCode: '123456',
-    serviceIndicator: 'Paper',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   },
   contactSecondary: {},
   docketNumber: '104-20',

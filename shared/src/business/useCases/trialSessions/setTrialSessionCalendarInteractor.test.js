@@ -5,7 +5,7 @@ const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
@@ -30,7 +30,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
   it('throws an exception when there is a permissions issue', async () => {
     user = new User({
-      name: 'Petitioner',
+      name: PARTY_TYPES.petitioner,
       role: ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
