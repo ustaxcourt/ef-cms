@@ -75,7 +75,7 @@ describe('updatePartyTypeAction', () => {
       updatePartyTypeAction,
       getFixtures({
         key: 'otherType',
-        value: 'Transferee',
+        value: PARTY_TYPES.transferee,
       }),
     );
     expect(state.form.partyType).toEqual(PARTY_TYPES.transferee);

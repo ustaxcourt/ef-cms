@@ -5,7 +5,7 @@ const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('submitCaseAssociationRequest', () => {
   let caseRecord = {
@@ -34,7 +34,7 @@ describe('submitCaseAssociationRequest', () => {
     ],
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

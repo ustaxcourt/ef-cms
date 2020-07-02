@@ -401,7 +401,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'estateType',
-      value: 'Trust',
+      value: PARTY_TYPES.trust,
     });
 
     result = runCompute(startCaseHelper, {
@@ -604,14 +604,14 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'Transferee',
+      value: PARTY_TYPES.transferee,
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(test.getState('form.partyType')).toEqual('Transferee');
+    expect(test.getState('form.partyType')).toEqual(PARTY_TYPES.transferee);
 
     // surviving spouse party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -634,7 +634,9 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
-    expect(test.getState('form.partyType')).toEqual('Surviving spouse');
+    expect(test.getState('form.partyType')).toEqual(
+      PARTY_TYPES.survivingSpouse,
+    );
 
     await test.runSequence('submitFilePetitionSequence');
 
