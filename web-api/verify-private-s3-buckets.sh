@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # Usage
 #   smoketest to verify the private buckets are configured as private
@@ -20,9 +20,11 @@ BUCKETS=(
 for bucket in ${BUCKETS[@]}; do
   # The only way to grant a bucket as public is via a bucket policy, so we check if the policy
   # file exists and throw an error on status codes
-  if aws s3api get-bucket-policy --bucket $bucket; then
+  $(aws s3api get-bucket-policy --bucket $bucket)
+  code=$?
+  if [ "${code}" == "0" ]; then
     echo "ustc-case-mgmt.flexion.us-documents-$ENV-us-east-1 is not private; it has a bucket policy when it should not"
-    exit 1;
+    exit 1
   fi
 
   # there should be a public access block defined for the buckets
@@ -37,3 +39,5 @@ for bucket in ${BUCKETS[@]}; do
   [ "${blockPublicPolicy}" != "true" ] && echo "bucket not fully private: BlockPublicPolicy must be set to true" && exit 1
   [ "${restrictPublicBuckets}" != "true" ] && echo "bucket not fully private: RestrictPublicBuckets must be set to true" && exit 1
 done
+
+echo "all buckets are private"
