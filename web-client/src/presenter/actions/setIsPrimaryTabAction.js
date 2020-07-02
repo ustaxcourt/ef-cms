@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state from store
  */
 export const setIsPrimaryTabAction = ({ get, store }) => {
-  let primaryTab = get(state.currentViewMetadata.caseDetail.primaryTab);
-  let caseDetailInternalTabs = get(
+  const primaryTab = get(state.currentViewMetadata.caseDetail.primaryTab);
+  const caseDetailInternalTabs = get(
     state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
   );
 

@@ -7,6 +7,8 @@ describe('validateSecondaryContactAction', () => {
   let successStub;
   let errorStub;
 
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
@@ -54,7 +56,7 @@ describe('validateSecondaryContactAction', () => {
             address1: '',
             address2: 'asdf',
             city: 'Flavortown',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',

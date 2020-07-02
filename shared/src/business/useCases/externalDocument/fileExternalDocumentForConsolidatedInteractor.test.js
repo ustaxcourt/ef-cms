@@ -2,10 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('./fileExternalDocumentForConsolidatedInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
@@ -27,7 +31,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'fieri@example.com',
           name: 'Guy Fieri',
           phone: '1234567890',
@@ -53,7 +57,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'ferrari@example.com',
           name: 'Enzo Ferrari',
           phone: '1234567890',
@@ -79,7 +83,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'foreman@example.com',
           name: 'George Foreman',
           phone: '1234567890',

@@ -887,6 +887,45 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
     });
 
+    it('should return case detail link if document is processed and user is docketclerk', () => {
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-03-01T21:40:46.415Z',
+          document: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Administrative Record',
+            documentType: 'Administrative Record',
+            eventCode: 'ADMR',
+            isFileAttached: true,
+            isPaper: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          isQC: true,
+          isRead: true,
+          messages: [baseMessage],
+          section: 'docket',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      });
+      expect(result).toEqual(
+        `/case-detail/${baseWorkItem.docketNumber}/document-view?documentId=${baseDocument.documentId}`,
+      );
+    });
+
     it('should return default edit link if document is in progress and user is petitionsClerk', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 

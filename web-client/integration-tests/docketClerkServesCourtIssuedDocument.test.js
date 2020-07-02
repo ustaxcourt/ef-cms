@@ -4,7 +4,6 @@ import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerk
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
-import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -46,17 +45,13 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkPrioritizesCase(test);
 
   loginAs(test, 'docketclerk');
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkCancelsAddDocketEntryFromOrder(test, 1);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkServesDocument(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
   docketClerkServesDocument(test, 1);

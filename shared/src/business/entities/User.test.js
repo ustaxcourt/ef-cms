@@ -1,4 +1,4 @@
-const { ROLES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 const { User } = require('./User');
 
 describe('User entity', () => {
@@ -30,7 +30,7 @@ describe('User entity', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -48,7 +48,7 @@ describe('User entity', () => {
       contact: {
         address1: '234 Main St',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
