@@ -453,7 +453,6 @@ describe('Case entity', () => {
               address3: 'Ut numquam ducimus ',
               city: 'Placeat sed dolorum',
               countryType: 'domestic',
-              name: 'Keelie Bruce',
               phone: '+1 (785) 771-2329',
               postalCode: '17860',
               secondaryName: 'Logan Fields',
@@ -768,20 +767,6 @@ describe('Case entity', () => {
           name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
         },
       });
-    });
-  });
-
-  describe('isValidCaseId', () => {
-    it('returns true if a valid uuid', () => {
-      expect(
-        Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeTruthy();
-    });
-
-    it('returns false if a invalid uuid', () => {
-      expect(
-        Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
-      ).toBeFalsy();
     });
   });
 

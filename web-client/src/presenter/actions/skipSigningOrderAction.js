@@ -20,7 +20,7 @@ export const skipSigningOrderAction = ({ get, store }) => {
     };
   }
 
-  const { caseId, documents } = get(state.caseDetail);
+  const { docketNumber, documents } = get(state.caseDetail);
   const documentId = get(state.documentId);
   const order = documents.find(d => d.documentId === documentId);
 
@@ -28,6 +28,6 @@ export const skipSigningOrderAction = ({ get, store }) => {
     alertSuccess: {
       message: `${order.documentTitle || order.documentType} updated.`,
     },
-    path: `/case-detail/${caseId}/draft-documents`,
+    path: `/case-detail/${docketNumber}/draft-documents`,
   };
 };
