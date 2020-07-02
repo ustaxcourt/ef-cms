@@ -11,7 +11,7 @@
 
 ENV=$1
 
-endpoint=$(aws es describe-elasticsearch-domain --domain "efcms-search-$ENV" | jq -r ".DomainStatus.Endpoint" )
+endpoint=$(aws es describe-elasticsearch-domain --domain "efcms-search-$ENV" --region us-east-1 | jq -r ".DomainStatus.Endpoint" )
 
 response=$(curl -I "https://$endpoint" | head -n 1 | cut -d$' ' -f2)
 
