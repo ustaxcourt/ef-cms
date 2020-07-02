@@ -15,7 +15,7 @@ describe('create user', () => {
       userId: 'petitionsclerk1@example.com',
     };
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'admin',
     });
     applicationContext
@@ -58,7 +58,7 @@ describe('create user', () => {
 
   it('should create a practitioner user when the user role is privatePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'admin',
     });
     applicationContext.getPersistenceGateway().createUser.mockReturnValue({
@@ -93,7 +93,7 @@ describe('create user', () => {
 
   it('should create a practitioner user when the user role is irsPractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'admin',
     });
     applicationContext.getPersistenceGateway().createUser.mockReturnValue({
@@ -127,7 +127,7 @@ describe('create user', () => {
 
   it('should create a practitioner user when the user role is inactivePractitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'admin',
     });
     applicationContext.getPersistenceGateway().createUser.mockReturnValue({

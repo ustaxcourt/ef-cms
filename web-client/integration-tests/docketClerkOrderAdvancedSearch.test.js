@@ -19,9 +19,10 @@ const test = setupTest({
   },
 });
 
-let SERVICE_INDICATOR_TYPES;
-
-({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = applicationContext.getConstants();
 
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',
@@ -30,7 +31,7 @@ const seedData = {
     address1: '123 Teachers Way',
     city: 'Haifa',
     country: 'Palestine',
-    countryType: 'international',
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
     name: 'Hanan Al Hroub',
     postalCode: '123456',
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
