@@ -35,7 +35,7 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-        <p className={classNames(noMargin ? 'no-margin' : '')}>
+        <p className={classNames(noMargin && 'no-margin')}>
           <span className="address-line">{contact.address1}</span>
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>
