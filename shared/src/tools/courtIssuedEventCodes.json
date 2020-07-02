@@ -326,37 +326,37 @@
   {
     "eventCode": "MISC",
     "documentType": "Miscellaneous",
-    "documentTitle": "",
+    "documentTitle": "[anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "HE",
     "documentType": "Hearing Exhibits",
-    "documentTitle": "",
+    "documentTitle": "Hearing Exhibits for [anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "TE",
     "documentType": "Trial Exhibits",
-    "documentTitle": "",
+    "documentTitle": "Trial Exhibits for [anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "USCA",
     "documentType": "U.S.C.A",
-    "documentTitle": "",
+    "documentTitle": "U.S.C.A [anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "ES",
     "documentType": "Bounced Electronic Service",
-    "documentTitle": "",
+    "documentTitle": "Bounced Electronic Service [anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "RM",
     "documentType": "Returned Mail",
-    "documentTitle": "",
+    "documentTitle": "Returned Mail [anything]",
     "scenario": "Type A"
   }
 ]
