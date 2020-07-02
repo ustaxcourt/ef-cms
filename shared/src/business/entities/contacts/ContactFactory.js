@@ -48,7 +48,11 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
-  email: joi.string().max(500).optional(),
+  email: joi.string().email().max(500).when('hasEAccess', {
+    is: true,
+    then: joi.required(),
+    otherwise: joi.optional(),
+  }),
   inCareOf: joi.string().max(500).optional(),
   name: joi.string().max(500).required(),
   phone: joi.string().max(500).required(),
@@ -58,6 +62,7 @@ const commonValidationRequirements = {
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .optional(),
+  hasEAccess: joi.boolean().optional(),
 };
 
 const domesticValidationObject = {
@@ -404,6 +409,7 @@ ContactFactory.createContactFactory = ({
       this.title = rawContact.title;
       this.additionalName = rawContact.additionalName;
       this.otherFilerType = rawContact.otherFilerType;
+      this.hasEAccess = rawContact.hasEAccess || undefined;
     }
 
     GenericContactConstructor.errorToMessageMap = {
