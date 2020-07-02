@@ -1,5 +1,4 @@
 const React = require('react');
-
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
