@@ -3,10 +3,10 @@ import { orderTypesHelper as orderTypesHelperComputed } from './orderTypesHelper
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { ROLES } = applicationContext.getConstants();
+const { USER_ROLES } = applicationContext.getConstants();
 
 let user = {
-  role: ROLES.docketClerk,
+  role: USER_ROLES.docketClerk,
 };
 
 const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
