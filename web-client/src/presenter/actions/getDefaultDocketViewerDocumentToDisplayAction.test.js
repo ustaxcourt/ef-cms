@@ -1,72 +1,108 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDefaultDocketViewerDocumentToDisplayAction } from './getDefaultDocketViewerDocumentToDisplayAction';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
-  it('returns the first item in the formattedDocketEntries array as the viewerDocumentToDisplay', async () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
+  it('returns the first docket record entry with a document as the default', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
-          formattedCaseDetail: {
-            formattedDocketEntries: [
+          caseDetail: {
+            docketRecord: [
               {
                 documentId: '123',
-                hasDocument: true,
+                index: 1,
+              },
+              {
+                index: 2,
               },
               {
                 documentId: '234',
-                hasDocument: false,
+                index: 3,
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
               },
               {
-                documentId: '345',
-                hasDocument: true,
+                documentId: '234',
               },
             ],
           },
         },
       },
     );
-    expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '123', hasDocument: true },
+    expect(result.output).toMatchObject({
+      viewerDocumentToDisplay: { documentId: '123' },
     });
   });
 
-  it('returns only an item from formattedDocketEntries with a document', async () => {
+  it('returns only an item from the docket record with a document', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
-          formattedCaseDetail: {
-            formattedDocketEntries: [
+          caseDetail: {
+            docketRecord: [
+              {
+                index: 1,
+              },
               {
                 documentId: '123',
-                hasDocument: false,
+                index: 2,
               },
               {
-                documentId: '234',
-                hasDocument: false,
+                index: 3,
               },
+            ],
+            documents: [
               {
-                documentId: '345',
-                hasDocument: true,
+                documentId: '123',
               },
             ],
           },
         },
       },
     );
-    expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '345', hasDocument: true },
+    expect(result.output).toMatchObject({
+      viewerDocumentToDisplay: { documentId: '123' },
     });
   });
 
-  it('returns viewerDocumentToDisplay null if there are no formattedDocketEntries on the formattedCaseDetail', async () => {
+  it('returns viewerDocumentToDisplay null if there are no docket entries with a document', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,
       {
+        modules: {
+          presenter,
+        },
         state: {
-          formattedCaseDetail: {
-            formattedDocketEntries: [],
+          caseDetail: {
+            docketRecord: [
+              {
+                index: 1,
+              },
+              {
+                index: 2,
+              },
+              {
+                index: 3,
+              },
+            ],
+            documents: [],
           },
         },
       },

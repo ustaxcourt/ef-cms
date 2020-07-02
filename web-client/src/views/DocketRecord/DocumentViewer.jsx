@@ -2,7 +2,6 @@ import { DocumentViewerDocument } from './DocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const DocumentViewer = connect(
   {
@@ -20,48 +19,36 @@ export const DocumentViewer = connect(
       <>
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
-            <div
-              className={classNames(
-                'document-viewer--documents',
-                !formattedCaseDetail.formattedDocketEntries.length &&
-                  'border border-base-lighter',
-              )}
-            >
-              {!formattedCaseDetail.formattedDocketEntries.length && (
-                <div className="padding-2">There are no documents</div>
-              )}
-
+            <div className="document-viewer--documents">
               <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
                 <tbody>
-                  {formattedCaseDetail.formattedDocketEntries.length > 0 &&
-                    formattedCaseDetail.formattedDocketEntries.map(
-                      (entry, idx) => {
-                        const active =
-                          viewerDocumentToDisplay.documentId ===
-                          entry.documentId
-                            ? 'active'
-                            : '';
-                        if (entry.hasDocument) {
-                          return (
-                            <tr
-                              className={active}
-                              key={idx}
-                              onClick={() => {
-                                setViewerDocumentToDisplaySequence({
-                                  viewerDocumentToDisplay: entry,
-                                });
-                              }}
-                            >
-                              <td className="center-column small">
-                                {entry.index}
-                              </td>
-                              <td>{entry.createdAtFormatted}</td>
-                              <td>{entry.descriptionDisplay}</td>
-                            </tr>
-                          );
-                        }
-                      },
-                    )}
+                  {formattedCaseDetail.formattedDocketEntries.map(
+                    (entry, idx) => {
+                      const active =
+                        viewerDocumentToDisplay.documentId === entry.documentId
+                          ? 'active'
+                          : '';
+                      if (entry.hasDocument) {
+                        return (
+                          <tr
+                            className={active}
+                            key={idx}
+                            onClick={() => {
+                              setViewerDocumentToDisplaySequence({
+                                viewerDocumentToDisplay: entry,
+                              });
+                            }}
+                          >
+                            <td className="center-column small">
+                              {entry.index}
+                            </td>
+                            <td>{entry.createdAtFormatted}</td>
+                            <td>{entry.descriptionDisplay}</td>
+                          </tr>
+                        );
+                      }
+                    },
+                  )}
                 </tbody>
               </table>
             </div>
