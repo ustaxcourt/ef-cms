@@ -3,22 +3,17 @@ const { DocketRecord } = require('./DocketRecord');
 
 describe('DocketRecord', () => {
   it('fails if applicationContext is not passed into the entity', () => {
-    let error;
-    let docketRecord;
-
-    try {
-      docketRecord = new DocketRecord({
-        description: 'Test Docket Record',
-        eventCode: 'O',
-        filingDate: new Date('9000-01-01').toISOString(),
-        index: 0,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
-    expect(docketRecord).toBeUndefined();
+    expect(() => {
+      new DocketRecord(
+        {
+          description: 'Test Docket Record',
+          eventCode: 'O',
+          filingDate: new Date('9000-01-01').toISOString(),
+          index: 0,
+        },
+        {},
+      );
+    }).toThrow('applicationContext must be defined');
   });
 
   describe('validation', () => {
@@ -181,5 +176,19 @@ describe('DocketRecord', () => {
 
       expect(invalidDocketRecord.isValid()).toBeTruthy();
     });
+  });
+
+  it('sets the number of pages', () => {
+    const docketRecord = new DocketRecord(
+      {
+        description: 'Test Docket Record',
+        eventCode: 'O',
+        filingDate: new Date('9000-01-01').toISOString(),
+        index: 0,
+      },
+      { applicationContext },
+    );
+    docketRecord.setNumberOfPages(13);
+    expect(docketRecord.numberOfPages).toEqual(13);
   });
 });
