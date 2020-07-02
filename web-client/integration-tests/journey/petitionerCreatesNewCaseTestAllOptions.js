@@ -216,7 +216,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: 'Corporation',
+      value: PARTY_TYPES.corporation,
     });
 
     result = runCompute(startCaseHelper, {
@@ -238,7 +238,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: 'Partnership (as the Tax Matters Partner)',
+      value: PARTY_TYPES.partnershipAsTaxMattersPartner,
     });
 
     result = runCompute(startCaseHelper, {
@@ -433,7 +433,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
-      value: 'Conservator',
+      value: PARTY_TYPES.conservator,
     });
 
     result = runCompute(startCaseHelper, {
@@ -465,7 +465,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
-      value: 'Guardian',
+      value: PARTY_TYPES.guardian,
     });
 
     result = runCompute(startCaseHelper, {
@@ -497,7 +497,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
-      value: 'Custodian',
+      value: PARTY_TYPES.custodian,
     });
 
     result = runCompute(startCaseHelper, {
@@ -583,7 +583,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'otherType',
-      value: 'Donor',
+      value: PARTY_TYPES.donor,
     });
 
     result = runCompute(startCaseHelper, {

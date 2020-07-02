@@ -1,5 +1,8 @@
 const React = require('react');
-const { COUNTRY_TYPES } = require('../../../entities/EntityConstants');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
 
@@ -77,7 +80,7 @@ describe('DocketRecord', () => {
     caseDetail = {
       contactPrimary,
       irsPractitioners: [],
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
       privatePractitioners: [],
     };
 
@@ -114,7 +117,9 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual('Petitioner');
+    expect(contacts.find('.party-info-header').text()).toEqual(
+      PARTY_TYPES.petitioner,
+    );
     expect(contacts.find('.party-details').length).toEqual(1);
 
     const contactPrimaryEl = contacts.find('.party-details');
@@ -165,7 +170,9 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual('Petitioner');
+    expect(contacts.find('.party-info-header').text()).toEqual(
+      PARTY_TYPES.petitioner,
+    );
     expect(contacts.find('.party-details').length).toEqual(2);
 
     const contactSecondaryEl = contacts.find('.party-details').at(1);

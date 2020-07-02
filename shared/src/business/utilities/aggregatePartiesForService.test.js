@@ -1,4 +1,5 @@
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
@@ -21,12 +22,12 @@ describe('aggregatePartiesForService', () => {
       {
         email: 'respondentone@example.com',
         name: 'Respondent One',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       {
         email: 'respondenttwo@example.com',
         name: 'Respondent Two',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
     ];
 
@@ -34,13 +35,13 @@ describe('aggregatePartiesForService', () => {
       {
         email: 'practitionerone@example.com',
         name: 'Practitioner One',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'p1',
       },
       {
         email: 'practitionertwo@example.com',
         name: 'Practitioner Two',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'p2',
       },
     ];

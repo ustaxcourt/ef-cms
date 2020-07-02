@@ -12,6 +12,7 @@ import classNames from 'classnames';
 
 export const StartCaseStep3 = connect(
   {
+    PARTY_TYPES: state.constants.PARTY_TYPES,
     completeStartCaseWizardStepSequence:
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
@@ -31,6 +32,7 @@ export const StartCaseStep3 = connect(
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
+    PARTY_TYPES,
     showModal,
     startCaseHelper,
     updateStartCaseFormValueSequence,
@@ -208,7 +210,7 @@ export const StartCaseStep3 = connect(
                 {[
                   'An estate or trust',
                   'A minor or legally incompetent person',
-                  'Donor',
+                  PARTY_TYPES.donor,
                   'Transferee',
                   'Deceased Spouse',
                 ].map((otherType, idx) => (

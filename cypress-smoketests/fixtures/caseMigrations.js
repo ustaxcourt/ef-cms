@@ -1,4 +1,7 @@
 const faker = require('faker');
+const {
+  PARTY_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 
 exports.BASE_CASE = {
@@ -23,7 +26,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -35,7 +38,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -47,7 +50,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -59,7 +62,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -71,7 +74,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -83,7 +86,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -95,7 +98,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -107,7 +110,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -119,7 +122,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: 'Petitioner',
+      title: PARTY_TYPES.petitioner,
     },
   ],
 };

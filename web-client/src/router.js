@@ -159,6 +159,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/document-view?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          docketRecordTab: 'documentView',
+          documentId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-petitioner-information',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
