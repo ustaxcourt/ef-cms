@@ -1,10 +1,9 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const { getCasesByUser } = require('./getCasesByUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { getCasesByUser } = require('./getCasesByUser');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 let queryStub = jest.fn().mockReturnValue({
   promise: async () => ({

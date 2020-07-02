@@ -1,10 +1,9 @@
 import { find, orderBy } from 'lodash';
-import { state } from 'cerebral';
-
 import {
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
+import { state } from 'cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
 const getInternalDocumentTypes = typeMap => {

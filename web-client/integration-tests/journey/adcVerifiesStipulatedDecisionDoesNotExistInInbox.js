@@ -1,6 +1,6 @@
 import { applicationContext } from '../../src/applicationContext';
-
 import { getFormattedMyInbox } from '../helpers';
+
 export const adcVerifiesStipulatedDecisionDoesNotExistInInbox = test => {
   describe('ADC verifies Stipulated Decision does not exist in inbox', () => {
     it('navigates to inbox', async () => {

@@ -1,13 +1,9 @@
 const React = require('react');
 const { CoverSheet } = require('./CoverSheet.jsx');
 const { shallow } = require('enzyme');
-import { applicationContext } from '../../../../../../shared/src/business/test/createTestApplicationContext';
+import { PARTY_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 
 describe('CoverSheet', () => {
-  let PARTY_TYPES;
-
-  ({ PARTY_TYPES } = applicationContext.getConstants());
-
   it('renders a document header with case information', () => {
     const wrapper = shallow(
       <CoverSheet

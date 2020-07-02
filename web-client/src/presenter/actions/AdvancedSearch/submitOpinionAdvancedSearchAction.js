@@ -1,6 +1,6 @@
 import { clone } from 'lodash';
 import { state } from 'cerebral';
-import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
+import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
  * submit advanced search form to search for opinions
