@@ -1,11 +1,10 @@
 const client = require('../../dynamodbClientService');
 const {
-  updateHighPriorityCaseTrialSortMappingRecords,
-} = require('./updateHighPriorityCaseTrialSortMappingRecords');
-
-const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  updateHighPriorityCaseTrialSortMappingRecords,
+} = require('./updateHighPriorityCaseTrialSortMappingRecords');
 
 const caseId = 'abc';
 const caseSortTags = {
