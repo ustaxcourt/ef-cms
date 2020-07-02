@@ -14,7 +14,7 @@ describe('canConsolidateInteractor', () => {
       ...MOCK_CASE,
       associatedJudge: 'Judge Buch',
       procedureType: 'Regular',
-      status: 'Submitted',
+      status: CASE_STATUS_TYPES.submitted,
     };
 
     caseToConsolidate = {
@@ -22,7 +22,7 @@ describe('canConsolidateInteractor', () => {
       associatedJudge: 'Judge Buch',
       docketNumber: '102-19',
       procedureType: 'Regular',
-      status: 'Submitted',
+      status: CASE_STATUS_TYPES.submitted,
     };
   });
 

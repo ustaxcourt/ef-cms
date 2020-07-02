@@ -2604,7 +2604,7 @@ describe('Case entity', () => {
 
       beforeEach(() => {
         caseEntity = new Case(
-          { ...MOCK_CASE, status: 'Submitted' },
+          { ...MOCK_CASE, status: CASE_STATUS_TYPES.submitted },
           {
             applicationContext,
           },
@@ -2637,7 +2637,7 @@ describe('Case entity', () => {
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(false);
 
-        otherCase.status = 'Submitted';
+        otherCase.status = CASE_STATUS_TYPES.submitted;
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(true);
       });
@@ -2652,7 +2652,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2662,7 +2662,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             docketNumber: '102-19',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2736,7 +2736,7 @@ describe('Case entity', () => {
       });
 
       it('should only return the ineligible failure if the pending case status is ineligible', () => {
-        leadCaseEntity.status = 'Submitted';
+        leadCaseEntity.status = CASE_STATUS_TYPES.submitted;
         pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
@@ -2787,7 +2787,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2805,7 +2805,7 @@ describe('Case entity', () => {
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
