@@ -119,7 +119,7 @@ module.exports.createCase1 = async () => {
       caseId,
       docketNumber,
       documentTitle: 'Something',
-      documentType: 'MISC - Miscellaneous',
+      documentType: 'Miscellaneous',
       eventCode: 'MISC',
       freeText: 'Something',
       scenario: 'Type A',

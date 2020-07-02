@@ -43,7 +43,7 @@ const seedData = {
 const signedByJudge = 'Maurice B. Foley';
 let caseDetail;
 
-describe('docket clerk order advanced search', () => {
+describe.skip('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];

@@ -26,7 +26,7 @@
         }
       ],
       "attachments": false,
-      "documentType": "ODD - Order of Dismissal and Decision Entered",
+      "documentType": "Order of Dismissal and Decision Entered",
       "entityName": "Document",
       "filingDate": "2020-04-14T03:01:15.215Z",
       "pending": false,
@@ -46,7 +46,7 @@
           "document": {
             "draftState": null,
             "attachments": false,
-            "documentType": "ODD - Order of Dismissal and Decision Entered",
+            "documentType": "Order of Dismissal and Decision Entered",
             "filingDate": "2020-04-14T03:01:15.215Z",
             "pending": false,
             "documentContents": "Déjà vu, this is a seed order in case 104-20 filed on Apr 13 at 11:01pm ET\n",
@@ -237,7 +237,7 @@
       }
     ],
     "attachments": false,
-    "documentType": "ODD - Order of Dismissal and Decision Entered",
+    "documentType": "Order of Dismissal and Decision Entered",
     "entityName": "Document",
     "filingDate": "2020-04-14T03:01:15.215Z",
     "pending": false,
@@ -270,7 +270,7 @@
             }
           ],
           "attachments": false,
-          "documentType": "ODD - Order of Dismissal and Decision Entered",
+          "documentType": "Order of Dismissal and Decision Entered",
           "filingDate": "2020-04-14T03:01:15.215Z",
           "pending": false,
           "receivedAt": "2020-04-14T03:01:15.215Z",
@@ -297,7 +297,7 @@
                   "docketNumber": "104-20"
                 },
                 "attachments": false,
-                "documentType": "ODD - Order of Dismissal and Decision Entered",
+                "documentType": "Order of Dismissal and Decision Entered",
                 "filingDate": "2020-04-14T03:01:15.215Z",
                 "pending": false,
                 "documentContents": "Déjà vu, this is a seed order in case 104-20 filed on Apr 13 at 11:01pm ET\n",
