@@ -1,6 +1,5 @@
 import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
 import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
-import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -11,19 +10,12 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner');
@@ -41,7 +33,6 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   loginAs(test, 'docketclerk');
   docketClerkViewsDraftOrder(test, 0);
   docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
-  docketClerkSignsOrder(test);
   docketClerkAddsDocketEntryFromDraft(test, 0);
 
   loginAs(test, 'petitioner');
