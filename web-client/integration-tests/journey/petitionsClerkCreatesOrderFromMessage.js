@@ -41,11 +41,16 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
-    //go back to message detail and verify that the order was added to the attachments
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await test.runSequence('setPDFSignatureDataSequence', {
+      signatureData: {
+        scale: 1,
+        x: 100,
+        y: 100,
+      },
     });
+    await test.runSequence('saveDocumentSigningSequence');
+
+    expect(test.getState('currentPage')).toEqual('MessageDetail');
 
     const messageDetailFormatted = runCompute(formattedMessageDetail, {
       state: test.getState(),
@@ -70,5 +75,6 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     );
 
     expect(draftOrder).toBeTruthy();
+    expect(draftOrder.signedAt).toBeDefined();
   });
 };
