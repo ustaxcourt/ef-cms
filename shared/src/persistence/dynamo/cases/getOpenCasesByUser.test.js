@@ -1,8 +1,11 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
 const { getOpenCasesByUser } = require('./getOpenCasesByUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 jest.mock('./getUserCases', () => ({
   getUserCases: jest.fn().mockReturnValue([
@@ -10,13 +13,13 @@ jest.mock('./getUserCases', () => ({
       caseId: '123',
       pk: 'case|123',
       sk: 'case|123',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     },
     {
       caseId: '121',
       pk: 'case|121',
       sk: 'case|121',
-      status: 'Closed',
+      status: CASE_STATUS_TYPES.closed,
     },
   ]),
 }));
@@ -38,7 +41,7 @@ describe('getOpenCasesByUser', () => {
         caseId: '123',
         pk: 'case|123',
         sk: 'case|123',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });

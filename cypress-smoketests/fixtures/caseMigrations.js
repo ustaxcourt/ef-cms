@@ -1,5 +1,6 @@
 const faker = require('faker');
 const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
@@ -11,7 +12,7 @@ exports.BASE_CASE = {
   caseCaption: 'A Migrated Casee',
   caseId: undefined,
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: CASE_STATUS_TYPES.calendared,
 };
 
 exports.CASE_WITH_OTHER_PETITIONERS = {
