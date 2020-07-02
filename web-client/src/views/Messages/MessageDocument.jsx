@@ -30,7 +30,7 @@ export const MessageDocument = connect(
     return (
       <div
         className={classNames(
-          'message-detail--attachments',
+          'document-viewer--documents',
           !viewerDocumentToDisplay && 'border border-base-lighter',
         )}
       >
