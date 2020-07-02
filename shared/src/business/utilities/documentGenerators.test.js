@@ -1,12 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-
 const fs = require('fs');
 const path = require('path');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('./getChromiumBrowser');
-
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -24,6 +17,11 @@ const {
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
