@@ -3,7 +3,6 @@ import {
   OPINION_EVENT_CODES,
   ORDER_DOCUMENT_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from 'cerebral';

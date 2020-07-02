@@ -1,57 +1,61 @@
-CODE,DOCKET ENTRY LANGUAGE,Display in Dropdown ,Nonstandard type ,What is this order for? ,Judge's name ,Date,Docket number(s),Trial location (dropdown) ,Concatenated Docket Entry ,Served Stamp
-O,ORDER *ANYTHING*,O - Order ,Type A ,[Anything],,,,,[Anything],Served OR Entered and Served
-OAJ,ORDER that case is assigned to *JUDGE* . *ANYTHING*,OAJ - Order that case is assigned ,Type B,[Anything],[Judge Name],,,,Order [Judge name] [Anything],Served
-OAL,"ORDER that the letter ""L"" is added to the Dkt. No. *ANYTHING*","OAL - Order that the letter ""L"" is added to Docket number ",Type C,,,,[Docket number],,"Order that the letter ""L"" is added to Docket number [Anything]",Served
-OAP,ORDER for Amended Petition on *DATE*. *ANY*,OAP - Order for Amended Petition ,Type D,[Anything],,[Date],,,Order for Amended Petition on [Date] [Anything],Served
-OAPF,ORDER for Amended Petition and Filing Fee  on *DATE*. *ANY*,OAPF - Order for Amended Petition and Filing Fee ,Type D,[Anything],,[Date],,,Order for Amended Petition and Filing Fee on [Date] [Anything],Served
-OAR,"ORDER that the letter ""R"" is added to the Dkt. No. *ANYTHING*","OAR - Order that the letter ""R"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""R"" is added to the Docket number [Docket number]",Served
-OAS,"ORDER that the letter ""S"" is added to the Dkt. No. *ANYTHING*","OAS - Order that the letter ""S"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""S"" is added to the Docket number [Docket number]",Served
-OASL,"ORDER that the letters ""SL"" are added to the Dkt. No. *ANY*","OASL - Order that the letters ""SL"" are added to the Docket number ",Type C,,,,[Docket number],,"Order that the letters ""SL"" are added to the Docket number [Docket number]",Served
-OAW,"ORDER that the letter ""W"" is added to the Dkt. No. *ANYTHING*","OAW - Order that the letter ""W"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""W"" is added to the Docket number [Docket number]",Served
-OAX,"ORDER that the letter ""X"" is added to the Dkt. No. *ANYTHING*","OAX - Order that the letter ""X"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""X"" is added to the Docket number [Docket number]",Served
-OCA,ORDER that caption of case is amended. *ANYTHING*,OCA - Order that caption of case is amended ,Type A ,[Anything],,,,,Order that caption of case is amended [Anything],Served
-OD,"ORDER OF DISMISSAL Entered,, *JUDGE*. *ANYTHING*","OD - Order of Dismissal Entered",Type B,[Anything],[Judge name],,,,"Order of Dismissal Entered, [Judge Name] [Anything]",Entered and Served
-ODD,"ORDER OF DISMISSAL AND DECISION Entered,, *JUDGE*. *ANYTHING*","ODD - Order of Dismissal and Decision Entered, ",Type B,[Anything],[Judge name],,,,"Order of Dismissal and Decision Entered, [Judge Name] [Anything]",Entered and Served
-ODL,"ORDER that the letter ""L"" is deleted from the Dkt. No. *ANY*","ODL - Order that the letter ""L"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""L"" is deleted from the Docket number [Docket number]",Served
-ODP,"ORDER that the letter ""P"" is deleted from the Dkt. No. *ANYTHING*","ODP - Order that the letter ""P"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""P"" is deleted from the Docket number [Docket number]",Served
-ODR,"ORDER that the letter ""R"" is deleted from the Dkt. No. *ANY*","ODR - Order that the letter ""R"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""R"" is deleted from the Docket number [Docket number]",Served
-ODS,"ORDER that the letter ""S"" is deleted from the Dkt. No. *ANY*","ODS - Order that the letter ""S"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""S"" is deleted from the Docket number [Docket number]",Served
-ODSL,"ORDER that the letters ""SL"" are deleted from the Dkt. No. *ANY*","ODSL - Order that the letters ""SL"" are deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letters ""SL"" are deleted from the Docket number [Docket number]",Served
-ODW,"ORDER that the letter ""W"" is deleted from the Dkt. No. *ANY*","ODW - Order that the letter ""W"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""W"" is deleted from the Docket number [Docket number]",Served
-ODX,"ORDER that the letter ""X"" is deleted from the Dkt. No. *ANY*","ODX - Order that the letter ""X"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""X"" is deleted from the Docket number [Docket number]",Served
-OF,ORDER for Filing Fee  on *DATE*. *ANYTHING*,OF - Order for Filing Fee ,Type D,[Anything],,[Date],,,Order for Filing Fee on [Date] [Anything],Served
-OFAB,ORDER fixing amount of bond at *ANYTHING*,OFAB - Order fixing amount of bond ,Type A ,[Anything],,,,,Order fixing amount of bond at [Anything],Served
-OFFX,ORDER time is extended to *DATE* for petr(s) to pay the Filing Fee .,OFFX - Order time is extended for petr(s) to pay the filing fee,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to pay the filing fee,Served
-OFWD,ORDER for Filing Fee  on *DATE*. Appl. waiver of Filing Fee  is Dn.,OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied. ,Type E,,,[Date],,,Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.,Served
-OFX,ORDER time is extended to *DATE* for petr(s) to pay Filing Fee  or submit an Application for Waiver of Filing Fee .,OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee,Served
-OIP,"ORDER that the letter ""P"" is added to the Dkt. No. *ANYTHING*","OIP - Order that the letter ""P"" is added to the Docket number",Type C,,,,[Docket number],,"Order that the letter ""P"" is added to the Docket number [Docket number]",Served
-OJR,ORDER that jurisdiction is retained by *JUDGE* *ANYTHING*,OJR - Order that jurisdiction is retained,Type B,[Anything],[Judge name ],,,,Order that jurisdiction is retained by [Judge Name] [Anything],Served
-OODS,ORDER for Ownership Disclosure Statement by *DATE*.,OODS - Order for Ownership Disclosure Statement ,Type E,,,[Date],,,Order for Ownership Disclosure Statement by [Date],Served
-OPFX,ORDER time is extended to *DATE* for petr(s) to file Amended Petition and pay the Filing Fee  or submit an Application for Waiver of Filing Fee .,OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee ,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee ,Served
-OPX,ORDER time is extended to *DATE* for petr(s) to file Amended Petition.,OPX - Order time is extended for petr(s) to file Amended Petition ,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to file Amended Petition ,Served
-ORAP,ORDER for Amendment to Petition by *DATE*. *ANYTHING*,ORAP - Order for Amendment to Petition ,Type D,[Anything],,[Date],,,Order for Amendment to Petition by [Date] [Anything],Served
-OROP,ORDER for Ratification of Petition by *DATE*. *ANYTHING*,OROP - Order for Ratification of Petition ,Type D,[Anything],,[Date],,,Order for Ratification of Petition by [Date] [Anything],Served
-OSC,ORDER *ANYTHING*,OSC - Order ,Type A ,[Anything],,,,,Order [Anything],Served
-OSCP,"ORDER petr(s) by *DATE* show cause why ""S"" should not be removed *ANYTHING*","OSCP - Order petr(s) to show cause why ""S"" should not be removed ",Type D,[Anything],,[Date],,,"OSCP - Order petr(s) by [Date] to show cause why ""S"" should not be removed [Anything]",Served
-OST,ORDER of Service of Transcript (Bench Opinion) *ANYTHING*,OST - Order of Service of Transcript (Bench Opinion),Type A ,[Anything],,,,,Order of Service of Transcript (Bench Opinion) [Anything],Served
-OSUB,ORDER that case is submitted to *JUDGE*. *ANYTHING*,OSUB - Order that case is submitted,Type B,[Anything],[Judge name],,,,Order that case is submitted to [Judge Name] [Anything],Served
-DEC,"DECISION Entered,, *JUDGE* *ANYTHING*","DEC - Decision Entered",Type B,[Anything],[Judge name],,,,"Decision Entered, [Judge Name] [Anything]",Entered and Served
-OAD,"ORDER AND DECISION Entered,, *ANY* *JUDGE*. *ANYTHING*","OAD - Order and Decision Entered",Type B,[Anything],[Judge name],,,,"Order and Decision Entered, [Judge Name] [Anything]",Entered and Served
-ODJ,"ORDER OF DISMISSAL FOR LACK OF JURISDICTION Entered,, *JUDGE*. *ANYTHING*","ODJ - Order of Dismissal for Lack of Jurisdiction Entered",Type B,[Anything],[Judge name],,,,"Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",Entered and Served
-SDEC,"STIPULATED DECISION Entered, *JUDGE*. *ANYTHING*","SDEC - Stipulated Decision Entered",Type B,[Anything],[Judge name],,,,"Stipulated Decision Entered, [Judge Name] [Anything]",Entered and Served
-MOP ,Memorandum Opinion [judge],MOP - Memorandum Opinion ,Type B,[Anything],[Judge name],,,,Memorandum Opinion [judge],
-NOT ,Notice [Anything],NOT - Notice ,Type A ,[Anything],,,,,[Anything],
+CODE,DOCKET ENTRY LANGUAGE,Document Type,Nonstandard type ,What is this order for? ,Judge's name ,Date,Docket number(s),Trial location (dropdown) ,Concatenated Docket Entry ,Served Stamp 
+O,ORDER *ANYTHING*,Order ,Type A ,[Anything],,,,,Order [Anything],Served OR Entered and Served 
+OAJ,ORDER that case is assigned to *JUDGE* . *ANYTHING*,Order that case is assigned ,Type B,[Anything],[Judge Name],,,,Order [Judge name] [Anything],Served 
+OAL,"ORDER that the letter ""L"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""L"" is added to Docket number ",Type C,,,,[Docket number],,"Order that the letter ""L"" is added to Docket number [Anything]",Served 
+OAP,ORDER for Amended Petition on *DATE*. *ANY*,Order for Amended Petition ,Type D,[Anything],,[Date],,,Order for Amended Petition on [Date] [Anything],Served 
+OAPF,ORDER for Amended Petition and Filing Fee  on *DATE*. *ANY*,Order for Amended Petition and Filing Fee ,Type D,[Anything],,[Date],,,Order for Amended Petition and Filing Fee on [Date] [Anything],Served 
+OAR,"ORDER that the letter ""R"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""R"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""R"" is added to the Docket number [Docket number]",Served 
+OAS,"ORDER that the letter ""S"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""S"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""S"" is added to the Docket number [Docket number]",Served 
+OASL,"ORDER that the letters ""SL"" are added to the Dkt. No. *ANY*","Order that the letters ""SL"" are added to the Docket number ",Type C,,,,[Docket number],,"Order that the letters ""SL"" are added to the Docket number [Docket number]",Served 
+OAW,"ORDER that the letter ""W"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""W"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""W"" is added to the Docket number [Docket number]",Served 
+OAX,"ORDER that the letter ""X"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""X"" is added to the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""X"" is added to the Docket number [Docket number]",Served 
+OCA,ORDER that caption of case is amended. *ANYTHING*,Order that caption of case is amended ,Type A ,[Anything],,,,,Order that caption of case is amended [Anything],Served
+OD,"ORDER OF DISMISSAL Entered, *JUDGE*. *ANYTHING*",Order of Dismissal Entered,Type B,[Anything],[Judge name],,,,"Order of Dismissal Entered, [Judge Name] [Anything]",Entered and Served 
+ODD,"ORDER OF DISMISSAL AND DECISION Entered, *JUDGE*. *ANYTHING*",Order of Dismissal and Decision Entered,Type B,[Anything],[Judge name],,,,"Order of Dismissal and Decision Entered, [Judge Name] [Anything]",Entered and Served 
+ODL,"ORDER that the letter ""L"" is deleted from the Dkt. No. *ANY*","Order that the letter ""L"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""L"" is deleted from the Docket number [Docket number]",Served
+ODP,"ORDER that the letter ""P"" is deleted from the Dkt. No. *ANYTHING*","Order that the letter ""P"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""P"" is deleted from the Docket number [Docket number]",Served
+ODR,"ORDER that the letter ""R"" is deleted from the Dkt. No. *ANY*","Order that the letter ""R"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""R"" is deleted from the Docket number [Docket number]",Served
+ODS,"ORDER that the letter ""S"" is deleted from the Dkt. No. *ANY*","Order that the letter ""S"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""S"" is deleted from the Docket number [Docket number]",Served
+ODSL,"ORDER that the letters ""SL"" are deleted from the Dkt. No. *ANY*","Order that the letters ""SL"" are deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letters ""SL"" are deleted from the Docket number [Docket number]",Served
+ODW,"ORDER that the letter ""W"" is deleted from the Dkt. No. *ANY*","Order that the letter ""W"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""W"" is deleted from the Docket number [Docket number]",Served
+ODX,"ORDER that the letter ""X"" is deleted from the Dkt. No. *ANY*","Order that the letter ""X"" is deleted from the Docket number ",Type C,,,,[Docket number],,"Order that the letter ""X"" is deleted from the Docket number [Docket number]",Served
+OF,ORDER for Filing Fee  on *DATE*. *ANYTHING*,Order for Filing Fee ,Type D,[Anything],,[Date],,,Order for Filing Fee on [Date] [Anything],Served
+OFAB,ORDER fixing amount of bond at *ANYTHING*,Order fixing amount of bond ,Type A ,[Anything],,,,,Order fixing amount of bond at [Anything],Served
+OFFX,ORDER time is extended to *DATE* for petr(s) to pay the Filing Fee .,Order time is extended for petr(s) to pay the filing fee,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to pay the filing fee,Served
+OFWD,ORDER for Filing Fee  on *DATE*. Appl. waiver of Filing Fee  is Dn.,Order for Filing Fee. Application waiver of Filing Fee is denied ,Type E,,,[Date],,,Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.,Served
+OFX,ORDER time is extended to *DATE* for petr(s) to pay Filing Fee  or submit an Application for Waiver of Filing Fee .,Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee,Served
+OIP,"ORDER that the letter ""P"" is added to the Dkt. No. *ANYTHING*","Order that the letter ""P"" is added to the Docket number",Type C,,,,[Docket number],,"Order that the letter ""P"" is added to the Docket number [Docket number]",Served
+OJR,ORDER that jurisdiction is retained by *JUDGE* *ANYTHING*,Order that jurisdiction is retained,Type B,[Anything],[Judge name ],,,,Order that jurisdiction is retained by [Judge Name] [Anything],Served
+OODS,ORDER for Ownership Disclosure Statement by *DATE*.,Order for Ownership Disclosure Statement ,Type E,,,[Date],,,Order for Ownership Disclosure Statement by [Date],Served
+OPFX,ORDER time is extended to *DATE* for petr(s) to file Amended Petition and pay the Filing Fee  or submit an Application for Waiver of Filing Fee .,Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee ,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee ,Served
+OPX,ORDER time is extended to *DATE* for petr(s) to file Amended Petition.,Order time is extended for petr(s) to file Amended Petition ,Type E,,,[Date],,,Order time is extended to [Date] for petr(s) to file Amended Petition ,Served
+ORAP,ORDER for Amendment to Petition by *DATE*. *ANYTHING*,Order for Amendment to Petition ,Type D,[Anything],,[Date],,,Order for Amendment to Petition by [Date] [Anything],Served
+OROP,ORDER for Ratification of Petition by *DATE*. *ANYTHING*,Order for Ratification of Petition ,Type D,[Anything],,[Date],,,Order for Ratification of Petition by [Date] [Anything],Served
+OSC,ORDER *ANYTHING*,Order to Show Cause ,Type A ,[Anything],,,,,Order [Anything],Served
+OSCP,"ORDER petr(s) by *DATE* show cause why ""S"" should not be removed *ANYTHING*","Order petr(s) to show cause why ""S"" should not be removed ",Type D,[Anything],,[Date],,,"Order petr(s) by [Date] to show cause why ""S"" should not be removed [Anything]",Served
+OST,ORDER of Service of Transcript (Bench Opinion) *ANYTHING*,Order of Service of Transcript (Bench Opinion),Type A ,[Anything],,,,,Order of Service of Transcript (Bench Opinion) [Anything],Served
+OSUB,ORDER that case is submitted to *JUDGE*. *ANYTHING*,Order that case is submitted,Type B,[Anything],[Judge name],,,,Order that case is submitted to [Judge Name] [Anything],Served
+DEC,"DECISION Entered, *JUDGE* *ANYTHING*",Decision Entered ,Type B,[Anything],[Judge name],,,,"Decision Entered, [Judge Name] [Anything]",Entered and Served 
+OAD,"ORDER AND DECISION Entered, *ANY* *JUDGE*. *ANYTHING*",Order and Decision Entered,Type B,[Anything],[Judge name],,,,"Order and Decision Entered, [Judge Name] [Anything]",Entered and Served 
+ODJ,"ORDER OF DISMISSAL FOR LACK OF JURISDICTION Entered, *JUDGE*. *ANYTHING*",Order of Dismissal for Lack of Jurisdiction Entered,Type B,[Anything],[Judge name],,,,"Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",Entered and Served 
+SDEC,"STIPULATED DECISION Entered, *JUDGE*. *ANYTHING*",Stipulated Decision Entered,Type B,[Anything],[Judge name],,,,"Stipulated Decision Entered, [Judge Name] [Anything]",Entered and Served 
+MOP ,Memorandum Opinion [judge],Memorandum Opinion ,Type B,[Anything],[Judge name],,,,Memorandum Opinion [judge],
+NOT ,Notice [Anything],Notice ,Type A ,[Anything],,,,,Notice [Anything],
 SOP ,Summary Opinion [judge],Summary Opinion ,Type B,[Anything],[Judge name],,,,Summary Opinion [judge],
 WRIT ,Writ of Habeas Corpus Ad Testificandum [anything],Writ of Habeas Corpus Ad Testificandum ,Type A ,[Anything] ,,,,,Writ of Habeas Corpus Ad Testificandum [anything],
-CTRA,Corrected Transcript of [Date],CTRA - Corrected Transcript ,Type E ,,,[Date],,,Corrected Transcipt of [Date] ,
-FTRL ,Further Trial before [Judge] at [Place],FTRL -  Further Trial before ...,Type F,,[Judge name],,,[Place],Further Trial before [Judge] at [Place],
-HEAR,Hearing before [Judge] at [Place],HEAR - Hearing before ...,Type F,,[Judge name],,,[Place],Hearing before [Judge] at [Place],
-NTD,Notice of Trial on [Date] at [Place] ,NTD - Notice of Trial ,Type G ,,,[Date],,[Place],Notice of Trial on [Date] at [Place] ,
-PTRL,Partial Trial before [Judge] at [Place],PTRL - Partial Trial before ...,Type F,,[Judge name],,,[Place],Partial Trial before [Judge] at [Place],
-TRL,Trial before [Judge] at [Place],TRL - Trial before ...,Type F,,[Judge name],,,[Place],Trial before [Judge] at [Place],
-ROA ,Record on Appeal [Anything],ROA - Record on Appeal,Type A ,[Anything],,,,,Record on Appeal [Anything],
-TCOP ,T.C. Opinion [judge] [anything],TCOP - T.C. Opinion,Type B,[Anything],[Judge name],,,,T.C. Opinion [judge] [anything],
-RTRA ,Revised Transcript of [anything],RTRA - Revised Transcript ,Type A,[Anything],,,,,Revised Transcript of [anything],
-TRAN,Transcript of [anything],TRAN - Transcript ,Type H,[Anything],,[Date],,,Transcript of [anything] on [date],
-SPTO,Standing Pre-Trial Order ,SPTO - Standing Pre-Trial Order ,HOLD hold (dependent on if we get to automated logic) ,,,,,,Standing Pre-Trial Order ,
-MISC,,MISC - Miscellaneous ,Type A,[Anything],,,,,,
+CTRA,Corrected Transcript of [Date],Corrected Transcript ,Type E ,,,[Date],,,Corrected Transcipt of [Date] ,
+FTRL ,Further Trial before [Judge] at [Place],Further Trial before,Type F,,[Judge name],,,[Place],Further Trial before [Judge] at [Place],
+HEAR,Hearing before [Judge] at [Place],Hearing before ...,Type F,,[Judge name],,,[Place],Hearing before [Judge] at [Place],
+NDT,Notice of Trial on [Date] at [Place] ,Notice of Trial ,Type G ,,,[Date],,[Place],Notice of Trial on [Date] at [Place] ,
+PTRL,Partial Trial before [Judge] at [Place],Partial Trial before,Type F,,[Judge name],,,[Place],Partial Trial before [Judge] at [Place],
+TRL,Trial before [Judge] at [Place],Trial before,Type F,,[Judge name],,,[Place],Trial before [Judge] at [Place],
+ROA ,Record on Appeal [Anything],Record on Appeal,Type A ,[Anything],,,,,Record on Appeal [Anything],
+TCOP ,T.C. Opinion [judge] [anything],T.C. Opinion,Type B,[Anything],[Judge name],,,,T.C. Opinion [judge] [anything],
+RTRA ,Revised Transcript of [anything],Revised Transcript ,Type A,[Anything],,,,,Revised Transcript of [anything],
+TRAN,Transcript of [anything] on [date],Transcript ,Type H,[Anything],,[Date],,,Transcript of [anything] on [date],
+MISC,[Anything],Miscellaneous ,Type A,[Anything],,,,,,
+HE,Hearing Exhibits for [Anything] ,Hearing Exhibits ,Type A,[Anything],,,,,,
+TE,Trial Exhibits for [Anything] ,Trial Exhibits,Type A,[Anything],,,,,,
+USCA,U.S.C.A. [Anything],U.S.C.A,Type A,[Anything],,,,,,
+ES,Bounced Electronic Service [Anything],Bounced Electronic Service ,Type A,[Anything],,,,,,
+RM,Returned Mail [Anything],Returned Mail,Type A,[Anything],,,,,,

@@ -1,5 +1,4 @@
 import { runCompute } from 'cerebral/test';
-
 import { workQueueSectionHelper } from './workQueueSectionHelper';
 
 describe('workQueueSectionHelper', () => {

@@ -988,10 +988,10 @@
         }
       }
     },
-    "/cases/{caseId}": {
+    "/cases/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -999,8 +999,8 @@
       ],
       "get": {
         "tags": ["cases"],
-        "summary": "get a case by caseId",
-        "description": "Get a case by caseId.\n",
+        "summary": "get a case by docket number",
+        "description": "Get a case by docket number.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1153,10 +1153,10 @@
         }
       }
     },
-    "/public-api/cases/{caseId}": {
+    "/public-api/cases/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1164,8 +1164,8 @@
       ],
       "get": {
         "tags": ["cases"],
-        "summary": "get a case by caseId",
-        "description": "Get a case by caseId.\n",
+        "summary": "get a case by docket number",
+        "description": "Get a case by docket number.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {

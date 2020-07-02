@@ -35,7 +35,7 @@ describe('submitCaseSearchSequence', () => {
   it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
     applicationContext
       .getUseCases()
-      .getCaseByDocketNumberInteractor.mockImplementation(() => {
+      .getCaseInteractor.mockImplementation(() => {
         return Promise.reject(
           new NotFoundError({ message: "404 Can't find it" }),
         );
