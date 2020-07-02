@@ -5,14 +5,7 @@ import {
   uploadPetition,
   viewDocumentDetailMessage,
 } from './helpers';
-import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
-  extractedPendingMessagesFromCaseDetailComputed,
-);
 
 const test = setupTest({
   useCases: {
@@ -45,17 +38,5 @@ describe('a docket clerk views case detail messages in progress with a message o
       message: 'this is a test message for docket clerk',
       test,
     });
-  });
-
-  loginAs(test, 'docketclerk');
-  it('docket clerk views case detail in progress messages with a message about a draft order', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    let result = runCompute(extractedPendingMessagesFromCaseDetail, {
-      state: test.getState(),
-    });
-    expect(result[0].editLink).not.toContain('/edit');
-    expect(result[0].editLink).toContain('/messages/');
   });
 });
