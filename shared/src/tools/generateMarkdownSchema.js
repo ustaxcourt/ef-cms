@@ -65,6 +65,7 @@ const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
 const { CaseMessage } = require('../business/entities/CaseMessage');
 const { Correspondence } = require('../business/entities/Correspondence');
+const { COUNTRY_TYPES } = require('../business/entities/EntityConstants');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 const { ForwardMessage } = require('../business/entities/ForwardMessage');
@@ -94,7 +95,7 @@ const generateMarkdownSchema = (entity, entityName) => {
 
 generateMarkdownSchema(
   getNextFriendForIncompetentPersonContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/NextFriendForIncompetentPersonContact',
@@ -102,7 +103,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getNextFriendForMinorContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/NextFriendForMinorContact',
@@ -110,7 +111,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPartnershipAsTaxMattersPartnerPrimaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PartnershipAsTaxMattersPartnerContact',
@@ -118,7 +119,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPartnershipBBAPrimaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PartnershipBBAPrimaryContact',
@@ -126,7 +127,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPartnershipOtherThanTaxMattersPrimaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PartnershipOtherThanTaxMattersPrimaryContact',
@@ -134,7 +135,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerConservatorContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerConservatorContact',
@@ -142,7 +143,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerCorporationContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerCorporationContact',
@@ -150,7 +151,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerCustodianContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerCustodianContact',
@@ -158,7 +159,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerDeceasedSpouseContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerDeceasedSpouseContact',
@@ -166,7 +167,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerEstateWithExecutorPrimaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerEstateWithExecutorPrimaryContact',
@@ -174,7 +175,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerGuardianContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerGuardianContact',
@@ -182,7 +183,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerIntermediaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerIntermediaryContact',
@@ -190,7 +191,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerPrimaryContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerPrimaryContact',
@@ -198,7 +199,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerSpouseContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerSpouseContact',
@@ -206,7 +207,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getPetitionerTrustContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/PetitionerTrustContact',
@@ -214,7 +215,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getOtherPetitionerContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/OtherPetitionerContact',
@@ -222,7 +223,7 @@ generateMarkdownSchema(
 
 generateMarkdownSchema(
   getSurvivingSpouseContact({
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
   'contacts/SurvivingSpouseContact',

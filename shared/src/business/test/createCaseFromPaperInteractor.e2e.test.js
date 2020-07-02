@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
 const {
@@ -35,7 +36,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     MOCK_CASE.contactPrimary = {
       address1: '123 Abc Ln',
       city: 'something',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Bob Jones',
       phone: '1234567890',
       postalCode: '12345',

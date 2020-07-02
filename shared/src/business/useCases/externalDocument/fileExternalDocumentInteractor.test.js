@@ -2,12 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
@@ -21,7 +25,7 @@ describe('fileExternalDocumentInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',

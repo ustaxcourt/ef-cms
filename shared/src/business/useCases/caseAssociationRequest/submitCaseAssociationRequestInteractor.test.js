@@ -4,8 +4,8 @@ const {
 const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
+const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('submitCaseAssociationRequest', () => {
   let caseRecord = {
@@ -15,7 +15,7 @@ describe('submitCaseAssociationRequest', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -82,7 +82,7 @@ describe('submitCaseAssociationRequest', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -115,7 +115,7 @@ describe('submitCaseAssociationRequest', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -154,7 +154,7 @@ describe('submitCaseAssociationRequest', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',

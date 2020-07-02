@@ -6,8 +6,8 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { omit } = require('lodash');
-const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateCase', () => {
   const MOCK_CASE = {
@@ -17,7 +17,7 @@ describe('updateCase', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -119,7 +119,7 @@ describe('updateCase', () => {
           address2: 'Sunt maiores vitae ',
           address3: 'Culpa ex aliquip ven',
           city: 'Aperiam minim sunt r',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Iola Snow',
           phone: '+1 (772) 246-3448',
@@ -131,7 +131,7 @@ describe('updateCase', () => {
           address2: 'Aperiam aliquip volu',
           address3: 'Eos consequuntur max',
           city: 'Deleniti lorem sit ',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Linda Singleton',
           phone: '+1 (153) 683-1448',
           postalCode: '89985',
