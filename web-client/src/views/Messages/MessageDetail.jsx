@@ -208,7 +208,7 @@ export const MessageDetail = connect(
 
           <div className="grid-row grid-gap-5">
             <div className="grid-col-4">
-              <div className="border border-base-lighter message-detail--attachments">
+              <div className="border border-base-lighter document-viewer--documents">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}
