@@ -11,7 +11,7 @@ describe('updatePartyTypeAction', () => {
   const {
     COUNTRY_TYPES,
     PARTY_TYPES,
-    ROLES,
+    USER_ROLES,
   } = applicationContext.getConstants();
 
   const getFixtures = (props, state = {}) => ({
@@ -22,7 +22,7 @@ describe('updatePartyTypeAction', () => {
     state: {
       ...state,
       user: {
-        role: ROLES.petitioner,
+        role: USER_ROLES.petitioner,
       },
     },
   });
