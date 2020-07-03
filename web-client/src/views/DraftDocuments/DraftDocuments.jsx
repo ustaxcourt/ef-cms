@@ -28,6 +28,9 @@ export const DraftDocuments = connect(
         {showModal === 'ConfirmEditModal' && (
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
+        {showModal === 'ConfirmEditSignatureModal' && (
+          <ConfirmEditModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+        )}
       </>
     );
   },
