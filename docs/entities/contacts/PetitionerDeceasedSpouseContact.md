@@ -46,15 +46,6 @@
           name: "max"
           args: 
             limit: 500
-    email: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 500
     inCareOf: 
       type: "string"
       flags: 
@@ -111,6 +102,40 @@
         - "Electronic"
         - "None"
         - "Paper"
+    hasEAccess: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Flag that indicates if the contact has \"eAccess\" login credentials to the legacy system."
+    email: 
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "hasEAccess"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     state: 
       type: "string"
       flags: 
