@@ -25,7 +25,7 @@ export const DraftDocumentViewer = connect(
                 (draftDocument, index) => {
                   const active =
                     viewerDraftDocumentToDisplay?.documentId ===
-                    document.documentId
+                    draftDocument.documentId
                       ? 'active'
                       : '';
 
