@@ -54,12 +54,12 @@ describe('getIndexedCasesForUser', () => {
             },
             {
               match: {
-                'status.S': 'Jurisdiction Retained',
+                'status.S': CASE_STATUS_TYPES.jurisdictionRetained,
               },
             },
             {
               match: {
-                'status.S': 'Calendared',
+                'status.S': CASE_STATUS_TYPES.calendared,
               },
             },
           ],

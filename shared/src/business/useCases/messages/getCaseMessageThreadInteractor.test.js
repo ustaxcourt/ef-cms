@@ -4,7 +4,7 @@ const {
 const {
   getCaseMessageThreadInteractor,
 } = require('./getCaseMessageThreadInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('getCaseMessageThreadInteractor', () => {
@@ -25,7 +25,7 @@ describe('getCaseMessageThreadInteractor', () => {
     const mockCaseMessage = {
       attachments: [],
       caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
-      caseStatus: 'General Docket - Not at Issue',
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',

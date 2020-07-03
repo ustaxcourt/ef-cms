@@ -18,6 +18,7 @@ const axiosInstance = axios.create({
 const {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  STATUS_TYPES,
 } = applicationContext.getConstants();
 
 const firstConsolidatedCase = {
@@ -28,7 +29,7 @@ const firstConsolidatedCase = {
   docketNumber: '101-21',
   leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
@@ -38,7 +39,7 @@ const secondConsolidatedCase = {
   docketNumber: '102-21',
   leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const correspondenceCase = {
@@ -56,7 +57,7 @@ const correspondenceCase = {
   ],
   docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const otherFilersCase = {
@@ -92,7 +93,7 @@ const otherFilersCase = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const otherPetitionersCase = {
@@ -118,7 +119,7 @@ const otherPetitionersCase = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 describe('Case journey', () => {
