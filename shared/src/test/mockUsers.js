@@ -1,4 +1,4 @@
-import { ROLES } from '../business/entities/EntityConstants';
+const { ROLES } = require('../business/entities/EntityConstants');
 
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
