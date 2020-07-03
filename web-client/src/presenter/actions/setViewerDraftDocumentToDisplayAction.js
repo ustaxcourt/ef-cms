@@ -4,7 +4,8 @@ import { state } from 'cerebral';
  * sets the viewerDraftDocumentToDisplay from props
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get method
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
