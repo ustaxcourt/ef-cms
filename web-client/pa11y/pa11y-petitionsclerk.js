@@ -151,7 +151,7 @@ module.exports = [
     ],
     notes: 'checks the confirm modal when editing a signed draft document',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=draft-documents-viewer',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=edit-signed-order-confirm-modal',
   },
   {
     actions: [
