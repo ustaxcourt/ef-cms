@@ -1,6 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { ConfirmEditModal } from './ConfirmEditModal';
-import { DocumentViewer } from '../DocketRecord/DocumentViewer';
+import { DraftDocumentViewer } from '../DocketRecord/DraftDocumentViewer';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -23,10 +23,7 @@ export const DraftDocuments = connect(
           <p>There are no draft documents.</p>
         )}
         {formattedCaseDetail.formattedDraftDocuments.length > 0 && (
-          <DocumentViewer
-            documentsToView={formattedCaseDetail.formattedDraftDocuments}
-            draftDocuments={true}
-          />
+          <DraftDocumentViewer />
         )}
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
