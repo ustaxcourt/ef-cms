@@ -24,7 +24,7 @@ describe('opinionAdvancedSearchInteractor', () => {
           documentContents:
             'Everyone knows that Reeses Outrageous bars are the best candy',
           documentTitle: 'T.C. Opinion for More Candy',
-          documentType: 'TCOP - T.C. Opinion',
+          documentType: 'T.C. Opinion',
           eventCode: 'TCOP',
           signedJudgeName: 'Guy Fieri',
         },
@@ -69,7 +69,7 @@ describe('opinionAdvancedSearchInteractor', () => {
         documentContents:
           'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'T.C. Opinion for More Candy',
-        documentType: 'TCOP - T.C. Opinion',
+        documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
         signedJudgeName: 'Guy Fieri',
       },

@@ -37,7 +37,7 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'TCOP - T.C. Opinion',
+      value: 'T.C. Opinion',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -81,7 +81,7 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
-      documentType: 'TCOP - T.C. Opinion',
+      documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
       freeText: 'freeeeee text',
       judge: 'Judge Pugh',
@@ -94,7 +94,7 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
 
     expect(test.getState('form')).toMatchObject({
       documentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
-      documentType: 'TCOP - T.C. Opinion',
+      documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
       freeText: 'freeeeee text',
       generatedDocumentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
