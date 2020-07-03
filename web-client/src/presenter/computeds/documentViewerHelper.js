@@ -20,7 +20,9 @@ export const documentViewerHelper = (get, applicationContext) => {
         entry.document.documentId === viewerDocumentToDisplay.documentId,
     );
 
-  const filedLabel = `Filed ${formattedDocumentToDisplay.document.createdAtFormatted} by ${formattedDocumentToDisplay.document.filedBy}`;
+  const filedLabel = formattedDocumentToDisplay.document.filedBy
+    ? `Filed ${formattedDocumentToDisplay.document.createdAtFormatted} by ${formattedDocumentToDisplay.document.filedBy}`
+    : '';
 
   const { servedAtFormatted } = formattedDocumentToDisplay.document;
   const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
