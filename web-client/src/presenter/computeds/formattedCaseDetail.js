@@ -171,7 +171,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-    entry => !!entry.document && entry.isPending,
+    entry => entry.pending,
   );
 
   result.consolidatedCases = result.consolidatedCases || [];
