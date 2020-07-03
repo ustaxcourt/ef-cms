@@ -283,20 +283,20 @@ describe('formattedCaseDetail', () => {
       {
         description: 'Amended Petition',
         filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
+        isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
-        showInProgress: false,
         showLinkToDocument: false,
       },
       {
         description:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
         filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
-        showInProgress: false,
         showLinkToDocument: false,
       },
       {
@@ -304,20 +304,20 @@ describe('formattedCaseDetail', () => {
           'Motion for Leave to File Computation for Entry of Decision',
         filingsAndProceedingsWithAdditionalInfo:
           ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
-        showInProgress: false,
         showLinkToDocument: false,
       },
       {
         description:
           'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
         filingsAndProceedingsWithAdditionalInfo: ' (Lodged) Additional Info2',
+        isInProgress: false,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
-        showInProgress: false,
         showLinkToDocument: false,
       },
     ]);
