@@ -1,7 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { DocumentViewer } from '../DocketRecord/DocumentViewer';
-// import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';

@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -93,34 +92,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
-      const showDocumentEditLink =
+      const showDocumentViewerLink =
         document &&
         permissions.UPDATE_CASE &&
         (!document.isInProgress ||
           ((permissions.DOCKET_ENTRY ||
             permissions.CREATE_ORDER_DOCKET_ENTRY) &&
             document.isInProgress));
-
-      let editLink = ''; //defaults to doc detail
-
-      if (
-        showDocumentEditLink &&
-        (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
-        document
-      ) {
-        if (document.isCourtIssuedDocument && !document.servedAt) {
-          editLink = '/edit-court-issued';
-        } else if (isInProgress) {
-          editLink = '/complete';
-        } else if (
-          !document.isCourtIssuedDocument &&
-          !document.isPetition &&
-          qcWorkItemsUntouched &&
-          permissions.DOCKET_ENTRY
-        ) {
-          editLink = '/edit';
-        }
-      }
 
       let descriptionDisplay = record.description;
 
@@ -147,7 +125,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
         description: record.description,
         descriptionDisplay,
         documentId: document && document.documentId,
-        editLink,
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: (document && document.filedBy) || record.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
@@ -165,7 +142,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         servedPartiesCode:
           record.servedPartiesCode || (document && document.servedPartiesCode),
         showDocumentDescriptionWithoutLink:
-          !showDocumentEditLink &&
+          !showDocumentViewerLink &&
           (!userHasAccessToCase ||
             !userHasAccessToDocument ||
             !document ||
@@ -179,11 +156,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
                 permissions.DOCKET_ENTRY ||
                 permissions.CREATE_ORDER_DOCKET_ENTRY
               ))),
-        showDocumentEditLink,
         showDocumentProcessing:
           document &&
           !permissions.UPDATE_CASE &&
           document.processingStatus !== 'complete',
+        showDocumentViewerLink,
         showEditDocketRecordEntry,
         showInProgress: document && document.isInProgress && !isExternalUser,
         showLinkToDocument,
@@ -205,8 +182,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       return {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
-        editLink: '',
-        showDocumentEditLink: permissions.UPDATE_CASE,
+        showDocumentViewerLink: permissions.UPDATE_CASE,
       };
     },
   );

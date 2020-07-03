@@ -72,6 +72,34 @@ describe('documentViewerHelper', () => {
     expect(result.filedLabel).toEqual('Filed 11/21/18 by Test Petitioner');
   });
 
+  it('should return an empty filed label for court-issued documents', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: 'abc',
+              index: 1,
+            },
+          ],
+          documents: [
+            {
+              createdAt: '2018-11-22T20:49:28.192Z',
+              documentId: 'abc',
+              documentType: 'Order',
+            },
+          ],
+        },
+
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+    expect(result.filedLabel).toEqual('');
+  });
+
   it('should return showSealedInBlackstone true or false based on whether the document has isLegacySealed', () => {
     let result = runCompute(documentViewerHelper, {
       state: {

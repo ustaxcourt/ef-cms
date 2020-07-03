@@ -4,6 +4,6 @@ export const privatePractitionerViewsOpenAndClosedCases = test => {
 
     expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
     expect(test.getState('openCases').length).toBeGreaterThan(0);
-    expect(test.getState('closedCases').length).toBe(0);
+    expect(test.getState('closedCases').length).toBeGreaterThan(0);
   });
 };

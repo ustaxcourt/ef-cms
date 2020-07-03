@@ -11,8 +11,9 @@ export const FilingsAndProceedings = connect(
     arrayIndex: props.arrayIndex,
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
+    changeTabAndSetViewerDocumentToDisplaySequence:
+      sequences.changeTabAndSetViewerDocumentToDisplaySequence,
     entry: props.entry,
-    formattedCaseDetail: state.formattedCaseDetail,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence:
@@ -22,8 +23,8 @@ export const FilingsAndProceedings = connect(
     arrayIndex,
     caseDetail,
     caseDetailHelper,
+    changeTabAndSetViewerDocumentToDisplaySequence,
     entry,
-    formattedCaseDetail,
     openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
   }) {
@@ -86,14 +87,21 @@ export const FilingsAndProceedings = connect(
           </>
         )}
 
-        {entry.showDocumentEditLink && (
-          <a
+        {entry.showDocumentViewerLink && (
+          <Button
+            link
             aria-label="View PDF"
             className={classNames(
+              'text-left',
               entry.isStricken && 'stricken-docket-record',
               'view-pdf-link',
             )}
-            href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
+            onClick={() =>
+              changeTabAndSetViewerDocumentToDisplaySequence({
+                docketRecordTab: 'documentView',
+                viewerDocumentToDisplay: { documentId: entry.documentId },
+              })
+            }
           >
             {entry.isPaper && (
               <span className="filing-type-icon-mobile">
@@ -101,7 +109,7 @@ export const FilingsAndProceedings = connect(
               </span>
             )}
             {entry.descriptionDisplay}
-          </a>
+          </Button>
         )}
 
         <span

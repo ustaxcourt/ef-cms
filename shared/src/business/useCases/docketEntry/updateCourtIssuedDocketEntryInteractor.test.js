@@ -91,7 +91,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
-          documentType: 'TRAN - Transcript',
+          documentType: 'Transcript',
           eventCode: 'TRAN',
           userId: mockUserId,
           workItems: [
@@ -211,7 +211,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         date: '2019-03-01T21:40:46.415Z',
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         eventCode: 'TRAN',
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',

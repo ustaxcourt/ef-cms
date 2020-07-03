@@ -165,6 +165,10 @@
     color: color($theme-color-base-darkest);
     text-decoration: none;
   }
+
+  .no-indent {
+    text-indent: 0;
+  }
 }
 
 .action-button {

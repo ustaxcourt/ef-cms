@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -19,57 +20,60 @@ export const DocumentViewer = connect(
       <>
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
-            <div className="document-viewer--documents">
-              <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
-                <tbody>
-                  {draftDocuments &&
-                    documentsToView.map((draftDocument, index) => {
-                      const active =
-                        draftDocument.documentId === draftDocument.documentId
-                          ? 'active'
-                          : '';
+            <div className="border border-base-lighter document-viewer--documents">
+              {!draftDocuments &&
+                documentsToView.map(({ document, index, record }, idx) => {
+                  if (document) {
+                    const active =
+                      viewerDocumentToDisplay.documentId === document.documentId
+                        ? 'active'
+                        : '';
 
-                      return (
-                        <tr className={active} key={index}>
-                          <td className="center-column small">{index}</td>
-                          <td>{draftDocument.createdAtFormatted}</td>
-                          <td>{draftDocument.descriptionDisplay}</td>
-                        </tr>
-                      );
-                    })}
+                    return (
+                      <Button
+                        className={`usa-button--unstyled attachment-viewer-button ${active}`}
+                        key={idx}
+                        onClick={() => {
+                          setViewerDocumentToDisplaySequence({
+                            viewerDocumentToDisplay: document,
+                          });
+                        }}
+                      >
+                        <div className="grid-row">
+                          <div className="grid-col-1">{index}</div>
+                          <div className="grid-col-3">
+                            {record.createdAtFormatted}
+                          </div>
+                          <div className="grid-col-8 no-indent">
+                            {record.description}
+                          </div>
+                        </div>
+                      </Button>
+                    );
+                  }
+                })}
 
-                  {!draftDocuments &&
-                    documentsToView.map(({ document, index, record }, idx) => {
-                      if (document) {
-                        const active =
-                          viewerDocumentToDisplay.documentId ===
-                          document.documentId
-                            ? 'active'
-                            : '';
-
-                        return (
-                          <tr
-                            className={active}
-                            key={idx}
-                            onClick={() => {
-                              setViewerDocumentToDisplaySequence({
-                                viewerDocumentToDisplay: document,
-                              });
-                            }}
-                          >
-                            <td className="center-column small">{index}</td>
-                            <td>{record.createdAtFormatted}</td>
-                            <td>{record.description}</td>
-                          </tr>
-                        );
-                      } else {
-                        <tr>
-                          <td>hello</td>{' '}
-                        </tr>;
+              {draftDocuments &&
+                documentsToView.map((draftDocument, index) => {
+                  return (
+                    <Button
+                      className={
+                        'usa-button--unstyled attachment-viewer-button'
                       }
-                    })}
-                </tbody>
-              </table>
+                      key={index}
+                    >
+                      <div className="grid-row">
+                        <div className="grid-col-1">{index}</div>
+                        <div className="grid-col-3">
+                          {draftDocument.createdAtFormatted}
+                        </div>
+                        <div className="grid-col-8 no-indent">
+                          {draftDocument.descriptionDisplay}
+                        </div>
+                      </div>
+                    </Button>
+                  );
+                })}
             </div>
           </div>
 
