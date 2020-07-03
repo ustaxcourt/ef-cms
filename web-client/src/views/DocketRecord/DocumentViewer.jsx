@@ -11,7 +11,7 @@ export const DocumentViewer = connect(
       sequences.setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
-  function DocketRecord({
+  function DocumentViewer({
     formattedCaseDetail,
     setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay,
