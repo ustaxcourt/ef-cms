@@ -64,6 +64,7 @@ export const DraftDocumentViewerDocument = connect(
                 <Button
                   link
                   icon="edit"
+                  id="edit-order-button"
                   onClick={() =>
                     openConfirmEditModalSequence({
                       docketNumber: caseDetail.docketNumber,
