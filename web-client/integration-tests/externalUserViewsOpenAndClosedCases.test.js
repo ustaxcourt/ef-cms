@@ -2,7 +2,7 @@ import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdat
 import { irsPractitionerViewsOpenAndClosedCases } from './journey/irsPractitionerViewsOpenAndClosedCases';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsOpenAndClosedCases } from './journey/petitionerViewsOpenAndClosedCases';
-import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePractitionerViewsOpenClosedCases';
+import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePractitionerViewsOpenAndClosedCases';
 
 const test = setupTest();
 
