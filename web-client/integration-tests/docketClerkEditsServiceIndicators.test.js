@@ -5,7 +5,8 @@ import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketC
 import { docketClerkEditsServiceIndicatorForPractitioner } from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import { docketClerkEditsServiceIndicatorForRespondent } from './journey/docketClerkEditsServiceIndicatorForRespondent';
 import { docketClerkServesOrderOnPaperParties } from './journey/docketClerkServesOrderOnPaperParties';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -20,6 +21,9 @@ test.draftOrders = [];
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
   loginAs(test, 'petitioner');
@@ -49,5 +53,6 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     expectedDocumentType: 'Order',
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
+  docketClerkSignsOrder(test, 0);
   docketClerkServesOrderOnPaperParties(test, 0);
 });
