@@ -63,11 +63,10 @@ export const DocumentViewer = connect(
                       key={index}
                     >
                       <div className="grid-row">
-                        <div className="grid-col-1">{index}</div>
                         <div className="grid-col-3">
                           {draftDocument.createdAtFormatted}
                         </div>
-                        <div className="grid-col-8 no-indent">
+                        <div className="grid-col-9 no-indent">
                           {draftDocument.descriptionDisplay}
                         </div>
                       </div>
