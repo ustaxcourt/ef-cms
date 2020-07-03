@@ -1479,9 +1479,7 @@ describe('Document entity', () => {
 
   describe('getFormattedType', () => {
     it('strips out the dash and returns the verbiage after it', () => {
-      expect(Document.getFormattedType('TCOP - T.C. Opinion')).toEqual(
-        'T.C. Opinion',
-      );
+      expect(Document.getFormattedType('T.C. Opinion')).toEqual('T.C. Opinion');
     });
 
     it("returns the verbiage if there's no dash", () => {

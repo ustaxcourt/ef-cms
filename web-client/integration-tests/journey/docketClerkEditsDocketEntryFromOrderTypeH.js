@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'TRAN - Transcript',
+      value: 'Transcript',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -104,7 +104,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     expect(updatedOrderDocument).toMatchObject({
       date: '2018-01-01',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
-      documentType: 'TRAN - Transcript',
+      documentType: 'Transcript',
       eventCode: 'TRAN',
       freeText: 'this is free text',
     });
@@ -118,7 +118,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       date: '2018-01-01',
       day: '1',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
-      documentType: 'TRAN - Transcript',
+      documentType: 'Transcript',
       eventCode: 'TRAN',
       freeText: 'this is free text',
       generatedDocumentTitle: 'Transcript of this is free text on 01-01-2018',

@@ -4,7 +4,9 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-t
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import {
+  fakeFile,
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
@@ -27,6 +29,9 @@ const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 describe('Petitioner creates case', () => {
   beforeAll(() => {
     jest.setTimeout(10000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
   loginAs(testClient, 'petitioner');
@@ -59,6 +64,7 @@ describe('Docket clerk creates orders to search for', () => {
     signedAtFormatted: '01/02/2020',
   });
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
+  docketClerkSignsOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
   docketClerkCreatesAnOrder(testClient, {
@@ -67,6 +73,7 @@ describe('Docket clerk creates orders to search for', () => {
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
+  docketClerkSignsOrder(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
   docketClerkCreatesAnOrder(testClient, {
