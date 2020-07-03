@@ -3,6 +3,7 @@ import { DocumentViewerDocument } from './DocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const DocumentViewer = connect(
   {
@@ -24,14 +25,13 @@ export const DocumentViewer = connect(
               {formattedCaseDetail.docketRecordWithDocument.map(
                 ({ document, index, record }, idx) => {
                   if (document) {
-                    const active =
-                      viewerDocumentToDisplay.documentId === document.documentId
-                        ? 'active'
-                        : '';
-
                     return (
                       <Button
-                        className={`usa-button--unstyled attachment-viewer-button ${active}`}
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          viewerDocumentToDisplay.documentId ===
+                            document.documentId && 'active',
+                        )}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
