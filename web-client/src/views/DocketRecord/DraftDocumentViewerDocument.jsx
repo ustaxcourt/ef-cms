@@ -11,6 +11,9 @@ export const DraftDocumentViewerDocument = connect(
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence:
+      sequences.openConfirmEditSignatureModalSequence,
     viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
   function DraftDocumentViewerDocument({
@@ -18,6 +21,8 @@ export const DraftDocumentViewerDocument = connect(
     draftDocumentViewerHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
+    openConfirmEditModalSequence,
+    openConfirmEditSignatureModalSequence,
     viewerDraftDocumentToDisplay,
   }) {
     return (
@@ -42,6 +47,65 @@ export const DraftDocumentViewerDocument = connect(
             </div>
 
             <div className="message-document-actions">
+              {draftDocumentViewerHelper.showEditButtonNotSigned && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.documentId}`}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              )}
+
+              {draftDocumentViewerHelper.showEditButtonSigned && (
+                <Button
+                  link
+                  icon="edit"
+                  onClick={() =>
+                    openConfirmEditModalSequence({
+                      docketNumber: caseDetail.docketNumber,
+                      documentIdToEdit: viewerDraftDocumentToDisplay.documentId,
+                    })
+                  }
+                >
+                  Edit
+                </Button>
+              )}
+
+              {draftDocumentViewerHelper.showApplySignatureButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.documentId}/sign/`}
+                  icon="pencil-alt"
+                >
+                  Apply Signature
+                </Button>
+              )}
+
+              {draftDocumentViewerHelper.showEditSignatureButton && (
+                <Button
+                  link
+                  icon="pencil-alt"
+                  onClick={() =>
+                    openConfirmEditSignatureModalSequence({
+                      documentIdToEdit: viewerDraftDocumentToDisplay.documentId,
+                    })
+                  }
+                >
+                  Edit Signature
+                </Button>
+              )}
+
+              {draftDocumentViewerHelper.showAddDocketEntryButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplay.documentId}/add-court-issued-docket-entry`}
+                  icon="plus-circle"
+                >
+                  Add Docket Entry
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"

@@ -2,6 +2,7 @@ import { applicationContext } from '../../applicationContext';
 import { draftDocumentViewerHelper as draftDocumentViewerHelperComputed } from './draftDocumentViewerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
+const { USER_ROLES } = applicationContext.getConstants();
 
 const draftDocumentViewerHelper = withAppContextDecorator(
   draftDocumentViewerHelperComputed,
@@ -99,5 +100,270 @@ describe('draftDocumentViewerHelper', () => {
       },
     });
     expect(result).toEqual({ createdByLabel: '', documentTitle: '' });
+  });
+
+  it('return showAddDocketEntryButton true for user role of docketClerk', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(true);
+  });
+
+  it('return showAddDocketEntryButton true for user role of petitionsClerk', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.petitionsClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(true);
+  });
+
+  it('return showAddDocketEntryButton true for user role of clerkOfCourt', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.clerkOfCourt,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(true);
+  });
+
+  it('return showAddDocketEntryButton false for other internal user roles', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.judge,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(false);
+  });
+
+  it('return showApplySignatureButton true and showEditSignatureButton false for an internal user and an unsigned document', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showApplySignatureButton).toEqual(true);
+    expect(result.showEditSignatureButton).toEqual(false);
+  });
+
+  it('return showEditSignatureButton true and showApplySignatureButton false for an internal user and a signed document', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showEditSignatureButton).toEqual(true);
+    expect(result.showApplySignatureButton).toEqual(false);
+  });
+
+  it('return showApplySignatureButton false and showEditSignatureButton false for an external user', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.petitioner,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showApplySignatureButton).toEqual(false);
+    expect(result.showEditSignatureButton).toEqual(false);
+  });
+
+  it('return showEditButtonSigned true for an internal user and a document that is signed', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(true);
+  });
+
+  it('return showEditButtonNotSigned true for an internal user and a document that is not signed', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
+  });
+
+  it('return showEditButtonSigned false for an external user', () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.petitioner,
+    });
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
   });
 });
