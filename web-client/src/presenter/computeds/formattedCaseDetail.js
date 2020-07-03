@@ -68,8 +68,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
       };
 
       if (document) {
-        result.hasDocument = true;
-
         if (!result.eventCode) {
           result.eventCode = document.eventCode;
         }
@@ -158,8 +156,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
               permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY
             )));
 
-      result.showQcUntouched = result.qcWorkItemsUntouched;
-
       return result;
     },
   );
@@ -175,7 +171,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-    entry => entry.hasDocument && entry.isPending,
+    entry => !!entry.document && entry.isPending,
   );
 
   result.consolidatedCases = result.consolidatedCases || [];
