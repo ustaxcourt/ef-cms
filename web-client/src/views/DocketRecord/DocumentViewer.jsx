@@ -6,13 +6,13 @@ import React from 'react';
 
 export const DocumentViewer = connect(
   {
-    getFormattedCaseDetail: state.getFormattedCaseDetail,
+    formattedCaseDetail: state.formattedCaseDetail,
     setViewerDocumentToDisplaySequence:
       sequences.setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DocumentViewer({
-    getFormattedCaseDetail,
+    formattedCaseDetail,
     setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay,
   }) {
@@ -21,7 +21,7 @@ export const DocumentViewer = connect(
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
-              {getFormattedCaseDetail.docketRecordWithDocument.map(
+              {formattedCaseDetail.docketRecordWithDocument.map(
                 ({ document, index, record }, idx) => {
                   if (document) {
                     const active =
