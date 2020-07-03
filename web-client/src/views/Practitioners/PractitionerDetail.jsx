@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -131,6 +132,13 @@ export const PractitionerDetail = connect(
                           Email address
                         </span>
                         {practitionerDetailHelper.email}
+                        {practitionerDetailHelper.hasEAccess && (
+                          <FontAwesomeIcon
+                            className="margin-left-05 fa-icon-blue"
+                            icon="flag"
+                            size="1x"
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">

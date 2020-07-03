@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,6 +8,7 @@ import classNames from 'classnames';
 export const DocumentViewerDocument = connect(
   {
     caseDetail: state.caseDetail,
+    documentViewerHelper: state.documentViewerHelper,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -14,6 +16,7 @@ export const DocumentViewerDocument = connect(
   },
   function DocumentViewerDocument({
     caseDetail,
+    documentViewerHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     viewerDocumentToDisplay,
@@ -33,6 +36,30 @@ export const DocumentViewerDocument = connect(
 
         {!process.env.CI && viewerDocumentToDisplay && (
           <>
+            {documentViewerHelper.showSealedInBlackstone && (
+              <div className="sealed-in-blackstone margin-bottom-1">
+                <Icon
+                  aria-label="sealed case"
+                  className="margin-right-1 icon-sealed"
+                  icon="lock"
+                  size="1x"
+                />
+                Sealed in Blackstone
+              </div>
+            )}
+
+            <h3>{documentViewerHelper.description}</h3>
+
+            <div className="grid-row margin-bottom-1">
+              <div className="grid-col-6">
+                {documentViewerHelper.filedLabel}
+              </div>
+              <div className="grid-col-6 text-align-right">
+                {documentViewerHelper.servedLabel &&
+                  documentViewerHelper.servedLabel}
+              </div>
+            </div>
+
             <div className="message-document-actions">
               <Button
                 link
@@ -48,14 +75,7 @@ export const DocumentViewerDocument = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe
-              src={iframeSrc}
-              title={
-                viewerDocumentToDisplay.documentTitle ||
-                (viewerDocumentToDisplay.descriptionDisplay &&
-                  viewerDocumentToDisplay.descriptionDisplay)
-              }
-            />
+            <iframe src={iframeSrc} title={documentViewerHelper.description} />
           </>
         )}
       </div>
