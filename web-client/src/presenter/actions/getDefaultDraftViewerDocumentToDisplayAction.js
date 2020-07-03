@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  * gets the first draft document from the current case detail to set as the default viewerDocumentToDisplay
  *
  * @param {object} providers the providers object
+ * @param {object} providers.application context the application context
  * @param {Function} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
  * @returns {object} object containing viewerDocumentToDisplay
