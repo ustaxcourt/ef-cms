@@ -269,6 +269,7 @@ import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndex
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
+import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
@@ -697,6 +698,7 @@ export const presenter = {
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
     setViewerDocumentToDisplaySequence,
+    setViewerDraftDocumentToDisplaySequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,
     showCalculatePenaltiesModalSequence,
