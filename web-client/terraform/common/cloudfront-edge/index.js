@@ -43,7 +43,7 @@ exports.handler = (event, context, callback) => {
     `form-action ${applicationUrl}`,
     "object-src 'none'",
     `script-src 'self' ${dynamsoftUrl} resource://pdf.js`,
-    `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
+    `style-src 'self' ${dynamsoftUrl}`,
   ];
   headers['content-security-policy'] = [
     {
