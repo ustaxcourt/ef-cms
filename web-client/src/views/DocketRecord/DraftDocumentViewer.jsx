@@ -1,14 +1,22 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DocumentViewerDocument } from './DocumentViewerDocument';
+import { DraftDocumentViewerDocument } from './DraftDocumentViewerDocument';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    setViewerDraftDocumentToDisplaySequence:
+      sequences.setViewerDraftDocumentToDisplaySequence,
+    viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
-  function DraftDocumentViewer({ formattedCaseDetail }) {
+  function DraftDocumentViewer({
+    formattedCaseDetail,
+    setViewerDraftDocumentToDisplaySequence,
+    viewerDraftDocumentToDisplay,
+  }) {
     return (
       <>
         <div className="grid-row grid-gap-5">
@@ -18,10 +26,17 @@ export const DraftDocumentViewer = connect(
                 (draftDocument, index) => {
                   return (
                     <Button
-                      className={
-                        'usa-button--unstyled attachment-viewer-button'
-                      }
+                      className={classNames(
+                        'usa-button--unstyled attachment-viewer-button',
+                        viewerDraftDocumentToDisplay.documentId ===
+                          draftDocument.documentId && 'active',
+                      )}
                       key={index}
+                      onClick={() => {
+                        setViewerDraftDocumentToDisplaySequence({
+                          viewerDraftDocumentToDisplay: draftDocument,
+                        });
+                      }}
                     >
                       <div className="grid-row">
                         <div className="grid-col-3">
@@ -39,7 +54,7 @@ export const DraftDocumentViewer = connect(
           </div>
 
           <div className="grid-col-8">
-            <DocumentViewerDocument />
+            <DraftDocumentViewerDocument />
           </div>
         </div>
       </>
