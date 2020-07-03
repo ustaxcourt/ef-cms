@@ -10,7 +10,7 @@ describe('User entity', () => {
         address3: 'Under the stairs',
         city: 'Chicago',
         country: 'Brazil',
-        countryType: 'international',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -36,7 +37,16 @@ const OtherPetitionerDisplay = connect(
             </span>
           )}
           {petitioner.email && (
-            <span className="address-line">{petitioner.email}</span>
+            <span className="address-line">
+              {petitioner.email}
+              {petitioner.hasEAccess && (
+                <FontAwesomeIcon
+                  className="margin-left-05 fa-icon-blue"
+                  icon="flag"
+                  size="1x"
+                />
+              )}
+            </span>
           )}
         </p>
       </>

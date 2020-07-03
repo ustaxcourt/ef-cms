@@ -22,28 +22,28 @@ export const DocumentViewer = connect(
             <div className="document-viewer--documents">
               <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
                 <tbody>
-                  {formattedCaseDetail.formattedDocketEntries.map(
-                    (entry, idx) => {
-                      const active =
-                        viewerDocumentToDisplay.documentId === entry.documentId
-                          ? 'active'
-                          : '';
-                      if (entry.hasDocument) {
+                  {formattedCaseDetail.docketRecordWithDocument.map(
+                    ({ document, index, record }, idx) => {
+                      if (document) {
+                        const active =
+                          viewerDocumentToDisplay.documentId ===
+                          document.documentId
+                            ? 'active'
+                            : '';
+
                         return (
                           <tr
                             className={active}
                             key={idx}
                             onClick={() => {
                               setViewerDocumentToDisplaySequence({
-                                viewerDocumentToDisplay: entry,
+                                viewerDocumentToDisplay: document,
                               });
                             }}
                           >
-                            <td className="center-column small">
-                              {entry.index}
-                            </td>
-                            <td>{entry.createdAtFormatted}</td>
-                            <td>{entry.descriptionDisplay}</td>
+                            <td className="center-column small">{index}</td>
+                            <td>{record.createdAtFormatted}</td>
+                            <td>{record.description}</td>
                           </tr>
                         );
                       }

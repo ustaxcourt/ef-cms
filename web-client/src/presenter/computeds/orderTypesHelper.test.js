@@ -3,8 +3,10 @@ import { orderTypesHelper as orderTypesHelperComputed } from './orderTypesHelper
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+const { USER_ROLES } = applicationContext.getConstants();
+
 let user = {
-  role: 'docketclerk',
+  role: USER_ROLES.docketClerk,
 };
 
 const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
@@ -22,7 +24,7 @@ const orderTypesHelper = withAppContextDecorator(orderTypesHelperComputed, {
         { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
       ],
       USER_ROLES: {
-        petitionsClerk: 'petitionsclerk',
+        petitionsClerk: USER_ROLES.petitionsClerk,
       },
     };
   },
@@ -40,7 +42,7 @@ describe('orderTypesHelper', () => {
   });
 
   it('should filter out and only return type O for petitionsclerk', () => {
-    user.role = 'petitionsclerk';
+    user.role = USER_ROLES.petitionsClerk;
     const result = runCompute(orderTypesHelper, {});
     expect(result.orderTypes).toEqual([
       {

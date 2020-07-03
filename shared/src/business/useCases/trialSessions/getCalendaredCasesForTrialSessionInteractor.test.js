@@ -10,7 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 const mockJudge = {
-  role: 'judge',
+  role: ROLES.judge,
   section: 'judgeChambers',
   userId: '123',
 };

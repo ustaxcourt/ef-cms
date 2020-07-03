@@ -2,7 +2,6 @@ doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
-    meta(built="" + (new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'}) + " EST")
     meta(revision="" + (process.env.CIRCLE_SHA1 || '').substr(0,7))
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title U.S. Tax Court Electronic Filing and Case Management System
@@ -17,4 +16,6 @@ html(lang="en")
   body
     #app-public
     #modal-root
+    footer.grid-container.position-fixed.bottom-0.right-0
+      p Deployed #{(new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'})} EST    
     script(src="index-public." + process.env.USTC_ENV + ".js")
