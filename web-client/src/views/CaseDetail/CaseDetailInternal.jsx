@@ -28,12 +28,14 @@ export const CaseDetailInternal = connect(
   {
     caseDetailInternalTabs:
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
+    formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.modal.showModal,
   },
   function CaseDetailInternal({
     caseDetailInternalTabs,
+    formattedCaseDetail,
     showEditPetition,
     showModal,
   }) {
@@ -66,7 +68,9 @@ export const CaseDetailInternal = connect(
                 tabName="documentView"
                 title="Document View"
               >
-                <DocumentViewer />
+                <DocumentViewer
+                  documentsToView={formattedCaseDetail.docketRecordWithDocument}
+                />
               </Tab>
             </Tabs>
           )}
@@ -90,7 +94,7 @@ export const CaseDetailInternal = connect(
           {caseDetailInternalTabs.drafts && (
             <>
               <div className="title">
-                <h1>Draft Documents</h1>
+                <h1>Drafts</h1>
               </div>
               <DraftDocuments />
             </>
