@@ -35,10 +35,6 @@ const docketClerkUser = {
   role: ROLES.docketClerk,
   userId: '234',
 };
-const judgeUser = {
-  role: ROLES.judge,
-  userId: '345',
-};
 const petitionerUser = {
   role: ROLES.petitioner,
   userId: '456',
@@ -286,289 +282,43 @@ describe('formattedCaseDetail', () => {
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Amended Petition',
-        editLink: '',
         filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
         showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
         showDocumentProcessing: false,
+        showDocumentViewerLink: true,
         showInProgress: false,
         showLinkToDocument: false,
       },
       {
         description:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-        editLink: '',
         filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
         showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
         showDocumentProcessing: false,
+        showDocumentViewerLink: true,
         showInProgress: false,
         showLinkToDocument: false,
       },
       {
         description:
           'Motion for Leave to File Computation for Entry of Decision',
-        editLink: '',
         filingsAndProceedingsWithAdditionalInfo:
           ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
         showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
         showDocumentProcessing: false,
+        showDocumentViewerLink: true,
         showInProgress: false,
         showLinkToDocument: false,
       },
       {
         description:
           'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
-        editLink: '',
         filingsAndProceedingsWithAdditionalInfo: ' (Lodged) Additional Info2',
         showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
         showDocumentProcessing: false,
+        showDocumentViewerLink: true,
         showInProgress: false,
         showLinkToDocument: false,
-      },
-    ]);
-  });
-
-  it('should return correct editLink for docket clerk users', () => {
-    const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
-      correspondence: [],
-      docketRecord: [
-        {
-          description: 'Order for Amended Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
-        },
-        {
-          description: 'Answer',
-          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
-          filingDate: '2019-05-19T17:29:13.120Z',
-        },
-        {
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          filingDate: '2019-06-19T17:29:13.120Z',
-        },
-      ],
-      documents: [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          documentTitle: 'Order for Amended Petition',
-          documentType: 'OAP - Order for Amended Petition',
-          eventCode: 'OAP',
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-05-19T17:29:13.120Z',
-          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          isFileAttached: false,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          workItems: [{ isQC: true }],
-        },
-      ],
-    };
-    const result = runCompute(formattedCaseDetail, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail,
-        validationErrors: {},
-      },
-    });
-    expect(result.formattedDocketEntries).toMatchObject([
-      {
-        editLink: '/edit-court-issued',
-        showDocumentEditLink: true,
-      },
-      {
-        editLink: '/complete',
-        showDocumentEditLink: true,
-      },
-      {
-        editLink: '/edit',
-        showDocumentEditLink: true,
-      },
-    ]);
-  });
-
-  it("should return correct editLink for a case that hasn't been served", () => {
-    const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
-      correspondence: [],
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
-          filingDate: '2019-04-19T15:29:13.120Z',
-        },
-        {
-          description: 'Order for Amended Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
-        },
-        {
-          description: 'Answer',
-          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
-          filingDate: '2019-05-19T17:29:13.120Z',
-        },
-        {
-          description: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          filingDate: '2019-06-19T17:29:13.120Z',
-        },
-      ],
-      documents: [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-04-19T15:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          eventCode: 'P',
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          documentTitle: 'Order for Amended Petition',
-          documentType: 'OAP - Order for Amended Petition',
-          eventCode: 'OAP',
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-05-19T17:29:13.120Z',
-          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          isFileAttached: false,
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-06-19T17:29:13.120Z',
-          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-          eventCode: 'M073',
-          workItems: [{ isQC: true }],
-        },
-      ],
-      status: CASE_STATUS_TYPES.new,
-    };
-    const result = runCompute(formattedCaseDetail, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
-      },
-    });
-
-    expect(result.formattedDocketEntries).toMatchObject([
-      {
-        editLink: '',
-        showDocumentEditLink: true,
-      },
-      {
-        editLink: '/edit-court-issued',
-        showDocumentEditLink: true,
-      },
-      {
-        editLink: '/complete',
-        showDocumentEditLink: true,
-      },
-      {
-        editLink: '',
-        showDocumentEditLink: true,
-      },
-    ]);
-  });
-
-  it("should return correct editLink for a case that is paper and hasn't been served", () => {
-    const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
-      correspondence: [],
-      docketRecord: [
-        {
-          description: 'Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
-          filingDate: '2019-04-19T15:29:13.120Z',
-        },
-        {
-          description: 'Request for Place of Trial at Boise, Idaho',
-          documentId: '934248df-9cd2-412f-82ee-b4dce2a2fc31',
-          filingDate: '2019-04-19T15:29:13.120Z',
-        },
-      ],
-      documents: [
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-04-19T15:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0e',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          eventCode: 'P',
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          createdAt: '2019-04-19T15:29:13.120Z',
-          documentId: '934248df-9cd2-412f-82ee-b4dce2a2fc31',
-          documentTitle: 'Request for Place of Trial at Boise, Idaho',
-          documentType: 'Request for Place of Trial',
-          eventCode: 'RQT',
-        },
-      ],
-      isPaper: true,
-      status: CASE_STATUS_TYPES.new,
-    };
-    const result = runCompute(formattedCaseDetail, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
-      },
-    });
-
-    expect(result.formattedDocketEntries).toMatchObject([
-      {
-        description: 'Petition',
-        showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
-      },
-      {
-        description: 'Request for Place of Trial at Boise, Idaho',
-        showDocumentDescriptionWithoutLink: false,
-        showDocumentEditLink: true,
       },
     ]);
   });
@@ -1062,13 +812,12 @@ describe('formattedCaseDetail', () => {
           descriptionDisplay: 'Order to do something',
           documentId: 'd-1-2-3',
           documentType: 'Order',
-          editLink: '',
-          isCourtIssuedDocument: false,
+          isCourtIssuedDocument: true,
           isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
+          isNotServedCourtIssuedDocument: true,
           isPetition: false,
           isStatusServed: false,
-          showDocumentEditLink: true,
+          showDocumentViewerLink: true,
           signedAtFormatted: undefined,
           signedAtFormattedTZ: undefined,
         },
@@ -1077,55 +826,12 @@ describe('formattedCaseDetail', () => {
           descriptionDisplay: 'Stipulated Decision',
           documentId: 'd-2-3-4',
           documentType: 'Stipulated Decision',
-          editLink: '',
           isCourtIssuedDocument: true,
           isInProgress: false,
           isNotServedCourtIssuedDocument: true,
           isPetition: false,
           isStatusServed: false,
-          showDocumentEditLink: true,
-          signedAtFormatted: undefined,
-          signedAtFormattedTZ: undefined,
-        },
-      ]);
-    });
-
-    it('does not populate editLink for draft documents', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(judgeUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedDraftDocuments).toMatchObject([
-        {
-          createdAtFormatted: '02/28/19',
-          descriptionDisplay: 'Order to do something',
-          documentId: 'd-1-2-3',
-          documentType: 'Order',
-          editLink: '',
-          isCourtIssuedDocument: false,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isPetition: false,
-          isStatusServed: false,
-          showDocumentEditLink: true,
-          signedAtFormatted: undefined,
-          signedAtFormattedTZ: undefined,
-        },
-        {
-          createdAtFormatted: '02/28/19',
-          descriptionDisplay: 'Stipulated Decision',
-          documentId: 'd-2-3-4',
-          documentType: 'Stipulated Decision',
-          editLink: '',
-          isCourtIssuedDocument: true,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: true,
-          isPetition: false,
-          isStatusServed: false,
-          showDocumentEditLink: true,
+          showDocumentViewerLink: true,
           signedAtFormatted: undefined,
           signedAtFormattedTZ: undefined,
         },
@@ -1255,7 +961,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             workItems: [
@@ -1268,7 +974,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             servedAt: '2019-06-19T17:29:13.120Z',
@@ -1473,7 +1179,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             workItems: [
@@ -1486,7 +1192,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             numberOfPages: 9,
@@ -1614,7 +1320,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
             documentTitle: 'Court Issued - Not Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             workItems: [
@@ -1627,7 +1333,7 @@ describe('formattedCaseDetail', () => {
             createdAt: '2019-06-19T17:29:13.120Z',
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             documentTitle: 'Court Issued - Served',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
             numberOfPages: 9,
@@ -1662,7 +1368,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
         false,
       );
-      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
         false,
       );
     });
@@ -1688,7 +1394,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
         false,
       );
-      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
         true,
       );
     });

@@ -190,7 +190,7 @@ describe('formatted work queue computed', () => {
 
   it('should set isCourtIssuedDocument to true for a court-issued document in the selected work item', () => {
     const workItemCopy = cloneDeep(workItem);
-    workItemCopy.document.documentType = 'O - Order';
+    workItemCopy.document.documentType = 'Order';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -806,7 +806,7 @@ describe('formatted work queue computed', () => {
           ...baseWorkItem,
           document: {
             ...baseDocument,
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
             pending: false,
           },
@@ -834,7 +834,7 @@ describe('formatted work queue computed', () => {
           ...baseWorkItem,
           document: {
             ...baseDocument,
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
             pending: false,
           },
@@ -1434,7 +1434,7 @@ describe('formatted work queue computed', () => {
       let result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(false);
 
-      workItem.document.documentType = 'TRAN - Transcript';
+      workItem.document.documentType = 'Transcript';
 
       result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(true);
