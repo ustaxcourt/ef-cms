@@ -11,10 +11,7 @@ export const DraftDocuments = connect(
       sequences.archiveDraftDocumentModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    setViewerDocumentToDisplaySequence:
-      sequences.setViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DraftDocuments({ formattedCaseDetail, showModal }) {
     return (
