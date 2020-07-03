@@ -5,13 +5,13 @@ import React from 'react';
 
 export const DocumentViewer = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
     setViewerDocumentToDisplaySequence:
       sequences.setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
-  function DocketRecord({
-    formattedCaseDetail,
+  function DocumentViewer({
+    documentsToView,
+    draftDocuments = false,
     setViewerDocumentToDisplaySequence,
     viewerDocumentToDisplay,
   }) {
@@ -22,8 +22,24 @@ export const DocumentViewer = connect(
             <div className="document-viewer--documents">
               <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
                 <tbody>
-                  {formattedCaseDetail.docketRecordWithDocument.map(
-                    ({ document, index, record }, idx) => {
+                  {draftDocuments &&
+                    documentsToView.map((draftDocument, index) => {
+                      const active =
+                        draftDocument.documentId === draftDocument.documentId
+                          ? 'active'
+                          : '';
+
+                      return (
+                        <tr className={active} key={index}>
+                          <td className="center-column small">{index}</td>
+                          <td>{draftDocument.createdAtFormatted}</td>
+                          <td>{draftDocument.descriptionDisplay}</td>
+                        </tr>
+                      );
+                    })}
+
+                  {!draftDocuments &&
+                    documentsToView.map(({ document, index, record }, idx) => {
                       if (document) {
                         const active =
                           viewerDocumentToDisplay.documentId ===
@@ -46,9 +62,12 @@ export const DocumentViewer = connect(
                             <td>{record.description}</td>
                           </tr>
                         );
+                      } else {
+                        <tr>
+                          <td>hello</td>{' '}
+                        </tr>;
                       }
-                    },
-                  )}
+                    })}
                 </tbody>
               </table>
             </div>
