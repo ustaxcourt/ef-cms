@@ -54,7 +54,7 @@ export const DocketRecord = connect(
                   <tr
                     className={classNames(
                       entry.isInProgress && 'in-progress',
-                      entry.showQcUntouched && 'qc-untouched',
+                      entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
                     key={entry.index}
                   >
@@ -86,7 +86,7 @@ export const DocketRecord = connect(
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
                       )}
 
-                      {entry.showQcUntouched && (
+                      {entry.qcWorkItemsUntouched && (
                         <FontAwesomeIcon icon={['fa', 'star']} />
                       )}
 
