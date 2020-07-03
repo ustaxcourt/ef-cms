@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewerDocument = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
     draftDocumentViewerHelper: state.draftDocumentViewerHelper,
     iframeSrc: state.iframeSrc,
@@ -17,6 +19,7 @@ export const DraftDocumentViewerDocument = connect(
     viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
   function DraftDocumentViewerDocument({
+    archiveDraftDocumentModalSequence,
     caseDetail,
     draftDocumentViewerHelper,
     iframeSrc,
@@ -71,6 +74,21 @@ export const DraftDocumentViewerDocument = connect(
                   Edit
                 </Button>
               )}
+
+              <Button
+                link
+                icon="trash"
+                onClick={() =>
+                  archiveDraftDocumentModalSequence({
+                    caseId: caseDetail.caseId,
+                    documentId: viewerDraftDocumentToDisplay.documentId,
+                    documentTitle: viewerDraftDocumentToDisplay.documentTitle,
+                    redirectToCaseDetail: true,
+                  })
+                }
+              >
+                Delete
+              </Button>
 
               {draftDocumentViewerHelper.showApplySignatureButton && (
                 <Button
