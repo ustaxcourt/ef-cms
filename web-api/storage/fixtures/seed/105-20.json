@@ -107,7 +107,6 @@
     "docketNumber": "105-20",
     "status": "served"
   },
-
   {
     "eventCode": "O",
     "docketRecordId": "cb57802b-4571-43ad-8f35-b54ac7fb7399",
@@ -121,7 +120,6 @@
     "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
-
   {
     "date": null,
     "draftState": null,
@@ -625,7 +623,8 @@
       "name": "Astra Santiago",
       "state": "NY",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com",
+      "hasEAccess": true
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -709,7 +708,6 @@
     "index": 2,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
-
   {
     "draftState": null,
     "servedParties": [
@@ -739,7 +737,6 @@
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
   },
-
   {
     "role": "privatePractitioner",
     "serviceIndicator": "Electronic",
