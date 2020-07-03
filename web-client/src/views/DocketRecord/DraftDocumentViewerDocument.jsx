@@ -35,16 +35,10 @@ export const DraftDocumentViewerDocument = connect(
 
         {!process.env.CI && viewerDraftDocumentToDisplay && (
           <>
-            <h3>{draftDocumentViewerHelper.descriptionDisplay}</h3>
+            <h3>{draftDocumentViewerHelper.documentTitle}</h3>
 
             <div className="grid-row margin-bottom-1">
-              <div className="grid-col-6">
-                {draftDocumentViewerHelper.filedLabel}
-              </div>
-              <div className="grid-col-6 text-align-right">
-                {draftDocumentViewerHelper.servedLabel &&
-                  draftDocumentViewerHelper.servedLabel}
-              </div>
+              {draftDocumentViewerHelper.createdByLabel}
             </div>
 
             <div className="message-document-actions">
@@ -64,7 +58,7 @@ export const DraftDocumentViewerDocument = connect(
             </div>
             <iframe
               src={iframeSrc}
-              title={draftDocumentViewerHelper.descriptionDisplay}
+              title={draftDocumentViewerHelper.documentTitle}
             />
           </>
         )}
