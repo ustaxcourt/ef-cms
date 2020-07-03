@@ -21,21 +21,16 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     );
   if (!formattedDocumentToDisplay) {
     return {
-      descriptionDisplay: 'Nothing',
-      filedLabel: 'Nothing',
-      servedLable: 'Nothing',
+      createdByLabel: '',
+      documentTitle: '',
     };
   }
-  const filedLabel = formattedDocumentToDisplay.filedBy
-    ? `Filed ${formattedDocumentToDisplay.createdAtFormatted} by ${formattedDocumentToDisplay.filedBy}`
+  const createdByLabel = formattedDocumentToDisplay.filedBy
+    ? `Created by ${formattedDocumentToDisplay.filedBy}`
     : '';
 
-  const { servedAtFormatted } = formattedDocumentToDisplay;
-  const servedLabel = servedAtFormatted ? `Served ${servedAtFormatted}` : '';
-
   return {
-    descriptionDisplay: formattedDocumentToDisplay.descriptionDisplay,
-    filedLabel,
-    servedLabel,
+    createdByLabel,
+    documentTitle: formattedDocumentToDisplay.documentTitle,
   };
 };

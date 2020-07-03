@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,20 +10,25 @@ import { state } from 'cerebral';
  * @returns {object} object containing viewerDocumentToDisplay
  */
 export const getDefaultDraftViewerDocumentToDisplayAction = ({
+  applicationContext,
   get,
   props,
 }) => {
   const { documentId } = props;
   let viewerDraftDocumentToDisplay = null;
 
-  const caseDetail = get(state.formattedCaseDetail);
+  const caseDetail = get(state.caseDetail);
+
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, cloneDeep(caseDetail));
 
   if (documentId) {
-    viewerDraftDocumentToDisplay = caseDetail.formattedDraftDocuments.find(
+    viewerDraftDocumentToDisplay = draftDocuments.find(
       d => d.documentId === documentId,
     );
-  } else if (caseDetail.formattedDraftDocuments) {
-    viewerDraftDocumentToDisplay = caseDetail.formattedDraftDocuments[0];
+  } else {
+    viewerDraftDocumentToDisplay = draftDocuments[0];
   }
 
   return {
