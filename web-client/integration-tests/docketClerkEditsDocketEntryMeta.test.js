@@ -8,6 +8,7 @@ import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerk
 import { docketClerkNavigatesToEditDocketEntryMetaCourtIssued } from './journey/docketClerkNavigatesToEditDocketEntryMetaCourtIssued';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates } from './journey/docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
@@ -25,6 +26,9 @@ test.draftOrders = [];
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
   loginAs(test, 'petitioner');
@@ -50,6 +54,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expectedDocumentType: 'Order',
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
+  docketClerkSignsOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
   docketClerkEditsDocketEntryMetaCourtIssued(test);
@@ -63,6 +68,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
+  docketClerkSignsOrder(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(test);
