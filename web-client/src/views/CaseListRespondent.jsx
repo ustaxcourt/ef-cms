@@ -17,7 +17,6 @@ export const CaseListRespondent = connect(
     dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
-    pageSize: state.constants.CASE_LIST_PAGE_SIZE,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
@@ -40,13 +39,13 @@ export const CaseListRespondent = connect(
     }, []);
 
     const renderTable = (
-      cases,
+      cases = [],
       showLoadMore,
       showMoreResultsSequence,
       tabName,
     ) => (
       <>
-        {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
+        {cases.length == 0 && <p>You have no {tabName.toLowerCase()} cases.</p>}
         {cases.length > 0 && (
           <table
             className="usa-table responsive-table dashboard"
