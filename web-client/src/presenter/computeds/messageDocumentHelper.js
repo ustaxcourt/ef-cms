@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
-  const { USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
+  const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
@@ -25,13 +25,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .isInternalUser(user.role);
 
-  const isDocketPetitionsClerkRole = [
-    USER_ROLES.clerkOfCourt,
-    USER_ROLES.docketClerk,
-    USER_ROLES.petitionsClerk,
-  ].includes(user.role);
+  const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
 
-  const showAddDocketEntryButtonForRole = isDocketPetitionsClerkRole;
+  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
