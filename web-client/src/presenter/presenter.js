@@ -82,7 +82,6 @@ import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequ
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
-import { getCasesByStatusForUserSequence } from './sequences/getCasesByStatusForUserSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
@@ -270,7 +269,6 @@ import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from '.
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
-import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
@@ -511,7 +509,6 @@ export const presenter = {
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
     getCaseInventoryReportSequence,
-    getCasesByStatusForUserSequence,
     getUsersInSectionSequence,
     gotoAccessibilityStatementSequence,
     gotoAddCourtIssuedDocketEntrySequence,
@@ -698,7 +695,6 @@ export const presenter = {
     setTrialSessionCalendarSequence,
     setViewerDocumentToDisplaySequence,
     setWorkItemActionSequence,
-    setWorkQueueIsInternalSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
     showMoreClosedCasesSequence,
