@@ -4,6 +4,8 @@
 /**
  * npm install --save-dev @babel/core @babel/node
  * find web-client/src/ -name '*.jsx' | xargs npx babel-node sequenceAudit.js
+
+ npx babel-node sequenceAudit.js web-client/src/views/CaseDetail/AddToTrialModal.jsx
  */
 const fs = require('fs');
 const { presenter } = require('./web-client/src/presenter/presenter');
@@ -42,6 +44,9 @@ function getConnectedCerebral(fileContents) {
       throw new Error(`Unrecognized connection type ${connectionType}`);
     }
     connectionMap[connectionType][jsName] = cerebralName;
+    if (connectionType == 'sequences') {
+      delete globalSequenceUsageCount[cerebralName];
+    }
   });
   return { connectionMap, fileContents };
 }
@@ -55,7 +60,7 @@ function stripWhitespace(str) {
 /**
  *
  */
-function getSequenceReferenceCount(sequenceName, fileContents) {
+function getConnectionReferenceCount(sequenceName, fileContents) {
   // edge-case: could produce false-positive "yep I found it" matches if one sequence is a substring of another.
   // eslint-disable-next-line security/detect-non-literal-regexp
   return [...fileContents.matchAll(new RegExp(sequenceName, 'gim'))].length;
@@ -64,17 +69,17 @@ function getSequenceReferenceCount(sequenceName, fileContents) {
 /**
  *
  */
-function collectSequenceData(fileContents) {
+function collectConnectionData(fileContents) {
   let connectionMap;
   ({ connectionMap, fileContents } = getConnectedCerebral(fileContents));
   const reportUnused = ([connectionType, connectionMap]) => {
     Object.keys(connectionMap).forEach(connectionReference => {
-      const result = getSequenceReferenceCount(
+      const result = getConnectionReferenceCount(
         connectionReference,
         fileContents,
       );
       if (result <= 1) {
-        // one for the connection argument
+        // one for the connection argument of the component itself
         warn(
           `  ~ "${connectionType}" connection "${connectionReference}" appears unused`,
         );
@@ -94,12 +99,15 @@ const readFile = filePath => {
 const filePaths = [...process.argv].slice(2);
 
 filePaths.forEach(view => {
-  collectSequenceData(readFile(view));
+  collectConnectionData(readFile(view));
   if (logMessages.length > 0) {
     console.log('> ', view);
     logMessages.forEach(message => console.warn(message));
     logMessages.clear();
   }
+});
+Object.keys(globalSequenceUsageCount).forEach(sequenceName => {
+  console.log(`  ? is ${sequenceName} unused?`); // honestly, it is probably a quoted string passed to a component somewhere
 });
 
 console.log('Checked', filePaths.length, 'files');
