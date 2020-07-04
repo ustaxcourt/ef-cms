@@ -215,11 +215,12 @@ export const MessageDetail = connect(
 
                 {formattedMessageDetail.attachments.length > 0 &&
                   formattedMessageDetail.attachments.map((attachment, idx) => {
-                    const active =
-                      viewerDocumentToDisplay === attachment ? 'active' : '';
                     return (
                       <Button
-                        className={`usa-button--unstyled attachment-viewer-button ${active}`}
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          viewerDocumentToDisplay === attachment && 'active',
+                        )}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
