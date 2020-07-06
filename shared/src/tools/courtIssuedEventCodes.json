@@ -4,91 +4,104 @@
     "documentType": "Order",
     "documentTitle": "Order [Anything]",
     "scenario": "Type A",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAJ",
     "documentType": "Order that case is assigned",
     "documentTitle": "Order [Judge name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAL",
     "documentType": "Order that the letter \"L\" is added to Docket number",
     "documentTitle": "Order that the letter \"L\" is added to Docket number [Anything]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAP",
     "documentType": "Order for Amended Petition",
     "documentTitle": "Order for Amended Petition on [Date] [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAPF",
     "documentType": "Order for Amended Petition and Filing Fee",
     "documentTitle": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAR",
     "documentType": "Order that the letter \"R\" is added to the Docket number",
     "documentTitle": "Order that the letter \"R\" is added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAS",
     "documentType": "Order that the letter \"S\" is added to the Docket number",
     "documentTitle": "Order that the letter \"S\" is added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OASL",
     "documentType": "Order that the letters \"SL\" are added to the Docket number",
     "documentTitle": "Order that the letters \"SL\" are added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAW",
     "documentType": "Order that the letter \"W\" is added to the Docket number",
     "documentTitle": "Order that the letter \"W\" is added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OAX",
     "documentType": "Order that the letter \"X\" is added to the Docket number",
     "documentTitle": "Order that the letter \"X\" is added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OCA",
     "documentType": "Order that caption of case is amended",
     "documentTitle": "Order that caption of case is amended [Anything]",
     "scenario": "Type A",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OD",
     "documentType": "Order of Dismissal Entered",
     "documentTitle": "Order of Dismissal Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODD",
     "documentType": "Order of Dismissal and Decision Entered",
     "documentTitle": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODL",
@@ -101,182 +114,206 @@
     "documentType": "Order that the letter \"P\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"P\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODR",
     "documentType": "Order that the letter \"R\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"R\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODS",
     "documentType": "Order that the letter \"S\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"S\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODSL",
     "documentType": "Order that the letters \"SL\" are deleted from the Docket number",
     "documentTitle": "Order that the letters \"SL\" are deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODW",
     "documentType": "Order that the letter \"W\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"W\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODX",
     "documentType": "Order that the letter \"X\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"X\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OF",
     "documentType": "Order for Filing Fee",
     "documentTitle": "Order for Filing Fee on [Date] [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OFAB",
     "documentType": "Order fixing amount of bond",
     "documentTitle": "Order fixing amount of bond at [Anything]",
     "scenario": "Type A",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OFFX",
     "documentType": "Order time is extended for petr(s) to pay the filing fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to pay the filing fee",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OFWD",
     "documentType": "Order for Filing Fee. Application waiver of Filing Fee is denied",
     "documentTitle": "Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OFX",
     "documentType": "Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OIP",
     "documentType": "Order that the letter \"P\" is added to the Docket number",
     "documentTitle": "Order that the letter \"P\" is added to the Docket number [Docket number]",
     "scenario": "Type C",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OJR",
     "documentType": "Order that jurisdiction is retained",
     "documentTitle": "Order that jurisdiction is retained by [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OODS",
     "documentType": "Order for Ownership Disclosure Statement",
     "documentTitle": "Order for Ownership Disclosure Statement by [Date]",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OPFX",
     "documentType": "Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OPX",
     "documentType": "Order time is extended for petr(s) to file Amended Petition",
     "documentTitle": "Order time is extended to [Date] for petr(s) to file Amended Petition",
     "scenario": "Type E",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ORAP",
     "documentType": "Order for Amendment to Petition",
     "documentTitle": "Order for Amendment to Petition by [Date] [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OROP",
     "documentType": "Order for Ratification of Petition",
     "documentTitle": "Order for Ratification of Petition by [Date] [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OSC",
     "documentType": "Order to Show Cause",
     "documentTitle": "Order [Anything]",
     "scenario": "Type A",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OSCP",
     "documentType": "Order petr(s) to show cause why \"S\" should not be removed",
     "documentTitle": "Order petr(s) by [Date] to show cause why \"S\" should not be removed [Anything]",
     "scenario": "Type D",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OST",
     "documentType": "Order of Service of Transcript (Bench Opinion)",
     "documentTitle": "Order of Service of Transcript (Bench Opinion) [Anything]",
     "scenario": "Type A",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OSUB",
     "documentType": "Order that case is submitted",
     "documentTitle": "Order that case is submitted to [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "DEC",
     "documentType": "Decision Entered",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isDecision": true
+    "requiresSignature": true
   },
   {
     "eventCode": "OAD",
     "documentType": "Order and Decision Entered",
     "documentTitle": "Order and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "ODJ",
     "documentType": "Order of Dismissal for Lack of Jurisdiction Entered",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isOrder": true
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "SDEC",
     "documentType": "Stipulated Decision Entered",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
-    "isDecision": true
+    "requiresSignature": true
   },
   {
     "eventCode": "MOP",
@@ -290,7 +327,8 @@
     "documentType": "Notice",
     "documentTitle": "Notice [Anything]",
     "scenario": "Type A",
-    "isNotice": true
+    "isNotice": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "SOP",
