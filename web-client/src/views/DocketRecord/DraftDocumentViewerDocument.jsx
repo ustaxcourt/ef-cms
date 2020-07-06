@@ -40,8 +40,7 @@ export const DraftDocumentViewerDocument = connect(
             There is no document selected for preview
           </div>
         )}
-
-        {!process.env.CI && viewerDraftDocumentToDisplay && (
+        {viewerDraftDocumentToDisplay && (
           <>
             <h3>{draftDocumentViewerHelper.documentTitle}</h3>
 
@@ -139,10 +138,12 @@ export const DraftDocumentViewerDocument = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe
-              src={iframeSrc}
-              title={draftDocumentViewerHelper.documentTitle}
-            />
+            {!process.env.CI && (
+              <iframe
+                src={iframeSrc}
+                title={draftDocumentViewerHelper.documentTitle}
+              />
+            )}
           </>
         )}
       </div>
