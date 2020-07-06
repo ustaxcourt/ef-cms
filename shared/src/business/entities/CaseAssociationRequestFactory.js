@@ -6,12 +6,14 @@ const {
   SCENARIOS,
 } = require('./EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
-const { JoiValidationConstants } = require('../../JoiValidationConstants');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 const {

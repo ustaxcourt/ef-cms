@@ -1,9 +1,11 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../business/utilities/DateHandler');
-const { JoiValidationConstants } = require('../../JoiValidationConstants');
 /**
  * constructor
  *

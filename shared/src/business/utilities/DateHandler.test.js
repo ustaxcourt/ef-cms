@@ -1,6 +1,8 @@
 const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
-const { JoiValidationConstants } = require('../../JoiValidationConstants');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 
 describe('DateHandler', () => {
   describe('pattern matcher', () => {
