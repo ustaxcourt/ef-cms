@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setAttachmentDocumentToDisplayAction } from './setAttachmentDocumentToDisplayAction';
+import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
 
-describe('setAttachmentDocumentToDisplayAction', () => {
+describe('setViewerDocumentToDisplayAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -13,40 +13,40 @@ describe('setAttachmentDocumentToDisplayAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets the attachmentDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
-    const result = await runAction(setAttachmentDocumentToDisplayAction, {
+  it('sets the viewerDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
+    const result = await runAction(setViewerDocumentToDisplayAction, {
       modules: {
         presenter,
       },
       props: {
-        attachmentDocumentToDisplay: { documentId: '1234' },
+        viewerDocumentToDisplay: { documentId: '1234' },
       },
       state: {
-        attachmentDocumentToDisplay: null,
         caseDetail: {
           caseId: '48849291-d329-465d-a421-eecf06a671de',
         },
+        viewerDocumentToDisplay: null,
       },
     });
-    expect(result.state.attachmentDocumentToDisplay).toEqual({
+    expect(result.state.viewerDocumentToDisplay).toEqual({
       documentId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
 
-  it('does not set iframeSrc if props.attachmentDocumentToDisplay is null', async () => {
-    const result = await runAction(setAttachmentDocumentToDisplayAction, {
+  it('does not set iframeSrc if props.viewerDocumentToDisplay is null', async () => {
+    const result = await runAction(setViewerDocumentToDisplayAction, {
       modules: {
         presenter,
       },
       props: {
-        attachmentDocumentToDisplay: null,
+        viewerDocumentToDisplay: null,
       },
       state: {
-        attachmentDocumentToDisplay: null,
         caseDetail: {
           caseId: '48849291-d329-465d-a421-eecf06a671de',
         },
+        viewerDocumentToDisplay: null,
       },
     });
     expect(result.state.iframeSrc).toBeUndefined();

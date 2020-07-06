@@ -15,6 +15,10 @@ export const validateEditPrivatePractitionersAction = ({
   get,
   path,
 }) => {
+  let SERVICE_INDICATOR_TYPES;
+
+  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+
   const { privatePractitioners } = get(state.modal);
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 
@@ -36,8 +40,11 @@ export const validateEditPrivatePractitionersAction = ({
       foundPractitioner => foundPractitioner.userId === practitioner.userId,
     );
     if (
-      ['Paper', 'None'].includes(oldPractitioner.serviceIndicator) &&
-      practitioner.serviceIndicator === 'Electronic'
+      [
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      ].includes(oldPractitioner.serviceIndicator) &&
+      practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
       error = {
         ...error,

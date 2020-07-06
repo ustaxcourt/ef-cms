@@ -1,8 +1,11 @@
 const {
+  CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
@@ -26,7 +29,7 @@ describe('createCase integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',

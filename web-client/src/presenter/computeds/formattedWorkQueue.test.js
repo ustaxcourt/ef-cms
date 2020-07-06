@@ -190,7 +190,7 @@ describe('formatted work queue computed', () => {
 
   it('should set isCourtIssuedDocument to true for a court-issued document in the selected work item', () => {
     const workItemCopy = cloneDeep(workItem);
-    workItemCopy.document.documentType = 'O - Order';
+    workItemCopy.document.documentType = 'Order';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -806,7 +806,7 @@ describe('formatted work queue computed', () => {
           ...baseWorkItem,
           document: {
             ...baseDocument,
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
             pending: false,
           },
@@ -834,7 +834,7 @@ describe('formatted work queue computed', () => {
           ...baseWorkItem,
           document: {
             ...baseDocument,
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
             eventCode: 'OAJ',
             pending: false,
           },
@@ -885,6 +885,45 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
+    });
+
+    it('should return case detail link if document is processed and user is docketclerk', () => {
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-03-01T21:40:46.415Z',
+          document: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Administrative Record',
+            documentType: 'Administrative Record',
+            eventCode: 'ADMR',
+            isFileAttached: true,
+            isPaper: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+          },
+          isInitializeCase: false,
+          isQC: true,
+          isRead: true,
+          messages: [baseMessage],
+          section: 'docket',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      });
+      expect(result).toEqual(
+        `/case-detail/${baseWorkItem.docketNumber}/document-view?documentId=${baseDocument.documentId}`,
+      );
     });
 
     it('should return default edit link if document is in progress and user is petitionsClerk', () => {
@@ -1395,7 +1434,7 @@ describe('formatted work queue computed', () => {
       let result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(false);
 
-      workItem.document.documentType = 'TRAN - Transcript';
+      workItem.document.documentType = 'Transcript';
 
       result = formatWorkItem({ applicationContext, workItem });
       expect(result.isCourtIssuedDocument).toEqual(true);

@@ -1,31 +1,32 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
 
-applicationContext.getUseCases().updateCase.mockReturnValue({});
-
-presenter.providers.applicationContext = applicationContext;
-
-const getFixtures = (props, state = {}) => ({
-  modules: {
-    presenter,
-  },
-  props,
-  state: {
-    ...state,
-    user: {
-      role: ROLES.petitioner,
-    },
-  },
-});
-
 describe('updatePartyTypeAction', () => {
+  applicationContext.getUseCases().updateCase.mockReturnValue({});
+
+  presenter.providers.applicationContext = applicationContext;
+
+  const {
+    COUNTRY_TYPES,
+    PARTY_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const getFixtures = (props, state = {}) => ({
+    modules: {
+      presenter,
+    },
+    props,
+    state: {
+      ...state,
+      user: {
+        role: USER_ROLES.petitioner,
+      },
+    },
+  });
+
   it('sets the partyType to Petitioner when filingType is updated to Myself', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
@@ -64,7 +65,7 @@ describe('updatePartyTypeAction', () => {
       updatePartyTypeAction,
       getFixtures({
         key: 'otherType',
-        value: 'Donor',
+        value: PARTY_TYPES.donor,
       }),
     );
     expect(state.form.partyType).toEqual(PARTY_TYPES.donor);
@@ -75,7 +76,7 @@ describe('updatePartyTypeAction', () => {
       updatePartyTypeAction,
       getFixtures({
         key: 'otherType',
-        value: 'Transferee',
+        value: PARTY_TYPES.transferee,
       }),
     );
     expect(state.form.partyType).toEqual(PARTY_TYPES.transferee);
@@ -112,7 +113,7 @@ describe('updatePartyTypeAction', () => {
           value: 'A business',
         },
         {
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       ),
     );
@@ -215,7 +216,9 @@ describe('updatePartyTypeAction', () => {
         },
       ),
     );
-    expect(state.form.contactPrimary).toEqual({ countryType: 'domestic' });
+    expect(state.form.contactPrimary).toEqual({
+      countryType: COUNTRY_TYPES.DOMESTIC,
+    });
     expect(state.form.contactSecondary).toEqual({});
   });
 });

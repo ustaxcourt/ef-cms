@@ -39,7 +39,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     expect(result.state.form).toEqual({
       attachments: false,
       documentTitle: 'Order for Filing Fee on [Date] [Anything]',
-      documentType: 'OF - Order for Filing Fee',
+      documentType: 'Order for Filing Fee',
       eventCode: 'OF',
       scenario: 'Type D',
     });
@@ -61,8 +61,8 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
 
     expect(result.state.form).toEqual({
       attachments: false,
-      documentTitle: '[Anything]',
-      documentType: 'O - Order',
+      documentTitle: 'Order [Anything]',
+      documentType: 'Order',
       eventCode: 'O',
       freeText: 'something',
       scenario: 'Type A',

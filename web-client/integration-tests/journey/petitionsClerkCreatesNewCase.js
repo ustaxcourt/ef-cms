@@ -1,7 +1,13 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} = applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCase = (
   test,
@@ -137,12 +143,12 @@ export const petitionsClerkCreatesNewCase = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'partyType',
-      value: 'Petitioner',
+      value: PARTY_TYPES.petitioner,
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
 
     await test.runSequence('updateFormValueSequence', {

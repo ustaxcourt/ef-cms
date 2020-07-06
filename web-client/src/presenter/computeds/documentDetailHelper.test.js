@@ -524,7 +524,7 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'SDEC - Stipulated Decision Entered',
+                documentType: 'Stipulated Decision Entered',
                 signedAt: getDateISO(),
               },
             ],
@@ -1449,7 +1449,7 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'OAP - Order for Amended Petition',
+                documentType: 'Order for Amended Petition',
               },
             ],
           },
@@ -1474,7 +1474,7 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'OAP - Order for Amended Petition',
+                documentType: 'Order for Amended Petition',
               },
             ],
           },
@@ -1553,7 +1553,7 @@ describe('document detail helper', () => {
               documents: [
                 {
                   documentId: 'abc',
-                  documentType: 'MISC - Miscellaneous',
+                  documentType: 'Miscellaneous',
                 },
               ],
             },
@@ -1582,7 +1582,7 @@ describe('document detail helper', () => {
               documents: [
                 {
                   documentId: 'abc',
-                  documentType: 'OAP - Order for Amended Petition',
+                  documentType: 'Order for Amended Petition',
                 },
               ],
             },

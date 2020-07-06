@@ -113,8 +113,8 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
-  it('returns showDateFirst = true and showTrialLocation = true when state.form.eventCode is NTD (scenario = Type G)', () => {
-    let testState = { ...state, form: { eventCode: 'NTD' } };
+  it('returns showDateFirst = true and showTrialLocation = true when state.form.eventCode is NDT (scenario = Type G)', () => {
+    let testState = { ...state, form: { eventCode: 'NDT' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

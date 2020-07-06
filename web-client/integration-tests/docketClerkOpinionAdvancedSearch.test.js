@@ -119,7 +119,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
-          opinionType: 'TCOP - T.C. Opinion',
+          opinionType: 'T.C. Opinion',
         },
       });
 

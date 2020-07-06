@@ -20,7 +20,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         attachments: false,
         date: '04/10/2025',
         documentTitle: 'Notice of Trial on [Date] at [Place]',
-        documentType: 'NTD - Notice of Trial',
+        documentType: 'Notice of Trial',
         scenario: 'Type G',
         trialLocation: 'Seattle, Washington',
       });
@@ -34,7 +34,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle: 'Notice of Trial on [Date] at [Place]',
-        documentType: 'NTD - Notice of Trial',
+        documentType: 'Notice of Trial',
         scenario: 'Type G',
         trialLocation: 'Seattle, Washington',
       });
@@ -48,7 +48,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle: 'Notice of Trial on [Date] at [Place]',
-        documentType: 'NTD - Notice of Trial',
+        documentType: 'Notice of Trial',
         scenario: 'Type G',
         trialLocation: 'Seattle, Washington',
       });

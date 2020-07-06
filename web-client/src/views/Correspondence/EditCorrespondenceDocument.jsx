@@ -15,8 +15,6 @@ import classNames from 'classnames';
 
 export const EditCorrespondenceDocument = connect(
   {
-    cancelAndNavigateToCorrespondenceSequence:
-      sequences.cancelAndNavigateToCorrespondenceSequence,
     clearExistingDocumentSequence: sequences.clearExistingDocumentSequence,
     constants: state.constants,
     documentDetailHelper: state.documentDetailHelper,
