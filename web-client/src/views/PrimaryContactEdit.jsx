@@ -12,6 +12,7 @@ import React from 'react';
 
 export const PrimaryContactEdit = connect(
   {
+    COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     contactEditHelper: state.contactEditHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -24,6 +25,7 @@ export const PrimaryContactEdit = connect(
   },
   function PrimaryContactEdit({
     contactEditHelper,
+    COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -94,7 +96,7 @@ export const PrimaryContactEdit = connect(
               type={type}
               onChange="contactPrimaryCountryTypeChangeSequence"
             />
-            {form.contactPrimary.countryType === 'domestic' ? (
+            {form.contactPrimary.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}
                 type={type}

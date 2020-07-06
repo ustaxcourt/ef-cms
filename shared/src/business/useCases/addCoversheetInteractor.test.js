@@ -681,7 +681,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.caseCaptionExtension).toEqual('Petitioner');
+      expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
     });
 
     it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {

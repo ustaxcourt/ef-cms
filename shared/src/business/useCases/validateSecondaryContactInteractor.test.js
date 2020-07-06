@@ -2,7 +2,7 @@ const {
   validateSecondaryContactInteractor,
 } = require('./validateSecondaryContactInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('validateSecondaryContactInteractor', () => {
   it('runs validation on a contact with no invalid properties', async () => {
@@ -11,7 +11,7 @@ describe('validateSecondaryContactInteractor', () => {
       address2: 'Grand View Apartments',
       address3: 'Apt. #104',
       city: 'Jordan',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'night@theroxbury.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',
@@ -35,7 +35,7 @@ describe('validateSecondaryContactInteractor', () => {
       address2: 'Grand View Apartments',
       address3: 'Apt. #104',
       city: 'Jordan',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'night@theroxbury.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',

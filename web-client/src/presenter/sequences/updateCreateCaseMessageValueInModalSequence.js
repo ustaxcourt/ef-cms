@@ -26,13 +26,13 @@ export const updateCreateCaseMessageValueInModalSequence = [
         no: [
           set(state.modal.showChambersSelect, false),
           set(state.modal.form.toSection, props.value),
-          ...getUsersInSectionSequence,
+          getUsersInSectionSequence,
         ],
       },
     ],
     chambers: [
       set(state.modal.form.toSection, props.value),
-      ...getUsersInSectionSequence,
+      getUsersInSectionSequence,
     ],
     default: [set(state.modal.form[props.key], props.value)],
   },

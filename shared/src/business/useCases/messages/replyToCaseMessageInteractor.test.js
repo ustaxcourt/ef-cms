@@ -7,7 +7,7 @@ const {
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-const { ROLES } = require('../../entities/EntityConstants');
+const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('replyToCaseMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -61,7 +61,7 @@ describe('replyToCaseMessageInteractor', () => {
       caseCaption: 'Guy Fieri, Petitioner',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
-      status: 'General Docket - Not at Issue',
+      status: CASE_STATUS_TYPES.generalDocket,
     });
 
     await replyToCaseMessageInteractor({
@@ -77,7 +77,7 @@ describe('replyToCaseMessageInteractor', () => {
         .calls[0][0].caseMessage,
     ).toMatchObject({
       ...caseMessageData,
-      caseStatus: 'General Docket - Not at Issue',
+      caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',

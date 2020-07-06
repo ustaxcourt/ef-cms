@@ -1,7 +1,11 @@
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -16,7 +20,7 @@ describe('migrateCaseInteractor', () => {
 
     adminUser = new User({
       name: 'Joe Exotic',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -49,7 +53,7 @@ describe('migrateCaseInteractor', () => {
         address2: 'Address 2',
         address3: 'Address 3',
         city: 'Some City',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner1@example.com',
         name: 'Diana Prince',
         phone: '+1 (215) 128-6587',

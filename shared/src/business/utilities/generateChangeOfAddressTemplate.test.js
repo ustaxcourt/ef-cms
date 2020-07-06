@@ -1,3 +1,4 @@
+import { COUNTRY_TYPES } from '../entities/EntityConstants';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -8,7 +9,7 @@ const caseDetail = {
   contactPrimary: {
     address1: 'address 1',
     city: 'City',
-    countryType: 'domestic',
+    countryType: COUNTRY_TYPES.DOMESTIC,
     phone: '123-123-1234',
     postalCode: '12345',
     state: 'AL',

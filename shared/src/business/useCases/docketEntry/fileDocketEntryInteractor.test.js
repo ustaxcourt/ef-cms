@@ -1,9 +1,13 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
@@ -22,7 +26,7 @@ describe('fileDocketEntryInteractor', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
