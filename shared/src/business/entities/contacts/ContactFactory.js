@@ -373,7 +373,7 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
       : {},
     secondary: constructors.secondary
       ? new constructors.secondary(contactInfo.secondary || {})
-      : {},
+      : undefined,
   };
 };
 
