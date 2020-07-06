@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const draftDocumentViewerHelper = (get, applicationContext) => {
+  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
@@ -44,13 +45,19 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showEditButtonForRole = isInternalUser;
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
+  const showAddDocketEntryButtonForDocument =
+    documentIsSigned ||
+    !EVENT_CODES_REQUIRING_SIGNATURE.includes(
+      formattedDocumentToDisplay.eventCode,
+    );
   const showApplySignatureButtonForDocument = !documentIsSigned;
   const showEditSignatureButtonForDocument = documentIsSigned;
 
   return {
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
-    showAddDocketEntryButton: showAddDocketEntryButtonForRole,
+    showAddDocketEntryButton:
+      showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
       showApplyEditSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
