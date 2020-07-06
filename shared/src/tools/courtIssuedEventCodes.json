@@ -254,7 +254,8 @@
     "eventCode": "DEC",
     "documentType": "Decision Entered",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
-    "scenario": "Type B"
+    "scenario": "Type B",
+    "isDecision": true
   },
   {
     "eventCode": "OAD",
@@ -274,25 +275,29 @@
     "eventCode": "SDEC",
     "documentType": "Stipulated Decision Entered",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
-    "scenario": "Type B"
+    "scenario": "Type B",
+    "isDecision": true
   },
   {
     "eventCode": "MOP",
     "documentType": "Memorandum Opinion",
     "documentTitle": "Memorandum Opinion [judge]",
-    "scenario": "Type B"
+    "scenario": "Type B",
+    "isOpinion": true
   },
   {
     "eventCode": "NOT",
     "documentType": "Notice",
     "documentTitle": "Notice [Anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isNotice": true
   },
   {
     "eventCode": "SOP",
     "documentType": "Summary Opinion",
     "documentTitle": "Summary Opinion [judge]",
-    "scenario": "Type B"
+    "scenario": "Type B",
+    "isOpinion": true
   },
   {
     "eventCode": "WRIT",
@@ -346,7 +351,8 @@
     "eventCode": "TCOP",
     "documentType": "T.C. Opinion",
     "documentTitle": "T.C. Opinion [judge] [anything]",
-    "scenario": "Type B"
+    "scenario": "Type B",
+    "isOpinion": true
   },
   {
     "eventCode": "RTRA",
