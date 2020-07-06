@@ -83,7 +83,7 @@ resource "aws_route53_record" "record_east_www" {
   records = [
     module.dynamsoft_us_east.dns_name,
   ]
-  latency_routing_policy = {
+  latency_routing_policy {
     region = "us-east-1"
   }
   ttl     = 60
@@ -98,7 +98,7 @@ resource "aws_route53_record" "record_west_www" {
   records = [
     module.dynamsoft_us_west.dns_name
   ]
-  latency_routing_policy = {
+  latency_routing_policy {
     region = "us-west-1"
   }
   ttl     = 60
