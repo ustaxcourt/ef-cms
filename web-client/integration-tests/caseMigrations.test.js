@@ -170,7 +170,7 @@ const otherPetitionersCase = {
 
 describe('Case journey', () => {
   it('should migrate cases', async () => {
-    jest.setTimeout(5000);
+    jest.setTimeout(3000);
 
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
