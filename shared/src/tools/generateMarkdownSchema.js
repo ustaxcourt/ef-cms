@@ -7,6 +7,9 @@ const {
   getNextFriendForMinorContact,
 } = require('../business/entities/contacts/NextFriendForMinorContact');
 const {
+  getOtherFilerContact,
+} = require('../business/entities/contacts/OtherFilerContact');
+const {
   getPartnershipAsTaxMattersPartnerPrimaryContact,
 } = require('../business/entities/contacts/PartnershipAsTaxMattersPartnerContact');
 const {
@@ -216,6 +219,14 @@ generateMarkdownSchema(
     isPaper: true,
   }),
   'contacts/SurvivingSpouseContact',
+);
+
+generateMarkdownSchema(
+  getOtherFilerContact({
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    isPaper: true,
+  }),
+  'contacts/OtherFilerContact',
 );
 
 generateMarkdownSchema(Batch, 'Batch');
