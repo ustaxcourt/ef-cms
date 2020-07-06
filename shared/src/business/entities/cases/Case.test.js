@@ -49,7 +49,6 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
     });
   });
@@ -100,7 +99,6 @@ describe('Case entity', () => {
         orderForFilingFee: true,
         orderForOds: false,
         orderForRatification: false,
-        orderToChangeDesignatedPlaceOfTrial: true,
         orderToShowCause: true,
       },
       {
@@ -115,7 +113,6 @@ describe('Case entity', () => {
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });
@@ -158,6 +155,16 @@ describe('Case entity', () => {
         },
       );
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
+    });
+
+    it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, contactSecondary: undefined },
+        { applicationContext },
+      );
+      expect(myCase).toMatchObject({
+        contactSecondary: undefined,
+      });
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
