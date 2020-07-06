@@ -1,9 +1,11 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
-const { JoiValidationConstants } = require('../../JoiValidationConstants');
 
 /**
  * DocketRecord constructor

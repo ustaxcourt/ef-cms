@@ -6,6 +6,9 @@ const {
   ROLES,
 } = require('./EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
@@ -13,7 +16,6 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-const { JoiValidationConstants } = require('../../JoiValidationConstants');
 
 /**
  * constructor
