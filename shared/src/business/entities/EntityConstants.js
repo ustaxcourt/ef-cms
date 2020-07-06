@@ -52,47 +52,9 @@ const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
-// TODO: should come from court issued event codes
-const ORDER_EVENT_CODES = [
-  'O',
-  'OAJ',
-  'OAL',
-  'OAP',
-  'OAPF',
-  'OAR',
-  'OAS',
-  'OASL',
-  'OAW',
-  'OAX',
-  'OCA',
-  'OD',
-  'ODD',
-  'ODL',
-  'ODP',
-  'ODR',
-  'ODS',
-  'ODSL',
-  'ODW',
-  'ODX',
-  'OF',
-  'OFAB',
-  'OFFX',
-  'OFWD',
-  'OFX',
-  'OIP',
-  'OJR',
-  'OODS',
-  'OPFX',
-  'OPX',
-  'ORAP',
-  'OROP',
-  'OSC',
-  'OSCP',
-  'OST',
-  'OSUB',
-  'OAD',
-  'ODJ',
-];
+const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
+  d => d.eventCode,
+);
 
 // TODO: should come from court issued event codes
 const DOCUMENT_NOTICE_EVENT_CODES = ['NOT'];

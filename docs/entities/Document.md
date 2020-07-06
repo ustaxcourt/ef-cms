@@ -501,7 +501,7 @@
       type: "string"
       flags: 
         only: true
-        presence: "optional"
+        presence: "required"
       allow: 
         - "A"
         - "AAAP"
@@ -841,7 +841,6 @@
         - "USCA"
         - "USDL"
         - "WRIT"
-        - null
     filedBy: 
       type: "string"
       flags: 
@@ -2308,20 +2307,52 @@
               - 
                 ref: 
                   path: 
-                    - "documentType"
+                    - "eventCode"
                 is: 
                   type: "any"
                   flags: 
                     only: true
                   allow: 
-                    - "Order"
-                    - "Order of Dismissal for Lack of Jurisdiction"
-                    - "Order of Dismissal"
-                    - "Order of Dismissal and Decision"
-                    - "Order to Show Cause"
-                    - "Order and Decision"
-                    - "Decision"
-                    - "Notice"
+                    - "O"
+                    - "OAJ"
+                    - "OAL"
+                    - "OAP"
+                    - "OAPF"
+                    - "OAR"
+                    - "OAS"
+                    - "OASL"
+                    - "OAW"
+                    - "OAX"
+                    - "OCA"
+                    - "OD"
+                    - "ODD"
+                    - "ODP"
+                    - "ODR"
+                    - "ODS"
+                    - "ODSL"
+                    - "ODW"
+                    - "ODX"
+                    - "OF"
+                    - "OFAB"
+                    - "OFFX"
+                    - "OFWD"
+                    - "OFX"
+                    - "OIP"
+                    - "OJR"
+                    - "OODS"
+                    - "OPFX"
+                    - "OPX"
+                    - "ORAP"
+                    - "OROP"
+                    - "OSC"
+                    - "OSCP"
+                    - "OST"
+                    - "OSUB"
+                    - "OAD"
+                    - "ODJ"
+                    - "NOT"
+                    - "SDEC"
+                    - "DEC"
                 then: 
                   type: "any"
                   flags: 
@@ -2359,20 +2390,52 @@
               - 
                 ref: 
                   path: 
-                    - "documentType"
+                    - "eventCode"
                 is: 
                   type: "string"
                   flags: 
                     only: true
                   allow: 
-                    - "Order"
-                    - "Order of Dismissal for Lack of Jurisdiction"
-                    - "Order of Dismissal"
-                    - "Order of Dismissal and Decision"
-                    - "Order to Show Cause"
-                    - "Order and Decision"
-                    - "Decision"
-                    - "Notice"
+                    - "O"
+                    - "OAJ"
+                    - "OAL"
+                    - "OAP"
+                    - "OAPF"
+                    - "OAR"
+                    - "OAS"
+                    - "OASL"
+                    - "OAW"
+                    - "OAX"
+                    - "OCA"
+                    - "OD"
+                    - "ODD"
+                    - "ODP"
+                    - "ODR"
+                    - "ODS"
+                    - "ODSL"
+                    - "ODW"
+                    - "ODX"
+                    - "OF"
+                    - "OFAB"
+                    - "OFFX"
+                    - "OFWD"
+                    - "OFX"
+                    - "OIP"
+                    - "OJR"
+                    - "OODS"
+                    - "OPFX"
+                    - "OPX"
+                    - "ORAP"
+                    - "OROP"
+                    - "OSC"
+                    - "OSCP"
+                    - "OST"
+                    - "OSUB"
+                    - "OAD"
+                    - "ODJ"
+                    - "NOT"
+                    - "SDEC"
+                    - "DEC"
                 then: 
                   type: "string"
                   flags: 
