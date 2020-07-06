@@ -49,7 +49,6 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
     });
   });
@@ -100,7 +99,6 @@ describe('Case entity', () => {
         orderForFilingFee: true,
         orderForOds: false,
         orderForRatification: false,
-        orderToChangeDesignatedPlaceOfTrial: true,
         orderToShowCause: true,
       },
       {
@@ -115,7 +113,6 @@ describe('Case entity', () => {
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });

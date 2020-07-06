@@ -171,7 +171,6 @@
     "orderForRatification": false,
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": "R",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "sortableDocketNumber": 20000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",

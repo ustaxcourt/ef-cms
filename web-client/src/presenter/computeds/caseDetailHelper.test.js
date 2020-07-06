@@ -644,7 +644,6 @@ describe('case detail computed', () => {
           orderForFilingFee: false,
           orderForOds: false,
           orderForRatification: false,
-          orderToChangeDesignatedPlaceOfTrial: false,
           orderToShowCause: true,
         },
         form: {},

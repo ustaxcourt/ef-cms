@@ -246,7 +246,6 @@ Valid Case object example:
     "orderForOds": false,
     "orderForRatification": false,
     "orderToShowCause": false,
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "orderDesignatingPlaceOfTrial": false,
     "contactPrimary": {
         "address1": "982 Oak Boulevard",
