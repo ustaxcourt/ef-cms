@@ -229,6 +229,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "eventCode": "ODS",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
@@ -246,6 +247,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
@@ -263,6 +265,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "workItems": [
