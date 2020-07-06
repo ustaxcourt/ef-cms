@@ -2,15 +2,12 @@ import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { DraftDocumentViewer } from '../DocketRecord/DraftDocumentViewer';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const DraftDocuments = connect(
   {
-    archiveDraftDocumentModalSequence:
-      sequences.archiveDraftDocumentModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
-    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     showModal: state.modal.showModal,
   },
   function DraftDocuments({ formattedCaseDetail, showModal }) {

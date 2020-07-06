@@ -45,7 +45,9 @@ describe('formattedCaseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail: {},
+        caseDetail: {
+          contactPrimary: {},
+        },
       },
     });
     expect(result).toMatchObject({
@@ -57,6 +59,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {},
       correspondence: [],
       docketRecord: [
         {
@@ -81,6 +84,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record documents', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {},
       correspondence: [],
       docketRecord: [
         {
@@ -329,6 +333,7 @@ describe('formattedCaseDetail', () => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         caseId: 'abdc-1234-5678-xyz',
+        contactPrimary: {},
         correspondence: [],
         docketRecord: [
           {
@@ -522,6 +527,7 @@ describe('formattedCaseDetail', () => {
   describe('case name mapping', () => {
     it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -538,6 +544,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -554,6 +561,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo and friends,  Petitioners ',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -570,6 +578,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -588,6 +597,7 @@ describe('formattedCaseDetail', () => {
     it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
@@ -606,6 +616,7 @@ describe('formattedCaseDetail', () => {
     it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ name: 'Jackie Chan' }],
@@ -627,6 +638,7 @@ describe('formattedCaseDetail', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: CASE_STATUS_TYPES.calendared,
@@ -650,6 +662,7 @@ describe('formattedCaseDetail', () => {
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: CASE_STATUS_TYPES.calendared,
@@ -673,6 +686,7 @@ describe('formattedCaseDetail', () => {
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
       const caseDetail = {
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -717,6 +731,7 @@ describe('formattedCaseDetail', () => {
 
     it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
       const caseDetail = {
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -741,6 +756,7 @@ describe('formattedCaseDetail', () => {
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
@@ -761,6 +777,7 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {},
         correspondence: [],
         docketRecord: [
           {
@@ -854,6 +871,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '123',
           },
         ],
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: CASE_STATUS_TYPES.calendared,
@@ -877,6 +895,7 @@ describe('formattedCaseDetail', () => {
     it('should default consolidatedCases to an empty array if they do not exist', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
         status: CASE_STATUS_TYPES.calendared,
@@ -1397,6 +1416,106 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
         true,
       );
+    });
+  });
+
+  describe('showEAccessFlag', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
+      baseContact.hasEAccess = false;
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+
+    it('sets the showEAccessFlag to true for internal users when contact has legacy access', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(true);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
+    });
+
+    it('sets the showEAccessFlag to false for external users when contact has legacy access', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
 });

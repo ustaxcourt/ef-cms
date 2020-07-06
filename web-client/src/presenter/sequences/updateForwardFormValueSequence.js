@@ -11,7 +11,7 @@ import { setSectionAction } from '../actions/ForwardForm/setSectionAction';
 export const updateForwardFormValueSequence = [
   runKeyPathAction,
   {
-    chambers: [setSectionAction, ...getUsersInSectionSequence],
+    chambers: [setSectionAction, getUsersInSectionSequence],
     default: [setForwardFormValueAction],
     section: [
       isChambersPathAction,
@@ -19,7 +19,7 @@ export const updateForwardFormValueSequence = [
         no: [
           set(state.workItemMetadata.showChambersSelect, false),
           setForwardFormValueAction,
-          ...getUsersInSectionSequence,
+          getUsersInSectionSequence,
         ],
         yes: [
           set(state.workItemMetadata.showChambersSelect, true),

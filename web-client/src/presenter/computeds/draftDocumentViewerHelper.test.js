@@ -233,6 +233,59 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showAddDocketEntryButton).toEqual(false);
   });
 
+  it('return showAddDocketEntryButton true for signed document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              eventCode: 'O',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(true);
+  });
+
+  it('return showAddDocketEntryButton false for unsigned document that requires signature', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              eventCode: 'O',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(false);
+  });
+
   it('return showApplySignatureButton true and showEditSignatureButton false for an internal user and an unsigned document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 

@@ -1,5 +1,5 @@
 const {
-  ORDER_DOCUMENT_TYPES,
+  ORDER_EVENT_CODES,
   ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
@@ -95,7 +95,7 @@ describe('orderAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_EVENT_CODES,
     });
   });
 });
