@@ -54,6 +54,30 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
 
+  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
+    ...otherFiler,
+    showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
+  }));
+
+  result.otherPetitioners = (result.otherPetitioners || []).map(
+    otherPetitioner => ({
+      ...otherPetitioner,
+      showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
+    }),
+  );
+
+  result.contactPrimary = {
+    ...result.contactPrimary,
+    showEAccessFlag: !isExternalUser && result.contactPrimary?.hasEAccess,
+  };
+
+  if (result.contactSecondary) {
+    result.contactSecondary = {
+      ...result.contactSecondary,
+      showEAccessFlag: !isExternalUser && result.contactSecondary.hasEAccess,
+    };
+  }
+
   result.formattedDocketEntries = result.docketRecordWithDocument.map(
     ({ document, index, record }) => {
       const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;

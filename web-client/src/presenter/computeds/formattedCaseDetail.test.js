@@ -1399,4 +1399,104 @@ describe('formattedCaseDetail', () => {
       );
     });
   });
+
+  describe('showEAccessFlag', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
+      baseContact.hasEAccess = false;
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+
+    it('sets the showEAccessFlag to true for internal users when contact has legacy access', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(true);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
+    });
+
+    it('sets the showEAccessFlag to false for external users when contact has legacy access', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
+      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+  });
 });
