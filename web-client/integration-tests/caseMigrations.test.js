@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest } from './helpers';
 import axios from 'axios';
 
@@ -14,6 +15,12 @@ const axiosInstance = axios.create({
   timeout: 1000,
 });
 
+const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+  STATUS_TYPES,
+} = applicationContext.getConstants();
+
 const firstConsolidatedCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
@@ -22,7 +29,7 @@ const firstConsolidatedCase = {
   docketNumber: '101-21',
   leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
@@ -32,7 +39,7 @@ const secondConsolidatedCase = {
   docketNumber: '102-21',
   leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const correspondenceCase = {
@@ -50,7 +57,7 @@ const correspondenceCase = {
   ],
   docketNumber: '106-15',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const otherFilersCase = {
@@ -64,7 +71,7 @@ const otherFilersCase = {
       address1: '42 Lamb Sauce Blvd',
       city: 'Nashville',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'gordon@thelambsauce.com',
       name: 'Gordon Ramsay',
       otherFilerType: 'Intervenor',
@@ -76,7 +83,7 @@ const otherFilersCase = {
       address1: '1337 12th Ave',
       city: 'Flavortown',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'mayor@flavortown.com',
       name: 'Guy Fieri',
       otherFilerType: 'Participant',
@@ -86,7 +93,7 @@ const otherFilersCase = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 const otherPetitionersCase = {
@@ -102,17 +109,17 @@ const otherPetitionersCase = {
       address2: 'Maxime dolorum quae ',
       address3: 'Ut numquam ducimus ',
       city: 'Placeat sed dolorum',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Keelie Bruce',
       phone: '+1 (785) 771-2329',
       postalCode: '17860',
       secondaryName: 'Logan Fields',
-      serviceIndicator: 'None',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'LA',
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
-  status: 'Calendared',
+  status: STATUS_TYPES.calendared,
 };
 
 describe('Case journey', () => {

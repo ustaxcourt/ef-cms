@@ -254,7 +254,7 @@ const formatCase = (applicationContext, caseDetail) => {
       editUrl:
         document.documentType === 'Stipulated Decision'
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : document.documentType === 'MISC - Miscellaneous'
+          : document.documentType === 'Miscellaneous'
           ? `/case-detail/${caseDetail.docketNumber}/edit-upload-court-issued/${document.documentId}`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
       signUrl:

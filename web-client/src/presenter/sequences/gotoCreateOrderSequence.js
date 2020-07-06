@@ -36,7 +36,7 @@ export const gotoCreateOrderSequence = [
           clearFormAction,
           setCasePropFromStateAction,
           setCreateOrderModalDataOnFormAction,
-          ...convertHtml2PdfSequence,
+          convertHtml2PdfSequence,
           setIsCreatingOrderAction,
           setCurrentPageAction('CreateOrder'),
         ],

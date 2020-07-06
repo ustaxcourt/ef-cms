@@ -1,3 +1,7 @@
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
 const { asUserFromEmail } = require('../createUsers');
 
 module.exports.createCase1 = async () => {
@@ -46,7 +50,7 @@ module.exports.createCase1 = async () => {
           address2: 'Suscipit animi solu',
           address3: 'Architecto assumenda',
           city: 'Aspernatur nostrum s',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner',
           name: 'Brett Osborne',
           phone: '+1 (537) 235-6147',
@@ -55,7 +59,7 @@ module.exports.createCase1 = async () => {
         },
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Birmingham, Alabama',
         procedureType: 'Regular',
       },
@@ -119,7 +123,7 @@ module.exports.createCase1 = async () => {
       caseId,
       docketNumber,
       documentTitle: 'Something',
-      documentType: 'MISC - Miscellaneous',
+      documentType: 'Miscellaneous',
       eventCode: 'MISC',
       freeText: 'Something',
       scenario: 'Type A',

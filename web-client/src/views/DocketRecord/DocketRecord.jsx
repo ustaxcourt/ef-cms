@@ -53,8 +53,8 @@ export const DocketRecord = connect(
                 return (
                   <tr
                     className={classNames(
-                      entry.showInProgress && 'in-progress',
-                      entry.showQcUntouched && 'qc-untouched',
+                      entry.isInProgress && 'in-progress',
+                      entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
                     key={entry.index}
                   >
@@ -82,11 +82,11 @@ export const DocketRecord = connect(
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
-                      {entry.showInProgress && (
+                      {entry.isInProgress && (
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
                       )}
 
-                      {entry.showQcUntouched && (
+                      {entry.qcWorkItemsUntouched && (
                         <FontAwesomeIcon icon={['fa', 'star']} />
                       )}
 

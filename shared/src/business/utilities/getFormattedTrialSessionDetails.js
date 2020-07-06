@@ -126,7 +126,6 @@ exports.getTrialSessionStatus = ({ applicationContext, session }) => {
   );
 
   if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-    // TODO: Move to constants, on the entity?
     return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
     return SESSION_STATUS_GROUPS.open;

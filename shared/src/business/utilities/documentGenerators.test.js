@@ -18,6 +18,10 @@ const {
   trialSessionPlanningReport,
 } = require('./documentGenerators');
 const {
+  CASE_STATUS_TYPES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -36,6 +40,10 @@ describe('documentGenerators', () => {
 
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
+      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
+        if (err) throw err;
+      });
+
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );
@@ -98,7 +106,7 @@ describe('documentGenerators', () => {
               caseTitle: 'rick james b',
               docketNumber: '101-20',
               docketNumberSuffix: 'L',
-              status: 'Closed',
+              status: CASE_STATUS_TYPES.closed,
             },
           ],
           reportTitle: 'General Docket - Not at Issue',
@@ -170,7 +178,7 @@ describe('documentGenerators', () => {
       const pdf = await coverSheet({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner',
+          caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
           certificateOfService: true,
           dateFiledLodged: '01/01/20',
@@ -231,7 +239,7 @@ describe('documentGenerators', () => {
                 name: 'Test IRS Practitioner',
               },
             ],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
             privatePractitioners: [
               {
                 barNumber: 'PT20001',

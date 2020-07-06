@@ -28,7 +28,7 @@ describe('create practitioner user', () => {
 
   beforeEach(() => {
     testUser = {
-      role: 'admissionsclerk',
+      role: ROLES.admissionsClerk,
       userId: 'admissionsclerk',
     };
 

@@ -17,7 +17,7 @@ describe('initializeUploadFormAction', () => {
 
     expect(results.state.form).toEqual({
       documentTitle: '[anything]',
-      documentType: 'MISC - Miscellaneous',
+      documentType: 'Miscellaneous',
       eventCode: 'MISC',
       scenario: 'Type A',
     });

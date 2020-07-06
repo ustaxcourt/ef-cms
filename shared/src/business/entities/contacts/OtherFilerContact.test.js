@@ -1,17 +1,20 @@
+const {
+  COUNTRY_TYPES,
+  UNIQUE_OTHER_FILER_TYPE,
+} = require('../EntityConstants');
 const { getOtherFilerContact } = require('./OtherFilerContact');
-const { UNIQUE_OTHER_FILER_TYPE } = require('../EntityConstants');
 
 describe('OtherFilerContact', () => {
   it('creates a valid other filer contact', () => {
     const entityConstructor = getOtherFilerContact({
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
     });
 
     const contact = new entityConstructor({
       address1: '123 Deming Way',
       city: 'Los Angeles',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
       name: 'Eric',
       otherFilerType: UNIQUE_OTHER_FILER_TYPE,
@@ -25,14 +28,14 @@ describe('OtherFilerContact', () => {
 
   it('creates an invalid other filer contact', () => {
     const entityConstructor = getOtherFilerContact({
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
     });
 
     const contact = new entityConstructor({
       address1: '123 Deming Way',
       city: 'Los Angeles',
       country: 'USA',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
       name: 'Eric',
       phone: '555-555-1212',
