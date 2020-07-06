@@ -22,14 +22,11 @@ export const updateMessageValueSequence = [
         no: [
           set(state.modal.showChambersSelect, false),
           setFormValueAction,
-          ...getUsersInSectionSequence,
+          getUsersInSectionSequence,
         ],
       },
     ],
-    chambers: [
-      set(state.form.section, props.value),
-      ...getUsersInSectionSequence,
-    ],
+    chambers: [set(state.form.section, props.value), getUsersInSectionSequence],
     default: [setFormValueAction],
   },
 ];

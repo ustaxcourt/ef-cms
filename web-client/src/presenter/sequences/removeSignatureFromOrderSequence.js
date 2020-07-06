@@ -11,7 +11,7 @@ import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submit
 export const removeSignatureFromOrderSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   setDocumentToEditAction,
-  ...convertHtml2PdfSequence,
+  convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
     error: [], // TODO: show an alert if this occurs?

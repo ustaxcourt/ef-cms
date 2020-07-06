@@ -63,7 +63,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   loginAs(test, 'docketclerk');
-  it('login as a docket clerk and check pending items count has increased', async () => {
+  it('login as a docket clerk, check pending items count has increased and view pending document', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -81,5 +81,16 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       .length;
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
+
+    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
+      docketRecordTab: 'documentView',
+      viewerDocumentToDisplay: {
+        documentId: formatted.pendingItemsDocketEntries[0].documentId,
+      },
+    });
+
+    expect(
+      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
   });
 });
