@@ -142,9 +142,9 @@ describe('PublicCase', () => {
         documents: [
           {
             documentId: '123',
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
           },
-          { documentId: '234', documentType: 'O - Order' },
+          { documentId: '234', documentType: 'Order' },
           { documentId: '345', documentType: 'Petition' },
           { documentId: '987', eventCode: 'TRAN' },
         ],
@@ -179,7 +179,7 @@ describe('PublicCase', () => {
           createdAt: undefined,
           documentId: '123',
           documentTitle: undefined,
-          documentType: 'OAJ - Order that case is assigned',
+          documentType: 'Order that case is assigned',
           eventCode: undefined,
           filedBy: undefined,
           isPaper: undefined,
@@ -253,7 +253,7 @@ describe('PublicCase', () => {
     it('should return true for a court-issued order document that is not on the docket record', () => {
       const isPrivate = isDraftDocument(
         {
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [],
       );
@@ -264,7 +264,7 @@ describe('PublicCase', () => {
       const isPrivate = isDraftDocument(
         {
           documentId: '123',
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [{ documentId: '123' }],
       );
@@ -307,7 +307,7 @@ describe('PublicCase', () => {
     it('should return true for a court-issued order document that is not on the docket record', () => {
       const isPrivate = isPrivateDocument(
         {
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [],
       );
@@ -318,7 +318,7 @@ describe('PublicCase', () => {
       const isPrivate = isPrivateDocument(
         {
           documentId: '123',
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [{ documentId: '123' }],
       );

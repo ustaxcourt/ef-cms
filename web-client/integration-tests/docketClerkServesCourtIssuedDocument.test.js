@@ -3,8 +3,8 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
-import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -23,6 +23,13 @@ const test = setupTest({
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
+  beforeAll(() => {
+    jest.setTimeout(40000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
+  });
+
   loginAs(test, 'petitioner');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
@@ -46,19 +53,17 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkPrioritizesCase(test);
 
   loginAs(test, 'docketclerk');
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkCancelsAddDocketEntryFromOrder(test, 1);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
+  docketClerkSignsOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
+  docketClerkSignsOrder(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
 });

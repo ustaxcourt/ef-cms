@@ -62,7 +62,7 @@ Valid Case object example:
             "draftState": {
                 "eventCode": "MISC",
                 "generatedDocumentTitle": "A Strong Opinion",
-                "documentType": "TCOP - T.C. Opinion",
+                "documentType": "T.C. Opinion",
                 "scenario": "Type A",
                 "primaryDocumentFileSize": 3586249,
                 "freeText": "A Strong Opinion",
@@ -82,7 +82,7 @@ Valid Case object example:
                 }
             ],
             "attachments": false,
-            "documentType": "TCOP - T.C. Opinion",
+            "documentType": "T.C. Opinion",
             "filingDate": "2020-05-13T14:49:32.100Z",
             "pending": false,
             "isFileAttached": true,
@@ -111,6 +111,7 @@ Valid Case object example:
         {
             "barNumber": "PT1234",
             "email": "flexionustc@gmail.com",
+            "hasEAccess": true,
             "name": "Test Practitioner",
             "role": "practitioner",
             "section": "practitioner",
@@ -123,7 +124,7 @@ Valid Case object example:
                 "countryType": "domestic",
                 "phone": "+1 (555) 555-5555",
                 "postalCode": "61234",
-                "state": "IL"
+                "state": "IL",
             },
             "representingPrimary": true,
             "serviceIndicator": "Paper"
@@ -131,6 +132,7 @@ Valid Case object example:
         {
             "barNumber": "PT1111",
             "email": "practitioner3@example.com",
+            "hasEAccess": true,
             "name": "Test practitioner3",
             "role": "practitioner",
             "section": "practitioner",
@@ -153,6 +155,7 @@ Valid Case object example:
         {
             "barNumber": "RT1234",
             "email": "flexionustc+respondent@gmail.com",
+            "hasEAccess": true,
             "name": "Test Respondent",
             "role": "respondent",
             "section": "respondent",
@@ -182,7 +185,7 @@ Valid Case object example:
         {
             "description": "Notice Notice",
             "documentId": "42e33c93-023c-40b4-9a4d-143bb26986bb",
-            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"NOT - Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
+            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
             "eventCode": "NOT",
             "filingDate": "2020-01-27T21:39:03.125Z",
             "index": 2
@@ -253,6 +256,8 @@ Valid Case object example:
         "countryType": "domestic",
         "name": "Keelie Bruce",
         "phone": "+1 (785) 771-2329",
+        "email": "someone@example.com",
+        "hasEAccess": true,
         "postalCode": "17860",
         "secondaryName": "Logan Fields",
         "serviceIndicator": "None",
@@ -268,6 +273,8 @@ Valid Case object example:
 	        "city": "Placeat sed dolorum",
 	        "countryType": "domestic",
 	        "name": "Keelie Bruce",
+            "email": "someone@example.com",
+            "hasEAccess": true,
 	        "phone": "+1 (785) 771-2329",
 	        "postalCode": "17860",
 	        "secondaryName": "Logan Fields",
@@ -277,29 +284,31 @@ Valid Case object example:
     ],
     "otherFilers": [
         {
-          "address1": "42 Lamb Sauce Blvd",
-          "city": "Nashville",
-          "country": "USA",
-          "countryType": "domestic",
-          "email": "gordon@thelambsauce.com",
-          "name": "Gordon Ramsay",
-          "otherFilerType": "Intervenor",
-          "phone": "1234567890",
-          "postalCode": "05198",
-          "state": "AK"
+            "address1": "42 Lamb Sauce Blvd",
+            "city": "Nashville",
+            "country": "USA",
+            "countryType": "domestic",
+            "name": "Gordon Ramsay",
+            "email": "someone@example.com",
+            "hasEAccess": true,
+            "otherFilerType": "Intervenor",
+            "phone": "1234567890",
+            "postalCode": "05198",
+            "state": "AK"
         },
         {
-          "address1": "1337 12th Ave",
-          "city": "Flavortown",
-          "country": "USA",
-          "countryType": "domestic",
-          "email": "mayor@flavortown.com",
-          "name": "Guy Fieri",
-          "otherFilerType": "Participant",
-          "phone": "1234567890",
-          "postalCode": "05198",
-          "state": "AK"
-        },
+            "address1": "1337 12th Ave",
+            "city": "Flavortown",
+            "country": "USA",
+            "countryType": "domestic",
+            "name": "Guy Fieri",
+            "email": "someone@example.com",
+            "hasEAccess": true,
+            "otherFilerType": "Participant",
+            "phone": "1234567890",
+            "postalCode": "05198",
+            "state": "AK"
+        }
     ]
 }
 ```

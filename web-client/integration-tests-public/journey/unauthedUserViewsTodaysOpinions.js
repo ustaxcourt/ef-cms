@@ -9,7 +9,7 @@ export const unauthedUserViewsTodaysOpinions = test => {
     expect(test.getState('todaysOpinions')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentType: 'TCOP - T.C. Opinion',
+          documentType: 'T.C. Opinion',
           numberOfPages: 1,
         }),
       ]),

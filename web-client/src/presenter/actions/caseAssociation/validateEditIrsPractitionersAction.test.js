@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateEditIrsPractitionersAction } from './validateEditIrsPractitionersAction';
@@ -6,6 +6,9 @@ import { validateEditIrsPractitionersAction } from './validateEditIrsPractitione
 describe('validateEditIrsPractitionersAction', () => {
   let successStub;
   let errorStub;
+  let SERVICE_INDICATOR_TYPES;
+
+  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -15,6 +18,7 @@ describe('validateEditIrsPractitionersAction', () => {
       error: errorStub,
       success: successStub,
     };
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call the success path when no errors are found', async () => {

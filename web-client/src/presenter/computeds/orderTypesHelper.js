@@ -9,7 +9,7 @@ export const orderTypesHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.petitionsClerk) {
     orderTypes = orderTypes.filter(order =>
-      ['O', 'NOT'].includes(order.eventCode),
+      ['O', 'NOT', 'ODJ', 'OSC'].includes(order.eventCode),
     );
   }
 

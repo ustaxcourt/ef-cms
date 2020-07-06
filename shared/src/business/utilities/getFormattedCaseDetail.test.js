@@ -219,7 +219,7 @@ describe('formatCase', () => {
         {
           documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
           documentTitle: 'Order [Judge Name] [Anything]',
-          documentType: 'OAJ - Order that case is assigned',
+          documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           scenario: 'Type B',
         },
@@ -735,7 +735,7 @@ describe('getFormattedCaseDetail', () => {
             archived: false,
             createdAt: getDateISO(),
             documentId: 'd-3-4-5',
-            documentType: 'MISC - Miscellaneous',
+            documentType: 'Miscellaneous',
           },
         ],
       },

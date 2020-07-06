@@ -1,5 +1,5 @@
 const getDocumentEditUrl = ({ applicationContext, caseDetail, document }) => {
-  const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
+  const MISCELLANEOUS_DOCUMENT_TYPE = 'Miscellaneous';
   const STIPULATED_DECISION_DOCUMENT_TYPE = applicationContext.getConstants()
     .SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType;
 

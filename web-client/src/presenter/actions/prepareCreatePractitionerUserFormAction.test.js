@@ -3,6 +3,8 @@ import { prepareCreatePractitionerUserFormAction } from './prepareCreatePractiti
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
+const { COUNTRY_TYPES } = applicationContext.getConstants();
+
 describe('prepareCreatePractitionerUserFormAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -19,7 +21,7 @@ describe('prepareCreatePractitionerUserFormAction', () => {
     expect(result.state.form).toEqual({
       admissionsStatus: 'Active',
       contact: {
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
       },
     });
   });

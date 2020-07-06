@@ -119,7 +119,7 @@ joiValidationDecorator(
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object()).required(),
+    messages: joi.array().items(joi.object().instance(Message)).required(),
     section: joi
       .string()
       .valid(
@@ -129,7 +129,11 @@ joiValidationDecorator(
         IRS_SYSTEM_SECTION,
       )
       .required(),
-    sentBy: joi.string().max(100).required(),
+    sentBy: joi
+      .string()
+      .max(100)
+      .required()
+      .description('The name of the user that sent the WorkItem'),
     sentBySection: joi
       .string()
       .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
