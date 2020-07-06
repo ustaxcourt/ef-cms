@@ -39,19 +39,9 @@ joiValidationDecorator(
   joi.object().keys({
     additionalInfo: joi.string().max(500).optional(),
     additionalInfo2: joi.string().max(500).optional(),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    caseId: JoiValidationConstants.UUID.optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    documentId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    documentId: JoiValidationConstants.UUID.optional(),
     documentTitle: joi.string().max(500).optional(),
     documentType: joi
       .string()

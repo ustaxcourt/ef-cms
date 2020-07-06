@@ -179,20 +179,12 @@ joiValidationDecorator(
       .description(
         'Optional Docket Number text used when generating a fully concatenated document title.',
       ),
-    documentContentsId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .description('The S3 ID containing the text contents of the document.'),
-    documentId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required()
-      .description('ID of the associated PDF document in the S3 bucket.'),
+    documentContentsId: JoiValidationConstants.UUID.optional().description(
+      'The S3 ID containing the text contents of the document.',
+    ),
+    documentId: JoiValidationConstants.UUID.required().description(
+      'ID of the associated PDF document in the S3 bucket.',
+    ),
     documentTitle: joi
       .string()
       .max(500)
@@ -320,13 +312,7 @@ joiValidationDecorator(
       .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
       .optional(),
     qcAt: JoiValidationConstants.ISO_DATE.optional(),
-    qcByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .allow(null),
+    qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
     receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     relationship: joi
       .string()
@@ -401,19 +387,8 @@ joiValidationDecorator(
     signedByUserId: joi
       .when('signedJudgeName', {
         is: joi.exist().not(null),
-        otherwise: joi
-          .string()
-          .uuid({
-            version: ['uuidv4'],
-          })
-          .optional()
-          .allow(null),
-        then: joi
-          .string()
-          .uuid({
-            version: ['uuidv4'],
-          })
-          .required(),
+        otherwise: JoiValidationConstants.UUID.optional().allow(null),
+        then: JoiValidationConstants.UUID.required(),
       })
       .description('The id of the user who applied the signature.'),
     signedJudgeName: joi
@@ -435,12 +410,7 @@ joiValidationDecorator(
       .description(
         'An optional trial location used when generating a fully concatenated document title.',
       ),
-    userId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    userId: JoiValidationConstants.UUID.required(),
     workItems: joi.array().optional(),
   }),
 );

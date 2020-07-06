@@ -25,12 +25,7 @@ joiValidationDecorator(
   PublicDocketRecordEntry,
   joi.object().keys({
     description: joi.string().max(500).optional(),
-    documentId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    documentId: JoiValidationConstants.UUID.optional(),
     filedBy: joi.string().max(500).optional(),
     filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),

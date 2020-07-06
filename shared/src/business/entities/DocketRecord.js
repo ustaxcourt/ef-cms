@@ -58,12 +58,7 @@ joiValidationDecorator(
       .description(
         'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
       ),
-    documentId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .allow(null)
+    documentId: JoiValidationConstants.UUID.allow(null)
       .optional()
       .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi

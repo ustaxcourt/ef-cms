@@ -70,21 +70,10 @@ WorkItem.validationName = 'WorkItem';
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
-    assigneeId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .allow(null)
-      .optional(),
+    assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
     assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().max(100).required(),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    caseId: JoiValidationConstants.UUID.required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi
       .string()
@@ -93,13 +82,7 @@ joiValidationDecorator(
     caseTitle: joi.string().max(500).optional(),
     completedAt: JoiValidationConstants.ISO_DATE.optional(),
     completedBy: joi.string().max(100).optional().allow(null),
-    completedByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .allow(null),
+    completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
     docketNumber: joi
@@ -139,20 +122,10 @@ joiValidationDecorator(
       .string()
       .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
       .optional(),
-    sentByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    sentByUserId: JoiValidationConstants.UUID.optional(),
     trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
     updatedAt: JoiValidationConstants.ISO_DATE.required(),
-    workItemId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    workItemId: JoiValidationConstants.UUID.required(),
   }),
 );
 

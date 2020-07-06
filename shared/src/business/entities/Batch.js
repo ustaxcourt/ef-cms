@@ -49,12 +49,7 @@ Batch.VALIDATION_ERROR_MESSAGES = {
 };
 
 Batch.schema = joi.object().keys({
-  batchId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  batchId: JoiValidationConstants.UUID.required(),
   batchIndex: joi.number().integer().min(0).required(),
   createdAt: JoiValidationConstants.ISO_DATE.required(),
   pages: joi.array().min(1).required(),
