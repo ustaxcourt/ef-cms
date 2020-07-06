@@ -5,11 +5,11 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * PublicDocument
@@ -45,7 +45,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
     documentId: joi
       .string()
       .uuid({
@@ -67,8 +67,8 @@ joiValidationDecorator(
       .string()
       .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
       .optional(),
-    receivedAt: joiStrictTimestamp.optional(),
-    servedAt: joiStrictTimestamp.optional(),
+    receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+    servedAt: JoiValidationConstants.ISO_DATE.optional(),
     servedParties: joi.array().optional(), // TODO: object definition
   }),
   {},

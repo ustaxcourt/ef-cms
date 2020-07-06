@@ -1,10 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * PublicDocketRecordEntry
@@ -32,7 +32,7 @@ joiValidationDecorator(
       })
       .optional(),
     filedBy: joi.string().max(500).optional(),
-    filingDate: joiStrictTimestamp.max('now').optional(), // Required on DocketRecord so probably should be required here.
+    filingDate: JoiValidationConstants.ISO_DATE.max('now').optional(), // Required on DocketRecord so probably should be required here.
     index: joi.number().integer().optional(),
     numberOfPages: joi.number().integer().optional(),
   }),

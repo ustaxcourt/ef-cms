@@ -1,10 +1,12 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
+const { createISODateString } = require('../business/utilities/DateHandler');
+
 /**
  * constructor
  *
@@ -31,7 +33,7 @@ Message.validationName = 'Message';
 joiValidationDecorator(
   Message,
   joi.object().keys({
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
     entityName: joi.string().valid('Message').required(),
     from: joi.string().max(100).required(),
     fromUserId: joi

@@ -1,12 +1,13 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
-const joiStrictTimestamp = getTimestampSchema();
 /**
  *
  * @constructor
@@ -38,7 +39,7 @@ SecondaryDocumentInformationFactory.get = (
   let schemaOptionalItems = {
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    certificateOfServiceDate: joiStrictTimestamp.max('now'),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
     objections: joi.string(),
   };
 

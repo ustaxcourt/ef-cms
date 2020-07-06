@@ -1,14 +1,5 @@
 const joi = require('@hapi/joi');
 const {
-  joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const { Message } = require('./Message');
-const { omit, orderBy } = require('lodash');
-const joiStrictTimestamp = getTimestampSchema();
-const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -18,6 +9,16 @@ const {
   IRS_SYSTEM_SECTION,
   SECTIONS,
 } = require('./EntityConstants');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
+  joiValidationDecorator,
+} = require('../../utilities/JoiValidationDecorator');
+const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
+const { createISODateString } = require('../business/utilities/DateHandler');
+const { Message } = require('./Message');
+const { omit, orderBy } = require('lodash');
 
 /**
  * constructor
@@ -90,7 +91,7 @@ joiValidationDecorator(
       .valid(...Object.values(CASE_STATUS_TYPES))
       .optional(),
     caseTitle: joi.string().max(500).optional(),
-    completedAt: joiStrictTimestamp.optional(),
+    completedAt: JoiValidationConstants.ISO_DATE.optional(),
     completedBy: joi.string().max(100).optional().allow(null),
     completedByUserId: joi
       .string()
@@ -100,7 +101,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -144,8 +145,8 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    trialDate: joiStrictTimestamp.optional().allow(null),
-    updatedAt: joiStrictTimestamp.required(),
+    trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+    updatedAt: JoiValidationConstants.ISO_DATE.required(),
     workItemId: joi
       .string()
       .uuid({

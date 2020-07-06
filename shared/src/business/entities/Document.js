@@ -17,13 +17,14 @@ const {
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
+const { createISODateString } = require('../business/utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
-const joiStrictTimestamp = getTimestampSchema();
 
 Document.validationName = 'Document';
 /**
@@ -150,16 +151,18 @@ joiValidationDecorator(
         'A document that was archived instead of added to the Docket Record.',
       ),
     certificateOfService: joi.boolean().optional(),
-    certificateOfServiceDate: joiStrictTimestamp.when('certificateOfService', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
-    createdAt: joiStrictTimestamp
-      .required()
-      .description('When the Document was added to the system.'),
-    date: joiStrictTimestamp
-      .optional()
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.when(
+      'certificateOfService',
+      {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
+    createdAt: JoiValidationConstants.ISO_DATE.required().description(
+      'When the Document was added to the system.',
+    ),
+    date: JoiValidationConstants.ISO_DATE.optional()
       .allow(null)
       .description(
         'An optional date used when generating a fully concatenated document title.',
@@ -233,8 +236,7 @@ joiValidationDecorator(
       .description(
         'The party who filed the document, either the petitioner or respondent on the case.',
       ),
-    filingDate: joiStrictTimestamp
-      .max('now')
+    filingDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description('Date that this Document was filed.'),
     freeText: joi.string().max(500).optional(),
@@ -317,7 +319,7 @@ joiValidationDecorator(
       .string()
       .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
       .optional(),
-    qcAt: joiStrictTimestamp.optional(),
+    qcAt: JoiValidationConstants.ISO_DATE.optional(),
     qcByUserId: joi
       .string()
       .uuid({
@@ -325,7 +327,7 @@ joiValidationDecorator(
       })
       .optional()
       .allow(null),
-    receivedAt: joiStrictTimestamp.optional(),
+    receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     relationship: joi
       .string()
       .valid(...DOCUMENT_RELATIONSHIPS)
@@ -334,11 +336,9 @@ joiValidationDecorator(
       .string()
       .valid(...SCENARIOS)
       .optional(),
-    secondaryDate: joiStrictTimestamp
-      .optional()
-      .description(
-        'A secondary date associated with the document, typically related to time-restricted availability.',
-      ),
+    secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
+      'A secondary date associated with the document, typically related to time-restricted availability.',
+    ),
     secondaryDocument: joi
       .object()
       .keys({
@@ -368,8 +368,8 @@ joiValidationDecorator(
       .alternatives()
       .conditional('servedParties', {
         is: joi.exist().not(null),
-        otherwise: joiStrictTimestamp.optional(),
-        then: joiStrictTimestamp.required(),
+        otherwise: JoiValidationConstants.ISO_DATE.optional(),
+        then: JoiValidationConstants.ISO_DATE.required(),
       })
       .description('When the document is served on the parties.'),
     servedParties: joi
@@ -381,8 +381,7 @@ joiValidationDecorator(
         then: joi.required(),
       })
       .description('The parties to whom the document has been served.'),
-    serviceDate: joiStrictTimestamp
-      .max('now')
+    serviceDate: JoiValidationConstants.ISO_DATE.max('now')
       .optional()
       .allow(null)
       .description('Certificate of service date.'),

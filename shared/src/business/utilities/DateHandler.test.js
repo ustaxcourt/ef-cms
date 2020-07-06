@@ -1,7 +1,6 @@
 const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
+const { JoiValidationConstants } = require('../../JoiValidationConstants');
 
 describe('DateHandler', () => {
   describe('pattern matcher', () => {
@@ -209,7 +208,9 @@ describe('DateHandler', () => {
 
     it('creates timestamps that strictly adhere to Joi formatting rules', () => {
       const thisDate = DateHandler.createISODateString();
-      expect(joiStrictTimestamp.validate(thisDate).error).toBeUndefined();
+      expect(
+        JoiValidationConstants.ISO_DATE.validate(thisDate).error,
+      ).toBeUndefined();
     });
   });
 

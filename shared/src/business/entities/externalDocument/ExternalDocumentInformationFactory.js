@@ -11,6 +11,9 @@ const {
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
@@ -19,10 +22,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -188,7 +188,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joiStrictTimestamp.max('now'),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
     partyIrsPractitioner: joi.boolean(),

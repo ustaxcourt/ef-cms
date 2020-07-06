@@ -34,6 +34,9 @@ const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
@@ -42,12 +45,10 @@ const { Correspondence } = require('../Correspondence');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, isEmpty } = require('lodash');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { User } = require('../User');
-const joiStrictTimestamp = getTimestampSchema();
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -318,11 +319,14 @@ Case.VALIDATION_RULES = {
     .description(
       'Temporarily blocked from trial due to a pending item or due date.',
     ),
-  automaticBlockedDate: joiStrictTimestamp.when('automaticBlocked', {
-    is: true,
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }),
+  automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
+    'automaticBlocked',
+    {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    },
+  ),
   automaticBlockedReason: joi
     .string()
     .valid(...Object.values(AUTOMATIC_BLOCKED_REASONS))
@@ -337,13 +341,11 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Temporarily blocked from trial.'),
-  blockedDate: joiStrictTimestamp
-    .when('blocked', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .meta({ tags: ['Restricted'] }),
+  blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }).meta({ tags: ['Restricted'] }),
   blockedReason: joi
     .string()
     .max(250)
@@ -379,7 +381,7 @@ Case.VALIDATION_RULES = {
     .string()
     .valid(...CASE_TYPES)
     .required(),
-  closedDate: joiStrictTimestamp.when('status', {
+  closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: CASE_STATUS_TYPES.closed,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
@@ -390,11 +392,9 @@ Case.VALIDATION_RULES = {
     .array()
     .items(joi.object().meta({ entityName: 'Correspondence' }))
     .description('List of Correspondence documents for the case.'),
-  createdAt: joiStrictTimestamp
-    .required()
-    .description(
-      'When the paper or electronic case was added to the system. This value cannot be edited.',
-    ),
+  createdAt: JoiValidationConstants.ISO_DATE.required().description(
+    'When the paper or electronic case was added to the system. This value cannot be edited.',
+  ),
   damages: joi
     .number()
     .optional()
@@ -465,8 +465,7 @@ Case.VALIDATION_RULES = {
     .allow(null)
     .optional()
     .description('Case docket number suffix before modification.'),
-  irsNoticeDate: joiStrictTimestamp
-    .max('now')
+  irsNoticeDate: JoiValidationConstants.ISO_DATE.max('now')
     .optional()
     .allow(null)
     .description('Last date that the petitioner is allowed to file before.'),
@@ -505,9 +504,9 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the notice of attachments.'),
-  noticeOfTrialDate: joiStrictTimestamp
-    .optional()
-    .description('Reminder for clerks to review the notice of trial date.'),
+  noticeOfTrialDate: JoiValidationConstants.ISO_DATE.optional().description(
+    'Reminder for clerks to review the notice of trial date.',
+  ),
   orderDesignatingPlaceOfTrial: joi
     .boolean()
     .optional()
@@ -568,13 +567,14 @@ Case.VALIDATION_RULES = {
     .valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
-  petitionPaymentDate: joiStrictTimestamp
-    .when('petitionPaymentStatus', {
+  petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
+    'petitionPaymentStatus',
+    {
       is: PAYMENT_STATUS.PAID,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    })
-    .description('When the petitioner paid the case fee.'),
+    },
+  ).description('When the petitioner paid the case fee.'),
   petitionPaymentMethod: joi
     .string()
     .max(50)
@@ -589,13 +589,14 @@ Case.VALIDATION_RULES = {
     .valid(...Object.values(PAYMENT_STATUS))
     .required()
     .description('Status of the case fee payment.'),
-  petitionPaymentWaivedDate: joiStrictTimestamp
-    .when('petitionPaymentStatus', {
+  petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
+    'petitionPaymentStatus',
+    {
       is: PAYMENT_STATUS.WAIVED,
       otherwise: joi.allow(null).optional(),
       then: joi.required(),
-    })
-    .description('When the case fee was waived.'),
+    },
+  ).description('When the case fee was waived.'),
   preferredTrialCity: joi
     .alternatives()
     .try(
@@ -620,13 +621,10 @@ Case.VALIDATION_RULES = {
     .description(
       'QC Checklist object that must be completed before the case can go to trial.',
     ),
-  receivedAt: joiStrictTimestamp
-    .required()
-    .description(
-      'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
-    ),
-  sealedDate: joiStrictTimestamp
-    .optional()
+  receivedAt: JoiValidationConstants.ISO_DATE.required().description(
+    'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+  ),
+  sealedDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
     .description('When the case was sealed from the public.'),
   sortableDocketNumber: joi
@@ -654,8 +652,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: joiStrictTimestamp
-    .optional()
+  trialDate: JoiValidationConstants.ISO_DATE.optional()
     .allow(null)
     .description('When this case goes to trial.'),
   trialLocation: joi
