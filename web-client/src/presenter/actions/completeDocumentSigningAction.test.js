@@ -7,7 +7,7 @@ describe('completeDocumentSigningAction', () => {
   const {
     generateSignedDocumentInteractor,
     getInboxMessagesForUserInteractor,
-    signDocumentInteractor,
+    saveSignedDocumentInteractor,
   } = applicationContext.getUseCases();
   const {
     uploadDocumentFromClient,
@@ -86,7 +86,7 @@ describe('completeDocumentSigningAction', () => {
 
     expect(uploadDocumentFromClient.mock.calls.length).toBe(1);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(1);
-    expect(signDocumentInteractor.mock.calls.length).toBe(1);
+    expect(saveSignedDocumentInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -130,7 +130,7 @@ describe('completeDocumentSigningAction', () => {
 
     expect(uploadDocumentFromClient.mock.calls.length).toBe(0);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(0);
-    expect(signDocumentInteractor.mock.calls.length).toBe(0);
+    expect(saveSignedDocumentInteractor.mock.calls.length).toBe(0);
     expect(result.output).toMatchObject({
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',

@@ -38,7 +38,7 @@ export const MessageDocument = connect(
           <div className="padding-2">There are no attachments to preview</div>
         )}
 
-        {!process.env.CI && viewerDocumentToDisplay && (
+        {viewerDocumentToDisplay && (
           <>
             <div className="message-document-actions">
               {messageDocumentHelper.showEditButtonNotSigned && (
@@ -116,10 +116,12 @@ export const MessageDocument = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe
-              src={iframeSrc}
-              title={viewerDocumentToDisplay.documentTitle}
-            />
+            {!process.env.CI && (
+              <iframe
+                src={iframeSrc}
+                title={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
           </>
         )}
       </div>
