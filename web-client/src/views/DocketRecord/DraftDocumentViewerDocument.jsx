@@ -6,6 +6,8 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewerDocument = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
     draftDocumentViewerHelper: state.draftDocumentViewerHelper,
     iframeSrc: state.iframeSrc,
@@ -17,6 +19,7 @@ export const DraftDocumentViewerDocument = connect(
     viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
   function DraftDocumentViewerDocument({
+    archiveDraftDocumentModalSequence,
     caseDetail,
     draftDocumentViewerHelper,
     iframeSrc,
@@ -37,8 +40,7 @@ export const DraftDocumentViewerDocument = connect(
             There is no document selected for preview
           </div>
         )}
-
-        {!process.env.CI && viewerDraftDocumentToDisplay && (
+        {viewerDraftDocumentToDisplay && (
           <>
             <h3>{draftDocumentViewerHelper.documentTitle}</h3>
 
@@ -61,6 +63,7 @@ export const DraftDocumentViewerDocument = connect(
                 <Button
                   link
                   icon="edit"
+                  id="edit-order-button"
                   onClick={() =>
                     openConfirmEditModalSequence({
                       docketNumber: caseDetail.docketNumber,
@@ -71,6 +74,21 @@ export const DraftDocumentViewerDocument = connect(
                   Edit
                 </Button>
               )}
+
+              <Button
+                link
+                icon="trash"
+                onClick={() =>
+                  archiveDraftDocumentModalSequence({
+                    caseId: caseDetail.caseId,
+                    documentId: viewerDraftDocumentToDisplay.documentId,
+                    documentTitle: viewerDraftDocumentToDisplay.documentTitle,
+                    redirectToCaseDetail: true,
+                  })
+                }
+              >
+                Delete
+              </Button>
 
               {draftDocumentViewerHelper.showApplySignatureButton && (
                 <Button
@@ -120,10 +138,12 @@ export const DraftDocumentViewerDocument = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe
-              src={iframeSrc}
-              title={draftDocumentViewerHelper.documentTitle}
-            />
+            {!process.env.CI && (
+              <iframe
+                src={iframeSrc}
+                title={draftDocumentViewerHelper.documentTitle}
+              />
+            )}
           </>
         )}
       </div>
