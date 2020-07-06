@@ -63,7 +63,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   loginAs(test, 'docketclerk');
-  it('login as a docket clerk, check pending items count has increased and view penidng document', async () => {
+  it('login as a docket clerk, check pending items count has increased and view pending document', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
