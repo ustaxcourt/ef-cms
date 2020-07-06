@@ -27,11 +27,25 @@ describe('Petitions clerk views case detail', function () {
       cy.get('button#tab-drafts').click();
 
       cy.get('.attachment-viewer-button').should('contain', 'First draft');
-      cy.get('.attachment-viewer-button').click();
+      cy.get('.attachment-viewer-button').first().click();
 
       cy.get('.document-viewer--documents h3').should('contain', 'First draft');
 
       cy.get('.message-document-actions').children().should('have.length', 5);
+    });
+
+    it('should navigate back to draft documents on clicking "Back to Draft Documents" when editing signature', () => {
+      cy.visit('/case-detail/103-20');
+
+      cy.get('button#tab-drafts').click();
+
+      cy.get('.attachment-viewer-button').first().click();
+      cy.get('a:contains("Apply Signature")').click();
+
+      cy.get('h1').should('contain', 'Apply Signature');
+      cy.get('button:contains("Back to Draft Document")').click();
+
+      cy.get('.document-viewer--documents h3').should('contain', 'First draft');
     });
   });
 });
