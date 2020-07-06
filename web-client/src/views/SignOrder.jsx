@@ -8,6 +8,8 @@ import React, { useEffect, useRef } from 'react';
 
 export const SignOrder = connect(
   {
+    changeTabAndSetViewerDraftDocumentToDisplaySequence:
+      sequences.changeTabAndSetViewerDraftDocumentToDisplaySequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
@@ -21,8 +23,8 @@ export const SignOrder = connect(
     skipSigningOrderSequence: sequences.skipSigningOrderSequence,
   },
   function SignOrder({
+    changeTabAndSetViewerDraftDocumentToDisplaySequence,
     currentPageNumber,
-    docketNumber,
     documentId,
     pdfForSigning,
     pdfObj,
@@ -153,7 +155,12 @@ export const SignOrder = connect(
             <div className="grid-col-4">
               <Button
                 link
-                href={`/case-detail/${docketNumber}/documents/${documentId}`}
+                onClick={() => {
+                  changeTabAndSetViewerDraftDocumentToDisplaySequence({
+                    primaryTab: 'draftDocuments',
+                    viewerDraftDocumentToDisplay: { documentId: documentId },
+                  });
+                }}
               >
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
                 Back to Draft Document
