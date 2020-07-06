@@ -229,7 +229,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
-    "eventCode": "ODS",
+    "eventCode": "DISC",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],

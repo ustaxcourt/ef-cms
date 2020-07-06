@@ -1,4 +1,5 @@
 const {
+  EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
@@ -510,8 +511,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
@@ -541,9 +542,9 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
+          documentType: 'Order',
           draftState: null,
-          eventCode: 'TRAN',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -561,8 +562,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -579,8 +580,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
@@ -595,8 +596,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
