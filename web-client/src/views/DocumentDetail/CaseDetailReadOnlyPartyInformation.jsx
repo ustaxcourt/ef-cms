@@ -39,7 +39,7 @@ export const CaseDetailReadOnlyPartyInformation = connect(
           {contact.email && (
             <p>
               {contact.email}{' '}
-              {contact.hasEAccess && (
+              {contact.showEAccessFlag && (
                 <FontAwesomeIcon
                   className="margin-left-05 fa-icon-blue"
                   icon="flag"

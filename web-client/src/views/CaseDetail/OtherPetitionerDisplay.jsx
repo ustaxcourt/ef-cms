@@ -39,7 +39,7 @@ const OtherPetitionerDisplay = connect(
           {petitioner.email && (
             <span className="address-line">
               {petitioner.email}
-              {petitioner.hasEAccess && (
+              {petitioner.showEAccessFlag && (
                 <FontAwesomeIcon
                   className="margin-left-05 fa-icon-blue"
                   icon="flag"
