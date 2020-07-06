@@ -510,6 +510,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [],
@@ -527,6 +528,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
@@ -673,6 +675,7 @@
   },
   {
     "documentType": "Answer",
+    "eventCode": "A",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [

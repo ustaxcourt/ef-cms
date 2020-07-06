@@ -206,8 +206,7 @@ joiValidationDecorator(
     eventCode: joi
       .string()
       .valid(...ALL_EVENT_CODES)
-      .allow(null)
-      .optional(),
+      .required(),
     filedBy: joi
       .string()
       .max(500)

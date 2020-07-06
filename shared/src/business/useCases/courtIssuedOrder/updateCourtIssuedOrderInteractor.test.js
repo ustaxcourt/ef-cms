@@ -47,6 +47,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
@@ -54,6 +55,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
@@ -61,6 +63,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: mockUserId,
       },
@@ -107,6 +110,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -122,6 +126,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Order to Show Cause',
+          eventCode: 'OSC',
         },
       }),
     ).rejects.toThrow('Document not found');
@@ -135,6 +140,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseId: caseRecord.caseId,
         documentType: 'Order to Show Cause',
         draftState: {},
+        eventCode: 'OSC',
       },
     });
 
@@ -159,6 +165,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
           documentContents: 'the contents!',
           richText: '<b>the contents!</b>',
         },
+        eventCode: 'OSC',
         richText: '<b>the contents!</b>',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -188,6 +195,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseId: caseRecord.caseId,
         documentType: 'Order to Show Cause',
         draftState: {},
+        eventCode: 'OSC',
         judge: 'Judge Judgy',
       },
     });

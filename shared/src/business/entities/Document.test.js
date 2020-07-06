@@ -13,6 +13,7 @@ const { WorkItem } = require('./WorkItem');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
+  eventCode: 'A',
   filedBy: 'Test Petitioner',
   role: ROLES.petitioner,
   userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
