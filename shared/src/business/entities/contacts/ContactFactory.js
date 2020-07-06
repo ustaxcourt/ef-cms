@@ -388,8 +388,9 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
 ContactFactory.createContactFactory = ({
   additionalErrorMappings,
   additionalValidation,
+  contactName,
 }) => {
-  return ({ countryType, isPaper }) => {
+  const ContactFactoryConstructor = ({ countryType, isPaper }) => {
     /**
      * creates a contact entity
      *
@@ -417,6 +418,8 @@ ContactFactory.createContactFactory = ({
       this.hasEAccess = rawContact.hasEAccess || undefined;
     }
 
+    GenericContactConstructor.contactName = () => contactName;
+
     GenericContactConstructor.errorToMessageMap = {
       ...ContactFactory.getErrorToMessageMap({ countryType }),
       ...additionalErrorMappings,
@@ -433,6 +436,10 @@ ContactFactory.createContactFactory = ({
 
     return GenericContactConstructor;
   };
+
+  ContactFactoryConstructor.contactName = contactName;
+
+  return ContactFactoryConstructor;
 };
 
 exports.ContactFactory = ContactFactory;
