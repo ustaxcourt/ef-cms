@@ -1,13 +1,14 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
 const { MAX_FILE_SIZE_BYTES } = require('../EntityConstants');
 
-const joiStrictTimestamp = getTimestampSchema();
 /**
  *
  * @constructor
@@ -41,7 +42,7 @@ SupportingDocumentInformationFactory.get = (
   };
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joiStrictTimestamp.max('now'),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
     supportingDocumentFile: joi.object(),
     supportingDocumentFileSize: joi
       .number()

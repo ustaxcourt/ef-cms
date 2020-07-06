@@ -2,10 +2,8 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
-
+const { createISODateString } = require('../business/utilities/DateHandler');
+const { JoiValidationConstants } = require('../../JoiValidationConstants');
 /**
  * constructor
  *
@@ -58,7 +56,7 @@ Batch.schema = joi.object().keys({
     })
     .required(),
   batchIndex: joi.number().integer().min(0).required(),
-  createdAt: joiStrictTimestamp.required(),
+  createdAt: JoiValidationConstants.ISO_DATE.required(),
   pages: joi.array().min(1).required(),
 });
 

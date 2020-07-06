@@ -6,11 +6,8 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
 const { SESSION_TERMS, SESSION_TYPES } = require('../EntityConstants');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 TrialSession.validationName = 'TrialSession';
 
@@ -102,20 +99,20 @@ TrialSession.validationRules = {
     city: joi.string().allow('').optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().allow('').optional(),
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
     entityName: joi.string().valid('TrialSession').required(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
     judge: joi.object().optional(),
     maxCases: joi.number().greater(0).integer().required(),
     notes: joi.string().max(400).optional(),
-    noticeIssuedDate: joiStrictTimestamp.optional(),
+    noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
       .valid(...SESSION_TYPES)
       .required(),
-    startDate: joiStrictTimestamp.required(),
+    startDate: JoiValidationConstants.ISO_DATE.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().allow('').optional(),
     swingSession: joi.boolean().optional(),
@@ -149,11 +146,14 @@ joiValidationDecorator(
         }),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
-        removedFromTrialDate: joiStrictTimestamp.when('removedFromTrial', {
-          is: true,
-          otherwise: joi.optional().allow(null),
-          then: joi.required(),
-        }),
+        removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+          'removedFromTrial',
+          {
+            is: true,
+            otherwise: joi.optional().allow(null),
+            then: joi.required(),
+          },
+        ),
       }),
     ),
     isCalendared: joi.boolean().required(),

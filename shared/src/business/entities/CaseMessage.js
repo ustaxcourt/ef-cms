@@ -1,11 +1,5 @@
 const joi = require('@hapi/joi');
 const {
-  joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
-const {
   CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
   DOCKET_NUMBER_MATCHER,
@@ -14,7 +8,10 @@ const {
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
-
+const {
+  joiValidationDecorator,
+} = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../business/utilities/DateHandler');
 /**
  * constructor
  *
@@ -92,13 +89,11 @@ CaseMessage.VALIDATION_RULES = {
     .string()
     .required()
     .description('The case title for the associated cases.'),
-  completedAt: joiStrictTimestamp
-    .when('isCompleted', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .description('When the message was marked as completed.'),
+  completedAt: JoiValidationConstants.ISO_DATE.when('isCompleted', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }).description('When the message was marked as completed.'),
   completedBy: joi
     .string()
     .max(500)
@@ -134,9 +129,9 @@ CaseMessage.VALIDATION_RULES = {
     .allow(null)
     .optional()
     .description('The message entered when completing the message thread.'),
-  createdAt: joiStrictTimestamp
-    .required()
-    .description('When the message was created.'),
+  createdAt: JoiValidationConstants.ISO_DATE.required().description(
+    'When the message was created.',
+  ),
   docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
   docketNumberWithSuffix: joi
     .string()

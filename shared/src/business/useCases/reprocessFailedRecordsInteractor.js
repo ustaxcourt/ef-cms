@@ -1,4 +1,4 @@
-const { createISODateString } = require('../utilities/DateHandler');
+const { createISODateString } = require('../business/utilities/DateHandler');
 
 const checkSearchClientMappings = async ({ applicationContext, index }) => {
   /**

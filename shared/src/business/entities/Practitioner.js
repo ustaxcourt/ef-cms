@@ -13,8 +13,7 @@ const {
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
+const { JoiValidationConstants } = require('../../JoiValidationConstants');
 
 /**
  * constructor
@@ -88,8 +87,7 @@ const practitionerValidation = {
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
-  admissionsDate: joiStrictTimestamp
-    .max('now')
+  admissionsDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description(
       'The date the practitioner was admitted to the Tax Court bar.',
