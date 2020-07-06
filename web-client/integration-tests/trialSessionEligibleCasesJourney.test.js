@@ -1,4 +1,5 @@
 import { CHIEF_JUDGE } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -9,6 +10,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
+const { STATUS_TYPES } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
@@ -175,7 +177,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail').highPriority).toBeFalsy();
 
       await test.runSequence('updateModalValueSequence', {
@@ -213,7 +217,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail').highPriority).toBeTruthy();
 
       await test.runSequence('unprioritizeCaseSequence');
@@ -278,7 +284,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
       expect(test.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
@@ -291,7 +299,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
       expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
@@ -300,19 +310,25 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[2],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       //Case #4 - assigned
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[3],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       //Case #5 - assigned
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[4],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
@@ -336,7 +352,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,
@@ -351,7 +369,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000);
@@ -368,7 +388,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,

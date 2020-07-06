@@ -18,7 +18,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throw unauthorized error on invalid role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'petitioner',
     });
 
@@ -64,7 +64,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       docketNumber: '101-18',
       documentId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       documentTitle: 'Transcript of [anything] on [date]',
-      documentType: 'TRAN - Transcript',
+      documentType: 'Transcript',
       eventCode: 'TRAN',
       processingStatus: 'pending',
       secondaryDate: '2200-01-21T20:49:28.192Z',

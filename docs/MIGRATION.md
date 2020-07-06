@@ -62,7 +62,7 @@ Valid Case object example:
             "draftState": {
                 "eventCode": "MISC",
                 "generatedDocumentTitle": "A Strong Opinion",
-                "documentType": "TCOP - T.C. Opinion",
+                "documentType": "T.C. Opinion",
                 "scenario": "Type A",
                 "primaryDocumentFileSize": 3586249,
                 "freeText": "A Strong Opinion",
@@ -82,7 +82,7 @@ Valid Case object example:
                 }
             ],
             "attachments": false,
-            "documentType": "TCOP - T.C. Opinion",
+            "documentType": "T.C. Opinion",
             "filingDate": "2020-05-13T14:49:32.100Z",
             "pending": false,
             "isFileAttached": true,
@@ -182,7 +182,7 @@ Valid Case object example:
         {
             "description": "Notice Notice",
             "documentId": "42e33c93-023c-40b4-9a4d-143bb26986bb",
-            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"NOT - Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
+            "editState": "{\"eventCode\":\"NOT\",\"documentType\":\"Notice\",\"documentTitle\":\"Notice [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Notice\",\"generatedDocumentTitle\":\"Notice Notice\",\"caseId\":\"99d67c60-dcbf-4ac3-b26f-c1edd518b4f6\",\"documentId\":\"42e33c93-023c-40b4-9a4d-143bb26986bb\"}",
             "eventCode": "NOT",
             "filingDate": "2020-01-27T21:39:03.125Z",
             "index": 2

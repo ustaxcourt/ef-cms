@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -35,7 +36,18 @@ export const CaseDetailReadOnlyPartyInformation = connect(
             </span>
           </p>
           {contact.phone && <p>{contact.phone}</p>}
-          {contact.email && <p>{contact.email}</p>}
+          {contact.email && (
+            <p>
+              {contact.email}{' '}
+              {contact.hasEAccess && (
+                <FontAwesomeIcon
+                  className="margin-left-05 fa-icon-blue"
+                  icon="flag"
+                  size="1x"
+                />
+              )}
+            </p>
+          )}
         </React.Fragment>
       );
     };

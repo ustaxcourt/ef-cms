@@ -1,254 +1,254 @@
 [
   {
     "eventCode": "O",
-    "documentType": "O - Order",
-    "documentTitle": "[Anything]",
+    "documentType": "Order",
+    "documentTitle": "Order [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "OAJ",
-    "documentType": "OAJ - Order that case is assigned",
+    "documentType": "Order that case is assigned",
     "documentTitle": "Order [Judge name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "OAL",
-    "documentType": "OAL - Order that the letter \"L\" is added to Docket number",
+    "documentType": "Order that the letter \"L\" is added to Docket number",
     "documentTitle": "Order that the letter \"L\" is added to Docket number [Anything]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OAP",
-    "documentType": "OAP - Order for Amended Petition",
+    "documentType": "Order for Amended Petition",
     "documentTitle": "Order for Amended Petition on [Date] [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OAPF",
-    "documentType": "OAPF - Order for Amended Petition and Filing Fee",
+    "documentType": "Order for Amended Petition and Filing Fee",
     "documentTitle": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OAR",
-    "documentType": "OAR - Order that the letter \"R\" is added to the Docket number",
+    "documentType": "Order that the letter \"R\" is added to the Docket number",
     "documentTitle": "Order that the letter \"R\" is added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OAS",
-    "documentType": "OAS - Order that the letter \"S\" is added to the Docket number",
+    "documentType": "Order that the letter \"S\" is added to the Docket number",
     "documentTitle": "Order that the letter \"S\" is added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OASL",
-    "documentType": "OASL - Order that the letters \"SL\" are added to the Docket number",
+    "documentType": "Order that the letters \"SL\" are added to the Docket number",
     "documentTitle": "Order that the letters \"SL\" are added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OAW",
-    "documentType": "OAW - Order that the letter \"W\" is added to the Docket number",
+    "documentType": "Order that the letter \"W\" is added to the Docket number",
     "documentTitle": "Order that the letter \"W\" is added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OAX",
-    "documentType": "OAX - Order that the letter \"X\" is added to the Docket number",
+    "documentType": "Order that the letter \"X\" is added to the Docket number",
     "documentTitle": "Order that the letter \"X\" is added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OCA",
-    "documentType": "OCA - Order that caption of case is amended",
+    "documentType": "Order that caption of case is amended",
     "documentTitle": "Order that caption of case is amended [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "OD",
-    "documentType": "OD - Order of Dismissal Entered",
+    "documentType": "Order of Dismissal Entered",
     "documentTitle": "Order of Dismissal Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODD",
-    "documentType": "ODD - Order of Dismissal and Decision Entered",
+    "documentType": "Order of Dismissal and Decision Entered",
     "documentTitle": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODL",
-    "documentType": "ODL - Order that the letter \"L\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"L\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"L\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODP",
-    "documentType": "ODP - Order that the letter \"P\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"P\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"P\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODR",
-    "documentType": "ODR - Order that the letter \"R\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"R\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"R\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODS",
-    "documentType": "ODS - Order that the letter \"S\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"S\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"S\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODSL",
-    "documentType": "ODSL - Order that the letters \"SL\" are deleted from the Docket number",
+    "documentType": "Order that the letters \"SL\" are deleted from the Docket number",
     "documentTitle": "Order that the letters \"SL\" are deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODW",
-    "documentType": "ODW - Order that the letter \"W\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"W\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"W\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "ODX",
-    "documentType": "ODX - Order that the letter \"X\" is deleted from the Docket number",
+    "documentType": "Order that the letter \"X\" is deleted from the Docket number",
     "documentTitle": "Order that the letter \"X\" is deleted from the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OF",
-    "documentType": "OF - Order for Filing Fee",
+    "documentType": "Order for Filing Fee",
     "documentTitle": "Order for Filing Fee on [Date] [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OFAB",
-    "documentType": "OFAB - Order fixing amount of bond",
+    "documentType": "Order fixing amount of bond",
     "documentTitle": "Order fixing amount of bond at [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "OFFX",
-    "documentType": "OFFX - Order time is extended for petr(s) to pay the filing fee",
+    "documentType": "Order time is extended for petr(s) to pay the filing fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to pay the filing fee",
     "scenario": "Type E"
   },
   {
     "eventCode": "OFWD",
-    "documentType": "OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.",
+    "documentType": "Order for Filing Fee. Application waiver of Filing Fee is denied",
     "documentTitle": "Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.",
     "scenario": "Type E"
   },
   {
     "eventCode": "OFX",
-    "documentType": "OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
+    "documentType": "Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
     "scenario": "Type E"
   },
   {
     "eventCode": "OIP",
-    "documentType": "OIP - Order that the letter \"P\" is added to the Docket number",
+    "documentType": "Order that the letter \"P\" is added to the Docket number",
     "documentTitle": "Order that the letter \"P\" is added to the Docket number [Docket number]",
     "scenario": "Type C"
   },
   {
     "eventCode": "OJR",
-    "documentType": "OJR - Order that jurisdiction is retained",
+    "documentType": "Order that jurisdiction is retained",
     "documentTitle": "Order that jurisdiction is retained by [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "OODS",
-    "documentType": "OODS - Order for Ownership Disclosure Statement",
+    "documentType": "Order for Ownership Disclosure Statement",
     "documentTitle": "Order for Ownership Disclosure Statement by [Date]",
     "scenario": "Type E"
   },
   {
     "eventCode": "OPFX",
-    "documentType": "OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
+    "documentType": "Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
     "documentTitle": "Order time is extended to [Date] for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
     "scenario": "Type E"
   },
   {
     "eventCode": "OPX",
-    "documentType": "OPX - Order time is extended for petr(s) to file Amended Petition",
+    "documentType": "Order time is extended for petr(s) to file Amended Petition",
     "documentTitle": "Order time is extended to [Date] for petr(s) to file Amended Petition",
     "scenario": "Type E"
   },
   {
     "eventCode": "ORAP",
-    "documentType": "ORAP - Order for Amendment to Petition",
+    "documentType": "Order for Amendment to Petition",
     "documentTitle": "Order for Amendment to Petition by [Date] [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OROP",
-    "documentType": "OROP - Order for Ratification of Petition",
+    "documentType": "Order for Ratification of Petition",
     "documentTitle": "Order for Ratification of Petition by [Date] [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OSC",
-    "documentType": "OSC - Order",
+    "documentType": "Order to Show Cause",
     "documentTitle": "Order [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "OSCP",
-    "documentType": "OSCP - Order petr(s) to show cause why \"S\" should not be removed",
-    "documentTitle": "OSCP - Order petr(s) by [Date] to show cause why \"S\" should not be removed [Anything]",
+    "documentType": "Order petr(s) to show cause why \"S\" should not be removed",
+    "documentTitle": "Order petr(s) by [Date] to show cause why \"S\" should not be removed [Anything]",
     "scenario": "Type D"
   },
   {
     "eventCode": "OST",
-    "documentType": "OST - Order of Service of Transcript (Bench Opinion)",
+    "documentType": "Order of Service of Transcript (Bench Opinion)",
     "documentTitle": "Order of Service of Transcript (Bench Opinion) [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "OSUB",
-    "documentType": "OSUB - Order that case is submitted",
+    "documentType": "Order that case is submitted",
     "documentTitle": "Order that case is submitted to [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "DEC",
-    "documentType": "DEC - Decision Entered",
+    "documentType": "Decision Entered",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "OAD",
-    "documentType": "OAD - Order and Decision Entered",
+    "documentType": "Order and Decision Entered",
     "documentTitle": "Order and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODJ",
-    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered",
+    "documentType": "Order of Dismissal for Lack of Jurisdiction Entered",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "SDEC",
-    "documentType": "SDEC - Stipulated Decision Entered",
+    "documentType": "Stipulated Decision Entered",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "MOP",
-    "documentType": "MOP - Memorandum Opinion",
+    "documentType": "Memorandum Opinion",
     "documentTitle": "Memorandum Opinion [judge]",
     "scenario": "Type B"
   },
   {
     "eventCode": "NOT",
-    "documentType": "NOT - Notice",
-    "documentTitle": "[Anything]",
+    "documentType": "Notice",
+    "documentTitle": "Notice [Anything]",
     "scenario": "Type A"
   },
   {
@@ -265,132 +265,98 @@
   },
   {
     "eventCode": "CTRA",
-    "documentType": "CTRA - Corrected Transcript",
+    "documentType": "Corrected Transcript",
     "documentTitle": "Corrected Transcipt of [Date]",
     "scenario": "Type E"
   },
   {
     "eventCode": "FTRL",
-    "documentType": "FTRL - Further Trial before ...",
+    "documentType": "Further Trial before",
     "documentTitle": "Further Trial before [Judge] at [Place]",
     "scenario": "Type F"
   },
   {
     "eventCode": "HEAR",
-    "documentType": "HEAR - Hearing before ...",
+    "documentType": "Hearing before",
     "documentTitle": "Hearing before [Judge] at [Place]",
     "scenario": "Type F"
   },
   {
-    "eventCode": "NTD",
-    "documentType": "NTD - Notice of Trial",
+    "eventCode": "NDT",
+    "documentType": "Notice of Trial",
     "documentTitle": "Notice of Trial on [Date] at [Place]",
     "scenario": "Type G"
   },
   {
     "eventCode": "PTRL",
-    "documentType": "PTRL - Partial Trial before ...",
+    "documentType": "Partial Trial before",
     "documentTitle": "Partial Trial before [Judge] at [Place]",
     "scenario": "Type F"
   },
   {
     "eventCode": "TRL",
-    "documentType": "TRL - Trial before ...",
+    "documentType": "Trial before",
     "documentTitle": "Trial before [Judge] at [Place]",
     "scenario": "Type F"
   },
   {
     "eventCode": "ROA",
-    "documentType": "ROA - Record on Appeal",
+    "documentType": "Record on Appeal",
     "documentTitle": "Record on Appeal [Anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "TCOP",
-    "documentType": "TCOP - T.C. Opinion",
+    "documentType": "T.C. Opinion",
     "documentTitle": "T.C. Opinion [judge] [anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "RTRA",
-    "documentType": "RTRA - Revised Transcript",
+    "documentType": "Revised Transcript",
     "documentTitle": "Revised Transcript of [anything]",
     "scenario": "Type A"
   },
   {
     "eventCode": "TRAN",
-    "documentType": "TRAN - Transcript",
+    "documentType": "Transcript",
     "documentTitle": "Transcript of [anything] on [date]",
     "scenario": "Type H"
   },
   {
-    "eventCode": "SPTO",
-    "documentType": "SPTO - Standing Pre-Trial Order",
-    "documentTitle": "Standing Pre-Trial Order",
-    "scenario": "HOLD hold (dependent on if we get to automated logic)"
-  },
-  {
     "eventCode": "MISC",
-    "documentType": "MISC - Miscellaneous",
+    "documentType": "Miscellaneous",
     "documentTitle": "[anything]",
     "scenario": "Type A"
   },
   {
-    "documentTitle": "Bounced Electronic Service",
-    "documentType": "Bounced Electronic Service",
-    "category": "Miscellaneous",
-    "eventCode": "ES",
-    "scenario": "Standard",
-    "labelPreviousDocument": "",
-    "labelFreeText": "",
-    "labelFreeText2": "",
-    "ordinalField": ""
-  },
-  {
-    "documentTitle": "Hearing Exhibits for [Anything]",
-    "documentType": "Hearing Exhibits",
-    "category": "Miscellaneous",
     "eventCode": "HE",
-    "scenario": "Nonstandard B",
-    "labelPreviousDocument": "",
-    "labelFreeText": "Description",
-    "labelFreeText2": "",
-    "ordinalField": ""
+    "documentType": "Hearing Exhibits",
+    "documentTitle": "Hearing Exhibits for [anything]",
+    "scenario": "Type A"
   },
-
   {
-    "documentTitle": "Returned Mail",
-    "documentType": "Returned Mail",
-    "category": "Miscellaneous",
-    "eventCode": "RM",
-    "scenario": "Standard",
-    "labelPreviousDocument": "",
-    "labelFreeText": "",
-    "labelFreeText2": "",
-    "ordinalField": ""
-  },
-
-  {
-    "documentTitle": "Trial Exhibits for [Anything]",
-    "documentType": "Trial Exhibits",
-    "category": "Miscellaneous",
     "eventCode": "TE",
-    "scenario": "Nonstandard B",
-    "labelPreviousDocument": "",
-    "labelFreeText": "Description",
-    "labelFreeText2": "",
-    "ordinalField": ""
+    "documentType": "Trial Exhibits",
+    "documentTitle": "Trial Exhibits for [anything]",
+    "scenario": "Type A"
   },
-
   {
-    "documentTitle": "U.S.C.A. [Anything]",
-    "documentType": "U.S.C.A. [Anything]",
-    "category": "Miscellaneous",
     "eventCode": "USCA",
-    "scenario": "Nonstandard B",
-    "labelPreviousDocument": "",
-    "labelFreeText": "Description",
-    "labelFreeText2": "",
-    "ordinalField": ""
+    "documentType": "U.S.C.A",
+    "documentTitle": "U.S.C.A [anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "ES",
+    "documentType": "Bounced Electronic Service",
+    "documentTitle": "Bounced Electronic Service [anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "RM",
+    "documentType": "Returned Mail",
+    "documentTitle": "Returned Mail [anything]",
+    "scenario": "Type A"
   }
 ]

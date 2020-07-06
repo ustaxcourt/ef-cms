@@ -3,9 +3,13 @@ const {
   getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('./fileCourtIssuedOrderInteractor');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -59,7 +63,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
@@ -232,7 +236,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         caseId: caseRecord.caseId,
         docketNumber: '45678-18',
         documentTitle: 'TC Opinion',
-        documentType: 'TCOP - T.C. Opinion',
+        documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
         judge: 'Dredd',
       },
@@ -261,7 +265,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         {
           caseId: caseRecord.caseId,
           caseStatus: caseRecord.status,
-          caseTitle: 'Petitioner',
+          caseTitle: PARTY_TYPES.petitioner,
           createdAt: '2019-03-01T21:40:46.415Z',
           docketNumber: caseRecord.docketNumber,
           docketNumberWithSuffix: caseRecord.docketNumber,
@@ -322,7 +326,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
           caseId: caseRecord.caseId,
           docketNumber: '45678-18',
           documentTitle: 'TC Opinion',
-          documentType: 'TCOP - T.C. Opinion',
+          documentType: 'T.C. Opinion',
           eventCode: 'TCOP',
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

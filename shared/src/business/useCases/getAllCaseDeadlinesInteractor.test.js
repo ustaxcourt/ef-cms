@@ -1,8 +1,12 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   getAllCaseDeadlinesInteractor,
 } = require('./getAllCaseDeadlinesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('getAllCaseDeadlinesInteractor', () => {
@@ -32,7 +36,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
         state: 'CA',
       },
       docketNumber: '101-19',
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
       procedureType: 'Regular',
     },
   ];

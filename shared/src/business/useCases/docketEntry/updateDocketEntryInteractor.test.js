@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   updateDocketEntryInteractor,
 } = require('./updateDocketEntryInteractor');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
@@ -77,7 +81,7 @@ describe('updateDocketEntryInteractor', () => {
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,

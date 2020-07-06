@@ -6,7 +6,7 @@ describe('setOpinionTypesAction', () => {
     const opinionDocumentTypes = [
       'MOP - Memorandum Opinion',
       'Summary Opinion',
-      'TCOP - T.C. Opinion',
+      'T.C. Opinion',
     ];
 
     const result = await runAction(setOpinionTypesAction, {

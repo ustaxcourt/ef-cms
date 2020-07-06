@@ -4,13 +4,15 @@ const {
 const {
   associateIrsPractitionerToCase,
 } = require('./associateIrsPractitionerToCase');
+
 const {
   COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('associateIrsPractitionerToCase', () => {
   let caseRecord = {
@@ -39,7 +41,7 @@ describe('associateIrsPractitionerToCase', () => {
     ],
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     status: 'New',

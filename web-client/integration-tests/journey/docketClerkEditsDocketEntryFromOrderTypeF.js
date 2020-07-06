@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'FTRL - Further Trial before ...',
+      value: 'Further Trial before',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -82,7 +82,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
-      documentType: 'FTRL - Further Trial before ...',
+      documentType: 'Further Trial before',
       eventCode: 'FTRL',
       judge: 'Judge Ashford',
       trialLocation: 'Boise, Idaho',
@@ -95,7 +95,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
 
     expect(test.getState('form')).toMatchObject({
       documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
-      documentType: 'FTRL - Further Trial before ...',
+      documentType: 'Further Trial before',
       eventCode: 'FTRL',
       generatedDocumentTitle:
         'Further Trial before Judge Ashford at Boise, Idaho',

@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('submitCaseAssociationRequest', () => {
@@ -34,7 +38,7 @@ describe('submitCaseAssociationRequest', () => {
     ],
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
