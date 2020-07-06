@@ -95,15 +95,15 @@ for (const partyType in PARTY_TYPES) {
     partyType: PARTY_TYPES[partyType],
   });
 
-  contactMapping += `### ${partyType}\nPrimary contact: ${constructors.primary.contactName}\n`;
+  contactMapping += `### ${partyType}\n\nPrimary contact: ${constructors.primary.contactName}\n\n`;
   if (constructors.secondary) {
-    contactMapping += `Secondary contact: ${constructors.secondary.contactName}\n`;
+    contactMapping += `Secondary contact: ${constructors.secondary.contactName}\n\n`;
   }
   if (constructors.otherFilers) {
-    contactMapping += `Other filers contact: ${constructors.otherFilers.contactName}\n`;
+    contactMapping += `Other filers contact: ${constructors.otherFilers.contactName}\n\n`;
   }
   if (constructors.otherPetitioners) {
-    contactMapping += `Other petitioners contact: ${constructors.otherPetitioners.contactName}\n`;
+    contactMapping += `Other petitioners contact: ${constructors.otherPetitioners.contactName}\n\n`;
   }
 }
 
