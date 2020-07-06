@@ -1,6 +1,9 @@
 const fs = require('fs');
 const json2yaml = require('json2yaml');
 const {
+  ContactFactory,
+} = require('../business/entities/contacts/ContactFactory');
+const {
   getNextFriendForIncompetentPersonContact,
 } = require('../business/entities/contacts/NextFriendForIncompetentPersonContact');
 const {
@@ -72,6 +75,7 @@ const { NewCaseMessage } = require('../business/entities/NewCaseMessage');
 const { NewPractitioner } = require('../business/entities/NewPractitioner');
 const { Note } = require('../business/entities/notes/Note');
 const { Order } = require('../business/entities/orders/Order');
+const { PARTY_TYPES } = require('../business/entities/EntityConstants');
 const { Practitioner } = require('../business/entities/Practitioner');
 const { PublicUser } = require('../business/entities/PublicUser');
 const { Scan } = require('../business/entities/Scan');
@@ -80,6 +84,27 @@ const { User } = require('../business/entities/User');
 const { UserCase } = require('../business/entities/UserCase');
 const { UserCaseNote } = require('../business/entities/notes/UserCaseNote');
 const { WorkItem } = require('../business/entities/WorkItem');
+
+let contactMapping = '# Party Type Contact Type Mappings\n';
+
+for (const partyType in PARTY_TYPES) {
+  const constructors = ContactFactory.getContactConstructors({
+    partyType: PARTY_TYPES[partyType],
+  });
+
+  contactMapping += `### ${partyType}\nPrimary contact: ${constructors.primary.contactName}\n`;
+  if (constructors.secondary) {
+    contactMapping += `Secondary contact: ${constructors.secondary.contactName}\n`;
+  }
+  if (constructors.otherFilers) {
+    contactMapping += `Other filers contact: ${constructors.otherFilers.contactName}\n`;
+  }
+  if (constructors.otherPetitioners) {
+    contactMapping += `Other petitioners contact: ${constructors.otherPetitioners.contactName}\n`;
+  }
+}
+
+fs.writeFileSync('./docs/entities/ContactMapping.md', contactMapping);
 
 const generateMarkdownSchema = (entity, entityName) => {
   const json = entity.getSchema().describe();
