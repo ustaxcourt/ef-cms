@@ -15,4 +15,5 @@ exports.getOtherFilerContact = ContactFactory.createContactFactory({
       .valid(...OTHER_FILER_TYPES)
       .required(),
   },
+  contactName: 'OtherFilerContact',
 });
