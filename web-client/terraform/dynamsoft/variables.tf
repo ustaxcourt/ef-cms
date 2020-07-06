@@ -1,13 +1,13 @@
 variable "environment" {
-  type = "string"
+  type = string
 }
 
 variable "dns_domain" {
-  type = "string"
+  type = string
 }
 
 variable "ami" {
-  type = "string"
+  type = string
 }
 
 variable "availability_zones" {
@@ -15,19 +15,19 @@ variable "availability_zones" {
 }
 
 variable "dynamsoft_s3_zip_path" {
-  type = "string"
+  type = string
 }
 
 variable "dynamsoft_url" {
-  type = "string"
+  type = string
 }
 
 variable "dynamsoft_product_keys" {
-  type = "string"
+  type = string
 }
 
 variable "is_dynamsoft_enabled" {
   default = "1"
-  type = "string"
+  type = string
  }
  

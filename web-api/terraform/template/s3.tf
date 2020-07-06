@@ -19,21 +19,21 @@ resource "aws_s3_bucket" "deployment_us_east_1" {
   provider = "aws.us-east-1"
   region = "us-east-1"
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 }
 
 data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "deployment_us_west_2" {
-  provider = "aws.us-west-1"
+  provider = aws.us-west-1
   region = "us-west-1"
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-west-1.deploys"
   acl = "private"
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 }
 
@@ -54,8 +54,8 @@ resource "aws_s3_bucket" "documents_us_east_1" {
     enabled = true
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 
   replication_configuration {
@@ -66,7 +66,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
       prefix = ""
 
       destination {
-        bucket        = "${aws_s3_bucket.documents_us_west_1.arn}"
+        bucket        = aws_s3_bucket.documents_us_west_1.arn
         storage_class = "STANDARD"
       }
     }
@@ -75,7 +75,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 
 
 resource "aws_s3_bucket_public_access_block" "block_documents_east" {
-  bucket = "${aws_s3_bucket.documents_us_east_1.id}"
+  bucket = aws_s3_bucket.documents_us_east_1.id
 
   block_public_acls = true
   block_public_policy = true
@@ -84,7 +84,7 @@ resource "aws_s3_bucket_public_access_block" "block_documents_east" {
 }
 
 resource "aws_s3_bucket" "documents_us_west_1" {
-  provider = "aws.us-west-1"
+  provider = aws.us-west-1
   region = "us-west-1"
   bucket = "${var.dns_domain}-documents-${var.environment}-us-west-1"
   acl = "private"
@@ -100,14 +100,14 @@ resource "aws_s3_bucket" "documents_us_west_1" {
     enabled = true
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_documents_west" {
-  bucket = "${aws_s3_bucket.documents_us_west_1.id}"
-  provider = "aws.us-west-1"
+  bucket = aws_s3_bucket.documents_us_west_1.id
+  provider = aws.us-west-1
   block_public_acls = true
   block_public_policy = true
   ignore_public_acls = true
@@ -131,8 +131,8 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
     enabled = true
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 
   lifecycle_rule {
@@ -145,7 +145,7 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_temp_east" {
-  bucket = "${aws_s3_bucket.temp_documents_us_east_1.id}"
+  bucket = aws_s3_bucket.temp_documents_us_east_1.id
 
   block_public_acls = true
   block_public_policy = true
@@ -154,7 +154,7 @@ resource "aws_s3_bucket_public_access_block" "block_temp_east" {
 }
 
 resource "aws_s3_bucket" "temp_documents_us_west_1" {
-  provider = "aws.us-west-1"
+  provider = aws.us-west-1
   region = "us-west-1"
   bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
   acl = "private"
@@ -170,8 +170,8 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
     enabled = true
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 
   lifecycle_rule {
@@ -184,8 +184,8 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_temp_west" {
-  bucket = "${aws_s3_bucket.temp_documents_us_west_1.id}"
-  provider = "aws.us-west-1"
+  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  provider = aws.us-west-1
   block_public_acls = true
   block_public_policy = true
   ignore_public_acls = true

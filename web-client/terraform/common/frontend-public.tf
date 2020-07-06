@@ -1,22 +1,22 @@
 resource "aws_s3_bucket" "frontend_public" {
   bucket = "ui-public-${var.environment}.${var.dns_domain}"
 
-  policy = "${data.aws_iam_policy_document.public_policy_bucket.json}"
+  policy = data.aws_iam_policy_document.public_policy_bucket.json
 
   website {
     index_document = "index.html"
     error_document = "index.html"
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 }
 
 resource "aws_s3_bucket" "failover_public" {
   bucket = "failover-ui-public-${var.environment}.${var.dns_domain}"
 
-  policy = "${data.aws_iam_policy_document.public_policy_bucket_failover.json}"
+  policy = data.aws_iam_policy_document.public_policy_bucket_failover.json
 
   website {
     index_document = "index.html"
@@ -25,11 +25,11 @@ resource "aws_s3_bucket" "failover_public" {
 
   region = "us-west-1"
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 
-  provider = "aws.us-west-1"
+  provider = aws.us-west-1
 }
 
 data "aws_iam_policy_document" "public_policy_bucket" {
@@ -79,7 +79,7 @@ module "ui-public-certificate" {
   # is_hosted_zone_private = "false"
   # validation_method      = "DNS"
   certificate_name       = "ui-public-${var.environment}.${var.dns_domain}"
-  environment            = "${var.environment}"
+  environment            = var.environment
   description            = "Certificate for ui-public-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
 }
@@ -102,7 +102,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   }
 
   origin {
-    domain_name = "${aws_s3_bucket.frontend_public.website_endpoint}"
+    domain_name = aws_s3_bucket.frontend_public.website_endpoint
     origin_id   = "primary-public-${var.environment}.${var.dns_domain}"
 
     custom_origin_config {
@@ -114,13 +114,13 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
 
   origin {
-    domain_name = "${aws_s3_bucket.failover_public.website_endpoint}"
+    domain_name = aws_s3_bucket.failover_public.website_endpoint
     origin_id   = "failover-public-${var.environment}.${var.dns_domain}"
 
     custom_origin_config {
@@ -132,7 +132,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
@@ -155,12 +155,12 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "group-public-${var.environment}.${var.dns_domain}"
     min_ttl                = 0
-    default_ttl            = "${var.cloudfront_default_ttl}"
-    max_ttl                = "${var.cloudfront_max_ttl}"
+    default_ttl            = var.cloudfront_default_ttl
+    max_ttl                = var.cloudfront_max_ttl
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = "${aws_lambda_function.header_security_lambda.qualified_arn}"
+      lambda_arn   = aws_lambda_function.header_security_lambda.qualified_arn
       include_body = false
     }
 
@@ -203,7 +203,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "${module.ui-public-certificate.acm_certificate_arn}"
+    acm_certificate_arn = module.ui-public-certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
@@ -213,13 +213,13 @@ data "aws_route53_zone" "public_zone" {
 }
 
 resource "aws_route53_record" "public_www" {
-  zone_id = "${data.aws_route53_zone.public_zone.zone_id}"
+  zone_id = data.aws_route53_zone.public_zone.zone_id
   name    = "ui-public-${var.environment}.${var.dns_domain}"
   type    = "A"
 
   alias = {
-    name                   = "${aws_cloudfront_distribution.public_distribution.domain_name}"
-    zone_id                = "${aws_cloudfront_distribution.public_distribution.hosted_zone_id}"
+    name                   = aws_cloudfront_distribution.public_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.public_distribution.hosted_zone_id
     evaluate_target_health = false
   }
 }

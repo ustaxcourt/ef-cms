@@ -1,22 +1,22 @@
 resource "aws_s3_bucket" "frontend" {
   bucket = "ui-${var.environment}.${var.dns_domain}"
 
-  policy = "${data.aws_iam_policy_document.allow_public.json}"
+  policy = data.aws_iam_policy_document.allow_public.json
 
   website {
     index_document = "index.html"
     error_document = "index.html"
   }
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 }
 
 resource "aws_s3_bucket" "failover" {
   bucket = "failover-ui-${var.environment}.${var.dns_domain}"
 
-  policy = "${data.aws_iam_policy_document.allow_public_failover.json}"
+  policy = data.aws_iam_policy_document.allow_public_failover.json
 
   website {
     index_document = "index.html"
@@ -25,11 +25,11 @@ resource "aws_s3_bucket" "failover" {
 
   region = "us-west-1"
 
-  tags {
-    environment = "${var.environment}"
+  tags = {
+    environment = var.environment
   }
 
-  provider = "aws.us-west-1"
+  provider = aws.us-west-1
 }
 
 data "aws_iam_policy_document" "allow_public" {
@@ -79,7 +79,7 @@ module "ui-certificate" {
   # is_hosted_zone_private = "false"
   # validation_method      = "DNS"
   certificate_name       = "ui-${var.environment}.${var.dns_domain}"
-  environment            = "${var.environment}"
+  environment            = var.environment
   description            = "Certificate for ui-${var.environment}.${var.dns_domain}"
   product_domain         = "EFCMS"
 }
@@ -106,7 +106,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = "${aws_s3_bucket.frontend.website_endpoint}"
+    domain_name = aws_s3_bucket.frontend.website_endpoint
     origin_id   = "primary-${var.environment}.${var.dns_domain}"
 
     custom_origin_config {
@@ -118,13 +118,13 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
 
   origin {
-    domain_name = "${aws_s3_bucket.failover.website_endpoint}"
+    domain_name = aws_s3_bucket.failover.website_endpoint
     origin_id   = "failover-${var.environment}.${var.dns_domain}"
 
     custom_origin_config {
@@ -136,7 +136,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name = "x-allowed-domain"
-      value = "${var.dns_domain}"
+      value = var.dns_domain
     }
   }
 
@@ -159,12 +159,12 @@ resource "aws_cloudfront_distribution" "distribution" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "group-${var.environment}.${var.dns_domain}"
     min_ttl                = 0
-    default_ttl            = "${var.cloudfront_default_ttl}"
-    max_ttl                = "${var.cloudfront_max_ttl}"
+    default_ttl            = var.cloudfront_default_ttl
+    max_ttl                = var.cloudfront_max_ttl
 
     lambda_function_association {
       event_type   = "origin-response"
-      lambda_arn   = "${aws_lambda_function.header_security_lambda.qualified_arn}"
+      lambda_arn   = aws_lambda_function.header_security_lambda.qualified_arn
       include_body = false
     }
 
@@ -207,7 +207,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "${module.ui-certificate.acm_certificate_arn}"
+    acm_certificate_arn = module.ui-certificate.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
@@ -217,13 +217,13 @@ data "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = "${data.aws_route53_zone.zone.zone_id}"
+  zone_id = data.aws_route53_zone.zone.zone_id
   name    = "ui-${var.environment}.${var.dns_domain}"
   type    = "A"
 
   alias = {
-    name                   = "${aws_cloudfront_distribution.distribution.domain_name}"
-    zone_id                = "${aws_cloudfront_distribution.distribution.hosted_zone_id}"
+    name                   = aws_cloudfront_distribution.distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
     evaluate_target_health = false
   }
 }
