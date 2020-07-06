@@ -64,10 +64,6 @@ const OPINION_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOpinion,
 ).map(d => d.eventCode);
 
-const DECISION_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isDecision,
-).map(d => d.eventCode);
-
 const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
 );
@@ -75,11 +71,9 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
 
-const EVENT_CODES_REQUIRING_SIGNATURE = [
-  ...ORDER_EVENT_CODES,
-  ...DOCUMENT_NOTICE_EVENT_CODES,
-  ...DECISION_EVENT_CODES,
-];
+const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.requiresSignature,
+).map(d => d.eventCode);
 
 const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
