@@ -36,7 +36,7 @@ module "dynamsoft_us_east" {
   environment = var.environment
   dns_domain = var.dns_domain
   providers = {
-    aws = "aws.us-east-1"
+    aws = aws.us-east-1
   }
   ami = "ami-0a313d6098716f372"
   availability_zones = ["us-east-1a"]
@@ -107,7 +107,7 @@ resource "aws_route53_record" "record_west_www" {
 resource "aws_acm_certificate_validation" "dns_validation_east" {
   certificate_arn         = module.dynamsoft_us_east.cert_arn
   validation_record_fqdns = [aws_route53_record.record_certs.fqdn]
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
 }
 
 resource "aws_acm_certificate_validation" "dns_validation_west" {

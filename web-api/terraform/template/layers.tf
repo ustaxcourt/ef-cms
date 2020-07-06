@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "layer_bucket" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.layers"
   acl = "private"
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
   region = "us-east-1"
 
   tags = {

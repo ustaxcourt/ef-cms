@@ -1,6 +1,6 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
   domain   = "mail.efcms-${var.environment}.${var.dns_domain}"
 }
 
@@ -15,7 +15,7 @@ resource "aws_route53_record" "ses_verification_record" {
 resource "aws_ses_domain_identity_verification" "example_verification" {
   domain = aws_ses_domain_identity.main.id
 
-  depends_on = ["aws_route53_record.ses_verification_record"]
+  depends_on = [aws_route53_record.ses_verification_record]
 }
 
 resource "aws_ses_domain_mail_from" "main" {

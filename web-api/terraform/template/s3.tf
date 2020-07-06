@@ -16,7 +16,7 @@ provider "aws" {
 resource "aws_s3_bucket" "deployment_us_east_1" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.deploys"
   acl = "private"
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
   region = "us-east-1"
 
   tags = {
@@ -38,7 +38,7 @@ resource "aws_s3_bucket" "deployment_us_west_2" {
 }
 
 resource "aws_s3_bucket" "documents_us_east_1" {
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
   region = "us-east-1"
   bucket = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   acl = "private"
@@ -115,7 +115,7 @@ resource "aws_s3_bucket_public_access_block" "block_documents_west" {
 }
 
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
-  provider = "aws.us-east-1"
+  provider = aws.us-east-1
   region = "us-east-1"
   bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
   acl = "private"

@@ -65,8 +65,8 @@ resource "aws_lambda_permission" "apigw_public_lambda" {
 
 resource "aws_api_gateway_deployment" "api_public_deployment" {
   depends_on = [
-    "aws_api_gateway_method.api_public_method",
-    "aws_api_gateway_integration.api_public_integration"
+    aws_api_gateway_method.api_public_method,
+    aws_api_gateway_integration.api_public_integration
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api_public.id
   stage_name = var.environment
