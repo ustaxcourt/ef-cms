@@ -21,6 +21,7 @@ const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
         ],
+        EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
         USER_ROLES: {
           petitionsClerk: USER_ROLES.petitionsClerk,
         },
@@ -34,9 +35,11 @@ const state = {
   caseDetail: {
     contactPrimary: { name: 'Banzai' },
     contactSecondary: { name: 'Timon' },
+    documents: [{ documentId: '123' }],
     irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
     privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
   },
+  documentId: '123',
   form: {
     generatedDocumentTitle: 'Circle of Life',
   },
@@ -153,5 +156,69 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     user.role = USER_ROLES.petitionsClerk;
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.showServiceStamp).toEqual(false);
+  });
+
+  it('should return showSaveAndServeButton true and showDocumentNotSignedAlert false if document is signed', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(true);
+    expect(result.showDocumentNotSignedAlert).toEqual(false);
+  });
+
+  it('should return showSaveAndServeButton false and showDocumentNotSignedAlert true if document is not signed but the event code requires a signature', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(false);
+    expect(result.showDocumentNotSignedAlert).toEqual(true);
+  });
+
+  it('should return showSaveAndServeButton true and showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'A',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(true);
+    expect(result.showDocumentNotSignedAlert).toEqual(false);
   });
 });

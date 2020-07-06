@@ -111,6 +111,7 @@ Valid Case object example:
         {
             "barNumber": "PT1234",
             "email": "flexionustc@gmail.com",
+            "hasEAccess": true,
             "name": "Test Practitioner",
             "role": "practitioner",
             "section": "practitioner",
@@ -123,7 +124,7 @@ Valid Case object example:
                 "countryType": "domestic",
                 "phone": "+1 (555) 555-5555",
                 "postalCode": "61234",
-                "state": "IL"
+                "state": "IL",
             },
             "representingPrimary": true,
             "serviceIndicator": "Paper"
@@ -131,6 +132,7 @@ Valid Case object example:
         {
             "barNumber": "PT1111",
             "email": "practitioner3@example.com",
+            "hasEAccess": true,
             "name": "Test practitioner3",
             "role": "practitioner",
             "section": "practitioner",
@@ -153,6 +155,7 @@ Valid Case object example:
         {
             "barNumber": "RT1234",
             "email": "flexionustc+respondent@gmail.com",
+            "hasEAccess": true,
             "name": "Test Respondent",
             "role": "respondent",
             "section": "respondent",
@@ -253,6 +256,8 @@ Valid Case object example:
         "countryType": "domestic",
         "name": "Keelie Bruce",
         "phone": "+1 (785) 771-2329",
+        "email": "someone@example.com",
+        "hasEAccess": true,
         "postalCode": "17860",
         "secondaryName": "Logan Fields",
         "serviceIndicator": "None",
@@ -268,6 +273,8 @@ Valid Case object example:
 	        "city": "Placeat sed dolorum",
 	        "countryType": "domestic",
 	        "name": "Keelie Bruce",
+            "email": "someone@example.com",
+            "hasEAccess": true,
 	        "phone": "+1 (785) 771-2329",
 	        "postalCode": "17860",
 	        "secondaryName": "Logan Fields",
@@ -277,29 +284,31 @@ Valid Case object example:
     ],
     "otherFilers": [
         {
-          "address1": "42 Lamb Sauce Blvd",
-          "city": "Nashville",
-          "country": "USA",
-          "countryType": "domestic",
-          "email": "gordon@thelambsauce.com",
-          "name": "Gordon Ramsay",
-          "otherFilerType": "Intervenor",
-          "phone": "1234567890",
-          "postalCode": "05198",
-          "state": "AK"
+            "address1": "42 Lamb Sauce Blvd",
+            "city": "Nashville",
+            "country": "USA",
+            "countryType": "domestic",
+            "name": "Gordon Ramsay",
+            "email": "someone@example.com",
+            "hasEAccess": true,
+            "otherFilerType": "Intervenor",
+            "phone": "1234567890",
+            "postalCode": "05198",
+            "state": "AK"
         },
         {
-          "address1": "1337 12th Ave",
-          "city": "Flavortown",
-          "country": "USA",
-          "countryType": "domestic",
-          "email": "mayor@flavortown.com",
-          "name": "Guy Fieri",
-          "otherFilerType": "Participant",
-          "phone": "1234567890",
-          "postalCode": "05198",
-          "state": "AK"
-        },
+            "address1": "1337 12th Ave",
+            "city": "Flavortown",
+            "country": "USA",
+            "countryType": "domestic",
+            "name": "Guy Fieri",
+            "email": "someone@example.com",
+            "hasEAccess": true,
+            "otherFilerType": "Participant",
+            "phone": "1234567890",
+            "postalCode": "05198",
+            "state": "AK"
+        }
     ]
 }
 ```
