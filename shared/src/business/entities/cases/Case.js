@@ -219,7 +219,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
-      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+      .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
   } else {
     this.correspondence = [];
   }
