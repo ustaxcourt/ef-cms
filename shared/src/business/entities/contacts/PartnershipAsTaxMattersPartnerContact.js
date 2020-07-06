@@ -12,5 +12,6 @@ exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createC
     additionalValidation: {
       secondaryName: joi.string().max(500).required(),
     },
+    contactName: 'PartnershipAsTaxMattersPartnerPrimaryContact',
   },
 );

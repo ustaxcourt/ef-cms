@@ -12,5 +12,6 @@ exports.getNextFriendForIncompetentPersonContact = ContactFactory.createContactF
     additionalValidation: {
       secondaryName: joi.string().max(500).required(),
     },
+    contactName: 'NextFriendForIncompetentPersonContact',
   },
 );
