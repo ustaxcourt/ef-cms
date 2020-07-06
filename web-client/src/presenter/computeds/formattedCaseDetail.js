@@ -124,11 +124,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     document,
     permissions,
     record,
+    showDocumentViewerLink,
     userHasAccessToCase,
     userHasAccessToDocument,
   }) => {
     return (
-      !result.showDocumentViewerLink &&
+      !showDocumentViewerLink &&
       (!userHasAccessToCase ||
         !userHasAccessToDocument ||
         !document ||
@@ -216,6 +217,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document,
           permissions,
           record,
+          showDocumentViewerLink: formattedResult.showDocumentViewerLink,
           userHasAccessToCase,
           userHasAccessToDocument,
         },
