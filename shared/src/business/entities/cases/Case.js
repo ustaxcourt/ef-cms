@@ -281,8 +281,6 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.orderForOds = rawCase.orderForOds || false;
   this.orderForRatification = rawCase.orderForRatification || false;
   this.orderToShowCause = rawCase.orderToShowCause || false;
-  this.orderToChangeDesignatedPlaceOfTrial =
-    rawCase.orderToChangeDesignatedPlaceOfTrial || false;
 
   this.docketNumberWithSuffix =
     this.docketNumber + (this.docketNumberSuffix || '');
@@ -538,12 +536,6 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order for Ratification.'),
-  orderToChangeDesignatedPlaceOfTrial: joi
-    .boolean()
-    .optional()
-    .description(
-      'Reminder for clerks to review the Order to Change Designated Place Of Trial.',
-    ),
   orderToShowCause: joi
     .boolean()
     .optional()
