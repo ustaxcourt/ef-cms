@@ -7,11 +7,11 @@ const {
   DOCKET_NUMBER_MATCHER,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
+  EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
-  ORDER_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   SCENARIOS,
   TRACKED_DOCUMENT_TYPES,
@@ -391,8 +391,8 @@ joiValidationDecorator(
       .string()
       .when('draftState', {
         is: joi.exist().not(null),
-        otherwise: joi.when('documentType', {
-          is: joi.valid(...ORDER_TYPES.map(t => t.documentType)),
+        otherwise: joi.when('eventCode', {
+          is: joi.valid(...EVENT_CODES_REQUIRING_SIGNATURE),
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         }),
@@ -420,8 +420,8 @@ joiValidationDecorator(
     signedJudgeName: joi
       .when('draftState', {
         is: joi.exist().not(null),
-        otherwise: joi.when('documentType', {
-          is: joi.string().valid(...ORDER_TYPES.map(t => t.documentType)),
+        otherwise: joi.when('eventCode', {
+          is: joi.string().valid(...EVENT_CODES_REQUIRING_SIGNATURE),
           otherwise: joi.string().optional().allow(null),
           then: joi.string().required(),
         }),

@@ -54,6 +54,41 @@ describe('Case entity', () => {
     });
   });
 
+  it('sorts correspondence array according to `filingDate`', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        correspondence: [
+          { filingDate: '2020-01-05T01:02:03.004Z' },
+          { filingDate: '2019-01-05T01:02:03.004Z' },
+        ],
+      },
+      { applicationContext },
+    );
+    expect(myCase.correspondence).toMatchObject([
+      { filingDate: '2019-01-05T01:02:03.004Z' },
+      { filingDate: '2020-01-05T01:02:03.004Z' },
+    ]);
+  });
+  describe('conditionally sets userId on entity', () => {
+    it('sets userId to current user if current user matches rawCase', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
+        { applicationContext },
+      );
+      expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
+    });
+    it('does NOT set userId to if current user does not match rawCase', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, userId: '9999' },
+        { applicationContext },
+      );
+      expect(myCase.userId).not.toEqual(
+        applicationContext.getCurrentUser().userId,
+      );
+    });
+  });
+
   it('sets the expected order booleans', () => {
     const myCase = new Case(
       {
@@ -1113,7 +1148,30 @@ describe('Case entity', () => {
       expect(error).toBeTruthy();
     });
   });
+  describe('updateDocketRecord', () => {
+    it('updates the docket record entity at the provided docketRecordIndex', () => {
+      const caseRecord = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const updatedDocketEntry = new DocketRecord(
+        {
+          description: 'second record now updated',
+          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
+          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+          filingDate: '2018-03-02T22:22:00.000Z',
+          index: 7,
+        },
+        { applicationContext },
+      );
+      caseRecord.updateDocketRecord(1, updatedDocketEntry);
 
+      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
+      expect(caseRecord.docketRecord[1].description).toEqual(
+        'second record now updated',
+      );
+      expect(caseRecord.docketRecord[1].index).toEqual(7);
+    });
+  });
   describe('updateDocketRecordEntry', () => {
     it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
