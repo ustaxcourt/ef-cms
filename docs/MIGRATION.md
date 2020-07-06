@@ -107,14 +107,14 @@ Valid Case object example:
         }
     ],
     "hasPendingItems": true,
-    "practitioners": [
+    "privatePractitioners": [
         {
             "barNumber": "PT1234",
             "email": "flexionustc@gmail.com",
             "hasEAccess": true,
             "name": "Test Practitioner",
-            "role": "practitioner",
-            "section": "practitioner",
+            "role": "privatePractitioner",
+            "section": "privatePractitioner",
             "userId": "4719886e-9275-4df9-b0fd-1cfcb62a0504",
             "contact": {
                 "address1": "234 Main St",
@@ -134,8 +134,8 @@ Valid Case object example:
             "email": "practitioner3@example.com",
             "hasEAccess": true,
             "name": "Test practitioner3",
-            "role": "practitioner",
-            "section": "practitioner",
+            "role": "privatePractitioner",
+            "section": "privatePractitioner",
             "userId": "03e00879-343d-4683-87d3-e5310b55e256",
             "contact": {
                 "address1": "234 Main St",
@@ -151,14 +151,14 @@ Valid Case object example:
             "serviceIndicator": "Paper"
         }
     ],
-    "respondents": [
+    "irsPractitioners": [
         {
             "barNumber": "RT1234",
             "email": "flexionustc+respondent@gmail.com",
             "hasEAccess": true,
             "name": "Test Respondent",
-            "role": "respondent",
-            "section": "respondent",
+            "role": "irsPractitioner",
+            "section": "irsPractitioner",
             "userId": "f0a0581f-11ba-4e35-8287-12a8dbe240f2",
             "contact": {
                 "address1": "234 Main St",
