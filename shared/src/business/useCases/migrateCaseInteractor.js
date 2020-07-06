@@ -36,6 +36,32 @@ exports.migrateCaseInteractor = async ({
     },
   );
 
+  for (const privatePractitioner of caseToAdd.privatePractitioners) {
+    const practitioner = await applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber({
+        applicationContext,
+        barNumber: privatePractitioner.barNumber,
+      });
+
+    privatePractitioner.userId = practitioner
+      ? practitioner.userId
+      : applicationContext.getUniqueId();
+  }
+
+  for (const irsPractitioner of caseToAdd.irsPractitioners) {
+    const practitioner = await applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber({
+        applicationContext,
+        barNumber: irsPractitioner.barNumber,
+      });
+
+    irsPractitioner.userId = practitioner
+      ? practitioner.userId
+      : applicationContext.getUniqueId();
+  }
+
   const caseValidatedRaw = caseToAdd.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().createCase({
