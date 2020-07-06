@@ -42,6 +42,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
       isOrder: true,
+      requiresSignature: true,
       scenario: 'Type D',
     });
   });
@@ -67,6 +68,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
       eventCode: 'O',
       freeText: 'something',
       isOrder: true,
+      requiresSignature: true,
       scenario: 'Type A',
     });
   });
