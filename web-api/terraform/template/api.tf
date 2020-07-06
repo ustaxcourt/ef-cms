@@ -81,7 +81,7 @@ resource "aws_api_gateway_method" "api_clamav_method_post" {
 
 resource "aws_api_gateway_method" "api_clamav_method_options" {
   depends_on = [
-    "aws_api_gateway_method.api_clamav_method_post"
+    aws_api_gateway_method.api_clamav_method_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_clamav_resource.id
@@ -91,7 +91,7 @@ resource "aws_api_gateway_method" "api_clamav_method_options" {
 
 resource "aws_api_gateway_method" "api_method_get" {
   depends_on = [
-    "aws_api_gateway_method.api_clamav_method_options"
+    aws_api_gateway_method.api_clamav_method_options
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_resource.id
@@ -102,7 +102,7 @@ resource "aws_api_gateway_method" "api_method_get" {
 
 resource "aws_api_gateway_method" "api_method_post" {
   depends_on = [
-    "aws_api_gateway_method.api_method_get"
+    aws_api_gateway_method.api_method_get
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_resource.id
@@ -113,7 +113,7 @@ resource "aws_api_gateway_method" "api_method_post" {
 
 resource "aws_api_gateway_method" "api_method_put" {
   depends_on = [
-    "aws_api_gateway_method.api_method_post"
+    aws_api_gateway_method.api_method_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_resource.id
@@ -124,7 +124,7 @@ resource "aws_api_gateway_method" "api_method_put" {
 
 resource "aws_api_gateway_method" "api_method_delete" {
   depends_on = [
-    "aws_api_gateway_method.api_method_put"
+    aws_api_gateway_method.api_method_put
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_resource.id
@@ -135,7 +135,7 @@ resource "aws_api_gateway_method" "api_method_delete" {
 
 resource "aws_api_gateway_method" "api_method_options" {
   depends_on = [
-    "aws_api_gateway_method.api_method_delete"
+    aws_api_gateway_method.api_method_delete
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_resource.id
@@ -178,7 +178,7 @@ resource "aws_api_gateway_method_response" "clamav_method_response_post" {
 
 resource "aws_api_gateway_integration_response" "clamav_response_post" {
   depends_on = [
-    "aws_api_gateway_integration.api_clamav_integration_post"
+    aws_api_gateway_integration.api_clamav_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_resource.api_clamav_resource.id
@@ -193,7 +193,7 @@ resource "aws_api_gateway_integration_response" "clamav_response_post" {
 
 resource "aws_api_gateway_integration" "api_clamav_integration_options" {
   depends_on = [
-    "aws_api_gateway_integration.api_clamav_integration_post"
+    aws_api_gateway_integration.api_clamav_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_clamav_method_options.resource_id
@@ -207,7 +207,7 @@ resource "aws_api_gateway_integration" "api_clamav_integration_options" {
 
 resource "aws_api_gateway_integration" "api_integration_get" {
   depends_on = [
-    "aws_api_gateway_integration.api_clamav_integration_options"
+    aws_api_gateway_integration.api_clamav_integration_options
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_get.resource_id
@@ -220,7 +220,7 @@ resource "aws_api_gateway_integration" "api_integration_get" {
 
 resource "aws_api_gateway_integration" "api_integration_post" {
   depends_on = [
-    "aws_api_gateway_integration.api_integration_get"
+    aws_api_gateway_integration.api_integration_get
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_post.resource_id
@@ -233,7 +233,7 @@ resource "aws_api_gateway_integration" "api_integration_post" {
 
 resource "aws_api_gateway_integration" "api_integration_put" {
   depends_on = [
-    "aws_api_gateway_integration.api_integration_post"
+    aws_api_gateway_integration.api_integration_post
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_put.resource_id
@@ -246,7 +246,7 @@ resource "aws_api_gateway_integration" "api_integration_put" {
 
 resource "aws_api_gateway_integration" "api_integration_delete" {
   depends_on = [
-    "aws_api_gateway_integration.api_integration_put"
+    aws_api_gateway_integration.api_integration_put
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_delete.resource_id
@@ -259,7 +259,7 @@ resource "aws_api_gateway_integration" "api_integration_delete" {
 
 resource "aws_api_gateway_integration" "api_integration_options" {
   depends_on = [
-    "aws_api_gateway_integration.api_integration_delete"
+    aws_api_gateway_integration.api_integration_delete
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_options.resource_id
@@ -290,21 +290,21 @@ resource "aws_lambda_permission" "apigw_clamav_lambda" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    "aws_api_gateway_method.api_clamav_method_post",
-    "aws_api_gateway_method.api_clamav_method_options",
-    "aws_api_gateway_method.api_method_get",
-    "aws_api_gateway_method.api_method_post",
-    "aws_api_gateway_method.api_method_put",
-    "aws_api_gateway_method.api_method_delete",
-    "aws_api_gateway_method.api_method_options",
-    "aws_api_gateway_integration.api_clamav_integration_post",
-    "aws_api_gateway_integration.api_clamav_integration_options",
-    "aws_api_gateway_integration.api_integration_get",
-    "aws_api_gateway_integration.api_integration_post",
-    "aws_api_gateway_integration.api_integration_put",
-    "aws_api_gateway_integration.api_integration_delete",
-    "aws_api_gateway_integration.api_integration_options",
-    "aws_api_gateway_authorizer.custom_authorizer"
+    aws_api_gateway_method.api_clamav_method_post,
+    aws_api_gateway_method.api_clamav_method_options,
+    aws_api_gateway_method.api_method_get,
+    aws_api_gateway_method.api_method_post,
+    aws_api_gateway_method.api_method_put,
+    aws_api_gateway_method.api_method_delete,
+    aws_api_gateway_method.api_method_options,
+    aws_api_gateway_integration.api_clamav_integration_post,
+    aws_api_gateway_integration.api_clamav_integration_options,
+    aws_api_gateway_integration.api_integration_get,
+    aws_api_gateway_integration.api_integration_post,
+    aws_api_gateway_integration.api_integration_put,
+    aws_api_gateway_integration.api_integration_delete,
+    aws_api_gateway_integration.api_integration_options,
+    aws_api_gateway_authorizer.custom_authorizer
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   stage_name = var.environment
