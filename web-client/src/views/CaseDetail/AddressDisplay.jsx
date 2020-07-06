@@ -64,7 +64,7 @@ export const AddressDisplay = connect(
           {contact.email && showEmail && (
             <span className="address-line">
               {contact.email}
-              {contact.hasEAccess && (
+              {contact.showEAccessFlag && (
                 <FontAwesomeIcon
                   className="margin-left-05 fa-icon-blue"
                   icon="flag"

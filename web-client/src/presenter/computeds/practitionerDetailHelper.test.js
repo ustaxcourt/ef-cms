@@ -18,6 +18,7 @@ describe('practitionerDetailHelper', () => {
         practitionerDetail: {
           additionalPhone: null,
         },
+        user: { role: 'petitioner' },
       },
     });
     expect(additionalPhone).toEqual('Not provided');
@@ -30,6 +31,7 @@ describe('practitionerDetailHelper', () => {
         practitionerDetail: {
           alternateEmail: null,
         },
+        user: { role: 'petitioner' },
       },
     });
     expect(alternateEmail).toEqual('Not provided');
@@ -42,6 +44,7 @@ describe('practitionerDetailHelper', () => {
         practitionerDetail: {
           admissionsDate: '2020-01-27T05:00:00.000Z',
         },
+        user: { role: 'petitioner' },
       },
     });
     expect(admissionsDateFormatted).toEqual('01/27/2020');
@@ -56,6 +59,7 @@ describe('practitionerDetailHelper', () => {
         practitionerDetail: {
           admissionsDate: '2020-01-27T05:00:00.000Z',
         },
+        user: { role: 'admissionsclerk' },
       },
     });
     expect(showEditLink).toBeTruthy();
@@ -70,8 +74,54 @@ describe('practitionerDetailHelper', () => {
         practitionerDetail: {
           admissionsDate: '2020-01-27T05:00:00.000Z',
         },
+        user: { role: 'petitioner' },
       },
     });
     expect(showEditLink).toBeFalsy();
+  });
+
+  it('should show the hasEAccess flag for an internal user', () => {
+    const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          hasEAccess: true,
+        },
+        user: { role: 'admissionsclerk' },
+      },
+    });
+    expect(showEAccessFlag).toBeTruthy();
+  });
+
+  it('should not show the hasEAccess flag for an external user', () => {
+    const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          hasEAccess: true,
+        },
+        user: { role: 'petitioner' },
+      },
+    });
+    expect(showEAccessFlag).toBeFalsy();
+  });
+
+  it('should not show the hasEAccess flag for an internal user when the contact has no eAccess', () => {
+    const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          hasEAccess: false,
+        },
+        user: { role: 'admissionsclerk' },
+      },
+    });
+    expect(showEAccessFlag).toBeFalsy();
   });
 });
