@@ -68,7 +68,5 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     expect(receiptMockCall.supportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondarySupportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondaryDocument).toBeDefined();
-
-    // expect(Document.mock.calls.length).toBe(10);
   });
 });
