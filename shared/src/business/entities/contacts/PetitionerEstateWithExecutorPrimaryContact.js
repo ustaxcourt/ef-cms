@@ -14,5 +14,6 @@ exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createCon
       secondaryName: joi.string().max(500).required(),
       title: joi.string().max(100).optional(),
     },
+    contactName: 'PetitionerEstateWithExecutorPrimaryContact',
   },
 );

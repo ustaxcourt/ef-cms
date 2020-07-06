@@ -18,6 +18,7 @@ import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketCl
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 
 // Public User
+import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
@@ -56,12 +57,18 @@ describe('Docket clerk creates a draft order (should not be viewable to the publ
 });
 
 describe('Docket clerk creates and serves an order (should be viewable to the public)', () => {
+  beforeAll(() => {
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
+  });
   loginAs(testClient, 'docketclerk');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkSignsOrder(testClient, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 });

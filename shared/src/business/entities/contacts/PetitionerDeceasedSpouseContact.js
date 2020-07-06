@@ -13,5 +13,6 @@ exports.getPetitionerDeceasedSpouseContact = ContactFactory.createContactFactory
       inCareOf: joi.string().max(100).required(),
       phone: joi.string().max(100).optional().allow(null),
     },
+    contactName: 'PetitionerDeceasedSpouseContact',
   },
 );
