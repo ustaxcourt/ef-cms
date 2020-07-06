@@ -54,7 +54,7 @@ describe('Case entity', () => {
     });
   });
 
-  it('sorts correspondence array according to createdAt', () => {
+  it('sorts correspondence array according to `filingDate`', () => {
     const myCase = new Case(
       {
         ...MOCK_CASE,
@@ -78,7 +78,7 @@ describe('Case entity', () => {
       );
       expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
     });
-    it('does NOT set userId to current user if current user matches rawCase', () => {
+    it('does NOT set userId to if current user does not match rawCase', () => {
       const myCase = new Case(
         { ...MOCK_CASE, userId: '9999' },
         { applicationContext },
