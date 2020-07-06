@@ -8,11 +8,11 @@ import React, { useEffect, useRef } from 'react';
 
 export const SignOrder = connect(
   {
-    changeTabAndSetViewerDraftDocumentToDisplaySequence:
-      sequences.changeTabAndSetViewerDraftDocumentToDisplaySequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
+    navigateToCaseDetailWithDraftDocumentSequence:
+      sequences.navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
@@ -23,9 +23,9 @@ export const SignOrder = connect(
     skipSigningOrderSequence: sequences.skipSigningOrderSequence,
   },
   function SignOrder({
-    changeTabAndSetViewerDraftDocumentToDisplaySequence,
     currentPageNumber,
     documentId,
+    navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -156,9 +156,9 @@ export const SignOrder = connect(
               <Button
                 link
                 onClick={() => {
-                  changeTabAndSetViewerDraftDocumentToDisplaySequence({
+                  navigateToCaseDetailWithDraftDocumentSequence({
                     primaryTab: 'draftDocuments',
-                    viewerDraftDocumentToDisplay: { documentId: documentId },
+                    viewerDraftDocumentToDisplay: { documentId },
                   });
                 }}
               >

@@ -28,7 +28,7 @@ import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
-import { changeTabAndSetViewerDraftDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDraftDocumentToDisplaySequence';
+import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
@@ -457,7 +457,7 @@ export const presenter = {
     caseInventoryReportLoadMoreSequence,
     cerebralBindSimpleSetStateSequence,
     changeTabAndSetViewerDocumentToDisplaySequence,
-    changeTabAndSetViewerDraftDocumentToDisplaySequence,
+    navigateToCaseDetailWithDraftDocumentSequence,
     chooseModalWizardStepSequence,
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
