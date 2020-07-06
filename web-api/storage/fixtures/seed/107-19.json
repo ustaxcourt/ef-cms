@@ -378,7 +378,7 @@
     "pending": false,
     "receivedAt": "2019-08-16T17:29:10.133Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "ODS",
+    "eventCode": "DISC",
     "createdAt": "2019-08-16T17:29:10.133Z",
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
