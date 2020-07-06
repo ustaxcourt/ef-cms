@@ -94,6 +94,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "workItems": [
@@ -183,6 +184,7 @@
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
+    "eventCode": "STIN",
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.530Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
