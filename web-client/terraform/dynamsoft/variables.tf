@@ -11,7 +11,7 @@ variable "ami" {
 }
 
 variable "availability_zones" {
-  type = "list"
+  type = list
 }
 
 variable "dynamsoft_s3_zip_path" {

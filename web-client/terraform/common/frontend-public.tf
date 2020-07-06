@@ -1,3 +1,14 @@
+
+provider "aws" {
+  region = "us-east-1"
+  alias = "us-east-1"
+}
+
+provider "aws" {
+  region = "us-west-1"
+  alias = "us-west-1"
+}
+
 resource "aws_s3_bucket" "frontend_public" {
   bucket = "ui-public-${var.environment}.${var.dns_domain}"
 
@@ -136,14 +147,12 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     }
   }
 
-  custom_error_response = [
-    {
-      error_caching_min_ttl = 0
-      error_code            = 404
-      response_code         = 200
-      response_page_path    = "/index.html"
-    },
-  ]
+  custom_error_response {
+    error_caching_min_ttl = 0
+    error_code            = 404
+    response_code         = 200
+    response_page_path    = "/index.html"
+  }
 
   enabled             = true
   default_root_object = "index.html"
@@ -217,7 +226,7 @@ resource "aws_route53_record" "public_www" {
   name    = "ui-public-${var.environment}.${var.dns_domain}"
   type    = "A"
 
-  alias = {
+  alias {
     name                   = aws_cloudfront_distribution.public_distribution.domain_name
     zone_id                = aws_cloudfront_distribution.public_distribution.hosted_zone_id
     evaluate_target_health = false

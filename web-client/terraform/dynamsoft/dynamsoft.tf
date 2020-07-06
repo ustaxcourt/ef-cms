@@ -21,7 +21,7 @@ resource "aws_instance" "dynamsoft" {
 data "template_file" "setup_dynamsoft" {
   template = file("setup_dynamsoft.sh")
 
-  vars {
+  vars = {
     dynamsoft_s3_zip_path = var.dynamsoft_s3_zip_path
     dynamsoft_url = var.dynamsoft_url
     dynamsoft_product_keys = var.dynamsoft_product_keys
@@ -108,7 +108,7 @@ resource "aws_elb" "dynamsoft_elb" {
 
   count = var.is_dynamsoft_enabled
 
-  instances                   = [aws_instance.dynamsoft.id]
+  instances                   = [aws_instance.dynamsoft.0.id]
   cross_zone_load_balancing   = false
   idle_timeout                = 400
   connection_draining         = true
