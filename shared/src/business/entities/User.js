@@ -106,12 +106,7 @@ const userValidation = {
     // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
     .optional(),
   token: joi.string().optional(),
-  userId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  userId: JoiValidationConstants.UUID.required(),
   ...baseUserValidation,
 };
 

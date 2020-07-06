@@ -36,27 +36,11 @@ joiValidationDecorator(
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
     entityName: joi.string().valid('Message').required(),
     from: joi.string().max(100).required(),
-    fromUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    fromUserId: JoiValidationConstants.UUID.required(),
     message: joi.string().max(500).required(),
-    messageId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    messageId: JoiValidationConstants.UUID.required(),
     to: joi.string().max(100).optional().allow(null),
-    toUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .allow(null),
+    toUserId: JoiValidationConstants.UUID.optional().allow(null),
   }),
 );
 

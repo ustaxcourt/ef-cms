@@ -84,13 +84,9 @@ joiValidationDecorator(
         then: joi.required(),
       })
       .description('Last date of the statistics period.'),
-    statisticId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required()
-      .description('Unique statistic ID only used by the system.'),
+    statisticId: JoiValidationConstants.UUID.required().description(
+      'Unique statistic ID only used by the system.',
+    ),
     year: joi
       .number()
       .integer()

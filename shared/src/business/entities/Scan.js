@@ -79,12 +79,7 @@ Scan.VALIDATION_ERROR_MESSAGES = {
 Scan.schema = joi.object().keys({
   batches: joi.array().min(1).required(),
   createdAt: JoiValidationConstants.ISO_DATE.required(),
-  scanId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  scanId: JoiValidationConstants.UUID.required(),
 });
 
 joiValidationDecorator(Scan, Scan.schema, Scan.VALIDATION_ERROR_MESSAGES);

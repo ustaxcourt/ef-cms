@@ -365,13 +365,9 @@ Case.VALIDATION_RULES = {
     .description(
       'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
     ),
-  caseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required()
-    .description('Unique case ID only used by the system.'),
+  caseId: JoiValidationConstants.UUID.required().description(
+    'Unique case ID only used by the system.',
+  ),
   caseNote: joi
     .string()
     .max(500)
@@ -477,15 +473,9 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  leadCaseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .optional()
-    .description(
-      'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
-    ),
+  leadCaseId: JoiValidationConstants.UUID.optional().description(
+    'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
+  ),
   litigationCosts: joi
     .number()
     .optional()
@@ -665,15 +655,9 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .optional()
-    .description(
-      'The unique ID of the trial session associated with this case.',
-    ),
+  trialSessionId: JoiValidationConstants.UUID.optional().description(
+    'The unique ID of the trial session associated with this case.',
+  ),
   trialTime: joi
     .string()
     .pattern(PATTERNS['H:MM'])

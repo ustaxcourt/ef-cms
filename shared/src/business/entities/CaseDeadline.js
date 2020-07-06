@@ -41,20 +41,12 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseDeadline.schema = joi.object().keys({
-  caseDeadlineId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required()
-    .description('Unique Case Deadline ID only used by the system.'),
-  caseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required()
-    .description('Unique Case ID only used by the system.'),
+  caseDeadlineId: JoiValidationConstants.UUID.required().description(
+    'Unique Case Deadline ID only used by the system.',
+  ),
+  caseId: JoiValidationConstants.UUID.required().description(
+    'Unique Case ID only used by the system.',
+  ),
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the Case Deadline was added to the system.',
   ),

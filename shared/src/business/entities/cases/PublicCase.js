@@ -58,12 +58,7 @@ function PublicCase(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: joi.string().max(500).optional(),
-  caseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .optional(),
+  caseId: JoiValidationConstants.UUID.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: joi
     .string()
@@ -81,9 +76,7 @@ const publicCaseSchema = {
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: joi.string().uuid({
-    version: ['uuidv4'],
-  }),
+  caseId: JoiValidationConstants.UUID,
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),

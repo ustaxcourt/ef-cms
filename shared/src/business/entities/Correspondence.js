@@ -20,23 +20,13 @@ function Correspondence(rawProps) {
 }
 
 Correspondence.schema = {
-  documentId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  documentId: JoiValidationConstants.UUID.required(),
   documentTitle: joi.string().max(500).required(),
   filedBy: joi.string().max(500).allow('').optional(),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
-  userId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  userId: JoiValidationConstants.UUID.required(),
 };
 
 joiValidationDecorator(Correspondence, Correspondence.schema, {});
