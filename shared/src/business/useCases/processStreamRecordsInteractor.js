@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { createISODateString } = require('../business/utilities/DateHandler');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * recursively deletes the key from the item

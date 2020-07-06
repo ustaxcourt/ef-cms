@@ -1,6 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { createISODateString } = require('../business/utilities/DateHandler');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * @param {object} providers the providers object

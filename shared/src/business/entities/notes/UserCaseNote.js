@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi');
 const {
   JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstant');
+} = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');

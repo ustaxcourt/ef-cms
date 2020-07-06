@@ -16,7 +16,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
-const { createISODateString } = require('../business/utilities/DateHandler');
+const { createISODateString } = require('../utilities/DateHandler');
 const { Message } = require('./Message');
 const { omit, orderBy } = require('lodash');
 

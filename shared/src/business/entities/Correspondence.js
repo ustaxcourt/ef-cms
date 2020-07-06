@@ -5,7 +5,7 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../business/utilities/DateHandler');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * @param {object} rawProps the raw document data
