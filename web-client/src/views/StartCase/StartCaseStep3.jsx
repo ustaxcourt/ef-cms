@@ -211,7 +211,7 @@ export const StartCaseStep3 = connect(
                   'An estate or trust',
                   'A minor or legally incompetent person',
                   PARTY_TYPES.donor,
-                  'Transferee',
+                  PARTY_TYPES.transferee,
                   'Deceased Spouse',
                 ].map((otherType, idx) => (
                   <div className="usa-radio" key={otherType}>

@@ -9,7 +9,7 @@
     ],
     "serviceStamp": "Served",
     "attachments": false,
-    "documentType": "O - Order",
+    "documentType": "Order",
     "filingDate": "2020-04-29T15:52:01.457Z",
     "pending": false,
     "receivedAt": "2020-04-29T15:52:01.457Z",
@@ -39,7 +39,7 @@
           ],
           "serviceStamp": "Served",
           "attachments": false,
-          "documentType": "O - Order",
+          "documentType": "Order",
           "filingDate": "2020-04-29T15:52:01.457Z",
           "pending": false,
           "receivedAt": "2020-04-29T15:52:01.457Z",
@@ -82,7 +82,7 @@
             "createdAt": "2020-04-29T15:52:15.628Z",
             "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
             "from": "Test Petitionsclerk",
-            "message": "O - Order filed by Petitionsclerk is ready for review.",
+            "message": "Order filed by Petitionsclerk is ready for review.",
             "entityName": "Message",
             "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
           }
@@ -107,7 +107,6 @@
     "docketNumber": "105-20",
     "status": "served"
   },
-
   {
     "eventCode": "O",
     "docketRecordId": "cb57802b-4571-43ad-8f35-b54ac7fb7399",
@@ -118,10 +117,9 @@
     "index": 3,
     "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "numberOfPages": 1,
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"O - Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentContents\":\"We are sealing this case right meow\n\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"freeText\":\"Order that this case is sealed\",\"serviceStamp\":\"Served\",\"generatedDocumentTitle\":\"Order that this case is sealed\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
-
   {
     "date": null,
     "draftState": null,
@@ -132,7 +130,7 @@
       }
     ],
     "attachments": false,
-    "documentType": "TCOP - T.C. Opinion",
+    "documentType": "T.C. Opinion",
     "filingDate": "2020-05-13T14:49:32.100Z",
     "pending": false,
     "receivedAt": "2020-05-13T14:49:32.100Z",
@@ -163,7 +161,7 @@
             }
           ],
           "attachments": false,
-          "documentType": "TCOP - T.C. Opinion",
+          "documentType": "T.C. Opinion",
           "filingDate": "2020-05-13T14:49:32.100Z",
           "pending": false,
           "receivedAt": "2020-05-13T14:49:32.100Z",
@@ -187,7 +185,7 @@
                 "draftState": {
                   "eventCode": "MISC",
                   "generatedDocumentTitle": "A Strong Opinion",
-                  "documentType": "MISC - Miscellaneous",
+                  "documentType": "Miscellaneous",
                   "scenario": "Type A",
                   "primaryDocumentFileSize": 3586249,
                   "freeText": "A Strong Opinion",
@@ -196,7 +194,7 @@
                   "docketNumber": "105-20"
                 },
                 "attachments": false,
-                "documentType": "TCOP - T.C. Opinion",
+                "documentType": "T.C. Opinion",
                 "filingDate": "2020-05-13T14:49:32.100Z",
                 "pending": false,
                 "isFileAttached": true,
@@ -236,7 +234,7 @@
                   "createdAt": "2020-05-13T14:50:45.763Z",
                   "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
                   "from": "Test Docketclerk1",
-                  "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+                  "message": "T.C. Opinion filed by Docketclerk is ready for review.",
                   "entityName": "Message",
                   "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
                 }
@@ -275,7 +273,7 @@
             "createdAt": "2020-05-13T14:50:45.763Z",
             "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
             "from": "Test Docketclerk1",
-            "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+            "message": "T.C. Opinion filed by Docketclerk is ready for review.",
             "entityName": "Message",
             "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
           }
@@ -445,7 +443,7 @@
       ],
       "serviceStamp": "Served",
       "attachments": false,
-      "documentType": "O - Order",
+      "documentType": "Order",
       "filingDate": "2020-04-29T15:52:01.457Z",
       "pending": false,
       "receivedAt": "2020-04-29T15:52:01.457Z",
@@ -474,7 +472,7 @@
             },
             "serviceStamp": "Served",
             "attachments": false,
-            "documentType": "O - Order",
+            "documentType": "Order",
             "filingDate": "2020-04-29T15:52:01.457Z",
             "pending": false,
             "documentContents": "We are sealing this case right meow.\n",
@@ -514,7 +512,7 @@
               "createdAt": "2020-04-29T15:52:15.628Z",
               "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
               "from": "Test Petitionsclerk",
-              "message": "O - Order filed by Petitionsclerk is ready for review.",
+              "message": "Order filed by Petitionsclerk is ready for review.",
               "entityName": "Message",
               "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
             }
@@ -561,7 +559,7 @@
         "createdAt": "2020-04-29T15:52:15.628Z",
         "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
         "from": "Test Petitionsclerk",
-        "message": "O - Order filed by Petitionsclerk is ready for review.",
+        "message": "Order filed by Petitionsclerk is ready for review.",
         "entityName": "Message",
         "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -625,7 +623,8 @@
       "name": "Astra Santiago",
       "state": "NY",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com",
+      "hasEAccess": true
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -683,7 +682,7 @@
     "index": 4,
     "documentId": "130a3790-7e82-4f5c-8158-17f5d9d560e7",
     "numberOfPages": 1,
-    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"TCOP - T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
+    "editState": "{\"eventCode\":\"TCOP\",\"documentType\":\"T.C. Opinion\",\"documentTitle\":\"T.C. Opinion [judge] [anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"T.C. Opinion Judge Armen Some very strong opinions about sunglasses\",\"judge\":\"Judge Armen\",\"freeText\":\"Some very strong opinions about sunglasses\",\"caseId\":\"28caad58-df69-4a4d-af15-6554aee7fbd6\",\"documentId\":\"130a3790-7e82-4f5c-8158-17f5d9d560e7\"}",
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
   {
@@ -709,7 +708,6 @@
     "index": 2,
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6"
   },
-
   {
     "draftState": null,
     "servedParties": [
@@ -739,7 +737,6 @@
     "servedAt": "2020-04-29T15:51:29.168Z",
     "privatePractitioners": []
   },
-
   {
     "role": "privatePractitioner",
     "serviceIndicator": "Electronic",
@@ -786,7 +783,7 @@
       ],
       "serviceStamp": "Served",
       "attachments": false,
-      "documentType": "O - Order",
+      "documentType": "Order",
       "filingDate": "2020-04-29T15:52:01.457Z",
       "pending": false,
       "receivedAt": "2020-04-29T15:52:01.457Z",
@@ -815,7 +812,7 @@
             },
             "serviceStamp": "Served",
             "attachments": false,
-            "documentType": "O - Order",
+            "documentType": "Order",
             "filingDate": "2020-04-29T15:52:01.457Z",
             "pending": false,
             "documentContents": "We are sealing this case right meow.\n",
@@ -855,7 +852,7 @@
               "createdAt": "2020-04-29T15:52:15.628Z",
               "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
               "from": "Test Petitionsclerk",
-              "message": "O - Order filed by Petitionsclerk is ready for review.",
+              "message": "Order filed by Petitionsclerk is ready for review.",
               "entityName": "Message",
               "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
             }
@@ -902,7 +899,7 @@
         "createdAt": "2020-04-29T15:52:15.628Z",
         "messageId": "fd717166-8cf6-4925-96e8-0f3c807dabca",
         "from": "Test Petitionsclerk",
-        "message": "O - Order filed by Petitionsclerk is ready for review.",
+        "message": "Order filed by Petitionsclerk is ready for review.",
         "entityName": "Message",
         "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -978,7 +975,7 @@
         }
       ],
       "attachments": false,
-      "documentType": "TCOP - T.C. Opinion",
+      "documentType": "T.C. Opinion",
       "filingDate": "2020-05-13T14:49:32.100Z",
       "pending": false,
       "receivedAt": "2020-05-13T14:49:32.100Z",
@@ -1002,7 +999,7 @@
             "draftState": {
               "eventCode": "MISC",
               "generatedDocumentTitle": "A Strong Opinion",
-              "documentType": "MISC - Miscellaneous",
+              "documentType": "Miscellaneous",
               "scenario": "Type A",
               "primaryDocumentFileSize": 3586249,
               "freeText": "A Strong Opinion",
@@ -1011,7 +1008,7 @@
               "docketNumber": "105-20"
             },
             "attachments": false,
-            "documentType": "TCOP - T.C. Opinion",
+            "documentType": "T.C. Opinion",
             "filingDate": "2020-05-13T14:49:32.100Z",
             "pending": false,
             "isFileAttached": true,
@@ -1051,7 +1048,7 @@
               "createdAt": "2020-05-13T14:50:45.763Z",
               "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
               "from": "Test Docketclerk1",
-              "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+              "message": "T.C. Opinion filed by Docketclerk is ready for review.",
               "entityName": "Message",
               "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
             }
@@ -1095,7 +1092,7 @@
         "createdAt": "2020-05-13T14:50:45.763Z",
         "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
         "from": "Test Docketclerk1",
-        "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+        "message": "T.C. Opinion filed by Docketclerk is ready for review.",
         "entityName": "Message",
         "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -1119,7 +1116,7 @@
         }
       ],
       "attachments": false,
-      "documentType": "TCOP - T.C. Opinion",
+      "documentType": "T.C. Opinion",
       "filingDate": "2020-05-13T14:49:32.100Z",
       "pending": false,
       "receivedAt": "2020-05-13T14:49:32.100Z",
@@ -1143,7 +1140,7 @@
             "draftState": {
               "eventCode": "MISC",
               "generatedDocumentTitle": "A Strong Opinion",
-              "documentType": "MISC - Miscellaneous",
+              "documentType": "Miscellaneous",
               "scenario": "Type A",
               "primaryDocumentFileSize": 3586249,
               "freeText": "A Strong Opinion",
@@ -1152,7 +1149,7 @@
               "docketNumber": "105-20"
             },
             "attachments": false,
-            "documentType": "TCOP - T.C. Opinion",
+            "documentType": "T.C. Opinion",
             "filingDate": "2020-05-13T14:49:32.100Z",
             "pending": false,
             "isFileAttached": true,
@@ -1192,7 +1189,7 @@
               "createdAt": "2020-05-13T14:50:45.763Z",
               "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
               "from": "Test Docketclerk1",
-              "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+              "message": "T.C. Opinion filed by Docketclerk is ready for review.",
               "entityName": "Message",
               "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
             }
@@ -1236,7 +1233,7 @@
         "createdAt": "2020-05-13T14:50:45.763Z",
         "messageId": "a87aef8b-bee8-444f-8eae-2eaedcecc76b",
         "from": "Test Docketclerk1",
-        "message": "TCOP - T.C. Opinion filed by Docketclerk is ready for review.",
+        "message": "T.C. Opinion filed by Docketclerk is ready for review.",
         "entityName": "Message",
         "fromUserId": "2805d1ab-18d0-43ec-bafb-654e83405416"
       }

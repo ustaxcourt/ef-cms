@@ -753,4 +753,51 @@ describe('ContactFactory', () => {
       expect(contactConstructor).toEqual({});
     });
   });
+
+  describe('hasEAccess validation', () => {
+    let contactConstructor;
+
+    beforeEach(() => {
+      contactConstructor = ContactFactory.createContactFactory({
+        additionalErrorMappings: {},
+        additionalValidation: {},
+      })({ partyType: PARTY_TYPES.petitioner });
+    });
+
+    it('fails when an email is not provided and the contact has eAccess', () => {
+      const contact = new contactConstructor({
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        hasEAccess: true,
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      });
+
+      expect(contact.getFormattedValidationErrors()).toMatchObject({
+        email: '"email" is required',
+      });
+    });
+
+    it('passes when email is not provided and the contact does not have eAccess', () => {
+      const contact = new contactConstructor({
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        hasEAccess: false,
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      });
+
+      expect(contact.getFormattedValidationErrors()).toEqual(null);
+    });
+  });
 });

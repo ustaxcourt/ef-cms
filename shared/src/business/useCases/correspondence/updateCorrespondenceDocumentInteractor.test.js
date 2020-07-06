@@ -44,33 +44,18 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     docketNumber: '123-45',
     docketRecord: [
       {
-        description: 'Docket Record 0',
-        docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        eventCode: 'O',
-        filingDate: createISODateString(),
-        index: 0,
-      },
-      {
         description: 'Docket Record 1',
         docketRecordId: mockDocumentId,
         documentId: mockDocumentId,
         eventCode: 'OAJ',
         filingDate: createISODateString(),
-        index: 1,
+        index: 0,
       },
     ],
     documents: [
       {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        documentType: 'O - Order',
-        eventCode: 'O',
-        serviceStamp: 'Served',
-        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-      },
-      {
         documentId: mockDocumentId,
-        documentType: 'OAJ - Order that case is assigned',
+        documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },

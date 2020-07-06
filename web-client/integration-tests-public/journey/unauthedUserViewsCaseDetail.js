@@ -77,9 +77,9 @@ export const unauthedUserViewsCaseDetail = test => {
           documentType: 'Statement of Taxpayer Identification',
         }),
         expect.objectContaining({
-          documentType: 'OD - Order of Dismissal Entered',
+          documentType: 'Order of Dismissal Entered',
         }),
-        expect.objectContaining({ documentType: 'TRAN - Transcript' }),
+        expect.objectContaining({ documentType: 'Transcript' }),
       ]),
     );
   });

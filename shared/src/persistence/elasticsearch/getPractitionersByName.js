@@ -1,3 +1,4 @@
+const { ROLES } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 const { uniqBy } = require('lodash');
 
@@ -19,9 +20,9 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
     {
       bool: {
         should: [
-          { match: { 'role.S': 'irsPractitioner' } },
-          { match: { 'role.S': 'privatePractitioner' } },
-          { match: { 'role.S': 'inactivePractitioner' } },
+          { match: { 'role.S': ROLES.irsPractitioner } },
+          { match: { 'role.S': ROLES.privatePractitioner } },
+          { match: { 'role.S': ROLES.inactivePractitioner } },
         ],
       },
     },
