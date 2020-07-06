@@ -11,7 +11,7 @@ export const selectDocumentForScanSequence = [
     no: [],
     yes: [
       selectDocumentForPreviewAction,
-      ...setPdfPreviewUrlSequence,
+      setPdfPreviewUrlSequence,
       set(state.currentViewMetadata.documentUploadMode, 'preview'),
     ],
   },

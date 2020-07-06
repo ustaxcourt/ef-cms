@@ -28,7 +28,6 @@ export const CaseDetailInternal = connect(
   {
     caseDetailInternalTabs:
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
-    primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.modal.showModal,
   },
