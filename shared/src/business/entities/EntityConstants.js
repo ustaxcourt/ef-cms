@@ -3,7 +3,7 @@ const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEven
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy } = require('lodash');
 
-// a number (100 to 9999) followed by a - and a 2 digit year
+// a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 // city, state, optional unique ID (generated automatically in testing files)
@@ -121,17 +121,15 @@ const SCENARIOS = [
   'Type H',
 ];
 
-// TODO: should come from court issued event codes
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
 const OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
 
-// TODO: should come from internal or external filing event
-const CONTACT_CHANGE_DOCUMENT_TYPES = [
-  'Notice of Change of Address',
-  'Notice of Change of Telephone Number',
-  'Notice of Change of Address and Telephone Number',
-];
+const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+)
+  .filter(d => d.isContactChange)
+  .map(d => d.documentType);
 
 // TODO: ????
 const TRACKED_DOCUMENT_TYPES = {
@@ -695,7 +693,6 @@ const CHAMBERS_SECTIONS = sortBy([
   URDAS_CHAMBERS_SECTION,
   TOROS_CHAMBERS_SECTION,
   VASQUEZS_CHAMBERS_SECTION,
-  TOROS_CHAMBERS_SECTION,
   WELLS_CHAMBERS_SECTION,
 ]);
 
