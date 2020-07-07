@@ -305,7 +305,7 @@
           "scenario": "Type A",
           "entityName": "Document",
           "freeText": "Unservable USCA Document",
-          "documentId": "86c12180-4c87-4982-a5d4-d343c6ef6665",
+          "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
           "documentTitle": "U.S.C.A Unservable USCA Document",
           "relationship": "primaryDocument",
           "docketNumber": "101-20"
@@ -350,8 +350,8 @@
     "scenario": "Type A",
     "entityName": "Document",
     "freeText": "Unservable USCA Document",
-    "sk": "document|86c12180-4c87-4982-a5d4-d343c6ef6665",
-    "documentId": "86c12180-4c87-4982-a5d4-d343c6ef6665",
+    "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "documentTitle": "U.S.C.A Unservable USCA Document",
     "relationship": "primaryDocument",
@@ -366,8 +366,8 @@
     "sk": "docket-record|842561bb-5c4a-44fb-94f7-c4732320e132",
     "description": "U.S.C.A Unservable USCA Document",
     "index": 3,
-    "documentId": "86c12180-4c87-4982-a5d4-d343c6ef6665",
-    "editState": "{\"eventCode\":\"USCA\",\"documentType\":\"U.S.C.A\",\"documentTitle\":\"U.S.C.A [anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"U.S.C.A Unservable USCA Document\",\"freeText\":\"Unservable USCA Document\",\"caseId\":\"0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0\",\"documentId\":\"86c12180-4c87-4982-a5d4-d343c6ef6665\"}",
+    "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "editState": "{\"eventCode\":\"USCA\",\"documentType\":\"U.S.C.A\",\"documentTitle\":\"U.S.C.A [anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"U.S.C.A Unservable USCA Document\",\"freeText\":\"Unservable USCA Document\",\"caseId\":\"0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0\",\"documentId\":\"06f60736-5f37-4590-b62a-5c7edf84ffc6\"}",
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
   }
 ]
