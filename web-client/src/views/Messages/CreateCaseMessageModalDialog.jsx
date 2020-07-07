@@ -26,6 +26,7 @@ export const CreateCaseMessageModalDialog = connect(
     form,
     onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
+    title = 'Create Message',
     updateChambersInCreateCaseMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateCaseMessageModalSequence,
@@ -43,7 +44,7 @@ export const CreateCaseMessageModalDialog = connect(
         className="ustc-create-message-modal"
         confirmLabel="Send"
         preventCancelOnBlur={true}
-        title="Create Message"
+        title={title}
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
