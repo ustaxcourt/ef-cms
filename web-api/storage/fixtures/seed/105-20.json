@@ -4,7 +4,7 @@
     "servedParties": [
       {
         "name": "Astra Santiago",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "serviceStamp": "Served",
@@ -34,7 +34,7 @@
           "servedParties": [
             {
               "name": "Astra Santiago",
-              "email": "petitioner"
+              "email": "petitioner@example.com"
             }
           ],
           "serviceStamp": "Served",
@@ -126,7 +126,7 @@
     "servedParties": [
       {
         "name": "Test Private Practitioner",
-        "email": "privatePractitioner"
+        "email": "privatePractitioner@example.com"
       }
     ],
     "attachments": false,
@@ -157,7 +157,7 @@
           "servedParties": [
             {
               "name": "Test Private Practitioner",
-              "email": "privatePractitioner"
+              "email": "privatePractitioner@example.com"
             }
           ],
           "attachments": false,
@@ -301,7 +301,7 @@
     "servedParties": [
       {
         "name": "Astra Santiago",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Petition",
@@ -438,7 +438,7 @@
       "servedParties": [
         {
           "name": "Astra Santiago",
-          "email": "petitioner"
+          "email": "petitioner@example.com"
         }
       ],
       "serviceStamp": "Served",
@@ -712,7 +712,7 @@
     "servedParties": [
       {
         "name": "Astra Santiago",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Statement of Taxpayer Identification",
@@ -757,7 +757,7 @@
     "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
+    "email": "privatePractitioner@example.com"
   },
   {
     "sk": "work-item|332026fb-8844-49b6-bb13-66eff6882f00",
@@ -777,7 +777,7 @@
       "servedParties": [
         {
           "name": "Astra Santiago",
-          "email": "petitioner"
+          "email": "petitioner@example.com"
         }
       ],
       "serviceStamp": "Served",
@@ -970,7 +970,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatePractitioner"
+          "email": "privatePractitioner@example.com"
         }
       ],
       "attachments": false,
@@ -1111,7 +1111,7 @@
       "servedParties": [
         {
           "name": "Test Private Practitioner",
-          "email": "privatePractitioner"
+          "email": "privatePractitioner@example.com"
         }
       ],
       "attachments": false,
