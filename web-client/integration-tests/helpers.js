@@ -352,7 +352,7 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
 export const uploadPetition = async (
   test,
   overrides = {},
-  loginUsername = 'petitioner',
+  loginUsername = 'petitioner@example.com',
 ) => {
   const user = {
     ...userMap[loginUsername],
