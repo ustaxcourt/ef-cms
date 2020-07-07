@@ -131,8 +131,6 @@ const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
   .filter(d => d.isContactChange)
   .map(d => d.documentType);
 
-console.log(CONTACT_CHANGE_DOCUMENT_TYPES);
-
 // TODO: ????
 const TRACKED_DOCUMENT_TYPES = {
   application: {
