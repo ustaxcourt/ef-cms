@@ -614,6 +614,7 @@ export const presenter = {
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeleteCorrespondenceModalSequence,
+    openConfirmDeleteDeficiencyStatisticsModalSequence,
     openConfirmDeleteOtherStatisticsModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
