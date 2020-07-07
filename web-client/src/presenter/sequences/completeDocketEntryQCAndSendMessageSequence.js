@@ -6,6 +6,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
+import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -15,13 +16,11 @@ import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidati
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateCaseMessageDetailsFromModalAction } from '../actions/CaseMessage/updateCaseMessageDetailsFromModalAction';
 import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  updateCaseMessageDetailsFromModalAction,
   validateCreateCaseMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
@@ -38,6 +37,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
+      getCaseMessagesForCaseAction,
       navigateToDocumentQCAction,
     ]),
   },
