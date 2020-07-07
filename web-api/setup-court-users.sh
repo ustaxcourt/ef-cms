@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Usage
-#   creates the COURT users inside our system.  
+#   creates the COURT users inside our system.
 #   The court users come directly from a court_users.csv
 
 # Requirements
