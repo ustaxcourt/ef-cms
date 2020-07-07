@@ -21,12 +21,12 @@ export const petitionsClerkForwardsMessageToDocketClerk = test => {
       toUserId: expect.anything(),
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
       key: 'toSection',
       value: 'docket',
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '1805d1ab-18d0-43ec-bafb-654e83405416', //docketclerk
     });
