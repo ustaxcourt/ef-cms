@@ -52,22 +52,24 @@ const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
+const pickEventCode = d => d.eventCode;
+
 const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
-).map(d => d.eventCode);
+).map(pickEventCode);
 
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
-  d => d.eventCode,
+  pickEventCode,
 );
 
 const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isNotice,
-).map(d => d.eventCode);
+).map(pickEventCode);
 
 const OPINION_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOpinion,
 );
-const OPINION_EVENT_CODES = OPINION_DOCUMENT_TYPES.map(d => d.eventCode);
+const OPINION_EVENT_CODES = OPINION_DOCUMENT_TYPES.map(pickEventCode);
 
 const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
@@ -78,7 +80,7 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
 
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
-).map(d => d.eventCode);
+).map(pickEventCode);
 
 const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
