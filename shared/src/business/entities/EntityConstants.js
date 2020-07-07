@@ -52,6 +52,10 @@ const STIN_DOCKET_ENTRY_TYPE = {
   eventCode: 'STIN',
 };
 
+const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.isUnservable,
+).map(d => d.eventCode);
+
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
   d => d.eventCode,
 );
@@ -862,6 +866,7 @@ module.exports = {
   TRIAL_LOCATION_MATCHER,
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
+  UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
 };
