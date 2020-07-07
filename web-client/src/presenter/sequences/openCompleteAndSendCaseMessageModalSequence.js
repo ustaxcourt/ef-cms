@@ -8,9 +8,10 @@ import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { updateCaseMessageModalAttachmentsAction } from '../actions/updateCaseMessageModalAttachmentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-export const openCreateMessageAlongsideDocketRecordQCModalSequence = [
+export const openCompleteAndSendCaseMessageModalSequence = [
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
@@ -25,7 +26,8 @@ export const openCreateMessageAlongsideDocketRecordQCModalSequence = [
       clearModalStateAction,
       generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
-      setShowModalFactoryAction('CreateMessageAlongsideDocketRecordQCModal'),
+      updateCaseMessageModalAttachmentsAction,
+      setShowModalFactoryAction('CreateCaseMessageModalDialog'),
     ],
   },
 ];
