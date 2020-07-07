@@ -22,6 +22,7 @@ const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
         ],
         EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
+        UNSERVABLE_EVENT_CODES: ['RUHROH'],
         USER_ROLES: {
           petitionsClerk: USER_ROLES.petitionsClerk,
         },
@@ -220,5 +221,25 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
     expect(result.showSaveAndServeButton).toEqual(true);
     expect(result.showDocumentNotSignedAlert).toEqual(false);
+  });
+
+  it('should return showSaveAndServeButton false if the document is unservable', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'RUHROH',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(false);
   });
 });
