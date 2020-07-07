@@ -1,6 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedCaseDetail = withAppContextDecorator(
@@ -30,9 +29,6 @@ export const petitionsClerkEditsDraftOrder = (
 
     test.setState('form.richText', setRichText);
     await test.runSequence('submitCourtIssuedOrderSequence');
-
-    //TODO - fix this when cerebral runSequence starts properly awaiting things
-    await wait(1000);
 
     const formattedAfterEdit = runCompute(formattedCaseDetail, {
       state: test.getState(),
