@@ -6,7 +6,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
@@ -15,13 +15,18 @@ import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidati
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
+import { updateCaseMessageDetailsFromModalAction } from '../actions/CaseMessage/updateCaseMessageDetailsFromModalAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  updateWorkItemFromPropsOrModalOrFormAction,
+  // computeFormDateAction,
+  // computeSecondaryFormDateAction,
+  // computeCertificateOfServiceFormDateAction,
+  // computeDateReceivedAction,
+  // validateDocketEntryAction,
+  updateCaseMessageDetailsFromModalAction,
   validateInitialWorkItemMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
@@ -38,7 +43,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
-      navigateToCaseDetailAction,
+      navigateToDocumentQCAction,
     ]),
   },
 ];
