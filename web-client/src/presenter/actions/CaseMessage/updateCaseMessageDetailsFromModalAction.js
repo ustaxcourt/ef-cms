@@ -12,8 +12,9 @@ export const updateCaseMessageDetailsFromModalAction = ({ get }) => {
 
   const message = {
     assigneeId: modalFormMessage.toUserId,
-    message: modalFormMessage.subject,
+    message: modalFormMessage.message,
     section: modalFormMessage.toSection,
+    subject: modalFormMessage.subject,
   };
 
   return { message };
