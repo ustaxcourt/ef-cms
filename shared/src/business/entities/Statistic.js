@@ -1,10 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * Statistic constructor
@@ -79,21 +79,16 @@ joiValidationDecorator(
       .description(
         'The total amount of penalties for the period or year on the IRS notice.',
       ),
-    lastDateOfPeriod: joiStrictTimestamp
-      .max('now')
+    lastDateOfPeriod: JoiValidationConstants.ISO_DATE.max('now')
       .when('yearOrPeriod', {
         is: 'Period',
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       })
       .description('Last date of the statistics period.'),
-    statisticId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required()
-      .description('Unique statistic ID only used by the system.'),
+    statisticId: JoiValidationConstants.UUID.required().description(
+      'Unique statistic ID only used by the system.',
+    ),
     year: joi
       .number()
       .integer()
