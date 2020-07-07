@@ -347,19 +347,22 @@
     "eventCode": "CTRA",
     "documentType": "Corrected Transcript",
     "documentTitle": "Corrected Transcipt of [Date]",
-    "scenario": "Type E"
+    "scenario": "Type E",
+    "isUnservable": true
   },
   {
     "eventCode": "FTRL",
     "documentType": "Further Trial before",
     "documentTitle": "Further Trial before [Judge] at [Place]",
-    "scenario": "Type F"
+    "scenario": "Type F",
+    "isUnservable": true
   },
   {
     "eventCode": "HEAR",
     "documentType": "Hearing before",
     "documentTitle": "Hearing before [Judge] at [Place]",
-    "scenario": "Type F"
+    "scenario": "Type F",
+    "isUnservable": true
   },
   {
     "eventCode": "NDT",
@@ -371,19 +374,22 @@
     "eventCode": "PTRL",
     "documentType": "Partial Trial before",
     "documentTitle": "Partial Trial before [Judge] at [Place]",
-    "scenario": "Type F"
+    "scenario": "Type F",
+    "isUnservable": true
   },
   {
     "eventCode": "TRL",
     "documentType": "Trial before",
     "documentTitle": "Trial before [Judge] at [Place]",
-    "scenario": "Type F"
+    "scenario": "Type F",
+    "isUnservable": true
   },
   {
     "eventCode": "ROA",
     "documentType": "Record on Appeal",
     "documentTitle": "Record on Appeal [Anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "TCOP",
@@ -396,13 +402,15 @@
     "eventCode": "RTRA",
     "documentType": "Revised Transcript",
     "documentTitle": "Revised Transcript of [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "TRAN",
     "documentType": "Transcript",
     "documentTitle": "Transcript of [anything] on [date]",
-    "scenario": "Type H"
+    "scenario": "Type H",
+    "isUnservable": true
   },
   {
     "eventCode": "MISC",
@@ -414,30 +422,35 @@
     "eventCode": "HE",
     "documentType": "Hearing Exhibits",
     "documentTitle": "Hearing Exhibits for [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "TE",
     "documentType": "Trial Exhibits",
     "documentTitle": "Trial Exhibits for [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "USCA",
     "documentType": "U.S.C.A",
     "documentTitle": "U.S.C.A [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "ES",
     "documentType": "Bounced Electronic Service",
     "documentTitle": "Bounced Electronic Service [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   },
   {
     "eventCode": "RM",
     "documentType": "Returned Mail",
     "documentTitle": "Returned Mail [anything]",
-    "scenario": "Type A"
+    "scenario": "Type A",
+    "isUnservable": true
   }
 ]
