@@ -1,6 +1,9 @@
 import { state } from 'cerebral';
 
 export const caseMessageModalHelper = (get, applicationContext) => {
+  const {
+    CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const {
     docketRecordWithDocument,
@@ -11,10 +14,10 @@ export const caseMessageModalHelper = (get, applicationContext) => {
 
   const form = get(state.modal.form);
   const screenMetadata = get(state.screenMetadata);
-  const documentAttachmentLimit = 5; // TODO: Do something better with this
 
   const currentAttachmentCount = (form.attachments || []).length;
-  const canAddDocument = currentAttachmentCount < documentAttachmentLimit;
+  const canAddDocument =
+    currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
     currentAttachmentCount === 0 || screenMetadata.showAddDocumentForm;
 
