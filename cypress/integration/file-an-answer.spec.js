@@ -4,7 +4,7 @@ const {
 
 describe('Filing an Answer', function () {
   before(() => {
-    cy.login('irsPractitioner@example.com', '/case-detail/104-20');
+    cy.login('irsPractitioner', '/case-detail/104-20');
   });
 
   it('should have a file first IRS document button', () => {
@@ -47,7 +47,7 @@ describe('Filing an Answer', function () {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(SLEEP);
 
-    navigateToDashboard('irsPractitioner@example.com');
+    navigateToDashboard('irsPractitioner');
     cy.get('button#tab-closed').click();
     cy.get('table#case-list').find('a').should('contain', '104-20');
   });

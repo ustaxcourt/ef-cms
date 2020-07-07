@@ -9,7 +9,7 @@ const {
 
 describe('Create case and submit to IRS', function () {
   before(() => {
-    navigateToDocumentQC('petitionsclerk@example.com');
+    navigateToDocumentQC('petitionsclerk');
 
     getCreateACaseButton().click();
   });
