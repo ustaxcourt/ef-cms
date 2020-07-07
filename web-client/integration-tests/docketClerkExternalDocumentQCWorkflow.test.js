@@ -27,7 +27,7 @@ describe('Create a work item', () => {
   let notificationsBefore;
   let decisionWorkItem;
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and cache the initial inbox counts', async () => {
     await getFormattedDocumentQCMyInbox(test);
@@ -39,7 +39,7 @@ describe('Create a work item', () => {
     notificationsBefore = getNotifications(test);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -66,7 +66,7 @@ describe('Create a work item', () => {
     await uploadExternalDecisionDocument(test);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 3 document qc section inbox entries', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,

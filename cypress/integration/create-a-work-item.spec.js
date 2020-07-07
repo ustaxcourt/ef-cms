@@ -23,7 +23,7 @@ const {
 describe('Create a work item ', () => {
   before(() => {
     navigateToDocumentDetail(
-      'petitionsclerk',
+      'petitionsclerk@example.com',
       '104-19',
       'c63be3f2-2240-451e-b6bd-8206d52a070b',
     );
@@ -39,7 +39,7 @@ describe('Create a work item ', () => {
 
   it('creates another work item card in the in progress tab of the document', () => {
     navigateToDocumentDetail(
-      'petitionsclerk',
+      'petitionsclerk@example.com',
       '104-19',
       'c63be3f2-2240-451e-b6bd-8206d52a070b',
     );
@@ -49,7 +49,7 @@ describe('Create a work item ', () => {
   });
 
   it('creates a sent message in the petitionsclerk sent queue with yolo', () => {
-    navigateToDashboard('petitionsclerk');
+    navigateToDashboard('petitionsclerk@example.com');
     viewMyOutbox();
     getTableRows().should('have.length', 1);
     cy.showsSpinner(false);
@@ -65,7 +65,7 @@ describe('Create a work item ', () => {
   });
 
   it("puts a work item in the docketclerk's inbox", () => {
-    navigateToDashboard('docketclerk');
+    navigateToDashboard('docketclerk@example.com');
     viewMyInbox();
     getTableRows().should('have.length', 1);
     getWorkItemContaining('104-19');
@@ -73,7 +73,7 @@ describe('Create a work item ', () => {
   });
 
   it('creates a section inbox message in this work item', () => {
-    navigateToDashboard('docketclerk');
+    navigateToDashboard('docketclerk@example.com');
     viewSectionInbox();
     getWorkItemContaining('yolo').should('exist');
   });

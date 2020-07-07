@@ -3,7 +3,7 @@ let createdDocketNumber;
 
 describe('File a petition', function () {
   before(() => {
-    cy.login('petitioner');
+    cy.login('petitioner@example.com');
   });
 
   it('finds footer element', () => {
@@ -38,7 +38,7 @@ describe('File a petition', function () {
 
 describe('before filing a petition', () => {
   beforeEach(() => {
-    cy.login('petitioner', 'before-filing-a-petition');
+    cy.login('petitioner@example.com', 'before-filing-a-petition');
   });
 
   it('should navigate to dashboard when cancel is clicked', () => {
@@ -60,7 +60,7 @@ describe('before filing a petition', () => {
 
 describe('creation form', () => {
   before(() => {
-    cy.login('petitioner', 'file-a-petition/step-1');
+    cy.login('petitioner@example.com', 'file-a-petition/step-1');
   });
 
   it('has a stin file input', () => {
@@ -217,7 +217,7 @@ describe('creation form', () => {
 describe('can view case detail', () => {
   before(() => {
     cy.viewport(1200, 900);
-    cy.login('petitioner', `/case-detail/${createdDocketNumber}`);
+    cy.login('petitioner@example.com', `/case-detail/${createdDocketNumber}`);
     cy.url().should('include', 'case-detail');
   });
 

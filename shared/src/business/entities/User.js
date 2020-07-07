@@ -98,7 +98,7 @@ const userValidation = {
         }),
     })
     .optional(),
-  email: joi.string().max(100).optional(),
+  email: joi.string().email({ tlds: false }).max(100).optional(),
   entityName: joi.string().valid('User').required(),
   section: joi
     .string()

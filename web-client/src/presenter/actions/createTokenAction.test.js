@@ -8,7 +8,7 @@ describe('createTokenAction', () => {
       modules: {
         presenter,
       },
-      state: { form: { name: 'petitioner' } },
+      state: { form: { name: 'petitioner@example.com' } },
     });
 
     expect(result.output.token).toBeDefined();

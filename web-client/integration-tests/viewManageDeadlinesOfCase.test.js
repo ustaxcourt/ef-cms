@@ -21,7 +21,7 @@ describe('View and manage the deadlines of a case', () => {
   const createdIds = [];
 
   describe('Create a case', () => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);
@@ -30,37 +30,37 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   describe('View a case with no deadlines', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewsCaseWithNoDeadlines(test);
   });
 
   describe('Create a case deadline', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkCreatesACaseDeadline(test);
   });
 
   describe('View a case deadline list on case', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewCaseDeadline(test);
   });
 
   describe('Edit a case deadline on case', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkEditsCaseDeadline(test);
   });
 
   describe('Delete a case deadline on case', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkDeletesCaseDeadline(test);
   });
 
   describe('View a case with no deadlines', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewsCaseWithNoDeadlines(test);
   });
 
   describe('View the deadlines report', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkViewsDeadlineReport(test);
   });
 });

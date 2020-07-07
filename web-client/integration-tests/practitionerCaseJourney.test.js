@@ -21,13 +21,13 @@ describe('Practitioner requests access to case', () => {
   });
 
   //tests for practitioner starting a new case
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -45,7 +45,7 @@ describe('Practitioner requests access to case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForNonexistentCase(test);
   practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
@@ -57,7 +57,7 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case #2', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -75,7 +75,7 @@ describe('Practitioner requests access to case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
   practitionerViewsCaseDetail(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
