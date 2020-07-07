@@ -6,7 +6,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
-import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -29,7 +28,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
     error: [setValidationErrorsByFlagAction],
     success: showProgressSequenceDecorator([
       createCaseMessageAction,
-      stopShowValidationAction,
       stopShowValidationAction,
       completeDocketEntryQCAction,
       clearFormAction,
