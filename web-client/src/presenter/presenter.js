@@ -339,9 +339,9 @@ import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequen
 import { updateCaseMessageModalAttachmentsSequence } from './sequences/updateCaseMessageModalAttachmentsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
+import { updateChambersInCreateCaseMessageModalSequence } from './sequences/updateChambersInCreateCaseMessageModalSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
-import { updateCreateCaseMessageValueInModalSequence } from './sequences/updateCreateCaseMessageValueInModalSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
@@ -355,6 +355,7 @@ import { updateForwardFormValueSequence } from './sequences/updateForwardFormVal
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
+import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
 import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
@@ -363,6 +364,7 @@ import { updatePetitionerInformationFormSequence } from './sequences/updatePetit
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
+import { updateSectionInCreateCaseMessageModalSequence } from './sequences/updateSectionInCreateCaseMessageModalSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
@@ -766,9 +768,9 @@ export const presenter = {
     updateCaseMessageModalAttachmentsSequence,
     updateCaseNoteSequence,
     updateCasePartyTypeSequence,
+    updateChambersInCreateCaseMessageModalSequence,
     updateCompleteFormValueSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
-    updateCreateCaseMessageValueInModalSequence,
     updateCreateOrderModalFormValueSequence,
     updateDocketEntryFormValueSequence,
     updateDocketEntryMetaDocumentFormValueSequence,
@@ -782,6 +784,7 @@ export const presenter = {
     updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
+    updateModalFormValueSequence,
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionDetailsSequence,
@@ -790,6 +793,7 @@ export const presenter = {
     updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,
+    updateSectionInCreateCaseMessageModalSequence,
     updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
