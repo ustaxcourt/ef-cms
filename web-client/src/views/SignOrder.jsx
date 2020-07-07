@@ -11,6 +11,8 @@ export const SignOrder = connect(
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
+    navigateToCaseDetailWithDraftDocumentSequence:
+      sequences.navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
@@ -22,8 +24,8 @@ export const SignOrder = connect(
   },
   function SignOrder({
     currentPageNumber,
-    docketNumber,
     documentId,
+    navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -153,7 +155,12 @@ export const SignOrder = connect(
             <div className="grid-col-4">
               <Button
                 link
-                href={`/case-detail/${docketNumber}/documents/${documentId}`}
+                onClick={() => {
+                  navigateToCaseDetailWithDraftDocumentSequence({
+                    primaryTab: 'draftDocuments',
+                    viewerDraftDocumentToDisplay: { documentId },
+                  });
+                }}
               >
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
                 Back to Draft Document

@@ -155,6 +155,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
+import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToDocumentQcFromPrintPaperPetitionReceiptSequence } from './sequences/navigateToDocumentQcFromPrintPaperPetitionReceiptSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
@@ -585,6 +586,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCaseDetailFromPaperServiceSequence,
     navigateToCaseDetailSequence,
+    navigateToCaseDetailWithDraftDocumentSequence,
     navigateToDocumentQcFromPrintPaperPetitionReceiptSequence,
     navigateToEditOrderSequence,
     navigateToPathSequence,

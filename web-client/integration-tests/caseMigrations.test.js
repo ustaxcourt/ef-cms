@@ -46,7 +46,7 @@ const correspondenceCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Third Migrated Case',
-  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  caseId: applicationContext.getUniqueId(),
   correspondence: [
     {
       documentId: '148c2f6f-0e9e-42f3-a73b-b250923d72d9',
@@ -64,7 +64,7 @@ const otherFilersCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Fourth Migrated Case',
-  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  caseId: applicationContext.getUniqueId(),
   docketNumber: '187-20',
   otherFilers: [
     {
@@ -100,8 +100,30 @@ const otherPetitionersCase = {
   ...MOCK_CASE,
   associatedJudge: 'Chief Judge',
   caseCaption: 'The Fifth Migrated Case',
-  caseId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+  caseId: applicationContext.getUniqueId(),
   docketNumber: '162-20',
+  irsPractitioners: [
+    {
+      additionalName: 'Test Other Petitioner',
+      barNumber: 'RT6789',
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
+      email: 'someone@example.com',
+      hasEAccess: true,
+      name: 'Keelie Bruce',
+      role: 'irsPractitioner',
+      secondaryName: 'Logan Fields',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    },
+  ],
   otherPetitioners: [
     {
       additionalName: 'Test Other Petitioner',
@@ -119,11 +141,37 @@ const otherPetitionersCase = {
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
+  privatePractitioners: [
+    {
+      additionalName: 'Test Other Petitioner',
+      barNumber: 'PT1234',
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        barNumber: 'PT1234',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
+      email: 'someone@example.com',
+      hasEAccess: true,
+      name: 'Keelie Bruce',
+      role: 'privatePractitioner',
+      secondaryName: 'Logan Fields',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+      userId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+    },
+  ],
   status: STATUS_TYPES.calendared,
 };
 
 describe('Case journey', () => {
   it('should migrate cases', async () => {
+    jest.setTimeout(3000);
+
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       firstConsolidatedCase,
@@ -157,9 +205,30 @@ describe('Case journey', () => {
       docketNumber: secondConsolidatedCase.docketNumber,
     });
     expect(test.getState('caseDetail.consolidatedCases').length).toBe(2);
+
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: correspondenceCase.docketNumber,
     });
     expect(test.getState('caseDetail.correspondence').length).toBe(1);
+  });
+
+  it('Docketclerk views case with other filers', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: otherFilersCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.otherFilers').length).toBe(2);
+  });
+
+  it('Docketclerk views case with other petitioners', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: otherPetitionersCase.docketNumber,
+    });
+    expect(test.getState('caseDetail.otherPetitioners').length).toBe(1);
+    expect(test.getState('caseDetail.privatePractitioners.0.barNumber')).toBe(
+      'PT1234',
+    );
+    expect(
+      test.getState('caseDetail.privatePractitioners.0.contact.city'),
+    ).toBe('Placeat sed dolorum');
   });
 });
