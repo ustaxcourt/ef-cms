@@ -6,7 +6,7 @@ import React from 'react';
 
 export const FileUploadStatusModal = connect(
   {
-    cancelUploadSequence: sequences.cancelFileUploadSequence, // TODO: replace with a real cancel sequence
+    cancelUploadSequence: sequences.cancelFileUploadSequence,
     helper: state.fileUploadStatusHelper,
     percentComplete: state.fileUploadProgress.percentComplete,
   },
