@@ -5,6 +5,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
+    UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
   const documentId = get(state.documentId);
@@ -60,8 +61,9 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   }`;
 
   const showSaveAndServeButton =
-    !!caseDocument.signedAt ||
-    !EVENT_CODES_REQUIRING_SIGNATURE.includes(form.eventCode);
+    (!!caseDocument.signedAt ||
+      !EVENT_CODES_REQUIRING_SIGNATURE.includes(form.eventCode)) &&
+    !UNSERVABLE_EVENT_CODES.includes(form.eventCode);
 
   const showDocumentNotSignedAlert =
     !caseDocument.signedAt &&

@@ -21,6 +21,7 @@ describe('OtherFilerContact', () => {
       phone: '555-555-1212',
       postalCode: '90210',
       state: 'TN',
+      title: UNIQUE_OTHER_FILER_TYPE,
     });
 
     expect(contact.getFormattedValidationErrors()).toEqual(null);
@@ -45,6 +46,7 @@ describe('OtherFilerContact', () => {
 
     expect(contact.getFormattedValidationErrors()).toEqual({
       otherFilerType: 'Select a filer type',
+      title: 'Title must be Intervenor or Participant',
     });
   });
 });
