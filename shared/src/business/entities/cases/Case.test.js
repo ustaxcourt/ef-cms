@@ -355,6 +355,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
         {
           address1: '1337 12th Ave',
@@ -367,6 +368,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
       ];
 
