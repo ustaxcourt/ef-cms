@@ -64,7 +64,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   markAllCasesAsQCed(test, () => createdCaseIds);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
-  loginAs(test, 'trialclerk');
+  loginAs(test, 'trialclerk@example.com');
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
   trialClerkViewsNotesFromCaseDetail(test);

@@ -16,7 +16,7 @@ describe('irsSuperuser case search', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'irsSuperuser');
+  loginAs(test, 'irsSuperuser@example.com');
   irsSuperuserSearchForCase(test);
   irsSuperuserAdvancedSearchForCase(test);
   irsSuperuserAdvancedSearchForCaseDocketNumber(test);
@@ -24,6 +24,6 @@ describe('irsSuperuser case search', () => {
   loginAs(test, 'petitioner@example.com');
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'irsSuperuser');
+  loginAs(test, 'irsSuperuser@example.com');
   irsSuperuserSearchForUnservedCase(test);
 });

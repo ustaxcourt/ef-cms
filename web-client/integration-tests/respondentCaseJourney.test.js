@@ -37,7 +37,7 @@ describe('Respondent requests access to a case', () => {
   respondentViewsCaseDetailOfAssociatedCase(test);
   respondentFilesDocumentForAssociatedCase(test, fakeFile);
 
-  loginAs(test, 'irsPractitioner1');
+  loginAs(test, 'irsPractitioner1@example.com');
   respondentSearchesForCase(test);
   respondentViewsCaseDetailOfUnassociatedCase(test);
   respondentRequestsAccessToCase(test, fakeFile);
