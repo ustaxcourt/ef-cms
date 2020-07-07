@@ -16,12 +16,15 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
 
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    const currentUser = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
       section: 'docket',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(currentUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -290,6 +293,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
