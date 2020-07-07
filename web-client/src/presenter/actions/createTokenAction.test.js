@@ -22,6 +22,6 @@ describe('createTokenAction', () => {
         },
         state: { form: { name: 'nachos' } },
       }),
-    ).rejects.toThrow('Username not found in mock logins.');
+    ).rejects.toThrow('Username "nachos" not found in mock logins.');
   });
 });
