@@ -229,6 +229,9 @@
       rules: 
         - 
           name: "email"
+          args: 
+            options: 
+              tlds: false
         - 
           name: "max"
           args: 
