@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
+import { ConfirmEditSignatureModal } from './ConfirmEditSignatureModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
 import { MessageDocument } from './MessageDocument';
@@ -253,7 +254,7 @@ export const MessageDetail = connect(
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
         {showModal === 'ConfirmEditSignatureModal' && (
-          <ConfirmEditModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
         )}
       </>
     );
