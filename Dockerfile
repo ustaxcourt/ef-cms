@@ -20,7 +20,7 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
   git bash openssh-client python python-dev python-pip python-setuptools ca-certificates less \
   unzip wget jq shellcheck clamav 
 
-ENV AWS_CLI_VERSION 1.18.91
+ENV AWS_CLI_VERSION 2.0.28
 
 RUN freshclam
 
