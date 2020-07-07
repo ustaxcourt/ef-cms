@@ -178,6 +178,7 @@ import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumen
 import { openCaseInventoryReportModalSequence } from './sequences/openCaseInventoryReportModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
+import { openCompleteAndSendCaseMessageModalSequence } from './sequences/openCompleteAndSendCaseMessageModalSequence';
 import { openCompleteMessageModalSequence } from './sequences/openCompleteMessageModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
@@ -194,7 +195,6 @@ import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmResc
 import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServeToIrsModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateCaseMessageModalSequence } from './sequences/openCreateCaseMessageModalSequence';
-import { openCreateMessageAlongsideDocketRecordQCModalSequence } from './sequences/openCreateMessageAlongsideDocketRecordQCModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
@@ -615,6 +615,7 @@ export const presenter = {
     openConfirmDeleteCorrespondenceModalSequence,
     openConfirmDeleteDeficiencyStatisticsModalSequence,
     openConfirmDeleteOtherStatisticsModalSequence,
+    openCompleteAndSendCaseMessageModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
@@ -625,7 +626,6 @@ export const presenter = {
     openConfirmServeToIrsModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateCaseMessageModalSequence,
-    openCreateMessageAlongsideDocketRecordQCModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
