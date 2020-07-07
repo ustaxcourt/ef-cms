@@ -11,7 +11,7 @@ const {
 describe('change the case caption via the petition qc page', () => {
   before(() => {
     navigateToPetitionQc(
-      'petitionsclerk@example.com',
+      'petitionsclerk',
       '101-19',
       '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     );
@@ -22,7 +22,7 @@ describe('change the case caption via the petition qc page', () => {
   });
 
   it('updates the case title header', () => {
-    navigateToCase('petitionsclerk@example.com', '101-19');
+    navigateToCase('petitionsclerk', '101-19');
     getCaseTitleContaining(
       'hello world v. Commissioner of Internal Revenue, Respondent',
     ).should('exist');

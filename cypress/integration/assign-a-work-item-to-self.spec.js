@@ -8,7 +8,7 @@ const {
 
 describe('Assign a work item ', () => {
   it('views the section inbox', () => {
-    navigateToDashboard('petitionsclerk@example.com');
+    navigateToDashboard('petitionsclerk');
     viewDocumentQCSectionInbox();
     getWorkItemRow('101-19W').should('exist');
   });
