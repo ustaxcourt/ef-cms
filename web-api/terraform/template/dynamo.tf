@@ -1,6 +1,6 @@
 
 resource "aws_dynamodb_table" "efcms-east" {
-  provider       = "aws.us-east-1"
+  provider       = aws.us-east-1
   name           = "efcms-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
 
@@ -36,9 +36,9 @@ resource "aws_dynamodb_table" "efcms-east" {
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
-  tags {
+  tags = {
     Name        = "efcms-${var.environment}"
-    Environment = "${var.environment}"
+    Environment = var.environment
   }
 
   ttl {
@@ -48,7 +48,7 @@ resource "aws_dynamodb_table" "efcms-east" {
 }
 
 resource "aws_dynamodb_table" "efcms-west" {
-  provider       = "aws.us-west-1"
+  provider       = aws.us-west-1
   name           = "efcms-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
 
@@ -84,9 +84,9 @@ resource "aws_dynamodb_table" "efcms-west" {
   stream_enabled   = true
   stream_view_type = "NEW_AND_OLD_IMAGES"
 
-  tags {
+  tags = {
     Name        = "efcms-${var.environment}"
-    Environment = "${var.environment}"
+    Environment = var.environment
   }
 
   ttl {
@@ -96,7 +96,7 @@ resource "aws_dynamodb_table" "efcms-west" {
 }
 
 resource "aws_dynamodb_table" "efcms-deploy" {
-  provider       = "aws.us-east-1"
+  provider       = aws.us-east-1
   name           = "efcms-deploy-${var.environment}"
   billing_mode = "PAY_PER_REQUEST"
 
@@ -117,8 +117,8 @@ resource "aws_dynamodb_table" "efcms-deploy" {
     enabled = true
   }
 
-  tags {
+  tags = {
     Name        = "efcms-deploy-${var.environment}"
-    Environment = "${var.environment}"
+    Environment = var.environment
   }
 }

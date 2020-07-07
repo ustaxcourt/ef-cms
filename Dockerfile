@@ -27,8 +27,8 @@ RUN freshclam
 RUN pip install --upgrade pip
 RUN apt-get install -y awscli && \
   pip install --upgrade awscli==${AWS_CLI_VERSION} && \
-  wget -q -O terraform_0.11.14_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip && \
-  unzip -o terraform_0.11.14_linux_amd64.zip terraform && \
+  wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \
+  unzip -o terraform_0.12.28_linux_amd64.zip terraform && \
   cp terraform /usr/local/bin/ && \
   curl -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip' && \
   mkdir sonar_scanner && \
