@@ -78,6 +78,7 @@ const otherFilersCase = {
       phone: '1234567890',
       postalCode: '05198',
       state: 'AK',
+      title: 'Intervenor',
     },
     {
       address1: '1337 12th Ave',
@@ -90,6 +91,7 @@ const otherFilersCase = {
       phone: '1234567890',
       postalCode: '05198',
       state: 'AK',
+      title: 'Participant',
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
