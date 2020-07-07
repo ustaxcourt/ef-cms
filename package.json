@@ -167,6 +167,7 @@
     "cypress:smoketests:open": "cypress open -C cypress-smoketests.json --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY,ENV=$ENV",
     "cypress:smoketests": "cypress run -C cypress-smoketests.json --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY,ENV=$ENV",
     "cypress": "TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop cypress run",
+    "deploy:api": "cd web-api/terraform/main && ../bin/deploy-app.sh",
     "destroy:dev": "node env-destroy-utils/destroyEnvironment.js dev",
     "destroy:exp1": "node env-destroy-utils/destroyEnvironment.js exp1",
     "destroy:exp2": "node env-destroy-utils/destroyEnvironment.js exp2",
