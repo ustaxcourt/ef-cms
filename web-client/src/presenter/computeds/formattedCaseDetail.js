@@ -21,7 +21,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const { SYSTEM_GENERATED_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const {
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const systemGeneratedEventCodes = Object.keys(
     SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
@@ -182,7 +185,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
         formattedResult.showDocumentProcessing =
           !permissions.UPDATE_CASE && document.processingStatus !== 'complete';
 
-        formattedResult.showNotServed = document.isNotServedCourtIssuedDocument;
+        formattedResult.isUnservable = !UNSERVABLE_EVENT_CODES.includes(
+          document.eventCode,
+        );
+        formattedResult.showNotServed =
+          formattedResult.isUnservable &&
+          document.isNotServedCourtIssuedDocument;
         formattedResult.showServed = document.isStatusServed;
 
         formattedResult.showDocumentViewerLink = getShowDocumentViewerLink({
