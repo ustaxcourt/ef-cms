@@ -15,7 +15,7 @@ export const updateCaseMessageModalAttachmentsAction = ({
 }) => {
   const { attachments } = get(state.modal.form);
   const { documents } = get(state.caseDetail);
-  const { documentId } = props;
+  const documentId = props.documentId || get(state.documentId);
 
   // TODO: Should we evaluate the length of the array and conditionally push?
   if (documentId) {
