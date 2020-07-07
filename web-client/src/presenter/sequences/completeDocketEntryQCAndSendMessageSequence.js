@@ -5,7 +5,9 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
+import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
+import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -16,24 +18,20 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateCaseMessageDetailsFromModalAction } from '../actions/CaseMessage/updateCaseMessageDetailsFromModalAction';
-import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
+import { validateCreateCaseMessageAction } from '../actions/validateCreateCaseMessageAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  // computeFormDateAction,
-  // computeSecondaryFormDateAction,
-  // computeCertificateOfServiceFormDateAction,
-  // computeDateReceivedAction,
-  // validateDocketEntryAction,
   updateCaseMessageDetailsFromModalAction,
-  validateInitialWorkItemMessageAction,
+  validateCreateCaseMessageAction,
   {
     error: [setValidationErrorsByFlagAction],
     success: showProgressSequenceDecorator([
+      createCaseMessageAction,
+      stopShowValidationAction,
       stopShowValidationAction,
       completeDocketEntryQCAction,
-      createWorkItemAction,
       clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
@@ -43,6 +41,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
+      getCaseMessagesForCaseAction,
       navigateToDocumentQCAction,
     ]),
   },
