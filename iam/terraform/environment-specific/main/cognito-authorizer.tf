@@ -37,7 +37,7 @@ resource "aws_iam_role" "authorizer_lambda" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": [
-          "lambda.amazonaws.com", 
+          "lambda.amazonaws.com",
           "apigateway.amazonaws.com"
         ]
       },
