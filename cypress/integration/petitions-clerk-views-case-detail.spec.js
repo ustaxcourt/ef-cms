@@ -1,6 +1,6 @@
 describe('Petitions clerk views case detail', function () {
   beforeEach(() => {
-    cy.login('petitionsclerk');
+    cy.login('petitionsclerk@example.com');
   });
 
   describe('case information tab', () => {

@@ -21,7 +21,7 @@ describe('Judge messages journey', () => {
 
   const createdCases = [];
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
@@ -32,14 +32,14 @@ describe('Judge messages journey', () => {
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesMessageToJudge(
     test,
     "don't forget to be awesome",
     createdCases,
   );
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesMessageToJudge(
     test,
     'karma karma karma karma karma chameleon',

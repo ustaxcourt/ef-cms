@@ -9,7 +9,7 @@ const {
 
 describe('Edit a case caption from case detail header', function () {
   before(() => {
-    navigateToCaseDetail('docketclerk', '101-19');
+    navigateToCaseDetail('docketclerk@example.com', '101-19');
     getActionMenuButton().click();
     getEditCaseCaptionButton().click();
     getCaptionTextArea().clear().type('there is no cow level');

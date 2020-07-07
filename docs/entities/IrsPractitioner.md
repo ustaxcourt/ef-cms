@@ -228,6 +228,8 @@
         presence: "optional"
       rules: 
         - 
+          name: "email"
+        - 
           name: "max"
           args: 
             limit: 100

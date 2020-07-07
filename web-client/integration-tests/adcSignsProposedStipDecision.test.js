@@ -28,26 +28,26 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerViewsCaseDetail(test);
   practitionerFilesDocumentForStipulatedDecision(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsStipulatedDecision(test);
   docketClerkSendsStipDecisionToADC(test);
 
-  loginAs(test, 'adc');
+  loginAs(test, 'adc@example.com');
   adcViewsStipulatedDecisionForSigning(test);
   adcVerifiesStipulatedDecisionDoesNotExistInInbox(test);
   adcVerifiesStipulatedDecisionExistsInOutbox(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkVerifiesStipulatedDecisionExistsInOutbox(
     test,
     'Jeff, this is ready for review and signature',
