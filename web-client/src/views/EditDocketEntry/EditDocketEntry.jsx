@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CreateMessageModalDialog } from '../DocumentDetail/CreateMessageModalDialog';
+import { CreateCaseMessageModalDialog } from '../Messages/CreateCaseMessageModalDialog';
 import { DocumentDetailHeader } from '../DocumentDetail/DocumentDetailHeader';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { DocumentMessages } from '../DocumentDetail/DocumentMessages';
@@ -21,15 +21,15 @@ export const EditDocketEntry = connect(
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     editDocketEntryHelper: state.editDocketEntryHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    openCreateMessageAlongsideDocketRecordQCModalSequence:
-      sequences.openCreateMessageAlongsideDocketRecordQCModalSequence,
+    openCompleteAndSendCaseMessageModalSequence:
+      sequences.openCompleteAndSendCaseMessageModalSequence,
     showModal: state.modal.showModal,
   },
   function EditDocketEntry({
     completeDocketEntryQCSequence,
     editDocketEntryHelper,
     formCancelToggleCancelSequence,
-    openCreateMessageAlongsideDocketRecordQCModalSequence,
+    openCompleteAndSendCaseMessageModalSequence,
     showModal,
   }) {
     return (
@@ -107,7 +107,7 @@ export const EditDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      openCreateMessageAlongsideDocketRecordQCModalSequence();
+                      openCompleteAndSendCaseMessageModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
@@ -132,8 +132,11 @@ export const EditDocketEntry = connect(
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
-        {showModal === 'CreateMessageAlongsideDocketRecordQCModal' && (
-          <CreateMessageModalDialog onConfirmSequence="completeDocketEntryQCAndSendMessageSequence" />
+        {showModal === 'CreateCaseMessageModalDialog' && (
+          <CreateCaseMessageModalDialog
+            title="Complete and Send Message"
+            onConfirmSequence="completeDocketEntryQCAndSendMessageSequence"
+          />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
