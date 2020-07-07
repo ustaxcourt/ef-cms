@@ -6,7 +6,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
-import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -39,7 +38,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setSaveAlertsForNavigationAction,
       setCaseAction,
       setAlertSuccessAction,
-      getCaseMessagesForCaseAction,
       navigateToDocumentQCAction,
     ]),
   },
