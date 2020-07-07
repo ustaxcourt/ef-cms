@@ -46,7 +46,7 @@ describe('Judge messages journey', () => {
     createdCases,
   );
 
-  loginAs(test, 'judgeArmen');
+  loginAs(test, 'judgeArmen@example.com');
   judgeViewsDashboardMessages(test);
   judgeViewsCaseDetail(test);
 });
