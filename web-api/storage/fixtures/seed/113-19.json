@@ -21,7 +21,7 @@
       "name": "Letti Toretto",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
