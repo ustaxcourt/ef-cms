@@ -105,22 +105,23 @@ const otherPetitionersCase = {
   irsPractitioners: [
     {
       additionalName: 'Test Other Petitioner',
-      address1: '982 Oak Boulevard',
-      address2: 'Maxime dolorum quae ',
-      address3: 'Ut numquam ducimus ',
       barNumber: 'RT6789',
-      city: 'Placeat sed dolorum',
-      countryType: COUNTRY_TYPES.DOMESTIC,
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
       email: 'someone@example.com',
       hasEAccess: true,
       name: 'Keelie Bruce',
-      phone: '+1 (785) 771-2329',
-      postalCode: '17860',
       role: 'irsPractitioner',
       secondaryName: 'Logan Fields',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-      state: 'LA',
-      userId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
     },
   ],
   otherPetitioners: [
@@ -143,21 +144,24 @@ const otherPetitionersCase = {
   privatePractitioners: [
     {
       additionalName: 'Test Other Petitioner',
-      address1: '982 Oak Boulevard',
-      address2: 'Maxime dolorum quae ',
-      address3: 'Ut numquam ducimus ',
       barNumber: 'PT1234',
-      city: 'Placeat sed dolorum',
-      countryType: COUNTRY_TYPES.DOMESTIC,
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        barNumber: 'PT1234',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
       email: 'someone@example.com',
       hasEAccess: true,
       name: 'Keelie Bruce',
-      phone: '+1 (785) 771-2329',
-      postalCode: '17860',
       role: 'privatePractitioner',
       secondaryName: 'Logan Fields',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-      state: 'LA',
       userId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
     },
   ],
@@ -166,6 +170,8 @@ const otherPetitionersCase = {
 
 describe('Case journey', () => {
   it('should migrate cases', async () => {
+    jest.setTimeout(3000);
+
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
       firstConsolidatedCase,
@@ -221,5 +227,8 @@ describe('Case journey', () => {
     expect(test.getState('caseDetail.privatePractitioners.0.barNumber')).toBe(
       'PT1234',
     );
+    expect(
+      test.getState('caseDetail.privatePractitioners.0.contact.city'),
+    ).toBe('Placeat sed dolorum');
   });
 });
