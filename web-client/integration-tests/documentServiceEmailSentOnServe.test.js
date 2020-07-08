@@ -21,13 +21,13 @@ describe.skip('Document Service Email Sent on Serve', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order which should send an email',
     eventCode: 'O',

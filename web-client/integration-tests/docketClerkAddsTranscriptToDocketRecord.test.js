@@ -26,12 +26,12 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -60,7 +60,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
   });
   docketClerkServesDocument(test, 1);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
