@@ -886,6 +886,29 @@ describe('formattedCaseDetail', () => {
         },
       ]);
     });
+
+    it("doesn't format draft documents if there isn't any", () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...caseDetail,
+            documents: [
+              {
+                createdAt: '2019-02-28T21:14:39.488Z',
+                documentId: 'Petition',
+                documentType: 'Petition',
+                showValidationInput: '2019-02-28T21:14:39.488Z',
+                status: 'served',
+              },
+            ],
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDraftDocuments).toEqual([]);
+    });
   });
 
   describe('consolidatedCases', () => {
