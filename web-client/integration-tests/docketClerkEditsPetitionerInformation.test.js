@@ -11,7 +11,7 @@ describe('docket clerk edits the petitioner information', () => {
 
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
@@ -30,7 +30,7 @@ describe('docket clerk edits the petitioner information', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case contact information', async () => {
     await test.runSequence('gotoEditPetitionerInformationSequence', {

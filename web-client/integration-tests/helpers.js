@@ -352,8 +352,11 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
 export const uploadPetition = async (
   test,
   overrides = {},
-  loginUsername = 'petitioner',
+  loginUsername = 'petitioner@example.com',
 ) => {
+  if (!userMap[loginUsername]) {
+    throw new Error(`Unable to log into test as ${loginUsername}`);
+  }
   const user = {
     ...userMap[loginUsername],
     sub: userMap[loginUsername].userId,
