@@ -189,11 +189,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
         formattedResult.showDocumentProcessing =
           !permissions.UPDATE_CASE && document.processingStatus !== 'complete';
 
-        formattedResult.isUnservable = !UNSERVABLE_EVENT_CODES.includes(
+        formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
           document.eventCode,
         );
         formattedResult.showNotServed =
-          formattedResult.isUnservable &&
+          !formattedResult.isUnservable &&
           document.isNotServedCourtIssuedDocument;
         formattedResult.showServed = document.isStatusServed;
 

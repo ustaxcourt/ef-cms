@@ -152,6 +152,11 @@ describe('formattedCaseDetail', () => {
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           filingDate: '2019-04-19T17:42:13.122Z',
         },
+        {
+          description: 'Hearing Exhibits for asdfasdfasdf',
+          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
       ],
       documents: [
         {
@@ -242,21 +247,15 @@ describe('formattedCaseDetail', () => {
           scenario: 'Nonstandard C',
         },
         {
-          additionalInfo: 'Additional Info',
-          additionalInfo2: 'Additional Info2',
-          category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          documentTitle: 'U.S.C.A anything',
-          documentType: 'U.S.C.A',
-          eventCode: 'USCA',
-          freeText: 'Test',
-          lodged: true,
-          partyIrsPractitioner: true,
-          partyPrivatePractitioner: true,
-          previousDocument: 'Amended Petition',
-          relationship: 'primarySupportingDocument',
-          scenario: 'Nonstandard C',
+          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+          documentTitle: 'Hearing Exhibits for asdfasdfasdf',
+          documentType: 'Hearing Exhibits',
+          eventCode: 'HE',
+          freeText: 'adsf',
+          lodged: false,
+          relationship: 'primaryDocument',
+          scenario: 'Type A',
         },
       ],
       hasVerifiedIrsNotice: false,
@@ -299,13 +298,18 @@ describe('formattedCaseDetail', () => {
           filingsAndProceedings: '(Lodged)',
         },
       },
+      {
+        record: {
+          description: 'Hearing Exhibits for asdfasdfasdf',
+          filingsAndProceedings: '',
+        },
+      },
     ]);
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Amended Petition',
         filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
         isInProgress: false,
-        isUnservable: true,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
@@ -340,6 +344,16 @@ describe('formattedCaseDetail', () => {
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
+        showLinkToDocument: false,
+      },
+      {
+        description: 'Hearing Exhibits for asdfasdfasdf',
+        filingsAndProceedingsWithAdditionalInfo: '',
+        isInProgress: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentProcessing: false,
+        showDocumentViewerLink: true,
+        showEditDocketRecordEntry: false,
         showLinkToDocument: false,
       },
     ]);
