@@ -239,15 +239,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
     },
   );
 
-  result.formattedDraftDocuments = (result.draftDocuments || []).map(
-    draftDocument => {
-      return {
-        ...draftDocument,
-        descriptionDisplay: draftDocument.documentTitle,
-        showDocumentViewerLink: permissions.UPDATE_CASE,
-      };
-    },
-  );
+  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+    return {
+      ...draftDocument,
+      descriptionDisplay: draftDocument.documentTitle,
+      showDocumentViewerLink: permissions.UPDATE_CASE,
+    };
+  });
 
   result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
     entry => entry.pending,
