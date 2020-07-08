@@ -100,7 +100,7 @@ const userValidation = {
         }),
     })
     .optional(),
-  email: joi.string().email({ tlds: false }).max(100).optional(),
+  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('User').required(),
   section: joi
     .string()
