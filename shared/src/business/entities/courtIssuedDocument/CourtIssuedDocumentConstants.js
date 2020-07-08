@@ -32,6 +32,8 @@ exports.ENTERED_AND_SERVED_EVENT_CODES = [
   'SDEC',
 ];
 
+exports.CORRECTED_TRANSCRIPT_DOCUMENT_TYPE = 'Corrected Transcript';
+
 exports.GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
 
 exports.SERVICE_STAMP_OPTIONS = ['Served', 'Entered and Served'];

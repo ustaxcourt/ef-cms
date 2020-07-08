@@ -2348,11 +2348,11 @@
                     - "OSCP"
                     - "OST"
                     - "OSUB"
+                    - "DEC"
                     - "OAD"
                     - "ODJ"
-                    - "NOT"
                     - "SDEC"
-                    - "DEC"
+                    - "NOT"
                 then: 
                   type: "any"
                   flags: 
@@ -2431,11 +2431,11 @@
                     - "OSCP"
                     - "OST"
                     - "OSUB"
+                    - "DEC"
                     - "OAD"
                     - "ODJ"
-                    - "NOT"
                     - "SDEC"
-                    - "DEC"
+                    - "NOT"
                 then: 
                   type: "string"
                   flags: 

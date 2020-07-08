@@ -10,8 +10,11 @@ export const CreateCaseMessageModalDialog = connect(
     constants: state.constants,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateCreateCaseMessageValueInModalSequence:
-      sequences.updateCreateCaseMessageValueInModalSequence,
+    updateChambersInCreateCaseMessageModalSequence:
+      sequences.updateChambersInCreateCaseMessageModalSequence,
+    updateModalFormValueSequence: sequences.updateModalFormValueSequence,
+    updateSectionInCreateCaseMessageModalSequence:
+      sequences.updateSectionInCreateCaseMessageModalSequence,
     users: state.users,
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
@@ -23,7 +26,10 @@ export const CreateCaseMessageModalDialog = connect(
     form,
     onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
-    updateCreateCaseMessageValueInModalSequence,
+    title = 'Create Message',
+    updateChambersInCreateCaseMessageModalSequence,
+    updateModalFormValueSequence,
+    updateSectionInCreateCaseMessageModalSequence,
     users,
     validateCreateCaseMessageInModalSequence,
     validationErrors,
@@ -38,7 +44,7 @@ export const CreateCaseMessageModalDialog = connect(
         className="ustc-create-message-modal"
         confirmLabel="Send"
         preventCancelOnBlur={true}
-        title="Create Message"
+        title={title}
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
@@ -53,8 +59,8 @@ export const CreateCaseMessageModalDialog = connect(
             className="usa-select"
             id="toSection"
             name="toSection"
-            onChange={async e => {
-              await updateCreateCaseMessageValueInModalSequence({
+            onChange={e => {
+              updateSectionInCreateCaseMessageModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -82,8 +88,8 @@ export const CreateCaseMessageModalDialog = connect(
               id="chambers"
               name="chambers"
               onChange={e => {
-                updateCreateCaseMessageValueInModalSequence({
-                  key: e.target.name,
+                updateChambersInCreateCaseMessageModalSequence({
+                  key: 'toSection',
                   value: e.target.value,
                 });
                 validateCreateCaseMessageInModalSequence();
@@ -110,7 +116,7 @@ export const CreateCaseMessageModalDialog = connect(
             id="toUserId"
             name="toUserId"
             onChange={e => {
-              updateCreateCaseMessageValueInModalSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -137,7 +143,7 @@ export const CreateCaseMessageModalDialog = connect(
             type="text"
             value={form.subject || ''}
             onChange={e => {
-              updateCreateCaseMessageValueInModalSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -155,7 +161,7 @@ export const CreateCaseMessageModalDialog = connect(
             id="message"
             name="message"
             onChange={e => {
-              updateCreateCaseMessageValueInModalSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });

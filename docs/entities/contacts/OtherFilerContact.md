@@ -85,12 +85,11 @@
     title: 
       type: "string"
       flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 500
+        only: true
+        presence: "required"
+      allow: 
+        - "Intervenor"
+        - "Participant"
     serviceIndicator: 
       type: "string"
       flags: 
@@ -109,9 +108,14 @@
       type: "string"
       rules: 
         - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
       whens: 
         - 
           ref: 

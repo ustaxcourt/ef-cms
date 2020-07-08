@@ -20,10 +20,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreateOrder(test);
   petitionsClerkSignsOrder(test);
   petitionsClerkAddsDocketEntryFromOrder(test);

@@ -1,6 +1,5 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkCreatesAnOrder = (test, data) => {
@@ -43,9 +42,6 @@ export const docketClerkCreatesAnOrder = (test, data) => {
     });
 
     await test.runSequence('submitCourtIssuedOrderSequence');
-
-    //TODO - fix this when cerebral runSequence starts properly awaiting things
-    await wait(1000);
 
     //skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {

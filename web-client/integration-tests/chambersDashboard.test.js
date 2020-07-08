@@ -19,7 +19,7 @@ describe('Chambers dashboard', () => {
 
   const createdCases = [];
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
@@ -30,13 +30,13 @@ describe('Chambers dashboard', () => {
   petitionerViewsCaseDetailAfterFilingDocument(test);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesMessageToChambers(
     test,
     'Yeah, chambers!!',
     createdCases,
   );
 
-  loginAs(test, 'armensChambers');
+  loginAs(test, 'armensChambers@example.com');
   chambersUserViewsDashboard(test, 'Yeah, chambers!!');
 });

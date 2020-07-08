@@ -2,7 +2,6 @@ import { CerebralTest } from 'cerebral/test';
 import { applicationContextPublic as applicationContext } from '../src/applicationContextPublic';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter-public';
-
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const fakeData =

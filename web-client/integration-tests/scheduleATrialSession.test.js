@@ -36,7 +36,7 @@ describe('Schedule A Trial Session', () => {
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
@@ -45,14 +45,14 @@ describe('Schedule A Trial Session', () => {
       test.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSubmitsCaseToIrs(test);
 
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkSetsCaseReadyForTrial(test);
   };
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsNewTrialSession(test);
@@ -65,7 +65,7 @@ describe('Schedule A Trial Session', () => {
   // Add case with a different city
   makeCaseReadyForTrial(test, caseCount + 1, {});
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
 
   petitionsClerkManuallyAddsCaseToTrial(test);

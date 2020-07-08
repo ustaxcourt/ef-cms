@@ -32,7 +32,7 @@ describe('Case from Paper Document Scan journey', () => {
     };
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCreateNewCase(test);
   petitionsClerkViewsScanView(test);
   petitionsClerkSelectsScannerSource(test, {
