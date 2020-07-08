@@ -9,6 +9,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 - [SonarCloud](https://sonarcloud.io/) — static code analysis.
   - Create a [organization](https://sonarcloud.io/create-organization). Make note of the name chosen for CircleCI configuration later.
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Make note of each project’s key and token for CircleCI configuration later.
+- [Honeybadger](https://www.honeybadger.io/plans/) — exception monitoring.
+  - Make note of the key for CircleCI configuration later.
 
 ## 2. Configure your local developer machine.
 
@@ -76,11 +78,13 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `API_SONAR_TOKEN` | SonarCloud token for the API project |
   | `UI_SONAR_KEY` | SonarCloud key for the UI project |
   | `UI_SONAR_TOKEN` | SonarCloud token for the UI project |
-  | `DYNAMSOFT_PRODUCT_KEYS_DEV` | Dynamsoft Web TWAIN product key used for DEV |
   | `DYNAMSOFT_PRODUCT_KEYS_STG` | Dynamsoft Web TWAIN product key used for STG |
   | `DYNAMSOFT_PRODUCT_KEYS_TEST` | Dynamsoft Web TWAIN product key used for TEST |
   | `DYNAMSOFT_PRODUCT_KEYS_PROD` | Dynamsoft Web TWAIN product key used for PROD |
   | `DYNAMSOFT_S3_ZIP_PATH` | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz` |
+  | `CIRCLE_HONEYBADGER_API_KEY_STG` | Honeybadger key used for STG |
+  | `CIRCLE_HONEYBADGER_API_KEY_TEST` | Honeybadger key used for TEST |
+  | `CIRCLE_HONEYBADGER_API_KEY_PROD` | Honeybadger key used for PROD |
   | `EFCMS_DOMAIN` | Domain name chosen above |
   | `COGNITO_SUFFIX` | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_PASS` | Password of your choice used by the Cognito admin user |
