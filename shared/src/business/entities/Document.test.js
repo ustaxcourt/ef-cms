@@ -245,7 +245,7 @@ describe('Document entity', () => {
         });
       });
 
-      it('should pass validation when "isLegacy" is true, "isSealed" and "isLegacy" are true', () => {
+      it('should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true', () => {
         const document = new Document(
           {
             ...A_VALID_DOCUMENT,
@@ -264,7 +264,7 @@ describe('Document entity', () => {
         expect(document.isValid()).toBeTruthy();
       });
 
-      it('should pass validation when "isLegacy" is false, "isSealed" and "isLegacy" are undefined', () => {
+      it('should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined', () => {
         const document = new Document(
           {
             ...A_VALID_DOCUMENT,
