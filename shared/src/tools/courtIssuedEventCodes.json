@@ -346,8 +346,8 @@
   {
     "eventCode": "CTRA",
     "documentType": "Corrected Transcript",
-    "documentTitle": "Corrected Transcript of [Date]",
-    "scenario": "Type E",
+    "documentTitle": "Corrected Transcript of [Anything] on [Date]",
+    "scenario": "Type H",
     "isUnservable": true
   },
   {
@@ -401,8 +401,8 @@
   {
     "eventCode": "RTRA",
     "documentType": "Revised Transcript",
-    "documentTitle": "Revised Transcript of [anything]",
-    "scenario": "Type A",
+    "documentTitle": "Revised Transcript of [anything] on [date]",
+    "scenario": "Type H",
     "isUnservable": true
   },
   {
