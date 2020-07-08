@@ -42,8 +42,8 @@ exports.handler = (event, context, callback) => {
     `default-src ${applicationUrl} ${s3Url} data: blob:`,
     `form-action ${applicationUrl}`,
     "object-src 'none'",
-    `script-src 'self' ${dynamsoftUrl} resource://pdf.js`,
-    `style-src 'self' ${dynamsoftUrl}`,
+    `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
+    `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
   ];
   headers['content-security-policy'] = [
     {
