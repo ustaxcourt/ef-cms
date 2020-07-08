@@ -210,12 +210,10 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Document details`,
         );
-        return app.getSequence('navigateToCaseDetailWithDraftDocumentSequence')(
-          {
-            docketNumber,
-            documentId,
-          },
-        );
+        return app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+        });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
