@@ -970,6 +970,11 @@ describe('formattedCaseDetail', () => {
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'Court Issued - Unservable',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -1018,6 +1023,21 @@ describe('formattedCaseDetail', () => {
             status: 'served',
             workItems: [
               { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'U.S.C.A',
+            documentType: 'U.S.C.A.',
+            eventCode: 'USCA',
+            isCourtIssuedDocument: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: true },
             ],
           },
         ],
@@ -1146,6 +1166,23 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
+      ).toEqual(true);
+    });
+
+    it('should should the edit button if the document is an unservable court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[5].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });
