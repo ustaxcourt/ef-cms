@@ -1031,7 +1031,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {
@@ -1281,7 +1281,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {
@@ -1422,7 +1422,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {
