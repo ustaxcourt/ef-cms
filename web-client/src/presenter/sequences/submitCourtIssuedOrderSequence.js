@@ -34,7 +34,7 @@ const onFileUploadedSuccess = [
           getEditDocumentEntryPointAction,
           {
             CaseDetail: navigateToCaseDetailAction,
-            DocumentDetail: navigateToDocumentDetailAction,
+            DraftDocuments: navigateToDocumentDetailAction,
           },
         ],
         success: [],

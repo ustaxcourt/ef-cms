@@ -11,7 +11,7 @@ import { state } from 'cerebral';
  */
 export const getEditDocumentEntryPointAction = async ({ get, path, store }) => {
   let editDocumentEntryPoint =
-    get(state.editDocumentEntryPoint) || 'DocumentDetail';
+    get(state.editDocumentEntryPoint) || 'DraftDocuments';
 
   store.unset(state.editDocumentEntryPoint);
 
