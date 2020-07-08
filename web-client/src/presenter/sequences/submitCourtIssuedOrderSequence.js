@@ -7,7 +7,6 @@ import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectTo
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -35,7 +34,7 @@ const onFileUploadedSuccess = [
           getEditDocumentEntryPointAction,
           {
             CaseDetail: navigateToCaseDetailAction,
-            DraftDocuments: navigateToDocumentDetailAction,
+            DraftDocuments: navigateToDraftDocumentsAction,
           },
         ],
         success: [],
