@@ -1,4 +1,11 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
+import {
+  FORMATS,
+  calculateISODate,
+  createISODateString,
+  deconstructDate,
+  formatDateString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
@@ -313,20 +320,45 @@ describe('docket clerk order advanced search', () => {
     });
 
     it('search for a date range that contains served orders', async () => {
-      const currentDate = new Date();
-      const orderCreationYear = currentDate.getUTCFullYear();
-      const orderCreationMonth = currentDate.getUTCMonth();
-      const orderCreationDate = currentDate.getDate();
+      const endOrderCreationMoment = calculateISODate({
+        howMuch: 1,
+        unit: 'months',
+      });
+      const startOrderCreationMoment = calculateISODate({
+        howMuch: -1,
+        unit: 'months',
+      });
+
+      const {
+        day: endDateDay,
+        month: endDateMonth,
+        year: endDateYear,
+      } = deconstructDate(
+        formatDateString(
+          createISODateString(endOrderCreationMoment),
+          FORMATS.MMDDYYYY,
+        ),
+      );
+      const {
+        day: startDateDay,
+        month: startDateMonth,
+        year: startDateYear,
+      } = deconstructDate(
+        formatDateString(
+          createISODateString(startOrderCreationMoment),
+          FORMATS.MMDDYYYY,
+        ),
+      );
 
       test.setState('advancedSearchForm', {
         orderSearch: {
-          endDateDay: orderCreationDate,
-          endDateMonth: orderCreationMonth + 1,
-          endDateYear: orderCreationYear,
+          endDateDay,
+          endDateMonth,
+          endDateYear,
           keyword: 'dismissal',
-          startDateDay: orderCreationDate,
-          startDateMonth: orderCreationMonth - 1,
-          startDateYear: orderCreationYear,
+          startDateDay,
+          startDateMonth,
+          startDateYear,
         },
       });
 
