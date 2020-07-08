@@ -22,7 +22,7 @@ const testClient = setupTestClient({
 testClient.draftOrders = [];
 
 describe('Unauthed user views todays opinions', () => {
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
   it('Create test case to add an opinion to', async () => {
     const caseDetail = await uploadPetition(testClient);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -31,7 +31,7 @@ describe('Unauthed user views todays opinions', () => {
 
   //  the next few tests create an order document, then edit it to convert
   //  it to an opinion type document, and then serve that opinion in order for it to show up in todays opinions
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order to do something',
     eventCode: 'O',

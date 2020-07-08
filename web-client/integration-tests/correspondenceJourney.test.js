@@ -14,14 +14,14 @@ describe('Adds correspondence to a case', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('create case', async () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkNavigatesToAddCorrespondence(test);
   docketClerkAddsCorrespondence(test, correspondenceTitle);
   docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);

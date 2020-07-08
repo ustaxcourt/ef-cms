@@ -61,14 +61,14 @@ describe('docket clerk order advanced search', () => {
   });
 
   describe('performing data entry', () => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     it('create case', async () => {
       caseDetail = await uploadPetition(test);
       expect(caseDetail).toBeDefined();
       test.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesAnOrder(test, {
       documentTitle: 'Order',
       eventCode: 'O',

@@ -196,7 +196,7 @@ describe('Case journey', () => {
     );
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('Docketclerk views both consolidated case details', async () => {
     await test.runSequence('gotoCaseDetailSequence', {

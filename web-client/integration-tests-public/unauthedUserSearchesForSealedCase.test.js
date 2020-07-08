@@ -21,7 +21,7 @@ describe('Petitioner creates cases to search for', () => {
     jest.setTimeout(10000);
   });
 
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
 
   it('Create case', async () => {
     const caseDetail = await uploadPetition(testClient, {
@@ -43,7 +43,7 @@ describe('Petitioner creates cases to search for', () => {
 });
 
 describe('Docket clerk seals the case (should not be viewable to the public)', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 

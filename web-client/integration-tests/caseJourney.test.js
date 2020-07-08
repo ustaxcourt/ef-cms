@@ -52,7 +52,7 @@ describe('Case journey', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerCancelsCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
@@ -60,24 +60,24 @@ describe('Case journey', () => {
   petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCaseSearch(test);
   petitionsClerkViewsMessages(test);
   petitionsClerkAssignsWorkItemToSelf(test);
   petitionsClerkAssignsWorkItemToOther(test);
-  loginAs(test, 'petitionsclerk1');
+  loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerkViewsMessagesAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
   petitionsClerkSubmitsCaseToIrs(test);
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   respondentViewsDashboard(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
   docketClerkUpdatesCaseCaption(test);
@@ -85,12 +85,12 @@ describe('Case journey', () => {
   docketClerkStartsNewMessageThreadOnAnswer(test);
   docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);
 
-  loginAs(test, 'docketclerk1');
+  loginAs(test, 'docketclerk1@example.com');
   docketClerkDocketDashboard(test);
   docketClerkSelectsAssignee(test);
   docketClerkSelectsWorkItems(test);
   docketClerkAssignWorkItems(test);
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsMessages(test);
   docketClerkViewsDocument(test);
   docketClerkForwardWorkItem(test);
@@ -98,7 +98,7 @@ describe('Case journey', () => {
   docketClerkViewsOutboxAfterForward(test);
   docketClerkAddsDocketEntries(test, fakeFile);
 
-  loginAs(test, 'adc');
+  loginAs(test, 'adc@example.com');
   adcViewsMessages(test);
   adcViewsDocumentDetail(test);
   adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete(test);

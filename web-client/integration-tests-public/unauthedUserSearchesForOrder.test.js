@@ -34,7 +34,7 @@ describe('Petitioner creates case', () => {
     };
   });
 
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
 
   it('Create case', async () => {
     const caseDetail = await uploadPetition(testClient, {
@@ -56,7 +56,7 @@ describe('Petitioner creates case', () => {
 });
 
 describe('Docket clerk creates orders to search for', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order',
     eventCode: 'O',
@@ -91,7 +91,7 @@ describe('Unauthed user searches for an order by keyword', () => {
 });
 
 describe('Docket clerk seals case', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 
