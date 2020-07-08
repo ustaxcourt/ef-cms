@@ -101,6 +101,7 @@ const practitionerValidation = {
     .description('The Tax Court bar admission status for the practitioner.'),
   alternateEmail: joi
     .string()
+    .email({ tlds: false })
     .max(100)
     .optional()
     .allow(null)
