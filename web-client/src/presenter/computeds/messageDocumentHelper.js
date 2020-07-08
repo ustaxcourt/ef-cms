@@ -13,9 +13,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.documentId === viewerDocumentToDisplay.documentId,
     );
 
-  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
-    caseDocument.eventCode,
-  );
+  const documentRequiresSignature =
+    caseDocument &&
+    EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
 
   const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
 

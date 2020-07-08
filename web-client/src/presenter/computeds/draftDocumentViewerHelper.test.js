@@ -444,16 +444,19 @@ describe('draftDocumentViewerHelper', () => {
   it('should return showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
+        ...getBaseState(petitionerUser),
         caseDetail: {
-          ...getBaseState(docketClerkUser),
+          docketRecord: [],
           documents: [
             {
-              documentId: '123',
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
             },
           ],
         },
-        documentId: '123',
-        form: {
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
           eventCode: 'MISC', // Does not require a signature
         },
       },
@@ -465,16 +468,19 @@ describe('draftDocumentViewerHelper', () => {
   it('should return showDocumentNotSignedAlert true if document is not signed but the event code requires a signature', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
+        ...getBaseState(petitionerUser),
         caseDetail: {
-          ...getBaseState(docketClerkUser),
+          docketRecord: [],
           documents: [
             {
-              documentId: '123',
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
             },
           ],
         },
-        documentId: '123',
-        form: {
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
           eventCode: 'O', // Requires a signature
         },
       },
