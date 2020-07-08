@@ -7,7 +7,7 @@ const REGION = process.argv[3];
 
 if (!ENV || !REGION) {
   console.error(
-    "Missing required arguments: pleases invoke this script like so 'node smoke-tests ${ENV} ${REGION}'",
+    "Missing required arguments: please invoke this script like so 'node smoke-tests ${ENV} ${REGION}'",
   );
   process.exit(1);
 }
