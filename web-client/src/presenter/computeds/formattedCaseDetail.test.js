@@ -887,7 +887,7 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it("doesn't format draft documents if there isn't any", () => {
+    it("doesn't format draft documents if there are none", () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
