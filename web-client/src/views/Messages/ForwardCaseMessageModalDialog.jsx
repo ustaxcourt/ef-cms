@@ -82,7 +82,7 @@ export const ForwardCaseMessageModalDialog = connect(
               name="chambers"
               onChange={e => {
                 updateChambersInCreateCaseMessageModalSequence({
-                  key: e.target.name,
+                  key: 'toSection',
                   value: e.target.value,
                 });
                 validateCreateCaseMessageInModalSequence();

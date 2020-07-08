@@ -34,12 +34,12 @@
   * [Trial Session Working Copy ](./Trial-Session-Working-Copy.md)
 
 * [Case Detail](./Case-Detail.md)
-* [Docket Record](./Docket-Record.md)
-* [Statistics](./Statistics.md)
-* [Document Detail](./Document-Detail.md)
-* [Sealed Cases](./Sealed-Cases.md)
-* [Correspondence](./Correspondence.md)
-* [Consolidated Cases](./Consolidated-Cases.md)
+  * [Docket Record](./Docket-Record.md)
+  * [Statistics](./Statistics.md)
+  * [Drafts](./Drafts.md)
+  * [Sealed Cases](./Sealed-Cases.md)
+  * [Correspondence](./Correspondence.md)
+  * [Consolidated Cases](./Consolidated-Cases.md)
   * [Case Information](./Case-Information.md)
 
 #### Petitioners

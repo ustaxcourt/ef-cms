@@ -28,8 +28,8 @@
 
 ## In Progress
 #### Draft Documents
-* Court-issued documents (Orders, Notices, etc.) created by users are saved as drafts prior to being added to the Docket Record
-* Users can still edit document text, delete the document, and add or remove signatures while in a draft state
+* [Drafts](./Drafts.md) include court-issued documents that have been saved but not added to the Docket Record
+
 
 #### Pending Messages
 * All active messages related to documents on a case are displayed under pending messages
