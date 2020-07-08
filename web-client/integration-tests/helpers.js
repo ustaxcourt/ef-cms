@@ -354,6 +354,9 @@ export const uploadPetition = async (
   overrides = {},
   loginUsername = 'petitioner@example.com',
 ) => {
+  if (!userMap[loginUsername]) {
+    throw new Error(`Unable to log into test as ${loginUsername}`);
+  }
   const user = {
     ...userMap[loginUsername],
     sub: userMap[loginUsername].userId,
