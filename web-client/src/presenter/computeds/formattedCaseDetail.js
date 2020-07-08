@@ -114,12 +114,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
     const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
     const hasServedCourtIssuedDocument =
       hasCourtIssuedDocument && !!document.servedAt;
+    const hasUnservableCourtIssuedDocument =
+      document && UNSERVABLE_EVENT_CODES.includes(document.eventCode);
 
     return (
       permissions.EDIT_DOCKET_ENTRY &&
       (!document || document.qcWorkItemsCompleted) &&
       !hasSystemGeneratedDocument &&
-      (!hasCourtIssuedDocument || hasServedCourtIssuedDocument)
+      (!hasCourtIssuedDocument ||
+        hasServedCourtIssuedDocument ||
+        hasUnservableCourtIssuedDocument)
     );
   };
 

@@ -292,6 +292,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.documents[5],
     ).toMatchObject({
