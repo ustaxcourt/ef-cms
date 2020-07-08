@@ -3,12 +3,12 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const caseDetailMock = jest.fn();
-const documentDetailMock = jest.fn();
+const draftDocumentsMock = jest.fn();
 const messageDetailMock = jest.fn();
 
 presenter.providers.path = {
   CaseDetail: caseDetailMock,
-  DocumentDetail: documentDetailMock,
+  DraftDocuments: draftDocumentsMock,
   MessageDetail: messageDetailMock,
 };
 
@@ -25,13 +25,13 @@ describe('getEditDocumentEntryPointAction', () => {
     expect(caseDetailMock).toHaveBeenCalled();
   });
 
-  it('returns the DocumentDetail path by default if state.editDocumentEntryPoint is not set', async () => {
+  it('returns the DraftDocuments path by default if state.editDocumentEntryPoint is not set', async () => {
     await runAction(getEditDocumentEntryPointAction, {
       modules: {
         presenter,
       },
       state: {},
     });
-    expect(documentDetailMock).toHaveBeenCalled();
+    expect(draftDocumentsMock).toHaveBeenCalled();
   });
 });
