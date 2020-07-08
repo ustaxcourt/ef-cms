@@ -17,13 +17,13 @@ describe('admissions clerk practitioner journey', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'admissionsclerk');
+  loginAs(test, 'admissionsclerk@example.com');
 
   admissionsClerkAddsNewPractitioner(test);
   admissionsClerkSearchesForPractitionersByName(test);
   admissionsClerkSearchesForPractitionerByBarNumber(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -41,10 +41,10 @@ describe('admissions clerk practitioner journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test, true);
 
-  loginAs(test, 'admissionsclerk');
+  loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkEditsPractitionerInfo(test);
 });

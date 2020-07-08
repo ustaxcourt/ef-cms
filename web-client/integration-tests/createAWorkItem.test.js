@@ -64,7 +64,7 @@ describe('Create a work item', () => {
   let docketNumber;
   let petitionDocument;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('create the case for this test', async () => {
     const caseDetail = await uploadPetition(test);
@@ -75,7 +75,7 @@ describe('Create a work item', () => {
     );
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
 
   it('login as a petitionsclerk and create a new work item on the petition document', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
@@ -108,7 +108,7 @@ describe('Create a work item', () => {
     expect(workItemFromSectionOutbox).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk1');
+  loginAs(test, 'docketclerk1@example.com');
 
   it('verify the work item exists on the docket section inbox', async () => {
     const workItemFromSectionInbox = await findWorkItemInWorkQueue({

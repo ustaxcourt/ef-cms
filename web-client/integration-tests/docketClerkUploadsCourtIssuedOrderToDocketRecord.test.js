@@ -18,23 +18,23 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkUploadsACourtIssuedDocument(test, fakeFile);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test, 3);
   petitionsClerkViewsDraftOrder(test, 0);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(test, 0);
   docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
   docketClerkAddsDocketEntryFromDraft(test, 0);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, { documentCount: 3 });
 });
