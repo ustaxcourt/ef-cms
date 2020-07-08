@@ -189,7 +189,7 @@
     "representingPrimary": true,
     "pk": "case|6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
+    "email": "privatePractitioner@example.com"
   },
   {
     "documentType": "Petition",
