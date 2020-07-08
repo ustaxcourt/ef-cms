@@ -22,10 +22,6 @@ const yesterdayFormatted = formatDateString(
   createISODateString(yesterdayMoment),
   FORMATS.MMDDYYYY,
 );
-const todayFormatted = formatDateString(
-  createISODateString(),
-  FORMATS.MMDDYYYY,
-);
 
 /**
  *
@@ -53,7 +49,7 @@ CourtIssuedDocumentTypeE.schema = {
     otherwise: JoiValidationConstants.ISO_DATE.min(
       yesterdayFormatted,
     ).required(),
-    then: JoiValidationConstants.ISO_DATE.max(todayFormatted).required(),
+    then: JoiValidationConstants.ISO_DATE.max('now').required(),
   }),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
