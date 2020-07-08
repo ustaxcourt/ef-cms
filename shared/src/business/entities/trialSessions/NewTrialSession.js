@@ -1,11 +1,11 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { TrialSession } = require('./TrialSession');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 NewTrialSession.validationName = 'TrialSession';
 
@@ -27,7 +27,7 @@ joiValidationDecorator(
   NewTrialSession,
   joi.object().keys({
     ...TrialSession.validationRules.COMMON,
-    startDate: joiStrictTimestamp.min('now').required(),
+    startDate: JoiValidationConstants.ISO_DATE.min('now').required(),
   }),
   NewTrialSession.VALIDATION_ERROR_MESSAGES,
 );

@@ -26,7 +26,7 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test);
@@ -34,15 +34,15 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkEditsPetitionerInformation(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkEditsServiceIndicatorForPetitioner(test);
   docketClerkEditsServiceIndicatorForPractitioner(test);
   docketClerkEditsServiceIndicatorForRespondent(test);

@@ -21,7 +21,7 @@
       "name": "Letti Toretto",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -33,7 +33,6 @@
     "orderForRatification": false,
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,

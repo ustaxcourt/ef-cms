@@ -298,7 +298,7 @@
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -312,7 +312,6 @@
     "initialDocketNumberSuffix": "L",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "L",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2020-01-23T21:45:14.136Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -374,7 +373,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "attachments": false,
@@ -466,7 +465,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Notice of Trial",

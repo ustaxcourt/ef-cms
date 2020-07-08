@@ -530,11 +530,6 @@
       flags: 
         presence: "optional"
         description: "Reminder for clerks to review the Order for Ratification."
-    orderToChangeDesignatedPlaceOfTrial: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Reminder for clerks to review the Order to Change Designated Place Of Trial."
     orderToShowCause: 
       type: "boolean"
       flags: 
