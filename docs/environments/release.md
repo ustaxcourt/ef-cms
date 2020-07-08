@@ -1,6 +1,8 @@
 # Continuous release process with CircleCI
 
-Once CircleCI is configured, any merge to an environment’s branch will automatically kick off a deployment to that environment. There is a manual release step, however, documented below.
+Once CircleCI is configured, any merge to an environment’s branch will automatically kick off a deployment to that environment.
+
+**There is a manual release step**, however, documented below.
 
 ## Manual deployment steps
 
@@ -10,13 +12,13 @@ Before the automated deploy phase happens, any account-specific or environment-s
 
 These commands are run manually as an administrator, since they provision AWS account-level resources which the automated deployment user does not have permission to change.
 
-- **For the first deploy that happens in an AWS account,** the account-specific Terraform command needs to be run manually, from the branch being deployed:
+- **For the first deploy that happens in an AWS account, and for any subsequent changes to these resources,** the account-specific Terraform command needs to be run manually, from the branch being deployed:
 
   ```bash
   (cd iam/terraform/account-specific/main && ../bin/deploy-app.sh)
   ```
 
-- **For the first deploy that happens in an environment (stg, prod, test),** the environment-specific Terraform command needs to be run manually, from the branch being deployed, with the name of the environment for that branch:
+- **For the first deploy that happens in an environment (stg, prod, test), and for any subsequent changes to these resources,** the environment-specific Terraform command needs to be run manually, from the branch being deployed, with the name of the environment for that branch:
 
   ```bash
   # This command is for the stg environment specifically:
