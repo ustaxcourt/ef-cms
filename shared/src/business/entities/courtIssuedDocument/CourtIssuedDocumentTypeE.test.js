@@ -69,7 +69,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     });
   });
 
-  describe('Order time is extended for petr(s) to file Amended Petition [OPX]', () => {
+  describe('Order for Filing Fee. Application waiver of Filing Fee is denied [OFWD]', () => {
     it('should have an error message for any date past the current', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
@@ -81,9 +81,9 @@ describe('CourtIssuedDocumentTypeE', () => {
         attachments: false,
         date,
         documentTitle:
-          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+          'Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.',
         documentType:
-          'Order time is extended for petr(s) to file Amended Petition',
+          'Order for Filing Fee. Application waiver of Filing Fee is denied',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -98,9 +98,9 @@ describe('CourtIssuedDocumentTypeE', () => {
         attachments: false,
         date,
         documentTitle:
-          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+          'Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.',
         documentType:
-          'Order time is extended for petr(s) to file Amended Petition',
+          'Order for Filing Fee. Application waiver of Filing Fee is denied',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
@@ -117,9 +117,9 @@ describe('CourtIssuedDocumentTypeE', () => {
         attachments: false,
         date,
         documentTitle:
-          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+          'Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.',
         documentType:
-          'Order time is extended for petr(s) to file Amended Petition',
+          'Order for Filing Fee. Application waiver of Filing Fee is denied',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
