@@ -2,7 +2,7 @@ const faker = require('faker');
 const {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
-  PARTY_TYPES,
+  OTHER_FILER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
 const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 
@@ -28,7 +28,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -40,7 +40,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -52,7 +52,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -64,7 +64,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -76,7 +76,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -88,7 +88,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -100,7 +100,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -112,7 +112,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
     {
       additionalName: `Additional ${faker.name.findName()}`,
@@ -124,7 +124,7 @@ exports.CASE_WITH_OTHER_PETITIONERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
-      title: PARTY_TYPES.petitioner,
+      title: OTHER_FILER_TYPES[0],
     },
   ],
 };
@@ -142,6 +142,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -153,6 +154,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -164,6 +166,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -175,6 +178,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -186,6 +190,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -197,6 +202,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -208,6 +214,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -219,6 +226,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
     {
       address1: faker.address.streetAddress(),
@@ -230,6 +238,7 @@ exports.CASE_WITH_OTHER_FILERS = {
       phone: faker.phone.phoneNumber(),
       postalCode: faker.address.zipCode(),
       state: faker.address.stateAbbr(),
+      title: OTHER_FILER_TYPES[0],
     },
   ],
 };
