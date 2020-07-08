@@ -346,7 +346,7 @@
   {
     "eventCode": "CTRA",
     "documentType": "Corrected Transcript",
-    "documentTitle": "Corrected Transcipt of [Date]",
+    "documentTitle": "Corrected Transcript of [Date]",
     "scenario": "Type E",
     "isUnservable": true
   },

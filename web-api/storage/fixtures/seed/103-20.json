@@ -298,7 +298,7 @@
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -373,7 +373,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "attachments": false,
@@ -465,7 +465,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Notice of Trial",

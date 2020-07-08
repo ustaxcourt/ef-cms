@@ -14,7 +14,7 @@ import jwt from 'jsonwebtoken';
 export const createTokenAction = async ({ get, props }) => {
   const name = props.token || get(state.form.name);
   if (!userMap[name]) {
-    throw new ActionError('Username not found in mock logins.');
+    throw new ActionError(`Username "${name}" not found in mock logins.`);
   }
   const user = {
     ...userMap[name],
