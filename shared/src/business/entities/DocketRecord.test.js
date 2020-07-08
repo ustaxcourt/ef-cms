@@ -150,7 +150,7 @@ describe('DocketRecord', () => {
         { applicationContext },
       );
 
-      expect(invalidDocketRecord.isValid()).toBeFalsy();
+      expect(invalidDocketRecord.isValid()).toBeTruthy();
     });
 
     it('passes validation when isLegacy is false and isStricken is undefined', () => {
