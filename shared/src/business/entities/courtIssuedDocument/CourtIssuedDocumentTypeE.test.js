@@ -69,7 +69,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     });
   });
 
-  describe('corrected transcript [CTRA]', () => {
+  describe('Order time is extended for petr(s) to file Amended Petition [OPX]', () => {
     it('should have an error message for any date past the current', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
@@ -80,8 +80,10 @@ describe('CourtIssuedDocumentTypeE', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         date,
-        documentTitle: 'Corrected Transcript [Date]',
-        documentType: 'Corrected Transcript',
+        documentTitle:
+          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+        documentType:
+          'Order time is extended for petr(s) to file Amended Petition',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -95,8 +97,10 @@ describe('CourtIssuedDocumentTypeE', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         date,
-        documentTitle: 'Corrected Transcript [Date]',
-        documentType: 'Corrected Transcript',
+        documentTitle:
+          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+        documentType:
+          'Order time is extended for petr(s) to file Amended Petition',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
@@ -112,8 +116,10 @@ describe('CourtIssuedDocumentTypeE', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         date,
-        documentTitle: 'Corrected Transcript [Date]',
-        documentType: 'Corrected Transcript',
+        documentTitle:
+          'Order time is extended to [Date] for petr(s) to file Amended Petition',
+        documentType:
+          'Order time is extended for petr(s) to file Amended Petition',
         scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
