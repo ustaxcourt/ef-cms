@@ -145,7 +145,7 @@ describe('DocketRecord', () => {
           filingDate: new Date('2000-01-01').toISOString(),
           index: 0,
           isLegacy: true,
-          isStriken: false,
+          isStricken: false,
         },
         { applicationContext },
       );
