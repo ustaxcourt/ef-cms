@@ -108,9 +108,14 @@
       type: "string"
       rules: 
         - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
       whens: 
         - 
           ref: 
