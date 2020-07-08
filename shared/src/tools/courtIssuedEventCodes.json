@@ -256,7 +256,7 @@
   {
     "eventCode": "OSC",
     "documentType": "Order to Show Cause",
-    "documentTitle": "Order [Anything]",
+    "documentTitle": "Order to Show Cause [Anything]",
     "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
