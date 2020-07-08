@@ -39,7 +39,7 @@ export const petitionsClerkAddsNoticeToCase = test => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
