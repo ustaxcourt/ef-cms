@@ -219,7 +219,9 @@ describe('Create a work item', () => {
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Motion in Limine QC completed and message sent.',
     });
-    expect(window.document.title).toBe('Document QC | U.S. Tax Court');
+
+    expect(test.getState('currentPage')).toBe('Messages');
+
     const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
       item => item.docketNumber === caseDetail.docketNumber,
     );
