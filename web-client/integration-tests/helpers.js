@@ -12,6 +12,7 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
+import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -30,6 +31,9 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+const formattedCaseMessages = withAppContextDecorator(
+  formattedCaseMessagesComputed,
+);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 Object.assign(applicationContext, {
@@ -63,6 +67,16 @@ export const getFormattedDocumentQCMyInbox = async test => {
     workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+export const getMySentFormattedCaseMessages = async test => {
+  await test.runSequence('gotoCaseMessagesSequence', {
+    box: 'outbox',
+    queue: 'my',
+  });
+  return runCompute(formattedCaseMessages, {
     state: test.getState(),
   });
 };
@@ -352,8 +366,11 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
 export const uploadPetition = async (
   test,
   overrides = {},
-  loginUsername = 'petitioner',
+  loginUsername = 'petitioner@example.com',
 ) => {
+  if (!userMap[loginUsername]) {
+    throw new Error(`Unable to log into test as ${loginUsername}`);
+  }
   const user = {
     ...userMap[loginUsername],
     sub: userMap[loginUsername].userId,

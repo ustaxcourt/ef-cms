@@ -21,13 +21,13 @@ describe('Respondent requests access to a case', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   respondentSearchesForNonexistentCase(test);
   respondentViewsDashboard(test);
   respondentSearchesForCase(test);
@@ -37,7 +37,7 @@ describe('Respondent requests access to a case', () => {
   respondentViewsCaseDetailOfAssociatedCase(test);
   respondentFilesDocumentForAssociatedCase(test, fakeFile);
 
-  loginAs(test, 'irsPractitioner1');
+  loginAs(test, 'irsPractitioner1@example.com');
   respondentSearchesForCase(test);
   respondentViewsCaseDetailOfUnassociatedCase(test);
   respondentRequestsAccessToCase(test, fakeFile);

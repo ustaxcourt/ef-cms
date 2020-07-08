@@ -13,7 +13,7 @@ describe.skip('Petition Service Email Sent on Serve', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
@@ -22,7 +22,7 @@ describe.skip('Petition Service Email Sent on Serve', () => {
     ).documentId;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSubmitsCaseToIrs(test);
 
   it('should send the expected emails to irs super user', async () => {

@@ -19,13 +19,13 @@ describe('Petitions clerk case journey', () => {
     jest.setTimeout(40000);
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
   petitionsClerkVerifiesOrderForOdsCheckbox(test, fakeFile);
   petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox(test, fakeFile);
   petitionsClerkVerifiesPetitionPaymentFeeOptions(test, fakeFile);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case #1', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -34,11 +34,11 @@ describe('Petitions clerk case journey', () => {
     test.caseId = caseDetail.caseId;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkEditsPetitionInQCIRSNotice(test);
   petitionsClerkChangesCaseCaptionDuringQC(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case #2', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -47,7 +47,7 @@ describe('Petitions clerk case journey', () => {
     test.caseId = caseDetail.caseId;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsDeficiencyStatisticToCase(test);
   petitionsClerkEditsDeficiencyStatistic(test);
   petitionsClerkDeleteDeficiencyStatistic(test);

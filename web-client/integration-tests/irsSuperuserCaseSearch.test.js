@@ -13,17 +13,17 @@ describe('irsSuperuser case search', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'irsSuperuser');
+  loginAs(test, 'irsSuperuser@example.com');
   irsSuperuserSearchForCase(test);
   irsSuperuserAdvancedSearchForCase(test);
   irsSuperuserAdvancedSearchForCaseDocketNumber(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'irsSuperuser');
+  loginAs(test, 'irsSuperuser@example.com');
   irsSuperuserSearchForUnservedCase(test);
 });
