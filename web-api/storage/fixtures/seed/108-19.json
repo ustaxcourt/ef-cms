@@ -69,7 +69,7 @@
       "name": "Garrett Carpenter",
       "state": "MD",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "otherPetitioners": [
       {
@@ -84,7 +84,7 @@
         "name": "Coralie Carpenter",
         "state": "MD",
         "countryType": "domestic",
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "additionalName": "Coralie Carpenter",
         "title": "Trust"
       },
@@ -100,7 +100,7 @@
         "name": "Riya Carpenter",
         "state": "MD",
         "countryType": "domestic",
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "additionalName": "Riya Carpenter",
         "title": "Trust"
       },
@@ -116,7 +116,7 @@
         "name": "Chinju Carpenter",
         "state": "MD",
         "countryType": "domestic",
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "additionalName": "Chinju Carpenter",
         "title": "Trust"
       }
@@ -369,7 +369,7 @@
     "servedAt": "2019-08-16T19:22:13.925Z",
     "servedParties": [
       {
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "name": "Garrett Carpenter, Leslie Bullock"
       }
     ],

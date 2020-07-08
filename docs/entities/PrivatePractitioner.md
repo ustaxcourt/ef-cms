@@ -228,6 +228,11 @@
         presence: "optional"
       rules: 
         - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
           name: "max"
           args: 
             limit: 100
@@ -241,7 +246,60 @@
     section: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
+      allow: 
+        - "adc"
+        - "admissions"
+        - "chambers"
+        - "clerkofcourt"
+        - "docket"
+        - "petitions"
+        - "trialClerks"
+        - "armensChambers"
+        - "ashfordsChambers"
+        - "buchsChambers"
+        - "carluzzosChambers"
+        - "cohensChambers"
+        - "colvinsChambers"
+        - "copelandsChambers"
+        - "foleysChambers"
+        - "galesChambers"
+        - "gerbersChambers"
+        - "goekesChambers"
+        - "gustafsonsChambers"
+        - "guysChambers"
+        - "halpernsChambers"
+        - "holmesChambers"
+        - "jacobsChambers"
+        - "jonesChambers"
+        - "kerrigansChambers"
+        - "laubersChambers"
+        - "leydensChambers"
+        - "marvelsChambers"
+        - "morrisonsChambers"
+        - "negasChambers"
+        - "panuthosChambers"
+        - "parisChambers"
+        - "pughsChambers"
+        - "ruwesChambers"
+        - "thorntonsChambers"
+        - "torosChambers"
+        - "urdasChambers"
+        - "vasquezsChambers"
+        - "wellsChambers"
+        - "admin"
+        - "admissionsclerk"
+        - "docketclerk"
+        - "floater"
+        - "inactivePractitioner"
+        - "irsPractitioner"
+        - "irsSuperuser"
+        - "judge"
+        - "petitioner"
+        - "petitionsclerk"
+        - "privatePractitioner"
+        - "trialclerk"
     token: 
       type: "string"
       flags: 

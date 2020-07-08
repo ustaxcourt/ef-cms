@@ -27,19 +27,19 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   let judgeDocketSectionQCInboxCountBefore;
   let adcDocketSectionQCInboxCountBefore;
 
-  loginAs(test, 'judgeCohen');
+  loginAs(test, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox before", async () => {
     await getFormattedDocumentQCSectionInbox(test);
     judgeDocketSectionQCInboxCountBefore = getInboxCount(test);
   });
 
-  loginAs(test, 'adc');
+  loginAs(test, 'adc@example.com');
   it("Get adc's document qc section inbox before", async () => {
     await getFormattedDocumentQCSectionInbox(test);
     adcDocketSectionQCInboxCountBefore = getInboxCount(test);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   for (let index = 0; index <= 2; index++) {
     it(`Create case ${index}`, async () => {
       let caseDetail = await uploadPetition(test);
@@ -50,16 +50,16 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     petitionerFilesDocumentForCase(test, fakeFile);
   }
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test);
   docketClerkViewsTrialSessionList(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
   petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 1);
 
-  loginAs(test, 'judgeCohen');
+  loginAs(test, 'judgeCohen@example.com');
   it("Get judge's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(test);
     const judgeDocketSectionQCInboxCountAfter = getInboxCount(test);
@@ -68,7 +68,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     );
   });
 
-  loginAs(test, 'adc');
+  loginAs(test, 'adc@example.com');
   it("Get adc's document qc section inbox after", async () => {
     await getFormattedDocumentQCSectionInbox(test);
     const adcDocketSectionQCInboxCountAfter = getInboxCount(test);

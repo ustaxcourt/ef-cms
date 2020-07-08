@@ -188,6 +188,12 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
     target_origin_id = "group-public-${var.environment}.${var.dns_domain}"
 
+    lambda_function_association {
+      event_type   = "origin-response"
+      lambda_arn   = aws_lambda_function.header_security_lambda.qualified_arn
+      include_body = false
+    }
+
     forwarded_values {
       query_string = false
 

@@ -31,7 +31,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -39,7 +39,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
   petitionerFilesADocumentForCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkChecksDocketEntryEditLink(test);
   docketClerkQCsDocketEntry(test);
   docketClerkChecksDocketEntryEditLink(test, { value: true });

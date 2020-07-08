@@ -160,7 +160,7 @@
       "name": "Tatum Craig",
       "state": "NM",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "otherFilers": [
       {
@@ -346,7 +346,7 @@
     "section": "irsPractitioner",
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner"
+    "email": "irsPractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -368,7 +368,7 @@
     "representingPrimary": true,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
+    "email": "privatePractitioner@example.com"
   },
   {
     "documentType": "Ownership Disclosure Statement",
@@ -454,7 +454,7 @@
     "servedParties": [
       {
         "name": "Tatum Craig",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",

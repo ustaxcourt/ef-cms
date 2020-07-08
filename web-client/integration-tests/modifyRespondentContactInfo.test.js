@@ -14,7 +14,7 @@ describe('Modify Respondent Contact Information', () => {
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
 
     it(`create case #${i} and associate a respondent`, async () => {
       caseDetail = await uploadPetition(test);
@@ -22,11 +22,11 @@ describe('Modify Respondent Contact Information', () => {
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkAddsRespondentsToCase(test);
   }
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   respondentUpdatesAddress(test);
   for (let i = 0; i < 3; i++) {
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
