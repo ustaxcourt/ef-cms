@@ -39,18 +39,11 @@ export const petitionsClerkAddsNoticeToCase = test => {
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
-    // await test.runSequence('setPDFSignatureDataSequence', {
-    //   isPdfAlreadySigned: false,
-    //   signatureApplied: false,
-    //   signatureData: { scale: 1, x: 20, y: 20 },
-    // });
-    // await test.runSequence('saveDocumentSigningSequence');
-
-    //skip signing and go back to caseDetail
+    // skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

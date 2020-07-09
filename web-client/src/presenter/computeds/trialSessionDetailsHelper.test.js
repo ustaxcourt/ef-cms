@@ -29,8 +29,7 @@ describe('trialSessionDetailsHelper', () => {
             MOCK_CASE,
             {
               ...MOCK_CASE,
-              caseCaption:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else, Petitioners',
+              caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
               docketNumberSuffix: 'W',
               qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
             },

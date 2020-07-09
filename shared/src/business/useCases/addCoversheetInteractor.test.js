@@ -20,8 +20,7 @@ describe('addCoversheetInteractor', () => {
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketNumber: '101-19',
