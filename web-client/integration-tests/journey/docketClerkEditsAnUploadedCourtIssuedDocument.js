@@ -72,5 +72,6 @@ export const docketClerkEditsAnUploadedCourtIssuedDocument = (
     );
     expect(newDraftOrder).toBeTruthy();
     test.draftOrders.push(newDraftOrder);
+    test.documentId = newDraftOrder.documentId;
   });
 };

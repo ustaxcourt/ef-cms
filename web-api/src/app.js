@@ -260,6 +260,9 @@ const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
 const {
+  saveSignedDocumentLambda,
+} = require('./documents/saveSignedDocumentLambda');
+const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
 const {
@@ -364,7 +367,6 @@ const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
-const { signDocumentLambda } = require('./documents/signDocumentLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -422,7 +424,7 @@ app.post(
 );
 app.post(
   '/case-documents/:caseId/:documentId/sign',
-  lambdaWrapper(signDocumentLambda),
+  lambdaWrapper(saveSignedDocumentLambda),
 );
 app.get(
   '/case-documents/:caseId/:documentId/download-policy-url',

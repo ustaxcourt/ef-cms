@@ -38,6 +38,8 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  formatCase,
+  formatDocketRecordWithDocument,
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
@@ -198,9 +200,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    formatCase: jest.fn().mockImplementation(formatCase),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
+    formatDocketRecordWithDocument: jest
+      .fn()
+      .mockImplementation(formatDocketRecordWithDocument),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),

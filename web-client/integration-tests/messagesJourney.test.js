@@ -6,6 +6,7 @@ import { docketClerkEditsSignatureFromMessage } from './journey/docketClerkEdits
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
@@ -31,7 +32,7 @@ describe('messages journey', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -40,23 +41,23 @@ describe('messages journey', () => {
     test.caseId = caseDetail.caseId;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
   petitionsClerkCreatesNewMessageOnCase(test);
   petitionsClerkViewsSentMessagesBox(test);
 
-  loginAs(test, 'petitionsclerk1');
+  loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1RepliesToMessage(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsReplyInInbox(test);
   petitionsClerkCreatesOrderFromMessage(test);
   petitionsClerkForwardsMessageToDocketClerk(test);
   petitionsClerkViewsInProgressMessagesOnCaseDetail(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsForwardedMessageInInbox(test);
   docketClerkEditsOrderFromMessage(test);
   docketClerkAppliesSignatureFromMessage(test);
@@ -64,4 +65,11 @@ describe('messages journey', () => {
   docketClerkAddsDocketEntryFromMessage(test);
   docketClerkCompletesMessageThread(test);
   docketClerkViewsCompletedMessagesOnCaseDetail(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
+  petitionsClerkCreatesNewMessageOnCase(test);
+  petitionsClerk1ViewsMessageInbox(test);
+  petitionsClerk1ViewsMessageDetail(test);
+  petitionsClerk1CreatesNoticeFromMessageDetail(test);
 });

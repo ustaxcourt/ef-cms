@@ -6,4 +6,5 @@ const { ContactFactory } = require('./ContactFactory');
 exports.getPetitionerPrimaryContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {},
   additionalValidation: {},
+  contactName: 'PetitionerPrimaryContact',
 });

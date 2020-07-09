@@ -22,7 +22,7 @@ describe('Modify Petitioner Contact Information', () => {
 
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -50,7 +50,7 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCasePrimaryContactAddressAndPhone(test);
 
   // attempt to modify secondary contact information
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: 'L',
@@ -63,6 +63,6 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddressAndPhone(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsNoticeOfChangeOfAddress(test);
 });

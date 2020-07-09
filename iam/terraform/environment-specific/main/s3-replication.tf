@@ -20,7 +20,7 @@ EOF
 
 resource "aws_iam_role_policy" "s3_replication_policy" {
   name = "s3_replication_policy_${var.environment}"
-  role = "${aws_iam_role.s3_replication_role.id}"
+  role = aws_iam_role.s3_replication_role.id
 
   policy = <<EOF
 {

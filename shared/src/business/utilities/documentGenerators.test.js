@@ -1,12 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  generatePdfFromHtmlInteractor,
-} = require('../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('./getChromiumBrowser');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
-
-const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -23,7 +17,15 @@ const {
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
+const {
+  CASE_STATUS_TYPES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -38,6 +40,10 @@ describe('documentGenerators', () => {
 
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
+      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
+        if (err) throw err;
+      });
+
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );
@@ -100,7 +106,7 @@ describe('documentGenerators', () => {
               caseTitle: 'rick james b',
               docketNumber: '101-20',
               docketNumberSuffix: 'L',
-              status: 'Closed',
+              status: CASE_STATUS_TYPES.closed,
             },
           ],
           reportTitle: 'General Docket - Not at Issue',

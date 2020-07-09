@@ -1,11 +1,20 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
+import {
+  FORMATS,
+  calculateISODate,
+  createISODateString,
+  deconstructDate,
+  formatDateString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import {
+  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -53,23 +62,27 @@ describe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
   describe('performing data entry', () => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     it('create case', async () => {
       caseDetail = await uploadPetition(test);
       expect(caseDetail).toBeDefined();
       test.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesAnOrder(test, {
       documentTitle: 'Order',
       eventCode: 'O',
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
+    docketClerkSignsOrder(test, 0);
     docketClerkAddsDocketEntryFromOrder(test, 0);
     docketClerkServesDocument(test, 0);
 
@@ -78,6 +91,7 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
+    docketClerkSignsOrder(test, 1);
     docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
 
     docketClerkCreatesAnOrder(test, {
@@ -85,6 +99,7 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
+    docketClerkSignsOrder(test, 2);
     docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
     docketClerkServesDocument(test, 2);
 
@@ -93,6 +108,7 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'O',
       expectedDocumentType: 'Order',
     });
+    docketClerkSignsOrder(test, 3);
     docketClerkAddsDocketEntryFromOrder(test, 3);
     docketClerkServesDocument(test, 3);
     docketClerkSealsCase(test);
@@ -305,20 +321,45 @@ describe('docket clerk order advanced search', () => {
     });
 
     it('search for a date range that contains served orders', async () => {
-      const currentDate = new Date();
-      const orderCreationYear = currentDate.getUTCFullYear();
-      const orderCreationMonth = currentDate.getUTCMonth();
-      const orderCreationDate = currentDate.getDate();
+      const endOrderCreationMoment = calculateISODate({
+        howMuch: 1,
+        unit: 'months',
+      });
+      const startOrderCreationMoment = calculateISODate({
+        howMuch: -1,
+        unit: 'months',
+      });
+
+      const {
+        day: endDateDay,
+        month: endDateMonth,
+        year: endDateYear,
+      } = deconstructDate(
+        formatDateString(
+          createISODateString(endOrderCreationMoment),
+          FORMATS.MMDDYYYY,
+        ),
+      );
+      const {
+        day: startDateDay,
+        month: startDateMonth,
+        year: startDateYear,
+      } = deconstructDate(
+        formatDateString(
+          createISODateString(startOrderCreationMoment),
+          FORMATS.MMDDYYYY,
+        ),
+      );
 
       test.setState('advancedSearchForm', {
         orderSearch: {
-          endDateDay: orderCreationDate,
-          endDateMonth: orderCreationMonth + 1,
-          endDateYear: orderCreationYear,
+          endDateDay,
+          endDateMonth,
+          endDateYear,
           keyword: 'dismissal',
-          startDateDay: orderCreationDate,
-          startDateMonth: orderCreationMonth - 1,
-          startDateYear: orderCreationYear,
+          startDateDay,
+          startDateMonth,
+          startDateYear,
         },
       });
 
@@ -362,7 +403,7 @@ describe('docket clerk order advanced search', () => {
       expect(test.getState('searchResults')).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            documentId: test.draftOrders[2].documentId,
+            documentId: test.draftOrders[1].documentId,
           }),
         ]),
       );

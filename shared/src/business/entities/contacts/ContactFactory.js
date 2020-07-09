@@ -48,7 +48,11 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
-  email: joi.string().max(500).optional(),
+  email: joi.string().email({ tlds: false }).max(100).when('hasEAccess', {
+    is: true,
+    then: joi.required(),
+    otherwise: joi.optional(),
+  }),
   inCareOf: joi.string().max(500).optional(),
   name: joi.string().max(500).required(),
   phone: joi.string().max(500).required(),
@@ -58,6 +62,12 @@ const commonValidationRequirements = {
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .optional(),
+  hasEAccess: joi
+    .boolean()
+    .optional()
+    .description(
+      'Flag that indicates if the contact has "eAccess" login credentials to the legacy system.',
+    ),
 };
 
 const domesticValidationObject = {
@@ -167,6 +177,7 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
     getPetitionerIntermediaryContact,
   } = require('./PetitionerIntermediaryContact');
   const { getOtherFilerContact } = require('./OtherFilerContact');
+  const { getOtherPetitionerContact } = require('./OtherPetitionerContact');
   const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
@@ -179,63 +190,63 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
       case PARTY_TYPES.petitioner:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.conservator:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerConservatorContact,
           secondary: null,
         };
       case PARTY_TYPES.corporation:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCorporationContact,
           secondary: null,
         };
       case PARTY_TYPES.custodian:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCustodianContact,
           secondary: null,
         };
       case PARTY_TYPES.estate:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerEstateWithExecutorPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.estateWithoutExecutor:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerIntermediaryContact,
           secondary: null,
         };
       case PARTY_TYPES.guardian:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerGuardianContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForIncompetentPerson:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForIncompetentPersonContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForMinor:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForMinorContact,
           secondary: null,
         };
@@ -243,49 +254,49 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipAsTaxMattersPartnerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipBBA:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipBBAPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipOtherThanTaxMattersPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.petitionerDeceasedSpouse:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerDeceasedSpouseContact,
         };
       case PARTY_TYPES.petitionerSpouse:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerSpouseContact,
         };
       case PARTY_TYPES.survivingSpouse:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getSurvivingSpouseContact,
           secondary: null,
         };
       case PARTY_TYPES.trust:
         return {
           otherFilers: getOtherFilerContact,
-          otherPetitioners: getPetitionerPrimaryContact,
+          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerTrustContact,
           secondary: null,
         };
@@ -363,7 +374,7 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
       : {},
     secondary: constructors.secondary
       ? new constructors.secondary(contactInfo.secondary || {})
-      : {},
+      : undefined,
   };
 };
 
@@ -378,8 +389,9 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
 ContactFactory.createContactFactory = ({
   additionalErrorMappings,
   additionalValidation,
+  contactName,
 }) => {
-  return ({ countryType, isPaper }) => {
+  const ContactFactoryConstructor = ({ countryType, isPaper }) => {
     /**
      * creates a contact entity
      *
@@ -404,7 +416,10 @@ ContactFactory.createContactFactory = ({
       this.title = rawContact.title;
       this.additionalName = rawContact.additionalName;
       this.otherFilerType = rawContact.otherFilerType;
+      this.hasEAccess = rawContact.hasEAccess || undefined;
     }
+
+    GenericContactConstructor.contactName = () => contactName;
 
     GenericContactConstructor.errorToMessageMap = {
       ...ContactFactory.getErrorToMessageMap({ countryType }),
@@ -422,6 +437,10 @@ ContactFactory.createContactFactory = ({
 
     return GenericContactConstructor;
   };
+
+  ContactFactoryConstructor.contactName = contactName;
+
+  return ContactFactoryConstructor;
 };
 
 exports.ContactFactory = ContactFactory;

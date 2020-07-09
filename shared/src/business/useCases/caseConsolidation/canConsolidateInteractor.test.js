@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { canConsolidateInteractor } = require('./canConsolidateInteractor');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('canConsolidateInteractor', () => {
@@ -13,7 +14,7 @@ describe('canConsolidateInteractor', () => {
       ...MOCK_CASE,
       associatedJudge: 'Judge Buch',
       procedureType: 'Regular',
-      status: 'Submitted',
+      status: CASE_STATUS_TYPES.submitted,
     };
 
     caseToConsolidate = {
@@ -21,7 +22,7 @@ describe('canConsolidateInteractor', () => {
       associatedJudge: 'Judge Buch',
       docketNumber: '102-19',
       procedureType: 'Regular',
-      status: 'Submitted',
+      status: CASE_STATUS_TYPES.submitted,
     };
   });
 
@@ -36,7 +37,7 @@ describe('canConsolidateInteractor', () => {
   });
 
   it('should return false when cases are not consolidatable', () => {
-    caseToConsolidate.status = 'Closed';
+    caseToConsolidate.status = CASE_STATUS_TYPES.closed;
 
     const result = canConsolidateInteractor({
       applicationContext,

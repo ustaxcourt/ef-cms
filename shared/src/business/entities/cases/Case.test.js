@@ -49,8 +49,105 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
+    });
+  });
+
+  it('sorts correspondence array according to `filingDate`', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        correspondence: [
+          { filingDate: '2020-01-05T01:02:03.004Z' },
+          { filingDate: '2019-01-05T01:02:03.004Z' },
+        ],
+      },
+      { applicationContext },
+    );
+    expect(myCase.correspondence).toMatchObject([
+      { filingDate: '2019-01-05T01:02:03.004Z' },
+      { filingDate: '2020-01-05T01:02:03.004Z' },
+    ]);
+  });
+
+  describe('adding and removing practitioners', () => {
+    let myCase;
+    beforeEach(() => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [{ name: 'Christopher Walken', userId: '123' }],
+          privatePractitioners: [{ name: 'Slim Shady', userId: '567' }],
+        },
+        { applicationContext },
+      );
+    });
+
+    describe('who are from IRS', () => {
+      it('updates a matching IRS practitioner found on the case', () => {
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        myCase.updateIrsPractitioner({
+          name: 'Christopher Running',
+          userId: '123',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Running',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updateIrsPractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Walken',
+        });
+      });
+    });
+
+    describe('who are private', () => {
+      it('updates a matching private practitioner found on the case', () => {
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        myCase.updatePrivatePractitioner({
+          name: 'Stout Sunny',
+          userId: '567',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Stout Sunny',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updatePrivatePractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Slim Shady',
+        });
+      });
+    });
+  });
+
+  describe('conditionally sets userId on entity', () => {
+    it('sets userId to current user if current user matches rawCase', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
+        { applicationContext },
+      );
+      expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
+    });
+    it('does NOT set userId to if current user does not match rawCase', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, userId: '9999' },
+        { applicationContext },
+      );
+      expect(myCase.userId).not.toEqual(
+        applicationContext.getCurrentUser().userId,
+      );
     });
   });
 
@@ -65,7 +162,6 @@ describe('Case entity', () => {
         orderForFilingFee: true,
         orderForOds: false,
         orderForRatification: false,
-        orderToChangeDesignatedPlaceOfTrial: true,
         orderToShowCause: true,
       },
       {
@@ -80,7 +176,6 @@ describe('Case entity', () => {
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
-      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });
@@ -123,6 +218,16 @@ describe('Case entity', () => {
         },
       );
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
+    });
+
+    it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, contactSecondary: undefined },
+        { applicationContext },
+      );
+      expect(myCase).toMatchObject({
+        contactSecondary: undefined,
+      });
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
@@ -313,6 +418,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
         {
           address1: '1337 12th Ave',
@@ -325,6 +431,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
       ];
 
@@ -1103,7 +1210,30 @@ describe('Case entity', () => {
       expect(error).toBeTruthy();
     });
   });
+  describe('updateDocketRecord', () => {
+    it('updates the docket record entity at the provided docketRecordIndex', () => {
+      const caseRecord = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      const updatedDocketEntry = new DocketRecord(
+        {
+          description: 'second record now updated',
+          docketRecordId: '8675309b-28d0-43ec-bafb-654e83405412',
+          documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+          filingDate: '2018-03-02T22:22:00.000Z',
+          index: 7,
+        },
+        { applicationContext },
+      );
+      caseRecord.updateDocketRecord(1, updatedDocketEntry);
 
+      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
+      expect(caseRecord.docketRecord[1].description).toEqual(
+        'second record now updated',
+      );
+      expect(caseRecord.docketRecord[1].index).toEqual(7);
+    });
+  });
   describe('updateDocketRecordEntry', () => {
     it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -2604,7 +2734,7 @@ describe('Case entity', () => {
 
       beforeEach(() => {
         caseEntity = new Case(
-          { ...MOCK_CASE, status: 'Submitted' },
+          { ...MOCK_CASE, status: CASE_STATUS_TYPES.submitted },
           {
             applicationContext,
           },
@@ -2637,7 +2767,7 @@ describe('Case entity', () => {
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(false);
 
-        otherCase.status = 'Submitted';
+        otherCase.status = CASE_STATUS_TYPES.submitted;
         result = caseEntity.canConsolidate(otherCase);
         expect(result).toEqual(true);
       });
@@ -2652,7 +2782,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2662,14 +2792,14 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             docketNumber: '102-19',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = 'Calendared';
+        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2722,8 +2852,8 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are both ineligible', () => {
-        leadCaseEntity.status = 'Closed';
-        pendingCaseEntity.status = 'Closed';
+        leadCaseEntity.status = CASE_STATUS_TYPES.closed;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2736,8 +2866,8 @@ describe('Case entity', () => {
       });
 
       it('should only return the ineligible failure if the pending case status is ineligible', () => {
-        leadCaseEntity.status = 'Submitted';
-        pendingCaseEntity.status = 'Closed';
+        leadCaseEntity.status = CASE_STATUS_TYPES.submitted;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.closed;
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
         pendingCaseEntity.associatedJudge = 'Some judge';
@@ -2787,7 +2917,7 @@ describe('Case entity', () => {
             ...MOCK_CASE,
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );
@@ -2805,7 +2935,7 @@ describe('Case entity', () => {
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
-            status: 'Submitted',
+            status: CASE_STATUS_TYPES.submitted,
           },
           { applicationContext },
         );

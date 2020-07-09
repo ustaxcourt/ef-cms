@@ -12,7 +12,7 @@ describe('docket clerk opinion advanced search', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('go to advanced opinion search tab', async () => {
     await refreshElasticsearchIndex();
@@ -119,7 +119,7 @@ describe('docket clerk opinion advanced search', () => {
       test.setState('advancedSearchForm', {
         opinionSearch: {
           keyword: 'opinion',
-          opinionType: 'TCOP - T.C. Opinion',
+          opinionType: 'T.C. Opinion',
         },
       });
 

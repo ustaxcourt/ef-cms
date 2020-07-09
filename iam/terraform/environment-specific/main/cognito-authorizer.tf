@@ -1,7 +1,7 @@
 
 resource "aws_iam_role_policy" "authorizer_invocation_policy" {
   name = "cognito_authorizer_policy_${var.environment}"
-  role = "${aws_iam_role.authorizer_lambda.id}"
+  role = aws_iam_role.authorizer_lambda.id
 
   policy = <<EOF
 {
@@ -37,7 +37,7 @@ resource "aws_iam_role" "authorizer_lambda" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": [
-          "lambda.amazonaws.com", 
+          "lambda.amazonaws.com",
           "apigateway.amazonaws.com"
         ]
       },

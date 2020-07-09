@@ -8,6 +8,7 @@ import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerk
 import { docketClerkNavigatesToEditDocketEntryMetaCourtIssued } from './journey/docketClerkNavigatesToEditDocketEntryMetaCourtIssued';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates } from './journey/docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
@@ -25,9 +26,12 @@ test.draftOrders = [];
 describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -35,7 +39,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   });
   petitionerFilesADocumentForCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkChecksDocketEntryEditLink(test);
   docketClerkQCsDocketEntry(test);
   docketClerkChecksDocketEntryEditLink(test, { value: true });
@@ -49,6 +53,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
+  docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
@@ -62,6 +67,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkSignsOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);

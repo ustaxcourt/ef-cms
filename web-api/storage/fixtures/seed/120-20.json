@@ -156,7 +156,7 @@
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -170,7 +170,6 @@
     "initialDocketNumberSuffix": "SL",
     "docketNumberSuffix": "SL",
     "correspondence": [],
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "sortableDocketNumber": 20000120,
     "noticeOfTrialDate": "2020-06-25T20:58:55.412Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -218,7 +217,7 @@
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -232,7 +231,6 @@
     "initialDocketNumberSuffix": "SL",
     "docketNumberSuffix": "SL",
     "correspondence": [],
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "sortableDocketNumber": 20000120,
     "noticeOfTrialDate": "2020-06-25T20:58:55.412Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

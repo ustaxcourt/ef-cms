@@ -4,6 +4,7 @@ const {
 const {
   createPetitionerAccountInteractor,
 } = require('./createPetitionerAccountInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('createPetitionerAccountInteractor', () => {
   it('should attempt to persist the petitioner', async () => {
@@ -25,7 +26,7 @@ describe('createPetitionerAccountInteractor', () => {
       email: 'test@example.com',
       entityName: 'User',
       name: 'Cody',
-      role: 'petitioner',
+      role: ROLES.petitioner,
       userId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
     });
   });

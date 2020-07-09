@@ -74,7 +74,7 @@ export const petitionsClerkAssignsWorkItemToSelf = test => {
       state: test.getState(),
     }).find(workItem => workItem.workItemId === test.petitionWorkItemId);
     expect(formattedWorkItem.currentMessage.message).toEqual(
-      'Petition filed by Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse is ready for review.',
+      'Petition filed by Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse is ready for review.',
     );
     test.setState('workQueueToDisplay.workQueueIsInternal', true);
   });

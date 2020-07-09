@@ -6,7 +6,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const {
-  ORDER_DOCUMENT_TYPES,
+  ORDER_EVENT_CODES,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -55,7 +55,7 @@ exports.orderAdvancedSearchInteractor = async ({
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_EVENT_CODES,
       judgeType: 'signedJudgeName',
       ...rawSearch,
     });

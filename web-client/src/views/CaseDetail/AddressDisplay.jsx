@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -28,6 +29,12 @@ export const AddressDisplay = connect(
         >
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
+          {contact.secondaryName && (
+            <span>
+              <br />
+              c/o {contact.secondaryName}
+            </span>
+          )}
           {contact.inCareOf && (
             <span>
               <br />
@@ -61,7 +68,16 @@ export const AddressDisplay = connect(
             </span>
           )}
           {contact.email && showEmail && (
-            <span className="address-line">{contact.email}</span>
+            <span className="address-line">
+              {contact.email}
+              {contact.showEAccessFlag && (
+                <FontAwesomeIcon
+                  className="margin-left-05 fa-icon-blue"
+                  icon="flag"
+                  size="1x"
+                />
+              )}
+            </span>
           )}
         </p>
       </>

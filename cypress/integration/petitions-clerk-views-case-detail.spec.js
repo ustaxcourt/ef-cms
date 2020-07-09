@@ -1,5 +1,5 @@
 describe('Petitions clerk views case detail', function () {
-  before(() => {
+  beforeEach(() => {
     cy.login('petitionsclerk');
   });
 
@@ -17,6 +17,21 @@ describe('Petitions clerk views case detail', function () {
         .click();
 
       cy.get('div.other-petitioners-information').should('have.length', 7);
+    });
+  });
+
+  describe('draft documents tab', () => {
+    it('should display draft documents', () => {
+      cy.visit('/case-detail/103-20');
+
+      cy.get('button#tab-drafts').click();
+
+      cy.get('.attachment-viewer-button').should('contain', 'First draft');
+      cy.get('.attachment-viewer-button').first().click();
+
+      cy.get('.document-viewer--documents h3').should('contain', 'First draft');
+
+      cy.get('.message-document-actions').children().should('have.length', 5);
     });
   });
 });
