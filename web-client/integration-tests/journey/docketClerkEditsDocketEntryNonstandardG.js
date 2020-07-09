@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'REQA',
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
@@ -49,7 +49,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'First',
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'M057',
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
@@ -49,7 +49,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

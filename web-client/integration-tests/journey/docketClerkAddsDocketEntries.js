@@ -17,7 +17,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -26,7 +26,6 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     //primary document
@@ -72,7 +71,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -117,7 +116,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
       isAddAnother: true,
     });
