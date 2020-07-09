@@ -835,7 +835,7 @@ const router = {
         return app.getSequence('gotoPrintPaperServiceSequence')({
           alertWarning: {
             message:
-              'Document electronically served. Print and mail all paper service documents now.',
+              'This document has not been electronically served. Print and mail to complete paper service. ',
           },
           docketNumber,
         });
