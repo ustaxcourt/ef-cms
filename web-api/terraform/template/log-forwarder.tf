@@ -10,7 +10,7 @@ resource "aws_lambda_function" "log_forwarder" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_forwarder_role_${var.environment}"
   handler       = "log-forwarder.handler"
   source_code_hash = data.archive_file.zip_forwarder.output_base64sha256
-  
+
   runtime = "nodejs12.x"
 
   environment {
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "log_forwarder_west" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_forwarder_role_${var.environment}"
   handler       = "log-forwarder.handler"
   source_code_hash = data.archive_file.zip_forwarder.output_base64sha256
-  
+
   runtime = "nodejs12.x"
 
   environment {
