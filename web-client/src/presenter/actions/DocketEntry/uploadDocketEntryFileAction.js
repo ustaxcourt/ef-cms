@@ -35,6 +35,7 @@ export const uploadDocketEntryFileAction = async ({
       });
 
     return path.success({
+      documentId: primaryDocumentFileId,
       primaryDocumentFileId,
     });
   } catch (err) {

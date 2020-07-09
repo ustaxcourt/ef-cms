@@ -8,19 +8,22 @@ import React from 'react';
 
 export const PrintPaperService = connect(
   {
-    documentTitle: state.formattedCaseDetail.documentTitle,
+    documentType: state.form.documentType,
     navigateToCaseDetailFromPaperServiceSequence:
       sequences.navigateToCaseDetailFromPaperServiceSequence,
   },
   function PrintPaperService({
-    documentTitle,
+    documentType,
     navigateToCaseDetailFromPaperServiceSequence,
   }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
         <section className="usa-section grid-container">
-          <h2>Print ${documentTitle} for Paper Service</h2>
+          <h2>
+            Print {documentType || 'DOCUMENT TYPE GOES HERE HEY'} for Paper
+            Service
+          </h2>
           <div className="grid-row">
             <div className="grid-col-8">
               <WarningNotification />
