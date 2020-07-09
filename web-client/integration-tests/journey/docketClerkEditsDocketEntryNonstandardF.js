@@ -48,7 +48,6 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
     expect(test.getState('validationErrors')).toEqual({
       ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

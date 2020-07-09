@@ -47,7 +47,6 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
 
     expect(test.getState('validationErrors')).toEqual({
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       serviceDate: VALIDATION_ERROR_MESSAGES.serviceDate[1],
     });
 

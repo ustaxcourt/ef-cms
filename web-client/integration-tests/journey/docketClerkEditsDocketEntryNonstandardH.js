@@ -47,7 +47,6 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
     });
 
