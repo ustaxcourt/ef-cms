@@ -833,10 +833,6 @@ const router = {
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         return app.getSequence('gotoPrintPaperServiceSequence')({
-          alertWarning: {
-            message:
-              'This document has not been electronically served. Print and mail to complete paper service. ',
-          },
           docketNumber,
         });
       }),

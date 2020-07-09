@@ -6,7 +6,7 @@
 export const getPaperServiceSuccessMessageAction = () => {
   return {
     alertSuccess: {
-      message: 'This document has been served.',
+      message: 'Your entry has been added to the docket record.',
     },
   };
 };
