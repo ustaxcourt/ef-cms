@@ -62,5 +62,6 @@ export const saveAndServeDocketEntryAction = async ({
     caseDetail,
     caseId,
     docketNumber,
+    overridePaperServiceAddress: true,
   };
 };

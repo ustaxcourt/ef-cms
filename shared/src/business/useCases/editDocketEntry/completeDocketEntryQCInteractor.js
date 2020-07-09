@@ -50,7 +50,7 @@ exports.completeDocketEntryQCInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId } = entryMetadata;
+  const { caseId, documentId, overridePaperServiceAddress } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -239,7 +239,10 @@ exports.completeDocketEntryQCInteractor = async ({
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
-  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocument.documentType)) {
+  if (
+    overridePaperServiceAddress ||
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocument.documentType)
+  ) {
     if (servedParties.paper.length > 0) {
       const { Body: pdfData } = await applicationContext
         .getStorageClient()
