@@ -60,7 +60,6 @@ export const startCaseHelper = (get, applicationContext) => {
         ? 'Did you receive a notice from the IRS?'
         : 'Do you have a notice from the IRS?',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
-    showCaseTitleForPrimary: !hasContactSecondary,
     showEstateFilingOptions: form.otherType === 'An estate or trust',
     showHasIrsNoticeOptions: form.hasIrsNotice === true,
     showMinorIncompetentFilingOptions:
