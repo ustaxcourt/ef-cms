@@ -38,8 +38,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForDocument =
     !isDocumentOnDocketRecord &&
-    ((documentRequiresSignature && documentIsSigned) ||
-      !documentRequiresSignature);
+    (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
