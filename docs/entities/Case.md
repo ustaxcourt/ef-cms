@@ -23,7 +23,11 @@
         presence: "optional"
         description: "Temporarily blocked from trial due to a pending item or due date."
     automaticBlockedDate: 
-      type: "any"
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 
@@ -39,11 +43,8 @@
                 override: true
               - true
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "any"
@@ -52,7 +53,14 @@
             allow: 
               - null
     automaticBlockedReason: 
-      type: "any"
+      type: "string"
+      flags: 
+        only: true
+        description: "The reason the case was automatically blocked from trial."
+      allow: 
+        - "Due Date"
+        - "Pending Item"
+        - "Pending Item and Due Date"
       whens: 
         - 
           ref: 
@@ -68,15 +76,9 @@
                 override: true
               - true
           then: 
-            type: "string"
+            type: "any"
             flags: 
-              only: true
               presence: "required"
-              description: "The reason the case was automatically blocked from trial."
-            allow: 
-              - "Due Date"
-              - "Pending Item"
-              - "Pending Item and Due Date"
           otherwise: 
             type: "any"
             flags: 
@@ -93,7 +95,11 @@
           tags: 
             - "Restricted"
     blockedDate: 
-      type: "any"
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
       metas: 
         - 
           tags: 
@@ -113,11 +119,8 @@
                 override: true
               - true
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "any"
@@ -126,7 +129,14 @@
             allow: 
               - null
     blockedReason: 
-      type: "any"
+      type: "string"
+      flags: 
+        description: "Open text field for describing reason for blocking this case from trial."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 250
       metas: 
         - 
           tags: 
@@ -146,15 +156,9 @@
                 override: true
               - true
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "required"
-              description: "Open text field for describing reason for blocking this case from trial."
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 250
           otherwise: 
             type: "any"
             flags: 
@@ -254,7 +258,7 @@
       type: "string"
       flags: 
         presence: "required"
-        description: "Unique case ID in XXXXX-YY format."
+        description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
           name: "pattern"
@@ -341,7 +345,12 @@
           tags: 
             - "Restricted"
     highPriorityReason: 
-      type: "any"
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 250
       metas: 
         - 
           tags: 
@@ -361,14 +370,9 @@
                 override: true
               - true
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "required"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 250
           otherwise: 
             type: "any"
             flags: 
@@ -390,14 +394,18 @@
     initialDocketNumberSuffix: 
       type: "string"
       flags: 
+        only: true
         presence: "optional"
         description: "Case docket number suffix before modification."
-      rules: 
-        - 
-          name: "max"
-          args: 
-            limit: 2
       allow: 
+        - "W"
+        - "P"
+        - "X"
+        - "R"
+        - "SL"
+        - "L"
+        - "S"
+        - "_"
         - null
     irsNoticeDate: 
       type: "date"
@@ -423,6 +431,10 @@
       type: "boolean"
       flags: 
         presence: "optional"
+    isSealed: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     leadCaseId: 
       type: "string"
       flags: 
@@ -443,9 +455,14 @@
       allow: 
         - null
     mailingDate: 
-      type: "any"
+      type: "string"
       flags: 
         description: "Date that petition was mailed to the court."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 25
       whens: 
         - 
           ref: 
@@ -461,23 +478,13 @@
                 override: true
               - true
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "required"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 25
           otherwise: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 25
             allow: 
               - null
     noticeOfAttachments: 
@@ -533,6 +540,33 @@
       flags: 
         presence: "optional"
         description: "Reminder for clerks to review the Order to Show Cause."
+    otherFilers: 
+      type: "array"
+      flags: 
+        description: "List of OtherFilerContact Entities for the case."
+        presence: "optional"
+      rules: 
+        - 
+          name: "unique"
+          args: 
+            comparator: [object Function]
+      items: 
+        - 
+          type: "object"
+          metas: 
+            - 
+              entityName: "OtherFilerContact"
+    otherPetitioners: 
+      type: "array"
+      flags: 
+        description: "List of OtherPetitionerContact Entities for the case."
+        presence: "optional"
+      items: 
+        - 
+          type: "object"
+          metas: 
+            - 
+              entityName: "OtherPetitionerContact"
     partyType: 
       type: "string"
       flags: 
@@ -569,8 +603,11 @@
         - "Not Paid"
         - "Waived"
     petitionPaymentDate: 
-      type: "any"
+      type: "date"
       flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
         description: "When the petitioner paid the case fee."
       whens: 
         - 
@@ -587,25 +624,24 @@
                 override: true
               - "Paid"
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "optional"
             allow: 
               - null
     petitionPaymentMethod: 
-      type: "any"
+      type: "string"
       flags: 
         description: "How the petitioner paid the case fee."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 50
       whens: 
         - 
           ref: 
@@ -621,23 +657,21 @@
                 override: true
               - "Paid"
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "required"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 50
           otherwise: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
             allow: 
               - null
     petitionPaymentWaivedDate: 
-      type: "any"
+      type: "date"
       flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
         description: "When the case fee was waived."
       whens: 
         - 
@@ -654,18 +688,12 @@
                 override: true
               - "Waived"
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "optional"
             allow: 
               - null
@@ -811,7 +839,7 @@
         presence: "required"
         description: "A sortable representation of the docket number (auto-generated by constructor)."
     statistics: 
-      type: "any"
+      type: "array"
       flags: 
         description: "List of Statistic Entities for the case."
       whens: 
@@ -853,32 +881,20 @@
                       name: "min"
                       args: 
                         limit: 1
-                  items: 
-                    - 
-                      type: "object"
-                      metas: 
-                        - 
-                          entityName: "Statistic"
                 otherwise: 
-                  type: "array"
+                  type: "any"
                   flags: 
                     presence: "optional"
-                  items: 
-                    - 
-                      type: "object"
-                      metas: 
-                        - 
-                          entityName: "Statistic"
           otherwise: 
-            type: "array"
+            type: "any"
             flags: 
               presence: "optional"
-            items: 
-              - 
-                type: "object"
-                metas: 
-                  - 
-                    entityName: "Statistic"
+      items: 
+        - 
+          type: "object"
+          metas: 
+            - 
+              entityName: "Statistic"
     status: 
       type: "string"
       flags: 
@@ -903,7 +919,11 @@
           tags: 
             - "Restricted"
     closedDate: 
-      type: "any"
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 
@@ -919,11 +939,8 @@
                 override: true
               - "Closed"
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "any"

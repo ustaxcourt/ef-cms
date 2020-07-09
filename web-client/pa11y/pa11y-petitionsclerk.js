@@ -143,8 +143,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-drafts to be visible',
+      'click element #tab-drafts',
       'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
       'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
     ],
@@ -182,12 +182,12 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-deadlines to be visible',
-      'click element #tab-deadlines',
+      'wait for #tab-tracked-items to be visible',
+      'click element #tab-tracked-items',
     ],
     notes: 'checks a11y of deadlines tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=deadlines-tab',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=tracked-items-tab',
   },
   {
     actions: [
@@ -216,34 +216,32 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-drafts to be visible',
+      'click element #tab-drafts',
     ],
-    notes: 'checks a11y of in progress tab, draft documents secondary tab',
+    notes: 'checks a11y of the draft documents tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-drafts',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=drafts-tab',
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
-      'wait for #tab-messages to be visible',
-      'click element #tab-messages',
+      'wait for #tab-case-messages to be visible',
+      'click element #tab-case-messages',
     ],
-    notes: 'checks a11y of in progress tab, messages secondary tab',
+    notes: 'checks a11y of case messages tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-messages',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=case-messages-tab',
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
+      'wait for #tab-tracked-items to be visible',
+      'click element #tab-tracked-items',
       'wait for #tab-pending-report to be visible',
       'click element #tab-pending-report',
     ],
-    notes: 'checks a11y of in progress tab, pending report secondary tab',
+    notes: 'checks a11y of tracked-items tab, pending report secondary tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-pending-report',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=tracked-items-tab-pending-report',
   },
   {
     actions: [
@@ -320,6 +318,18 @@ module.exports = [
     notes: 'checks the add to trial session modal',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-other-filer to be visible',
+      'click element #tab-other-filer',
+      'wait for #tabContent-otherFiler to be visible',
+    ],
+    notes: 'checks the case detail => case information => other tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20',
   },
   {
     actions: [
@@ -488,4 +498,34 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/inbox&info=case-messages-section-inbox',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/section/outbox&info=case-messages-section-outbox',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=case-message-detail',
+  {
+    actions: [
+      'wait for #button-forward to be visible',
+      'click element #button-forward',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes: 'checks the forward modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-forward',
+  },
+  {
+    actions: [
+      'wait for #button-reply to be visible',
+      'click element #button-reply',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes: 'checks the reply modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-reply',
+  },
+  {
+    actions: [
+      'wait for #button-complete to be visible',
+      'click element #button-reply',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes: 'checks the complete modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-messages/105-20/message-detail/eb0a139a-8951-4de1-8b83-f02a27504105&info=message-detail-complete',
+  },
 ];

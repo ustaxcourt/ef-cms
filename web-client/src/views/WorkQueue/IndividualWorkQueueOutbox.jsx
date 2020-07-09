@@ -24,24 +24,24 @@ export const IndividualWorkQueueOutbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                <span className="padding-left-2px">Docket number</span>
+                <span className="padding-left-2px">Docket No.</span>
               </th>
               {workQueueHelper.showReceivedColumn && <th>Received</th>}
               {workQueueHelper.showSentColumn && (
                 <th className="small">Sent</th>
               )}
-              <th>Case title</th>
+              <th>Case Title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && (
-                <th>{workQueueHelper.outboxFiledByColumnLabel} by</th>
+                <th>{workQueueHelper.outboxFiledByColumnLabel} By</th>
               )}
-              {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
+              {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th className="max-width-7">
                   {workQueueHelper.assigneeColumnTitle}
                 </th>
               )}
-              <th>Processed by</th>
+              <th>Processed By</th>
               {!workQueueHelper.hideSectionColumn && (
                 <th className="small">Section</th>
               )}

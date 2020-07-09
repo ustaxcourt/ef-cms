@@ -15,7 +15,7 @@
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "name": "Brett Osborne",
-      "state": "AS",
+      "state": "AL",
       "countryType": "domestic",
       "email": "petitioner"
     },
@@ -169,6 +169,7 @@
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "signedAt": "2019-10-07T14:29:30.288Z",
+    "signedJudgeName": "Judge Buch",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "numberOfPages": 1,
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",

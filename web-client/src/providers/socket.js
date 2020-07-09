@@ -1,7 +1,10 @@
 const createWebSocketClient = token => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
   const connectionUrl = `${notificationsUrl}?token=${token}`;
-  const socket = new WebSocket(connectionUrl);
+  const socket = new WebSocket(
+    connectionUrl,
+    connectionUrl.indexOf('localhost') !== -1 ? 'echo-protocol' : undefined,
+  );
   return socket;
 };
 

@@ -72,7 +72,7 @@ const wizardStep4 = atWizardStep(4, {
 });
 
 const schema = {
-  wizardStep: joi.string().required(),
+  wizardStep: joi.string().valid('1', '2', '3', '4').required(),
   ...wizardStep1,
   ...wizardStep2,
   ...wizardStep3,

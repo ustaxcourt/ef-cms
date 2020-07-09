@@ -68,6 +68,9 @@ https://drive.google.com/open?id=1ay3hwjE2WrUH4izPs7BHNCRUY0S7WkhNZuuOTkWCyTI
 In this study, Flexion UX Designers performed an end-to-end testing of a U.S. Tax Court case workflow in order to validate system  features and handoffs between roles at the Court.
 https://drive.google.com/open?id=1_boNwUlm-FEa5qm74bC_beud0ZJ7urBkS0prDXFCc00
 
+## Pro-Se Petitioner: Create Case Usability Testing (May, 2020)
+In this study, Flexion UX Designers performed usability testing for creating a case as a pro-se petitioner. Goals focused on validating iterative design choices from the previous usability study and testing specifically on a mobile device.
+https://docs.google.com/presentation/d/1Olul5MtM7gp8WIs6ugREigsm5QSQvSL_6rgblGha83s/edit?usp=sharing
 
 
 # System user flows

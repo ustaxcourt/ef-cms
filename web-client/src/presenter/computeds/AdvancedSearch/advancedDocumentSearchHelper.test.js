@@ -34,7 +34,7 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toEqual({
-      documentTypeVerbiage: 'Opinion type',
+      documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
       showSealedIcon: false,
     });
@@ -160,6 +160,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
             documentType: 'O - Order',
+            eventCode: 'O',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -226,6 +227,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'My Opinion',
             documentType: 'TCOP - T.C. Opinion',
+            eventCode: 'TCOP',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -237,6 +239,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Opinion for Stuff',
             documentType: 'Summary Opinion',
+            eventCode: 'SOP',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Cohen',
           },

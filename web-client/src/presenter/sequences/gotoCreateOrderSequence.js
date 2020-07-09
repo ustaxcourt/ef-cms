@@ -9,23 +9,13 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
 
-const gotoCreateOrder = [
-  unset(state.documentToEdit),
-  clearModalAction,
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  setCasePropFromStateAction,
-  setCreateOrderModalDataOnFormAction,
-  ...convertHtml2PdfSequence,
-  setCurrentPageAction('CreateOrder'),
-];
-
-const gotoCaseDetailWithModal = [
+export const gotoCaseDetailWithModal = [
   ...openCreateOrderChooseTypeModalSequence,
   navigateToCaseDetailAction,
 ];
@@ -34,10 +24,22 @@ export const gotoCreateOrderSequence = [
   isLoggedInAction,
   {
     isLoggedIn: [
+      setRedirectUrlAction,
       hasOrderTypeSelectedAction,
       {
         no: gotoCaseDetailWithModal,
-        proceed: gotoCreateOrder,
+        proceed: [
+          unset(state.documentToEdit),
+          clearModalAction,
+          setCurrentPageAction('Interstitial'),
+          stopShowValidationAction,
+          clearFormAction,
+          setCasePropFromStateAction,
+          setCreateOrderModalDataOnFormAction,
+          ...convertHtml2PdfSequence,
+          setIsCreatingOrderAction,
+          setCurrentPageAction('CreateOrder'),
+        ],
       },
     ],
     unauthorized: [redirectToCognitoAction],

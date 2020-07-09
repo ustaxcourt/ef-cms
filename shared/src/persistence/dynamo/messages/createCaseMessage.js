@@ -11,7 +11,7 @@ const { put } = require('../../dynamodbClientService');
 exports.createCaseMessage = async ({ applicationContext, caseMessage }) => {
   await put({
     Item: {
-      gsi1pk: `message|${caseMessage.messageId}`,
+      gsi1pk: `message|${caseMessage.parentMessageId}`,
       pk: `case|${caseMessage.caseId}`,
       sk: `message|${caseMessage.messageId}`,
       ...caseMessage,
