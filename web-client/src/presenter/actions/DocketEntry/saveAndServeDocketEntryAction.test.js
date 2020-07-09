@@ -49,6 +49,7 @@ describe('saveAndServeDocketEntryAction', () => {
       caseDetail,
       caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
+      overridePaperServiceAddress: true,
     });
   });
 });

@@ -61,10 +61,13 @@ export const AddDocketEntry = connect(
                   >
                     Save and Serve
                   </Button>
+
+                  {/* TODO: update button attr 'id' (and potential pa11y) */}
                   <Button
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
+                      // TODO: saveForLaterDocketEntrySequence()
                       // submitDocketEntrySequence({
                       //   docketNumber: caseDetail.docketNumber,
                       //   isAddAnother: true,
