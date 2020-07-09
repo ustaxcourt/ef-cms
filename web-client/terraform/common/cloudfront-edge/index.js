@@ -47,6 +47,7 @@ exports.handler = (event, context, callback) => {
     `img-src ${applicationUrl} data:`,
     `font-src ${applicationUrl}`,
     `frame-src ${s3Url}`,
+    "frame-ancestors 'none'",
   ];
   headers['content-security-policy'] = [
     {
