@@ -17,7 +17,7 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 

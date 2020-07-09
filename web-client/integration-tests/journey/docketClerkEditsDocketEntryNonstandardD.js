@@ -43,7 +43,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: 'CS',
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
@@ -68,7 +68,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: petitionDocument.documentId,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence');
+    await test.runSequence('submitDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
