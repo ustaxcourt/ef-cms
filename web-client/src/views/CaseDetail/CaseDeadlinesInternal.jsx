@@ -30,7 +30,7 @@ export const CaseDeadlinesInternal = connect(
           <table className="usa-table docket-record row-border-only subsection deadlines">
             <thead>
               <tr>
-                <th>Due date</th>
+                <th>Due Date</th>
                 <th></th>
                 <th>Description</th>
                 <th></th>

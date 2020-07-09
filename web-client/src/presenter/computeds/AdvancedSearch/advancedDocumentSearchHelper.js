@@ -1,6 +1,6 @@
 import { Document } from '../../../../../shared/src/business/entities/Document';
 import {
-  OPINION_DOCUMENT_TYPES,
+  OPINION_EVENT_CODES,
   ORDER_DOCUMENT_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 
@@ -20,7 +20,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 
   if (advancedSearchTab === searchTabs.OPINION) {
     showSealedIcon = false;
-    documentTypeVerbiage = `${documentTypeVerbiage} type`;
+    documentTypeVerbiage = `${documentTypeVerbiage} Type`;
   }
 
   if (searchResults) {
@@ -64,7 +64,7 @@ export const formatDocumentSearchResultRecord = (
     result.documentTitle = result.formattedDocumentType;
   }
 
-  if (OPINION_DOCUMENT_TYPES.includes(result.eventCode)) {
+  if (OPINION_EVENT_CODES.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';

@@ -39,7 +39,7 @@ describe('validateAddPractitionerAction', () => {
             countryType: 'domestic',
             phone: '123-123-1234',
             postalCode: '12345',
-            state: 'ST',
+            state: 'AL',
           },
           email: 'test@example.com',
           firstName: 'Test',

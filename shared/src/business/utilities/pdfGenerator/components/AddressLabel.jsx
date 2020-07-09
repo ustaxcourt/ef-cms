@@ -12,6 +12,9 @@ export const AddressLabel = ({
 }) => {
   return (
     <div className="address-label">
+      <style type="text/css">
+        {'@media print{@page {margin-bottom: 2cm}}'}
+      </style>
       <div>{name}</div>
       <div>{address1}</div>
       {address2 && <div>{address2}</div>}

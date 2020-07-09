@@ -1,6 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FocusLock } from '../ustc-ui/FocusLock/FocusLock';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -112,8 +111,10 @@ export const ModalDialog = ({
                 </div>
                 <div className="mobile-lg:grid-col-3">
                   <Button
+                    iconRight
                     link
                     className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                    icon="times-circle"
                     onClick={
                       useRunConfirmSequence
                         ? runConfirmSequence
@@ -121,10 +122,6 @@ export const ModalDialog = ({
                     }
                   >
                     Close
-                    <FontAwesomeIcon
-                      className="margin-right-0 margin-left-1"
-                      icon="times-circle"
-                    />
                   </Button>
                 </div>
               </div>

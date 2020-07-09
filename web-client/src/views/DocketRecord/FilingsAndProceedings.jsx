@@ -4,38 +4,45 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
-    token: state.token,
   },
   function FilingsAndProceedings({
     arrayIndex,
-    baseUrl,
     caseDetail,
     caseDetailHelper,
     entry,
     formattedCaseDetail,
+    openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
-    token,
   }) {
     const renderDocumentLink = () => {
       return (
         <>
           <NonMobile>
-            <a
+            <Button
+              link
               aria-label={`View PDF: ${entry.description}`}
-              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
-              rel="noreferrer noopener"
-              target="_blank"
+              className={classNames(
+                entry.isStricken && 'stricken-docket-record',
+              )}
+              onClick={() =>
+                openCaseDocumentDownloadUrlSequence({
+                  caseId: caseDetail.caseId,
+                  documentId: entry.documentId,
+                })
+              }
             >
               {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
@@ -43,7 +50,7 @@ export const FilingsAndProceedings = connect(
                 </span>
               )}
               {entry.descriptionDisplay}
-            </a>
+            </Button>
           </NonMobile>
           <Mobile>
             <Button
@@ -82,6 +89,10 @@ export const FilingsAndProceedings = connect(
         {entry.showDocumentEditLink && (
           <a
             aria-label="View PDF"
+            className={classNames(
+              entry.isStricken && 'stricken-docket-record',
+              'view-pdf-link',
+            )}
             href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
           >
             {entry.isPaper && (
@@ -93,13 +104,19 @@ export const FilingsAndProceedings = connect(
           </a>
         )}
 
-        {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        <span
+          className={classNames(entry.isStricken && 'stricken-docket-record')}
+        >
+          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+        </span>
 
         <span> {entry.signatory}</span>
 
         <span className="filings-and-proceedings">
           {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
+
+        {entry.isStricken && <span>(STRICKEN)</span>}
       </>
     );
   },

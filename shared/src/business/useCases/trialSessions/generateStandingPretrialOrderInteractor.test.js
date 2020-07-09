@@ -35,7 +35,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         postalCode: '12345',
         startDate: '2/2/2020',
         startTime: '10:00',
-        state: 'ST',
+        state: 'AL',
       }));
   });
 
@@ -62,6 +62,17 @@ describe('generateStandingPretrialOrderInteractor', () => {
     });
     expect(
       applicationContext.getDocumentGenerators().standingPretrialOrder,
+    ).toHaveBeenCalled();
+  });
+
+  it('should add a served stamp to the document', async () => {
+    await generateStandingPretrialOrderInteractor({
+      applicationContext,
+      docketNumber: '234-56',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().addServedStampToDocument,
     ).toHaveBeenCalled();
   });
 });

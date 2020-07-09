@@ -4,6 +4,7 @@ import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { OtherFilerInformation } from './OtherFilerInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -38,6 +39,18 @@ export const CaseDetail = connect(
             <section className="usa-section grid-container">
               <SuccessNotification />
               <ErrorNotification />
+              {caseDetailHelper.showPetitionProcessingAlert && (
+                <div
+                  aria-live="polite"
+                  className="usa-alert usa-alert--warning"
+                  role="alert"
+                >
+                  <div className="usa-alert__body">
+                    You will be able to file documents after the Petition is
+                    processed.
+                  </div>
+                </div>
+              )}
               {caseDetailSubnavHelper.showCaseInformationTab && (
                 <div className="only-small-screens">
                   <div className="margin-bottom-3">
@@ -51,6 +64,7 @@ export const CaseDetail = connect(
                             'overview',
                             'petitioner',
                             'respondent',
+                            'otherFiler',
                           ].includes(e.target.value),
                           tab: e.target.value,
                         });
@@ -61,6 +75,7 @@ export const CaseDetail = connect(
                         <option value="overview">Overview</option>
                         <option value="petitioner">Petitioner</option>
                         <option value="respondent">Respondent</option>
+                        <option value="otherFiler">Other</option>
                       </optgroup>
                     </select>
                   </div>
@@ -103,6 +118,13 @@ export const CaseDetail = connect(
                         >
                           <RespondentInformation />
                         </Tab>
+                        <Tab
+                          id="tab-other-filer"
+                          tabName="otherFiler"
+                          title="Other"
+                        >
+                          <OtherFilerInformation />
+                        </Tab>
                       </Tabs>
                     </NonMobile>
                     <Mobile>
@@ -135,6 +157,15 @@ export const CaseDetail = connect(
                             title="Respondent"
                           >
                             <RespondentInformation />
+                          </Tab>
+                        )}
+                        {caseInformationTab === 'otherFiler' && (
+                          <Tab
+                            id="tab-other-filer"
+                            tabName="otherFiler"
+                            title="Other"
+                          >
+                            <OtherFilerInformation />
                           </Tab>
                         )}
                       </Tabs>

@@ -48,6 +48,9 @@ export const fileDocumentHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
+  const showSecondaryDocument =
+    form.secondaryDocument && form.secondaryDocument.documentTitle;
+
   const secondaryDocumentCertificateOfServiceDate =
     form.secondaryDocument && form.secondaryDocument.certificateOfServiceDate;
   let secondaryDocumentCertificateOfServiceDateFormatted;
@@ -167,6 +170,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showFilingIncludes,
     showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showSecondaryDocument,
     showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingIncludes,

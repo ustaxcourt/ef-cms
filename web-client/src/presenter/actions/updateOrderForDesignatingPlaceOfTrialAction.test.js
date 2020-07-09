@@ -23,7 +23,7 @@ describe('updateOrderForDesignatingPlaceOfTrialAction', () => {
         props: { key: 'preferredTrialCity' },
         state: {
           form: {
-            preferredTrialCity: 'Seattle, WA',
+            preferredTrialCity: 'Seattle, Washington',
           },
         },
       },
