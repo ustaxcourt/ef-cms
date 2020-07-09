@@ -67,6 +67,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

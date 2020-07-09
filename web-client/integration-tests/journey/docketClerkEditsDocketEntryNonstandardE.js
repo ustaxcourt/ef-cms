@@ -41,6 +41,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
     await test.runSequence('saveAndServeDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
