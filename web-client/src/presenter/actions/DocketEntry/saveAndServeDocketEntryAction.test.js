@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { submitDocketEntryWithFileAction } from './submitDocketEntryWithFileAction';
+import { saveAndServeDocketEntryAction } from './saveAndServeDocketEntryAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('submitDocketEntryWithFileAction', () => {
+describe('saveAndServeDocketEntryAction', () => {
   let caseDetail;
 
   beforeAll(() => {
@@ -15,12 +15,12 @@ describe('submitDocketEntryWithFileAction', () => {
     };
   });
 
-  it('should call submitDocketEntryWithFileAction and return caseDetail', async () => {
+  it('should call saveAndServeDocketEntryAction and return caseDetail', async () => {
     applicationContext
       .getUseCases()
       .fileDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(submitDocketEntryWithFileAction, {
+    const result = await runAction(saveAndServeDocketEntryAction, {
       modules: {
         presenter,
       },

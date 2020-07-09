@@ -14,18 +14,16 @@ import React from 'react';
 
 export const AddDocketEntry = connect(
   {
-    caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditingDocketEntry: state.isEditingDocketEntry,
+    saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
     showModal: state.modal.showModal,
-    submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
   function AddDocketEntry({
-    caseDetail,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
+    saveAndServeDocketEntrySequence,
     showModal,
-    submitDocketEntrySequence,
   }) {
     return (
       <>
@@ -58,22 +56,22 @@ export const AddDocketEntry = connect(
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
-                      submitDocketEntrySequence();
+                      saveAndServeDocketEntrySequence();
                     }}
                   >
-                    Finish
+                    Save and Serve
                   </Button>
                   <Button
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      submitDocketEntrySequence({
-                        docketNumber: caseDetail.docketNumber,
-                        isAddAnother: true,
-                      });
+                      // submitDocketEntrySequence({
+                      //   docketNumber: caseDetail.docketNumber,
+                      //   isAddAnother: true,
+                      // });
                     }}
                   >
-                    Add Another Entry
+                    Save for Later
                   </Button>
                   <Button
                     link
@@ -101,7 +99,9 @@ export const AddDocketEntry = connect(
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitDocketEntrySequence} />
+          <FileUploadErrorModal
+            confirmSequence={saveAndServeDocketEntrySequence}
+          />
         )}
       </>
     );
