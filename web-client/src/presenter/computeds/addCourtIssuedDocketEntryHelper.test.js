@@ -158,4 +158,46 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.showServiceStamp).toEqual(false);
   });
+
+  it('should return showSaveAndServeButton true if eventCode is not in unservable event codes list', () => {
+    const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: UNSERVABLE_EVENT_CODES[0], // corrected transcript
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(true);
+  });
+  it('should return showSaveAndServeButton false if eventCode is not in unservable event codes list', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(true);
+  });
 });
