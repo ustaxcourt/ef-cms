@@ -27,19 +27,7 @@ const onFileUploadedSuccess = [
   getEditedDocumentDetailParamsAction,
   getShouldRedirectToSigningAction,
   {
-    no: [
-      followRedirectAction,
-      {
-        default: [
-          getEditDocumentEntryPointAction,
-          {
-            CaseDetail: navigateToCaseDetailAction,
-            DraftDocuments: navigateToDraftDocumentsAction,
-          },
-        ],
-        success: [],
-      },
-    ],
+    no: navigateToDraftDocumentsAction,
     yes: navigateToSignOrderAction,
   },
 ];
