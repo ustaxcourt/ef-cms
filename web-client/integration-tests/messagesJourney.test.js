@@ -6,6 +6,7 @@ import { docketClerkEditsSignatureFromMessage } from './journey/docketClerkEdits
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
@@ -66,6 +67,8 @@ describe('messages journey', () => {
   docketClerkViewsCompletedMessagesOnCaseDetail(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
+  petitionsClerkCreatesNewMessageOnCase(test);
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1CreatesNoticeFromMessageDetail(test);
