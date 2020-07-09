@@ -81,34 +81,35 @@ export const formattedCaseDetail = (get, applicationContext) => {
     };
   }
 
-  const getShowDocumentViewerLink = ({ document, permissions }) => {
+  const getShowDocumentViewerLink = ({ document, userPermissions }) => {
     return (
-      permissions.UPDATE_CASE &&
+      userPermissions.UPDATE_CASE &&
       (!document.isInProgress ||
-        ((permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
+        ((userPermissions.DOCKET_ENTRY ||
+          userPermissions.CREATE_ORDER_DOCKET_ENTRY) &&
           document.isInProgress))
     );
   };
 
   const getShowLinkToDocument = ({
     document,
-    permissions,
     record,
     userHasAccessToCase,
     userHasAccessToDocument,
+    userPermissions,
   }) => {
     return (
       (isExternalUser ? !record.isStricken : userHasAccessToCase) &&
       userHasAccessToCase &&
       userHasAccessToDocument &&
-      !permissions.UPDATE_CASE &&
+      !userPermissions.UPDATE_CASE &&
       document.processingStatus === 'complete' &&
       !document.isInProgress &&
       !document.isNotServedCourtIssuedDocument
     );
   };
 
-  const getShowEditDocketRecordEntry = ({ document, permissions }) => {
+  const getShowEditDocketRecordEntry = ({ document, userPermissions }) => {
     const hasSystemGeneratedDocument =
       document && systemGeneratedEventCodes.includes(document.eventCode);
     const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
@@ -118,7 +119,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       document && UNSERVABLE_EVENT_CODES.includes(document.eventCode);
 
     return (
-      permissions.EDIT_DOCKET_ENTRY &&
+      userPermissions.EDIT_DOCKET_ENTRY &&
       (!document || document.qcWorkItemsCompleted) &&
       !hasSystemGeneratedDocument &&
       (!hasCourtIssuedDocument ||
@@ -129,11 +130,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   const getShowDocumentDescriptionWithoutLink = ({
     document,
-    permissions,
     record,
     showDocumentViewerLink,
     userHasAccessToCase,
     userHasAccessToDocument,
+    userPermissions,
   }) => {
     return (
       !showDocumentViewerLink &&
@@ -143,7 +144,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
         (userHasAccessToCase && userHasAccessToDocument && record.isStricken) ||
         (document &&
           (document.isNotServedCourtIssuedDocument || document.isInProgress) &&
-          !(permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY)))
+          !(
+            userPermissions.DOCKET_ENTRY ||
+            userPermissions.CREATE_ORDER_DOCKET_ENTRY
+          )))
     );
   };
 
@@ -189,25 +193,25 @@ export const formattedCaseDetail = (get, applicationContext) => {
         formattedResult.showDocumentProcessing =
           !permissions.UPDATE_CASE && document.processingStatus !== 'complete';
 
-        formattedResult.isUnservable = !UNSERVABLE_EVENT_CODES.includes(
+        formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
           document.eventCode,
         );
         formattedResult.showNotServed =
-          formattedResult.isUnservable &&
+          !formattedResult.isUnservable &&
           document.isNotServedCourtIssuedDocument;
         formattedResult.showServed = document.isStatusServed;
 
         formattedResult.showDocumentViewerLink = getShowDocumentViewerLink({
           document,
-          permissions,
+          userPermissions: permissions,
         });
 
         formattedResult.showLinkToDocument = getShowLinkToDocument({
           document,
-          permissions,
           record,
           userHasAccessToCase,
           userHasAccessToDocument,
+          userPermissions: permissions,
         });
       }
 
@@ -221,17 +225,17 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
         document,
-        permissions,
+        userPermissions: permissions,
       });
 
       formattedResult.showDocumentDescriptionWithoutLink = getShowDocumentDescriptionWithoutLink(
         {
           document,
-          permissions,
           record,
           showDocumentViewerLink: formattedResult.showDocumentViewerLink,
           userHasAccessToCase,
           userHasAccessToDocument,
+          userPermissions: permissions,
         },
       );
 
@@ -239,15 +243,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
     },
   );
 
-  result.formattedDraftDocuments = (result.draftDocuments || []).map(
-    draftDocument => {
-      return {
-        ...draftDocument,
-        descriptionDisplay: draftDocument.documentTitle,
-        showDocumentViewerLink: permissions.UPDATE_CASE,
-      };
-    },
-  );
+  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+    return {
+      ...draftDocument,
+      descriptionDisplay: draftDocument.documentTitle,
+      showDocumentViewerLink: permissions.UPDATE_CASE,
+    };
+  });
 
   result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
     entry => entry.pending,
