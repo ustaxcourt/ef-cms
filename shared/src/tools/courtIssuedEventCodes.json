@@ -365,7 +365,7 @@
     "isUnservable": true
   },
   {
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "documentType": "Notice of Trial",
     "documentTitle": "Notice of Trial on [Date] at [Place]",
     "scenario": "Type G"
