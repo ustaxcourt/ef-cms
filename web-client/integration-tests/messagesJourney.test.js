@@ -64,4 +64,9 @@ describe('messages journey', () => {
   docketClerkAddsDocketEntryFromMessage(test);
   docketClerkCompletesMessageThread(test);
   docketClerkViewsCompletedMessagesOnCaseDetail(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(test);
+  petitionsClerk1ViewsMessageDetail(test);
+  petitionsClerk1CreatesNoticeFromMessageDetail(test);
 });
