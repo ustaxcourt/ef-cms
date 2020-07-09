@@ -10,7 +10,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
   handler       = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
-  
+
   runtime = "nodejs12.x"
 
   environment {
@@ -27,7 +27,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda_west" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_${var.environment}"
   handler       = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
-  
+
   runtime = "nodejs12.x"
 
   environment {
