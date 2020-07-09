@@ -17,7 +17,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -26,6 +26,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     //primary document
@@ -71,7 +72,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -116,7 +117,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
       isAddAnother: true,
     });
@@ -125,10 +126,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       'Entry added. Continue adding docket entries below.',
     );
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('form')).toEqual({
-      lodged: false,
-      privatePractitioners: [],
-    });
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('form')).toEqual({});
   });
 };
