@@ -137,56 +137,6 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).not.toContain('c/o');
   });
 
-  it('displays the case title in place of the primary contact name if showCaseTitleForPrimary is true', () => {
-    caseDetail.showCaseTitleForPrimary = true;
-
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const contactPrimaryEl = wrapper.find(
-      '#petitioner-contacts .party-details',
-    );
-
-    expect(contactPrimaryEl.text()).not.toContain(contactPrimary.name);
-    expect(contactPrimaryEl.text()).toContain(options.caseTitle);
-  });
-
-  it('renders the secondary contact information if provided', () => {
-    caseDetail.contactSecondary = contactSecondary;
-
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      PARTY_TYPES.petitioner,
-    );
-    expect(contacts.find('.party-details').length).toEqual(2);
-
-    const contactSecondaryEl = contacts.find('.party-details').at(1);
-
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.name);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.address1);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.address2);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.address3);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.city);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.state);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.postalCode);
-    expect(contactSecondaryEl.text()).toContain(contactSecondary.phone);
-  });
-
   it("displays a party's country if international", () => {
     contactPrimary.countryType = COUNTRY_TYPES.INTERNATIONAL;
     contactPrimary.country = 'The Republic of Texas';
