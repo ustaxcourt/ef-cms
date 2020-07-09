@@ -73,7 +73,9 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     );
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
+    expect(transcriptDocuments[0].isUnservable).toEqual(true);
     // second transcript should NOT be available to the user
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
+    expect(transcriptDocuments[1].isUnservable).toEqual(true);
   });
 });

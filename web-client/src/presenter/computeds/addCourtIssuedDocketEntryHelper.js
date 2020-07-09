@@ -16,7 +16,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
 
   const user = applicationContext.getCurrentUser();
 
-  let eventCodes = COURT_ISSUED_EVENT_CODES;
+  const eventCodes = COURT_ISSUED_EVENT_CODES;
 
   const documentTypes = eventCodes.map(type => ({
     ...type,
