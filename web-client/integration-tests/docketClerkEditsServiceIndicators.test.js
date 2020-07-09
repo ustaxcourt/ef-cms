@@ -52,7 +52,7 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkSignsOrder(test, 0);
+  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrderOnPaperParties(test, 0);
 });

@@ -51,8 +51,8 @@ describe('external users perform an advanced search for orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkSignsOrder(test, 0);
+  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();

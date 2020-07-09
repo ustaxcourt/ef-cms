@@ -45,14 +45,22 @@ export const DraftDocumentViewerDocument = connect(
             <h3>{draftDocumentViewerHelper.documentTitle}</h3>
 
             <div className="grid-row margin-bottom-1">
-              {draftDocumentViewerHelper.createdByLabel}
+              <div className="grid-col-6">
+                {draftDocumentViewerHelper.createdByLabel}
+              </div>
+
+              {draftDocumentViewerHelper.showDocumentNotSignedAlert && (
+                <div className="grid-col-6 text-align-right text-secondary-dark text-semibold">
+                  Signature required for this document.
+                </div>
+              )}
             </div>
 
             <div className="message-document-actions">
               {draftDocumentViewerHelper.showEditButtonNotSigned && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.documentId}`}
+                  href={viewerDraftDocumentToDisplay.editUrl}
                   icon="edit"
                 >
                   Edit
