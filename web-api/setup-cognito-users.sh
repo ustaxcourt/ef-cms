@@ -1,10 +1,28 @@
 #!/bin/bash -e
+
+# Usage
+#   creates the TESTING users inside our system
+
+# Requirements
+#   - curl must be installed on your machine
+#   - jq must be installed on your machine
+#   - aws cli must be installed on your machine
+#   - aws credentials must be setup on your machine
+
+# Arguments
+#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+
+[ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+[ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
+[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
+[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
+
 ENV=$1
 REGION="us-east-1"
 
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
-restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users-${CURRENT_COLOR}'].id" --output text)
+restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='gateway_api_${ENV}'].id" --output text)
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -103,7 +121,7 @@ createAccount() {
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
     --data "$(generate_post_data "${email}" "${role}" "${barNumber}" "${section}" "${name}" "${employer}" "${firstName}" "${middleName}" "${lastName}" "${suffix}")" \
-      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
+      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -177,33 +195,34 @@ createAccount "migrator@example.com" "admin" "" "" "admin"
 createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
 createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
 createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
-createManyAccounts "10" "adc" "adc"
-createManyAccounts "10" "admissionsclerk" "admissions"
-createManyAccounts "10" "clerkofcourt" "clerkofcourt"
-createManyAccounts "10" "docketclerk" "docket"
-createManyAccounts "10" "petitionsclerk" "petitions"
-createManyAccounts "10" "trialclerk" "trialClerks"
-createManyAccounts "30" "petitioner" "petitioner"
-createChambersAccount "ashfordsChambers" "chambers"
-createChambersAccount "buchsChambers" "chambers"
-createChambersAccount "cohensChambers" "chambers"
-createPrivatePractitionerAccount "1" "PT1234"
-createPrivatePractitionerAccount "2" "PT5432"
-createPrivatePractitionerAccount "3" "PT1111"
-createPrivatePractitionerAccount "4" "PT2222"
-createPrivatePractitionerAccount "5" "PT3333"
-createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner"
-createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner"
-createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner"
-createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner"
-createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner"
-createIRSPractitionerAccount "1" "RT6789"
-createIRSPractitionerAccount "2" "RT0987"
-createIRSPractitionerAccount "3" "RT7777"
-createIRSPractitionerAccount "4" "RT8888"
-createIRSPractitionerAccount "5" "RT9999"
-createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner"
-createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner"
-createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner"
-createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner"
-createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner"
+createManyAccounts "10" "adc" "adc" &
+createManyAccounts "10" "admissionsclerk" "admissions" &
+createManyAccounts "10" "clerkofcourt" "clerkofcourt" &
+createManyAccounts "10" "docketclerk" "docket" &
+createManyAccounts "10" "petitionsclerk" "petitions" &
+createManyAccounts "10" "trialclerk" "trialClerks" &
+createManyAccounts "30" "petitioner" "petitioner" &
+createChambersAccount "ashfordsChambers" "chambers" &
+createChambersAccount "buchsChambers" "chambers" &
+createChambersAccount "cohensChambers" "chambers" &
+createPrivatePractitionerAccount "1" "PT1234" &
+createPrivatePractitionerAccount "2" "PT5432" &
+createPrivatePractitionerAccount "3" "PT1111" &
+createPrivatePractitionerAccount "4" "PT2222" &
+createPrivatePractitionerAccount "5" "PT3333" &
+createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner" &
+createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner" &
+createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner" &
+createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner" &
+createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner" &
+createIRSPractitionerAccount "1" "RT6789" &
+createIRSPractitionerAccount "2" "RT0987" &
+createIRSPractitionerAccount "3" "RT7777" &
+createIRSPractitionerAccount "4" "RT8888" &
+createIRSPractitionerAccount "5" "RT9999" &
+createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner" &
+createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner" &
+createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner" &
+createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner" &
+createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner" &
+wait

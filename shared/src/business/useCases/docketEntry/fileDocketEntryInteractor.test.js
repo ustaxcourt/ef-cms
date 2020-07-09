@@ -38,6 +38,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
@@ -46,6 +47,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
@@ -54,6 +56,7 @@ describe('fileDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
@@ -88,7 +91,7 @@ describe('fileDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
-          eventCode: 'MISL',
+          eventCode: 'MISP',
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -102,7 +105,8 @@ describe('fileDocketEntryInteractor', () => {
         caseId: caseRecord.caseId,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        eventCode: 'MISL',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
         isFileAttached: true,
         isPaper: true,
       },
@@ -115,44 +119,29 @@ describe('fileDocketEntryInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
-  it('sets the eventCode to MISL when the document is lodged', async () => {
+  it('sets lodged to true on any secondaryDocument', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
         caseId: caseRecord.caseId,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
-        lodged: true,
-      },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[3].eventCode,
-    ).toEqual('MISL');
-  });
-
-  it('sets the eventCode to MISL on any secondaryDocument', async () => {
-    await fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata: {
-        caseId: caseRecord.caseId,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISL',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
         isFileAttached: true,
         lodged: true,
         secondaryDocument: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
-          eventCode: 'MISL',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
           isFileAttached: true,
         },
         secondarySupportingDocumentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
-          eventCode: 'MISL',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
           isFileAttached: true,
         },
       },
@@ -165,14 +154,14 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.documents[4],
     ).toMatchObject({
-      eventCode: 'MISL',
+      eventCode: 'MISP',
       lodged: true,
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.documents[5],
     ).toMatchObject({
-      eventCode: 'MISL',
+      eventCode: 'MISP',
       lodged: true,
     });
   });
@@ -186,6 +175,7 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
+        filedBy: 'Test Petitioner',
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -219,6 +209,7 @@ describe('fileDocketEntryInteractor', () => {
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
+        filedBy: 'Test Petitioner',
         isPaper: true,
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

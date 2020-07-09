@@ -6,18 +6,19 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseMessagesIndividualInbox = connect(
-  { formattedMessages: state.formattedMessages },
+  { formattedMessages: state.formattedMessages.messages },
   function CaseMessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
         <table className="usa-table work-queue subsection">
           <thead>
             <tr>
-              <th className="small" colSpan="2">
-                Docket
+              <th aria-label="Docket Number" className="small" colSpan="2">
+                Docket No.
               </th>
               <th className="small">Received</th>
               <th>Message</th>
+              <th>Case Title</th>
               <th>Case Status</th>
               <th>From</th>
               <th className="small">Section</th>
@@ -37,12 +38,12 @@ export const CaseMessagesIndividualInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row message-queue-document message-subject">
                     <div className="message-document-title">
                       <Button
                         link
                         className="padding-0"
-                        href={`/case-messages/${message.docketNumber}/message-detail/${message.messageId}`}
+                        href={`/case-messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
                       >
                         {message.subject}
                       </Button>
@@ -52,12 +53,16 @@ export const CaseMessagesIndividualInbox = connect(
                       {message.message}
                     </div>
                   </td>
+                  <td className="message-queue-row">{message.caseTitle}</td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
                     {message.fromSection}
                   </td>
                   <td>
+                    {message.attachments.length === 0 && (
+                      <span>No attachments</span>
+                    )}
                     {message.attachments.length > 0 && (
                       <CaseMessagesRowAttachments
                         attachments={message.attachments}

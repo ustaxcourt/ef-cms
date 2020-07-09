@@ -7,6 +7,7 @@ const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
+  const mockUserId = applicationContext.getUniqueId();
 
   beforeAll(() => {
     caseRecord = {
@@ -40,25 +41,31 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
-          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
           documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
-          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
-          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
-          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
           workItems: [
             {
               assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -82,7 +89,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'TRAN - Transcript',
           eventCode: 'TRAN',
-          userId: 'be32eee7-4c0c-48bf-b2bd-7000ebb6941f',
+          userId: mockUserId,
           workItems: [
             {
               assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
@@ -147,6 +154,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
         },
       }),
     ).rejects.toThrow('Document not found');
@@ -165,6 +175,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         caseId: caseRecord.caseId,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
     });
 
@@ -226,6 +239,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
         objections: 'No',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
     });
 

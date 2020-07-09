@@ -9,6 +9,7 @@
 ### System Documentation
 * [Site Access](./Site-Access.md)
 * [Messages](./Messages.md)
+* [Messages Queues](./Message-Queues.md)
 * [Petitions](./Petitions.md)
    * [Create Case from Paper Petition](./Create-Case-From-Paper-Petition.md)
    * [Review and Serve Petition](./Review-and-Serve-Petition.md)
@@ -33,11 +34,13 @@
   * [Trial Session Working Copy ](./Trial-Session-Working-Copy.md)
 
 * [Case Detail](./Case-Detail.md)
-  * [Docket Record](./Docket-Record.md)
-
+* [Docket Record](./Docket-Record.md)
+* [Statistics](./Statistics.md)
 * [Document Detail](./Document-Detail.md)
 * [Sealed Cases](./Sealed-Cases.md)
 * [Correspondence](./Correspondence.md)
+* [Consolidated Cases](./Consolidated-Cases.md)
+  * [Case Information](./Case-Information.md)
 
 #### Petitioners
 * [External Filings](./External-Filings.md)

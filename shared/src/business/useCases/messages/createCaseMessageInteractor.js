@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { CaseMessage } = require('../../entities/CaseMessage');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -33,8 +34,8 @@ exports.createCaseMessageInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO: Would it be better to just pass this in since case detail is already loaded in the action?
   const {
+    caseCaption,
     docketNumber,
     docketNumberWithSuffix,
     status,
@@ -55,6 +56,7 @@ exports.createCaseMessageInteractor = async ({
       attachments,
       caseId,
       caseStatus: status,
+      caseTitle: Case.getCaseTitle(caseCaption),
       docketNumber,
       docketNumberWithSuffix,
       from: fromUser.name,

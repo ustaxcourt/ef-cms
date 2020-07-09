@@ -5,7 +5,6 @@ import { StandingPretrialNotice } from './StandingPretrialNotice.jsx';
 describe('StandingPretrialNotice', () => {
   let options;
   let trialInfo;
-  let footerDate = '05/01/2020';
 
   beforeAll(() => {
     options = {
@@ -25,7 +24,7 @@ describe('StandingPretrialNotice', () => {
       postalCode: '12345',
       startDay: 'Friday',
       startTime: '10:00am',
-      state: 'TEST STATE',
+      state: 'AL',
     };
   });
 
@@ -39,7 +38,7 @@ describe('StandingPretrialNotice', () => {
       options.caseCaptionExtension,
     );
     expect(wrapper.find('#docket-number').text()).toEqual(
-      `Docket Number ${options.docketNumberWithSuffix}`,
+      `Docket No. ${options.docketNumberWithSuffix}`,
     );
   });
 
@@ -112,19 +111,5 @@ describe('StandingPretrialNotice', () => {
     const signature = wrapper.find('.signature');
 
     expect(signature.text()).toContain(`(Signed) ${trialInfo.judge.name}`);
-  });
-
-  it('renders the served date', () => {
-    const wrapper = shallow(
-      <StandingPretrialNotice
-        footerDate={footerDate}
-        options={options}
-        trialInfo={trialInfo}
-      />,
-    );
-
-    const servedStamp = wrapper.find('#served-stamp');
-
-    expect(servedStamp.text()).toContain(`Served ${footerDate}`);
   });
 });

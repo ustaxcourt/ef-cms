@@ -8,6 +8,7 @@ describe('setConfirmEditModalStateAction', () => {
         caseId: 'abc-123',
         docketNumber: 'abc-123',
         documentIdToEdit: 'abc-123',
+        parentMessageId: '987',
       },
     });
 
@@ -16,6 +17,7 @@ describe('setConfirmEditModalStateAction', () => {
         caseId: 'abc-123',
         docketNumber: 'abc-123',
         documentIdToEdit: 'abc-123',
+        parentMessageId: '987',
       },
     });
   });

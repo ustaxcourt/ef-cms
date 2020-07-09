@@ -21,12 +21,12 @@ export const AllCases = connect(
         >
           <thead>
             <tr>
-              <th>Docket number</th>
+              <th aria-label="Docket Number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
-              <th>Case title</th>
-              <th>Case status</th>
+              <th>Case Title</th>
+              <th>Case Status</th>
               <th>Disposition</th>
-              <th>Disposition date</th>
+              <th>Disposition Date</th>
             </tr>
           </thead>
           {allCases.map((item, idx) => (

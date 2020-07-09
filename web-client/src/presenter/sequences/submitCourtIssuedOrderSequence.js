@@ -1,4 +1,5 @@
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntryPointAction';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
@@ -27,10 +28,16 @@ const onFileUploadedSuccess = [
   getShouldRedirectToSigningAction,
   {
     no: [
-      getEditDocumentEntryPointAction,
+      followRedirectAction,
       {
-        CaseDetail: navigateToCaseDetailAction,
-        DocumentDetail: navigateToDocumentDetailAction,
+        default: [
+          getEditDocumentEntryPointAction,
+          {
+            CaseDetail: navigateToCaseDetailAction,
+            DocumentDetail: navigateToDocumentDetailAction,
+          },
+        ],
+        success: [],
       },
     ],
     yes: navigateToSignOrderAction,
@@ -49,14 +56,14 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
       uploadOrderFileAction,
       {
         error: [openFileUploadErrorModal],
-        success: onFileUploadedSuccess,
+        success: [onFileUploadedSuccess],
       },
     ],
     yes: [
       overwriteOrderFileAction,
       {
         error: [openFileUploadErrorModal],
-        success: onFileUploadedSuccess,
+        success: [onFileUploadedSuccess],
       },
     ],
   },
