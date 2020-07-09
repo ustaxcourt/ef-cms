@@ -3,39 +3,41 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('chooseNextStepAction', () => {
-  let addAnotherEntryStub;
-  let caseDetailStub;
+  let isPaperStub;
+  let isElectronicStub;
 
   beforeAll(() => {
-    addAnotherEntryStub = jest.fn();
-    caseDetailStub = jest.fn();
+    isPaperStub = jest.fn();
+    isElectronicStub = jest.fn();
 
     presenter.providers.path = {
-      addAnotherEntry: addAnotherEntryStub,
-      caseDetail: caseDetailStub,
+      isElectronic: isElectronicStub,
+      isPaper: isPaperStub,
     };
   });
 
-  it('chooses the next step as supporting document if it exists', async () => {
+  it('chooses the next step as paper if the case is paper', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
       },
-      props: {
-        isAddAnother: true,
+      state: {
+        caseDetail: {
+          isPaper: true,
+        },
       },
     });
 
-    expect(addAnotherEntryStub).toHaveBeenCalled();
+    expect(isPaperStub).toHaveBeenCalled();
   });
 
-  it('does not choose the next step as supporting document if it does not exist', async () => {
+  it('chooses the next step as electronic if the case is electronic (not paper)', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
       },
     });
 
-    expect(caseDetailStub).toHaveBeenCalled();
+    expect(isElectronicStub).toHaveBeenCalled();
   });
 });
