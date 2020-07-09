@@ -140,12 +140,12 @@ describe('DocketRecord', () => {
           filingDate: new Date('2000-01-01').toISOString(),
           index: 0,
           isLegacy: true,
-          isStriken: false,
+          isStricken: false,
         },
         { applicationContext },
       );
 
-      expect(invalidDocketRecord.isValid()).toBeFalsy();
+      expect(invalidDocketRecord.isValid()).toBeTruthy();
     });
 
     it('passes validation when isLegacy is false and isStricken is undefined', () => {

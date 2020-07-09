@@ -15,7 +15,7 @@ resource "aws_lambda_function" "zip_streams" {
 
   runtime = "nodejs12.x"
 
- 
+
   environment {
     variables = data.null_data_source.locals.outputs
   }
