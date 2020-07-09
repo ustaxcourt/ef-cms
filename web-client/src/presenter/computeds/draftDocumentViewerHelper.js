@@ -15,6 +15,10 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
 
   const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
 
+  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+    viewerDraftDocumentToDisplay.eventCode,
+  );
+
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplay &&
     formattedCaseDetail.draftDocuments &&
@@ -53,6 +57,9 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showApplySignatureButtonForDocument = !documentIsSigned;
   const showEditSignatureButtonForDocument = documentIsSigned;
 
+  const showDocumentNotSignedAlert =
+    documentRequiresSignature && !documentIsSigned;
+
   return {
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
@@ -61,6 +68,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyEditSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showDocumentNotSignedAlert,
     showEditButtonNotSigned: showEditButtonForRole && !documentIsSigned,
     showEditButtonSigned: showEditButtonForRole && documentIsSigned,
     showEditSignatureButton:
