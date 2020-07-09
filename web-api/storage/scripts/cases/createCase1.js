@@ -109,7 +109,7 @@ module.exports.createCase1 = async () => {
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       caseId,
-      //todo - dont hardcode a judge
+      //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
       originalDocumentId: documentId,
       signedDocumentId: documentId,

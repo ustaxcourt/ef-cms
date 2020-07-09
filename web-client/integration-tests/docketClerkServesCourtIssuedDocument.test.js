@@ -54,16 +54,16 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(test, 0);
+  docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkCancelsAddDocketEntryFromOrder(test, 1);
   docketClerkViewsDraftOrder(test, 1);
+  docketClerkSignsOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkSignsOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
-  docketClerkSignsOrder(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
 });

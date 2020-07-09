@@ -82,8 +82,8 @@ describe('docket clerk order advanced search', () => {
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
-    docketClerkAddsDocketEntryFromOrder(test, 0);
     docketClerkSignsOrder(test, 0);
+    docketClerkAddsDocketEntryFromOrder(test, 0);
     docketClerkServesDocument(test, 0);
 
     docketClerkCreatesAnOrder(test, {
@@ -91,6 +91,7 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
+    docketClerkSignsOrder(test, 1);
     docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
 
     docketClerkCreatesAnOrder(test, {
@@ -98,8 +99,8 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'OD',
       expectedDocumentType: 'Order of Dismissal',
     });
-    docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
     docketClerkSignsOrder(test, 2);
+    docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
     docketClerkServesDocument(test, 2);
 
     docketClerkCreatesAnOrder(test, {
@@ -107,8 +108,8 @@ describe('docket clerk order advanced search', () => {
       eventCode: 'O',
       expectedDocumentType: 'Order',
     });
-    docketClerkAddsDocketEntryFromOrder(test, 3);
     docketClerkSignsOrder(test, 3);
+    docketClerkAddsDocketEntryFromOrder(test, 3);
     docketClerkServesDocument(test, 3);
     docketClerkSealsCase(test);
   });

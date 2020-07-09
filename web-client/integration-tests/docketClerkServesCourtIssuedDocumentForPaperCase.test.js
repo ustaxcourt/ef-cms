@@ -35,8 +35,8 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkSignsOrder(test, 0);
+  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrderWithPaperService(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
     test,

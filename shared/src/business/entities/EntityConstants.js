@@ -206,7 +206,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
-    eventCode: 'NDT',
+    eventCode: 'NTD',
   },
   standingPretrialNotice: {
     documentTitle: 'Standing Pretrial Notice',
