@@ -159,8 +159,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showServiceStamp).toEqual(false);
   });
 
-  it('should return showSaveAndServeButton true if eventCode is not in unservable event codes list', () => {
-    const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+  it('should return showSaveAndServeButton false if eventCode is found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         caseDetail: {
@@ -174,13 +173,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
         documentId: '123',
         form: {
-          eventCode: UNSERVABLE_EVENT_CODES[0], // corrected transcript
+          eventCode: 'RUHROH',
         },
       },
     });
-    expect(result.showSaveAndServeButton).toEqual(true);
+    expect(result.showSaveAndServeButton).toEqual(false);
   });
-  it('should return showSaveAndServeButton false if eventCode is not in unservable event codes list', () => {
+  it('should return showSaveAndServeButton true if eventCode is NOT found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         caseDetail: {
