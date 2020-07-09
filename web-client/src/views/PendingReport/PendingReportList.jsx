@@ -47,11 +47,11 @@ export const PendingReportList = connect(
         >
           <thead>
             <tr>
-              <th>Docket number</th>
-              <th>Date filed</th>
-              <th>Case title</th>
-              <th>Filings and proceedings</th>
-              <th>Case status</th>
+              <th aria-label="Docket Number">Docket No.</th>
+              <th>Date Filed</th>
+              <th>Case Title</th>
+              <th>Filings and Proceedings</th>
+              <th>Case Status</th>
               <th>Judge</th>
             </tr>
           </thead>

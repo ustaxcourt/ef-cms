@@ -31,6 +31,7 @@ describe('addCoversheetInteractor', () => {
         createdAt: '2019-04-19T14:45:15.595Z',
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        filedBy: 'Test Petitioner',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
         processingStatus: 'pending',
@@ -59,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+        filedBy: 'Test Petitioner1',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
         lodged: true,
@@ -278,7 +280,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateFiledLodged).toEqual('04/19/2019');
+      expect(result.dateFiledLodged).toEqual('04/19/19');
     });
 
     it('shows does not show the filing date if the document does not have a valid filingDate', async () => {
@@ -371,7 +373,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateReceived).toEqual('04/19/2019 10:45 am');
+      expect(result.dateReceived).toEqual('04/19/19 10:45 am');
     });
 
     it('shows does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
@@ -418,7 +420,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateReceived).toEqual('04/19/2019');
+      expect(result.dateReceived).toEqual('04/19/19');
     });
 
     it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', async () => {
@@ -467,7 +469,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.dateServed).toEqual('04/20/2019');
+      expect(result.dateServed).toEqual('04/20/19');
     });
 
     it('does not display the service date if servedAt is not present', async () => {
@@ -515,7 +517,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19');
+      expect(result.docketNumberWithSuffix).toEqual('102-19');
     });
 
     it('returns the docket number with suffix along with a Docket Number label', async () => {
@@ -540,7 +542,7 @@ describe('addCoversheetInteractor', () => {
         },
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19S');
+      expect(result.docketNumberWithSuffix).toEqual('102-19S');
     });
 
     it('displays Electronically Filed when the document is filed electronically', async () => {
@@ -729,7 +731,7 @@ describe('addCoversheetInteractor', () => {
         useInitialData: true,
       });
 
-      expect(result.docketNumber).toEqual('Docket Number: 102-19Z');
+      expect(result.docketNumberWithSuffix).toEqual('102-19Z');
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
   });

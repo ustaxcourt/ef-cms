@@ -48,7 +48,7 @@
         - 
           name: "max"
           args: 
-            limit: 1000
+            limit: 3000
       allow: 
         - null
       metas: 
@@ -254,7 +254,6 @@
         - "MIND"
         - "MISC"
         - "MISCL"
-        - "MISL"
         - "MISP"
         - "MOP"
         - "NAJA"
@@ -447,6 +446,37 @@
       rules: 
         - 
           name: "integer"
+    isLegacy: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system."
+    isStricken: 
+      type: "boolean"
+      flags: 
+        description: "Indicates the item has been removed from the docket record."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isLegacy"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     numberOfPages: 
       type: "number"
       flags: 
@@ -462,7 +492,7 @@
       allow: 
         - "R"
         - "B"
-        - ""
+        - "P"
         - null
 
  ```

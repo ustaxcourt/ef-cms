@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Usage
+#   downloads and starts the dynamodb local service
+
 # download the dynamo jar file if needed
 if [ ! -e ".dynamodb/dynamo.tar.gz" ]; then
   mkdir -p .dynamodb

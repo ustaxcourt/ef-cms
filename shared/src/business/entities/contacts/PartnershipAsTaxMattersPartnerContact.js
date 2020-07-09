@@ -10,7 +10,7 @@ exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createC
       secondaryName: 'Enter Tax Matters Partner name',
     },
     additionalValidation: {
-      secondaryName: joi.string().required(),
+      secondaryName: joi.string().max(500).required(),
     },
   },
 );

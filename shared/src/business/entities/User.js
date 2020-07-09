@@ -1,11 +1,16 @@
 const joi = require('@hapi/joi');
 const {
+  COUNTRY_TYPES,
+  ROLES,
+  US_STATES,
+  US_STATES_OTHER,
+} = require('./EntityConstants');
+const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 
 const userDecorator = (obj, rawObj) => {
   obj.entityName = 'User';
@@ -36,16 +41,22 @@ const userDecorator = (obj, rawObj) => {
 };
 
 const baseUserValidation = {
-  judgeFullName: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
-  judgeTitle: joi.when('role', {
-    is: ROLES.judge,
-    otherwise: joi.optional().allow(null),
-    then: joi.string().max(100).optional(),
-  }),
+  judgeFullName: joi
+    .string()
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
+  judgeTitle: joi
+    .string()
+    .max(100)
+    .when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.optional(),
+    }),
   name: joi.string().max(100).optional(),
   role: joi
     .string()
@@ -62,29 +73,29 @@ const userValidation = {
       address2: joi.string().max(100).optional().allow(null),
       address3: joi.string().max(100).optional().allow(null),
       city: joi.string().max(100).required(),
-      country: joi.when('countryType', {
+      country: joi.string().when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().optional().allow(null),
-        then: joi.string().required(),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
       }),
       countryType: joi
         .string()
         .valid(COUNTRY_TYPES.DOMESTIC, COUNTRY_TYPES.INTERNATIONAL)
         .required(),
-
       phone: joi.string().max(100).required(),
-
       postalCode: joi.when('countryType', {
         is: COUNTRY_TYPES.INTERNATIONAL,
         otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
         then: joi.string().max(100).required(),
       }),
-
-      state: joi.when('countryType', {
-        is: COUNTRY_TYPES.INTERNATIONAL,
-        otherwise: joi.string().max(100).required(),
-        then: joi.string().optional().allow(null),
-      }),
+      state: joi
+        .string()
+        .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+        .when('countryType', {
+          is: COUNTRY_TYPES.INTERNATIONAL,
+          otherwise: joi.required(),
+          then: joi.optional().allow(null),
+        }),
     })
     .optional(),
   email: joi.string().max(100).optional(),

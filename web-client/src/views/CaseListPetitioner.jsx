@@ -5,11 +5,13 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const CaseListPetitioner = connect(
   {
     caseType: state.openClosedCases.caseType,
+    clearOpenClosedCasesCurrentPageSequence:
+      sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     externalUserCasesHelper: state.externalUserCasesHelper,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
@@ -19,6 +21,7 @@ export const CaseListPetitioner = connect(
   },
   function CaseListPetitioner({
     caseType,
+    clearOpenClosedCasesCurrentPageSequence,
     closedTab,
     externalUserCasesHelper,
     openTab,
@@ -26,6 +29,12 @@ export const CaseListPetitioner = connect(
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
   }) {
+    useEffect(() => {
+      return () => {
+        clearOpenClosedCasesCurrentPageSequence();
+      };
+    }, []);
+
     const renderStartButton = () => (
       <Button
         aria-describedby=""
