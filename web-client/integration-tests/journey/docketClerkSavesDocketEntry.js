@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkSavesDocketEntry = (test, isAddAnother = true) => {
   return it('Docketclerk saves docket entry', async () => {
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
       isAddAnother,
     });
