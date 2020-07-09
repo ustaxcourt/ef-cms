@@ -53,6 +53,7 @@ function DocketEntryFactory(rawProps) {
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
     this.dateReceived = rawPropsParam.dateReceived;
     this.documentType = rawPropsParam.documentType;
+    this.isDocumentRequired = rawPropsParam.isDocumentRequired;
     this.eventCode = rawPropsParam.eventCode;
     this.serviceDate = rawPropsParam.serviceDate;
     this.freeText = rawPropsParam.freeText;
@@ -92,10 +93,15 @@ function DocketEntryFactory(rawProps) {
       .required(),
     freeText: joi.string().optional(),
     hasSupportingDocuments: joi.boolean(),
+    isDocumentRequired: joi.boolean().optional(),
     lodged: joi.boolean(),
     ordinalValue: joi.string().optional(),
     previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object().optional(),
+    primaryDocumentFile: joi.object().when('isDocumentRequired', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
     primaryDocumentFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'primaryDocumentFile',
       {

@@ -23,6 +23,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 // import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatingWithFileAction';
+import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -77,6 +78,7 @@ export const saveAndServeDocketEntrySequence = [
       computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
+      setDocumentIsRequiredAction,
       validateDocketEntryAction,
       // validateDocketEntryForServiceAction,
       {
