@@ -18,7 +18,7 @@
       "name": "Mufutau Wade",
       "state": "HI",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-03-05T17:34:13.490Z",
     "receivedAt": "2019-03-05T17:34:13.490Z",
@@ -35,7 +35,7 @@
         "custom:role": "petitioner",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "iat": 1551807217,
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTgwNzIxN30.BMAZc6z99e-w6lo_u3Qj9zPulispzrVeP3QKX0AWEaE"
       }
     ],
@@ -229,6 +229,7 @@
   },
   {
     "documentType": "Ownership Disclosure Statement",
+    "eventCode": "DISC",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
@@ -246,6 +247,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
@@ -263,6 +265,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.490Z",
     "workItems": [

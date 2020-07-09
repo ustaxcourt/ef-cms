@@ -57,6 +57,38 @@
     "updatedAt": "2020-01-23T21:44:54.044Z"
   },
   {
+    "draftState": {
+      "eventCode": "MISC",
+      "generatedDocumentTitle": "First draft",
+      "documentType": "Miscellaneous",
+      "scenario": "Type A",
+      "primaryDocumentFileSize": 3028,
+      "freeText": "Hello draft",
+      "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
+      "documentTitle": "First draft",
+      "docketNumber": "103-20"
+    },
+    "documentType": "Miscellaneous",
+    "filingDate": "2020-07-06T14:37:36.755Z",
+    "workItems": [],
+    "pending": false,
+    "receivedAt": "2020-07-06T14:37:36.755Z",
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "MISC",
+    "processingStatus": "complete",
+    "createdAt": "2020-07-06T14:37:36.753Z",
+    "scenario": "Type A",
+    "entityName": "Document",
+    "filedBy": "Test Petitionsclerk",
+    "freeText": "Hello draft",
+    "sk": "document|06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "documentId": "06f60736-5f37-4590-b62a-5c7edf84ffc6",
+    "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
+    "documentTitle": "First draft",
+    "relationship": "primaryDocument",
+    "docketNumber": "103-20"
+  },
+  {
     "docketNumberWithSuffix": "103-20L",
     "caseStatus": "Calendared",
     "caseIsInProgress": false,
@@ -266,7 +298,7 @@
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -280,7 +312,6 @@
     "initialDocketNumberSuffix": "L",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": "L",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2020-01-23T21:45:14.136Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -316,7 +347,7 @@
     "sk": "docket-record|2a3825e3-9144-446c-96c1-3c2b2f4b7b1c"
   },
   {
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "description": "Notice of Trial",
     "index": 3,
     "numberOfPages": 1,
@@ -342,7 +373,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "attachments": false,
@@ -434,7 +465,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Notice of Trial",
@@ -444,7 +475,7 @@
     "pending": false,
     "receivedAt": "2020-01-23T21:45:14.136Z",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "createdAt": "2020-01-23T21:45:14.136Z",
     "processingStatus": "complete",
     "filedBy": "Test Docketclerk",

@@ -4,7 +4,9 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-t
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import {
+  fakeFile,
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
@@ -27,9 +29,12 @@ const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 describe('Petitioner creates case', () => {
   beforeAll(() => {
     jest.setTimeout(10000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
 
   it('Create case', async () => {
     const caseDetail = await uploadPetition(testClient, {
@@ -51,13 +56,14 @@ describe('Petitioner creates case', () => {
 });
 
 describe('Docket clerk creates orders to search for', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(testClient, 0);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
@@ -66,6 +72,7 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkSignsOrder(testClient, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
@@ -74,6 +81,7 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkSignsOrder(testClient, 2);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
 });
 
@@ -84,7 +92,7 @@ describe('Unauthed user searches for an order by keyword', () => {
 });
 
 describe('Docket clerk seals case', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 

@@ -8,7 +8,7 @@ describe('createTokenAction', () => {
       modules: {
         presenter,
       },
-      state: { form: { name: 'petitioner' } },
+      state: { form: { name: 'petitioner@example.com' } },
     });
 
     expect(result.output.token).toBeDefined();
@@ -22,6 +22,6 @@ describe('createTokenAction', () => {
         },
         state: { form: { name: 'nachos' } },
       }),
-    ).rejects.toThrow('Username not found in mock logins.');
+    ).rejects.toThrow('Username "nachos" not found in mock logins.');
   });
 });

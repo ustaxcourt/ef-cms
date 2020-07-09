@@ -31,7 +31,7 @@ export const noticeGenerationCompleteSequence = [
       setAlertSuccessAction,
     ],
     paper: [
-      ...setPdfPreviewUrlSequence,
+      setPdfPreviewUrlSequence,
       setAlternateBackLocationAction,
       navigateToPrintPaperServiceAction,
       setTrialSessionCalendarAlertWarningAction,

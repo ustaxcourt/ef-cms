@@ -8,6 +8,7 @@ import { CaseMessagesInProgress } from './CaseMessagesInProgress';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
+import { DocumentViewer } from '../DocketRecord/DocumentViewer';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
@@ -27,7 +28,6 @@ export const CaseDetailInternal = connect(
   {
     caseDetailInternalTabs:
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
-    primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
     showModal: state.modal.showModal,
   },
@@ -65,7 +65,7 @@ export const CaseDetailInternal = connect(
                 tabName="documentView"
                 title="Document View"
               >
-                {/* TODO <DocumentView /> */}
+                <DocumentViewer />
               </Tab>
             </Tabs>
           )}
@@ -89,7 +89,7 @@ export const CaseDetailInternal = connect(
           {caseDetailInternalTabs.drafts && (
             <>
               <div className="title">
-                <h1>Draft Documents</h1>
+                <h1>Drafts</h1>
               </div>
               <DraftDocuments />
             </>

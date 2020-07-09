@@ -22,7 +22,7 @@ EOF
 
 resource "aws_iam_role_policy" "log_forwarder_policy" {
   name = "log_forwarder_policy_${var.environment}"
-  role = "${aws_iam_role.log_forwarder_role.id}"
+  role = aws_iam_role.log_forwarder_role.id
 
   policy = <<EOF
 {

@@ -1,6 +1,6 @@
 {
-  "name": "Chrome-AWS-Lambda-Layer",
-  "version": "0.0.1",
+  "name": "chrome-aws-lambda-layer",
+  "version": "0.0.2",
   "description": "Layer Only Packaging",
   "main": "index.js",
   "scripts": {
@@ -10,15 +10,14 @@
     "Lambda",
     "Layers"
   ],
-  "author": "William Bagayoko, Rachael Parris, Kris Koskelin",
-  "license": "ISC",
+  "license": "CC0-1.0",
   "dependencies": {
-    "chrome-aws-lambda": "^2.1.1",
+    "chrome-aws-lambda": "^3.1.1",
     "handlebars": "^4.7.6",
     "node-sass": "^4.13.0",
     "npm-force-resolutions": "0.0.3",
-    "pug": "^2.0.3",
-    "puppeteer-core": "^1.20.0"
+    "pug": "^3.0.0",
+    "puppeteer-core": "^4.0.1"
   },
   "resolutions": {
     "minimist": "^1.2.5"

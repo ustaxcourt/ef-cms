@@ -62,8 +62,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      value: 'Daenerys Stormborn',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -92,8 +91,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       country: 'Switzerland',
       countryType: COUNTRY_TYPES.INTERNATIONAL,
       email: 'test@example.com',
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '23-skidoo',
     });
@@ -114,8 +112,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      value: 'Daenerys Stormborn',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -152,8 +149,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       city: 'Cityville',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '12345',
       state: 'CA',
@@ -652,13 +648,11 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      value: 'Daenerys Stormborn',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.secondaryName',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2',
+      value: 'Daenerys Stormborn 2',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -694,12 +688,10 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       city: 'Cityville',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '12345',
-      secondaryName:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2',
+      secondaryName: 'Daenerys Stormborn 2',
       state: 'CA',
     });
 
@@ -736,12 +728,10 @@ export const petitionerCreatesNewCaseTestAllOptions = (
       city: 'Cityville',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '12345',
-      secondaryName:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2',
+      secondaryName: 'Daenerys Stormborn 2',
       state: 'CA',
     });
 

@@ -13,7 +13,6 @@ export const OrderSearch = connect(
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
-    validateStartDateSequence: sequences.validateStartDateSequence,
     validationErrors: state.validationErrors,
   },
   function OrderSearch({

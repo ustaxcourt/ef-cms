@@ -62,8 +62,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      value: 'Daenerys Stormborn',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -87,8 +86,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
       city: 'Cityville',
       country: 'Switzerland',
       countryType: COUNTRY_TYPES.INTERNATIONAL,
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '23-skidoo',
     });

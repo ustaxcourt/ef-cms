@@ -17,7 +17,7 @@
       "name": "Samson Workman",
       "state": "MA",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-03-01T22:53:50.097Z",
     "receivedAt": "2019-03-01T22:53:50.097Z",
@@ -62,15 +62,17 @@
     "sk": "docket-record|89ddfd4e-1def-4cfb-984b-42d06655a180"
   },
   {
-    "description": "Answer",
     "eventCode": "A",
-    "index": 3,
-    "filingDate": "2019-03-01T22:54:05.993Z",
-    "filedBy": "Test Respondent",
-    "numberOfPages": 2,
     "docketRecordId": "261725bd-4976-4e2b-9ce9-53540f4eff06",
-    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "sk": "docket-record|261725bd-4976-4e2b-9ce9-53540f4eff06"
+    "numberOfPages": 2,
+    "filingDate": "2019-03-01T22:54:05.993Z",
+    "entityName": "DocketRecord",
+    "sk": "docket-record|261725bd-4976-4e2b-9ce9-53540f4eff06",
+    "description": "Answer",
+    "index": 3,
+    "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+    "filedBy": "Test Respondent",
+    "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50"
   },
   {
     "description": "Simultaneous Answering Brief",
@@ -194,44 +196,57 @@
     "updatedAt": "2019-03-01T22:53:50.098Z"
   },
   {
-    "sk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-    "pk": "section|docket",
-    "gsi1pk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-    "docketNumberSuffix": "S",
+    "associatedJudge": "Chief Judge",
     "caseStatus": "New",
-    "caseIsInProgress": false,
+    "gsi1pk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
     "document": {
-      "createdAt": "2019-03-01T22:54:05.993Z",
-      "receivedAt": "2019-03-01T21:40:46.415Z",
+      "hasSupportingDocuments": false,
+      "attachments": false,
+      "documentType": "Answer",
       "filingDate": "2019-03-01T21:40:46.415Z",
-      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
-      "numberOfPages": 1,
+      "partyPrimary": true,
+      "pending": false,
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
       "documentType": "Answer",
       "documentTitle": "Answer by Test Respondent",
+      "createdAt": "2019-03-01T22:54:05.993Z",
+      "scenario": "Standard",
+      "entityName": "Document",
       "filedBy": "Test Respondent",
-      "workItems": []
+      "certificateOfService": false,
+      "certificateOfServiceDate": null,
+      "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
+      "documentTitle": "Answer by Test Respondent",
+      "relationship": "primaryDocument",
+      "docketNumber": "103-19"
     },
+    "caseTitle": "Samson Workman",
     "section": "docket",
     "workItemId": "337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-    "isQC": true,
     "assigneeId": null,
+    "isQC": true,
     "sentBy": "respondent",
     "createdAt": "2019-03-01T22:54:06.000Z",
+    "highPriority": false,
     "assigneeName": null,
+    "entityName": "WorkItem",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseTitle": "Samson Workman",
+    "sk": "work-item|337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
+    "docketNumberSuffix": "103-19S",
     "messages": [
       {
         "createdAt": "2019-03-01T22:54:06.000Z",
         "messageId": "08e1cbed-d215-42d2-9216-25c9788dcf5b",
-        "message": "Answer filed by Respondent is ready for review.",
-        "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "from": "Test Respondent",
+        "message": "Answer filed by Respondent is ready for review.",
+        "entityName": "Message",
         "fromUserId": "5805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
+    "pk": "section|docket",
     "docketNumber": "103-19",
+    "sentByUserId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-03-01T22:54:06.000Z"
   },
   {
@@ -505,11 +520,12 @@
     "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner",
+    "email": "irsPractitioner@example.com",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "eventCode": "STIN",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [],
@@ -527,6 +543,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [
@@ -673,6 +690,7 @@
   },
   {
     "documentType": "Answer",
+    "eventCode": "A",
     "entityName": "Document",
     "filingDate": "2019-08-14T20:35:52.915Z",
     "workItems": [

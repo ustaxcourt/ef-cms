@@ -121,7 +121,7 @@ describe('create user', () => {
 
     expect(user).toMatchObject({
       barNumber: 'CS20001',
-      role: 'irsPractitioner',
+      role: ROLES.irsPractitioner,
     });
   });
 

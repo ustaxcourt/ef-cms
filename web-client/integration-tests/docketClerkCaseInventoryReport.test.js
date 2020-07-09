@@ -24,7 +24,7 @@ describe('case inventory report journey', () => {
   const createdDocketNumbers = [];
   const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
     await test.runSequence('openCaseInventoryReportModalSequence');
     //New
@@ -79,7 +79,7 @@ describe('case inventory report journey', () => {
   });
 
   //Create a trial session and set as calendared
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, {
     judge: {
       name: 'Judge Armen',
@@ -88,10 +88,10 @@ describe('case inventory report journey', () => {
     trialLocation,
   });
   docketClerkViewsTrialSessionList(test, { trialLocation });
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   for (let i = 0; i < 2; i++) {
     it(`create case ${i + 1}`, async () => {
       const caseDetail = await uploadPetition(test);
@@ -100,7 +100,7 @@ describe('case inventory report journey', () => {
     });
   }
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('manually add first case to the trial session', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: createdDocketNumbers[0],

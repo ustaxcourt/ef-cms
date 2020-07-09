@@ -47,7 +47,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
@@ -56,14 +56,14 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
       test.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSubmitsCaseToIrs(test);
 
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkSetsCaseReadyForTrial(test);
   };
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
 
@@ -72,7 +72,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     makeCaseReadyForTrial(test, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   markAllCasesAsQCed(test, () => {
     return [createdCaseIds[0], createdCaseIds[1]];
   });

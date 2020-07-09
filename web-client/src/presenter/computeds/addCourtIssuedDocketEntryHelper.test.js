@@ -21,8 +21,10 @@ const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
         ],
+        EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
+        UNSERVABLE_EVENT_CODES: ['RUHROH'],
         USER_ROLES: {
-          petitionsClerk: 'petitionsclerk',
+          petitionsClerk: USER_ROLES.petitionsClerk,
         },
       };
     },
@@ -34,9 +36,11 @@ const state = {
   caseDetail: {
     contactPrimary: { name: 'Banzai' },
     contactSecondary: { name: 'Timon' },
+    documents: [{ documentId: '123' }],
     irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
     privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
   },
+  documentId: '123',
   form: {
     generatedDocumentTitle: 'Circle of Life',
   },
@@ -150,7 +154,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   });
 
   it('should not show service stamp if user is petitions clerk', () => {
-    user.role = 'petitionsclerk';
+    user.role = USER_ROLES.petitionsClerk;
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.showServiceStamp).toEqual(false);
   });

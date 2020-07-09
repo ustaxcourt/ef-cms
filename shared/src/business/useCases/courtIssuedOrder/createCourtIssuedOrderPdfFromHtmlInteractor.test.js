@@ -30,7 +30,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
   it('throws an error if the user is not authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitioner',
+      role: ROLES.petitioner,
       userId: '432',
     });
 
