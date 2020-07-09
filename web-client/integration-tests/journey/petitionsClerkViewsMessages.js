@@ -21,7 +21,7 @@ export const petitionsClerkViewsMessages = test => {
     expect(workItem).toBeDefined();
     expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
     expect(workItem.messages[0].message).toEqual(
-      'Petition filed by Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse is ready for review.',
+      'Petition filed by Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse is ready for review.',
     );
     test.documentId = workItem.document.documentId;
     test.workItemId = workItem.workItemId;
