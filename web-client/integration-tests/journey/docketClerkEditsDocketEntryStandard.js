@@ -55,7 +55,6 @@ export const docketClerkEditsDocketEntryStandard = test => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
