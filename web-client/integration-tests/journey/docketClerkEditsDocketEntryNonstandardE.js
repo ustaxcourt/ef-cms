@@ -78,7 +78,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       documentTitle:
         'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho',
       documentType: 'Motion to Change Place of Hearing of Disclosure Case',
-      eventCode: 'M057',
+      eventCode: 'MISCL',
     });
   });
 };
