@@ -1,6 +1,8 @@
 const joi = require('@hapi/joi');
 const {
   COURT_ISSUED_EVENT_CODES,
+  DOCKET_NUMBER_MATCHER,
+  DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -55,7 +57,7 @@ function PublicCase(rawCase, { applicationContext }) {
 }
 
 const publicCaseSchema = {
-  caseCaption: joi.string().optional(),
+  caseCaption: joi.string().max(500).optional(),
   caseId: joi
     .string()
     .uuid({
@@ -63,19 +65,33 @@ const publicCaseSchema = {
     })
     .optional(),
   createdAt: joiStrictTimestamp.optional(),
-  docketNumber: joi.string().optional(),
-  docketNumberSuffix: joi.string().allow(null).optional(),
+  docketNumber: joi
+    .string()
+    .regex(DOCKET_NUMBER_MATCHER)
+    .required()
+    .description('Unique case identifier in XXXXX-YY format.'),
+  docketNumberSuffix: joi
+    .string()
+    .allow(null)
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .optional(),
   isSealed: joi.boolean(),
   receivedAt: joiStrictTimestamp.optional(),
 };
+
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: joi.string(),
+  caseId: joi.string().uuid({
+    version: ['uuidv4'],
+  }),
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
-  docketNumber: joi.string().required(),
-  docketNumberSuffix: joi.string().optional(),
+  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumberSuffix: joi
+    .string()
+    .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+    .optional(),
   docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
   isSealed: joi.boolean(),

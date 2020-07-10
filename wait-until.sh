@@ -1,4 +1,18 @@
 #!/bin/bash
+
+# This script waits for a specified service to come online
+
+# Usage
+#   wait-until.sh http://localhost:4000/api/swagger
+
+# Requirements
+#   - curl must be installed on your machine
+
+# Arguments
+#   - $1 - the http service to check
+
+[ -z "$1" ] && echo "The http service to check must be provided as the \$1 argument." && exit 1
+
 url=$1
 max_tries=900
 try_count=0

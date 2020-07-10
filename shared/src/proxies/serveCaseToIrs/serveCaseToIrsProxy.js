@@ -12,9 +12,5 @@ exports.serveCaseToIrsInteractor = ({ applicationContext, caseId }) => {
   return post({
     applicationContext,
     endpoint: `/cases/${caseId}/serve-to-irs`,
-    headers: {
-      Accept: 'application/pdf',
-    },
-    options: { responseType: 'blob' },
   });
 };

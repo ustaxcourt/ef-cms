@@ -63,7 +63,7 @@
             - "domestic"
             - "international"
         country: 
-          type: "any"
+          type: "string"
           whens: 
             - 
               ref: 
@@ -79,11 +79,11 @@
                     override: true
                   - "international"
               then: 
-                type: "string"
+                type: "any"
                 flags: 
                   presence: "required"
               otherwise: 
-                type: "string"
+                type: "any"
                 flags: 
                   presence: "optional"
                 allow: 
@@ -132,7 +132,72 @@
                     args: 
                       regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
         state: 
-          type: "any"
+          type: "string"
+          flags: 
+            only: true
+          allow: 
+            - "AK"
+            - "AL"
+            - "AR"
+            - "AZ"
+            - "CA"
+            - "CO"
+            - "CT"
+            - "DC"
+            - "DE"
+            - "FL"
+            - "GA"
+            - "HI"
+            - "IA"
+            - "ID"
+            - "IL"
+            - "IN"
+            - "KS"
+            - "KY"
+            - "LA"
+            - "MA"
+            - "MD"
+            - "ME"
+            - "MI"
+            - "MN"
+            - "MO"
+            - "MS"
+            - "MT"
+            - "NC"
+            - "ND"
+            - "NE"
+            - "NH"
+            - "NJ"
+            - "NM"
+            - "NV"
+            - "NY"
+            - "OH"
+            - "OK"
+            - "OR"
+            - "PA"
+            - "RI"
+            - "SC"
+            - "SD"
+            - "TN"
+            - "TX"
+            - "UT"
+            - "VA"
+            - "VT"
+            - "WA"
+            - "WI"
+            - "WV"
+            - "WY"
+            - "AA"
+            - "AE"
+            - "AP"
+            - "AS"
+            - "FM"
+            - "GU"
+            - "MH"
+            - "MP"
+            - "PR"
+            - "PW"
+            - "VI"
           whens: 
             - 
               ref: 
@@ -148,20 +213,15 @@
                     override: true
                   - "international"
               then: 
-                type: "string"
+                type: "any"
                 flags: 
                   presence: "optional"
                 allow: 
                   - null
               otherwise: 
-                type: "string"
+                type: "any"
                 flags: 
                   presence: "required"
-                rules: 
-                  - 
-                    name: "max"
-                    args: 
-                      limit: 100
     email: 
       type: "string"
       flags: 
@@ -228,7 +288,12 @@
         - "privatePractitioner"
         - "trialclerk"
     judgeFullName: 
-      type: "any"
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -244,14 +309,9 @@
                 override: true
               - "judge"
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 100
           otherwise: 
             type: "any"
             flags: 
@@ -259,7 +319,12 @@
             allow: 
               - null
     judgeTitle: 
-      type: "any"
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -275,14 +340,9 @@
                 override: true
               - "judge"
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 100
           otherwise: 
             type: "any"
             flags: 

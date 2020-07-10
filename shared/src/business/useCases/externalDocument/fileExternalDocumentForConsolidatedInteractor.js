@@ -81,12 +81,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
-    secondaryDocument.eventCode = 'MISL';
   }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
-      item.eventCode = 'MISL';
     });
   }
 

@@ -131,6 +131,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
         }
       }
 
+      const showLinkToDocument =
+        (isExternalUser ? !record.isStricken : userHasAccessToCase) &&
+        userHasAccessToCase &&
+        userHasAccessToDocument &&
+        document &&
+        !permissions.UPDATE_CASE &&
+        document.processingStatus === 'complete' &&
+        !document.isInProgress &&
+        !document.isNotServedCourtIssuedDocument;
+
       return {
         action: record.action,
         createdAtFormatted: record.createdAtFormatted,
@@ -148,6 +158,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isPaper,
         isPending: document && document.pending,
         isServed: document && !!document.servedAt,
+        isStricken: record.isStricken,
         numberOfPages:
           (document && (record.numberOfPages || document.numberOfPages)) || 0,
         servedAtFormatted: document && document.servedAtFormatted,
@@ -158,6 +169,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
           (!userHasAccessToCase ||
             !userHasAccessToDocument ||
             !document ||
+            (userHasAccessToCase &&
+              userHasAccessToDocument &&
+              record.isStricken) ||
             (document &&
               (document.isNotServedCourtIssuedDocument ||
                 document.isInProgress) &&
@@ -172,14 +186,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document.processingStatus !== 'complete',
         showEditDocketRecordEntry,
         showInProgress: document && document.isInProgress && !isExternalUser,
-        showLinkToDocument:
-          userHasAccessToCase &&
-          userHasAccessToDocument &&
-          document &&
-          !permissions.UPDATE_CASE &&
-          document.processingStatus === 'complete' &&
-          !document.isInProgress &&
-          !document.isNotServedCourtIssuedDocument,
+        showLinkToDocument,
         showLoadingIcon:
           document &&
           !permissions.UPDATE_CASE &&

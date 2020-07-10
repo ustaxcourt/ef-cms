@@ -8,15 +8,14 @@ import React from 'react';
 export const DocumentSearchResults = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
-    baseUrl: state.baseUrl,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
-    token: state.token,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
-    baseUrl,
+    openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
-    token,
   }) {
     return (
       <>
@@ -26,13 +25,13 @@ export const DocumentSearchResults = connect(
               ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
 
-            <table className="usa-table search-results responsive-table row-border-only">
+            <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Docket number</th>
-                  <th>Case title</th>
+                  <th aria-label="docket number">Docket No.</th>
+                  <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>
                   <th>Date</th>
@@ -62,17 +61,18 @@ export const DocumentSearchResults = connect(
                       </td>
                       <td>{result.caseTitle}</td>
                       <td>
-                        <a
-                          href={
-                            advancedDocumentSearchHelper.isPublic
-                              ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
-                              : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
-                          }
-                          rel="noopener noreferrer"
-                          target="_blank"
+                        <Button
+                          link
+                          onClick={() => {
+                            openCaseDocumentDownloadUrlSequence({
+                              caseId: result.caseId,
+                              documentId: result.documentId,
+                              isPublic: advancedDocumentSearchHelper.isPublic,
+                            });
+                          }}
                         >
                           {result.documentTitle}
-                        </a>
+                        </Button>
                       </td>
                       <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>

@@ -1,46 +1,29 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { CaseMessageModalAttachments } from './CaseMessageModalAttachments';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const getDocumentOption = document => {
-  const title = document.documentTitle || document.documentType;
-  return (
-    <option key={document.documentId} value={`${document.documentId}`}>
-      {document.createdAtFormatted} - {title}
-    </option>
-  );
-};
-
 export const CreateCaseMessageModalDialog = connect(
   {
     constants: state.constants,
-    createCaseMessageModalHelper: state.createCaseMessageModalHelper,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateCreateCaseMessageAttachmentsSequence:
-      sequences.updateCreateCaseMessageAttachmentsSequence,
     updateCreateCaseMessageValueInModalSequence:
       sequences.updateCreateCaseMessageValueInModalSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     users: state.users,
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  function CreateMessageModalDialog({
+  function CreateCaseMessageModalDialog({
     constants,
-    createCaseMessageModalHelper,
     form,
     onConfirmSequence = 'createCaseMessageSequence',
     showChambersSelect,
-    updateCreateCaseMessageAttachmentsSequence,
     updateCreateCaseMessageValueInModalSequence,
-    updateScreenMetadataSequence,
     users,
     validateCreateCaseMessageInModalSequence,
     validationErrors,
@@ -152,6 +135,7 @@ export const CreateCaseMessageModalDialog = connect(
             id="subject"
             name="subject"
             type="text"
+            value={form.subject || ''}
             onChange={e => {
               updateCreateCaseMessageValueInModalSequence({
                 key: e.target.name,
@@ -180,85 +164,7 @@ export const CreateCaseMessageModalDialog = connect(
           />
         </FormGroup>
 
-        {form.attachments && form.attachments.length > 0 && (
-          <div className="margin-bottom-20">
-            <div>
-              <FontAwesomeIcon
-                className="fa-icon-black"
-                icon="file-pdf"
-                size="1x"
-              />
-              <strong className="margin-left-1">Attachment(s)</strong>
-            </div>
-            {form.attachments.map((document, idx) => {
-              return (
-                <div
-                  className="margin-top-1"
-                  key={`${idx}-${document.documentId}`}
-                >
-                  {document.documentTitle}
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {createCaseMessageModalHelper.showAddDocumentForm && (
-          <FormGroup>
-            <label className="usa-label" htmlFor="document">
-              Add document(s) <span className="usa-hint">(optional)</span>
-            </label>
-            <select
-              className="usa-select"
-              id="document"
-              name="document"
-              onChange={e => {
-                updateCreateCaseMessageAttachmentsSequence({
-                  documentId: e.target.value,
-                });
-                updateScreenMetadataSequence({
-                  key: 'showAddDocumentForm',
-                  value: false,
-                });
-                validateCreateCaseMessageInModalSequence();
-              }}
-            >
-              <option value="">- Select -</option>
-              {createCaseMessageModalHelper.draftDocuments.length > 0 && (
-                <optgroup label="Draft documents">
-                  {createCaseMessageModalHelper.draftDocuments.map(
-                    getDocumentOption,
-                  )}
-                </optgroup>
-              )}
-
-              {createCaseMessageModalHelper.documents.length > 0 && (
-                <optgroup label="Docket record">
-                  {createCaseMessageModalHelper.documents.map(
-                    getDocumentOption,
-                  )}
-                </optgroup>
-              )}
-            </select>
-          </FormGroup>
-        )}
-
-        {createCaseMessageModalHelper.showAddMoreDocumentsButton && (
-          <Button
-            link
-            icon="plus-circle"
-            iconColor="blue"
-            onClick={() => {
-              updateScreenMetadataSequence({
-                key: 'showAddDocumentForm',
-                value: true,
-              });
-            }}
-          >
-            {' '}
-            Add More Document(s)
-          </Button>
-        )}
+        <CaseMessageModalAttachments />
       </ConfirmModal>
     );
   },
