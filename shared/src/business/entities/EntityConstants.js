@@ -58,6 +58,47 @@ const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isUnservable,
 ).map(pickEventCode);
 
+const ORDER_TYPES = [
+  {
+    documentType: 'Order',
+    eventCode: 'O',
+  },
+  {
+    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+    documentType: 'Order of Dismissal for Lack of Jurisdiction',
+    eventCode: 'ODJ',
+  },
+  {
+    documentTitle: 'Order of Dismissal',
+    documentType: 'Order of Dismissal',
+    eventCode: 'OD',
+  },
+  {
+    documentTitle: 'Order of Dismissal and Decision',
+    documentType: 'Order of Dismissal and Decision',
+    eventCode: 'ODD',
+  },
+  {
+    documentTitle: 'Order to Show Cause',
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  {
+    documentTitle: 'Order and Decision',
+    documentType: 'Order and Decision',
+    eventCode: 'OAD',
+  },
+  {
+    documentTitle: 'Decision',
+    documentType: 'Decision',
+    eventCode: 'DEC',
+  },
+  {
+    documentType: 'Notice',
+    eventCode: 'NOT',
+  },
+];
+
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
   pickEventCode,
 );
@@ -77,13 +118,9 @@ const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
-const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = [
-  'HE',
-  'TE',
-  'ES',
-  'RM',
-  'USCA',
-];
+const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.requiresCoversheet,
+).map(pickEventCode);
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -473,48 +510,6 @@ const OTHER_TYPES = {
   nextFriendForIncompetentPerson: PARTY_TYPES.nextFriendForIncompetentPerson,
   nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
 };
-
-// TODO: should come from court issued event codes
-const ORDER_TYPES = [
-  {
-    documentType: 'Order',
-    eventCode: 'O',
-  },
-  {
-    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-    documentType: 'Order of Dismissal for Lack of Jurisdiction',
-    eventCode: 'ODJ',
-  },
-  {
-    documentTitle: 'Order of Dismissal',
-    documentType: 'Order of Dismissal',
-    eventCode: 'OD',
-  },
-  {
-    documentTitle: 'Order of Dismissal and Decision',
-    documentType: 'Order of Dismissal and Decision',
-    eventCode: 'ODD',
-  },
-  {
-    documentTitle: 'Order to Show Cause',
-    documentType: 'Order to Show Cause',
-    eventCode: 'OSC',
-  },
-  {
-    documentTitle: 'Order and Decision',
-    documentType: 'Order and Decision',
-    eventCode: 'OAD',
-  },
-  {
-    documentTitle: 'Decision',
-    documentType: 'Decision',
-    eventCode: 'DEC',
-  },
-  {
-    documentType: 'Notice',
-    eventCode: 'NOT',
-  },
-];
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
