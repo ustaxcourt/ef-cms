@@ -59,7 +59,10 @@ joiValidationDecorator(
       .optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     servedAt: JoiValidationConstants.ISO_DATE.optional(),
-    servedParties: joi.array().optional(), // TODO: object definition
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().max(500).required() })
+      .optional(),
   }),
   {},
 );
