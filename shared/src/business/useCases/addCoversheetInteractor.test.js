@@ -759,7 +759,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
 
-    it('does NOT display dateRecieved, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
+    it('does NOT display dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
