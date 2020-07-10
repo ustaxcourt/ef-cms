@@ -33,6 +33,8 @@ exports.fileDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
+  console.log('documentMetadata', documentMetadata);
+
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }

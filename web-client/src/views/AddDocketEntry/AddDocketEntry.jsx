@@ -17,12 +17,14 @@ export const AddDocketEntry = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditingDocketEntry: state.isEditingDocketEntry,
     saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
+    saveForLaterDocketEntrySequence: sequences.saveForLaterDocketEntrySequence,
     showModal: state.modal.showModal,
   },
   function AddDocketEntry({
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
     saveAndServeDocketEntrySequence,
+    saveForLaterDocketEntrySequence,
     showModal,
   }) {
     return (
@@ -67,11 +69,7 @@ export const AddDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      // TODO: saveForLaterDocketEntrySequence()
-                      // submitDocketEntrySequence({
-                      //   docketNumber: caseDetail.docketNumber,
-                      //   isAddAnother: true,
-                      // });
+                      saveForLaterDocketEntrySequence();
                     }}
                   >
                     Save for Later
