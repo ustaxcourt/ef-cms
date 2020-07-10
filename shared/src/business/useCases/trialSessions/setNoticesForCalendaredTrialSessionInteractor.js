@@ -125,6 +125,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
         processingStatus: 'complete',
+        signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
         userId: user.userId,
       },
       { applicationContext },
