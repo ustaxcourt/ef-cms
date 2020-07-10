@@ -256,7 +256,7 @@
   {
     "eventCode": "OSC",
     "documentType": "Order to Show Cause",
-    "documentTitle": "Order [Anything]",
+    "documentTitle": "Order to Show Cause [Anything]",
     "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
@@ -346,8 +346,8 @@
   {
     "eventCode": "CTRA",
     "documentType": "Corrected Transcript",
-    "documentTitle": "Corrected Transcript of [Date]",
-    "scenario": "Type E",
+    "documentTitle": "Corrected Transcript of [Anything] on [Date]",
+    "scenario": "Type H",
     "isUnservable": true
   },
   {
@@ -365,10 +365,11 @@
     "isUnservable": true
   },
   {
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "documentType": "Notice of Trial",
     "documentTitle": "Notice of Trial on [Date] at [Place]",
-    "scenario": "Type G"
+    "scenario": "Type G",
+    "requiresSignature": true
   },
   {
     "eventCode": "PTRL",
@@ -401,8 +402,8 @@
   {
     "eventCode": "RTRA",
     "documentType": "Revised Transcript",
-    "documentTitle": "Revised Transcript of [anything]",
-    "scenario": "Type A",
+    "documentTitle": "Revised Transcript of [anything] on [date]",
+    "scenario": "Type H",
     "isUnservable": true
   },
   {

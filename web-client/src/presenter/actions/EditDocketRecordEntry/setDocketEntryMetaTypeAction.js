@@ -35,5 +35,6 @@ export const setDocketEntryMetaTypeAction = ({
     editType = 'Document';
   }
 
+  store.set(state.documentId, documentId);
   store.set(state.screenMetadata.editType, editType);
 };

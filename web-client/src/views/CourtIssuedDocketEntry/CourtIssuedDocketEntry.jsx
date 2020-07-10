@@ -87,11 +87,6 @@ export const CourtIssuedDocketEntry = connect(
                     Save and Serve
                   </Button>
                 )}
-                {addCourtIssuedDocketEntryHelper.showDocumentNotSignedAlert && (
-                  <p className="text-secondary-dark text-semibold">
-                    Signature required to serve
-                  </p>
-                )}
               </div>
             </div>
           </div>

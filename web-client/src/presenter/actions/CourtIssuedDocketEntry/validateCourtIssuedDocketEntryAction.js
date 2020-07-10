@@ -14,14 +14,32 @@ export const validateCourtIssuedDocketEntryAction = ({
   get,
   path,
 }) => {
+  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
+  const caseDetail = get(state.caseDetail);
+  const documentId = get(state.documentId);
   const entryMetadata = get(state.form);
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validateCourtIssuedDocketEntryInteractor({
       applicationContext,
       entryMetadata,
     });
+
+  // Additional validation to determine if the signature required warning should be displayed
+  if (EVENT_CODES_REQUIRING_SIGNATURE.includes(entryMetadata.eventCode)) {
+    const document = caseDetail.documents.find(
+      doc => doc.documentId === documentId,
+    );
+
+    if (!document.signedAt) {
+      if (!errors) {
+        errors = {};
+      }
+
+      errors.documentType = 'Signature required for this document.';
+    }
+  }
 
   if (!errors) {
     return path.success();
