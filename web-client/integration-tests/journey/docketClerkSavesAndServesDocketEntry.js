@@ -2,9 +2,9 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkSavesDocketEntry = test => {
-  return it('Docketclerk saves docket entry', async () => {
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+export const docketClerkSavesAndServesDocketEntry = test => {
+  return it('Docketclerk saves and serves a docket entry', async () => {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
