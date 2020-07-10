@@ -124,6 +124,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.partySecondary = rawProps.partySecondary;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
+    console.log('primary document file is', this.primaryDocumentFile);
     this.secondaryDocument = rawProps.secondaryDocument;
     this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
