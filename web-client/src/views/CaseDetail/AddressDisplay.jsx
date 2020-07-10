@@ -33,6 +33,7 @@ export const AddressDisplay = connect(
             <span>
               <br />
               c/o {contact.secondaryName}
+              {contact.title && <span>, {contact.title}</span>}
             </span>
           )}
           {contact.inCareOf && (
