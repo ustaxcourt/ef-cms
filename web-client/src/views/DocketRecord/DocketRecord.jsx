@@ -79,21 +79,31 @@ export const DocketRecord = connect(
                       className="filing-type-icon hide-on-mobile"
                     >
                       {entry.isPaper && (
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                        <FontAwesomeIcon
+                          icon={['fas', 'file-alt']}
+                          title="is paper"
+                        />
                       )}
 
                       {entry.isInProgress && (
-                        <FontAwesomeIcon icon={['fas', 'thumbtack']} />
+                        <FontAwesomeIcon
+                          icon={['fas', 'thumbtack']}
+                          title="in progress"
+                        />
                       )}
 
                       {entry.qcWorkItemsUntouched && (
-                        <FontAwesomeIcon icon={['fa', 'star']} />
+                        <FontAwesomeIcon
+                          icon={['fa', 'star']}
+                          title="is untouched"
+                        />
                       )}
 
                       {entry.showLoadingIcon && (
                         <FontAwesomeIcon
                           className="fa-spin spinner"
                           icon="spinner"
+                          title="is loading"
                         />
                       )}
                     </td>

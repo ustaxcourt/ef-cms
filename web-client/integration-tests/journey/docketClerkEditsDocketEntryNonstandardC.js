@@ -43,7 +43,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
       value: 'DCL',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText,
@@ -101,7 +101,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
       value: true,
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

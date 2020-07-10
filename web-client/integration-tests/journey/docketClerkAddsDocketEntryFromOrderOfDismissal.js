@@ -63,7 +63,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added to Docket Record.',
+      'Your entry has been added to docket record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {
