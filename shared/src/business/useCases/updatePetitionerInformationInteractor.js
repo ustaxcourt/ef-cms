@@ -37,7 +37,6 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const user = applicationContext.getCurrentUser();
 
-  // TODO - should we also check UPDATE_CONTACT_INFO?
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }

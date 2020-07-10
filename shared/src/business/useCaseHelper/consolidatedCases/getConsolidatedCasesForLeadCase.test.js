@@ -27,24 +27,25 @@ describe('getConsolidatedCasesForLeadCase', () => {
     ).toMatchObject({ leadCaseId: '123' });
   });
 
-  // TODO - Refactor Case constants into their own file.
-  //  Test currently fails when trying to mock out Case.validateRawCollection
-  //  due to circular dependency issue, UserCase pulls in Case validation text
-  // it('should validate the retrieved cases', async () => {
-  //   const mockCaseId = '123';
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getCasesByLeadCaseId.mockResolvedValue([MOCK_CASE]);
+  it('should validate the retrieved cases', async () => {
+    const mockCaseId = '123';
+    const invalidMockCase = {
+      ...MOCK_CASE,
+      docketNumber: undefined,
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId.mockResolvedValue([invalidMockCase]);
 
-  //   getConsolidatedCasesForLeadCase({
-  //     applicationContext,
-  //     casesAssociatedWithUserOrLeadCaseMap: {
-  //       '123': MOCK_CASE,
-  //     },
-  //     leadCaseId: mockCaseId,
-  //     userAssociatedCaseIdsMap: {},
-  //   });
-
-  //   expect(Case.validateRawCollection).toBeCalled();
-  // });
+    await expect(
+      getConsolidatedCasesForLeadCase({
+        applicationContext,
+        casesAssociatedWithUserOrLeadCaseMap: {
+          '123': invalidMockCase,
+        },
+        leadCaseId: mockCaseId,
+        userAssociatedCaseIdsMap: {},
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
+  });
 });

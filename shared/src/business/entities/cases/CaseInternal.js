@@ -172,7 +172,7 @@ const paperRequirements = joi
       .string()
       .valid(...Object.values(PARTY_TYPES))
       .required(),
-    petitionFile: joi.object().required(), // TODO: object definition
+    petitionFile: joi.object().required(), // object of type File
     petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'petitionFile',
       {
@@ -209,7 +209,7 @@ const paperRequirements = joi
       .conditional('preferredTrialCity', {
         is: joi.exist().not(null),
         otherwise: joi.object().optional(),
-        then: joi.object().required(), // TODO: object definition
+        then: joi.object().required(), // object of type File
       }),
     requestForPlaceOfTrialFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'requestForPlaceOfTrialFile',
@@ -220,7 +220,7 @@ const paperRequirements = joi
       },
     ),
     statistics: Case.VALIDATION_RULES.statistics,
-    stinFile: joi.object().optional(), // TODO: object definition
+    stinFile: joi.object().optional(), // object of type File
     stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),

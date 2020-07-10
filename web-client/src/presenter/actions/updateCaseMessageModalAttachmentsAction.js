@@ -17,7 +17,6 @@ export const updateCaseMessageModalAttachmentsAction = ({
   const { documents } = get(state.caseDetail);
   const documentId = props.documentId || get(state.documentId);
 
-  // TODO: Should we evaluate the length of the array and conditionally push?
   if (documentId) {
     const document = documents.find(d => d.documentId === documentId);
 
