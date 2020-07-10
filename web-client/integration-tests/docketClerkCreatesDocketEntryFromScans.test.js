@@ -5,6 +5,7 @@ import {
 } from './scanHelpers';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
+import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
 import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
@@ -43,7 +44,7 @@ describe('Create Docket Entry From Scans', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test);
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
   docketClerkViewsEditDocketRecord(test);
@@ -62,7 +63,7 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
-  docketClerkSavesDocketEntry(test, true);
+  docketClerkSavesAndServesDocketEntry(test);
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsSectionQCInProgress(test, false);
 });

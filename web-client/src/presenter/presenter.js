@@ -239,6 +239,7 @@ import { reviewRequestAccessInformationSequence } from './sequences/reviewReques
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveAndServeDocketEntrySequence } from './sequences/saveAndServeDocketEntrySequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { saveForLaterDocketEntrySequence } from './sequences/saveForLaterDocketEntrySequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
@@ -670,6 +671,7 @@ export const presenter = {
     runTrialSessionPlanningReportSequence,
     saveAndServeDocketEntrySequence,
     saveDocumentSigningSequence,
+    saveForLaterDocketEntrySequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
     sealCaseSequence,

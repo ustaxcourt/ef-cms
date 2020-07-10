@@ -1,8 +1,6 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
-import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
@@ -10,17 +8,13 @@ import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
-import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
+import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
-import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -31,26 +25,14 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const afterEntryCreated = showProgressSequenceDecorator([
-  setCaseAction,
-  closeFileUploadStatusModalAction,
-  chooseNextStepAction,
-  {
-    isElectronic: [
-      getDocketEntryAlertSuccessAction,
-      setAlertSuccessAction,
-      setSaveAlertsForNavigationAction,
-      navigateToCaseDetailAction,
-    ],
-    isPaper: [
-      completeDocketEntryQCAction,
-      setPdfPreviewUrlAction,
-      gotoPrintPaperServiceSequence,
-    ],
-  },
+const afterEntrySaved = showProgressSequenceDecorator([
+  getDocketEntryAlertSuccessAction,
+  setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
+  navigateToCaseDetailAction,
 ]);
 
-export const saveAndServeDocketEntrySequence = [
+export const saveForLaterDocketEntrySequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
@@ -61,7 +43,6 @@ export const saveAndServeDocketEntrySequence = [
       computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
-      setDocumentIsRequiredAction,
       validateDocketEntryAction,
       {
         error: [
@@ -73,15 +54,21 @@ export const saveAndServeDocketEntrySequence = [
           generateTitleAction,
           stopShowValidationAction,
           clearAlertsAction,
-          openFileUploadStatusModalAction,
-          getDocumentIdAction,
-          uploadDocketEntryFileAction,
+          isFileAttachedAction,
           {
-            error: [openFileUploadErrorModal],
-            success: [
-              setDocumentIdAction,
-              saveDocketEntryAction,
-              afterEntryCreated,
+            no: [saveDocketEntryAction, afterEntrySaved],
+            yes: [
+              openFileUploadStatusModalAction,
+              getDocumentIdAction,
+              uploadDocketEntryFileAction,
+              {
+                error: [openFileUploadErrorModal],
+                success: [
+                  saveDocketEntryAction,
+                  closeFileUploadStatusModalAction,
+                  afterEntrySaved,
+                ],
+              },
             ],
           },
         ],
