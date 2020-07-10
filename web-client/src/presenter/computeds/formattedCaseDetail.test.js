@@ -359,156 +359,45 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
-  it.only('should format only lodged documents with overridden eventCode MISCL', () => {
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
         name: 'Bob',
       },
-      contactSecondary: {
-        name: 'Bill',
-      },
       correspondence: [],
       docketRecord: [
         {
-          description: 'Amended Petition',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          filingDate: '2019-04-19T17:29:13.120Z',
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
         },
         {
-          description:
-            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
-          filingDate: '2019-04-19T17:31:09.515Z',
-        },
-        {
-          description:
-            'Motion for Leave to File Computation for Entry of Decision',
-          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
-          filingDate: '2019-04-19T17:39:10.476Z',
-        },
-        {
-          description:
-            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          filingDate: '2019-04-19T17:42:13.122Z',
-        },
-        {
-          description: 'Hearing Exhibits for asdfasdfasdf',
-          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          eventCode: 'M115',
           filingDate: '2020-07-08T16:33:41.180Z',
         },
       ],
       documents: [
-        {
-          attachments: false,
-          category: 'Petition',
-          certificateOfService: false,
-          createdAt: '2019-04-19T17:29:13.120Z',
-          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          documentTitle: 'Amended Petition',
-          documentType: 'Amended Petition',
-          eventCode: 'PAP',
-          exhibits: false,
-          hasSupportingDocuments: true,
-          objections: 'No',
-          partyPrimary: true,
-          relationship: 'primaryDocument',
-          scenario: 'Standard',
-          supportingDocument:
-            'Unsworn Declaration under Penalty of Perjury in Support',
-          supportingDocumentFreeText: 'Test',
-        },
-        {
-          attachments: false,
-          category: 'Miscellaneous',
-          certificateOfService: false,
-          createdAt: '2019-04-19T18:24:09.515Z',
-          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
-          documentTitle:
-            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
-          documentType: 'Amended',
-          eventCode: 'ADED',
-          exhibits: true,
-          hasSupportingDocuments: true,
-          ordinalValue: 'First',
-          partyIrsPractitioner: true,
-          partyPrimary: true,
-          previousDocument:
-            'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
-          scenario: 'Nonstandard F',
-          supportingDocument: 'Brief in Support',
-          supportingDocumentFreeText: null,
-        },
-        {
-          attachments: true,
-          category: 'Motion',
-          certificateOfService: true,
-          certificateOfServiceDate: '2018-06-07',
-          certificateOfServiceDay: '7',
-          certificateOfServiceMonth: '6',
-          certificateOfServiceYear: '2018',
-          createdAt: '2019-04-19T17:39:10.476Z',
-          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
-          documentTitle:
-            'Motion for Leave to File Computation for Entry of Decision',
-          documentType: 'Motion for Leave to File',
-          eventCode: 'M115',
-          exhibits: true,
-          hasSecondarySupportingDocuments: false,
-          hasSupportingDocuments: true,
-          objections: 'Yes',
-          partyPrimary: true,
-          partySecondary: true,
-          relationship: 'primaryDocument',
-          scenario: 'Nonstandard H',
-          secondarySupportingDocument: null,
-          secondarySupportingDocumentFreeText: null,
-          supportingDocument: 'Declaration in Support',
-          supportingDocumentFreeText: 'Rachael',
-        },
-        {
-          additionalInfo: 'Additional Info',
-          additionalInfo2: 'Additional Info2',
-          category: 'Supporting Document',
-          createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          documentTitle:
-            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
-          documentType:
-            'Unsworn Declaration under Penalty of Perjury in Support',
-          eventCode: 'USDL',
-          freeText: 'Test',
-          lodged: true,
-          partyIrsPractitioner: true,
-          partyPrivatePractitioner: true,
-          previousDocument: 'Amended Petition',
-          relationship: 'primarySupportingDocument',
-          scenario: 'Nonstandard C',
-        },
-        {
-          createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
-          documentTitle: 'Hearing Exhibits for asdfasdfasdf',
-          documentType: 'Hearing Exhibits',
-          eventCode: 'HE',
-          freeText: 'adsf',
-          lodged: false,
-          relationship: 'primaryDocument',
-          scenario: 'Type A',
-        },
         {
           documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
           documentType: 'Motion for Leave to File Administrative Record',
           eventCode: 'M115',
           lodged: true,
         },
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: false,
+        },
       ],
-      hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner' }],
     };
+
     const result = runCompute(formattedCaseDetail, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -516,10 +405,16 @@ describe('formattedCaseDetail', () => {
         validationErrors: {},
       },
     });
-    const updatedDocument = result.documents.find(
+
+    const lodgedDocument = result.documents.find(
       d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
     );
-    expect(updatedDocument.eventCode).toEqual('MISCL');
+    const unlodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+    );
+
+    expect(lodgedDocument.eventCode).toEqual('MISCL');
+    expect(unlodgedDocument.eventCode).not.toEqual('MISCL');
   });
 
   describe('sorts docket records', () => {
