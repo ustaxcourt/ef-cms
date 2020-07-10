@@ -18,11 +18,12 @@ export const saveDocketEntryAction = async ({
   const { primaryDocumentFileId } = props;
   const isFileAttached = get(state.form.primaryDocumentFile);
   const isUpdating = get(state.isEditingDocketEntry);
-  const documentId = isFileAttached
-    ? primaryDocumentFileId
-    : isUpdating
-    ? get(state.documentId)
-    : applicationContext.getUniqueId();
+  const documentId =
+    isFileAttached || primaryDocumentFileId
+      ? primaryDocumentFileId
+      : isUpdating
+      ? get(state.documentId)
+      : applicationContext.getUniqueId();
 
   let documentMetadata = omit(
     {
