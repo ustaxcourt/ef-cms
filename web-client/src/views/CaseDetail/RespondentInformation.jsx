@@ -1,4 +1,5 @@
 import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
+import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditIrsPractitionersModal } from './EditIrsPractitionersModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,47 +10,10 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
-  return (
-    <React.Fragment>
-      <p className="margin-top-0 address-name">
-        {nameOverride || contact.name}{' '}
-        {contact.barNumber && `(${contact.barNumber})`}
-        {contact.inCareOf && (
-          <span>
-            <br />
-            c/o {contact.inCareOf}
-          </span>
-        )}
-      </p>
-      <p>
-        <span className="address-line">{contact.address1}</span>
-        {contact.address2 && (
-          <span className="address-line">{contact.address2}</span>
-        )}
-        {contact.address3 && (
-          <span className="address-line">{contact.address3}</span>
-        )}
-        <span className="address-line">
-          {contact.city && `${contact.city}, `}
-          {contact.state} {contact.postalCode}
-        </span>
-        {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <span className="address-line">{contact.country}</span>
-        )}
-        {contact.phone && (
-          <span className="address-line margin-top-1">{contact.phone}</span>
-        )}
-      </p>
-    </React.Fragment>
-  );
-};
-
 const RespondentInformation = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
-    constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
     openAddIrsPractitionerModalSequence:
@@ -63,7 +27,6 @@ const RespondentInformation = connect(
   function RespondentInformation({
     caseDetailHelper,
     caseInformationHelper,
-    constants,
     form,
     formattedCaseDetail,
     openAddIrsPractitionerModalSequence,
@@ -85,17 +48,15 @@ const RespondentInformation = connect(
                 key={index}
               >
                 <address aria-labelledby="respondent-label">
-                  {respondent.name &&
-                    AddressDisplay(
-                      {
+                  {respondent.name && (
+                    <AddressDisplay
+                      contact={{
                         ...respondent,
                         ...respondent.contact,
-                      },
-                      constants,
-                      {
-                        nameOverride: respondent.name,
-                      },
-                    )}
+                      }}
+                      nameOverride={respondent.name}
+                    />
+                  )}
                 </address>
                 {respondent.serviceIndicator && (
                   <div className="margin-top-4">
@@ -209,4 +170,4 @@ const RespondentInformation = connect(
   },
 );
 
-export { AddressDisplay, RespondentInformation };
+export { RespondentInformation };

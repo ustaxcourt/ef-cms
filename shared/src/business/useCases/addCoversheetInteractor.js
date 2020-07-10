@@ -23,7 +23,7 @@ exports.generateCoverSheetData = ({
     (documentEntity.servedAt &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.servedAt, 'MMDDYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -33,14 +33,14 @@ exports.generateCoverSheetData = ({
       (documentEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+          .formatDateString(documentEntity.createdAt, 'MMDDYY')) ||
       '';
   } else {
     dateReceivedFormatted =
       (documentEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MM/DD/YYYY hh:mm a')) ||
+          .formatDateString(documentEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
       '';
   }
 
@@ -48,7 +48,7 @@ exports.generateCoverSheetData = ({
     (documentEntity.filingDate &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.filingDate, 'MMDDYY')) ||
     '';
 
   const caseCaptionToUse = useInitialData
@@ -84,7 +84,7 @@ exports.generateCoverSheetData = ({
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
-    docketNumber: `Docket Number: ${docketNumberWithSuffix}`,
+    docketNumberWithSuffix,
     documentTitle,
     electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',

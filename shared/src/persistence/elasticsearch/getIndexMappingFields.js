@@ -5,11 +5,15 @@
  * @returns {object} the mapping properties of the specified index
  */
 exports.getIndexMappingFields = async ({ applicationContext, index }) => {
-  const searchClient = applicationContext.getSearchClient();
+  try {
+    const searchClient = applicationContext.getSearchClient();
 
-  const indexMapping = await searchClient.indices.getMapping({
-    index,
-  });
+    const indexMapping = await searchClient.indices.getMapping({
+      index,
+    });
 
-  return indexMapping.efcms.mappings.properties;
+    return indexMapping.efcms.mappings.properties;
+  } catch (e) {
+    await applicationContext.notifyHoneybadger(e, { index });
+  }
 };

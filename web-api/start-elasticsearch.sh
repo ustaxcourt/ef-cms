@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Usage
+#   downloads and starts elasticsearch for local use
+
 # download the elasticsearch archive if needed
 if [ -f /.dockerenv ]; then
   ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.2-linux-x86_64.tar.gz"
-else 
+else
   ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.5.2-darwin-x86_64.tar.gz"
 fi
 

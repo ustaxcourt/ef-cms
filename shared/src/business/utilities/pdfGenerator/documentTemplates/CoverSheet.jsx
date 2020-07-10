@@ -49,7 +49,7 @@ export const CoverSheet = ({
         <div id="docket-number">
           {electronicallyFiled && <div>Electronically Filed</div>}
           {mailingDate && <div>{mailingDate}</div>}
-          <div>Docket Number {docketNumberWithSuffix}</div>
+          <div>Docket No. {docketNumberWithSuffix}</div>
         </div>
         <div className="clear"></div>
       </div>

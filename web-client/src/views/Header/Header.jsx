@@ -1,4 +1,5 @@
 import { AccountMenu } from './AccountMenu';
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
@@ -265,16 +266,15 @@ export const Header = connect(
                 )}
                 role="navigation"
               >
-                <button
-                  className="usa-nav__close"
+                <Button
+                  iconRight
+                  link
+                  className="usa-nav__close float-right margin-right-0 padding-top-0"
+                  icon="times-circle"
                   onClick={() => toggleMobileMenuSequence()}
                 >
-                  Close{' '}
-                  <FontAwesomeIcon
-                    className="account-menu-icon"
-                    icon={['fa', 'times-circle']}
-                  />
-                </button>
+                  Close
+                </Button>
                 {user &&
                   NavigationItems(headerHelper, {
                     isReportsMenuOpen,

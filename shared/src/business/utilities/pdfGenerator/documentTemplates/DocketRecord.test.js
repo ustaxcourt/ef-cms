@@ -28,7 +28,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner',
       phone: '123-124-1234',
       postalCode: '12345',
-      state: 'STATE',
+      state: 'AL',
     };
 
     contactSecondary = {
@@ -40,7 +40,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner 2',
       phone: '123-124-5678',
       postalCode: '12345',
-      state: 'STATE',
+      state: 'AL',
     };
 
     privatePractitioner = {
@@ -53,7 +53,7 @@ describe('DocketRecord', () => {
         country: 'USA',
         phone: '234-123-4567',
         postalCode: '12345',
-        state: 'STATE',
+        state: 'AL',
       },
       formattedName: 'Test Private Practitioner (PT20001)',
       name: 'Test Private Practitioner',
@@ -69,7 +69,7 @@ describe('DocketRecord', () => {
         country: 'USA',
         phone: '234-123-4567',
         postalCode: '12345',
-        state: 'STATE',
+        state: 'AL',
       },
       name: 'Test IRS Practitioner',
     };

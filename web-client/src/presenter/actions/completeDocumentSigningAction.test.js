@@ -5,7 +5,6 @@ import { runAction } from 'cerebral/test';
 
 describe('completeDocumentSigningAction', () => {
   const {
-    completeWorkItemInteractor,
     generateSignedDocumentInteractor,
     getInboxMessagesForUserInteractor,
     signDocumentInteractor,
@@ -88,11 +87,7 @@ describe('completeDocumentSigningAction', () => {
     expect(uploadDocumentFromClient.mock.calls.length).toBe(1);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(1);
     expect(signDocumentInteractor.mock.calls.length).toBe(1);
-    expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
-      alertSuccess: {
-        message: 'Signature added.',
-      },
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',
@@ -136,11 +131,7 @@ describe('completeDocumentSigningAction', () => {
     expect(uploadDocumentFromClient.mock.calls.length).toBe(0);
     expect(generateSignedDocumentInteractor.mock.calls.length).toBe(0);
     expect(signDocumentInteractor.mock.calls.length).toBe(0);
-    expect(completeWorkItemInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
-      alertSuccess: {
-        message: 'Signature added.',
-      },
       caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       tab: 'docketRecord',

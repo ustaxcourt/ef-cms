@@ -147,6 +147,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/draft-documents',
+      ifHasAccess(docketNumber => {
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'drafts',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-petitioner-information',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -444,6 +456,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/create-order/*',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
+        return app.getSequence('gotoCreateOrderSequence')({
+          docketNumber,
+          parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-court-issued',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -493,6 +519,32 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-order/*/sign',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoSignOrderSequence');
+        return sequence({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-order/*/sign/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
+        const sequence = app.getSequence('gotoSignOrderSequence');
+        return sequence({
+          docketNumber,
+          documentId,
+          parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
@@ -505,13 +557,15 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/edit-order/*/sign',
-      ifHasAccess((docketNumber, documentId) => {
+      '/case-detail/*/edit-order/*/*',
+      ifHasAccess((docketNumber, documentIdToEdit, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
-        const sequence = app.getSequence('gotoSignOrderSequence');
+        const sequence = app.getSequence('gotoEditOrderSequence');
         return sequence({
           docketNumber,
-          documentId,
+          documentIdToEdit,
+          parentMessageId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -535,6 +589,23 @@ const router = {
         return app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
           docketNumber,
           documentId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        const sequence = app.getSequence(
+          'gotoAddCourtIssuedDocketEntrySequence',
+        );
+        return sequence({
+          docketNumber,
+          documentId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });
       }),
     );
@@ -992,11 +1063,11 @@ const router = {
 
     registerRoute(
       '/case-messages/*/message-detail/*',
-      ifHasAccess((docketNumber, messageId) => {
+      ifHasAccess((docketNumber, parentMessageId) => {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
-          messageId,
+          parentMessageId,
         });
       }),
     );

@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
+const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -30,6 +30,8 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
+  this.isLegacy = rawDocketRecord.isLegacy;
+  this.isStricken = rawDocketRecord.isStricken;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -75,7 +77,7 @@ joiValidationDecorator(
     entityName: joi.string().valid('DocketRecord').required(),
     eventCode: joi
       .string()
-      .valid(...getAllEventCodes())
+      .valid(...ALL_EVENT_CODES)
       .required()
       .description(
         'Code associated with the event that resulted in this item being added to the Docket Record.',
@@ -96,10 +98,26 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    isLegacy: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system.',
+      ),
+    isStricken: joi
+      .boolean()
+      .when('isLegacy', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description(
+        'Indicates the item has been removed from the docket record.',
+      ),
     numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
-      .valid('R', 'B', '')
+      .valid(...SERVED_PARTIES_CODES)
       .allow(null)
       .optional()
       .description('Served parties code to override system-computed code.'),

@@ -51,7 +51,7 @@ module.exports.createCase1 = async () => {
           name: 'Brett Osborne',
           phone: '+1 (537) 235-6147',
           postalCode: '89499',
-          state: 'AS',
+          state: 'AK',
         },
         filingType: 'Myself',
         hasIrsNotice: false,
@@ -70,9 +70,13 @@ module.exports.createCase1 = async () => {
       });
     };
 
+    const coversheets = [];
+
     for (const document of caseDetail.documents) {
-      await addCoversheet(document);
+      coversheets.push(addCoversheet(document));
     }
+
+    await Promise.all(coversheets);
   });
 
   await asUserFromEmail('docketclerk', async applicationContext => {
@@ -101,6 +105,8 @@ module.exports.createCase1 = async () => {
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
       caseId,
+      //todo - dont hardcode a judge
+      nameForSigning: 'Maurice B. Foley',
       originalDocumentId: documentId,
       signedDocumentId: documentId,
     });

@@ -39,6 +39,10 @@ const judgeUser = {
   role: ROLES.judge,
   userId: '345',
 };
+const petitionerUser = {
+  role: ROLES.petitioner,
+  userId: '456',
+};
 
 describe('formattedCaseDetail', () => {
   it('does not error and returns expected empty values on empty caseDetail', () => {
@@ -1539,6 +1543,154 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntries[1].numberOfPages).toEqual(0);
+    });
+  });
+
+  describe('stricken docket record', () => {
+    let caseDetail;
+
+    beforeAll(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {
+          name: 'Bob',
+        },
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 2,
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 7,
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+        ],
+      };
+    });
+
+    it('should not show the link to an external user for a document with a stricken docket record', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail,
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(true);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+        false,
+      );
+    });
+
+    it('should show the link to an internal user for a document with a stricken docket record', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: true,
+            DOCKET_ENTRY: true,
+            UPDATE_CASE: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(false);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+        true,
+      );
     });
   });
 });

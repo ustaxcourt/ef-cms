@@ -3,13 +3,15 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
+import { CaseMessagesCompleted } from './CaseMessagesCompleted';
+import { CaseMessagesInProgress } from './CaseMessagesInProgress';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
 import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
-import { MessagesInProgress } from './MessagesInProgress';
+import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
@@ -53,28 +55,13 @@ export const CaseDetailInternal = connect(
               <DocketRecord />
             </>
           )}
-          {caseDetailInternalTabs.deadlines && (
-            <>
-              <div className="title">
-                <h1>Deadlines</h1>
-              </div>
-              <CaseDeadlinesInternal />
-            </>
-          )}
-          {caseDetailInternalTabs.inProgress && (
+          {caseDetailInternalTabs.trackedItems && (
             <Tabs
-              bind="currentViewMetadata.caseDetail.inProgressTab"
+              bind="currentViewMetadata.caseDetail.trackedItemsTab"
               className="classic-horizontal-header3 tab-border"
             >
-              <Tab
-                id="tab-draft-documents"
-                tabName="draftDocuments"
-                title="Draft Documents"
-              >
-                <DraftDocuments />
-              </Tab>
-              <Tab id="tab-messages" tabName="messages" title="Messages">
-                <MessagesInProgress />
+              <Tab id="tab-deadlines" tabName="deadlines" title="Deadlines">
+                <CaseDeadlinesInternal />
               </Tab>
               <Tab
                 id="tab-pending-report"
@@ -82,6 +69,35 @@ export const CaseDetailInternal = connect(
                 title="Pending Report"
               >
                 <CaseDetailPendingReportList />
+              </Tab>
+            </Tabs>
+          )}
+          {caseDetailInternalTabs.drafts && (
+            <>
+              <div className="title">
+                <h1>Draft Documents</h1>
+              </div>
+              <DraftDocuments />
+            </>
+          )}
+          {caseDetailInternalTabs.messages && (
+            <Tabs
+              bind="currentViewMetadata.caseDetail.messagesTab"
+              className="classic-horizontal-header3 tab-border"
+            >
+              <Tab
+                id="tab-messages-in-progress"
+                tabName="messagesInProgress"
+                title="In Progress"
+              >
+                <CaseMessagesInProgress />
+              </Tab>
+              <Tab
+                id="tab-messages-completed"
+                tabName="messagesCompleted"
+                title="Completed"
+              >
+                <CaseMessagesCompleted />
               </Tab>
             </Tabs>
           )}
@@ -109,6 +125,9 @@ export const CaseDetailInternal = connect(
               </Tab>
               <Tab id="tab-respondent" tabName="respondent" title="Respondent">
                 <RespondentInformation />
+              </Tab>
+              <Tab id="tab-other-filer" tabName="otherFiler" title="Other">
+                <OtherFilerInformation />
               </Tab>
             </Tabs>
           )}

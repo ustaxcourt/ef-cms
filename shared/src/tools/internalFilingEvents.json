@@ -339,17 +339,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Bounced Electronic Service",
-      "documentType": "Bounced Electronic Service",
-      "category": "Miscellaneous",
-      "eventCode": "ES",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
       "documentType": "Certificate as to the Genuineness of the Administrative Record",
       "category": "Miscellaneous",
@@ -401,17 +390,6 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Hearing Exhibits for [Anything]",
-      "documentType": "Hearing Exhibits",
-      "category": "Miscellaneous",
-      "eventCode": "HE",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "Description",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -515,17 +493,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Returned Mail",
-      "documentType": "Returned Mail",
-      "category": "Miscellaneous",
-      "eventCode": "RM",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Status Report",
       "documentType": "Status Report",
       "category": "Miscellaneous",
@@ -533,28 +500,6 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "Trial Exhibits for [Anything]",
-      "documentType": "Trial Exhibits",
-      "category": "Miscellaneous",
-      "eventCode": "TE",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "Description",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
-      "documentTitle": "U.S.C.A. [Anything]",
-      "documentType": "U.S.C.A. [Anything]",
-      "category": "Miscellaneous",
-      "eventCode": "USCA",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "Description",
       "labelFreeText2": "",
       "ordinalField": ""
     }

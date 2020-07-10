@@ -12,6 +12,7 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
+  const mockUserId = applicationContext.getUniqueId();
 
   beforeEach(() => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
@@ -57,7 +58,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
@@ -65,7 +67,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
@@ -73,7 +76,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          filedBy: 'Test Petitioner',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
@@ -81,7 +85,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order',
           documentType: 'Order',
           eventCode: 'O',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
@@ -89,7 +96,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
         },
         {
           docketNumber: '45678-18',
@@ -97,7 +107,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentTitle: 'Transcript of [anything] on [date]',
           documentType: 'TRAN - Transcript',
           eventCode: 'TRAN',
-          userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+          userId: mockUserId,
         },
       ],
       filingType: 'Myself',

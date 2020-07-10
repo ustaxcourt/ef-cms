@@ -43,15 +43,7 @@ const getDocumentContentsForDocuments = async ({
   return documents;
 };
 
-/**
- * getCaseInteractor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get
- * @returns {object} the case data
- */
-exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
+const getCase = async ({ applicationContext, caseId }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {
@@ -130,4 +122,18 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     });
   }
   return caseDetailRaw;
+};
+
+exports.getCase = getCase;
+
+/**
+ * getCaseInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to get
+ * @returns {object} the case data
+ */
+exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
+  return await getCase({ applicationContext, caseId });
 };

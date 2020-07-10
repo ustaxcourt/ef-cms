@@ -22,18 +22,6 @@ console.error = () => null;
 console.info = () => null;
 
 describe('handle', () => {
-  it('should return warm up string if warm up source is passed in', async () => {
-    const response = await handle(
-      { source: 'serverless-plugin-warmup' },
-      async () => 'success',
-    );
-    expect(response).toEqual({
-      body: '"Lambda is warm!"',
-      headers: EXPECTED_HEADERS,
-      statusCode: '200',
-    });
-  });
-
   it('should handle a response with pdf data', async () => {
     const response = await handle({}, async () => '%PDF-'); // contains pdf header
     expect(response).toEqual({
@@ -216,18 +204,6 @@ describe('getAuthHeader', () => {
     expect(response).toEqual('petitioner');
   });
 
-  it('should return the user token from the Authorization header #2', () => {
-    let error;
-    try {
-      getAuthHeader({
-        headers: {},
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-  });
-
   it('should return the user token from the Authorization header #3', () => {
     let error;
     try {
@@ -313,6 +289,18 @@ describe('getAuthHeader', () => {
     expect(response).toEqual(undefined);
     expect(error).toBeDefined();
   });
+
+  it('should return null and should not throw an error if token is not present', () => {
+    let error;
+    let response;
+    try {
+      response = getAuthHeader({});
+    } catch (err) {
+      error = err;
+    }
+    expect(response).toEqual(null);
+    expect(error).toBeUndefined();
+  });
 });
 
 describe('getUserFromAuthHeader', () => {
@@ -335,21 +323,14 @@ describe('getUserFromAuthHeader', () => {
     });
     expect(user).toEqual(null);
   });
+
+  it('should return null if there is no token', () => {
+    const user = getUserFromAuthHeader({});
+    expect(user).toEqual(null);
+  });
 });
 
 describe('redirect', () => {
-  it('should return warm up string if warm up source is passed in', async () => {
-    const response = await redirect(
-      { source: 'serverless-plugin-warmup' },
-      async () => 'success',
-    );
-    expect(response).toEqual({
-      body: '"Lambda is warm!"',
-      headers: EXPECTED_HEADERS,
-      statusCode: '200',
-    });
-  });
-
   it('should return a redirect status in the header', async () => {
     const response = await redirect({}, async () => ({ url: 'example.com' }));
     expect(response).toEqual({

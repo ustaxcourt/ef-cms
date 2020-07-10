@@ -13,6 +13,12 @@ exports.addServedStampToDocument = async ({
   pdfData,
   serviceStampText,
 }) => {
+  if (!serviceStampText) {
+    serviceStampText = `SERVED ${applicationContext
+      .getUtilities()
+      .formatNow('MM/DD/YY')}`;
+  }
+
   const {
     PDFDocument,
     rgb,
@@ -30,7 +36,7 @@ exports.addServedStampToDocument = async ({
     StandardFonts.HelveticaBold,
   );
 
-  const textSize = 16 * scale;
+  const textSize = 14 * scale;
   const padding = 3 * scale;
   const serviceStampWidth = helveticaBoldFont.widthOfTextAtSize(
     serviceStampText,

@@ -1,5 +1,5 @@
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
+const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * opinionPublicSearchInteractor
@@ -42,7 +42,7 @@ exports.opinionPublicSearchInteractor = async ({
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
       ...rawSearch,
     });

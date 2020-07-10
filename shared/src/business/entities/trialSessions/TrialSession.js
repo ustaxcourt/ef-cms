@@ -119,15 +119,10 @@ TrialSession.validationRules = {
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().allow('').optional(),
     swingSession: joi.boolean().optional(),
-    swingSessionId: joi.when('swingSession', {
+    swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
       is: true,
       otherwise: joi.string().optional(),
-      then: joi
-        .string()
-        .uuid({
-          version: ['uuidv4'],
-        })
-        .required(),
+      then: joi.required(),
     }),
     term: joi
       .string()
@@ -136,12 +131,7 @@ TrialSession.validationRules = {
     termYear: joi.string().required(),
     trialClerk: joi.object().optional(),
     trialLocation: joi.string().required(),
-    trialSessionId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
 
@@ -151,20 +141,18 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        caseId: joi.string().uuid({
-          version: ['uuidv4'],
-        }),
-        disposition: joi.when('removedFromTrial', {
+        caseId: JoiValidationConstants.UUID,
+        disposition: joi.string().when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joi.string().required(),
+          then: joi.required(),
         }),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
-        removedFromTrialDate: joi.when('removedFromTrial', {
+        removedFromTrialDate: joiStrictTimestamp.when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joiStrictTimestamp.required(),
+          then: joi.required(),
         }),
       }),
     ),

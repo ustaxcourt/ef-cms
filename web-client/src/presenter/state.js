@@ -16,13 +16,13 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
+import { caseMessageModalHelper } from './computeds/caseMessageModalHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { createCaseMessageModalHelper } from './computeds/createCaseMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -42,6 +42,7 @@ import {
   formattedClosedCases,
   formattedOpenCases,
 } from './computeds/formattedCaseDetail';
+import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
@@ -54,6 +55,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
@@ -101,13 +103,13 @@ const helpers = {
   caseDetailSubnavHelper,
   caseInformationHelper,
   caseInventoryReportHelper,
+  caseMessageModalHelper,
   caseSearchBoxHelper,
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
-  createCaseMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
@@ -123,6 +125,7 @@ const helpers = {
   fileDocumentHelper,
   fileUploadStatusHelper,
   formattedCaseDetail,
+  formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
   formattedMessageDetail,
@@ -137,6 +140,7 @@ const helpers = {
   internalTypesHelper,
   loadingHelper,
   menuHelper,
+  messageDocumentHelper,
   messagesHelper,
   orderTypesHelper,
   pdfPreviewModalHelper,
@@ -187,10 +191,11 @@ export const baseState = {
       caseDetailInternalTabs: {
         caseInformation: false,
         correspondence: false,
-        deadlines: false,
         docketRecord: false,
-        inProgress: false,
+        drafts: false,
+        messages: false,
         notes: false,
+        trackedItems: false,
       },
     },
     documentDetail: {

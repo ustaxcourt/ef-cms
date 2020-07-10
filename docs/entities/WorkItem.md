@@ -131,6 +131,7 @@
       type: "string"
       flags: 
         presence: "required"
+        description: "Unique case identifier in XXXXX-YY format."
       rules: 
         - 
           name: "pattern"
@@ -233,6 +234,7 @@
         - "pughsChambers"
         - "ruwesChambers"
         - "thorntonsChambers"
+        - "torosChambers"
         - "urdasChambers"
         - "vasquezsChambers"
         - "wellsChambers"
@@ -299,6 +301,7 @@
         - "pughsChambers"
         - "ruwesChambers"
         - "thorntonsChambers"
+        - "torosChambers"
         - "urdasChambers"
         - "vasquezsChambers"
         - "wellsChambers"

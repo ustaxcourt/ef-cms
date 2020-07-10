@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -35,7 +36,11 @@ export const submitCourtIssuedDocketEntrySequence = [
       getDocketEntryAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      navigateToCaseDetailAction,
+      followRedirectAction,
+      {
+        default: navigateToCaseDetailAction,
+        success: [],
+      },
     ]),
   },
 ];

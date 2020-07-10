@@ -61,7 +61,7 @@
     "contactPrimary": {
       "address3": "Nisi quisquam ea har",
       "secondaryName": "Leslie Bullock",
-      "address2": "Qui est neque rerum ",
+      "address2": "104 West 120th Street ",
       "city": "Ut similique id erro",
       "phone": "+1 (241) 924-9153",
       "address1": "907 West Rocky Cowley Parkway",
@@ -71,6 +71,56 @@
       "countryType": "domestic",
       "email": "petitioner"
     },
+    "otherPetitioners": [
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Coralie Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Coralie Carpenter",
+        "title": "Trust"
+      },
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Riya Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Riya Carpenter",
+        "title": "Trust"
+      },
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Chinju Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Chinju Carpenter",
+        "title": "Trust"
+      }
+    ],
     "createdAt": "2019-08-16T19:21:46.146Z",
     "receivedAt": "2019-08-16T19:21:46.146Z",
     "noticeOfAttachments": false,
@@ -317,6 +367,12 @@
     "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
     "numberOfPages": 1,
     "servedAt": "2019-08-16T19:22:13.925Z",
+    "servedParties": [
+      {
+        "email": "petitioner",
+        "name": "Garrett Carpenter, Leslie Bullock"
+      }
+    ],
     "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "status": "served"
   }
