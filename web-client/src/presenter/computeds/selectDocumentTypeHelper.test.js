@@ -21,7 +21,7 @@ DOCUMENT_EXTERNAL_CATEGORIES_MAP['Miscellaneous'].push({
 DOCUMENT_EXTERNAL_CATEGORIES_MAP['Decision'].push({
   category: 'Decision',
   documentTitle: 'Stipulated Decision Entered [judge] [anything]',
-  documentType: 'Stipulated Decision Entered',
+  documentType: 'Stipulated Decision',
   eventCode: 'SDEC',
   labelFreeText: "Judge's Name",
   labelFreeText2: 'Decision Notes',
@@ -395,7 +395,7 @@ describe('selectDocumentTypeHelper', () => {
   it('should return correct data for Nonstandard J document scenario', () => {
     state.form = {
       category: 'Decision',
-      documentType: 'Stipulated Decision Entered',
+      documentType: 'Stipulated Decision',
     };
     const result = runCompute(selectDocumentTypeHelper, {
       state,
