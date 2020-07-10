@@ -62,7 +62,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: '2050',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
@@ -88,7 +88,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: true,
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

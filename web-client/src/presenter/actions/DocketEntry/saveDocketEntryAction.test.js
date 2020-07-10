@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updateDocketEntryWithoutFileAction } from './updateDocketEntryWithoutFileAction';
+import { saveDocketEntryAction } from './saveDocketEntryAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('updateDocketEntryWithoutFileAction', () => {
+describe('saveDocketEntryAction', () => {
   let caseDetail;
 
   beforeAll(() => {
@@ -15,12 +15,12 @@ describe('updateDocketEntryWithoutFileAction', () => {
     };
   });
 
-  it('should call updateDocketEntryInteractor and return caseDetail', async () => {
+  it('should call saveDocketEntryAction and return caseDetail', async () => {
     applicationContext
       .getUseCases()
-      .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(updateDocketEntryWithoutFileAction, {
+    const result = await runAction(saveDocketEntryAction, {
       modules: {
         presenter,
       },
@@ -34,12 +34,22 @@ describe('updateDocketEntryWithoutFileAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updateDocketEntryInteractor,
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().fileDocketEntryInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
       caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
+      overridePaperServiceAddress: true,
     });
   });
 });
