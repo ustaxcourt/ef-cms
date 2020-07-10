@@ -17,6 +17,11 @@ describe('DocketEntryFactory', () => {
       rawEntity = {};
     });
 
+    it('should require a file if isDocumentRequired', () => {
+      rawEntity.isDocumentRequired = true;
+      expect(errors().primaryDocumentFile).toBeDefined();
+    });
+
     it('should require a file', () => {
       rawEntity.primaryDocumentFile = {};
       rawEntity.primaryDocumentFileSize = 1;
