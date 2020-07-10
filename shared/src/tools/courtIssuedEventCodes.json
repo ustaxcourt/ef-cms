@@ -424,34 +424,39 @@
     "documentType": "Hearing Exhibits",
     "documentTitle": "Hearing Exhibits for [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "TE",
     "documentType": "Trial Exhibits",
     "documentTitle": "Trial Exhibits for [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "USCA",
     "documentType": "U.S.C.A",
     "documentTitle": "U.S.C.A [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "ES",
     "documentType": "Bounced Electronic Service",
     "documentTitle": "Bounced Electronic Service [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "RM",
     "documentType": "Returned Mail",
     "documentTitle": "Returned Mail [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   }
 ]
