@@ -83,7 +83,7 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Objection Some free text',
       documentType: 'Objection [anything]',
-      eventCode: 'OBJ',
+      eventCode: 'MISCL',
       lodged: true,
     });
   });

@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Certificate of Service Petition 05-05-2015',
       documentType: 'Certificate of Service',
-      eventCode: 'CS',
+      eventCode: 'MISCL',
       serviceDate: '2015-05-05',
     });
   });
