@@ -191,6 +191,16 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
 
+  it('Should include the signedAt field on the Notice of Trial document', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(findNoticeOfTrial(calendaredCases[0]).signedAt).toBeTruthy();
+    expect(findNoticeOfTrial(calendaredCases[1]).signedAt).toBeTruthy();
+  });
+
   it('Should set the noticeOfTrialDate field on each case', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
