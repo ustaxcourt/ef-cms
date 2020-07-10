@@ -76,7 +76,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'First Request for Admissions',
       documentType: 'Request for Admissions',
-      eventCode: 'REQA',
+      eventCode: 'MISCL',
     });
   });
 };
