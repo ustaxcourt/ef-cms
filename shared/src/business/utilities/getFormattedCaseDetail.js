@@ -41,7 +41,9 @@ const formatDocument = (applicationContext, document) => {
       .getUtilities()
       .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
   }
-
+  if (result.lodged) {
+    result.eventCode = 'MISCL';
+  }
   result.showLegacySealed = !!result.isLegacySealed;
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = !!result.servedAt;
@@ -172,10 +174,6 @@ const formatDocketRecordWithDocument = (
 
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
-      }
-
-      if (formattedDocument.lodged) {
-        record.eventCode = 'MISCL';
       }
     }
 

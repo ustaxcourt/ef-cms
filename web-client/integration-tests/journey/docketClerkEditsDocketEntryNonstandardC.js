@@ -135,7 +135,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
       certificateOfServiceDate: '2011-01-01',
       documentTitle: 'Declaration of Bob Barker in Support of Petition',
       documentType: 'Declaration in Support',
-      eventCode: 'DCL',
+      eventCode: 'MISCL',
       lodged: true,
       mailingDate: 'yesterday',
       pending: true,

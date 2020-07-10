@@ -86,7 +86,7 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'First Supplement to Petition',
       documentType: 'Supplement',
-      eventCode: 'SUPM',
+      eventCode: 'MISCL',
     });
   });
 };

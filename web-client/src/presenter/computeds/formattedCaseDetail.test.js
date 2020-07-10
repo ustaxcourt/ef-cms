@@ -359,6 +359,64 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      correspondence: [],
+      docketRecord: [
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+      ],
+      documents: [
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: true,
+        },
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: false,
+        },
+      ],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner' }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    const lodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+    );
+    const unlodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+    );
+
+    expect(lodgedDocument.eventCode).toEqual('MISCL');
+    expect(unlodgedDocument.eventCode).not.toEqual('MISCL');
+  });
+
   describe('sorts docket records', () => {
     let sortedCaseDetail;
     beforeAll(() => {

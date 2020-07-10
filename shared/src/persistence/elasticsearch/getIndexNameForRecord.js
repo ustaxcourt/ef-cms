@@ -9,7 +9,7 @@ exports.getIndexNameForRecord = record => {
   ];
 
   const isRecordOfType = (record, type) => {
-    if (record.entityName && record.entityName.S) {
+    if (record && record.entityName && record.entityName.S) {
       if (type === 'User' && userEntityNames.includes(record.entityName.S)) {
         return true;
       }
