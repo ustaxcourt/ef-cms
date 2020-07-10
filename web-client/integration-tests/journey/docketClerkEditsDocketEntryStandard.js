@@ -19,11 +19,6 @@ export const docketClerkEditsDocketEntryStandard = test => {
       },
     );
 
-    console.log(
-      'caseDetailFormatted.formattedDocketEntries[0]',
-      caseDetailFormatted.formattedDocketEntries[0],
-    );
-
     const { documentId } = caseDetailFormatted.formattedDocketEntries[0];
     expect(documentId).toBeDefined();
 
