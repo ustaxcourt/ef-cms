@@ -203,6 +203,32 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
+
+    it('Generates a CoverSheet document for court issued documents that require a coversheet', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: PARTY_TYPES.petitioner,
+          caseTitle: 'Test Person',
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CourtIssuedDocumentCoverSheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 
   describe('docketRecord', () => {
