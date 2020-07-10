@@ -42,7 +42,7 @@ exports.handler = (event, context, callback) => {
     "default-src 'none'",
     `form-action ${applicationUrl}`,
     "object-src 'none'",
-    `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${dynamsoftUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
     `img-src ${applicationUrl} data:`,
     `font-src ${applicationUrl}`,
