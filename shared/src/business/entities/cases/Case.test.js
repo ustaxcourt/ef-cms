@@ -69,6 +69,69 @@ describe('Case entity', () => {
       { filingDate: '2020-01-05T01:02:03.004Z' },
     ]);
   });
+
+  describe('adding and removing practitioners', () => {
+    let myCase;
+    beforeEach(() => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [{ name: 'Christopher Walken', userId: '123' }],
+          privatePractitioners: [{ name: 'Slim Shady', userId: '567' }],
+        },
+        { applicationContext },
+      );
+    });
+
+    describe('who are from IRS', () => {
+      it('updates a matching IRS practitioner found on the case', () => {
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        myCase.updateIrsPractitioner({
+          name: 'Christopher Running',
+          userId: '123',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Running',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updateIrsPractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Walken',
+        });
+      });
+    });
+
+    describe('who are private', () => {
+      it('updates a matching private practitioner found on the case', () => {
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        myCase.updatePrivatePractitioner({
+          name: 'Stout Sunny',
+          userId: '567',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Stout Sunny',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updatePrivatePractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Slim Shady',
+        });
+      });
+    });
+  });
+
   describe('conditionally sets userId on entity', () => {
     it('sets userId to current user if current user matches rawCase', () => {
       const myCase = new Case(

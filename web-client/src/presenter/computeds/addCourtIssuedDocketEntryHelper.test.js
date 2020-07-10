@@ -159,7 +159,27 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showServiceStamp).toEqual(false);
   });
 
-  it('should return showSaveAndServeButton true and showDocumentNotSignedAlert false if document is signed', () => {
+  it('should return showSaveAndServeButton false if eventCode is found in unservable event codes list', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          documents: [
+            {
+              documentId: '123',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        documentId: '123',
+        form: {
+          eventCode: 'RUHROH',
+        },
+      },
+    });
+    expect(result.showSaveAndServeButton).toEqual(false);
+  });
+  it('should return showSaveAndServeButton true if eventCode is NOT found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         caseDetail: {
@@ -178,68 +198,5 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       },
     });
     expect(result.showSaveAndServeButton).toEqual(true);
-    expect(result.showDocumentNotSignedAlert).toEqual(false);
-  });
-
-  it('should return showSaveAndServeButton false and showDocumentNotSignedAlert true if document is not signed but the event code requires a signature', () => {
-    const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: {
-        caseDetail: {
-          ...state.caseDetail,
-          documents: [
-            {
-              documentId: '123',
-            },
-          ],
-        },
-        documentId: '123',
-        form: {
-          eventCode: 'O',
-        },
-      },
-    });
-    expect(result.showSaveAndServeButton).toEqual(false);
-    expect(result.showDocumentNotSignedAlert).toEqual(true);
-  });
-
-  it('should return showSaveAndServeButton true and showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
-    const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: {
-        caseDetail: {
-          ...state.caseDetail,
-          documents: [
-            {
-              documentId: '123',
-            },
-          ],
-        },
-        documentId: '123',
-        form: {
-          eventCode: 'A',
-        },
-      },
-    });
-    expect(result.showSaveAndServeButton).toEqual(true);
-    expect(result.showDocumentNotSignedAlert).toEqual(false);
-  });
-
-  it('should return showSaveAndServeButton false if the document is unservable', () => {
-    const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: {
-        caseDetail: {
-          ...state.caseDetail,
-          documents: [
-            {
-              documentId: '123',
-            },
-          ],
-        },
-        documentId: '123',
-        form: {
-          eventCode: 'RUHROH',
-        },
-      },
-    });
-    expect(result.showSaveAndServeButton).toEqual(false);
   });
 });

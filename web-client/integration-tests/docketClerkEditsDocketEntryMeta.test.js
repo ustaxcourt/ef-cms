@@ -53,8 +53,8 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkSignsOrder(test, 0);
+  docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
   docketClerkEditsDocketEntryMetaCourtIssued(test);
@@ -67,8 +67,8 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkSignsOrder(test, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(test);

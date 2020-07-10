@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
+  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -11,6 +12,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     caseDetail.documents.find(
       d => d.documentId === viewerDocumentToDisplay.documentId,
     );
+
+  const documentRequiresSignature =
+    caseDocument &&
+    EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
 
   const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
 
@@ -31,12 +36,17 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showEditButtonForRole = isInternalUser;
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
-  const showAddDocketEntryButtonForDocument = !isDocumentOnDocketRecord;
+  const showAddDocketEntryButtonForDocument =
+    !isDocumentOnDocketRecord &&
+    (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord;
   const showEditButtonForDocument = !isDocumentOnDocketRecord;
+
+  const showDocumentNotSignedAlert =
+    documentRequiresSignature && !documentIsSigned;
 
   return {
     showAddDocketEntryButton:
@@ -44,6 +54,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyEditSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
     showEditButtonSigned:

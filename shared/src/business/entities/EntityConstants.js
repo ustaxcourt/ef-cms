@@ -1,7 +1,7 @@
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy } = require('lodash');
+const { flatten, sortBy, without } = require('lodash');
 
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
@@ -79,10 +79,22 @@ const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
-
+const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = [
+  'HE',
+  'TE',
+  'ES',
+  'RM',
+  'USCA',
+];
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
+
+// _without returns a new array with values from arg1 sans values subsequent args
+const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
+  EVENT_CODES_REQUIRING_SIGNATURE,
+  'NTD',
+);
 
 const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -208,7 +220,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
-    eventCode: 'NDT',
+    eventCode: 'NTD',
   },
   standingPretrialNotice: {
     documentTitle: 'Standing Pretrial Notice',
@@ -584,38 +596,149 @@ const IRS_SYSTEM_SECTION = 'irsSystem';
 const PETITIONS_SECTION = 'petitions';
 const TRIAL_CLERKS_SECTION = 'trialClerks';
 
-const ARMENS_CHAMBERS_SECTION = 'armensChambers';
-const ASHFORDS_CHAMBERS_SECTION = 'ashfordsChambers';
-const BUCHS_CHAMBERS_SECTION = 'buchsChambers';
-const CARLUZZOS_CHAMBERS_SECTION = 'carluzzosChambers';
-const COHENS_CHAMBERS_SECTION = 'cohensChambers';
-const COLVINS_CHAMBERS_SECTION = 'colvinsChambers';
-const COPELANDS_CHAMBERS_SECTION = 'copelandsChambers';
-const FOLEYS_CHAMBERS_SECTION = 'foleysChambers';
-const GALES_CHAMBERS_SECTION = 'galesChambers';
-const GERBERS_CHAMBERS_SECTION = 'gerbersChambers';
-const GOEKES_CHAMBERS_SECTION = 'goekesChambers';
-const GUSTAFSONS_CHAMBERS_SECTION = 'gustafsonsChambers';
-const GUYS_CHAMBERS_SECTION = 'guysChambers';
-const HALPERNS_CHAMBERS_SECTION = 'halpernsChambers';
-const HOLMES_CHAMBERS_SECTION = 'holmesChambers';
-const JACOBS_CHAMBERS_SECTION = 'jacobsChambers';
-const JONES_CHAMBERS_SECTION = 'jonesChambers';
-const KERRIGANS_CHAMBERS_SECTION = 'kerrigansChambers';
-const LAUBERS_CHAMBERS_SECTION = 'laubersChambers';
-const LEYDENS_CHAMBERS_SECTION = 'leydensChambers';
-const MARVELS_CHAMBERS_SECTION = 'marvelsChambers';
-const MORRISONS_CHAMBERS_SECTION = 'morrisonsChambers';
-const NEGAS_CHAMBERS_SECTION = 'negasChambers';
-const PANUTHOS_CHAMBERS_SECTION = 'panuthosChambers';
-const PARIS_CHAMBERS_SECTION = 'parisChambers';
-const PUGHS_CHAMBERS_SECTION = 'pughsChambers';
-const RUWES_CHAMBERS_SECTION = 'ruwesChambers';
-const THORNTONS_CHAMBERS_SECTION = 'thorntonsChambers';
-const TOROS_CHAMBERS_SECTION = 'torosChambers';
-const URDAS_CHAMBERS_SECTION = 'urdasChambers';
-const VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
-const WELLS_CHAMBERS_SECTION = 'wellsChambers';
+const JUDGES_CHAMBERS = {
+  ARMENS_CHAMBERS_SECTION: {
+    label: 'Armen’s Chambers',
+    section: 'armensChambers',
+  },
+  ASHFORDS_CHAMBERS_SECTION: {
+    label: 'Ashford’s Chambers',
+    section: 'ashfordsChambers',
+  },
+  BUCHS_CHAMBERS_SECTION: {
+    label: 'Buch’s Chambers',
+    section: 'buchsChambers',
+  },
+  CARLUZZOS_CHAMBERS_SECTION: {
+    label: 'Carluzzo’s Chambers',
+    section: 'carluzzosChambers',
+  },
+  COHENS_CHAMBERS_SECTION: {
+    label: 'Cohen’s Chambers',
+    section: 'cohensChambers',
+  },
+  COLVINS_CHAMBERS_SECTION: {
+    label: 'Colvin’s Chambers',
+    section: 'colvinsChambers',
+  },
+  COPELANDS_CHAMBERS_SECTION: {
+    label: 'Copeland’s Chambers',
+    section: 'copelandsChambers',
+  },
+  FOLEYS_CHAMBERS_SECTION: {
+    label: 'Foley’s Chambers',
+    section: 'foleysChambers',
+  },
+  GALES_CHAMBERS_SECTION: {
+    label: 'Gale’s Chambers',
+    section: 'galesChambers',
+  },
+  GERBERS_CHAMBERS_SECTION: {
+    label: 'Gerber’s Chambers',
+    section: 'gerbersChambers',
+  },
+  GOEKES_CHAMBERS_SECTION: {
+    label: 'Goeke’s Chambers',
+    section: 'goekesChambers',
+  },
+  GUSTAFSONS_CHAMBERS_SECTION: {
+    label: 'Gustafson’s Chambers',
+    section: 'gustafsonsChambers',
+  },
+  GUYS_CHAMBERS_SECTION: {
+    label: 'Guy’s Chambers',
+    section: 'guysChambers',
+  },
+  HALPERNS_CHAMBERS_SECTION: {
+    label: 'Halpern’s Chambers',
+    section: 'halpernsChambers',
+  },
+  HOLMES_CHAMBERS_SECTION: {
+    label: 'Holmes’ Chambers',
+    section: 'holmesChambers',
+  },
+  JACOBS_CHAMBERS_SECTION: {
+    label: 'Jacobs’ Chambers',
+    section: 'jacobsChambers',
+  },
+  JONES_CHAMBERS_SECTION: {
+    label: 'Jones’ Chambers',
+    section: 'jonesChambers',
+  },
+  KERRIGANS_CHAMBERS_SECTION: {
+    label: 'Kerrigan’s Chambers',
+    section: 'kerrigansChambers',
+  },
+  LAUBERS_CHAMBERS_SECTION: {
+    label: 'Lauber’s Chambers',
+    section: 'laubersChambers',
+  },
+  LEYDENS_CHAMBERS_SECTION: {
+    label: 'Leyden’s Chambers',
+    section: 'leydensChambers',
+  },
+  MARVELS_CHAMBERS_SECTION: {
+    label: 'Marvel’s Chambers',
+    section: 'marvelsChambers',
+  },
+  MORRISONS_CHAMBERS_SECTION: {
+    label: 'Morrison’s Chambers',
+    section: 'morrisonsChambers',
+  },
+  NEGAS_CHAMBERS_SECTION: {
+    label: 'Nega’s Chambers',
+    section: 'negasChambers',
+  },
+  PANUTHOS_CHAMBERS_SECTION: {
+    label: 'Panuthos’ Chambers',
+    section: 'panuthosChambers',
+  },
+  PARIS_CHAMBERS_SECTION: {
+    label: 'Paris’ Chambers',
+    section: 'parisChambers',
+  },
+  PUGHS_CHAMBERS_SECTION: {
+    label: 'Pugh’s Chambers',
+    section: 'pughsChambers',
+  },
+  RUWES_CHAMBERS_SECTION: {
+    label: 'Ruwe’s Chambers',
+    section: 'ruwesChambers',
+  },
+  THORNTONS_CHAMBERS_SECTION: {
+    label: 'Thornton’s Chambers',
+    section: 'thorntonsChambers',
+  },
+  TOROS_CHAMBERS_SECTION: {
+    label: 'Toro’s Chambers',
+    section: 'torosChambers',
+  },
+  URDAS_CHAMBERS_SECTION: {
+    label: 'Urda’s Chambers',
+    section: 'urdasChambers',
+  },
+  VASQUEZS_CHAMBERS_SECTION: {
+    label: 'Vasquez’s Chambers',
+    section: 'vasquezsChambers',
+  },
+  WELLS_CHAMBERS_SECTION: {
+    label: 'Wells’ Chambers',
+    section: 'wellsChambers',
+  },
+};
+
+const chambersSections = [];
+const chambersSectionsLabels = [];
+
+Object.keys(JUDGES_CHAMBERS).forEach(k => {
+  const chambers = JUDGES_CHAMBERS[k];
+
+  chambersSections.push(chambers.section);
+  chambersSectionsLabels[chambers.section] = chambers.label;
+});
+
+const CHAMBERS_SECTIONS = sortBy(chambersSections);
+const CHAMBERS_SECTIONS_LABELS = chambersSectionsLabels;
 
 const SECTIONS = sortBy([
   ADC_SECTION,
@@ -625,41 +748,6 @@ const SECTIONS = sortBy([
   DOCKET_SECTION,
   PETITIONS_SECTION,
   TRIAL_CLERKS_SECTION,
-]);
-
-const CHAMBERS_SECTIONS = sortBy([
-  ARMENS_CHAMBERS_SECTION,
-  ASHFORDS_CHAMBERS_SECTION,
-  BUCHS_CHAMBERS_SECTION,
-  CARLUZZOS_CHAMBERS_SECTION,
-  COHENS_CHAMBERS_SECTION,
-  COLVINS_CHAMBERS_SECTION,
-  COPELANDS_CHAMBERS_SECTION,
-  FOLEYS_CHAMBERS_SECTION,
-  GALES_CHAMBERS_SECTION,
-  GERBERS_CHAMBERS_SECTION,
-  GOEKES_CHAMBERS_SECTION,
-  GUSTAFSONS_CHAMBERS_SECTION,
-  GUYS_CHAMBERS_SECTION,
-  HALPERNS_CHAMBERS_SECTION,
-  HOLMES_CHAMBERS_SECTION,
-  JACOBS_CHAMBERS_SECTION,
-  JONES_CHAMBERS_SECTION,
-  KERRIGANS_CHAMBERS_SECTION,
-  LAUBERS_CHAMBERS_SECTION,
-  LEYDENS_CHAMBERS_SECTION,
-  MARVELS_CHAMBERS_SECTION,
-  MORRISONS_CHAMBERS_SECTION,
-  NEGAS_CHAMBERS_SECTION,
-  PANUTHOS_CHAMBERS_SECTION,
-  PARIS_CHAMBERS_SECTION,
-  PUGHS_CHAMBERS_SECTION,
-  RUWES_CHAMBERS_SECTION,
-  THORNTONS_CHAMBERS_SECTION,
-  URDAS_CHAMBERS_SECTION,
-  TOROS_CHAMBERS_SECTION,
-  VASQUEZS_CHAMBERS_SECTION,
-  WELLS_CHAMBERS_SECTION,
 ]);
 
 const TRIAL_STATUS_TYPES = [
@@ -766,11 +854,13 @@ module.exports = {
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
+  CHAMBERS_SECTIONS_LABELS,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -784,12 +874,14 @@ module.exports = {
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JUDGES_CHAMBERS,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
   MINUTE_ENTRIES_MAP,

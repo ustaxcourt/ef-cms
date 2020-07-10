@@ -459,4 +459,56 @@ describe('messageDocumentHelper', () => {
 
     expect(result.showEditButtonSigned).toEqual(false);
   });
+
+  it('should return showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
+            {
+              documentId: '123',
+              eventCode: 'MISC', // Does not require a signature
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showDocumentNotSignedAlert).toEqual(false);
+  });
+
+  it('should return showDocumentNotSignedAlert true if document is not signed but the event code requires a signature', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
+            {
+              documentId: '123',
+              eventCode: 'O', // Requires a signature
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showDocumentNotSignedAlert).toEqual(true);
+  });
 });
