@@ -95,7 +95,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Motion for Leave to File First Amended Petition',
       documentType: 'Motion for Leave to File',
-      eventCode: 'M115',
+      eventCode: 'MISCL',
     });
   });
 };
