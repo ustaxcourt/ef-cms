@@ -40,6 +40,7 @@ exports.handler = (event, context, callback) => {
     'base-uri resource://pdf.js',
     `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
     "default-src 'none'",
+    "manifest-src 'self'",
     `form-action ${applicationUrl}`,
     "object-src 'none'",
     `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${dynamsoftUrl} resource://pdf.js`,
