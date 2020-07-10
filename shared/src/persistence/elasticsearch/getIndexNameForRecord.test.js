@@ -2,10 +2,14 @@ const { getIndexNameForRecord } = require('./getIndexNameForRecord');
 
 describe('getIndexNameForRecord', () => {
   it('returns null as a default', () => {
-    const record = {};
+    let record, result;
 
-    const result = getIndexNameForRecord(record);
+    record = undefined;
+    result = getIndexNameForRecord(record);
+    expect(result).toEqual(null);
 
+    record = {};
+    result = getIndexNameForRecord(record);
     expect(result).toEqual(null);
   });
 
