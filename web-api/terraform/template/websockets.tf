@@ -112,7 +112,7 @@ resource "aws_apigatewayv2_deployment" "websocket_deploy" {
 
   triggers = {
     deployed_at = "Deployed at ${timestamp()}"
-  } 
+  }
 }
 
 

@@ -183,8 +183,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
   });
 
+  // skipping this test until we have better acceptance criteria about consolidated cases
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
-    // skipping until we finalize how this will be handled
     await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       documentIds: [documentId0],

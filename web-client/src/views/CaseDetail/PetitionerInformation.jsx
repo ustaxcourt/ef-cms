@@ -82,10 +82,6 @@ const PetitionerInformation = connect(
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
-                        nameOverride={
-                          formattedCaseDetail.showCaseTitleForPrimary &&
-                          formattedCaseDetail.caseTitle
-                        }
                         showEmail={true}
                       />
                     </address>
