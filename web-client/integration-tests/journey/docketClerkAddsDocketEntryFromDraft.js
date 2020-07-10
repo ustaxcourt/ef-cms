@@ -1,4 +1,3 @@
-import { applicationContext } from '../../src/applicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -28,12 +27,9 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
       documentId: draftOrderDocument.documentId,
     });
 
-    const {
-      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    } = applicationContext.getConstants();
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[4],
+      value: 'USCA',
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
