@@ -9,7 +9,6 @@ import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAc
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
-import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -74,7 +73,6 @@ export const saveAndServeDocketEntrySequence = [
           stopShowValidationAction,
           clearAlertsAction,
           openFileUploadStatusModalAction,
-          getDocumentIdAction,
           uploadDocketEntryFileAction,
           {
             error: [openFileUploadErrorModal],
