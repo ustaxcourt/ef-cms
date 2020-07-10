@@ -1,7 +1,7 @@
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy } = require('lodash');
+const { flatten, sortBy, without } = require('lodash');
 
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
@@ -77,10 +77,22 @@ const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
-
+const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = [
+  'HE',
+  'TE',
+  'ES',
+  'RM',
+  'USCA',
+];
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
+
+// _without returns a new array with values from arg1 sans values subsequent args
+const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
+  EVENT_CODES_REQUIRING_SIGNATURE,
+  'NTD',
+);
 
 const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -888,6 +900,7 @@ module.exports = {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -901,6 +914,7 @@ module.exports = {
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,

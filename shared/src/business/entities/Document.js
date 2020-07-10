@@ -7,6 +7,7 @@ const {
   DOCKET_NUMBER_MATCHER,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
@@ -395,7 +396,7 @@ joiValidationDecorator(
       .when('draftState', {
         is: joi.exist().not(null),
         otherwise: joi.when('eventCode', {
-          is: joi.string().valid(...EVENT_CODES_REQUIRING_SIGNATURE),
+          is: joi.string().valid(...EVENT_CODES_REQUIRING_JUDGE_SIGNATURE),
           otherwise: joi.string().optional().allow(null),
           then: joi.string().required(),
         }),
