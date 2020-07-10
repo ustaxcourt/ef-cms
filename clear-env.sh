@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Deletes existing cases from DynamoDB and ElasticSearch
+
 # Usage
 #   ./clear-env.sh $ENV
 

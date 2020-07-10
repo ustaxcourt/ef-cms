@@ -5,7 +5,7 @@ import React from 'react';
 
 export const SecondaryDocumentForm = connect(
   {
-    addDocketEntryHelper: state.addDocketEntryHelper.addDocketEntryHelper,
+    addDocketEntryHelper: state.addDocketEntryHelper,
   },
   function SecondaryDocumentForm({ addDocketEntryHelper }) {
     return (

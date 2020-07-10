@@ -138,8 +138,7 @@ describe('advancedSearchHelper', () => {
         searchResults: [
           {
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TN',
             },
             docketNumber: '101-19',
@@ -165,8 +164,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TN',
             },
             docketNumber: '101-19',
@@ -176,8 +174,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TX',
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
@@ -192,8 +189,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+        contactPrimaryName: 'Daenerys Stormborn',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
@@ -201,8 +197,7 @@ describe('advancedSearchHelper', () => {
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+        contactPrimaryName: 'Daenerys Stormborn',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
@@ -222,8 +217,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TN',
             },
             docketNumber: '101-19',
@@ -233,8 +227,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TX',
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
@@ -250,8 +243,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+        contactPrimaryName: 'Daenerys Stormborn',
         docketNumberWithSuffix: '101-19',
         receivedAt: '2019-03-01T05:00:00.000Z',
       },
@@ -266,8 +258,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TN',
             },
             docketNumber: '101-19',
@@ -277,8 +268,7 @@ describe('advancedSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: {
-              name:
-                'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+              name: 'Daenerys Stormborn',
               state: 'TX',
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
@@ -311,8 +301,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+        contactPrimaryName: 'Daenerys Stormborn',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
@@ -320,8 +309,7 @@ describe('advancedSearchHelper', () => {
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+        contactPrimaryName: 'Daenerys Stormborn',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
