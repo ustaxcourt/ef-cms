@@ -16,6 +16,7 @@ export const uploadDocketEntryFileAction = async ({
   store,
 }) => {
   const { primaryDocumentFile } = get(state.form);
+  const documentId = props.documentId || get(state.documentId);
 
   const progressFunctions = setupPercentDone(
     {
@@ -30,7 +31,7 @@ export const uploadDocketEntryFileAction = async ({
       .uploadDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
-        documentId: props.documentId,
+        documentId,
         onUploadProgress: progressFunctions.primary,
       });
 

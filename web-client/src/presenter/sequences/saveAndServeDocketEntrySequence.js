@@ -17,7 +17,6 @@ import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAct
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -76,11 +75,7 @@ export const saveAndServeDocketEntrySequence = [
           uploadDocketEntryFileAction,
           {
             error: [openFileUploadErrorModal],
-            success: [
-              setDocumentIdAction,
-              saveDocketEntryAction,
-              afterEntryCreated,
-            ],
+            success: [saveDocketEntryAction, afterEntryCreated],
           },
         ],
       },
