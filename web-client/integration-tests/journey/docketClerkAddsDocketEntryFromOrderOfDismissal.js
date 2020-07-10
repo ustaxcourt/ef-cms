@@ -39,9 +39,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
     );
 
     expect(test.getState('form.eventCode')).toEqual('OD');
-    expect(test.getState('form.documentType')).toEqual(
-      'Order of Dismissal Entered',
-    );
+    expect(test.getState('form.documentType')).toEqual('Order of Dismissal');
     expect(helperComputed.showJudge).toBeTruthy();
     expect(test.getState('form.judge')).toBeFalsy();
     expect(helperComputed.showFreeText).toBeTruthy();
