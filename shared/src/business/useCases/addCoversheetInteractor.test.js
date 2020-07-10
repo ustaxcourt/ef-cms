@@ -759,7 +759,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
     });
 
-    it('does NOT display dateRecieved and electronicallyFiled when the coversheet is being generated for a court issued document', () => {
+    it('does NOT display dateRecieved, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -780,12 +780,14 @@ describe('addCoversheetInteractor', () => {
           eventCode: 'USCA',
           isPaper: false,
           lodged: true,
+          servedAt: '2019-04-20T14:45:15.595Z',
         },
         useInitialData: true,
       });
 
       expect(result.dateReceived).toBeUndefined();
       expect(result.electronicallyFiled).toBeUndefined();
+      expect(result.dateServed).toBeUndefined();
     });
   });
 });

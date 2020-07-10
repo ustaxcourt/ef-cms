@@ -102,6 +102,7 @@ exports.generateCoverSheetData = ({
     coverSheetData = omit(coverSheetData, [
       'dateReceived',
       'electronicallyFiled',
+      'dateServed',
     ]);
   }
 
