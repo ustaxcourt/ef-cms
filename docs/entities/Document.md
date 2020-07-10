@@ -1140,9 +1140,9 @@
                     only: true
                   allow: 
                     - "Notice of Change of Address"
-                    - "Notice of Change of Telephone Number"
                     - "Notice of Change of Address and Telephone Number"
-                    - "Request for Place of Trial "
+                    - "Notice of Change of Telephone Number"
+                    - "Request for Place of Trial"
                     - "Miscellaneous"
                     - "Notice"
                 then: 
