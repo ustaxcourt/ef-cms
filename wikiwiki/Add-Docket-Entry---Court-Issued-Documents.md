@@ -44,3 +44,23 @@ format [Concatenated Document title] (Attachment(s))
 * Display concatenated document title as page title
 * Do not display a "filed by"
 * Do not display "Edit" button
+
+### Unserved Court-Issued documents
+These documents are court-issued but are not served onto parties when added to the docket record
+* Hearing Exhibits for [Anything]
+* Trial Exhibits for [Anything]
+* Transcript of [Anything]
+* Further Trial before [Judge] at [Place]
+* Corrected Transcript of [Date]
+* Hearing before [Judge] at [Place]
+* Partial Trial before [Judge] at [Place]
+* Trial before [Judge] at [Place]
+* Revised Transcript of [anything]
+
+### Court-Issued Documents with a Cover Sheet
+These documents receive a system generated cover sheet when added to the docket record
+* Hearing Exhibits for [Anything]
+* Trial Exhibits for [Anything]
+* Bounced Electronic Service of [Anything]
+* Returned Mail of [Anything]
+* U.S.C.A [Anything] 
