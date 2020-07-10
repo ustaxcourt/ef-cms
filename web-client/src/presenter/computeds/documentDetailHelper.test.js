@@ -524,7 +524,8 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'Stipulated Decision Entered',
+                documentType: 'Stipulated Decision',
+                eventCode: 'SDEC',
                 signedAt: getDateISO(),
               },
             ],
@@ -538,7 +539,7 @@ describe('document detail helper', () => {
         },
       });
       expect(result.showEditDocketEntry).toEqual(false);
-      expect(result.showEditCourtIssuedDocketEntry).toEqual(true);
+      expect(result.showEditCourtIssuedDocketEntry).toEqual(false);
     });
 
     it('should set showEditDocketEntry false when the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
@@ -568,55 +569,6 @@ describe('document detail helper', () => {
         },
       });
       expect(result.showEditDocketEntry).toEqual(false);
-    });
-
-    it('should set showEditDocketEntry true when the non QCed document is a served order and the user has the DOCKET_ENTRY permission', async () => {
-      const user = {
-        role: ROLES.petitionsClerk,
-        userId: '123',
-      };
-
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Order of Dismissal',
-                servedAt: getDateISO(),
-                workItems: [
-                  {
-                    caseStatus: CASE_STATUS_TYPES.new,
-                    document: {
-                      receivedAt: '2018-11-21T20:49:28.192Z',
-                    },
-                    isQC: true,
-                    messages: [
-                      {
-                        createdAt: '2018-11-21T20:49:28.192Z',
-                        message: 'Served on IRS',
-                      },
-                      {
-                        createdAt: '2018-11-21T20:49:28.192Z',
-                        message: 'Test',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-            status: CASE_STATUS_TYPES.new,
-          },
-          documentId: 'abc',
-          permissions: { DOCKET_ENTRY: true },
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showEditDocketEntry).toEqual(true);
     });
 
     it('should set showEditDocketEntry false on a QCed document even when it is a served order and the user has the DOCKET_ENTRY permission', async () => {
