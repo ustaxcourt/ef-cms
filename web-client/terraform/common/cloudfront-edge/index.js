@@ -47,7 +47,7 @@ exports.handler = (event, context, callback) => {
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
     `img-src ${applicationUrl} data:`,
     `font-src ${applicationUrl}`,
-    `frame-src ${s3Url}`,
+    `frame-src ${s3Url} blob:`,
     "frame-ancestors 'none'",
   ];
   headers['content-security-policy'] = [
