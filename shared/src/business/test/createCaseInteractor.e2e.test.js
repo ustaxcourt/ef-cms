@@ -2,10 +2,10 @@ const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('createCase integration test', () => {
@@ -31,12 +31,12 @@ describe('createCase integration test', () => {
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
-          state: 'AP',
+          state: 'AL',
         },
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -71,7 +71,7 @@ describe('createCase integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
               document: {
@@ -88,7 +88,8 @@ describe('createCase integration test', () => {
                 },
               ],
               section: 'petitions',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: 'Alex Petitionsclerk',
+              sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
         },
@@ -105,18 +106,18 @@ describe('createCase integration test', () => {
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: false,
+      orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'richard',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
@@ -129,7 +130,7 @@ describe('createCase integration test', () => {
     expect(docketsSectionInbox).toMatchObject([
       {
         assigneeName: null,
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19S',
         document: {
@@ -147,7 +148,8 @@ describe('createCase integration test', () => {
           },
         ],
         section: 'petitions',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: 'Alex Petitionsclerk',
+        sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
   });

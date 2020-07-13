@@ -9,12 +9,20 @@ import { state } from 'cerebral';
  * storing pdfPreviewUrl
  * @returns {object} the pdfUrl
  */
-export const generateCaseConfirmationPdfUrlAction = async ({ get, store }) => {
-  const baseUrl = get(state.baseUrl);
-  const token = get(state.token);
+export const generateCaseConfirmationPdfUrlAction = async ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const { caseId, docketNumber } = get(state.caseDetail);
 
-  const pdfPreviewUrl = `${baseUrl}/case-documents/${caseId}/case-${docketNumber}-confirmation.pdf/document-download-url?token=${token}`;
+  const {
+    url,
+  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
+    applicationContext,
+    caseId,
+    documentId: `case-${docketNumber}-confirmation.pdf`,
+  });
 
-  store.set(state.pdfPreviewUrl, pdfPreviewUrl);
+  store.set(state.pdfPreviewUrl, url);
 };

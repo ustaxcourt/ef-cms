@@ -5,7 +5,7 @@ import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateRec
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -42,7 +42,7 @@ export const completeDocketEntryQCSequence = [
       setAlertSuccessAction,
       setPaperServicePartiesAction,
       setSaveAlertsForNavigationAction,
-      navigateToCaseDetailAction,
+      navigateToDocumentQCAction,
       clearErrorAlertsAction,
     ],
   },

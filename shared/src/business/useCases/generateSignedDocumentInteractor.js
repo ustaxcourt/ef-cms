@@ -1,4 +1,4 @@
-const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
+// TODO: refactor here
 
 /**
  * @param {PDFPage} page the page to get dimensions for
@@ -22,6 +22,7 @@ exports.getPageDimensions = page => {
  * @returns {ByteArray} PDF data after signature is added
  */
 exports.generateSignedDocumentInteractor = async ({
+  applicationContext,
   pageIndex,
   pdfData,
   posX,
@@ -29,6 +30,12 @@ exports.generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
+  const {
+    PDFDocument,
+    rgb,
+    StandardFonts,
+  } = await applicationContext.getPdfLib();
+
   const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];

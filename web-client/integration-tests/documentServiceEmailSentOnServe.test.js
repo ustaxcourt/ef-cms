@@ -7,7 +7,7 @@ import {
 
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkViewsCaseDetailForCourtIssuedDocketEntry } from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 
@@ -38,7 +38,7 @@ describe.skip('Document Service Email Sent on Serve', () => {
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrder(test, 0);
+  docketClerkServesDocument(test, 0);
 
   it('should send the expected emails for parties', async () => {
     const emails = await getEmailsForAddress('petitioner');

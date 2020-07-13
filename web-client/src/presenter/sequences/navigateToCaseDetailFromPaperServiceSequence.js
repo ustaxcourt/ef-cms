@@ -1,3 +1,4 @@
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getPaperServiceSuccessMessageAction } from '../actions/getPaperServiceSuccessMessageAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -7,5 +8,9 @@ export const navigateToCaseDetailFromPaperServiceSequence = [
   setSaveAlertsForNavigationAction,
   getPaperServiceSuccessMessageAction,
   setAlertSuccessAction,
-  navigateToCaseDetailAction,
+  followRedirectAction,
+  {
+    default: [navigateToCaseDetailAction],
+    success: [],
+  },
 ];

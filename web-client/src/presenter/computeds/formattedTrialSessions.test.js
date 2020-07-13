@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import {
   filterFormattedSessionsByStatus,
@@ -28,17 +28,17 @@ let nextYear;
 let currentUser = {};
 
 const testJudgeUser = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: '1',
 };
 
 const testTrialClerkUser = {
-  role: User.ROLES.trialClerk,
+  role: ROLES.trialClerk,
   userId: '10',
 };
 
 const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+  constants: { USER_ROLES: ROLES },
   judgeUser: testJudgeUser,
 };
 
@@ -456,7 +456,7 @@ describe('formattedTrialSessions', () => {
         ...baseState,
         judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { role: User.ROLES.petitionsClerk, userId: '1' },
+        user: { role: ROLES.petitionsClerk, userId: '1' },
       },
     });
     expect(result.formattedSessions).toMatchObject([
@@ -612,7 +612,7 @@ describe('formattedTrialSessions', () => {
             trialLocation: 'Jacksonville, FL',
           },
         ],
-        user: { role: User.ROLES.petitionsClerk, userId: '1' },
+        user: { role: ROLES.petitionsClerk, userId: '1' },
       },
     });
     expect(result.formattedSessions).toMatchObject([

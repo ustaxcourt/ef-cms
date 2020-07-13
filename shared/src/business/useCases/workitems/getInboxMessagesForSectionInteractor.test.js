@@ -4,11 +4,11 @@ const {
 const {
   getInboxMessagesForSectionInteractor,
 } = require('./getInboxMessagesForSectionInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getInboxMessagesForSectionInteractor', () => {
   const mockPetitionsClerk = {
-    role: User.ROLES.petitionsClerk,
+    role: ROLES.petitionsClerk,
     userId: 'petitionsClerk',
   };
 
@@ -47,7 +47,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
 
   it('throws an error if the user does not have access to the work item', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     });
 

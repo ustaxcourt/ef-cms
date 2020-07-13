@@ -3,6 +3,7 @@ const path = require('path');
 const {
   generateSignedDocumentInteractor,
 } = require('./generateSignedDocumentInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { PDFDocument } = require('pdf-lib');
 
 describe('generateSignedDocument', () => {
@@ -22,6 +23,7 @@ describe('generateSignedDocument', () => {
 
   it('generates a pdf document with the provided signature text attached', async () => {
     const args = {
+      applicationContext,
       pageIndex: 0,
       pdfData: testDoc,
       posX: 200,
@@ -47,6 +49,7 @@ describe('generateSignedDocument', () => {
 
   it('uses a default scale value of 1 if not provided in args', async () => {
     const args = {
+      applicationContext,
       pageIndex: 0,
       pdfData: testDoc,
       posX: 200,

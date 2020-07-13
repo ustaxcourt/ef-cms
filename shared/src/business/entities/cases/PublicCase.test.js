@@ -14,8 +14,8 @@ describe('PublicCase', () => {
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
-          docketNumber: 'testing',
-          docketNumberSuffix: 'testing',
+          docketNumber: '101-20',
+          docketNumberSuffix: 'S',
           docketRecord: [{}],
           documents: [{}],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -87,6 +87,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
+      docketNumberWithSuffix: 'testingtesting',
       docketRecord: [],
       documents: [],
       isSealed: false,
@@ -119,6 +120,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
+      docketNumberWithSuffix: 'testingtesting',
       docketRecord: [],
       documents: [],
       isSealed: false,
@@ -159,6 +161,7 @@ describe('PublicCase', () => {
       createdAt: 'testing',
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
+      docketNumberWithSuffix: 'testingtesting',
       docketRecord: [
         {
           description: undefined,
@@ -331,5 +334,45 @@ describe('PublicCase', () => {
       );
       expect(isPrivate).toEqual(true);
     });
+  });
+
+  it('should compute docketNumberWithSuffix if it is not provided', () => {
+    const entity = new PublicCase(
+      {
+        caseCaption: 'testing',
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        contactPrimary: {},
+        contactSecondary: {},
+        createdAt: '2020-01-02T03:30:45.007Z',
+        docketNumber: '102-20',
+        docketNumberSuffix: 'SL',
+        docketNumberWithSuffix: null,
+        docketRecord: [{}],
+        documents: [{}],
+        receivedAt: '2020-01-05T03:30:45.007Z',
+      },
+      {},
+    );
+    expect(entity.docketNumberWithSuffix).toBe('102-20SL');
+  });
+
+  it('should compute docketNumberWithSuffix with just docketNumber if there is no suffix', () => {
+    const entity = new PublicCase(
+      {
+        caseCaption: 'testing',
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        contactPrimary: {},
+        contactSecondary: {},
+        createdAt: '2020-01-02T03:30:45.007Z',
+        docketNumber: '102-20',
+        docketNumberSuffix: null,
+        docketNumberWithSuffix: null,
+        docketRecord: [{}],
+        documents: [{}],
+        receivedAt: '2020-01-05T03:30:45.007Z',
+      },
+      {},
+    );
+    expect(entity.docketNumberWithSuffix).toBe('102-20');
   });
 });

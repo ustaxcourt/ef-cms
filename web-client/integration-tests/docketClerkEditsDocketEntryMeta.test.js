@@ -7,7 +7,7 @@ import { docketClerkEditsDocketEntryMeta } from './journey/docketClerkEditsDocke
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
 import { docketClerkNavigatesToEditDocketEntryMetaCourtIssued } from './journey/docketClerkNavigatesToEditDocketEntryMetaCourtIssued';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
-import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
 
@@ -54,7 +54,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expectedDocumentType: 'Order',
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrder(test, 0);
+  docketClerkServesDocument(test, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
   docketClerkEditsDocketEntryMetaCourtIssued(test);
   docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(test, 4);
@@ -67,7 +67,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkServesOrder(test, 1);
+  docketClerkServesDocument(test, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(test);
 });

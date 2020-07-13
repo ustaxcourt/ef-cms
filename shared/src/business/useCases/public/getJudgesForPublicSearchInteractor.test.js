@@ -4,7 +4,7 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('./getJudgesForPublicSearchInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getJudgesForPublicSearchInteractor', () => {
   it('strips out all non public data', async () => {
@@ -37,7 +37,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getUsersInSection,
-    ).toHaveBeenCalledWith({ applicationContext, section: User.ROLES.judge });
+    ).toHaveBeenCalledWith({ applicationContext, section: ROLES.judge });
     expect(results).toEqual([
       {
         judgeFullName: 'Lila A. Fenwick',

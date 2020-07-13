@@ -11,7 +11,7 @@ const caseDetail = {
     countryType: 'domestic',
     phone: '123-123-1234',
     postalCode: '12345',
-    state: 'ST',
+    state: 'AL',
   },
   docketNumber: '123-45',
   docketNumberSuffix: 'S',

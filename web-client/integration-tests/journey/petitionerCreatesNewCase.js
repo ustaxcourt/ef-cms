@@ -122,6 +122,6 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     expect(test.getState('currentPage')).toBe('DashboardPetitioner');
 
-    test.docketNumber = test.getState('cases.0.docketNumber');
+    test.docketNumber = test.getState('openCases.0.docketNumber');
   });
 };

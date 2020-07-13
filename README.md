@@ -50,14 +50,16 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 <a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
-## Dependency diagrams
-
-- <a href="docs/images/client-dependencies.jpg">Client</a>
-- <a href="docs/images/server-dependencies.jpg">Server</a>
-
 ## Backlog
 
-The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
+There are a few backlogs related to the project:
+
+| Items | Location
+|-------|----------
+| User stories and feature work <br>(Primary backlog) | [GitHub issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
+| Refactoring and bugs | [Trello cards in Flexion’s OpEx/DevEx board](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex).
+| Court-related decisions, processes, and environment work | [GitHub issues in this repository](https://github.com/ustaxcourt/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
+| Data migration script work | [GitHub issues in this private repository](https://github.com/ustaxcourt/ef-cms-migration/issues); scrum board using [GitHub projects](https://github.com/ustaxcourt/ef-cms-migration/projects).
 
 ## Testing everything
 

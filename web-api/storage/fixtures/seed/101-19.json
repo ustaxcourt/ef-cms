@@ -3,6 +3,7 @@
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "docket-record|af1aa3f3-e2e3-43e6-885d-4ce341588c76",
     "docketRecordId": "af1aa3f3-e2e3-43e6-885d-4ce341588c76",
+    "numberOfPages": 2,
     "filingDate": "2019-03-01T21:40:46.415Z",
     "description": "Petition",
     "filedBy": "Test Petitioner",
@@ -34,7 +35,7 @@
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "name": "Brett Osborne",
-      "state": "AS",
+      "state": "AL",
       "countryType": "domestic",
       "email": "petitioner"
     },
@@ -65,7 +66,15 @@
   },
   {
     "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "docketNumber": "101-19",
+    "docketNumberWithSuffix": "101-19W",
+    "status": "New",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
@@ -162,6 +171,7 @@
     "documentType": "Petition",
     "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
+    "numberOfPages": 1,
     "workItems": [
       {
         "associatedJudge": "Chief Judge",
@@ -227,14 +237,16 @@
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ODJ",
     "createdAt": "2019-10-07T14:29:30.288Z",
+    "signedAt": "2019-10-07T14:29:30.288Z",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "signedJudgeName": "Maurice B. Foley",
     "processingStatus": "complete",
     "filedBy": "Test Docketclerk",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
-    "signedAt": "2019-10-07T14:29:30.288Z",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "entityName": "Document",
-    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "numberOfPages": 1,
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
     "relationship": "primaryDocument",
@@ -244,6 +256,7 @@
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
+    "numberOfPages": 1,
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.628Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

@@ -6,8 +6,7 @@ const {
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { User } = require('../../entities/User');
+const { ROLES, TRIAL_CITIES } = require('../../entities/EntityConstants');
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';
@@ -16,13 +15,13 @@ describe('run trial session planning report', () => {
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
   });
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -39,9 +38,9 @@ describe('run trial session planning report', () => {
     ).rejects.toThrow();
   });
 
-  it('returns the created pdf', async () => {
+  it('returns the created pdf url', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     };
 
@@ -63,22 +62,6 @@ describe('run trial session planning report', () => {
         },
       ]);
 
-    applicationContext
-      .getTemplateGenerators()
-      .generateTrialSessionPlanningReportTemplate.mockImplementation(
-        async ({
-          content: { previousTerms, rows, selectedTerm, selectedYear },
-        }) => {
-          return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;
-        },
-      );
-
-    applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
-        return contentHtml;
-      });
-
     const result = await runTrialSessionPlanningReportInteractor({
       applicationContext,
       term: 'winter',
@@ -87,18 +70,10 @@ describe('run trial session planning report', () => {
 
     expect(result).toBe(mockPdfUrl);
     expect(
-      applicationContext.getTemplateGenerators()
-        .generateTrialSessionPlanningReportTemplate,
+      applicationContext.getDocumentGenerators().trialSessionPlanningReport,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-    ).toBeCalled();
-    expect(applicationContext.getUniqueId).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toBeCalled();
   });
 
@@ -152,7 +127,7 @@ describe('run trial session planning report', () => {
         },
       ];
       user = {
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'petitionsClerk',
       };
 
@@ -178,9 +153,7 @@ describe('run trial session planning report', () => {
         { term: 'spring', year: '2019' },
         { term: 'winter', year: '2019' },
       ]);
-      expect(results.trialLocationData.length).toEqual(
-        TrialSession.TRIAL_CITIES.ALL.length,
-      );
+      expect(results.trialLocationData.length).toEqual(TRIAL_CITIES.ALL.length);
       expect(results.trialLocationData[0]).toMatchObject({
         allCaseCount: 4,
         previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],

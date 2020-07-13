@@ -39,9 +39,6 @@
 * All documents tracked on the Pending Report for a case are displayed under pending report
 * Pending Report documents for a single case can also be printed in a print-optimized PDF
 
-## Case Information
-* Updates to case metadata are immediately visible on the Case Detail page when information is saved
-
 #### Petition Details
 * Docket Clerks / Clerk of the Court role is able to edit petition details from the Case Detail screen
 * Docket Clerks / Clerk of the Court role is able to seal a case (See [Sealed Cases](Sealed-Cases.md))

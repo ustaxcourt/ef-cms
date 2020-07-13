@@ -1,3 +1,9 @@
+const {
+  createISODateString,
+  formatDateString,
+} = require('../../utilities/DateHandler');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+
 /**
  * generateStandingPretrialNoticeInteractor
  *
@@ -26,47 +32,47 @@ exports.generateStandingPretrialNoticeInteractor = async ({
       docketNumber,
     });
 
-  const {
-    address1,
-    address2,
-    city,
-    courthouseName,
-    judge,
-    postalCode,
-    startDate,
-    startTime,
-    state,
-  } = trialSession;
+  const { docketNumberWithSuffix, irsPractitioners } = caseDetail;
 
-  const { caseCaption, docketNumberWithSuffix, irsPractitioners } = caseDetail;
+  let respondentContactText = 'not available at this time';
+  if (irsPractitioners && irsPractitioners.length) {
+    const firstRespondent = irsPractitioners[0];
+    respondentContactText = `${firstRespondent.name} (${firstRespondent.contact.phone})`;
+  }
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateStandingPretrialNoticeTemplate({
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
+  );
+  const startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  const startDay = formatDateString(trialSession.startDate, 'dddd');
+  const fullStartDate = formatDateString(
+    trialSession.startDate,
+    'dddd, MMMM D, YYYY',
+  );
+
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+
+  const pdfData = await applicationContext
+    .getDocumentGenerators()
+    .standingPretrialNotice({
       applicationContext,
-      content: {
-        caseCaption,
+      data: {
+        caseCaptionExtension,
+        caseTitle,
         docketNumberWithSuffix,
         trialInfo: {
-          address1,
-          address2,
-          city,
-          courthouseName,
-          irsPractitioners,
-          judge,
-          postalCode,
-          startDate,
+          ...trialSession,
+          fullStartDate,
+          respondentContactText,
+          startDay,
           startTime,
-          state,
         },
       },
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
     applicationContext,
-    contentHtml,
-    headerHtml:
-      '<div style="text-align:center;"><span class="pageNumber"></span></div>',
-    overwriteHeader: true,
+    pdfData,
   });
 };

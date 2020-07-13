@@ -3,7 +3,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
-import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -65,7 +65,7 @@ describe('docket clerk order advanced search', () => {
       signedAtFormatted: '01/02/2020',
     });
     docketClerkAddsDocketEntryFromOrder(test, 0);
-    docketClerkServesOrder(test, 0);
+    docketClerkServesDocument(test, 0);
 
     docketClerkCreatesAnOrder(test, {
       documentTitle: 'Order of Dismissal',
@@ -80,7 +80,7 @@ describe('docket clerk order advanced search', () => {
       expectedDocumentType: 'Order of Dismissal',
     });
     docketClerkAddsDocketEntryFromOrderOfDismissal(test, 2);
-    docketClerkServesOrder(test, 2);
+    docketClerkServesDocument(test, 2);
 
     docketClerkCreatesAnOrder(test, {
       documentTitle: 'Order of something',
@@ -88,7 +88,7 @@ describe('docket clerk order advanced search', () => {
       expectedDocumentType: 'Order',
     });
     docketClerkAddsDocketEntryFromOrder(test, 3);
-    docketClerkServesOrder(test, 3);
+    docketClerkServesDocument(test, 3);
     docketClerkSealsCase(test);
   });
 
@@ -318,7 +318,7 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      await wait(1000);
+      await wait(5000);
 
       expect(test.getState('searchResults')).toEqual(
         expect.arrayContaining([

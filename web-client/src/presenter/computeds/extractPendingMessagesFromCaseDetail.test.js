@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -23,7 +23,7 @@ const getBaseState = user => {
 };
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   userId: '123',
 };
 

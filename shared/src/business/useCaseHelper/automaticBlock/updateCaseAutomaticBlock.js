@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 
 /**
  * updateCaseAutomaticBlock
@@ -30,7 +30,7 @@ exports.updateCaseAutomaticBlock = async ({
           caseId: caseEntity.caseId,
         });
     } else if (
-      caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial &&
+      caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
       !caseEntity.blocked
     ) {
       await applicationContext

@@ -1,17 +1,14 @@
-import { setupTest } from './helpers';
-
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
 import {
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
-
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-
-// Public User
-import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
+import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesForSealedCaseByName } from './journey/unauthedUserSearchesForSealedCaseByName';
+import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unauthedUserSearchesForSealedCasesByDocketNumber';
 import { unauthedUserViewsCaseDetailForSealedCase } from './journey/unauthedUserViewsCaseDetailForSealedCase';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
@@ -36,7 +33,7 @@ describe('Petitioner creates cases to search for', () => {
         postalCode: '77546',
         state: 'CT',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
@@ -59,4 +56,9 @@ describe('Unauthed user searches for a sealed case by name', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesForSealedCaseByName(test);
   unauthedUserViewsPrintableDocketRecord(test);
+});
+
+describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
+  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserSearchesForSealedCasesByDocketNumber(test);
 });

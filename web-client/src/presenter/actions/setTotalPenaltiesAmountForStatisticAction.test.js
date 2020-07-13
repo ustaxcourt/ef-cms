@@ -11,13 +11,13 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
         form: {
           statistics: [
             {
-              totalPenalties: '$1.00',
+              irsTotalPenalties: '$1.00',
             },
             {
-              totalPenalties: '$2.00',
+              irsTotalPenalties: '$2.00',
             },
             {
-              totalPenalties: '$3.00',
+              irsTotalPenalties: '$3.00',
             },
           ],
         },
@@ -29,13 +29,13 @@ describe('setTotalPenaltiesAmountForStatisticAction,', () => {
 
     expect(result.state.form.statistics).toMatchObject([
       {
-        totalPenalties: '$1.00',
+        irsTotalPenalties: '$1.00',
       },
       {
-        totalPenalties: '$112.99',
+        irsTotalPenalties: '$112.99',
       },
       {
-        totalPenalties: '$3.00',
+        irsTotalPenalties: '$3.00',
       },
     ]);
   });

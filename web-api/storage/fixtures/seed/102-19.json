@@ -66,6 +66,7 @@
     "filedBy": "Test Petitioner",
     "index": 1,
     "docketRecordId": "8ac50e8e-3a86-4340-8383-ae76eaa02f8b",
+    "numberOfPages": 2,
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "docket-record|8ac50e8e-3a86-4340-8383-ae76eaa02f8b"
   },
@@ -84,7 +85,15 @@
   },
   {
     "sk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "docketNumberWithSuffix": "102-19P",
+    "docketNumber": "102-19",
+    "status": "New",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
+    "entityName": "UserCase"
   },
   {
     "docketNumberWithSuffix": "102-19P",
@@ -94,6 +103,7 @@
       "createdAt": "2019-03-01T21:42:29.073Z",
       "filingDate": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
@@ -134,6 +144,7 @@
       "filingDate": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
@@ -173,6 +184,7 @@
       "createdAt": "2019-03-01T21:42:29.073Z",
       "filingDate": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "numberOfPages": 1,
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
@@ -219,6 +231,7 @@
           "createdAt": "2019-03-01T21:42:29.073Z",
           "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
           "documentTitle": "Petition",
+          "numberOfPages": 1,
           "documentType": "Petition",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
           "filedBy": "Test Petitioner"
@@ -254,6 +267,7 @@
     "filedBy": "Test Petitioner",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|89c781f6-71ba-4ead-93d8-c681c2183a73",
+    "numberOfPages": 1,
     "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
   },
@@ -267,6 +281,7 @@
     "createdAt": "2019-03-05T17:34:13.491Z",
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
+    "numberOfPages": 1,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",

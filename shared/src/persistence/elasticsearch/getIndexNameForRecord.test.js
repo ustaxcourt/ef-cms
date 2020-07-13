@@ -5,6 +5,7 @@ describe('getIndexNameForRecord', () => {
     const record = {};
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual(null);
   });
 
@@ -16,6 +17,7 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-case');
   });
 
@@ -27,6 +29,7 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-document');
   });
 
@@ -38,6 +41,7 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-user');
   });
 
@@ -49,6 +53,7 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-user');
   });
 
@@ -60,6 +65,7 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-user');
   });
 
@@ -71,6 +77,31 @@ describe('getIndexNameForRecord', () => {
     };
 
     const result = getIndexNameForRecord(record);
+
     expect(result).toEqual('efcms-user');
+  });
+
+  it('returns efcms-message for CaseMessage records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseMessage',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-message');
+  });
+
+  it('returns efcms-user-case for UserCase records', () => {
+    const record = {
+      entityName: {
+        S: 'UserCase',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-user-case');
   });
 });

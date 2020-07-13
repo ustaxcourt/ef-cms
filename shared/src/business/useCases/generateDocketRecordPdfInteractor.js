@@ -45,7 +45,9 @@ exports.generateDocketRecordPdfInteractor = async ({
     },
   });
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .saveFileAndGenerateUrl({ applicationContext, file: pdf });
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
+    applicationContext,
+    file: pdf,
+    useTempBucket: true,
+  });
 };

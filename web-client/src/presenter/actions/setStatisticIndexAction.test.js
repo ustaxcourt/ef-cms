@@ -5,6 +5,7 @@ describe('setStatisticIndexAction,', () => {
   it('sets the statisticsIndex from props', async () => {
     const result = await runAction(setStatisticIndexAction, {
       props: {
+        key: 'totalPenalties',
         statisticIndex: 5,
       },
       state: {
@@ -15,5 +16,6 @@ describe('setStatisticIndexAction,', () => {
     });
 
     expect(result.state.modal.statisticIndex).toEqual(5);
+    expect(result.state.modal.key).toEqual('totalPenalties');
   });
 });

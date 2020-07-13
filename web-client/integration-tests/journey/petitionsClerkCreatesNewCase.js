@@ -1,5 +1,5 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
@@ -183,7 +183,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.UNPAID,
+      value: PAYMENT_STATUS.UNPAID,
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');

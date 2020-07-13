@@ -200,6 +200,6 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
 
     expect(test.getState('currentPage')).toBe('DashboardPractitioner');
 
-    test.docketNumber = test.getState('cases.0.docketNumber');
+    test.docketNumber = test.getState('openCases.0.docketNumber');
   });
 };

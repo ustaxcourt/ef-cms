@@ -4,7 +4,7 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('./orderPublicSearchInteractor');
-const { Document } = require('../../entities/Document');
+const { ORDER_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -56,7 +56,7 @@ describe('orderPublicSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_DOCUMENT_TYPES,
     });
   });
 

@@ -1,5 +1,5 @@
 const { PublicUser } = require('../../entities/PublicUser');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 /**
  * getJudgesForPublicSearchInteractor
@@ -13,7 +13,7 @@ exports.getJudgesForPublicSearchInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .getUsersInSection({
       applicationContext,
-      section: User.ROLES.judge,
+      section: ROLES.judge,
     });
 
   return PublicUser.validateRawCollection(rawJudges, { applicationContext });

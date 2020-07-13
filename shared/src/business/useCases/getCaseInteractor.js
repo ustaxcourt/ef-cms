@@ -13,37 +13,37 @@ const getDocumentContentsForDocuments = async ({
 }) => {
   for (const document of documents) {
     if (document.documentContentsId) {
-      const documentContentsFile = await applicationContext
-        .getPersistenceGateway()
-        .getDocument({
-          applicationContext,
-          documentId: document.documentContentsId,
-          protocol: 'S3',
-          useTempBucket: true,
-        });
+      try {
+        const documentContentsFile = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            documentId: document.documentContentsId,
+            protocol: 'S3',
+            useTempBucket: false,
+          });
 
-      const documentContentsData = JSON.parse(documentContentsFile.toString());
-      document.documentContents = documentContentsData.documentContents;
-      document.draftState = {
-        ...document.draftState,
-        documentContents: documentContentsData.documentContents,
-        richText: documentContentsData.richText,
-      };
+        const documentContentsData = JSON.parse(
+          documentContentsFile.toString(),
+        );
+        document.documentContents = documentContentsData.documentContents;
+        document.draftState = {
+          ...document.draftState,
+          documentContents: documentContentsData.documentContents,
+          richText: documentContentsData.richText,
+        };
+      } catch (e) {
+        applicationContext.logger.error(
+          `Document contents ${document.documentContentsId} could not be found in the S3 bucket.`,
+        );
+      }
     }
   }
 
   return documents;
 };
 
-/**
- * getCaseInteractor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get
- * @returns {object} the case data
- */
-exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
+const getCase = async ({ applicationContext, caseId }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {
@@ -53,7 +53,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
         applicationContext,
         caseId,
       });
-  } else if (Case.isValidDocketNumber(caseId)) {
+  } else {
     caseRecord = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -122,4 +122,18 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     });
   }
   return caseDetailRaw;
+};
+
+exports.getCase = getCase;
+
+/**
+ * getCaseInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to get
+ * @returns {object} the case data
+ */
+exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
+  return await getCase({ applicationContext, caseId });
 };

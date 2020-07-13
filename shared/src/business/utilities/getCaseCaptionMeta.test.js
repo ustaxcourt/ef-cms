@@ -1,4 +1,4 @@
-const { Case } = require('../entities/cases/Case');
+const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('./getCaseCaptionMeta');
 
 describe('getCaseCaptionMeta', () => {
@@ -7,9 +7,9 @@ describe('getCaseCaptionMeta', () => {
       caseCaption: 'Eve Brewer, Petitioner',
     };
     expect(getCaseCaptionMeta(caseDetail)).toMatchObject({
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
       caseCaption: 'Eve Brewer, Petitioner',
-      caseCaptionWithPostfix: `Eve Brewer, Petitioner ${Case.CASE_CAPTION_POSTFIX}`,
+      caseCaptionWithPostfix: `Eve Brewer, Petitioner ${CASE_CAPTION_POSTFIX}`,
     });
   });
 

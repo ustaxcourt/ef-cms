@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -30,7 +30,7 @@ describe('case inventory report journey', () => {
     //New
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'status',
-      value: Case.STATUS_TYPES.new,
+      value: CASE_STATUS_TYPES.new,
     });
     await test.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.new = test.getState(
@@ -48,7 +48,7 @@ describe('case inventory report journey', () => {
     //Calendared, Judge Armen
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'status',
-      value: Case.STATUS_TYPES.calendared,
+      value: CASE_STATUS_TYPES.calendared,
     });
     await test.runSequence('submitCaseInventoryReportModalSequence');
     initialCaseInventoryCounts.calendaredArmen = test.getState(
@@ -120,7 +120,7 @@ describe('case inventory report journey', () => {
     await test.runSequence('openCaseInventoryReportModalSequence');
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'status',
-      value: Case.STATUS_TYPES.new,
+      value: CASE_STATUS_TYPES.new,
     });
     await test.runSequence('submitCaseInventoryReportModalSequence');
     let updatedCaseInventoryCount = test.getState(
@@ -144,7 +144,7 @@ describe('case inventory report journey', () => {
     //Calendared, Judge Armen (+1 from initial)
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'status',
-      value: Case.STATUS_TYPES.calendared,
+      value: CASE_STATUS_TYPES.calendared,
     });
     await test.runSequence('submitCaseInventoryReportModalSequence');
     updatedCaseInventoryCount = test.getState(

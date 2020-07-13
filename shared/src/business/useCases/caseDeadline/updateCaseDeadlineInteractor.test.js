@@ -4,6 +4,7 @@ const {
 const {
   updateCaseDeadlineInteractor,
 } = require('./updateCaseDeadlineInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -34,7 +35,7 @@ describe('updateCaseDeadlineInteractor', () => {
   it('updates a case deadline', async () => {
     const mockPetitionsClerk = new User({
       name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.environment.stage = 'local';

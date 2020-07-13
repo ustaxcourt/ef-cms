@@ -15,7 +15,7 @@
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "name": "Brett Osborne",
-      "state": "AS",
+      "state": "AL",
       "countryType": "domestic",
       "email": "petitioner"
     },
@@ -56,6 +56,7 @@
     "eventCode": "P",
     "filedBy": "Test Petitioner",
     "index": 1,
+    "numberOfPages": 2,
     "docketRecordId": "e90247b9-0945-47b2-8cef-601d14be2ff9",
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "docket-record|e90247b9-0945-47b2-8cef-601d14be2ff9"
@@ -104,6 +105,7 @@
         "document": {
           "createdAt": "2019-03-01T21:40:46.415Z",
           "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+          "numberOfPages": 1,
           "documentTitle": "Petition",
           "documentType": "Petition",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -141,6 +143,7 @@
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "numberOfPages": 1,
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
   },
   {
@@ -166,7 +169,9 @@
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "signedAt": "2019-10-07T14:29:30.288Z",
+    "signedJudgeName": "Judge Buch",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "numberOfPages": 1,
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
@@ -187,6 +192,7 @@
     "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
+    "numberOfPages": 1,
     "pk": "case|2fb2da8d-4328-4a20-a5d7-b76637e1dc02"
   }
 ]

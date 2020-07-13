@@ -1,8 +1,10 @@
 const {
+  ORDER_DOCUMENT_TYPES,
+} = require('../../business/entities/EntityConstants');
+const {
   orderAdvancedSearchInteractor,
 } = require('./orderAdvancedSearchInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Document } = require('../../business/entities/Document');
 
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {
@@ -92,7 +94,7 @@ describe('orderAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_DOCUMENT_TYPES,
     });
   });
 });

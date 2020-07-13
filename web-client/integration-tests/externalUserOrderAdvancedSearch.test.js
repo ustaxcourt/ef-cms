@@ -2,7 +2,7 @@ import { associatedUserSearchesForServedOrder } from './journey/associatedUserSe
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
-import { docketClerkServesOrder } from './journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -47,7 +47,7 @@ describe('external users perform an advanced search for orders', () => {
     expectedDocumentType: 'Order',
   });
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrder(test, 0);
+  docketClerkServesDocument(test, 0);
   it('refresh elasticsearch index', async () => {
     await refreshElasticsearchIndex();
   });

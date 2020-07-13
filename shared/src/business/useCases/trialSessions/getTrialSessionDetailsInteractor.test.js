@@ -5,8 +5,8 @@ const {
   getTrialSessionDetailsInteractor,
 } = require('./getTrialSessionDetailsInteractor');
 const { omit } = require('lodash');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('Get trial session details', () => {
   const MOCK_TRIAL_SESSION = {
@@ -21,7 +21,7 @@ describe('Get trial session details', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
   });

@@ -9,7 +9,7 @@ const { completeWorkItemInteractor } = applicationContext.getUseCases();
 
 applicationContext.getCurrentUser.mockReturnValue({
   name: 'Docket Clerk',
-  userId: 'docketclerk',
+  userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
 });
 
 presenter.providers.path = {
@@ -43,7 +43,7 @@ describe('completeWorkItemInteractor', () => {
         user: {
           name: 'Docket Clerk',
           token: 'docketclerk',
-          userId: 'docketclerk',
+          userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
         },
       },
     });
@@ -77,7 +77,7 @@ describe('completeWorkItemInteractor', () => {
         user: {
           name: 'Docket Clerk',
           token: 'docketclerk',
-          userId: 'docketclerk',
+          userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
         },
       },
     });

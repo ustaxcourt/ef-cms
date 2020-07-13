@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
  * @param {object} providers.props the props passed in to the action
+ * @returns {object} path execution results
  */
 export const createPractitionerUserAction = async ({
   applicationContext,

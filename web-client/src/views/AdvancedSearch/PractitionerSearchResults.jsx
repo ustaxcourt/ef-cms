@@ -6,12 +6,10 @@ import React from 'react';
 export const PractitionerSearchResults = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
   function PractitionerSearchResults({
     advancedSearchHelper,
-    pageSize,
     showMoreResultsSequence,
   }) {
     return (
@@ -25,10 +23,10 @@ export const PractitionerSearchResults = connect(
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
                 <tr>
-                  <th>Bar no.</th>
+                  <th aria-label="bar number">Bar No.</th>
                   <th>Name</th>
                   <th>State</th>
-                  <th>Admissions status</th>
+                  <th>Admissions Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -52,7 +50,7 @@ export const PractitionerSearchResults = connect(
         )}
         {advancedSearchHelper.showLoadMore && (
           <Button secondary onClick={() => showMoreResultsSequence()}>
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (

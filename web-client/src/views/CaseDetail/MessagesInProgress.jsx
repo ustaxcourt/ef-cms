@@ -11,7 +11,7 @@ export const MessagesInProgress = connect(
     return (
       <>
         {extractedPendingMessagesFromCaseDetail.length === 0 && (
-          <p className="heading-2 margin-bottom-10">There are no messages.</p>
+          <p className="margin-bottom-10">There are no messages.</p>
         )}
         {extractedPendingMessagesFromCaseDetail.length > 0 && (
           <table className="usa-table row-border-only subsection messages">
@@ -38,10 +38,7 @@ export const MessagesInProgress = connect(
                   </td>
                   <td className="padding-extra">
                     <p className="margin-y-0">
-                      <a
-                        className="case-link"
-                        href={`/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}${workItem.editLink}`}
-                      >
+                      <a className="case-link" href={workItem.editLink}>
                         {workItem.document.documentTitle ||
                           workItem.document.documentType}
                       </a>

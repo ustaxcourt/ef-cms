@@ -13,7 +13,7 @@ export const ErrorNotification = connect(
 
     useEffect(() => {
       const notification = notificationRef.current;
-      if (notification) {
+      if (notification && !alertHelper.preventAutoScroll) {
         window.scrollTo(0, 0);
       }
     });

@@ -13,6 +13,7 @@
       "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T19:21:46.146Z",
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -60,7 +61,7 @@
     "contactPrimary": {
       "address3": "Nisi quisquam ea har",
       "secondaryName": "Leslie Bullock",
-      "address2": "Qui est neque rerum ",
+      "address2": "104 West 120th Street ",
       "city": "Ut similique id erro",
       "phone": "+1 (241) 924-9153",
       "address1": "907 West Rocky Cowley Parkway",
@@ -70,6 +71,56 @@
       "countryType": "domestic",
       "email": "petitioner"
     },
+    "otherPetitioners": [
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Coralie Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Coralie Carpenter",
+        "title": "Trust"
+      },
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Riya Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Riya Carpenter",
+        "title": "Trust"
+      },
+      {
+        "address3": "Nisi quisquam ea har",
+        "secondaryName": "Leslie Bullock",
+        "address2": "104 West 120th Street ",
+        "city": "Ut similique id erro",
+        "phone": "+1 (241) 924-9153",
+        "serviceIndicator": "None",
+        "address1": "907 West Rocky Cowley Parkway",
+        "postalCode": "26371",
+        "name": "Chinju Carpenter",
+        "state": "MD",
+        "countryType": "domestic",
+        "email": "petitioner",
+        "additionalName": "Chinju Carpenter",
+        "title": "Trust"
+      }
+    ],
     "createdAt": "2019-08-16T19:21:46.146Z",
     "receivedAt": "2019-08-16T19:21:46.146Z",
     "noticeOfAttachments": false,
@@ -99,6 +150,7 @@
     "eventCode": "P",
     "index": 1,
     "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+    "numberOfPages": 1,
     "filingDate": "2019-08-16T19:21:46.146Z",
     "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
     "status": "R served on 08/16/2019 2:22 PM",
@@ -134,6 +186,7 @@
       "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T19:21:46.146Z",
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -180,6 +233,7 @@
       "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
       "workItems": [],
       "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T19:21:46.146Z",
       "filingDate": "2019-08-16T19:21:46.146Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -218,7 +272,15 @@
   },
   {
     "sk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "docketNumberWithSuffix": "108-19",
+    "status": "Calendared",
+    "entityName": "UserCase"
   },
   {
     "sk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
@@ -239,6 +301,7 @@
     "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "document|3adb712b-d0c5-40e8-98c1-d2f38757e27a",
     "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+    "numberOfPages": 1,
     "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "status": "served"
   },
@@ -263,6 +326,7 @@
           "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
           "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
           "receivedAt": "2019-08-16T19:21:46.146Z",
+          "numberOfPages": 1,
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
         "section": "irsSystem",
@@ -301,7 +365,14 @@
     "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "sk": "document|3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
     "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+    "numberOfPages": 1,
     "servedAt": "2019-08-16T19:22:13.925Z",
+    "servedParties": [
+      {
+        "email": "petitioner",
+        "name": "Garrett Carpenter, Leslie Bullock"
+      }
+    ],
     "pk": "case|46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
     "status": "served"
   }

@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
-const { isEmpty } = require('lodash');
+const { InvalidEntityError } = require('../errors/errors');
+const { isEmpty, pick } = require('lodash');
 
 /**
  *
@@ -67,7 +68,7 @@ function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
   const obj = {};
   let errors = null;
-  if (entity && entity.getFormattedValidationErrors) {
+  if (entity.getFormattedValidationErrors) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
   if (errors) {
@@ -133,12 +134,19 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      throw new Error(
-        `The ${
-          entityConstructor.validationName || ''
-        } entity was invalid ${JSON.stringify(
-          this.getFormattedValidationErrors(),
-        )}`,
+      const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));
+      helpfulKeys.push(
+        'docketNumber',
+        ...Object.keys(this.getFormattedValidationErrors()),
+      );
+      throw new InvalidEntityError(
+        entityConstructor.validationName,
+        JSON.stringify(pick(this, helpfulKeys), (key, value) =>
+          this.hasOwnProperty(key) && typeof value === 'undefined'
+            ? '<undefined>'
+            : value,
+        ),
+        JSON.stringify(this.getFormattedValidationErrors()),
       );
     }
     return this;

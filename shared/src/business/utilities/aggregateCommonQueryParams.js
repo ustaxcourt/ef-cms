@@ -1,4 +1,4 @@
-const { CaseSearch } = require('../entities/cases/CaseSearch');
+const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
 /**
  * aggregateCommonQueryParams
@@ -117,7 +117,7 @@ const aggregateCommonQueryParams = ({
     });
   }
   if (yearFiledMin || yearFiledMax) {
-    const yearMin = yearFiledMin || CaseSearch.CASE_SEARCH_MIN_YEAR;
+    const yearMin = yearFiledMin || CASE_SEARCH_MIN_YEAR;
     const yearMax =
       yearFiledMax || applicationContext.getUtilities().formatNow('YYYY');
 

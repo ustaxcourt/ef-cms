@@ -1,11 +1,11 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { runCompute } from 'cerebral/test';
 import { trialSessionsHelper as trialSessionsHelperComputed } from './trialSessionsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
 let currentUser = {
-  role: User.ROLES.judge,
-  userId: '777',
+  role: ROLES.judge,
+  userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
 };
 
 const trialSessionsHelper = withAppContextDecorator(

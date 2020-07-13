@@ -1,5 +1,5 @@
 const { CaseExternal } = require('./CaseExternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
+const { PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternal', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
@@ -9,10 +9,10 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
@@ -38,10 +38,10 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
@@ -68,10 +68,10 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},

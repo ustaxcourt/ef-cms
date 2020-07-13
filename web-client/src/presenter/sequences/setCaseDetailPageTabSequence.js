@@ -1,7 +1,7 @@
-import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 
 export const setCaseDetailPageTabSequence = [
-  setCaseDetailPageTabAction,
+  setCaseDetailPageTabActionGenerator(),
   setIsPrimaryTabAction,
 ];

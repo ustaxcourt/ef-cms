@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
@@ -61,7 +62,7 @@ export const petitionsClerkSubmitsCaseToIrs = test => {
       '2017-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual(
-      Case.STATUS_TYPES.generalDocket,
+      CASE_STATUS_TYPES.generalDocket,
     );
     //check that documents were served
     const documents = test.getState('caseDetail.documents');

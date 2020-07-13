@@ -54,6 +54,8 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         hasDocument: !!document,
         index,
         isPaper: document && document.isPaper,
+        numberOfPages:
+          (document && (record.numberOfPages || document.numberOfPages)) || 0,
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:

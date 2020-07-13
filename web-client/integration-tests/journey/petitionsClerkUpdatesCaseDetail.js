@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -27,7 +28,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
@@ -88,7 +89,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
     await test.runSequence('validateCaseDetailSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
 
     await test.runSequence('saveSavedCaseForLaterSequence');
     test.setState('caseDetail', {});
@@ -125,9 +126,9 @@ export const petitionsClerkUpdatesCaseDetail = test => {
     // petitionPaymentDate
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: Case.PAYMENT_STATUS.PAID,
+      value: PAYMENT_STATUS.PAID,
     });
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -164,7 +165,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
       value: '',
     });
 
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     expect(test.getState('validationErrors')).toEqual({
       caseType: VALIDATION_ERROR_MESSAGES.caseType,
       procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
@@ -187,7 +188,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
       value: 'Regular',
     });
     //submit and route to case detail
-    await test.runSequence('navigateToReviewSavedPetitionSequence');
+    await test.runSequence('saveSavedCaseForLaterSequence');
     await test.runSequence('saveSavedCaseForLaterSequence');
     await test.runSequence('navigateToPathSequence', {
       path: `/case-detail/${test.docketNumber}`,

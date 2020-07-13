@@ -1,4 +1,6 @@
+import { clone } from 'lodash';
 import { state } from 'cerebral';
+import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
 
 /**
  * submit public opinion advanced search form
@@ -12,13 +14,19 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
-  const form = get(state.advancedSearchForm.opinionSearch);
+  const searchParams = clone(get(state.advancedSearchForm.opinionSearch));
+
+  if (searchParams.docketNumber) {
+    searchParams.docketNumber = trimDocketNumberSearch(
+      searchParams.docketNumber,
+    );
+  }
 
   const searchResults = await applicationContext
     .getUseCases()
     .opinionPublicSearchInteractor({
       applicationContext,
-      searchParams: form,
+      searchParams,
     });
 
   return { searchResults };

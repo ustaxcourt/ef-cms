@@ -1,13 +1,13 @@
 const {
   validatePetitionerInformationFormInteractor,
 } = require('./validatePetitionerInformationFormInteractor');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('validatePetition', () => {
   it('returns the expected errors object when contactPrimary is missing fields', () => {
     const errors = validatePetitionerInformationFormInteractor({
       contactPrimary: {},
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
 
     expect(Object.keys(errors)).toEqual(['contactPrimary', 'contactSecondary']);
@@ -28,7 +28,7 @@ describe('validatePetition', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
 
     expect(errors.contactPrimary).toBeNull();
@@ -58,7 +58,7 @@ describe('validatePetition', () => {
         state: 'TN',
         title: 'Executor',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
 
     expect(errors.contactPrimary).toBeNull();

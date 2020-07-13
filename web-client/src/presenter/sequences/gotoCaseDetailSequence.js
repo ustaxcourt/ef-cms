@@ -5,12 +5,12 @@ import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
+import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { parallel, set } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
@@ -29,6 +29,7 @@ const { USER_ROLES } = getConstants();
 const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
+  getCaseMessagesForCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 

@@ -3,7 +3,7 @@ import { CaseAssociationRequestFactory } from '../../../shared/src/business/enti
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
 export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
-  return it('Practitioner requests access to case', async () => {
+  return it('Practitioner requests access to pending case', async () => {
     await test.runSequence('gotoRequestAccessSequence', {
       docketNumber: test.docketNumber,
     });
@@ -83,6 +83,10 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
     );
     expect(test.getState('validationErrors')).toEqual({});
 
+    expect(test.getState('wizardStep')).toBe('RequestAccessReview');
+
     await test.runSequence('submitCaseAssociationRequestSequence');
+
+    expect(test.getState('wizardStep')).toBeUndefined();
   });
 };

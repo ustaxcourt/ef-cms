@@ -12,67 +12,99 @@ const joiStrictTimestamp = getTimestampSchema();
  * @param {object} rawStatistic the raw statistic data
  * @constructor
  */
-function Statistic(rawStatistic) {
+function Statistic(rawStatistic, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.entityName = 'Statistic';
 
-  this.deficiencyAmount = rawStatistic.deficiencyAmount;
+  this.determinationDeficiencyAmount =
+    rawStatistic.determinationDeficiencyAmount;
+  this.determinationTotalPenalties = rawStatistic.determinationTotalPenalties;
+  this.irsDeficiencyAmount = rawStatistic.irsDeficiencyAmount;
+  this.irsTotalPenalties = rawStatistic.irsTotalPenalties;
   this.lastDateOfPeriod = rawStatistic.lastDateOfPeriod;
-  this.totalPenalties = rawStatistic.totalPenalties;
   this.year = rawStatistic.year;
   this.yearOrPeriod = rawStatistic.yearOrPeriod;
+  this.statisticId =
+    rawStatistic.statisticId || applicationContext.getUniqueId();
 }
 
 Statistic.validationName = 'Statistic';
 
 Statistic.VALIDATION_ERROR_MESSAGES = {
+  determinationDeficiencyAmount: 'Enter deficiency as determined by Court',
+  determinationTotalPenalties: 'Enter total penalties as determined by Court',
+  irsDeficiencyAmount: 'Enter deficiency on IRS Notice',
+  irsTotalPenalties: 'Enter total penalties on IRS Notice',
   lastDateOfPeriod: [
     {
       contains: 'must be less than or equal to',
-      message: 'Enter a valid last date of period',
+      message: 'Enter valid last date of period',
     },
-    'last date of period is required',
+    'Enter last date of period',
   ],
+  year: 'Enter a valid year',
 };
 
 joiValidationDecorator(
   Statistic,
   joi.object().keys({
-    deficiencyAmount: joi
-      .number()
-      .required()
-      .allow(null)
-      .description('The amount of the deficiency.'),
+    determinationDeficiencyAmount: joi
+      .alternatives()
+      .conditional('determinationTotalPenalties', {
+        is: joi.exist().not(null),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
+      })
+      .description('The amount of the deficiency determined by the Court.'),
+    determinationTotalPenalties: joi
+      .alternatives()
+      .conditional('determinationDeficiencyAmount', {
+        is: joi.exist().not(null),
+        otherwise: joi.number().optional().allow(null),
+        then: joi.number().required(),
+      })
+      .description(
+        'The total amount of penalties for the period or year determined by the Court.',
+      ),
     entityName: joi.string().valid('Statistic').required(),
-    lastDateOfPeriod: joi.when('yearOrPeriod', {
-      is: 'Period',
-      otherwise: joi
-        .optional()
-        .allow(null)
-        .description('Last date of the statistics period.'),
-      then: joiStrictTimestamp
-        .max('now')
-        .required()
-        .allow(null)
-        .description('Last date of the statistics period.'),
-    }),
-    totalPenalties: joi
+    irsDeficiencyAmount: joi
       .number()
       .required()
-      .description('The total amount of penalties for the period or year.'),
-    year: joi.when('yearOrPeriod', {
-      is: 'Year',
-      otherwise: joi
-        .optional()
-        .allow(null)
-        .description('The year of the statistics period.'),
-      then: joi
-        .number()
-        .integer()
-        .required()
-        .min(1900)
-        .max(new Date().getFullYear())
-        .description('The year of the statistics period.'),
-    }),
+      .description('The amount of the deficiency on the IRS notice.'),
+    irsTotalPenalties: joi
+      .number()
+      .required()
+      .description(
+        'The total amount of penalties for the period or year on the IRS notice.',
+      ),
+    lastDateOfPeriod: joiStrictTimestamp
+      .max('now')
+      .when('yearOrPeriod', {
+        is: 'Period',
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .description('Last date of the statistics period.'),
+    statisticId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .required()
+      .description('Unique statistic ID only used by the system.'),
+    year: joi
+      .number()
+      .integer()
+      .min(1900)
+      .max(new Date().getFullYear())
+      .when('yearOrPeriod', {
+        is: 'Year',
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .description('The year of the statistics period.'),
     yearOrPeriod: joi
       .string()
       .required()

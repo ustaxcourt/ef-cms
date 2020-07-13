@@ -1,8 +1,26 @@
 const DateHandler = require('./DateHandler');
+const { FORMATS, PATTERNS } = DateHandler;
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 const joiStrictTimestamp = getTimestampSchema();
 
 describe('DateHandler', () => {
+  describe('pattern matcher', () => {
+    describe('H:MM', () => {
+      it('matches valid times', () => {
+        expect(PATTERNS['H:MM'].test('00:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('9:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('09:00')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('10:30')).toBeTruthy();
+        expect(PATTERNS['H:MM'].test('23:59')).toBeTruthy();
+      });
+      it('rejects invalid times', () => {
+        expect(PATTERNS['H:MM'].test('7:60')).toBeFalsy();
+        expect(PATTERNS['H:MM'].test('29:59')).toBeFalsy();
+        expect(PATTERNS['H:MM'].test('30:00')).toBeFalsy();
+      });
+    });
+  });
+
   describe('prepareDateFromString', () => {
     it("Creates a new moment object for 'now' when given no inputs'", () => {
       const myMoment = DateHandler.prepareDateFromString();
@@ -107,6 +125,14 @@ describe('DateHandler', () => {
       });
       expect(result).toEqual('2000-01-21T00:00:00.000Z');
     });
+    it('calculates dates with an hour not at midnight', () => {
+      const result = DateHandler.calculateISODate({
+        dateString: '2000-01-01T20:01:23.212Z',
+        howMuch: 20,
+        units: 'days',
+      });
+      expect(result).toEqual('2000-01-21T20:01:23.212Z');
+    });
     it('calculates dates with negative adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-21T00:00:00.000Z',
@@ -129,7 +155,7 @@ describe('DateHandler', () => {
       // now confirm it converts "back" to originally desired time
       const formattedInEastern = DateHandler.formatDateString(
         startOfDay,
-        DateHandler.FORMATS.DATE_TIME,
+        FORMATS.DATE_TIME,
       );
       expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
     });
@@ -147,7 +173,7 @@ describe('DateHandler', () => {
       // now confirm it converts "back" to originally desired time
       const formattedInEastern = DateHandler.formatDateString(
         endOfDay,
-        DateHandler.FORMATS.DATE_TIME,
+        FORMATS.DATE_TIME,
       );
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
     });

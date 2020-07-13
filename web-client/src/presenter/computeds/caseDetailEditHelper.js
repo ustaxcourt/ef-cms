@@ -49,9 +49,14 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     }
   }
 
+  const receivedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(caseDetail.receivedAt, 'MM/DD/YYYY');
+
   return {
     ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
+    receivedAtFormatted,
     requestForPlaceOfTrialDocumentId,
     requestForPlaceOfTrialDocumentTitle,
     shouldShowIrsNoticeDate: caseDetail.hasVerifiedIrsNotice,

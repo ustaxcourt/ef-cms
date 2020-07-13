@@ -91,6 +91,11 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
+  const petitionDocument = applicationContext
+    .getUtilities()
+    .getPetitionDocumentFromDocuments(caseDetail.documents);
+  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+
   return {
     caseDeadlines,
     documentDetailTab,
@@ -105,6 +110,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
+    showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -121,6 +127,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
+    showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.privatePractitioners &&

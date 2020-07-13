@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseSearchBoxHelper as caseSearchBoxHelperComputed } from './caseSearchBoxHelper';
 import { runCompute } from 'cerebral/test';
@@ -12,7 +12,7 @@ const caseSearchBoxHelper = withAppContextDecorator(
 describe('caseSearchBoxHelper', () => {
   it('should return showSearchDescription true if the user role is not irsSuperuser', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
     });
 
@@ -25,7 +25,7 @@ describe('caseSearchBoxHelper', () => {
 
   it('should return showSearchDescription false if the user role is irsSuperuser', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsSuperuser,
+      role: ROLES.irsSuperuser,
       userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
     });
 

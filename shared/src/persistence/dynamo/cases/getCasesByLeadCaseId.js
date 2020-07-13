@@ -14,7 +14,7 @@ exports.getCasesByLeadCaseId = async ({ applicationContext, leadCaseId }) => {
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': leadCaseId,
+      ':gsi1pk': `case|${leadCaseId}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',

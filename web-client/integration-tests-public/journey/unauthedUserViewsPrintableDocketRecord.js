@@ -3,6 +3,6 @@ export const unauthedUserViewsPrintableDocketRecord = test => {
     await test.runSequence('gotoPublicPrintableDocketRecordSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(test.getState('pdfPreviewUrl')).toEqual('abc');
+    expect(test.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

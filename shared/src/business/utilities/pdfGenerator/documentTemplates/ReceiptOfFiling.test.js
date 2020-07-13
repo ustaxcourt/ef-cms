@@ -57,7 +57,7 @@ describe('ReceiptOfFiling', () => {
       `${options.caseTitle}, ${options.caseCaptionExtension}`,
     );
     expect(wrapper.find('#docket-number').text()).toEqual(
-      `Docket Number ${options.docketNumberWithSuffix}`,
+      `Docket No. ${options.docketNumberWithSuffix}`,
     );
     expect(wrapper.find('.case-information h3').text()).toEqual(
       'Receipt of Filing',

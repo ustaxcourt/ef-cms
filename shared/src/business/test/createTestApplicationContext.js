@@ -9,6 +9,10 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  Case,
+  getPetitionDocumentFromDocuments,
+} = require('../entities/cases/Case');
+const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
@@ -37,6 +41,9 @@ const {
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
+  formatJudgeName,
+} = require('../../../src/business/utilities/getFormattedJudgeName');
+const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -51,6 +58,9 @@ const {
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+const {
+  getDocumentTypeForAddressChange,
+} = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
@@ -99,7 +109,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { Case } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
@@ -107,6 +116,7 @@ const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -115,11 +125,18 @@ const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
 // TODO: Abstract for use elsewhere
-const getFakeFile = () => {
+const getFakeFile = returnArray => {
   const fakeFile = Buffer.from(fakeData, 'base64');
   fakeFile.name = 'fakeFile.pdf';
+
+  if (returnArray) {
+    return new Uint8Array(fakeFile);
+  }
+
   return fakeFile;
 };
+
+const getFakeFileUint8Array = () => getFakeFile(true);
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -173,6 +190,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
+    dateStringsCompared: jest
+      .fn()
+      .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatDateString: jest
@@ -180,16 +200,23 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.formatDateString),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
+    formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
     formattedTrialSessionDetails: jest
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocumentTypeForAddressChange: jest
+      .fn()
+      .mockImplementation(getDocumentTypeForAddressChange),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getPetitionDocumentFromDocuments: jest
+      .fn()
+      .mockImplementation(getPetitionDocumentFromDocuments),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -223,13 +250,20 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const getDocumentGeneratorsReturnMock = {
+    addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFileUint8Array),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
+    coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
+    noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
+    order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialNotice: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    trialCalendar: jest.fn().mockImplementation(getFakeFile),
+    trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
 
   const getTemplateGeneratorsReturnMock = {
@@ -239,9 +273,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     generatePrintableDocketRecordTemplate: jest
       .fn()
       .mockResolvedValue('<div></div>'),
-    generateStandingPretrialNoticeTemplate: jest.fn(),
-    generateTrialCalendarTemplate: jest.fn(),
-    generateTrialSessionPlanningReportTemplate: jest.fn(),
   };
 
   const mockGetChromiumBrowserReturnValue = {
@@ -304,6 +335,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
+    persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
@@ -367,7 +399,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       return new User(
         user || {
           name: 'richard',
-          role: User.ROLES.petitioner,
+          role: ROLES.petitioner,
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       );
@@ -394,7 +426,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfStyles: jest.fn(),
+    getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn(() => ({
       compile: () => {

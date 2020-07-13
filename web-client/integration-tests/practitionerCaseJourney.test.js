@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -38,7 +38,7 @@ describe('Practitioner requests access to case', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
@@ -68,7 +68,7 @@ describe('Practitioner requests access to case', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;

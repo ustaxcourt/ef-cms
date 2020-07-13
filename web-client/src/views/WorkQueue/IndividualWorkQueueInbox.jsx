@@ -20,16 +20,16 @@ export const IndividualWorkQueueInbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                <span className="padding-left-2px">Docket number</span>
+                <span className="padding-left-2px">Docket No.</span>
               </th>
               <th className="small">Received</th>
-              <th>Case title</th>
+              <th>Case Title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case status</th>
+              <th>Case Status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && (
                 <th className="small">Section</th>
@@ -74,7 +74,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
+                        href={item.editLink}
                         onClick={e => {
                           e.stopPropagation();
                         }}

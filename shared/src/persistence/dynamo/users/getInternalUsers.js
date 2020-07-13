@@ -2,7 +2,7 @@ const {
   ADC_SECTION,
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} = require('../../../business/entities/WorkQueue');
+} = require('../../../business/entities/EntityConstants');
 const { getUsersInSection } = require('./getUsersInSection');
 
 exports.getInternalUsers = async ({ applicationContext }) => {

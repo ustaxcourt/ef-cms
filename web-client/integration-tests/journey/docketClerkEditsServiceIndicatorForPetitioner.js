@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkEditsServiceIndicatorForPetitioner = test => {
   return it('docket clerk edits service indicator for a petitioner', async () => {

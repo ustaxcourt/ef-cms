@@ -7,6 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
+ * @returns {object} path execution results
  */
 export const updatePractitionerUserAction = async ({
   applicationContext,

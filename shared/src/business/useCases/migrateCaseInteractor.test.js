@@ -1,7 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase.js');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 const DATE = '2018-11-21T20:49:28.192Z';
@@ -42,6 +42,7 @@ describe('migrateCaseInteractor', () => {
     });
 
     caseMetadata = {
+      caseCaption: 'Custom Caption',
       caseType: 'Other',
       contactPrimary: {
         address1: '99 South Oak Lane',
@@ -60,7 +61,7 @@ describe('migrateCaseInteractor', () => {
       documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       petitionFile: new File([], 'test.pdf'),
       petitionFileSize: 1,
       preferredTrialCity: 'Fresno, California',
@@ -91,7 +92,7 @@ describe('migrateCaseInteractor', () => {
           docketNumber: '00101-00',
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },

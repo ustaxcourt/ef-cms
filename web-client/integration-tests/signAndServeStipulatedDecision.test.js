@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 
 import {
   createCourtIssuedDocketEntry,
@@ -134,6 +134,6 @@ describe('a user signs and serves a stipulated decision', () => {
       d => d.documentId === signedDocumentId,
     );
     expect(signedDocument.servedAt).toBeDefined();
-    expect(caseDetail.status).toEqual(Case.STATUS_TYPES.closed);
+    expect(caseDetail.status).toEqual(CASE_STATUS_TYPES.closed);
   });
 });

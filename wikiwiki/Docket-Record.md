@@ -9,7 +9,7 @@
 * Docket entries can be edited by internal users at any time during the case (not implemented yet)
 * Docket entries can be deleted by internal users (not implemented yet)
 * Request for Place of Trial is listed as an event docket entry with no document link if the place of trial was entered as metadata. If a paper Request for Place of Trial document is received, the docket entry contains a document link and functions the same as any electronically filed document
-
+* Pages displays on docket record to inform all users on how many pages including the coversheet the documents include
 
 ## Document Title (Docket Record)
 * Order of docket entry information: [Concatenated Document Title] [Additional Line 1 (C/S 04/17/19)(Attachment(s)) (Objection) (Lodged) Additional Line 2

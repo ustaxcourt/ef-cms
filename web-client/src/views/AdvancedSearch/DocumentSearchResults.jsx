@@ -8,17 +8,14 @@ import React from 'react';
 export const DocumentSearchResults = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
-    baseUrl: state.baseUrl,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
-    token: state.token,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
-    baseUrl,
-    pageSize,
+    openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
-    token,
   }) {
     return (
       <>
@@ -28,14 +25,14 @@ export const DocumentSearchResults = connect(
               ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
 
-            <table className="usa-table search-results responsive-table row-border-only">
+            <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Docket number</th>
-                  <th>Case title</th>
-                  <th>Order</th>
+                  <th aria-label="docket number">Docket No.</th>
+                  <th>Case Title</th>
+                  <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>
                   <th>Date</th>
                   <th>Judge</th>
@@ -49,31 +46,33 @@ export const DocumentSearchResults = connect(
                         {idx + 1}
                       </td>
                       <td aria-hidden="true" className="small-column">
-                        {result.isSealed && (
-                          <Icon
-                            aria-label="sealed"
-                            className="iconSealed"
-                            icon={['fa', 'lock']}
-                            size="1x"
-                          />
-                        )}
+                        {advancedDocumentSearchHelper.showSealedIcon &&
+                          result.isSealed && (
+                            <Icon
+                              aria-label="sealed"
+                              className="iconSealed"
+                              icon={['fa', 'lock']}
+                              size="1x"
+                            />
+                          )}
                       </td>
                       <td>
                         <CaseLink formattedCase={result} />
                       </td>
                       <td>{result.caseTitle}</td>
                       <td>
-                        <a
-                          href={
-                            advancedDocumentSearchHelper.isPublic
-                              ? `${baseUrl}/public-api/${result.caseId}/${result.documentId}/public-document-download-url`
-                              : `${baseUrl}/case-documents/${result.caseId}/${result.documentId}/document-download-url?token=${token}`
-                          }
-                          rel="noopener noreferrer"
-                          target="_blank"
+                        <Button
+                          link
+                          onClick={() => {
+                            openCaseDocumentDownloadUrlSequence({
+                              caseId: result.caseId,
+                              documentId: result.documentId,
+                              isPublic: advancedDocumentSearchHelper.isPublic,
+                            });
+                          }}
                         >
                           {result.documentTitle}
-                        </a>
+                        </Button>
                       </td>
                       <td>{result.numberOfPages}</td>
                       <td>{result.formattedFiledDate}</td>
@@ -91,10 +90,10 @@ export const DocumentSearchResults = connect(
         {advancedDocumentSearchHelper.showLoadMore && (
           <Button
             secondary
-            aria-label={`load ${pageSize} more results`}
+            aria-label={'load more results'}
             onClick={() => showMoreResultsSequence()}
           >
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedDocumentSearchHelper.showNoMatches && (

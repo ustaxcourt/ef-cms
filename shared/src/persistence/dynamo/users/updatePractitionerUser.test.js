@@ -5,7 +5,7 @@ const {
   updatePractitionerUser,
   updateUserRecords,
 } = require('./updatePractitionerUser');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
@@ -14,13 +14,13 @@ describe('updatePractitionerUser', () => {
     const oldUser = {
       barNumber: 'PT1234',
       name: 'Test Private Practitioner',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       section: 'privatePractitioner',
     };
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Private Practitioner',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
 
@@ -99,7 +99,7 @@ describe('updatePractitionerUser', () => {
         Item: {
           barNumber: 'PT1234',
           name: 'Test Practitioner',
-          role: User.ROLES.inactivePractitioner,
+          role: ROLES.inactivePractitioner,
           section: 'inactivePractitioner',
         },
       }),
@@ -107,7 +107,7 @@ describe('updatePractitionerUser', () => {
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
 
@@ -130,7 +130,7 @@ describe('updatePractitionerUser', () => {
         Item: {
           barNumber: 'PT1234',
           name: 'Test Practitioner',
-          role: User.ROLES.inactivePractitioner,
+          role: ROLES.inactivePractitioner,
           section: 'inactivePractitioner',
         },
       }),
@@ -138,7 +138,7 @@ describe('updatePractitionerUser', () => {
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
 
@@ -156,7 +156,7 @@ describe('updatePractitionerUser - with a cognito response', () => {
     const updatedUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: User.ROLES.inactivePractitioner,
+      role: ROLES.inactivePractitioner,
       section: 'inactivePractitioner',
     };
 

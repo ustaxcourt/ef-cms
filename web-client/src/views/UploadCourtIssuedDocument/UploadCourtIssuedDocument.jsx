@@ -133,7 +133,7 @@ export const UploadCourtIssuedDocument = connect(
                 <Button
                   onClick={() => {
                     uploadCourtIssuedDocumentSequence({
-                      tab: 'inProgress',
+                      tab: 'drafts',
                     });
                   }}
                 >

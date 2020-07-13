@@ -4,15 +4,10 @@ const fs = require('fs');
 // USAGE EXAMPLE: node createModule.js path1/file1 path2/file2
 const targets = [
   'shared/src/business/assets/ustcPdf.scss',
-  'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.pug',
-  'shared/src/business/useCaseHelper/courtIssuedDocument/paperServiceAddressPage.pug',
-  'shared/src/business/useCaseHelper/standingPretrialNotice/standingPretrialNotice.pug',
   'shared/src/business/utilities/htmlGenerator/index.pug',
   'shared/src/business/utilities/htmlGenerator/index.scss',
   'shared/src/business/utilities/generateHTMLTemplateForPDF/noticeOfTrialIssued.pug',
   'shared/static/images/ustc_seal.png',
-  'shared/src/business/utilities/generateHTMLTemplateForPDF/changeOfAddress.pug',
-  'shared/src/business/utilities/generateHTMLTemplateForPDF/changeOfAddress.scss',
 ];
 
 // specify mime-types for supported base64 encodings here.

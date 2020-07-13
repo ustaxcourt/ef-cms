@@ -14,10 +14,10 @@ import React from 'react';
 export const PublicSearch = connect(
   {
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
-    submitCaseDocketNumberSearchSequence:
-      sequences.submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseDocketNumberSearchSequence:
+      sequences.submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence:
       sequences.submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence:
@@ -25,8 +25,8 @@ export const PublicSearch = connect(
   },
   function PublicSearch({
     advancedSearchTabChangeSequence,
-    submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
   }) {
@@ -41,6 +41,7 @@ export const PublicSearch = connect(
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
+            defaultActiveTab="case"
             onSelect={() => {
               advancedSearchTabChangeSequence();
             }}
@@ -58,7 +59,7 @@ export const PublicSearch = connect(
                   submitPublicCaseAdvancedSearchSequence
                 }
                 submitDocketNumberSearchSequence={
-                  submitCaseDocketNumberSearchSequence
+                  submitPublicCaseDocketNumberSearchSequence
                 }
               />
               <SearchResults />

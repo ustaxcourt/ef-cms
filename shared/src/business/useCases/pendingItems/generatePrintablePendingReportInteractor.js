@@ -34,11 +34,13 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   const formattedPendingItems = pendingItems.map(pendingItem => ({
     ...pendingItem,
-    associatedJudgeFormatted: pendingItem.associatedJudge.replace(
-      /^Judge\s+/,
-      '',
-    ),
+    associatedJudgeFormatted: applicationContext
+      .getUtilities()
+      .formatJudgeName(pendingItem.associatedJudge),
     caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
+    docketNumberWithSuffix: `${pendingItem.docketNumber}${
+      pendingItem.docketNumberSuffix || ''
+    }`,
     formattedFiledDate: applicationContext
       .getUtilities()
       .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
@@ -56,7 +58,9 @@ exports.generatePrintablePendingReportInteractor = async ({
         applicationContext,
         caseId,
       });
-    reportTitle = `Docket ${caseResult.docketNumber}`;
+    reportTitle = `Docket ${caseResult.docketNumber}${
+      caseResult.docketNumberSuffix || ''
+    }`;
   }
 
   const pdf = await applicationContext.getDocumentGenerators().pendingReport({

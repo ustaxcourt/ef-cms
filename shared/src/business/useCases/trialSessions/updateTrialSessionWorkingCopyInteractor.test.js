@@ -5,8 +5,8 @@ const {
   updateTrialSessionWorkingCopyInteractor,
 } = require('./updateTrialSessionWorkingCopyInteractor');
 const { omit } = require('lodash');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 let user;
 
@@ -49,7 +49,7 @@ describe('Update trial session working copy', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     user = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
 
@@ -69,7 +69,7 @@ describe('Update trial session working copy', () => {
 
   it('correctly returns data from persistence', async () => {
     user = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
 

@@ -43,6 +43,12 @@ export const updateDocketEntryWithFileAction = async ({
     documentId,
   });
 
+  await applicationContext.getUseCases().addCoversheetInteractor({
+    applicationContext,
+    caseId,
+    documentId,
+  });
+
   const caseDetail = await applicationContext
     .getUseCases()
     .updateDocketEntryInteractor({
@@ -50,12 +56,6 @@ export const updateDocketEntryWithFileAction = async ({
       documentMetadata,
       primaryDocumentFileId: documentId,
     });
-
-  await applicationContext.getUseCases().addCoversheetInteractor({
-    applicationContext,
-    caseId: caseDetail.caseId,
-    documentId,
-  });
 
   return {
     caseDetail,

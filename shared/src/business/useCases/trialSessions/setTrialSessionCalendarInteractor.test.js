@@ -4,9 +4,9 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
-const { User } = require('../../entities/User');
-
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { ROLES } = require('../../entities/EntityConstants');
+const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -31,7 +31,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('throws an exception when there is a permissions issue', async () => {
     user = new User({
       name: 'Petitioner',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext
@@ -63,7 +63,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
     user = new User({
       name: 'petitionsClerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -109,7 +109,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
     user = new User({
       name: 'petitionsClerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -149,7 +149,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('should set work items as high priority for each case that is calendared', async () => {
     user = new User({
       name: 'petitionsClerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext

@@ -45,7 +45,10 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkAppliesSignatureToDraftDocument(test);
   petitionsClerkClearsSignatureFromDraftDocument(test);
   petitionsClerkAppliesSignatureToDraftDocument(test);
-  petitionsClerkSavesSignatureForDraftDocument(test);
+  petitionsClerkSavesSignatureForDraftDocument(
+    test,
+    'Order of Dismissal and Decision updated.',
+  );
   petitionsClerkViewsDocumentDetail(test);
   petitionsClerkRemovesSignatureFromDraftDocument(test);
 });

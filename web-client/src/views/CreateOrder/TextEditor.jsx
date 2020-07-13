@@ -1,13 +1,23 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
-import React, { useEffect, useRef } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
+import React, { Suspense, useEffect, useRef } from 'react';
 
-const Size = Quill.import('attributors/style/size');
+const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
-Size.whitelist = fontSizes;
-Quill.register(Size, true);
+
+const ReactQuill = React.lazy(async () => {
+  const reactQuill = await import('react-quill');
+  const Size = reactQuill.Quill.import('attributors/style/size');
+  Size.whitelist = fontSizes;
+  reactQuill.Quill.register(Size, true);
+
+  fontSizes.forEach(item => {
+    inlineStylesFontSizes[item] = `font-size: ${item};`;
+  });
+
+  return { default: reactQuill };
+});
 
 export const TextEditor = ({
   defaultValue,
@@ -38,74 +48,72 @@ export const TextEditor = ({
     return () => removeKeyboardListeners();
   }, []);
 
-  fontSizes.forEach(item => {
-    inlineStylesFontSizes[item] = `font-size: ${item};`;
-  });
-
   return (
     <>
-      <ReactQuill
-        defaultValue={editorDelta || defaultValue}
-        formats={[
-          'size',
-          'bold',
-          'italic',
-          'underline',
-          'bullet',
-          'list',
-          'indent',
-        ]}
-        modules={{
-          toolbar: [
-            [
-              {
-                size: fontSizes,
+      <Suspense fallback={<div>Loading...</div>}>
+        <ReactQuill
+          defaultValue={editorDelta || defaultValue}
+          formats={[
+            'size',
+            'bold',
+            'italic',
+            'underline',
+            'bullet',
+            'list',
+            'indent',
+          ]}
+          modules={{
+            toolbar: [
+              [
+                {
+                  size: fontSizes,
+                },
+              ],
+              ['bold', 'italic', 'underline'],
+              [
+                { list: 'bullet' },
+                { list: 'ordered' },
+                { indent: '-1' },
+                { indent: '+1' },
+              ],
+            ],
+          }}
+          tabIndex={0}
+          onChange={(content, delta, source, editor) => {
+            const fullDelta = editor.getContents();
+            const documentContents = editor.getText();
+            const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+              inlineStyles: {
+                size: inlineStylesFontSizes,
               },
-            ],
-            ['bold', 'italic', 'underline'],
-            [
-              { list: 'bullet' },
-              { list: 'ordered' },
-              { indent: '-1' },
-              { indent: '+1' },
-            ],
-          ],
-        }}
-        tabIndex={0}
-        onChange={(content, delta, source, editor) => {
-          const fullDelta = editor.getContents();
-          const documentContents = editor.getText();
-          const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
-            inlineStyles: {
-              size: inlineStylesFontSizes,
-            },
-          });
-          const html = converter.convert();
-          updateFormValueSequence({
-            key: 'richText',
-            value: html,
-          });
-          updateFormValueSequence({
-            key: 'editorDelta',
-            value: fullDelta,
-          });
-          updateFormValueSequence({
-            key: 'documentContents',
-            value: documentContents,
-          });
-          updateScreenMetadataSequence({
-            key: 'pristine',
-            value: false,
-          });
-        }}
-      />
-      <button
-        aria-hidden
-        className="usa-sr-only"
-        id="escape-focus-for-keyboard"
-        ref={quillEscapeRef}
-        tabIndex="-1"
-      />
+            });
+            const html = converter.convert();
+            updateFormValueSequence({
+              key: 'richText',
+              value: html,
+            });
+            updateFormValueSequence({
+              key: 'editorDelta',
+              value: fullDelta,
+            });
+            updateFormValueSequence({
+              key: 'documentContents',
+              value: documentContents,
+            });
+            updateScreenMetadataSequence({
+              key: 'pristine',
+              value: false,
+            });
+          }}
+        />
+        <button
+          aria-hidden
+          className="usa-sr-only"
+          id="escape-focus-for-keyboard"
+          ref={quillEscapeRef}
+          tabIndex="-1"
+        />
+      </Suspense>
     </>
   );
 };

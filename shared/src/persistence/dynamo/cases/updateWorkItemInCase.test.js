@@ -28,13 +28,16 @@ describe('updateWorkItemInCase', () => {
         ],
       },
       workItem: {
-        assigneeId: 'bob',
+        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         workItemId: '456',
       },
     });
     expect(updateStub.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
-        ':workItem': { assigneeId: 'bob', workItemId: '456' },
+        ':workItem': {
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+          workItemId: '456',
+        },
       },
       Key: {
         pk: 'case|123',

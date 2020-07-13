@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { PAYMENT_STATUS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -17,7 +17,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       state: {
         caseDetail: {
           caseType: 'some case type',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
@@ -31,7 +31,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       paymentDateWaivedDay: '01',
       paymentDateWaivedMonth: '03',
       paymentDateWaivedYear: '2019',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Small',
     });
@@ -45,7 +45,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       state: {
         caseDetail: {
           petitionPaymentDate: '2019-03-01T21:40:46.415Z',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
         form: {},
       },
@@ -55,7 +55,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       paymentDateDay: '01',
       paymentDateMonth: '03',
       paymentDateYear: '2019',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
     });
   });
 
@@ -66,14 +66,14 @@ describe('setupEditPetitionDetailFormAction', () => {
       },
       state: {
         caseDetail: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         },
         form: {},
       },
     });
 
     expect(result.state.form).toEqual({
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
   });
 

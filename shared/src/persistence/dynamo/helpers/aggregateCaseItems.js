@@ -17,12 +17,17 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   const irsPractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('irsPractitioner|'),
   );
+  const correspondences = caseAndCaseItems.filter(item =>
+    item.sk.startsWith('correspondence|'),
+  );
 
   const sortedDocketRecord = sortBy(docketRecord, 'index');
   const sortedDocuments = sortBy(documents, 'createdAt');
+  const sortedCorrespondences = sortBy(correspondences, 'filingDate');
 
   return {
     ...theCase,
+    correspondence: sortedCorrespondences,
     docketRecord: sortedDocketRecord,
     documents: sortedDocuments,
     irsPractitioners,

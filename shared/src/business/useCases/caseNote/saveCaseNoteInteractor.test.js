@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { ROLES } = require('../../entities/EntityConstants');
 const { saveCaseNoteInteractor } = require('./saveCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -26,7 +27,7 @@ describe('saveCaseNoteInteractor', () => {
   it('saves a case note', async () => {
     const mockJudge = new User({
       name: 'Judge Armen',
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

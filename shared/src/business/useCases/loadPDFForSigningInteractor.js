@@ -1,5 +1,3 @@
-const { PDFDocument } = require('pdf-lib');
-
 /**
  * loadPDFForSigningInteractor
  *
@@ -17,6 +15,8 @@ exports.loadPDFForSigningInteractor = async ({
   documentId,
   removeCover = false,
 }) => {
+  const { PDFDocument } = await applicationContext.getPdfLib();
+
   try {
     const pdfjsLib = await applicationContext.getPdfJs();
     let pdfData = await applicationContext.getPersistenceGateway().getDocument({

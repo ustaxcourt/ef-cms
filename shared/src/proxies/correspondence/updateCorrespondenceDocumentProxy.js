@@ -11,15 +11,16 @@ const { put } = require('../requests');
  */
 exports.updateCorrespondenceDocumentInteractor = ({
   applicationContext,
-  documentIdToEdit,
+  documentId,
   documentMetadata,
 }) => {
   const { caseId } = documentMetadata;
+
   return put({
     applicationContext,
     body: {
       documentMetadata,
     },
-    endpoint: `/case-documents/${caseId}/correspondence/${documentIdToEdit}`,
+    endpoint: `/case-documents/${caseId}/correspondence/${documentId}`,
   });
 };

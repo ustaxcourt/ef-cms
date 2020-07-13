@@ -205,7 +205,7 @@ export const CaseInformation = connect(
           </div>
         )}
         <h3 id="orders-needed">
-          Orders Needed <span className="usa-hint">(optional)</span>
+          Orders/Notices Needed<span className="usa-hint">(optional)</span>
         </h3>
         <div
           aria-labelledby="orders-needed"

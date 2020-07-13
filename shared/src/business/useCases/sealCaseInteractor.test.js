@@ -1,7 +1,7 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { ROLES } = require('../entities/EntityConstants');
 const { sealCaseInteractor } = require('./sealCaseInteractor');
-const { User } = require('../entities/User');
 
 describe('sealCaseInteractor', () => {
   beforeAll(() => {
@@ -23,7 +23,7 @@ describe('sealCaseInteractor', () => {
 
   it('should call updateCase with the sealedDate set on the case and return the updated case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
 

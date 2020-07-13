@@ -10,7 +10,6 @@ const {
 
 describe('change the case caption via the petition qc page', () => {
   before(() => {
-    cy.task('seed');
     navigateToPetitionQc(
       'petitionsclerk',
       '101-19',

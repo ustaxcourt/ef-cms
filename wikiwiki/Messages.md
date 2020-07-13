@@ -1,30 +1,93 @@
 [Return to Directory](./README.md)
 
-# Messages
+# Message Actions
 
-## Message sorting
-* Inbox - oldest to newest by Received date
-* Sent - newest to oldest by Sent date
-* Completed - newest to oldest by Completed date
+## Create New Message
+*  "Create New Message" is displayed in the actions dropdown on Case Detail header for all internal users
+* On click of Create New Message, the Create New Message modal displays
 
-## Message flow
-* Message comes into Individual and Section Inbox and always displays the message text
-* When clerk forwards a message (sent to), the message moves to Sent tab for both Individual and Section
-* Open messages appear in In Progress Messages on case detail page
-* All messages for a document appear in Document detail page in either In Progress or Complete tabs 
+**Select section/ recipient**
+* Required fields
 
-## Unread messages
-* When a new message is received, a closed envelope icon is displayed on page refresh (not in real time) next to the Messages link in the header
-* Total number of unread messages is displayed next to the My Messages page title
-* Unread messages are indicated by bold text (Document Title) and a closed envelope icon
-* Messages are considered “read” when the user clicks on the item into the Document Detail page from their My Messages inbox  
-* Section Messages inbox does not indicate unread messages with an icon
-* Message count shown on Section Messages should be number of TOTAL messages in box
+**Subject line**
+* Is required
+* Free text field
 
-## Sent messages
-* Sent messages are visible in the Sent box for 7 days
+**Add message**
+* Is required
+* Free text field
 
-## Message icons
-* If Unread - Bold with blue envelope icon
-* If High Priority - Red exclamation point (not implemented yet)
-* If High Priority and Unread - Red exclamation point and bold (not implemented yet)
+**On Save**
+* Modal closes and success message displays "Your message has been sent."
+* Message is saved and associated with case
+* Message Detail screen is created
+* Message appears in Sent box for sending user and Section Sent box
+* Message appears in the recipient's My Messages Inbox, and the Section Messages Inbox
+
+## Reply to a Message
+**Recipient**
+* original sender is displayed read-only as recipient
+
+**Subject line**
+* current subject is displayed (i.e. the subject line sent in the original message)
+* subject line field is editable
+
+**Attachments**
+* Displays all documents attached to message in read-only
+
+**On Send**
+* App remains on Message Detail with success message displayed
+* Sent message displays in My Messages > Sent and Section Messages > Sent box
+* Message displays in My Messages > Inbox / Section Messages > Inbox of the recipient
+* Message thread displays on Message Detail screen
+
+## Forward a Message
+**Select section/ Select recipient**
+* User must select section and then recipient from dropdowns
+
+**Subject Line**
+* current subject is displayed (i.e. the subject line sent in the original message)
+* subject line field is editable
+
+**Attachments**
+* Displays all documents attached to message in read-only
+* User is able to  add up to five total attached documents
+
+**On Send**
+* App remains on Message Detail with success message displayed
+* Sent message displays in My Messages > Sent and Section Messages > Sent box
+* Message displays in My Messages > Inbox / Section Messages > Inbox of the recipient
+* Message thread displays on Message Detail screen
+
+## Complete a Message
+**Add Comment**
+* Optional field - current functionality
+
+**On Complete**
+* App remains on Message Detail with completed warning displayed
+* Message no longer displays in any user Inbox
+* Completed message displays in My Messages > Completed and Section Messages > Completed
+* Message thread displays as Completed on Message Detail screen
+
+## Create Order/Notice From Message
+**On click of "Create Order"**
+* User selects the title of the order and continues
+* User enter/pastes Order text and saves
+
+#### Apply Signature
+* On click of Save, app navigates to the Apply Signature screen for all Orders; for Notice, the app navigates back to the Message Detail (because the Clerk of the Court signature is automatically applied)
+* User can skip signature and be brought back to the Message Detail
+* User can apply and save signature
+
+**On click of Skip or Save Signature**
+* App navigates back to Message Detail screen with success message displayed
+* Order is added to Drafts documents table
+* Order is attached to Message
+* Order is displayed as attachment on Message Detail screen
+* If signature was added, Edit Signature action is displayed
+* If signature was skipped, Apply Signature action is displayed
+
+## Message Thread
+* If there is more than one message in a thread, messages are displayed in accordion
+* Current ("active") message is displayed as accordion header
+* Expanded accordion displays all messages sorted newest to oldest

@@ -1,5 +1,5 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { contactEditHelper as contactEditHelperComputed } from './contactEditHelper';
 import { runCompute } from 'cerebral/test';
@@ -22,7 +22,7 @@ describe('contactEditHelper', () => {
       ...state,
       caseDetail: {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
       },
     };
 
@@ -37,7 +37,7 @@ describe('contactEditHelper', () => {
       ...state,
       caseDetail: {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
       },
     };
 
@@ -52,7 +52,7 @@ describe('contactEditHelper', () => {
       ...state,
       caseDetail: {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
       },
     };
 
@@ -67,7 +67,7 @@ describe('contactEditHelper', () => {
       ...state,
       caseDetail: {
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.guardian,
+        partyType: PARTY_TYPES.guardian,
       },
     };
 

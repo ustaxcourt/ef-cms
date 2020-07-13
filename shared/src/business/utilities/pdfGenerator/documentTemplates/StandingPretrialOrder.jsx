@@ -3,7 +3,7 @@ const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-export const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
+export const StandingPretrialOrder = ({ options, trialInfo }) => {
   return (
     <>
       <PrimaryHeader />
@@ -99,17 +99,7 @@ export const StandingPretrialOrder = ({ footerDate, options, trialInfo }) => {
           material that is not so stipulated or exchanged, unless the parties
           have agreed otherwise or the Court so allows for good cause shown.
         </p>
-      </div>
 
-      <h3
-        className="text-center text-bold"
-        id="served-stamp"
-        style={{ pageBreakAfter: 'always' }}
-      >
-        Served {footerDate}
-      </h3>
-
-      <div style={{ marginLeft: '20px' }}>
         <p>
           <strong className="text-underline">3. Pretrial Memoranda.</strong> It
           is ORDERED that, unless a basis of settlement (resolution of the

@@ -127,7 +127,9 @@ export const DraftDocuments = connect(
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
-        {showModal === 'ConfirmEditModal' && <ConfirmEditModal />}
+        {showModal === 'ConfirmEditModal' && (
+          <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
+        )}
       </>
     );
   },

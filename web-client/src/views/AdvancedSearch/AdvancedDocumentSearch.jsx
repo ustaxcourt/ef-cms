@@ -47,7 +47,7 @@ export const AdvancedDocumentSearch = connect(
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value.toUpperCase(),
                       });
                     }}
                   />
@@ -205,7 +205,7 @@ export const AdvancedDocumentSearch = connect(
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value.toUpperCase(),
                       });
                     }}
                   />
@@ -243,7 +243,7 @@ export const AdvancedDocumentSearch = connect(
                     className="usa-label padding-top-105"
                     htmlFor="order-opinion"
                   >
-                    Opinion type
+                    Opinion Type
                   </label>
                   <BindedSelect
                     bind={`advancedSearchForm.${formType}.opinionType`}

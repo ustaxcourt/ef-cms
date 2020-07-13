@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
 import { runCompute } from 'cerebral/test';
@@ -17,7 +17,7 @@ const requestAccessHelper = withAppContextDecorator(
 );
 
 applicationContext.getCurrentUser = () => ({
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
 });
 
 describe('requestAccessHelper', () => {
@@ -90,7 +90,7 @@ describe('requestAccessHelper', () => {
 
   it('returns correct number of document options for user role respondent', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
     });
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);

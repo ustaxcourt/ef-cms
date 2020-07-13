@@ -1,5 +1,7 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { User } from '../../../../shared/src/business/entities/User';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -26,16 +28,20 @@ const getBaseState = user => {
 };
 
 const petitionsClerkUser = {
-  role: User.ROLES.petitionsClerk,
+  role: ROLES.petitionsClerk,
   userId: '123',
 };
 const docketClerkUser = {
-  role: User.ROLES.docketClerk,
+  role: ROLES.docketClerk,
   userId: '234',
 };
 const judgeUser = {
-  role: User.ROLES.judge,
+  role: ROLES.judge,
   userId: '345',
+};
+const petitionerUser = {
+  role: ROLES.petitioner,
+  userId: '456',
 };
 
 describe('formattedCaseDetail', () => {
@@ -55,6 +61,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -78,6 +85,7 @@ describe('formattedCaseDetail', () => {
   it('maps docket record documents', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -119,6 +127,7 @@ describe('formattedCaseDetail', () => {
       contactSecondary: {
         name: 'Bill',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Amended Petition',
@@ -328,6 +337,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Order for Amended Petition',
@@ -406,6 +416,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -468,7 +479,7 @@ describe('formattedCaseDetail', () => {
           workItems: [{ isQC: true }],
         },
       ],
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -480,7 +491,7 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editLink: '/review',
+        editLink: '',
         showDocumentEditLink: true,
       },
       {
@@ -504,6 +515,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary: {
         name: 'Bob',
       },
+      correspondence: [],
       docketRecord: [
         {
           description: 'Petition',
@@ -537,7 +549,7 @@ describe('formattedCaseDetail', () => {
         },
       ],
       isPaper: true,
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -550,13 +562,13 @@ describe('formattedCaseDetail', () => {
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Petition',
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentEditLink: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
       },
       {
         description: 'Request for Place of Trial at Boise, Idaho',
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentEditLink: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
       },
     ]);
   });
@@ -567,6 +579,7 @@ describe('formattedCaseDetail', () => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         caseId: 'abdc-1234-5678-xyz',
+        correspondence: [],
         docketRecord: [
           {
             description: 'Petition',
@@ -759,6 +772,7 @@ describe('formattedCaseDetail', () => {
   describe('case name mapping', () => {
     it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -774,6 +788,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -789,6 +804,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo and friends,  Petitioners ',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -804,6 +820,7 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -821,6 +838,7 @@ describe('formattedCaseDetail', () => {
     it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
@@ -838,6 +856,7 @@ describe('formattedCaseDetail', () => {
     it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
@@ -858,8 +877,9 @@ describe('formattedCaseDetail', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -880,8 +900,9 @@ describe('formattedCaseDetail', () => {
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -902,6 +923,7 @@ describe('formattedCaseDetail', () => {
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
@@ -945,6 +967,7 @@ describe('formattedCaseDetail', () => {
 
     it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
       const caseDetail = {
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
@@ -968,6 +991,7 @@ describe('formattedCaseDetail', () => {
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -987,6 +1011,7 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
+        correspondence: [],
         docketRecord: [
           {
             description: 'Petition',
@@ -1115,15 +1140,17 @@ describe('formattedCaseDetail', () => {
         consolidatedCases: [
           {
             associatedJudge: 'Guy Fieri',
+            correspondence: [],
             petitioners: [{ name: 'Bobby Flay' }],
-            status: Case.STATUS_TYPES.calendared,
+            status: CASE_STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
             trialSessionId: '123',
           },
         ],
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1144,8 +1171,9 @@ describe('formattedCaseDetail', () => {
     it('should default consolidatedCases to an empty array if they do not exist', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
+        correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1173,6 +1201,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {
           name: 'Bob',
         },
+        correspondence: [],
         docketRecord: [
           {
             description: 'Motion to Dismiss for Lack of Jurisdiction',
@@ -1375,6 +1404,293 @@ describe('formattedCaseDetail', () => {
       expect(
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
       ).toEqual(true);
+    });
+  });
+
+  describe('showEditDocketRecordEntry', () => {
+    let caseDetail;
+
+    beforeAll(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {
+          name: 'Bob',
+        },
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 2,
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 7,
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+        ],
+      };
+    });
+
+    it('should show number of pages from the docket record with a mapped document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].numberOfPages).toEqual(24);
+    });
+
+    it('should show number of pages from the document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[4].numberOfPages).toEqual(9);
+    });
+
+    it('should show zero (0) number of pages with no document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[1].numberOfPages).toEqual(0);
+    });
+  });
+
+  describe('stricken docket record', () => {
+    let caseDetail;
+
+    beforeAll(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {
+          name: 'Bob',
+        },
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+          {
+            description: 'System Generated',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 2,
+          },
+          {
+            description: 'Court Issued - Not Served',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            numberOfPages: 7,
+          },
+          {
+            description: 'Court Issued - Served',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'System Generated',
+            documentType: 'Notice of Trial',
+            eventCode: 'NDT',
+            workItems: [{ isQC: true }],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
+            documentTitle: 'Court Issued - Not Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
+            documentTitle: 'Court Issued - Served',
+            documentType: 'O - Order',
+            eventCode: 'O',
+            isCourtIssuedDocument: true,
+            numberOfPages: 9,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+        ],
+      };
+    });
+
+    it('should not show the link to an external user for a document with a stricken docket record', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail,
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(true);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+        false,
+      );
+    });
+
+    it('should show the link to an internal user for a document with a stricken docket record', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: true,
+            DOCKET_ENTRY: true,
+            UPDATE_CASE: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(false);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentEditLink).toEqual(
+        true,
+      );
     });
   });
 });

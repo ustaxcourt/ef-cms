@@ -27,9 +27,7 @@ describe('DocketHeader', () => {
 
   it('renders the docket number from props', () => {
     let wrapper = shallow(<DocketHeader docketNumberWithSuffix="123-45S" />);
-    expect(wrapper.find('#docket-number').text()).toEqual(
-      'Docket Number 123-45S',
-    );
+    expect(wrapper.find('#docket-number').text()).toEqual('Docket No. 123-45S');
   });
 
   it('only renders an h3 element if h3 prop is provided', () => {

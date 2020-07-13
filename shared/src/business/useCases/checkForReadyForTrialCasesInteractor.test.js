@@ -2,7 +2,7 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('./checkForReadyForTrialCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -91,7 +91,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
           workItems: [],
         },
       ],
-      status: Case.STATUS_TYPES.generalDocket,
+      status: CASE_STATUS_TYPES.generalDocket,
     });
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
@@ -118,7 +118,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
      */
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       ...MOCK_CASE,
-      status: Case.STATUS_TYPES.generalDocket,
+      status: CASE_STATUS_TYPES.generalDocket,
     });
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});

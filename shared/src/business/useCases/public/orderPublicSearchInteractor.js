@@ -1,5 +1,5 @@
-const { Document } = require('../../entities/Document');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
+const { ORDER_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
 
 /**
  * orderPublicSearchInteractor
@@ -40,7 +40,7 @@ exports.orderPublicSearchInteractor = async ({
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_DOCUMENT_TYPES,
       judgeType: 'signedJudgeName',
       ...rawSearch,
     });

@@ -8,124 +8,9 @@ const {
 const { createISODateString } = require('../../utilities/DateHandler');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
+const { SESSION_TERMS, SESSION_TYPES } = require('../EntityConstants');
 
 const joiStrictTimestamp = getTimestampSchema();
-
-const COMMON_CITIES = [
-  { city: 'Birmingham', state: 'Alabama' },
-  { city: 'Mobile', state: 'Alabama' },
-  { city: 'Anchorage', state: 'Alaska' },
-  { city: 'Phoenix', state: 'Arizona' },
-  { city: 'Little Rock', state: 'Arkansas' },
-  { city: 'Los Angeles', state: 'California' },
-  { city: 'San Diego', state: 'California' },
-  { city: 'San Francisco', state: 'California' },
-  { city: 'Denver', state: 'Colorado' },
-  { city: 'Hartford', state: 'Connecticut' },
-  { city: 'Washington', state: 'District of Columbia' },
-  { city: 'Jacksonville', state: 'Florida' },
-  { city: 'Miami', state: 'Florida' },
-  { city: 'Tampa', state: 'Florida' },
-  { city: 'Atlanta', state: 'Georgia' },
-  { city: 'Honolulu', state: 'Hawaii' },
-  { city: 'Boise', state: 'Idaho' },
-  { city: 'Chicago', state: 'Illinois' },
-  { city: 'Indianapolis', state: 'Indiana' },
-  { city: 'Des Moines', state: 'Iowa' },
-  { city: 'Louisville', state: 'Kentucky' },
-  { city: 'New Orleans', state: 'Louisiana' },
-  { city: 'Baltimore', state: 'Maryland' },
-  { city: 'Boston', state: 'Massachusetts' },
-  { city: 'Detroit', state: 'Michigan' },
-  { city: 'St. Paul', state: 'Minnesota' },
-  { city: 'Jackson', state: 'Mississippi' },
-  { city: 'Kansas City', state: 'Missouri' },
-  { city: 'St. Louis', state: 'Missouri' },
-  { city: 'Helena', state: 'Montana' },
-  { city: 'Omaha', state: 'Nebraska' },
-  { city: 'Las Vegas', state: 'Nevada' },
-  { city: 'Reno', state: 'Nevada' },
-  { city: 'Albuquerque', state: 'New Mexico' },
-  { city: 'Buffalo', state: 'New York' },
-  { city: 'New York City', state: 'New York' },
-  { city: 'Winston-Salem', state: 'North Carolina' },
-  { city: 'Cincinnati', state: 'Ohio' },
-  { city: 'Cleveland', state: 'Ohio' },
-  { city: 'Columbus', state: 'Ohio' },
-  { city: 'Oklahoma City', state: 'Oklahoma' },
-  { city: 'Portland', state: 'Oregon' },
-  { city: 'Philadelphia', state: 'Pennsylvania' },
-  { city: 'Pittsburgh', state: 'Pennsylvania' },
-  { city: 'Columbia', state: 'South Carolina' },
-  { city: 'Knoxville', state: 'Tennessee' },
-  { city: 'Memphis', state: 'Tennessee' },
-  { city: 'Nashville', state: 'Tennessee' },
-  { city: 'Dallas', state: 'Texas' },
-  { city: 'El Paso', state: 'Texas' },
-  { city: 'Houston', state: 'Texas' },
-  { city: 'Lubbock', state: 'Texas' },
-  { city: 'San Antonio', state: 'Texas' },
-  { city: 'Salt Lake City', state: 'Utah' },
-  { city: 'Richmond', state: 'Virginia' },
-  { city: 'Seattle', state: 'Washington' },
-  { city: 'Spokane', state: 'Washington' },
-  { city: 'Charleston', state: 'West Virginia' },
-  { city: 'Milwaukee', state: 'Wisconsin' },
-];
-
-const SMALL_CITIES = [
-  { city: 'Fresno', state: 'California' },
-  { city: 'Tallahassee', state: 'Florida' },
-  { city: 'Pocatello', state: 'Idaho' },
-  { city: 'Peoria', state: 'Illinois' },
-  { city: 'Wichita', state: 'Kansas' },
-  { city: 'Shreveport', state: 'Louisiana' },
-  { city: 'Portland', state: 'Maine' },
-  { city: 'Billings', state: 'Montana' },
-  { city: 'Albany', state: 'New York' },
-  { city: 'Syracuse', state: 'New York' },
-  { city: 'Bismarck', state: 'North Dakota' },
-  { city: 'Aberdeen', state: 'South Dakota' },
-  { city: 'Burlington', state: 'Vermont' },
-  { city: 'Roanoke', state: 'Virginia' },
-  { city: 'Cheyenne', state: 'Wyoming' },
-  ...COMMON_CITIES,
-];
-
-TrialSession.TRIAL_CITIES = {
-  ALL: SMALL_CITIES,
-  REGULAR: COMMON_CITIES,
-  SMALL: SMALL_CITIES,
-};
-
-TrialSession.TRIAL_CITY_STRINGS = SMALL_CITIES.map(
-  location => `${location.city}, ${location.state}`,
-);
-
-TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
-
-TrialSession.SESSION_TYPES = [
-  'Regular',
-  'Small',
-  'Hybrid',
-  'Special',
-  'Motion/Hearing',
-];
-
-TrialSession.SESSION_STATUS_GROUPS = {
-  all: 'All',
-  closed: 'Closed',
-  new: 'New',
-  open: 'Open',
-};
-
-TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
-  'address1',
-  'city',
-  'state',
-  'postalCode',
-  'judge',
-];
 
 TrialSession.validationName = 'TrialSession';
 
@@ -202,6 +87,14 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
   trialLocation: 'Select a trial session location',
 };
 
+TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
+  'address1',
+  'city',
+  'state',
+  'postalCode',
+  'judge',
+];
+
 TrialSession.validationRules = {
   COMMON: {
     address1: joi.string().allow('').optional(),
@@ -220,35 +113,25 @@ TrialSession.validationRules = {
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
-      .valid(...TrialSession.SESSION_TYPES)
+      .valid(...SESSION_TYPES)
       .required(),
     startDate: joiStrictTimestamp.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().allow('').optional(),
     swingSession: joi.boolean().optional(),
-    swingSessionId: joi.when('swingSession', {
+    swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
       is: true,
       otherwise: joi.string().optional(),
-      then: joi
-        .string()
-        .uuid({
-          version: ['uuidv4'],
-        })
-        .required(),
+      then: joi.required(),
     }),
     term: joi
       .string()
-      .valid(...TrialSession.SESSION_TERMS)
+      .valid(...SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
     trialClerk: joi.object().optional(),
     trialLocation: joi.string().required(),
-    trialSessionId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
 
@@ -258,20 +141,18 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        caseId: joi.string().uuid({
-          version: ['uuidv4'],
-        }),
-        disposition: joi.when('removedFromTrial', {
+        caseId: JoiValidationConstants.UUID,
+        disposition: joi.string().when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joi.string().required(),
+          then: joi.required(),
         }),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
-        removedFromTrialDate: joi.when('removedFromTrial', {
+        removedFromTrialDate: joiStrictTimestamp.when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
-          then: joiStrictTimestamp.required(),
+          then: joi.required(),
         }),
       }),
     ),

@@ -1,4 +1,4 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -28,7 +28,7 @@ describe('validateUpdateCaseModalAction', () => {
       state: {
         modal: {
           caseCaption: 'A case caption',
-          caseStatus: Case.STATUS_TYPES.closed,
+          caseStatus: CASE_STATUS_TYPES.closed,
         },
       },
     });
@@ -46,7 +46,7 @@ describe('validateUpdateCaseModalAction', () => {
         modal: {
           associatedJudge: 'Judge Armen',
           caseCaption: 'A case caption',
-          caseStatus: Case.STATUS_TYPES.submitted,
+          caseStatus: CASE_STATUS_TYPES.submitted,
         },
       },
     });
@@ -63,7 +63,7 @@ describe('validateUpdateCaseModalAction', () => {
       state: {
         modal: {
           associatedJudge: 'Judge Armen',
-          caseStatus: Case.STATUS_TYPES.submitted,
+          caseStatus: CASE_STATUS_TYPES.submitted,
         },
       },
     });
@@ -97,7 +97,7 @@ describe('validateUpdateCaseModalAction', () => {
       state: {
         modal: {
           caseCaption: 'A case caption',
-          caseStatus: Case.STATUS_TYPES.submitted,
+          caseStatus: CASE_STATUS_TYPES.submitted,
         },
       },
     });

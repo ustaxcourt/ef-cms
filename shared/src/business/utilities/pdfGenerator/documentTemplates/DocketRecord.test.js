@@ -1,5 +1,5 @@
 const React = require('react');
-const { ContactFactory } = require('../../../entities/contacts/ContactFactory');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
 
@@ -28,7 +28,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner',
       phone: '123-124-1234',
       postalCode: '12345',
-      state: 'STATE',
+      state: 'AL',
     };
 
     contactSecondary = {
@@ -40,7 +40,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner 2',
       phone: '123-124-5678',
       postalCode: '12345',
-      state: 'STATE',
+      state: 'AL',
     };
 
     privatePractitioner = {
@@ -53,7 +53,7 @@ describe('DocketRecord', () => {
         country: 'USA',
         phone: '234-123-4567',
         postalCode: '12345',
-        state: 'STATE',
+        state: 'AL',
       },
       formattedName: 'Test Private Practitioner (PT20001)',
       name: 'Test Private Practitioner',
@@ -69,7 +69,7 @@ describe('DocketRecord', () => {
         country: 'USA',
         phone: '234-123-4567',
         postalCode: '12345',
-        state: 'STATE',
+        state: 'AL',
       },
       name: 'Test IRS Practitioner',
     };
@@ -107,7 +107,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -138,7 +138,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -158,7 +158,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -181,13 +181,13 @@ describe('DocketRecord', () => {
   });
 
   it("displays a party's country if international", () => {
-    contactPrimary.countryType = ContactFactory.COUNTRY_TYPES.INTERNATIONAL;
+    contactPrimary.countryType = COUNTRY_TYPES.INTERNATIONAL;
     contactPrimary.country = 'The Republic of Texas';
 
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -205,7 +205,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -225,7 +225,7 @@ describe('DocketRecord', () => {
     let wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -238,7 +238,7 @@ describe('DocketRecord', () => {
     wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -279,7 +279,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -308,7 +308,7 @@ describe('DocketRecord', () => {
     let wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -321,7 +321,7 @@ describe('DocketRecord', () => {
     wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -350,7 +350,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -376,7 +376,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -394,7 +394,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -411,7 +411,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -428,7 +428,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
@@ -446,7 +446,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        countryTypes={ContactFactory.COUNTRY_TYPES}
+        countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,

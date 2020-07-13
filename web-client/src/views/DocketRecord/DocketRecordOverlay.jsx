@@ -10,21 +10,20 @@ const modalRoot = document.getElementById('modal-root');
 
 export const DocketRecordOverlay = connect(
   {
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
     formattedCaseDetail: state.formattedCaseDetail,
-    token: state.token,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
   },
   function DocketRecordOverlay({
-    baseUrl,
     caseDetail,
     dismissModalSequence,
     docketRecordIndex,
     formattedCaseDetail,
+    openCaseDocumentDownloadUrlSequence,
     runCancelSequence,
-    token,
   }) {
     const elRef = React.useRef(null);
 
@@ -104,17 +103,23 @@ export const DocketRecordOverlay = connect(
               <hr className="margin-top-1 margin-bottom-2" />
               <h3 tabIndex="-1">{record.description}</h3>
               <Button
+                link
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
-                href={`${baseUrl}/case-documents/${caseDetail.caseId}/${document.documentId}/document-download-url?token=${token}`}
-                rel="noreferrer noopener"
-                target="_blank"
+                onClick={() => {
+                  openCaseDocumentDownloadUrlSequence({
+                    caseId: caseDetail.caseId,
+                    documentId: document.documentId,
+                  });
+                }}
               >
                 <FontAwesomeIcon icon={['fas', 'file-pdf']} />
                 View PDF
               </Button>
               <p className="semi-bold label margin-top-3">Date</p>
               <p className="margin-top-0">{document.createdAtFormatted}</p>
+              <p className="semi-bold label margin-top-3">Pages</p>
+              <p className="margin-top-0">{record.numberOfPages}</p>
               <p className="semi-bold label margin-top-3">Filed By</p>
               <p className="margin-top-0">{document && document.filedBy}</p>
               <p className="semi-bold label margin-top-3">Action</p>

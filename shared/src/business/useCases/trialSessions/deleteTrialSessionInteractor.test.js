@@ -4,6 +4,7 @@ const {
 const {
   deleteTrialSessionInteractor,
 } = require('./deleteTrialSessionInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -40,7 +41,7 @@ describe('deleteTrialSessionInteractor', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -55,7 +56,7 @@ describe('deleteTrialSessionInteractor', () => {
   it('throws an exception when it fails to find a trial session', async () => {
     user = new User({
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -72,7 +73,7 @@ describe('deleteTrialSessionInteractor', () => {
   it('throws error when trial session start date is in the past', async () => {
     user = new User({
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -91,7 +92,7 @@ describe('deleteTrialSessionInteractor', () => {
   it('throws error if trial session is calendared', async () => {
     user = new User({
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -112,7 +113,7 @@ describe('deleteTrialSessionInteractor', () => {
   it('deletes the trial session and invokes expected persistence methods', async () => {
     user = new User({
       name: 'Docket Clerk',
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

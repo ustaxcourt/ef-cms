@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
 
 /**
  * Gets case caption parts from case data
@@ -8,7 +9,6 @@ const { Case } = require('../entities/cases/Case');
  */
 
 const getCaseCaptionMeta = caseDetail => {
-  const { CASE_CAPTION_POSTFIX } = Case;
   const { caseCaption } = caseDetail;
 
   const caseTitle = Case.getCaseTitle(caseDetail.caseCaption);

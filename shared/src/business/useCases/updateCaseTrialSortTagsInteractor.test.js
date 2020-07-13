@@ -3,8 +3,10 @@ const {
 } = require('./updateCaseTrialSortTagsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
+const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('Update case trial sort tags', () => {
@@ -16,7 +18,7 @@ describe('Update case trial sort tags', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'bob',
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
@@ -39,7 +41,7 @@ describe('Update case trial sort tags', () => {
   });
 
   it('calls persistence if case status is ready for trial', async () => {
-    mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+    mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
 
     await updateCaseTrialSortTagsInteractor({
       applicationContext,
@@ -79,7 +81,7 @@ describe('Update case trial sort tags', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+    mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(omit(mockCase, 'docketNumber'));

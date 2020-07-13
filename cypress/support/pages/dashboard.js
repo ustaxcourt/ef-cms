@@ -19,12 +19,6 @@ exports.viewSectionOutbox = () => {
   cy.get('button#section-sent-tab').click();
 };
 
-exports.viewDocumentQCMyInbox = () => {
-  cy.visit('/document-qc/my/inbox');
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(1000);
-};
-
 exports.viewDocumentQCSectionInbox = () => {
   cy.visit('/document-qc/section/inbox');
 };
@@ -59,12 +53,4 @@ exports.getWorkItemRow = docketNumber => {
 
 exports.getSendButton = () => {
   return cy.contains('button', 'Send');
-};
-
-exports.getWorkItemMessages = () => {
-  return cy.get('#tab-pending-messages').click();
-};
-
-exports.getWorkItemMessage = workItemId => {
-  return cy.get(`div.workitem-${workItemId}`);
 };

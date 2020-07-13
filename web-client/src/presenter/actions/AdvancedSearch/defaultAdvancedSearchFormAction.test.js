@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
+import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
@@ -18,7 +18,7 @@ describe('defaultAdvancedSearchFormAction', () => {
     expect(result.state.advancedSearchForm).toEqual({
       caseSearchByDocketNumber: {},
       caseSearchByName: {
-        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        countryType: COUNTRY_TYPES.DOMESTIC,
       },
       opinionSearch: {},
       orderSearch: {},
@@ -46,7 +46,7 @@ describe('defaultAdvancedSearchFormAction', () => {
         advancedSearchForm: {
           caseSearchByDocketNumber: { yes: true },
           caseSearchByName: {
-            countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             no: false,
           },
           opinionSearch: {},
@@ -61,7 +61,7 @@ describe('defaultAdvancedSearchFormAction', () => {
     expect(result.state.advancedSearchForm).toEqual({
       caseSearchByDocketNumber: { yes: true },
       caseSearchByName: {
-        countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
         no: false,
       },
       opinionSearch: {},

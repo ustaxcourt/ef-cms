@@ -8,14 +8,9 @@ import React from 'react';
 export const SearchResults = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
-    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  function SearchResults({
-    advancedSearchHelper,
-    pageSize,
-    showMoreResultsSequence,
-  }) {
+  function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
@@ -31,14 +26,14 @@ export const SearchResults = connect(
                   <NonMobile>
                     <th>Petitioner(s)</th>
                   </NonMobile>
-                  <th>Docket number</th>
+                  <th>Docket Number</th>
                   <NonMobile>
-                    <th>Date filed</th>
-                    <th>Case title</th>
+                    <th>Date Filed</th>
+                    <th>Case Title</th>
                     <th>State</th>
                   </NonMobile>
                   <Mobile>
-                    <th>Case title</th>
+                    <th>Case Title</th>
                   </Mobile>
                 </tr>
               </thead>
@@ -91,7 +86,7 @@ export const SearchResults = connect(
         )}
         {advancedSearchHelper.showLoadMore && (
           <Button secondary onClick={() => showMoreResultsSequence()}>
-            Load {pageSize} More
+            Load More
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (

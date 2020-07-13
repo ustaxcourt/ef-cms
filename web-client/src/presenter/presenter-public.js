@@ -7,12 +7,15 @@ import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequen
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
+import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
+import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
-import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
+import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -22,6 +25,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
+import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
@@ -35,12 +39,15 @@ export const presenter = {
     gotoPublicCaseDetailSequence,
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
+    gotoTodaysOpinionsSequence,
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
+    notFoundErrorSequence,
+    openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
-    submitCaseDocketNumberSearchSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
     toggleBetaBarSequence,
@@ -50,6 +57,7 @@ export const presenter = {
     updateAdvancedSearchFormValueSequence,
     updateDocketNumberSearchFormSequence,
     validateCaseAdvancedSearchFormSequence,
+    validateCaseDocketNumberSearchFormSequence,
     validateOpinionSearchSequence,
     validateOrderSearchSequence,
   },

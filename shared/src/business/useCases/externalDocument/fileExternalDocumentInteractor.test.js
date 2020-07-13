@@ -4,9 +4,10 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
@@ -45,35 +46,38 @@ describe('fileExternalDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          filedBy: 'Test Petitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          filedBy: 'Test Petitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           eventCode: 'A',
-          userId: 'irsPractitioner',
+          filedBy: 'Test Petitioner',
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
       filingType: 'Myself',
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
-      role: User.ROLES.petitioner,
-      userId: 'petitioner',
+      role: ROLES.petitioner,
+      userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
         name: 'irsPractitioner',
-        role: User.ROLES.irsPractitioner,
+        role: ROLES.irsPractitioner,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     );
@@ -97,6 +101,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
+          filedBy: 'Test Petitioner',
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -112,6 +117,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'A',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -128,7 +134,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
-  it('should set secondary document and secondary supporting documents to lodged with eventCode MISL', async () => {
+  it('should set secondary document and secondary supporting documents to lodged', async () => {
     const updatedCase = await fileExternalDocumentInteractor({
       applicationContext,
       documentIds: [
@@ -143,16 +149,20 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
+        filedBy: 'Test Petitioner',
+        scenario: 'Nonstandard H',
         secondaryDocument: {
           documentTitle: 'Motion for Judgment on the Pleadings',
           documentType: 'Motion for Judgment on the Pleadings',
           eventCode: 'M121',
+          filedBy: 'Test Petitioner',
         },
         secondarySupportingDocuments: [
           {
             documentTitle: 'Motion for in Camera Review',
             documentType: 'Motion for in Camera Review',
             eventCode: 'M135',
+            filedBy: 'Test Petitioner',
           },
         ],
         supportingDocuments: [
@@ -160,6 +170,7 @@ describe('fileExternalDocumentInteractor', () => {
             documentTitle: 'Civil Penalty Approval Form',
             documentType: 'Civil Penalty Approval Form',
             eventCode: 'CIVP',
+            filedBy: 'Test Petitioner',
           },
         ],
       },
@@ -178,11 +189,11 @@ describe('fileExternalDocumentInteractor', () => {
         lodged: undefined,
       },
       {
-        eventCode: 'MISL', //secondary document
+        eventCode: 'M121', //secondary document
         lodged: true,
       },
       {
-        eventCode: 'MISL', // secondary supporting document
+        eventCode: 'M135', // secondary supporting document
         lodged: true,
       },
     ]);
@@ -202,6 +213,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
           eventCode: 'A',
+          filedBy: 'Test Petitioner',
         },
       });
     } catch (err) {
@@ -223,7 +235,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = Case.STATUS_TYPES.calendared;
+    caseRecord.status = CASE_STATUS_TYPES.calendared;
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileExternalDocumentInteractor({
@@ -235,6 +247,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -250,7 +263,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = Case.STATUS_TYPES.new;
+    caseRecord.status = CASE_STATUS_TYPES.new;
 
     await fileExternalDocumentInteractor({
       applicationContext,
@@ -261,6 +274,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
+        filedBy: 'test Petitioner',
       },
     });
 
@@ -286,6 +300,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -295,7 +310,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -322,6 +337,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
+        filedBy: 'Test Petitioner',
       },
     });
 
@@ -331,7 +347,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()
