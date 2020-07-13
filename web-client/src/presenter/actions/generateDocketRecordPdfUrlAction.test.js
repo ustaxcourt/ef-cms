@@ -10,7 +10,6 @@ describe('generateDocketRecordPdfUrlAction', () => {
     applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor.mockResolvedValue(mockPdfUrl);
-
     global.window = global;
   });
 

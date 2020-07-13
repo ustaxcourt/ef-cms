@@ -18,7 +18,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   let petitionerUser;
   let docketClerkUser;
 
-  var apigateway = new AWS.APIGateway({
+  const apigateway = new AWS.APIGateway({
     region: process.env.REGION,
   });
   const { items: apis } = await apigateway
@@ -26,10 +26,10 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     .promise();
 
   const services = apis
-    .filter(api => api.name.includes(`${process.env.ENV}-ef-cms`))
+    .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
     .reduce((obj, api) => {
       obj[
-        api.name.replace(`${process.env.ENV}-`, '')
+        api.name.replace(`_${process.env.ENV}`, '')
       ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});
@@ -41,7 +41,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'petitioner1@example.com',
   });
 
-  let response = await axios.get(`${services['ef-cms-users-green']}`, {
+  let response = await axios.get(`${services['gateway_api']}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -56,7 +56,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'docketclerk1@example.com',
   });
 
-  response = await axios.get(`${services['ef-cms-users-green']}`, {
+  response = await axios.get(`${services['gateway_api']}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

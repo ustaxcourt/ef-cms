@@ -1,5 +1,7 @@
-import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-import { User } from '../../../../../shared/src/business/entities/User';
+import {
+  COUNTRY_TYPES,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
 import { applicationContext } from '../../../applicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
@@ -32,7 +34,7 @@ describe('advancedSearchHelper', () => {
 
   beforeEach(() => {
     globalUser = {
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketClerk',
     };
   });
@@ -64,7 +66,7 @@ describe('advancedSearchHelper', () => {
 
   it('returns showPractitionerSearch false when user is an external user', () => {
     globalUser = {
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'practitioner',
     };
 
@@ -85,7 +87,7 @@ describe('advancedSearchHelper', () => {
         ...getBaseState(globalUser),
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+            countryType: COUNTRY_TYPES.DOMESTIC,
           },
         },
       },
@@ -102,7 +104,7 @@ describe('advancedSearchHelper', () => {
         ...getBaseState(globalUser),
         advancedSearchForm: {
           caseSearchByName: {
-            countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
           },
         },
       },

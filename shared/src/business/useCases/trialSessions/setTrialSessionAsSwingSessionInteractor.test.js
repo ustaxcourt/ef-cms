@@ -4,7 +4,7 @@ const {
 const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -42,7 +42,7 @@ describe('Set trial session as swing session', () => {
 
   it('throws error if user is unauthorized', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'petitioner',
     };
 
@@ -57,7 +57,7 @@ describe('Set trial session as swing session', () => {
 
   it('calls getTrialSessionById and updateTrialSession persistence methods with correct parameters', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
 

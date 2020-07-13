@@ -20,7 +20,6 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
@@ -64,6 +63,8 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized for document service');
@@ -128,6 +129,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   );
 
   const newPdfData = await addServedStampToDocument({
+    applicationContext,
     pdfData,
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
@@ -202,7 +204,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
-    caseEntity: caseToUpdate,
+    caseEntity,
     documentEntity: courtIssuedDocument,
     servedParties,
   });
@@ -226,6 +228,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     const { url } = await saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
+      useTempBucket: true,
     });
 
     return { pdfUrl: url };

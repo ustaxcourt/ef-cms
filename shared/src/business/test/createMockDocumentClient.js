@@ -1,11 +1,11 @@
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 const mockDynamoUsers = {
   ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
     email: 'docketclerk',
     name: 'Test Docketclerk',
     pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     section: 'docket',
     sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -14,7 +14,7 @@ const mockDynamoUsers = {
     email: 'petitionsclerk',
     name: 'Test Petitionsclerk',
     pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.petitionsClerk,
+    role: ROLES.petitionsClerk,
     section: 'petitions',
     sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -23,7 +23,7 @@ const mockDynamoUsers = {
     email: 'petitioner',
     name: 'Test Petitioner',
     pk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
@@ -31,7 +31,7 @@ const mockDynamoUsers = {
     email: 'pettitionsclerk',
     name: 'Alex Petitionsclerk',
     pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.petitionsClerk,
+    role: ROLES.petitionsClerk,
     section: 'petitions',
     sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
     userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',

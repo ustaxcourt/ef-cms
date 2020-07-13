@@ -5,14 +5,14 @@ const {
   createPractitionerUser,
   createUserRecords,
 } = require('./createPractitionerUser');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
 
 const privatePractitionerUser = {
   barNumber: 'pt1234', //intentionally lower case - should be converted to upper case when persisted
   name: 'Test Private Practitioner',
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
 };
 
@@ -20,14 +20,14 @@ const privatePractitionerUserWithSection = {
   barNumber: 'pt1234',
   email: 'test@example.com',
   name: 'Test Private Practitioner',
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
 };
 
 const privatePractitionerUserWithoutBarNumber = {
   barNumber: '',
   name: 'Test Private Practitioner',
-  role: User.ROLES.privatePractitioner,
+  role: ROLES.privatePractitioner,
   section: 'privatePractitioner',
 };
 
@@ -35,7 +35,7 @@ const otherUser = {
   barNumber: 'pt1234',
   email: 'test@example.com',
   name: 'Test Other',
-  role: User.ROLES.other,
+  role: ROLES.other,
   section: 'other',
 };
 

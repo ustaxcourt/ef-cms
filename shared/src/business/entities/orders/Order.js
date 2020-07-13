@@ -2,47 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
-Order.ORDER_TYPES = [
-  {
-    documentType: 'Order',
-    eventCode: 'O',
-  },
-  {
-    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-    documentType: 'Order of Dismissal for Lack of Jurisdiction',
-    eventCode: 'ODJ',
-  },
-  {
-    documentTitle: 'Order of Dismissal',
-    documentType: 'Order of Dismissal',
-    eventCode: 'OD',
-  },
-  {
-    documentTitle: 'Order of Dismissal and Decision',
-    documentType: 'Order of Dismissal and Decision',
-    eventCode: 'ODD',
-  },
-  {
-    documentTitle: 'Order to Show Cause',
-    documentType: 'Order to Show Cause',
-    eventCode: 'OSC',
-  },
-  {
-    documentTitle: 'Order and Decision',
-    documentType: 'Order and Decision',
-    eventCode: 'OAD',
-  },
-  {
-    documentTitle: 'Decision',
-    documentType: 'Decision',
-    eventCode: 'DEC',
-  },
-  {
-    documentType: 'Notice',
-    eventCode: 'NOT',
-  },
-];
+const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
 
 /**
  * @param {object} rawOrder the raw order data
@@ -61,14 +21,22 @@ Order.VALIDATION_ERROR_MESSAGES = {
   orderBody: 'Order body is required.',
 };
 
+Order.VALIDATION_RULES = {
+  documentTitle: joi.string().max(100).required(),
+  documentType: joi
+    .string()
+    .valid(...ALL_DOCUMENT_TYPES)
+    .required(),
+  eventCode: joi
+    .string()
+    .valid(...ALL_EVENT_CODES)
+    .optional(),
+  orderBody: joi.string().max(500).required(),
+};
+
 joiValidationDecorator(
   Order,
-  joi.object().keys({
-    documentTitle: joi.string().required(),
-    documentType: joi.string().required(),
-    eventCode: joi.string().optional(),
-    orderBody: joi.string().required(),
-  }),
+  joi.object().keys(Order.VALIDATION_RULES),
   Order.VALIDATION_ERROR_MESSAGES,
 );
 

@@ -16,7 +16,7 @@ export const petitionsClerkViewsDocketRecordEditLinks = test => {
     );
 
     expect(caseDetailFormatted.formattedDocketEntries).toMatchObject([
-      { description: 'Petition', editLink: '/review' },
+      { description: 'Petition', editLink: '' },
       {
         description: 'Request for Place of Trial at Seattle, Washington',
         editLink: '',

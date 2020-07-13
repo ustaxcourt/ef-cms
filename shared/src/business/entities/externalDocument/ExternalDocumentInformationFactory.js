@@ -4,19 +4,21 @@ const {
   makeRequiredHelper,
 } = require('./externalDocumentHelpers');
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-} = require('../../../persistence/s3/getUploadPolicy');
+} = require('../EntityConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 const {
   SecondaryDocumentInformationFactory,
 } = require('./SecondaryDocumentInformationFactory');
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { Document } = require('../Document');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
@@ -163,8 +165,14 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     attachments: joi.boolean().required(),
     casesParties: joi.object().optional(),
     certificateOfService: joi.boolean().required(),
-    documentType: joi.string().optional(),
-    eventCode: joi.string().optional(),
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .optional(),
     freeText: joi.string().optional(),
     hasSupportingDocuments: joi.boolean().required(),
     lodged: joi.boolean().optional(),
@@ -221,7 +229,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   const objectionDocumentTypes = [
-    ...Document.CATEGORY_MAP['Motion'].map(entry => {
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
       return entry.documentType;
     }),
     'Motion to Withdraw Counsel (filed by petitioner)',

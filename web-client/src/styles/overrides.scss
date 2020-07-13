@@ -95,6 +95,10 @@ option:first-child {
   margin-bottom: 20px;
 }
 
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
 .usa-error-message {
   margin: 15px 0 0 0;
   font-size: 17px;
@@ -309,6 +313,6 @@ input[type='file']::-webkit-file-upload-button {
   border-radius: 5px;
 }
 
-.add-another-penalty-button .svg-inline--fa {
+.modal-button-link .svg-inline--fa {
   margin-right: 0.5rem;
 }

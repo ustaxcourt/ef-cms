@@ -1,8 +1,8 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { ROLES } = require('../../entities/EntityConstants');
 const { uploadDocumentInteractor } = require('./uploadDocumentInteractor');
-const { User } = require('../../entities/User');
 
 describe('uploadDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
@@ -26,7 +26,7 @@ describe('uploadDocumentInteractor', () => {
 
   it('runs successfully with no errors with a valid user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
@@ -46,7 +46,7 @@ describe('uploadDocumentInteractor', () => {
 
   it('runs successfully with no errors with all data and valid user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
@@ -77,7 +77,7 @@ describe('uploadDocumentInteractor', () => {
 
   it('runs successfully with no errors with all data and valid user who is a docketclerk', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.docketClerk,
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
 

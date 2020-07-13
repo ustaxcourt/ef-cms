@@ -1,5 +1,4 @@
 const { getPageDimensions } = require('../generateSignedDocumentInteractor');
-const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
  * addServedStampToDocument
@@ -9,7 +8,23 @@ const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
  * @param {string} providers.serviceStampText the service stamp text to add to the document
  * @returns {object} the new pdf with the stamp at the bottom center of the document
  */
-exports.addServedStampToDocument = async ({ pdfData, serviceStampText }) => {
+exports.addServedStampToDocument = async ({
+  applicationContext,
+  pdfData,
+  serviceStampText,
+}) => {
+  if (!serviceStampText) {
+    serviceStampText = `SERVED ${applicationContext
+      .getUtilities()
+      .formatNow('MM/DD/YY')}`;
+  }
+
+  const {
+    PDFDocument,
+    rgb,
+    StandardFonts,
+  } = await applicationContext.getPdfLib();
+
   const scale = 1;
   const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
@@ -21,7 +36,7 @@ exports.addServedStampToDocument = async ({ pdfData, serviceStampText }) => {
     StandardFonts.HelveticaBold,
   );
 
-  const textSize = 16 * scale;
+  const textSize = 14 * scale;
   const padding = 3 * scale;
   const serviceStampWidth = helveticaBoldFont.widthOfTextAtSize(
     serviceStampText,

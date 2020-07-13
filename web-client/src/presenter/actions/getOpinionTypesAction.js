@@ -1,4 +1,4 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { OPINION_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
 const courtIssuedEventCodes = require('../../../../shared/src/tools/courtIssuedEventCodes.json');
 
 /**
@@ -9,9 +9,7 @@ const courtIssuedEventCodes = require('../../../../shared/src/tools/courtIssuedE
  */
 export const getOpinionTypesAction = () => {
   const opinionDocuments = courtIssuedEventCodes.filter(courtIssuedDocument => {
-    if (
-      Document.OPINION_DOCUMENT_TYPES.includes(courtIssuedDocument.eventCode)
-    ) {
+    if (OPINION_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
       return courtIssuedDocument;
     }
   });

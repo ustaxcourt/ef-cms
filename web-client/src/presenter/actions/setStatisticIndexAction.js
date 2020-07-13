@@ -10,4 +10,5 @@ import { state } from 'cerebral';
  */
 export const setStatisticIndexAction = ({ props, store }) => {
   store.set(state.modal.statisticIndex, props.statisticIndex);
+  store.set(state.modal.key, props.key);
 };

@@ -67,13 +67,13 @@
   },
   {
     "eventCode": "OD",
-    "documentType": "OD - Order of Dismissal Entered,",
+    "documentType": "OD - Order of Dismissal Entered",
     "documentTitle": "Order of Dismissal Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODD",
-    "documentType": "ODD - Order of Dismissal and Decision Entered,",
+    "documentType": "ODD - Order of Dismissal and Decision Entered",
     "documentTitle": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
@@ -217,25 +217,25 @@
   },
   {
     "eventCode": "DEC",
-    "documentType": "DEC - Decision Entered,",
+    "documentType": "DEC - Decision Entered",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "OAD",
-    "documentType": "OAD - Order and Decision Entered,",
+    "documentType": "OAD - Order and Decision Entered",
     "documentTitle": "Order and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "ODJ",
-    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered,",
+    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
   {
     "eventCode": "SDEC",
-    "documentType": "SDEC - Stipulated Decision Entered,",
+    "documentType": "SDEC - Stipulated Decision Entered",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
   },
@@ -334,5 +334,63 @@
     "documentType": "MISC - Miscellaneous",
     "documentTitle": "[anything]",
     "scenario": "Type A"
+  },
+  {
+    "documentTitle": "Bounced Electronic Service",
+    "documentType": "Bounced Electronic Service",
+    "category": "Miscellaneous",
+    "eventCode": "ES",
+    "scenario": "Standard",
+    "labelPreviousDocument": "",
+    "labelFreeText": "",
+    "labelFreeText2": "",
+    "ordinalField": ""
+  },
+  {
+    "documentTitle": "Hearing Exhibits for [Anything]",
+    "documentType": "Hearing Exhibits",
+    "category": "Miscellaneous",
+    "eventCode": "HE",
+    "scenario": "Nonstandard B",
+    "labelPreviousDocument": "",
+    "labelFreeText": "Description",
+    "labelFreeText2": "",
+    "ordinalField": ""
+  },
+
+  {
+    "documentTitle": "Returned Mail",
+    "documentType": "Returned Mail",
+    "category": "Miscellaneous",
+    "eventCode": "RM",
+    "scenario": "Standard",
+    "labelPreviousDocument": "",
+    "labelFreeText": "",
+    "labelFreeText2": "",
+    "ordinalField": ""
+  },
+
+  {
+    "documentTitle": "Trial Exhibits for [Anything]",
+    "documentType": "Trial Exhibits",
+    "category": "Miscellaneous",
+    "eventCode": "TE",
+    "scenario": "Nonstandard B",
+    "labelPreviousDocument": "",
+    "labelFreeText": "Description",
+    "labelFreeText2": "",
+    "ordinalField": ""
+  },
+
+  {
+    "documentTitle": "U.S.C.A. [Anything]",
+    "documentType": "U.S.C.A. [Anything]",
+    "category": "Miscellaneous",
+    "eventCode": "USCA",
+    "scenario": "Nonstandard B",
+    "labelPreviousDocument": "",
+    "labelFreeText": "Description",
+    "labelFreeText2": "",
+    "ordinalField": ""
   }
 ]

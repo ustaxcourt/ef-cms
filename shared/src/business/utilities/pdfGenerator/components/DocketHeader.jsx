@@ -16,7 +16,7 @@ export const DocketHeader = ({
           <div id="caption-commissioner">Commissioner of Internal Revenue</div>
           <div id="caption-respondent">Respondent</div>
         </div>
-        <div id="docket-number">Docket Number {docketNumberWithSuffix}</div>
+        <div id="docket-number">Docket No. {docketNumberWithSuffix}</div>
         <div className="clear"></div>
         {h3 && <h3>{h3}</h3>}
       </div>

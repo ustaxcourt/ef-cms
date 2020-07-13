@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getAllEventCodes } = require('../../utilities/getAllEventCodes');
+const { ALL_EVENT_CODES, SERVED_PARTIES_CODES } = require('./EntityConstants');
 const { getTimestampSchema } = require('../../utilities/dateSchema');
 
 const joiStrictTimestamp = getTimestampSchema();
@@ -25,10 +25,13 @@ function DocketRecord(rawDocketRecord, { applicationContext }) {
   this.documentId = rawDocketRecord.documentId;
   this.editState = rawDocketRecord.editState;
   this.eventCode = rawDocketRecord.eventCode;
+  this.numberOfPages = rawDocketRecord.numberOfPages;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.servedPartiesCode = rawDocketRecord.servedPartiesCode;
+  this.isLegacy = rawDocketRecord.isLegacy;
+  this.isStricken = rawDocketRecord.isStricken;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -45,11 +48,13 @@ joiValidationDecorator(
   joi.object().keys({
     action: joi
       .string()
+      .max(100)
       .optional()
       .allow(null)
       .description('Action taken in response to this Docket Record item.'),
     description: joi
       .string()
+      .max(500)
       .required()
       .description(
         'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
@@ -64,6 +69,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
+      .max(3000)
       .allow(null)
       .optional()
       .meta({ tags: ['Restricted'] })
@@ -71,17 +77,18 @@ joiValidationDecorator(
     entityName: joi.string().valid('DocketRecord').required(),
     eventCode: joi
       .string()
-      .valid(...getAllEventCodes())
+      .valid(...ALL_EVENT_CODES)
       .required()
       .description(
         'Code associated with the event that resulted in this item being added to the Docket Record.',
       ),
     filedBy: joi
       .string()
+      .max(500)
       .optional()
       .allow(null)
       .meta({ tags: ['Restricted'] })
-      .description('ID of the user that filed this Docket Record item.'),
+      .description('User that filed this Docket Record item.'),
     filingDate: joiStrictTimestamp
       .max('now')
       .required()
@@ -91,13 +98,35 @@ joiValidationDecorator(
       .integer()
       .required()
       .description('Index of this item in the Docket Record list.'),
+    isLegacy: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates whether or not the DocketRecord belongs to a legacy case that has been migrated to the new system.',
+      ),
+    isStricken: joi
+      .boolean()
+      .when('isLegacy', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description(
+        'Indicates the item has been removed from the docket record.',
+      ),
+    numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
+      .valid(...SERVED_PARTIES_CODES)
       .allow(null)
       .optional()
       .description('Served parties code to override system-computed code.'),
   }),
   DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
+
+DocketRecord.prototype.setNumberOfPages = function (numberOfPages) {
+  this.numberOfPages = numberOfPages;
+};
 
 module.exports = { DocketRecord };

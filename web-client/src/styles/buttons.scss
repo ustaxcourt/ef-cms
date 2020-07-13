@@ -103,6 +103,10 @@
   svg {
     margin-right: 5px;
   }
+
+  &.usa-button--unstyled:visited {
+    color: $color-white;
+  }
 }
 
 .recall-button-box {
@@ -135,4 +139,63 @@
 .button-icon {
   border: none;
   background-color: rgba(0, 0, 0, 0);
+}
+
+.add-deficiency-statistics-form .calculate-penalties {
+  position: absolute;
+  top: 50px;
+  left: 180px;
+}
+
+.attachment-viewer-button {
+  display: block;
+  width: 100%;
+  padding: 15px 0 !important;
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  color: color($theme-color-base-darkest);
+  text-align: left;
+  text-decoration: none;
+  text-indent: 20px;
+
+  &.active,
+  &:hover {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+    background-color: color($theme-color-base-lightest);
+    box-shadow: 10px 0 0 0 color($theme-color-primary) inset;
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
+  }
+}
+
+.action-button {
+  font-weight: $font-semibold;
+  text-decoration: none;
+
+  svg {
+    margin-right: 3px;
+  }
+}
+
+.message-document-actions {
+  display: flex;
+  height: 50px;
+  justify-content: flex-end;
+  background-color: color($theme-color-primary);
+
+  button,
+  a,
+  a:visited {
+    height: 40px;
+    border-left: 1px solid $color-white;
+    margin-top: 5px;
+    color: $color-white;
+
+    &.usa-button--unstyled {
+      padding-left: 20px;
+    }
+
+    &:hover {
+      color: $color-primary-alt;
+    }
+  }
 }

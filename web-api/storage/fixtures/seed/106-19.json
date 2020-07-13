@@ -10,6 +10,7 @@
       "documentType": "Petition",
       "filedBy": "Denise Gould",
       "workItems": [],
+      "numberOfPages": 1,
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-07-12T17:09:41.026Z",
       "filingDate": "2019-07-12T17:09:41.026Z",
@@ -19,7 +20,8 @@
     "workItemId": "85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitioner",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isQC": true,
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
@@ -64,6 +66,7 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "adc",
@@ -100,6 +103,7 @@
     "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "numberOfPages": 1,
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -158,6 +162,7 @@
       "category": "Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "relationship": "primaryDocument",
+      "numberOfPages": 1,
       "docketNumber": "106-19"
     },
     "section": "docket",
@@ -212,6 +217,7 @@
       "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
       "category": "Decision",
+      "numberOfPages": 1,
       "documentTitle": "Proposed Stipulated Decision",
       "relationship": "primaryDocument",
       "docketNumber": "106-19"
@@ -250,7 +256,8 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
-      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
+      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+      "numberOfPages": 1
     },
     "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
@@ -290,6 +297,7 @@
       "documentType": "Petition",
       "filedBy": "Denise Gould",
       "workItems": [],
+      "numberOfPages": 1,
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
       "receivedAt": "2019-07-12T17:09:41.026Z",
       "filingDate": "2019-07-12T17:09:41.026Z",
@@ -299,7 +307,8 @@
     "workItemId": "85d71a2a-d1c8-448a-9c9f-2d5eb31784b7",
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitioner",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isQC": true,
     "createdAt": "2019-07-12T17:09:41.027Z",
     "assigneeName": null,
@@ -343,6 +352,7 @@
       "filedBy": "Petr. Denise Gould",
       "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+      "numberOfPages": 1,
       "category": "Decision",
       "documentTitle": "Proposed Stipulated Decision",
       "relationship": "primaryDocument",
@@ -381,6 +391,7 @@
     "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "numberOfPages": 1,
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -419,6 +430,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "adc",
@@ -457,6 +469,7 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -535,6 +548,7 @@
     "description": "Petition",
     "eventCode": "P",
     "index": 1,
+    "numberOfPages": 1,
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "filingDate": "2019-07-12T17:09:41.026Z",
     "filedBy": "Denise Gould",
@@ -555,6 +569,7 @@
     "description": "Proposed Stipulated Decision",
     "eventCode": "PSDE",
     "index": 3,
+    "numberOfPages": 1,
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "filingDate": "1990-10-10",
     "docketRecordId": "a79bbbca-1afe-41a2-a2a6-f4befd22546c",
@@ -567,7 +582,15 @@
   },
   {
     "sk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-07-12T17:09:41.026Z",
+    "caseCaption": "Denise Gould, Petitioner",
+    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "status": "New",
+    "docketNumber": "106-19",
+    "docketNumberWithSuffix": "106-19",
+    "entityName": "UserCase"
   },
   {
     "docketNumberSuffix": null,
@@ -578,6 +601,7 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -617,6 +641,7 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -656,7 +681,8 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
-      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
+      "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+      "numberOfPages": 1
     },
     "section": "armensChambers",
     "caseTitle": "Denise Gould",
@@ -699,6 +725,7 @@
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
       "documentTitle": "Proposed Stipulated Decision",
+      "numberOfPages": 1,
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -761,6 +788,7 @@
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "document|2da6d239-555a-40e8-af81-1949c8270cd7",
     "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
+    "numberOfPages": 1,
     "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
@@ -780,6 +808,7 @@
           "filingDate": "2019-07-12T17:09:41.026Z",
           "filedBy": "Denise Gould",
           "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+          "numberOfPages": 1,
           "documentTitle": "Petition",
           "receivedAt": "2019-07-12T17:09:41.026Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -789,7 +818,8 @@
         "isInitializeCase": true,
         "assigneeId": null,
         "isQC": true,
-        "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Petitioner",
+        "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "createdAt": "2019-07-12T17:09:41.027Z",
         "assigneeName": null,
         "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
@@ -815,6 +845,7 @@
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "numberOfPages": 1,
     "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88"
   },
   {
@@ -850,6 +881,7 @@
           "filedBy": "Petr. Denise Gould",
           "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
           "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+          "numberOfPages": 1,
           "category": "Decision",
           "documentTitle": "Proposed Stipulated Decision",
           "relationship": "primaryDocument",
@@ -887,6 +919,7 @@
         "document": {
           "createdAt": "2019-07-12T17:11:26.955Z",
           "documentType": "Proposed Stipulated Decision",
+          "numberOfPages": 1,
           "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
         },
         "section": "adc",
@@ -927,6 +960,7 @@
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "numberOfPages": 1,
     "pk": "case|d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "documentTitle": "Proposed Stipulated Decision",
     "relationship": "primaryDocument",

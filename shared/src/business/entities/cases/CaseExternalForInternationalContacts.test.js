@@ -1,5 +1,6 @@
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { PARTY_TYPES } = require('../EntityConstants');
 
 const contactErrorMessages =
   ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
@@ -22,10 +23,10 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
@@ -53,10 +54,10 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},

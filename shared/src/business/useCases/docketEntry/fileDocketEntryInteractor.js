@@ -4,12 +4,12 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -66,21 +66,15 @@ exports.fileDocketEntryInteractor = async ({
     'practitioner',
   ]);
 
-  if (primaryDocumentMetadata.lodged) {
-    primaryDocumentMetadata.eventCode = 'MISL';
-  }
-
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
-    secondaryDocument.eventCode = 'MISL';
   }
 
   if (secondarySupportingDocumentMetadata) {
     secondarySupportingDocumentMetadata.lodged = true;
-    secondarySupportingDocumentMetadata.eventCode = 'MISL';
   }
 
-  [
+  const documentsToFile = [
     [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
     [
       supportingDocumentFileId,
@@ -93,7 +87,11 @@ exports.fileDocketEntryInteractor = async ({
       secondarySupportingDocumentMetadata,
       'secondarySupportingDocument',
     ],
-  ].forEach(([documentId, metadata, relationship]) => {
+  ];
+
+  for (let document of documentsToFile) {
+    const [documentId, metadata, relationship] = document;
+
     if (documentId && metadata) {
       const documentEntity = new Document(
         {
@@ -128,9 +126,10 @@ exports.fileDocketEntryInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           isQC: true,
-          isRead: user.role !== User.ROLES.privatePractitioner,
+          isRead: user.role !== ROLES.privatePractitioner,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
         },
         { applicationContext },
       );
@@ -186,7 +185,7 @@ exports.fileDocketEntryInteractor = async ({
         ),
       );
     }
-  });
+  }
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()

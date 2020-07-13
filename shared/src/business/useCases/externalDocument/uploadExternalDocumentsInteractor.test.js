@@ -4,12 +4,12 @@ const {
 const {
   uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('uploadExternalDocumentsInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
 
@@ -28,7 +28,7 @@ describe('uploadExternalDocumentsInteractor', () => {
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'irsPractitioner',
     });
 
@@ -48,7 +48,7 @@ describe('uploadExternalDocumentsInteractor', () => {
 
   it('runs successfully with no errors with all data and valid user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'irsPractitioner',
     });
 
@@ -79,7 +79,7 @@ describe('uploadExternalDocumentsInteractor', () => {
 
   it('runs successfully with no errors with all data and valid user who is a practitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.irsPractitioner,
+      role: ROLES.irsPractitioner,
       userId: 'irsPractitioner',
     });
 

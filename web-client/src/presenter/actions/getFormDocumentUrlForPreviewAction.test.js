@@ -1,15 +1,18 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFormDocumentUrlForPreviewAction } from './getFormDocumentUrlForPreviewAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const { INITIAL_DOCUMENT_TYPES } = Document;
-
 describe('getFormDocumentUrlForPreviewAction', () => {
   let form;
 
   beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockReturnValue({
+        url: 'http://example.com',
+      });
     presenter.providers.applicationContext = applicationContext;
     form = {
       caseId: 't3-5t-c4-53-1d',
@@ -56,8 +59,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
-      pdfUrl:
-        'http://example.com/case-documents/t3-5t-c4-53-1d/test-apw-id/document-download-url?token=abc',
+      pdfUrl: 'http://example.com',
     });
   });
 
@@ -77,8 +79,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
-      pdfUrl:
-        'http://example.com/case-documents/t3-5t-c4-53-1d/test-ods-id/document-download-url?token=abc',
+      pdfUrl: 'http://example.com',
     });
   });
 
@@ -98,8 +99,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
-      pdfUrl:
-        'http://example.com/case-documents/t3-5t-c4-53-1d/test-petition-id/document-download-url?token=abc',
+      pdfUrl: 'http://example.com',
     });
   });
 
@@ -119,8 +119,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
-      pdfUrl:
-        'http://example.com/case-documents/t3-5t-c4-53-1d/test-rqt-id/document-download-url?token=abc',
+      pdfUrl: 'http://example.com',
     });
   });
 
@@ -140,8 +139,7 @@ describe('getFormDocumentUrlForPreviewAction', () => {
     });
 
     expect(output).toEqual({
-      pdfUrl:
-        'http://example.com/case-documents/t3-5t-c4-53-1d/test-stin-id/document-download-url?token=abc',
+      pdfUrl: 'http://example.com',
     });
   });
 

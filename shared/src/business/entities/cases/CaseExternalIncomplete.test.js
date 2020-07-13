@@ -1,5 +1,5 @@
 const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
-const { ContactFactory } = require('../contacts/ContactFactory');
+const { PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
@@ -22,9 +22,9 @@ describe('CaseExternalIncomplete entity', () => {
         filingType: 'Myself',
         hasIrsNotice: false,
         irsNoticeDate: null,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFileId: '102e29fa-bb8c-43ff-b18f-ddce9089dd80',
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(

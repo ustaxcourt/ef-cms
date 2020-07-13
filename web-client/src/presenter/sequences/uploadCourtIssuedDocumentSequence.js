@@ -6,7 +6,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseDetailPageTabAction } from '../actions/setCaseDetailPageTabAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -43,7 +43,7 @@ export const uploadCourtIssuedDocumentSequence = [
           getUploadCourtIssuedDocumentAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
-          setCaseDetailPageTabAction,
+          setCaseDetailPageTabActionGenerator(),
           setIsPrimaryTabAction,
           setCaseDetailPageTabFrozenAction,
           navigateToCaseDetailAction,

@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { getWorkItemInteractor } = require('./getWorkItemInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getWorkItemInteractor', () => {
   let mockWorkItem = {
@@ -21,12 +21,12 @@ describe('getWorkItemInteractor', () => {
   };
 
   const mockPetitionerUser = {
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     userId: 'petitioner',
   };
 
   const mockDocketClerkUser = {
-    role: User.ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: 'docketclerk',
   };
 

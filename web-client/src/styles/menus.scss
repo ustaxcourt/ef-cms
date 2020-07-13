@@ -13,23 +13,30 @@
     background-color: $color-white;
     box-shadow: 3px 9px 9px rgba(0, 0, 0, 0.2);
 
-    .usa-nav__submenu-item button {
-      padding: 0.2rem;
-      color: color($theme-color-primary);
-      font-weight: $font-semibold;
+    .usa-nav__submenu-item {
+      svg.fa-1x {
+        width: 16px;
+      }
 
-      &:hover {
-        text-decoration: underline;
+      button {
+        padding: 0.2rem;
+        color: color($theme-color-primary);
+        font-weight: $font-semibold;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      a {
+        padding: 0.2rem;
+        background-color: $color-white;
+        color: color($theme-color-primary);
+        font-size: 0.93rem;
+        font-weight: $font-semibold;
       }
     }
 
-    .usa-nav__submenu-item a {
-      padding: 0.2rem;
-      background-color: $color-white;
-      color: color($theme-color-primary);
-      font-size: 0.93rem;
-      font-weight: $font-semibold;
-    }
 
     &.position-right-0 {
       right: 0;

@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -49,7 +50,7 @@ exports.updateCaseContextInteractor = async ({
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
   if (caseStatus !== oldCase.status) {
-    if (oldCase.status === Case.STATUS_TYPES.calendared) {
+    if (oldCase.status === CASE_STATUS_TYPES.calendared) {
       const disposition = `Status was changed to ${caseStatus}`;
 
       const trialSession = await applicationContext
@@ -72,7 +73,7 @@ exports.updateCaseContextInteractor = async ({
 
       newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
     } else if (
-      oldCase.status === Case.STATUS_TYPES.generalDocketReadyForTrial
+      oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
     ) {
       await applicationContext
         .getPersistenceGateway()
@@ -82,7 +83,7 @@ exports.updateCaseContextInteractor = async ({
         });
     }
 
-    if (caseStatus === Case.STATUS_TYPES.generalDocketReadyForTrial) {
+    if (caseStatus === CASE_STATUS_TYPES.generalDocketReadyForTrial) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({

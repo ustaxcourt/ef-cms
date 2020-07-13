@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -35,7 +36,7 @@ exports.updateCaseTrialSortTagsInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  if (caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial) {
+  if (caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) {
     const caseSortTags = caseEntity.generateTrialSortTags();
 
     await applicationContext

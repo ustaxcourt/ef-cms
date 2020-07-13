@@ -1,13 +1,11 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { TrialSession } from '../entities/trialSessions/TrialSession';
-const { SESSION_STATUS_GROUPS } = TrialSession;
+import { SESSION_STATUS_GROUPS } from '../entities/EntityConstants';
+import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   formattedTrialSessionDetails,
   getTrialSessionStatus,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
-
-import { applicationContext } from '../../../../web-client/src/applicationContext';
 
 describe('formattedTrialSessionDetails', () => {
   const TRIAL_SESSION = {

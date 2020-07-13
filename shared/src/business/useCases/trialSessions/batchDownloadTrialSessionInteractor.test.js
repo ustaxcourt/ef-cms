@@ -2,9 +2,9 @@ import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSession
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let user;
@@ -26,7 +26,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     ];
 
     user = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: 'abc-123',
     };
     applicationContext.getCurrentUser.mockImplementation(() => user);
@@ -56,7 +56,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
     user = {
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'abc-123',
     };
 
@@ -105,7 +105,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .getCalendaredCasesForTrialSession.mockReturnValue([
         {
           ...MOCK_CASE,
-          status: Case.STATUS_TYPES.closed,
+          status: CASE_STATUS_TYPES.closed,
         },
       ]);
 

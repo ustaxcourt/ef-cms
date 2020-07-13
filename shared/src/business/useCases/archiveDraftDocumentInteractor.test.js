@@ -3,7 +3,7 @@ const {
 } = require('./archiveDraftDocumentInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('archiveDraftDocumentInteractor', () => {
   it('returns an unauthorized error on non petitionsclerk users', async () => {
@@ -20,7 +20,7 @@ describe('archiveDraftDocumentInteractor', () => {
 
   it('expect the updated case to contain the archived document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
     });
     applicationContext
       .getPersistenceGateway()

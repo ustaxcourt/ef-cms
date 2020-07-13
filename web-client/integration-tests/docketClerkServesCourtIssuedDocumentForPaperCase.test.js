@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 // docketClerk
@@ -42,6 +42,6 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
     test,
     0,
-    Case.STATUS_TYPES.generalDocket,
+    CASE_STATUS_TYPES.generalDocket,
   );
 });

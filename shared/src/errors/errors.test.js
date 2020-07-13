@@ -72,18 +72,18 @@ describe('UnprocessableEntityError', () => {
 });
 
 describe('InvalidEntityError', () => {
-  let error;
-
-  beforeEach(() => {
-    error = new InvalidEntityError();
+  it('should set the message which includes the entityName and failing ids', () => {
+    const error = new InvalidEntityError('TestEntity', 123, 'Test message');
+    expect(error.message).toEqual(
+      'The TestEntity entity was invalid. Test message. 123',
+    );
   });
 
-  it('should set a status code of 422', () => {
-    expect(error.statusCode).toEqual(422);
-  });
-
-  it('should set the message', () => {
-    expect(error.message).toEqual('entity is invalid or invalid for operation');
+  it('should set a default error message if one is not passed in', () => {
+    const error = new InvalidEntityError('TestEntity', 123);
+    expect(error.message).toEqual(
+      'The TestEntity entity was invalid. entity is invalid or invalid for operation. 123',
+    );
   });
 });
 

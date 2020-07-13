@@ -57,7 +57,7 @@ export const CaseSearchByDocketNumber = connect(
                       updateAdvancedSearchFormValueSequence({
                         formType: 'caseSearchByDocketNumber',
                         key: e.target.name,
-                        value: e.target.value,
+                        value: e.target.value.toUpperCase(),
                       });
                     }}
                   />

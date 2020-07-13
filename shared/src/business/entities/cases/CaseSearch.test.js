@@ -1,7 +1,7 @@
+const { CASE_SEARCH_MIN_YEAR } = require('../EntityConstants');
 const { CaseSearch } = require('./CaseSearch');
 
 const errorMessages = CaseSearch.VALIDATION_ERROR_MESSAGES;
-const minYear = CaseSearch.CASE_SEARCH_MIN_YEAR;
 
 describe('Case Search entity', () => {
   it('needs only a petitioner name to be valid', () => {
@@ -11,7 +11,7 @@ describe('Case Search entity', () => {
       petitionerName: 'Solomon Grundy',
       petitionerState: undefined,
       yearFiledMax: undefined,
-      yearFiledMin: minYear,
+      yearFiledMin: CASE_SEARCH_MIN_YEAR,
     });
     const validationErrors = caseSearch.getFormattedValidationErrors();
     expect(validationErrors).toEqual(null);

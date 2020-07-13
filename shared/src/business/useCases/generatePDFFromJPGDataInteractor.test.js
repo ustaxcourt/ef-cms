@@ -5,6 +5,8 @@ const {
 } = require('./generatePDFFromJPGDataInteractor.js');
 const { PDFDocument } = require('pdf-lib');
 
+const { applicationContext } = require('../test/createTestApplicationContext');
+
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
@@ -22,7 +24,10 @@ describe('generatePDFFromJPGDataInteractor', () => {
   it('generates a pdf document from the provided imgData array', async () => {
     const imgData = [testJpg, testJpg];
 
-    const newPdfData = await generatePDFFromJPGDataInteractor(imgData);
+    const newPdfData = await generatePDFFromJPGDataInteractor(
+      imgData,
+      applicationContext,
+    );
 
     fs.writeFileSync(
       testOutputPath + 'generatePDFFromJPGDataInteractor.pdf',

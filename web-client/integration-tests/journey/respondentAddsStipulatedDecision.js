@@ -6,7 +6,7 @@ export const respondentAddsStipulatedDecision = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
@@ -23,16 +23,26 @@ export const respondentAddsStipulatedDecision = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'documentType',
-      value: 'Proposed Stipulated Decision',
-    });
+    const documentToSelect = {
+      category: 'Decision',
+      documentTitle: 'Proposed Stipulated Decision',
+      documentType: 'Proposed Stipulated Decision',
+      eventCode: 'PSDE',
+      scenario: 'Standard',
+    };
+
+    for (const key of Object.keys(documentToSelect)) {
+      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+        key,
+        value: documentToSelect[key],
+      });
+    }
 
     await test.runSequence('validateSelectDocumentTypeSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('form.documentType')).toEqual(
       'Proposed Stipulated Decision',

@@ -1,7 +1,7 @@
 const {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} = require('../../entities/WorkQueue');
+} = require('../../entities/EntityConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,

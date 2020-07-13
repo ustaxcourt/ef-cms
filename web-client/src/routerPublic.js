@@ -23,11 +23,6 @@ const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
 
-    route('/..', () => {
-      setPageTitle('Dashboard');
-      app.getSequence('gotoPublicSearchSequence')();
-    });
-
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
@@ -37,6 +32,23 @@ const router = {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({
         docketNumber,
+      });
+    });
+
+    route('/todays-opinions', () => {
+      setPageTitle('Today’s Opinions');
+      app.getSequence('gotoTodaysOpinionsSequence')();
+    });
+
+    route('/', () => {
+      setPageTitle('Dashboard');
+      app.getSequence('gotoPublicSearchSequence')();
+    });
+
+    route('..', () => {
+      setPageTitle('Error');
+      return app.getSequence('notFoundErrorSequence')({
+        error: {},
       });
     });
 

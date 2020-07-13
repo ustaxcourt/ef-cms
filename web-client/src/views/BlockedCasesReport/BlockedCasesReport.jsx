@@ -43,10 +43,10 @@ export const BlockedCasesReport = connect(
                     <table className="usa-table row-border-only subsection work-queue deadlines">
                       <thead>
                         <tr>
-                          <th>Docket number</th>
-                          <th>Date blocked</th>
-                          <th>Case title</th>
-                          <th>Case status</th>
+                          <th aria-label="docket number">Docket No.</th>
+                          <th>Date Blocked</th>
+                          <th>Case Title</th>
+                          <th>Case Status</th>
                           <th>Reason</th>
                         </tr>
                       </thead>

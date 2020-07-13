@@ -1,17 +1,22 @@
 const joi = require('@hapi/joi');
 const {
+  CASE_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  PROCEDURE_TYPES,
+} = require('../EntityConstants');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { Statistic } = require('../Statistic');
 
 const joiStrictTimestamp = getTimestampSchema();
-CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
 
 /**
  * CaseInternal Entity
@@ -20,7 +25,11 @@ CaseInternal.DEFAULT_PROCEDURE_TYPE = Case.PROCEDURE_TYPES[0];
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseInternal(rawCase) {
+function CaseInternal(rawCase, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
+
   this.applicationForWaiverOfFilingFeeFile =
     rawCase.applicationForWaiverOfFilingFeeFile;
   this.applicationForWaiverOfFilingFeeFileSize =
@@ -64,7 +73,9 @@ function CaseInternal(rawCase) {
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
 
   this.statistics = Array.isArray(rawCase.statistics)
-    ? rawCase.statistics.map(statistic => new Statistic(statistic))
+    ? rawCase.statistics.map(
+        statistic => new Statistic(statistic, { applicationContext }),
+      )
     : [];
 
   const contacts = ContactFactory.createContacts({
@@ -103,70 +114,86 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = {
 const paperRequirements = joi
   .object()
   .keys({
-    applicationForWaiverOfFilingFeeFile: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.WAIVED,
-      otherwise: joi.optional().allow(null),
-      then: joi.object().required(),
-    }),
-    applicationForWaiverOfFilingFeeFileSize: joi.when(
+    applicationForWaiverOfFilingFeeFile: joi
+      .object()
+      .when('petitionPaymentStatus', {
+        is: PAYMENT_STATUS.WAIVED,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
+    applicationForWaiverOfFilingFeeFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'applicationForWaiverOfFilingFeeFile',
       {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
-        then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
+        then: joi.required(),
       },
     ),
-    caseCaption: joi.string().required(),
-    caseType: joi.string().required(),
+    caseCaption: joi.string().max(500).required(),
+    caseType: joi
+      .string()
+      .valid(...CASE_TYPES)
+      .required(),
     hasVerifiedIrsNotice: joi.boolean().required(),
-    irsNoticeDate: Case.validationRules.irsNoticeDate,
+    irsNoticeDate: Case.VALIDATION_RULES.irsNoticeDate,
     mailingDate: joi.string().max(25).required(),
-    noticeOfAttachments: Case.validationRules.noticeOfAttachments,
+    noticeOfAttachments: Case.VALIDATION_RULES.noticeOfAttachments,
     orderDesignatingPlaceOfTrial:
-      Case.validationRules.orderDesignatingPlaceOfTrial,
-    orderForAmendedPetition: Case.validationRules.orderForAmendedPetition,
+      Case.VALIDATION_RULES.orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition: Case.VALIDATION_RULES.orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee:
-      Case.validationRules.orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee: Case.validationRules.orderForFilingFee,
-    orderForOds: Case.validationRules.orderForOds,
-    orderForRatification: Case.validationRules.orderForRatification,
-    orderToShowCause: Case.validationRules.orderToShowCause,
-    ownershipDisclosureFile: joi.when('partyType', {
+      Case.VALIDATION_RULES.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: Case.VALIDATION_RULES.orderForFilingFee,
+    orderForOds: Case.VALIDATION_RULES.orderForOds,
+    orderForRatification: Case.VALIDATION_RULES.orderForRatification,
+    orderToShowCause: Case.VALIDATION_RULES.orderToShowCause,
+    ownershipDisclosureFile: joi.object().when('partyType', {
       is: joi
         .exist()
         .valid(
-          ContactFactory.PARTY_TYPES.corporation,
-          ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-          ContactFactory.PARTY_TYPES.partnershipBBA,
-          ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+          PARTY_TYPES.corporation,
+          PARTY_TYPES.partnershipAsTaxMattersPartner,
+          PARTY_TYPES.partnershipBBA,
+          PARTY_TYPES.partnershipOtherThanTaxMatters,
         ),
       otherwise: joi.optional().allow(null),
       then: joi.when('orderForOds', {
         is: joi.not(true),
         otherwise: joi.optional().allow(null),
-        then: joi.object().required(),
+        then: joi.required(),
       }),
     }),
-    ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional().allow(null),
-      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-    }),
-    partyType: joi.string().required(),
-    petitionFile: joi.object().required(),
-    petitionFileSize: joi.when('petitionFile', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional().allow(null),
-      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-    }),
-    petitionPaymentDate: joi.when('petitionPaymentStatus', {
-      is: Case.PAYMENT_STATUS.PAID,
-      otherwise: joiStrictTimestamp.optional().allow(null),
-      then: joiStrictTimestamp.max('now').required(),
-    }),
-    petitionPaymentMethod: Case.validationRules.petitionPaymentMethod,
-    petitionPaymentStatus: Case.validationRules.petitionPaymentStatus,
-    petitionPaymentWaivedDate: Case.validationRules.petitionPaymentWaivedDate,
+    ownershipDisclosureFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+      'ownershipDisclosureFile',
+      {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
+    partyType: joi
+      .string()
+      .valid(...Object.values(PARTY_TYPES))
+      .required(),
+    petitionFile: joi.object().required(), // TODO: object definition
+    petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+      'petitionFile',
+      {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
+    petitionPaymentDate: joiStrictTimestamp
+      .max('now')
+      .when('petitionPaymentStatus', {
+        is: PAYMENT_STATUS.PAID,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
+    petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
+    petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
+    petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
     preferredTrialCity: joi
       .alternatives()
       .conditional('requestForPlaceOfTrialFile', {
@@ -174,28 +201,34 @@ const paperRequirements = joi
         otherwise: joi.optional().allow(null),
         then: joi.string().required(),
       }),
-    procedureType: joi.string().required(),
+    procedureType: joi
+      .string()
+      .valid(...PROCEDURE_TYPES)
+      .required(),
     receivedAt: joiStrictTimestamp.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {
         is: joi.exist().not(null),
         otherwise: joi.object().optional(),
-        then: joi.object().required(),
+        then: joi.object().required(), // TODO: object definition
       }),
-    requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
+    requestForPlaceOfTrialFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+      'requestForPlaceOfTrialFile',
+      {
+        is: joi.exist().not(null),
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
+    statistics: Case.VALIDATION_RULES.statistics,
+    stinFile: joi.object().optional(), // TODO: object definition
+    stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
-      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
+      then: joi.required(),
     }),
-    statistics: Case.validationRules.statistics,
-    stinFile: joi.object().optional(),
-    stinFileSize: joi.when('stinFile', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional().allow(null),
-      then: joi.number().required().min(1).max(MAX_FILE_SIZE_BYTES).integer(),
-    }),
-    useSameAsPrimary: Case.validationRules.useSameAsPrimary,
+    useSameAsPrimary: Case.VALIDATION_RULES.useSameAsPrimary,
   })
   .or(
     'preferredTrialCity',

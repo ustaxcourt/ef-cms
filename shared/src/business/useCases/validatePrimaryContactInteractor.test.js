@@ -2,6 +2,7 @@ const {
   validatePrimaryContactInteractor,
 } = require('./validatePrimaryContactInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('validatePrimaryContactInteractor', () => {
   it('runs validation on a contact with no invalid properties', async () => {
@@ -18,7 +19,7 @@ describe('validatePrimaryContactInteractor', () => {
       state: 'MN',
     };
 
-    const partyType = ContactFactory.PARTY_TYPES.petitioner;
+    const partyType = PARTY_TYPES.petitioner;
 
     const errors = validatePrimaryContactInteractor({
       contactInfo: contactPrimary,
@@ -42,7 +43,7 @@ describe('validatePrimaryContactInteractor', () => {
       state: 'MN',
     };
 
-    const partyType = ContactFactory.PARTY_TYPES.petitioner;
+    const partyType = PARTY_TYPES.petitioner;
 
     const errors = validatePrimaryContactInteractor({
       contactInfo: contactPrimary,

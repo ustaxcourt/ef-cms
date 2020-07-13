@@ -27,9 +27,11 @@ export const updateUserContactInformationAction = async ({
   } catch (err) {
     if (
       err.originalError &&
-      err.originalError.response.data.indexOf(
+      err.originalError.response &&
+      err.originalError.response.data &&
+      err.originalError.response.data.includes(
         'there were no changes found needing to be updated',
-      ) !== -1
+      )
     ) {
       return path.noChange();
     } else {

@@ -1,6 +1,5 @@
-import { adcMarksStipulatedWorkItemAsCompleted } from './journey/adcMarksStipulatedWorkItemAsCompleted';
+import { adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete } from './journey/adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete';
 import { adcViewsCaseDetail } from './journey/adcViewsCaseDetail';
-import { adcViewsCaseDetailAfterComplete } from './journey/adcViewsCaseDetailAfterComplete';
 import { adcViewsDocumentDetail } from './journey/adcViewsDocumentDetail';
 import { adcViewsMessages } from './journey/adcViewsMessages';
 import { adcViewsMessagesAfterComplete } from './journey/adcViewsMessagesAfterComplete';
@@ -104,7 +103,6 @@ describe('Case journey', () => {
   adcViewsMessages(test);
   adcViewsCaseDetail(test);
   adcViewsDocumentDetail(test);
-  adcMarksStipulatedWorkItemAsCompleted(test);
-  adcViewsCaseDetailAfterComplete(test);
+  adcMarksWorkItemCompleteAndViewsCaseDetailAfterComplete(test);
   adcViewsMessagesAfterComplete(test);
 });

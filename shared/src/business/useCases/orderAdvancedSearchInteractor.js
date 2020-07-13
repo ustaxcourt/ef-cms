@@ -5,8 +5,10 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  ORDER_DOCUMENT_TYPES,
+} = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
-const { Document } = require('../../business/entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -53,7 +55,7 @@ exports.orderAdvancedSearchInteractor = async ({
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: Document.ORDER_DOCUMENT_TYPES,
+      documentEventCodes: ORDER_DOCUMENT_TYPES,
       judgeType: 'signedJudgeName',
       ...rawSearch,
     });

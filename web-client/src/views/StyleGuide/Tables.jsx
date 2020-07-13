@@ -63,7 +63,7 @@ export const Tables = () => (
     <table className="usa-table work-queue subsection">
       <thead>
         <tr>
-          <th>Docket number</th>
+          <th aria-label="Docket Number">Docket No.</th>
           <th>Date filed</th>
           <th>Petitioner name</th>
         </tr>

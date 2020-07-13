@@ -10,6 +10,7 @@ import { setPractitionerOnFormAction } from '../actions/FileDocument/setPractiti
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitCaseAssociationRequestAction } from '../actions/FileDocument/submitCaseAssociationRequestAction';
+import { unsetRequestAccessWizardStepAction } from '../actions/unsetRequestAccessWizardStepAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitCaseAssociationRequestSequence = [
@@ -24,6 +25,7 @@ export const submitCaseAssociationRequestSequence = [
       closeFileUploadStatusModalAction,
       getPrintableFilingReceiptSequence,
       getFileExternalDocumentAlertSuccessAction,
+      unsetRequestAccessWizardStepAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       navigateToCaseDetailAction,

@@ -8,7 +8,8 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case } = require('../../entities/cases/Case');
+const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -24,7 +25,7 @@ describe('createCaseDeadlineInteractor', () => {
   beforeEach(() => {
     user = new User({
       name: 'Test Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -68,7 +69,7 @@ describe('createCaseDeadlineInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()
@@ -92,7 +93,7 @@ describe('createCaseDeadlineInteractor', () => {
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
     expect(
       applicationContext.getPersistenceGateway()

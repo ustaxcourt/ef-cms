@@ -6,7 +6,7 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
@@ -44,22 +44,16 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('form.documentType')).toEqual('Answer');
-
-    await test.runSequence('editSelectedDocumentSequence');
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'category',
       value: 'Motion',
     });
 
-    await test.runSequence('clearWizardDataSequence', {
-      key: 'category',
-    });
-
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
@@ -82,7 +76,7 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       value: 'Nonstandard H',
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
@@ -113,7 +107,7 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       value: 'Nonstandard B',
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
@@ -126,11 +120,11 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       value: 'Anything',
     });
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('selectDocumentSequence');
+    await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

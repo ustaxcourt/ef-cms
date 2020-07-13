@@ -8,8 +8,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -42,8 +42,8 @@ exports.submitCaseAssociationRequestInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const isPrivatePractitioner =
-    authorizedUser.role === User.ROLES.privatePractitioner;
-  const isIrsPractitioner = authorizedUser.role === User.ROLES.irsPractitioner;
+    authorizedUser.role === ROLES.privatePractitioner;
+  const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner) {
     return await associatePrivatePractitionerToCase({

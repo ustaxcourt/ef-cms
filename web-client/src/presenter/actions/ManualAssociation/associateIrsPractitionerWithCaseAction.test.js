@@ -1,4 +1,4 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter-mock';

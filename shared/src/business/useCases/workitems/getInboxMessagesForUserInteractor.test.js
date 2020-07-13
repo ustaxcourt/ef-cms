@@ -4,11 +4,11 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('./getInboxMessagesForUserInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getInboxMessagesForUserInteractor', () => {
   const mockPetitionerUser = {
-    role: User.ROLES.petitioner,
+    role: ROLES.petitioner,
     userId: 'petitioner',
   };
 

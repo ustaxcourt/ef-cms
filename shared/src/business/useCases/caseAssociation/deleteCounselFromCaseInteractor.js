@@ -3,8 +3,8 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * deleteCounselFromCaseInteractor
@@ -42,9 +42,9 @@ exports.deleteCounselFromCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToDelete.role === User.ROLES.privatePractitioner) {
+  if (userToDelete.role === ROLES.privatePractitioner) {
     caseEntity.removePrivatePractitioner(userToDelete);
-  } else if (userToDelete.role === User.ROLES.irsPractitioner) {
+  } else if (userToDelete.role === ROLES.irsPractitioner) {
     caseEntity.removeIrsPractitioner(userToDelete);
   } else {
     throw new Error('User is not a practitioner');

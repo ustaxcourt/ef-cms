@@ -1,7 +1,7 @@
 import { clearWizardDataAction } from './clearWizardDataAction';
 import { runAction } from 'cerebral/test';
 
-describe('clearSecondaryDocumentScenarioAction', () => {
+describe('clearWizardDataAction', () => {
   it('clears document scenario with "category" key', async () => {
     const result = await runAction(clearWizardDataAction, {
       props: {

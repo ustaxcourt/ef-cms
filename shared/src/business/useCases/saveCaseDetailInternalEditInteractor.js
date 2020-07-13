@@ -9,6 +9,7 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
+const { WorkItem } = require('../entities/WorkItem');
 
 /**
  * saveCaseDetailInternalEditInteractor
@@ -24,11 +25,15 @@ exports.saveCaseDetailInternalEditInteractor = async ({
   caseId,
   caseToUpdate,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   if (!caseToUpdate || caseId !== caseToUpdate.caseId) {
     throw new UnprocessableEntityError();
@@ -90,17 +95,45 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     }).secondary.toRawObject();
   }
 
-  const updatedCase = new Case(fullCase, { applicationContext })
-    .setRequestForTrialDocketRecord(fullCase.preferredTrialCity, {
-      applicationContext,
-    })
-    .validate()
-    .toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateCase({
+  const caseEntity = new Case(fullCase, { applicationContext }).validate();
+  caseEntity.setRequestForTrialDocketRecord(fullCase.preferredTrialCity, {
     applicationContext,
-    caseToUpdate: updatedCase,
   });
 
-  return updatedCase;
+  if (!caseEntity.isPaper) {
+    const petitionDocument = caseEntity.getPetitionDocument();
+
+    const initializeCaseWorkItem = petitionDocument.workItems.find(
+      workItem => workItem.isInitializeCase,
+    );
+
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem.validate().toRawObject(),
+    });
+
+    const workItemEntity = new WorkItem(
+      {
+        ...initializeCaseWorkItem,
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        caseIsInProgress: true,
+      },
+      { applicationContext },
+    );
+
+    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    });
+  }
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return new Case(updatedCase, { applicationContext }).toRawObject();
 };

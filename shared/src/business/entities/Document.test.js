@@ -1,13 +1,21 @@
+const {
+  EXTERNAL_DOCUMENT_TYPES,
+  INTERNAL_DOCUMENT_TYPES,
+  OPINION_DOCUMENT_TYPES,
+  ORDER_TYPES,
+  ROLES,
+} = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
-const { User } = require('./User');
+const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  role: User.ROLES.petitioner,
-  userId: 'petitioner',
+  filedBy: 'Test Petitioner',
+  role: ROLES.petitioner,
+  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
 };
 const caseDetail = {
   contactPrimary: {
@@ -17,6 +25,7 @@ const caseDetail = {
     name: 'Bill',
   },
 };
+const mockUserId = applicationContext.getUniqueId();
 
 describe('Document entity', () => {
   describe('isPendingOnCreation', () => {
@@ -102,7 +111,7 @@ describe('Document entity', () => {
     it('Creates an invalid document with no document type', () => {
       const myDoc = new Document(
         {
-          userId: '123',
+          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
         { applicationContext },
       );
@@ -133,7 +142,7 @@ describe('Document entity', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       const workItem = new WorkItem(
         {
-          assigneeId: 'bob',
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: 'new',
@@ -204,6 +213,435 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeTruthy();
       expect(document.secondaryDate).toBeDefined();
+    });
+
+    describe('handling of sealed legacy documents', () => {
+      it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            isLegacySealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.getFormattedValidationErrors()).toMatchObject({
+          isLegacy: '"isLegacy" is required',
+          isSealed: '"isSealed" is required',
+        });
+      });
+
+      it('should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacy: true,
+            isLegacySealed: true,
+            isOrder: true,
+            isSealed: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: ORDER_TYPES[0].documentType,
+            draftState: {},
+            eventCode: 'O',
+            isLegacySealed: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+    });
+
+    describe('filedBy scenarios', () => {
+      let mockDocumentData = {
+        ...A_VALID_DOCUMENT,
+        documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+        draftState: null,
+        secondaryDate: '2019-03-01T21:40:46.415Z',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      };
+
+      describe('documentType is not in the list of documents that require filedBy', () => {
+        it('should pass validation when filedBy is undefined', () => {
+          let internalDocument = new Document(
+            { ...mockDocumentData, documentType: 'Petition' },
+            { applicationContext },
+          );
+
+          expect(internalDocument.isValid()).toBeTruthy();
+        });
+      });
+
+      describe('documentType is in the list of documents that require filedBy', () => {
+        describe('external filing events', () => {
+          describe('that are not autogenerated', () => {
+            it('should fail validation when "filedBy" is not provided', () => {
+              const document = new Document(
+                {
+                  ...A_VALID_DOCUMENT,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: EXTERNAL_DOCUMENT_TYPES[0],
+                  eventCode: 'TRAN',
+                  filedBy: undefined,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+              expect(document.isValid()).toBeFalsy();
+              expect(document.filedBy).toBeUndefined();
+            });
+
+            it('should pass validation when "filedBy" is provided', () => {
+              const document = new Document(
+                {
+                  ...A_VALID_DOCUMENT,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: EXTERNAL_DOCUMENT_TYPES[0],
+                  eventCode: 'TRAN',
+                  filedBy: 'Test Petitioner1',
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.isValid()).toBeTruthy();
+            });
+          });
+
+          describe('that are autogenerated', () => {
+            it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  isAutoGenerated: true,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.filedBy).toBeUndefined();
+              expect(document.isValid()).toBeTruthy();
+            });
+
+            it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.filedBy).toBeUndefined();
+              expect(document.isValid()).toBeTruthy();
+            });
+
+            it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  isAutoGenerated: false,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.isValid()).toBeFalsy();
+            });
+          });
+        });
+
+        describe('internal filing events', () => {
+          describe('that are not autogenerated', () => {
+            it('should fail validation when "filedBy" is not provided', () => {
+              const document = new Document(
+                {
+                  ...A_VALID_DOCUMENT,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: INTERNAL_DOCUMENT_TYPES[0],
+                  eventCode: 'TRAN',
+                  filedBy: undefined,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+              expect(document.isValid()).toBeFalsy();
+              expect(document.filedBy).toBeUndefined();
+            });
+
+            it('should pass validation when "filedBy" is provided', () => {
+              const document = new Document(
+                {
+                  ...A_VALID_DOCUMENT,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: INTERNAL_DOCUMENT_TYPES[0],
+                  eventCode: 'TRAN',
+                  filedBy: 'Test Petitioner1',
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.isValid()).toBeTruthy();
+            });
+          });
+
+          describe('that are autogenerated', () => {
+            it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  isAutoGenerated: true,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.filedBy).toBeUndefined();
+              expect(document.isValid()).toBeTruthy();
+            });
+
+            it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.filedBy).toBeUndefined();
+              expect(document.isValid()).toBeTruthy();
+            });
+
+            it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
+              const documentWithoutFiledBy = omit(A_VALID_DOCUMENT, 'filedBy');
+              const document = new Document(
+                {
+                  ...documentWithoutFiledBy,
+                  documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+                  documentType: 'Notice of Change of Address',
+                  eventCode: 'NCA',
+                  isAutoGenerated: false,
+                  isOrder: true,
+                  secondaryDate: '2019-03-01T21:40:46.415Z',
+                },
+                { applicationContext },
+              );
+
+              expect(document.isValid()).toBeFalsy();
+            });
+          });
+        });
+      });
+    });
+
+    it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.signedJudgeName).toBeUndefined();
+    });
+
+    it('should fail validation when the document type is opinion and judge is not provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: OPINION_DOCUMENT_TYPES[0].documentType,
+          eventCode: 'MOP',
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.judge).toBeUndefined();
+    });
+
+    it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          draftState: null,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeTruthy();
+    });
+
+    it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+    });
+
+    it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeFalsy();
+      expect(document.signedJudgeName).toBeUndefined();
+    });
+
+    it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+      expect(document.isValid()).toBeTruthy();
+    });
+
+    it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          servedAt: '2019-03-01T21:40:46.415Z',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeFalsy();
+      expect(document.getFormattedValidationErrors()).toMatchObject({
+        servedParties: '"servedParties" is required',
+      });
+    });
+
+    it('should fail validation when the document has servedParties and servedAt is not defined', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          documentType: ORDER_TYPES[0].documentType,
+          eventCode: 'TRAN',
+          isOrder: true,
+          secondaryDate: '2019-03-01T21:40:46.415Z',
+          servedParties: 'Test Petitioner',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+        },
+        { applicationContext },
+      );
+
+      expect(document.isValid()).toBeFalsy();
+      expect(document.getFormattedValidationErrors()).toMatchObject({
+        servedAt: '"servedAt" is required',
+      });
     });
   });
 
@@ -837,10 +1275,15 @@ describe('Document entity', () => {
   describe('setQCed', () => {
     it('updates the document QC information with user name, id, and date', () => {
       const document = new Document(A_VALID_DOCUMENT, { applicationContext });
-      const user = { name: 'Jean Luc', userId: 'ncc-1701-c' };
+      const user = {
+        name: 'Jean Luc',
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
       document.setQCed(user);
       expect(document.qcByUser.name).toEqual('Jean Luc');
-      expect(document.qcByUser.userId).toEqual('ncc-1701-c');
+      expect(document.qcByUser.userId).toEqual(
+        '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      );
       expect(document.qcAt).toBeDefined();
     });
   });
@@ -852,7 +1295,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -872,7 +1315,7 @@ describe('Document entity', () => {
               workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
             },
             {
-              assigneeId: 'bob',
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
               assigneeName: 'bob',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -907,7 +1350,7 @@ describe('Document entity', () => {
           ...A_VALID_DOCUMENT,
           workItems: [
             {
-              assigneeId: 'bill',
+              assigneeId: '49b4789b-3c90-4940-946c-95a700d5a501',
               assigneeName: 'bill',
               caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
               caseStatus: 'new',
@@ -1018,10 +1461,100 @@ describe('Document entity', () => {
           name: 'Served Party',
         },
       ]);
-
       expect(document.servedAt).toBeDefined();
       expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
+    });
+  });
+
+  describe('getFormattedType', () => {
+    it('strips out the dash and returns the verbiage after it', () => {
+      expect(Document.getFormattedType('TCOP - T.C. Opinion')).toEqual(
+        'T.C. Opinion',
+      );
+    });
+    it("returns the verbiage if there's no dash", () => {
+      expect(Document.getFormattedType('Summary Opinion')).toEqual(
+        'Summary Opinion',
+      );
+    });
+  });
+
+  describe('secondaryDocument validation', () => {
+    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+          secondaryDocument: {},
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(
+        Object.keys(createdDocument.getFormattedValidationErrors()),
+      ).toEqual(['secondaryDocument']);
+    });
+
+    it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+          secondaryDocument: undefined,
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should be valid if secondaryDocument is not present and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: undefined,
+        },
+        { applicationContext },
+      );
+
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should be valid if secondaryDocument is present and its contents are valid and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            documentTitle: 'Petition',
+            documentType: 'Petition',
+            eventCode: 'P',
+          },
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(true);
+    });
+
+    it('should not be valid if secondaryDocument is present and it is missing fields and the scenario is Nonstandard H', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {},
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(
+        Object.keys(createdDocument.getFormattedValidationErrors()),
+      ).toEqual(['documentType', 'eventCode']);
     });
   });
 });

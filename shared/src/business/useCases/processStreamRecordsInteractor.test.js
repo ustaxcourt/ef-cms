@@ -230,17 +230,20 @@ describe('processStreamRecordsInteractor', () => {
 
   it('attempts to reindex if bulk indexing returns error data', async () => {
     applicationContext.getSearchClient().bulk.mockResolvedValue({
-      body: {
-        errors: [{ badError: true }],
-        items: [
-          {
-            index: { error: false },
+      errors: true,
+      items: [
+        {
+          index: {},
+        },
+        {
+          index: {
+            error: {
+              reason: 'document missing',
+              type: 'document_missing_exception',
+            },
           },
-          {
-            index: { error: true },
-          },
-        ],
-      },
+        },
+      ],
     });
 
     await processStreamRecordsInteractor({
@@ -276,24 +279,25 @@ describe('processStreamRecordsInteractor', () => {
     expect(applicationContext.getSearchClient().index).toBeCalled();
     expect(
       applicationContext.getSearchClient().index.mock.calls[0][0],
-    ).toMatchObject({
-      body: { caseId: { S: '2' } },
-    });
+    ).toMatchObject({ body: { caseId: { S: '2' } } });
   });
 
   it('creates a reindex record if bulk indexing returns error data and individual indexing fails', async () => {
     applicationContext.getSearchClient().bulk.mockResolvedValue({
-      body: {
-        errors: [{ badError: true }],
-        items: [
-          {
-            index: { error: false },
+      errors: true,
+      items: [
+        {
+          index: { error: false },
+        },
+        {
+          index: {
+            error: {
+              reason: 'document missing',
+              type: 'document_missing_exception',
+            },
           },
-          {
-            index: { error: true },
-          },
-        ],
-      },
+        },
+      ],
     });
     applicationContext.getSearchClient().index.mockImplementation(() => {
       throw new Error('bad!');

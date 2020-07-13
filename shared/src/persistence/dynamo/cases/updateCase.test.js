@@ -2,11 +2,14 @@ const client = require('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { Case } = require('../../../business/entities/cases/Case');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
   let firstQueryStub;
+  let secondQueryStub;
 
   beforeEach(() => {
     firstQueryStub = [
@@ -15,7 +18,17 @@ describe('updateCase', () => {
         inProgress: false,
         pk: 'case|123',
         sk: 'case|123',
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    secondQueryStub = [
+      {
+        gsi1pk: 'user-case|123',
+        leadCaseId: '123',
+        pk: 'user|123',
+        sk: 'case|123',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -30,6 +43,7 @@ describe('updateCase', () => {
     applicationContext
       .getDocumentClient()
       .query.mockReturnValueOnce(firstQueryStub)
+      .mockReturnValueOnce(secondQueryStub)
       .mockReturnValue([
         {
           sk: '123',
@@ -64,7 +78,7 @@ describe('updateCase', () => {
         caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
         userId: 'petitioner',
       },
     });
@@ -87,14 +101,14 @@ describe('updateCase', () => {
         docketNumber: '101-18',
         docketNumberSuffix: 'W',
         inProgress: true,
-        status: Case.STATUS_TYPES.calendared,
+        status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
         userId: 'petitioner',
       },
     });
 
     expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      applicationContext.getDocumentClient().put.mock.calls[1][0].Item,
     ).toMatchObject({
       pk: 'case|123',
       sk: 'case|123',
@@ -103,7 +117,7 @@ describe('updateCase', () => {
       applicationContext.getDocumentClient().update.mock.calls[0][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':caseStatus': Case.STATUS_TYPES.calendared,
+        ':caseStatus': CASE_STATUS_TYPES.calendared,
       },
     });
     expect(
@@ -150,7 +164,7 @@ describe('updateCase', () => {
         associatedJudge: 'Judge Buch',
         caseId: '123',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     });
 
@@ -169,7 +183,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         caseId: '123',
         docketNumberSuffix: null,
-        status: Case.STATUS_TYPES.generalDocket,
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     });
 
@@ -192,7 +206,7 @@ describe('updateCase', () => {
           irsPractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -223,7 +237,7 @@ describe('updateCase', () => {
             { name: 'Guy Fieri', userId: 'user-id-existing-123' },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -267,7 +281,7 @@ describe('updateCase', () => {
             },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
       expect(
@@ -309,7 +323,7 @@ describe('updateCase', () => {
               userId: 'user-id-existing-234',
             },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -336,7 +350,7 @@ describe('updateCase', () => {
           privatePractitioners: [
             { name: 'Guy Fieri', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -369,7 +383,7 @@ describe('updateCase', () => {
             { name: 'Guy Fieri', userId: 'user-id-existing-123' },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -402,7 +416,7 @@ describe('updateCase', () => {
             },
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -431,7 +445,7 @@ describe('updateCase', () => {
           privatePractitioners: [
             { name: 'Rachel Ray', userId: 'user-id-existing-234' },
           ],
-          status: Case.STATUS_TYPES.generalDocket,
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       });
 
@@ -444,6 +458,120 @@ describe('updateCase', () => {
       ).toMatchObject({
         pk: 'case|123',
         sk: 'privatePractitioner|user-id-existing-123',
+      });
+    });
+  });
+
+  describe('user case mappings', () => {
+    beforeEach(() => {
+      applicationContext.getDocumentClient().query = jest
+        .fn()
+        .mockResolvedValueOnce(firstQueryStub) // getting case
+        .mockResolvedValueOnce([]) // work item mappings
+        .mockResolvedValue(secondQueryStub);
+
+      client.query = applicationContext.getDocumentClient().query;
+    });
+
+    it('updates user case mapping if the status has changed', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          associatedJudge: 'Judge Buch',
+          caseId: '123',
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          inProgress: true,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2019-03-01T21:40:46.415Z',
+          userId: 'petitioner',
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        gsi1pk: 'user-case|123',
+        pk: 'user|123',
+        sk: 'case|123',
+        status: CASE_STATUS_TYPES.calendared,
+      });
+    });
+
+    it('updates user case mapping if the docket number suffix has changed', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          associatedJudge: 'Judge Buch',
+          caseId: '123',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'W',
+          inProgress: true,
+          status: CASE_STATUS_TYPES.generalDocket,
+          trialDate: '2019-03-01T21:40:46.415Z',
+          userId: 'petitioner',
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        docketNumberSuffix: 'W',
+        gsi1pk: 'user-case|123',
+        pk: 'user|123',
+        sk: 'case|123',
+      });
+    });
+
+    it('updates user case mapping if the case caption has changed', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          associatedJudge: 'Judge Buch',
+          caseCaption: 'Guy Fieri, Petitioner',
+          caseId: '123',
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          inProgress: true,
+          status: CASE_STATUS_TYPES.generalDocket,
+          trialDate: '2019-03-01T21:40:46.415Z',
+          userId: 'petitioner',
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        caseCaption: 'Guy Fieri, Petitioner',
+        gsi1pk: 'user-case|123',
+        pk: 'user|123',
+        sk: 'case|123',
+      });
+    });
+
+    it('updates user case mapping if the lead case id (consolidation) has changed', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          associatedJudge: 'Judge Buch',
+          caseId: '123',
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          inProgress: true,
+          leadCaseId: 'case|321',
+          status: CASE_STATUS_TYPES.generalDocket,
+          trialDate: '2019-03-01T21:40:46.415Z',
+          userId: 'petitioner',
+        },
+      });
+
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+      ).toMatchObject({
+        gsi1pk: 'user-case|123',
+        leadCaseId: 'case|321',
+        pk: 'user|123',
+        sk: 'case|123',
       });
     });
   });

@@ -1,0 +1,25 @@
+[
+  {
+    "caseId": "28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "caseStatus": "General Docket - Not at Issue",
+    "createdAt": "2020-06-05T18:02:25.280Z",
+    "caseTitle": "Bill Burr",
+    "docketNumber": "105-20",
+    "docketNumberWithSuffix": "105-20L",
+    "entityName": "CaseMessage",
+    "from": "Test Petitionsclerk",
+    "fromSection": "petitions",
+    "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "gsi1pk": "message|eb0a139a-8951-4de1-8b83-f02a27504105",
+    "message": "hello!",
+    "messageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
+    "pk": "case|28caad58-df69-4a4d-af15-6554aee7fbd6",
+    "sk": "message|eb0a139a-8951-4de1-8b83-f02a27504105",
+    "parentMessageId": "eb0a139a-8951-4de1-8b83-f02a27504105",
+    "subject": "message to myself",
+    "to": "Test Petitionsclerk",
+    "toSection": "petitions",
+    "isRepliedTo": false,
+    "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416"
+  }
+]

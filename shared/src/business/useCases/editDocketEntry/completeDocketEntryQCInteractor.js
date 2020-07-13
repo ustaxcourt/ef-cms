@@ -5,6 +5,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  CONTACT_CHANGE_DOCUMENT_TYPES,
+  NOTICE_OF_DOCKET_CHANGE,
+} = require('../../entities/EntityConstants');
+const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -16,13 +20,13 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { omit } = require('lodash');
-const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -39,6 +43,8 @@ exports.completeDocketEntryQCInteractor = async ({
   entryMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
@@ -143,7 +149,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const docketChangeInfo = {
     caseCaptionExtension,
-    caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${Case.CASE_CAPTION_POSTFIX}`,
+    caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${CASE_CAPTION_POSTFIX}`,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
@@ -233,11 +239,7 @@ exports.completeDocketEntryQCInteractor = async ({
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
-  if (
-    Document.CONTACT_CHANGE_DOCUMENT_TYPES.includes(
-      updatedDocument.documentType,
-    )
-  ) {
+  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocument.documentType)) {
     if (servedParties.paper.length > 0) {
       const { Body: pdfData } = await applicationContext
         .getStorageClient()
@@ -293,7 +295,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
     let noticeUpdatedDocument = new Document(
       {
-        ...Document.NOTICE_OF_DOCKET_CHANGE,
+        ...NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
         userId: user.userId,
       },
@@ -301,7 +303,7 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     noticeUpdatedDocument.documentTitle = replaceBracketed(
-      Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
+      NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
 
@@ -323,6 +325,7 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     const newPdfData = await addServedStampToDocument({
+      applicationContext,
       pdfData,
       serviceStampText: `Served ${serviceStampDate}`,
     });

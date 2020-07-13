@@ -1,6 +1,8 @@
 /* eslint-disable jest/no-export */
-import { CerebralTest } from 'cerebral/test';
+import { CerebralTest, runCompute } from 'cerebral/test';
+import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -10,8 +12,6 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-
-import { DynamoDB } from 'aws-sdk';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -20,7 +20,6 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
-import { runCompute } from 'cerebral/test';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
@@ -31,9 +30,6 @@ import axios from 'axios';
 
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
@@ -296,7 +292,6 @@ export const uploadExternalDecisionDocument = async test => {
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: {},
     serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
@@ -323,7 +318,6 @@ export const uploadProposedStipulatedDecision = async test => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: { certificateOfServiceDate: null },
     serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
@@ -384,7 +378,7 @@ export const uploadPetition = async (
     contactSecondary: overrides.contactSecondary || {},
     filingType: 'Myself',
     hasIrsNotice: false,
-    partyType: overrides.partyType || ContactFactory.PARTY_TYPES.petitioner,
+    partyType: overrides.partyType || PARTY_TYPES.petitioner,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
   };
@@ -396,7 +390,7 @@ export const uploadPetition = async (
   const userToken = jwt.sign(user, 'secret');
 
   const response = await axios.post(
-    'http://localhost:3002/',
+    'http://localhost:4000/cases',
     {
       petitionFileId,
       petitionMetadata,
@@ -455,7 +449,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:3000';
+  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:4000';
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -562,6 +556,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
         '$',

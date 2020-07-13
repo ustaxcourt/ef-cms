@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 
@@ -7,7 +7,7 @@ import { runAction } from 'cerebral/test';
 import { setUserPermissionsAction } from './setUserPermissionsAction';
 
 describe('setUserPermissionsAction', () => {
-  const mockUser = { role: User.ROLES.docketClerk };
+  const mockUser = { role: ROLES.docketClerk };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;

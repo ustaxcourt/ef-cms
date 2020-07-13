@@ -33,6 +33,15 @@ module.exports = {
         'promise/catch-or-return': 'off',
       },
     },
+    {
+      files: [
+        'web-client/integration-tests/**/*.js',
+        'web-client/integration-tests-public/**/*.js',
+      ],
+      rules: {
+        'jest/expect-expect': 'off',
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -180,6 +189,7 @@ module.exports = {
         skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
+          'apigateway',
           'args',
           'armen',
           'armens',
@@ -218,6 +228,7 @@ module.exports = {
           'dynamsoft',
           'efcms',
           'elasticsearch',
+          'enum',
           'eslint',
           'falsy',
           'fieldset',
@@ -308,6 +319,7 @@ module.exports = {
           'scss',
           'semibold',
           'seriatim',
+          'serverless',
           'servoss',
           'sisqo',
           'skipnav',
@@ -324,6 +336,7 @@ module.exports = {
           'textarea',
           'thorton',
           'thortons',
+          'todays',
           'touchmove',
           'transferee',
           'truthy',

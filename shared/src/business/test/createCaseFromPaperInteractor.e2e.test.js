@@ -1,4 +1,8 @@
 const {
+  CASE_STATUS_TYPES,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
+const {
   createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
 const {
@@ -8,10 +12,9 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { ROLES } = require('../entities/EntityConstants');
 
 describe('createCaseFromPaperInteractor integration test', () => {
   const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
@@ -23,7 +26,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
@@ -49,7 +52,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         mailingDate: 'testing',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
-        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         receivedAt: RECEIVED_DATE,
         requestForPlaceOfTrialFile: new File(
           [],
@@ -90,7 +93,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               assigneeName: 'Alex Petitionsclerk',
-              caseStatus: Case.STATUS_TYPES.new,
+              caseStatus: CASE_STATUS_TYPES.new,
               createdAt: RECEIVED_DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
@@ -133,7 +136,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       receivedAt: RECEIVED_DATE,
-      status: Case.STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -145,7 +148,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsclerkInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19',
         document: {
@@ -174,7 +177,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsSectionInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: Case.STATUS_TYPES.new,
+        caseStatus: CASE_STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberWithSuffix: '101-19',
         document: {

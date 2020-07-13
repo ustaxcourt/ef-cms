@@ -3,7 +3,6 @@ let createdDocketNumber;
 
 describe('File a petition', function () {
   before(() => {
-    cy.task('seed');
     cy.login('petitioner');
   });
 
@@ -165,12 +164,22 @@ describe('creation form', () => {
     cy.get('button#submit-case').click();
   });
 
-  it('click the small radio button', () => {
+  it('click the regular radio button', () => {
     cy.get('#procedure-type-radios').scrollIntoView();
-    cy.get('#procedure-type-radios label').first().click();
+    cy.get('#procedure-type-radios label').eq(1).click();
   });
 
   it('select a city', () => {
+    cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+  });
+
+  it('click the small radio button', () => {
+    cy.get('#procedure-type-radios').scrollIntoView();
+    cy.get('#procedure-type-radios label').eq(0).click();
+  });
+
+  it('select a city', () => {
+    cy.get('#preferred-trial-city').should('have.value', '');
     cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
   });
 
@@ -179,15 +188,21 @@ describe('creation form', () => {
   });
 
   it('submits forms and redirects to the file petition success page', () => {
+    cy.get('button#submit-case').scrollIntoView().click();
+
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
-    cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase');
     cy.get('@postCase').should(xhr => {
       // eslint-disable-next-line jest/valid-expect
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
+
+    // wait for elasticsearch to refresh
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
+
     cy.url().should('include', 'file-a-petition/success');
     cy.get('a#button-back-to-dashboard').click();
   });
@@ -208,5 +223,9 @@ describe('can view case detail', () => {
 
   it('shows docket record table and data', () => {
     cy.get('table.case-detail.docket-record tbody tr').should('exist');
+  });
+
+  it('displays page count of the petition document', () => {
+    cy.get('td.number-of-pages').should('contain.text', '2');
   });
 });

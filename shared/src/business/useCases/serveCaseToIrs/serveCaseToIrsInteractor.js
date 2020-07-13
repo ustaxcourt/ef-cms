@@ -1,18 +1,22 @@
 const {
+  INITIAL_DOCUMENT_TYPES,
+  PAYMENT_STATUS,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
-const { PETITIONS_SECTION } = require('../../entities/WorkQueue');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
 }) => {
-  if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+  if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {
@@ -23,7 +27,7 @@ exports.addDocketEntryForPaymentStatus = ({
         { applicationContext },
       ),
     );
-  } else if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+  } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     caseEntity.addDocketRecord(
       new DocketRecord(
         {
@@ -40,8 +44,7 @@ exports.addDocketEntryForPaymentStatus = ({
 exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
   const stinDocument = caseEntity.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
   if (stinDocument) {
@@ -60,6 +63,7 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case
+ * @returns {Buffer} paper service pdf if the case is a paper case
  */
 exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
@@ -77,11 +81,10 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
-  for (const initialDocumentTypeKey of Object.keys(
-    Document.INITIAL_DOCUMENT_TYPES,
-  )) {
-    const initialDocumentType =
-      Document.INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
+  caseEntity.markAsSentToIRS();
+
+  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
+    const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
     const initialDocument = caseEntity.documents.find(
       document => document.documentType === initialDocumentType.documentType,
@@ -98,7 +101,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
       if (
         initialDocument.documentType ===
-        Document.INITIAL_DOCUMENT_TYPES.petition.documentType
+        INITIAL_DOCUMENT_TYPES.petition.documentType
       ) {
         await applicationContext
           .getUseCaseHelpers()
@@ -137,17 +140,19 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   //   item => item.documentId !== deletedStinDocumentId,
   // );
 
-  caseEntity.markAsSentToIRS();
-
   const petitionDocument = caseEntity.documents.find(
     document =>
-      document.documentType ===
-      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,
   );
+
+  initializeCaseWorkItem.document.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+  initializeCaseWorkItem.docketNumberWithSuffix =
+    caseEntity.docketNumberWithSuffix;
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
@@ -181,19 +186,66 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       applicationContext,
       caseId: caseEntity.caseId,
       documentId: doc.documentId,
+      replaceCoversheet: !caseEntity.isPaper,
+      useInitialData: !caseEntity.isPaper,
     });
   }
 
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+
+  const address = {
+    ...caseEntity.contactPrimary,
+    countryName:
+      caseEntity.contactPrimary.countryType !== 'domestic'
+        ? caseEntity.contactPrimary.country
+        : '',
+  };
+
   const pdfData = await applicationContext
-    .getUseCaseHelpers()
-    .generateCaseConfirmationPdf({
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
       applicationContext,
-      caseEntity,
+      data: {
+        address,
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
     });
 
-  if (caseEntity.isPaper) {
-    const paperServicePdfBuffer = Buffer.from(pdfData);
+  const caseConfirmationPdfName = caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-    return paperServicePdfBuffer;
+  await new Promise(resolve => {
+    const documentsBucket = applicationContext.getDocumentsBucketName();
+    const s3Client = applicationContext.getStorageClient();
+
+    const params = {
+      Body: pdfData,
+      Bucket: documentsBucket,
+      ContentType: 'application/pdf',
+      Key: caseConfirmationPdfName,
+    };
+
+    s3Client.upload(params, resolve);
+  });
+
+  if (caseEntity.isPaper) {
+    const {
+      url,
+    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+      applicationContext,
+      documentId: caseConfirmationPdfName,
+      useTempBucket: false,
+    });
+
+    return url;
   }
 };

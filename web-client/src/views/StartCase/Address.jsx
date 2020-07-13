@@ -14,6 +14,7 @@ export const Address = connect(
     updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
     updateFormValueSequence: sequences[props.onChange],
     usStates: state.constants.US_STATES,
+    usStatesOther: state.constants.US_STATES_OTHER,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
@@ -23,11 +24,12 @@ export const Address = connect(
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     usStates,
+    usStatesOther,
     validateStartCaseSequence,
     validationErrors,
   }) {
     return (
-      <React.Fragment>
+      <>
         <FormGroup
           errorText={
             validationErrors &&
@@ -143,6 +145,7 @@ export const Address = connect(
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
                   usStates={usStates}
+                  usStatesOther={usStatesOther}
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
@@ -202,6 +205,7 @@ export const Address = connect(
               type={type}
               updateFormValueSequence={updateFormValueSequence}
               usStates={usStates}
+              usStatesOther={usStatesOther}
               validateStartCaseSequence={validateStartCaseSequence}
             />
           </FormGroup>
@@ -240,7 +244,7 @@ export const Address = connect(
             }}
           />
         </FormGroup>
-      </React.Fragment>
+      </>
     );
   },
 );

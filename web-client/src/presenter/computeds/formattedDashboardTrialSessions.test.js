@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
 import {
@@ -223,7 +223,7 @@ describe('formattedDashboardTrialSessions', () => {
 
   it('returns results for an associated chambers judge if the user role is chambers', () => {
     applicationContext.getCurrentUser = () => ({
-      role: User.ROLES.chambers,
+      role: ROLES.chambers,
       userId: '6',
     });
     const result = runCompute(formattedDashboardTrialSessions, {

@@ -19,14 +19,24 @@ function Correspondence(rawProps) {
 }
 
 Correspondence.schema = {
-  documentId: joi.string().required(),
-  documentTitle: joi.string().required(),
-  filedBy: joi.string().allow('').optional(),
+  documentId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
+  documentTitle: joi.string().max(500).required(),
+  filedBy: joi.string().max(500).allow('').optional(),
   filingDate: joiStrictTimestamp
     .max('now')
     .required()
     .description('Date that this Document was filed.'),
-  userId: joi.string().required(),
+  userId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
 };
 
 joiValidationDecorator(Correspondence, Correspondence.schema, {});

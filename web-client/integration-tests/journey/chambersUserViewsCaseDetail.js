@@ -1,4 +1,7 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} from '../../../shared/src/business/entities/EntityConstants';
 
 export const chambersUserViewsCaseDetail = (
   test,
@@ -13,12 +16,10 @@ export const chambersUserViewsCaseDetail = (
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
+    expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
     expect(test.getState('caseDetail.documents').length).toEqual(
       expectedDocumentCount,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(
-      Case.CHIEF_JUDGE,
-    );
+    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
   });
 };

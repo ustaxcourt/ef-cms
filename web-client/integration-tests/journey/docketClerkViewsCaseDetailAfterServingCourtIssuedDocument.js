@@ -1,4 +1,4 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
   test,
@@ -20,10 +20,10 @@ export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
     if (expectedCaseStatus) {
       expect(test.getState('caseDetail.status')).toEqual(expectedCaseStatus);
     } else if (orderDocument.eventCode === 'O') {
-      expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
+      expect(test.getState('caseDetail.status')).toEqual(CASE_STATUS_TYPES.new);
     } else {
       expect(test.getState('caseDetail.status')).toEqual(
-        Case.STATUS_TYPES.closed,
+        CASE_STATUS_TYPES.closed,
       );
       expect(test.getState('caseDetail.highPriority')).toEqual(false);
     }

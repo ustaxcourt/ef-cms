@@ -11,6 +11,7 @@ describe('associateUserWithCase', () => {
       userId: '123',
     });
     expect(result).toEqual({
+      gsi1pk: 'user-case|234',
       pk: 'user|123',
       sk: 'case|234',
     });

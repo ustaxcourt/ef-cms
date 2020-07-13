@@ -1493,10 +1493,25 @@ button.change-scanner-button {
   font-size: 17px;
 }
 
-.upload-court-document-description-container {
-  min-height: 471px;
+.desktop\:upload-court-document-description-container {
+  @media only screen and (min-width: $medium-screen) {
+    min-height: 471px;
+  }
 }
 
 .accordion-item-title {
   align-self: center;
+}
+
+.message-detail--attachments {
+  height: 1000px;
+
+  iframe {
+    border: none;
+  }
+}
+
+.message-detail .usa-accordion__heading .accordion-item-title {
+  font-size: 16px;
+  font-weight: $font-regular;
 }

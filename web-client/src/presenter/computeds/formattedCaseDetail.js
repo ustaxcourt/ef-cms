@@ -1,10 +1,17 @@
 /* eslint-disable complexity */
 import { state } from 'cerebral';
 
-export const formattedCases = (get, applicationContext) => {
+export const formattedOpenCases = (get, applicationContext) => {
   const { formatCase } = applicationContext.getUtilities();
 
-  const cases = get(state.cases);
+  const cases = get(state.openCases);
+  return cases.map(myCase => formatCase(applicationContext, myCase));
+};
+
+export const formattedClosedCases = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
+
+  const cases = get(state.closedCases);
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
@@ -86,12 +93,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
-      const isPaperAndNotServed = result.isPaper && result.status === 'New';
-
       const showDocumentEditLink =
         document &&
         permissions.UPDATE_CASE &&
-        ((!isPaperAndNotServed && !document.isInProgress) ||
+        (!document.isInProgress ||
           ((permissions.DOCKET_ENTRY ||
             permissions.CREATE_ORDER_DOCKET_ENTRY) &&
             document.isInProgress));
@@ -114,8 +119,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
           permissions.DOCKET_ENTRY
         ) {
           editLink = '/edit';
-        } else if (document.isPetition && !document.servedAt) {
-          editLink = '/review';
         }
       }
 
@@ -127,6 +130,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
           descriptionDisplay += ` ${document.additionalInfo}`;
         }
       }
+
+      const showLinkToDocument =
+        (isExternalUser ? !record.isStricken : userHasAccessToCase) &&
+        userHasAccessToCase &&
+        userHasAccessToDocument &&
+        document &&
+        !permissions.UPDATE_CASE &&
+        document.processingStatus === 'complete' &&
+        !document.isInProgress &&
+        !document.isNotServedCourtIssuedDocument;
 
       return {
         action: record.action,
@@ -145,6 +158,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isPaper,
         isPending: document && document.pending,
         isServed: document && !!document.servedAt,
+        isStricken: record.isStricken,
+        numberOfPages:
+          (document && (record.numberOfPages || document.numberOfPages)) || 0,
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode:
           record.servedPartiesCode || (document && document.servedPartiesCode),
@@ -153,7 +169,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
           (!userHasAccessToCase ||
             !userHasAccessToDocument ||
             !document ||
-            isPaperAndNotServed ||
+            (userHasAccessToCase &&
+              userHasAccessToDocument &&
+              record.isStricken) ||
             (document &&
               (document.isNotServedCourtIssuedDocument ||
                 document.isInProgress) &&
@@ -168,14 +186,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document.processingStatus !== 'complete',
         showEditDocketRecordEntry,
         showInProgress: document && document.isInProgress && !isExternalUser,
-        showLinkToDocument:
-          userHasAccessToCase &&
-          userHasAccessToDocument &&
-          document &&
-          !permissions.UPDATE_CASE &&
-          document.processingStatus === 'complete' &&
-          !document.isInProgress &&
-          !document.isNotServedCourtIssuedDocument,
+        showLinkToDocument,
         showLoadingIcon:
           document &&
           !permissions.UPDATE_CASE &&
@@ -195,7 +206,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
         editLink: '',
-        showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
+        showDocumentEditLink: permissions.UPDATE_CASE,
       };
     },
   );

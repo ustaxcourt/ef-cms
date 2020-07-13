@@ -1,8 +1,8 @@
-const { Case } = require('../../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('createWorkItem', () => {
   let createWorkItemStub;
@@ -17,7 +17,7 @@ describe('createWorkItem', () => {
     environment: { stage: 'local' },
     getCurrentUser: () => ({
       name: 'Tax Payer',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     }),
     getPersistenceGateway: () => ({
@@ -51,7 +51,7 @@ describe('createWorkItem', () => {
     const applicationContext = createApplicationContext({
       getCurrentUser: () => ({
         name: 'Docketclerk',
-        role: User.ROLES.docketClerk,
+        role: ROLES.docketClerk,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });
@@ -68,7 +68,7 @@ describe('createWorkItem', () => {
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',
       document: {
@@ -96,7 +96,7 @@ describe('createWorkItem', () => {
     const applicationContext = createApplicationContext({
       getCurrentUser: () => ({
         name: 'Docketclerk',
-        role: User.ROLES.docketClerk,
+        role: ROLES.docketClerk,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });
@@ -115,7 +115,7 @@ describe('createWorkItem', () => {
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseStatus: Case.STATUS_TYPES.new,
+      caseStatus: CASE_STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',
       document: {

@@ -7,6 +7,7 @@ const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
+const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 
 /**
  *
@@ -53,7 +54,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let secondaryDate;
-  if (documentMeta.eventCode === Document.TRANSCRIPT_EVENT_CODE) {
+  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
     secondaryDate = documentMeta.date;
   }
 

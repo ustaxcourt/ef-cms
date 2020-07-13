@@ -4,7 +4,7 @@ const {
 const {
   opinionPublicSearchInteractor,
 } = require('./opinionPublicSearchInteractor');
-const { Document } = require('../../entities/Document');
+const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('opinionPublicSearchInteractor', () => {
   const mockOpinionSearchResult = [
@@ -54,7 +54,7 @@ describe('opinionPublicSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: Document.OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
     });
   });
 

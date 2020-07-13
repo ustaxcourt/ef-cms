@@ -1,5 +1,5 @@
 const client = require('../../dynamodbClientService');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   delete user.password;
@@ -53,11 +53,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 exports.createPractitionerUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
 
-  if (
-    ![User.ROLES.privatePractitioner, User.ROLES.irsPractitioner].includes(
-      user.role,
-    )
-  ) {
+  if (![ROLES.privatePractitioner, ROLES.irsPractitioner].includes(user.role)) {
     throw new Error(
       'Practitioner users must have either private or IRS practitioner role',
     );

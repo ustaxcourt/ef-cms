@@ -1,9 +1,10 @@
-import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
+import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
@@ -97,11 +98,13 @@ export const ReviewSavedPetition = connect(
                         </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
-                            {AddressDisplay(form.contactPrimary, constants, {
-                              nameOverride:
+                            <AddressDisplay
+                              contact={form.contactPrimary}
+                              nameOverride={
                                 startCaseHelper.showCaseTitleForPrimary &&
-                                startCaseHelper.caseTitle,
-                            })}
+                                startCaseHelper.caseTitle
+                              }
+                            />
                           </address>
                         )}
                       </div>
@@ -114,7 +117,7 @@ export const ReviewSavedPetition = connect(
                             >
                               Spouse’s information
                             </span>
-                            {AddressDisplay(form.contactSecondary, constants)}
+                            <AddressDisplay contact={form.contactSecondary} />
                           </>
                         )}
                       </div>
@@ -264,8 +267,12 @@ export const ReviewSavedPetition = connect(
                               (statistic, index) => (
                                 <tr key={index}>
                                   <td>{statistic.formattedDate}</td>
-                                  <td>{statistic.formattedDeficiencyAmount}</td>
-                                  <td>{statistic.formattedTotalPenalties}</td>
+                                  <td>
+                                    {statistic.formattedIrsDeficiencyAmount}
+                                  </td>
+                                  <td>
+                                    {statistic.formattedIrsTotalPenalties}
+                                  </td>
                                 </tr>
                               ),
                             )}
@@ -375,6 +382,7 @@ export const ReviewSavedPetition = connect(
             </Button>
             <Button
               link
+              id="cancel-create-case"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
@@ -384,6 +392,9 @@ export const ReviewSavedPetition = connect(
           </div>
         </section>
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
+        {showModal == 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDocumentQCSequence" />
+        )}
       </>
     );
   },

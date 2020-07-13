@@ -1,4 +1,4 @@
-import { User } from '../../../../../shared/src/business/entities/User';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPublicJudgesAction } from './getPublicJudgesAction';
 import { presenter } from '../../presenter-public';
@@ -13,11 +13,11 @@ describe('getPublicJudgesAction', () => {
     const mockJudges = [
       {
         name: 'Test Judge',
-        role: User.ROLES.judge,
+        role: ROLES.judge,
       },
       {
         name: 'Test Judge2',
-        role: User.ROLES.judge,
+        role: ROLES.judge,
       },
     ];
     applicationContext

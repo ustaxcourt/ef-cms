@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Returns the elasticsearch instance count defined in each environment
+
+# Usage
+#   ./get-keys.sh develop
+
+# Arguments
+#   - $1 - the branch to check
+
+[ -z "$1" ] && echo "The branch name to check must be provided as the \$1 argument." && exit 1
+
 BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then

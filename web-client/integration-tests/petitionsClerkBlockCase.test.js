@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { AUTOMATIC_BLOCKED_REASONS } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -68,7 +68,7 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
-        automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
         blocked: false,
         docketNumber: test.docketNumber,
       },
@@ -103,7 +103,7 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
-        automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.pending,
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         blocked: false,
         docketNumber: test.docketNumber,
       },
@@ -129,7 +129,7 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
-        automaticBlockedReason: Case.AUTOMATIC_BLOCKED_REASONS.dueDate,
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
         blocked: true,
         blockedReason: 'just because',
         docketNumber: test.docketNumber,

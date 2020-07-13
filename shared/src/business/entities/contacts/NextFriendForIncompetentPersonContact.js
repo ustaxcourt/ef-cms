@@ -10,7 +10,7 @@ exports.getNextFriendForIncompetentPersonContact = ContactFactory.createContactF
       secondaryName: 'Enter name of next friend',
     },
     additionalValidation: {
-      secondaryName: joi.string().required(),
+      secondaryName: joi.string().max(500).required(),
     },
   },
 );

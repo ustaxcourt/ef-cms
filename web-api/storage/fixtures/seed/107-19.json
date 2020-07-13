@@ -22,11 +22,27 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "entityName": "UserCase"
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
@@ -42,6 +58,7 @@
       "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T17:29:10.132Z",
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -88,6 +105,7 @@
       "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T17:29:10.132Z",
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -144,6 +162,34 @@
       "countryType": "domestic",
       "email": "petitioner"
     },
+    "otherFilers": [
+      {
+        "address1": "42 Lamb Sauce Blvd",
+        "city": "Nashville",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Gordon Ramsay",
+        "otherFilerType": "Intervenor",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Participant"
+      },
+      {
+        "address1": "1337 12th Ave",
+        "city": "Flavortown",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Guy Fieri",
+        "otherFilerType": "Participant",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Intervenor"
+      }
+    ],
     "createdAt": "2019-08-16T17:29:10.132Z",
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -171,6 +217,7 @@
     "eventCode": "P",
     "index": 1,
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "numberOfPages": 1,
     "filingDate": "2019-08-16T17:29:10.132Z",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "status": "R served on 08/16/2019 12:30 PM",
@@ -191,6 +238,7 @@
     "description": "Ownership Disclosure Statement",
     "eventCode": "DISC",
     "index": 3,
+    "numberOfPages": 2,
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "filingDate": "2019-08-16T17:29:10.133Z",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
@@ -213,6 +261,7 @@
       "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
       "workItems": [],
       "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+      "numberOfPages": 1,
       "receivedAt": "2019-08-16T17:29:10.132Z",
       "filingDate": "2019-08-16T17:29:10.132Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
@@ -246,7 +295,15 @@
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416"
+    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2019-08-16T17:29:10.132Z",
+    "caseCaption": "Tatum Craig, Petitioner",
+    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "docketNumber": "107-19",
+    "docketNumberWithSuffix": "107-19L",
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "entityName": "UserCase"
   },
   {
     "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
@@ -328,6 +385,7 @@
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
+    "numberOfPages": 1,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "status": "served"
   },
@@ -351,6 +409,7 @@
           "filingDate": "2019-08-16T17:29:10.132Z",
           "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
           "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+          "numberOfPages": 1,
           "receivedAt": "2019-08-16T17:29:10.132Z",
           "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
         },
@@ -390,7 +449,14 @@
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "numberOfPages": 1,
     "servedAt": "2019-08-16T17:30:10.526Z",
+    "servedParties": [
+      {
+        "name": "Tatum Craig",
+        "email": "petitioner"
+      }
+    ],
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "status": "served"
   },
@@ -409,6 +475,7 @@
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
+    "numberOfPages": 1,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "status": "served"
   }

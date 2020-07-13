@@ -19,20 +19,56 @@ describe('advancedDocumentSearchHelper', () => {
     },
   );
 
-  it('returns an empty object when searchResults is undefined', () => {
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        isPublic: true,
       },
     });
 
-    expect(result).toEqual({});
+    expect(result).toEqual({
+      documentTypeVerbiage: 'Opinion Type',
+      isPublic: true,
+      showSealedIcon: false,
+    });
+  });
+
+  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is order', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchForm: {},
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        isPublic: true,
+      },
+    });
+
+    expect(result).toEqual({
+      documentTypeVerbiage: 'Order',
+      isPublic: true,
+      showSealedIcon: true,
+    });
   });
 
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [],
       },
     });
@@ -48,6 +84,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [],
       },
     });
@@ -59,6 +99,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         isPublic: true,
         searchResults: [],
       },
@@ -71,6 +115,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             docketNumber: '101-19',
@@ -97,6 +145,12 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -106,6 +160,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
             documentType: 'O - Order',
+            eventCode: 'O',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -134,7 +189,6 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'Order',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Order',
-        formattedEventCode: 'O',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Buch',
       },
@@ -148,7 +202,6 @@ describe('advancedDocumentSearchHelper', () => {
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'Order for Amended Petition and Filing Fee',
-        formattedEventCode: 'OAPF',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
@@ -159,6 +212,12 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
@@ -168,6 +227,7 @@ describe('advancedDocumentSearchHelper', () => {
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'My Opinion',
             documentType: 'TCOP - T.C. Opinion',
+            eventCode: 'TCOP',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -178,7 +238,8 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Opinion for Stuff',
-            documentType: 'TCOP - T.C. Opinion',
+            documentType: 'Summary Opinion',
+            eventCode: 'SOP',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Cohen',
           },
@@ -193,11 +254,10 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: 'Z',
         docketNumberWithSuffix: '101-19Z',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'My Opinion',
+        documentTitle: 'T.C. Opinion',
         documentType: 'TCOP - T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'T.C. Opinion',
-        formattedEventCode: 'TCOP',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Buch',
       },
@@ -207,14 +267,44 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: 'P',
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'Opinion for Stuff',
-        documentType: 'TCOP - T.C. Opinion',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedDocumentType: 'T.C. Opinion',
-        formattedEventCode: 'TCOP',
+        formattedDocumentType: 'Summary Opinion',
         formattedFiledDate: '03/01/19',
         judge: 'Judge Cohen',
       },
     ]);
+  });
+
+  it('does not show sealed case icon for public opinion search', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        constants: {
+          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
+            .ADVANCED_SEARCH_TABS,
+        },
+        isPublic: true,
+        searchResults: [
+          {
+            docketNumber: '101-19',
+            docketNumberSuffix: 'Z',
+            documentContents: 'Test Petitioner, Petitioner',
+            documentTitle: 'Order',
+            documentType: 'O - Order',
+            filingDate: '2019-03-01T05:00:00.000Z',
+            isSealed: true,
+            judge: 'Judge Buch',
+          },
+        ],
+      },
+    });
+
+    expect(result).toMatchObject({
+      searchResultsCount: 1,
+      showSealedIcon: false,
+    });
   });
 });

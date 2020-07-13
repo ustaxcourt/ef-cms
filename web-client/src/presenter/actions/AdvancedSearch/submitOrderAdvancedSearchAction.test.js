@@ -33,4 +33,34 @@ describe('submitOrderAdvancedSearchAction', () => {
       },
     });
   });
+
+  it('should remove the docketNumberSuffix when a docket number is present', async () => {
+    await runAction(submitOrderAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            docketNumber: '105-20L',
+            keyword: 'a',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().orderAdvancedSearchInteractor.mock.calls
+        .length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      searchParams: {
+        docketNumber: '105-20',
+        keyword: 'a',
+      },
+    });
+  });
 });

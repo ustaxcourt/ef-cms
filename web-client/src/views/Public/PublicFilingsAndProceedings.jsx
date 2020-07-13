@@ -1,23 +1,34 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PublicFilingsAndProceedings = connect(
   {
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     entry: props.entry,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
   },
-  function PublicFilingsAndProceedings({ baseUrl, caseDetail, entry }) {
+  function PublicFilingsAndProceedings({
+    caseDetail,
+    entry,
+    openCaseDocumentDownloadUrlSequence,
+  }) {
     return (
       <React.Fragment>
         {entry.showLinkToDocument && (
-          <a
+          <Button
+            link
             aria-label={`View PDF: ${entry.description}`}
-            href={`${baseUrl}/public-api/${caseDetail.caseId}/${entry.documentId}/public-document-download-url`}
-            rel="noreferrer noopener"
-            target="_blank"
+            onClick={() => {
+              openCaseDocumentDownloadUrlSequence({
+                caseId: caseDetail.caseId,
+                documentId: entry.documentId,
+                isPublic: true,
+              });
+            }}
           >
             {entry.isPaper && (
               <span className="filing-type-icon-mobile">
@@ -25,7 +36,7 @@ export const PublicFilingsAndProceedings = connect(
               </span>
             )}
             {entry.description}
-          </a>
+          </Button>
         )}
 
         {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}

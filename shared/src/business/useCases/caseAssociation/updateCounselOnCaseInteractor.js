@@ -3,8 +3,8 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * updateCounselOnCaseInteractor
@@ -50,12 +50,12 @@ exports.updateCounselOnCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToUpdate.role === User.ROLES.privatePractitioner) {
+  if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
       userId: userToUpdate.userId,
       ...editableFields,
     });
-  } else if (userToUpdate.role === User.ROLES.irsPractitioner) {
+  } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
       userId: userToUpdate.userId,
       ...editableFields,

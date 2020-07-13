@@ -1,4 +1,4 @@
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 /**
  * getJudgeForUserChambersInteractor - returns the judge user for a given user in a chambers section
@@ -14,9 +14,9 @@ exports.getJudgeForUserChambersInteractor = async ({
   user,
 }) => {
   let judgeUser;
-  if (user.role === User.ROLES.judge) {
+  if (user.role === ROLES.judge) {
     judgeUser = user;
-  } else if (user.role === User.ROLES.chambers) {
+  } else if (user.role === ROLES.chambers) {
     let chambersSection;
     if (user.section) {
       chambersSection = user.section;
@@ -34,7 +34,7 @@ exports.getJudgeForUserChambersInteractor = async ({
         section: chambersSection,
       });
 
-    judgeUser = sectionUsers.find(user => user.role === User.ROLES.judge);
+    judgeUser = sectionUsers.find(user => user.role === ROLES.judge);
   }
 
   return judgeUser;

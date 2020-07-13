@@ -4,7 +4,7 @@ const {
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('./submitPendingCaseAssociationRequestInteractor');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('submitPendingCaseAssociationRequest', () => {
   let caseRecord = {
@@ -14,8 +14,8 @@ describe('submitPendingCaseAssociationRequest', () => {
 
   it('should throw an error when not authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.adc,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -30,13 +30,13 @@ describe('submitPendingCaseAssociationRequest', () => {
 
   it('should not add mapping if already associated', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.privatePractitioner,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Olivia Jade',
-      role: User.ROLES.privatePractitioner,
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     applicationContext

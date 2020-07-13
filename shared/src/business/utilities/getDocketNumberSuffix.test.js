@@ -5,7 +5,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Whistleblower',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('W');
@@ -15,7 +15,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Passport',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('P');
@@ -25,7 +25,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Declaratory Judgment (Exempt Organization)',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('X');
@@ -35,7 +35,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Declaratory Judgment (Retirement Plan)',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('R');
@@ -45,7 +45,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'CDP (Lien/Levy)',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('SL');
@@ -55,7 +55,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'CDP (Lien/Levy)',
       docketNumber: '101-18',
-      procedureType: 'regular',
+      procedureType: 'Regular',
     });
 
     expect(suffix).toEqual('L');
@@ -65,7 +65,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Something New',
       docketNumber: '101-18',
-      procedureType: 'small',
+      procedureType: 'Small',
     });
 
     expect(suffix).toEqual('S');
@@ -75,7 +75,7 @@ describe('getDocketNumberSuffix', () => {
     const suffix = getDocketNumberSuffix({
       caseType: 'Something New',
       docketNumber: '101-18',
-      procedureType: 'regular',
+      procedureType: 'Regular',
     });
 
     expect(suffix).toEqual(null);

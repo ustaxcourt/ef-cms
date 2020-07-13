@@ -22,7 +22,6 @@ export const ErrorFactory = {
       newError = new ServerInvalidResponseError(e);
     } else if (!e.response) {
       // this should only happen if cognito throws a cors exception due to expired tokens or invalid tokens
-      console.log('e', e);
       newError = new UnidentifiedUserError(e);
     }
     newError.originalError = e;

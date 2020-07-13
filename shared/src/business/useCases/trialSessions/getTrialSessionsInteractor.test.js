@@ -3,7 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { getTrialSessionsInteractor } = require('./getTrialSessionsInteractor');
 const { omit } = require('lodash');
-const { User } = require('../../entities/User');
+const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -29,7 +29,7 @@ describe('Get trial sessions', () => {
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext.getCurrentUser.mockImplementation(() => {
       return {
-        role: User.ROLES.petitionsClerk,
+        role: ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       };
     });

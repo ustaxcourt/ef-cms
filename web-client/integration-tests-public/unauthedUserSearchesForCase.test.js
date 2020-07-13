@@ -15,7 +15,7 @@ import { petitionerCreatesNewCase } from '../integration-tests/journey/petitione
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
-import { docketClerkServesOrder } from '../integration-tests/journey/docketClerkServesOrder';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
 
 // Public User
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
@@ -29,6 +29,7 @@ const test = setupTest({
     loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
+
 const testClient = setupTestClient({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
@@ -62,7 +63,7 @@ describe('Docket clerk creates and serves an order (should be viewable to the pu
     expectedDocumentType: 'Order of Dismissal',
   });
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
-  docketClerkServesOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
 });
 
 describe('Docket clerk creates and serves a transcript (should not be viewable to the public)', () => {
@@ -77,7 +78,7 @@ describe('Docket clerk creates and serves a transcript (should not be viewable t
     month: '01',
     year: '2019',
   });
-  docketClerkServesOrder(testClient, 2);
+  docketClerkServesDocument(testClient, 2);
 });
 
 describe('Unauthed user searches for a case and views a case detail page', () => {

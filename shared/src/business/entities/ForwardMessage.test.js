@@ -18,7 +18,7 @@ describe('ForwardMessage', () => {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         forwardMessage:
           'If everyone is moving forward together, then success takes care of itself.',
-        section: 'HenryFord',
+        section: 'petitions',
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });

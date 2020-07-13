@@ -196,7 +196,7 @@ export const TrialSessionInformation = connect(
               <div className="grid-col-6">
                 <div className="card trial-session-card height-full">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Courthouse location</h3>
+                    <h3 className="underlined">Courthouse Location</h3>
                     {formattedTrialSessionDetails.noLocationEntered && (
                       <p>No location entered</p>
                     )}

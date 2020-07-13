@@ -1,4 +1,4 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkViewsMessages = test => {
   return it('Petitions clerk views messages', async () => {
@@ -19,7 +19,7 @@ export const petitionsClerkViewsMessages = test => {
           workItem.document.documentType === 'Petition',
       );
     expect(workItem).toBeDefined();
-    expect(workItem.caseStatus).toEqual(Case.STATUS_TYPES.new);
+    expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
     expect(workItem.messages[0].message).toEqual(
       'Petition filed by Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse is ready for review.',
     );

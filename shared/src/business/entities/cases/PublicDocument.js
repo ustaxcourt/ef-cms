@@ -1,5 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  ALL_DOCUMENT_TYPES,
+  ALL_EVENT_CODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../EntityConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { getTimestampSchema } = require('../../../utilities/dateSchema');
@@ -32,8 +37,8 @@ function PublicDocument(rawDocument) {
 joiValidationDecorator(
   PublicDocument,
   joi.object().keys({
-    additionalInfo: joi.string().optional(),
-    additionalInfo2: joi.string().optional(),
+    additionalInfo: joi.string().max(500).optional(),
+    additionalInfo2: joi.string().max(500).optional(),
     caseId: joi
       .string()
       .uuid({
@@ -47,15 +52,24 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    documentTitle: joi.string().optional(),
-    documentType: joi.string().optional(),
-    eventCode: joi.string().optional(),
-    filedBy: joi.string().optional(),
+    documentTitle: joi.string().max(500).optional(),
+    documentType: joi
+      .string()
+      .valid(...ALL_DOCUMENT_TYPES)
+      .optional(),
+    eventCode: joi
+      .string()
+      .valid(...ALL_EVENT_CODES)
+      .optional(),
+    filedBy: joi.string().max(500).optional(),
     isPaper: joi.boolean().optional(),
-    processingStatus: joi.string().optional(),
+    processingStatus: joi
+      .string()
+      .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
+      .optional(),
     receivedAt: joiStrictTimestamp.optional(),
     servedAt: joiStrictTimestamp.optional(),
-    servedParties: joi.array().optional(),
+    servedParties: joi.array().optional(), // TODO: object definition
   }),
   {},
 );

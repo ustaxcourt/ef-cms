@@ -5,8 +5,8 @@ const {
   getTrialSessionWorkingCopyInteractor,
 } = require('./getTrialSessionWorkingCopyInteractor');
 const { omit } = require('lodash');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 const MOCK_WORKING_COPY = {
   sort: 'practitioner',
@@ -20,7 +20,7 @@ describe('Get trial session working copy', () => {
 
   beforeEach(() => {
     user = {
-      role: User.ROLES.judge,
+      role: ROLES.judge,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
 
@@ -33,7 +33,7 @@ describe('Get trial session working copy', () => {
     applicationContext
       .getUseCases()
       .getJudgeForUserChambersInteractor.mockReturnValue({
-        role: User.ROLES.judge,
+        role: ROLES.judge,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       });
   });
@@ -89,7 +89,7 @@ describe('Get trial session working copy', () => {
 
   it('correctly returns data from persistence for a trial clerk user', async () => {
     user = {
-      role: User.ROLES.trialClerk,
+      role: ROLES.trialClerk,
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     };
     applicationContext

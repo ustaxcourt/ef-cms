@@ -3,12 +3,11 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const {
-  User,
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
-const { SERVICE_INDICATOR_TYPES } = require('./cases/CaseConstants');
+const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 
 /**
  * constructor
@@ -28,7 +27,7 @@ joiValidationDecorator(
   joi.object().keys({
     ...userValidation,
     entityName: joi.string().valid('IrsPractitioner').required(),
-    role: joi.string().valid(User.ROLES.irsPractitioner).required(),
+    role: joi.string().valid(ROLES.irsPractitioner).required(),
     serviceIndicator: joi
       .string()
       .valid(...Object.values(SERVICE_INDICATOR_TYPES))

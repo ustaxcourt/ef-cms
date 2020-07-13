@@ -1,8 +1,4 @@
-const {
-  generateCoverPagePdf,
-} = require('../utilities/generateHTMLTemplateForPDF/generateCoverPagePdf');
 const { Case } = require('../entities/cases/Case');
-const { PDFDocument } = require('pdf-lib');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -11,22 +7,23 @@ const { PDFDocument } = require('pdf-lib');
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
  * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
  * @returns {object} the key/value pairs of computed strings
  */
 exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
   documentEntity,
+  useInitialData,
 }) => {
   const isLodged = documentEntity.lodged;
-  const { isPaper } = documentEntity;
+  const { certificateOfService, isPaper } = documentEntity;
 
   const dateServedFormatted =
     (documentEntity.servedAt &&
-      'Served ' +
-        applicationContext
-          .getUtilities()
-          .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+      applicationContext
+        .getUtilities()
+        .formatDateString(documentEntity.servedAt, 'MMDDYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -36,14 +33,14 @@ exports.generateCoverSheetData = ({
       (documentEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+          .formatDateString(documentEntity.createdAt, 'MMDDYY')) ||
       '';
   } else {
     dateReceivedFormatted =
       (documentEntity.createdAt &&
         applicationContext
           .getUtilities()
-          .formatDateString(documentEntity.createdAt, 'MM/DD/YYYY hh:mm a')) ||
+          .formatDateString(documentEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
       '';
   }
 
@@ -51,10 +48,18 @@ exports.generateCoverSheetData = ({
     (documentEntity.filingDate &&
       applicationContext
         .getUtilities()
-        .formatDateString(documentEntity.filingDate, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.filingDate, 'MMDDYY')) ||
     '';
 
-  const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
+  const caseCaptionToUse = useInitialData
+    ? caseEntity.initialCaption
+    : caseEntity.caseCaption;
+
+  const docketNumberSuffixToUse = useInitialData
+    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    : caseEntity.docketNumberSuffix;
+
+  const caseCaption = caseCaptionToUse || Case.getCaseCaption(caseEntity);
   let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {
@@ -69,22 +74,19 @@ exports.generateCoverSheetData = ({
   }
 
   const docketNumberWithSuffix =
-    caseEntity.docketNumber + (caseEntity.docketNumberSuffix || '');
+    caseEntity.docketNumber + (docketNumberSuffixToUse || '');
 
   const coverSheetData = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService:
-      documentEntity.certificateOfService === true
-        ? 'Certificate of Service'
-        : '',
+    certificateOfService,
     dateFiledLodged: dateFiledFormatted,
     dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
     dateReceived: dateReceivedFormatted,
     dateServed: dateServedFormatted,
-    docketNumber: `Docket Number: ${docketNumberWithSuffix}`,
+    docketNumberWithSuffix,
     documentTitle,
-    electronicallyFiled: documentEntity.isPaper ? '' : 'Electronically Filed',
+    electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',
   };
   return coverSheetData;
@@ -104,22 +106,29 @@ exports.addCoverToPdf = async ({
   caseEntity,
   documentEntity,
   pdfData,
+  replaceCoversheet = false,
+  useInitialData = false,
 }) => {
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
     documentEntity,
+    useInitialData,
   });
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData);
 
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
-  const coverPagePdf = await generateCoverPagePdf({
-    applicationContext,
-    content: coverSheetData,
-  });
+  const coverPagePdf = await applicationContext
+    .getDocumentGenerators()
+    .coverSheet({
+      applicationContext,
+      data: coverSheetData,
+    });
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
   const coverPageDocumentPages = await pdfDoc.copyPages(
@@ -127,9 +136,20 @@ exports.addCoverToPdf = async ({
     coverPageDocument.getPageIndices(),
   );
 
-  pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  if (replaceCoversheet) {
+    pdfDoc.removePage(0);
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  } else {
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
+  }
 
-  return await pdfDoc.save();
+  const newPdfData = await pdfDoc.save();
+  const numberOfPages = pdfDoc.getPages().length;
+
+  return {
+    numberOfPages,
+    pdfData: newPdfData,
+  };
 };
 
 /**
@@ -144,6 +164,8 @@ exports.addCoversheetInteractor = async ({
   applicationContext,
   caseId,
   documentId,
+  replaceCoversheet = false,
+  useInitialData = false,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -154,9 +176,8 @@ exports.addCoversheetInteractor = async ({
 
   const caseEntity = new Case(caseRecord, { applicationContext });
 
-  const documentEntity = caseEntity.documents.find(
-    document => document.documentId === documentId,
-  );
+  const documentEntity = caseEntity.getDocumentById({ documentId });
+  const docketRecordEntity = caseEntity.getDocketRecordByDocumentId(documentId);
 
   let pdfData;
   try {
@@ -173,22 +194,35 @@ exports.addCoversheetInteractor = async ({
     throw err;
   }
 
-  const newPdfData = await exports.addCoverToPdf({
+  const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
     documentEntity,
     pdfData,
+    replaceCoversheet,
+    useInitialData,
   });
 
   documentEntity.setAsProcessingStatusAsCompleted();
+  documentEntity.setNumberOfPages(numberOfPages);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocumentProcessingStatus({
+  await applicationContext.getPersistenceGateway().updateDocument({
+    applicationContext,
+    caseId,
+    document: documentEntity.validate().toRawObject(),
+    documentId,
+  });
+
+  if (docketRecordEntity) {
+    docketRecordEntity.setNumberOfPages(numberOfPages);
+
+    await applicationContext.getPersistenceGateway().updateDocketRecord({
       applicationContext,
       caseId,
-      documentId,
+      docketRecord: docketRecordEntity.validate().toRawObject(),
+      docketRecordId: docketRecordEntity.docketRecordId,
     });
+  }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,

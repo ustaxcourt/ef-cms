@@ -1,6 +1,6 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('./createCaseInteractor');
+const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('createCaseInteractor', () => {
@@ -9,7 +9,7 @@ describe('createCaseInteractor', () => {
   beforeEach(() => {
     user = new User({
       name: 'Test Petitioner',
-      role: User.ROLES.petitioner,
+      role: ROLES.petitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -39,7 +39,7 @@ describe('createCaseInteractor', () => {
           caseType: 'Other',
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
           preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
@@ -75,7 +75,7 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',
@@ -90,6 +90,9 @@ describe('createCaseInteractor', () => {
     expect(result).toBeDefined();
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toBeCalled();
+    expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).toBeCalled();
   });
@@ -97,7 +100,7 @@ describe('createCaseInteractor', () => {
   it('should create a case successfully as a practitioner', async () => {
     user = new User({
       name: 'Mister Peanutbutter',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -122,7 +125,7 @@ describe('createCaseInteractor', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',
@@ -148,7 +151,7 @@ describe('createCaseInteractor', () => {
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     user = new User({
       name: 'Carole Baskin',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -184,7 +187,7 @@ describe('createCaseInteractor', () => {
         filingType: 'Myself and my spouse',
         hasIrsNotice: true,
         isSpouseDeceased: 'No',
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Fresno, California',

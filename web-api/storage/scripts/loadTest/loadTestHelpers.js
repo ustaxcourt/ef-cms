@@ -1,9 +1,10 @@
 const faker = require('faker');
 const {
-  TrialSession,
-} = require('../../../../shared/src/business/entities/trialSessions/TrialSession');
-const { Case } = require('../../../../shared/src/business/entities/cases/Case');
-const { User } = require('../../../../shared/src/business/entities/User');
+  FILING_TYPES,
+  PROCEDURE_TYPES,
+  ROLES,
+  TRIAL_CITY_STRINGS,
+} = require('../../../../shared/src/business/entities/EntityConstants');
 
 const createTrialSession = async ({ applicationContext }) => {
   let startDate = faker.date.future(1);
@@ -35,9 +36,7 @@ const createTrialSession = async ({ applicationContext }) => {
     term = 'Fall';
   }
 
-  let trialLocation = faker.random.arrayElement(
-    TrialSession.TRIAL_CITY_STRINGS,
-  );
+  let trialLocation = faker.random.arrayElement(TRIAL_CITY_STRINGS);
 
   return await applicationContext.getUseCases().createTrialSessionInteractor({
     applicationContext,
@@ -129,15 +128,11 @@ const createCase = async ({
           postalCode: faker.address.zipCode(),
           state: faker.address.stateAbbr(),
         },
-        filingType: faker.random.arrayElement(
-          Case.FILING_TYPES[User.ROLES.petitioner],
-        ),
+        filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
         partyType: 'Petitioner',
-        preferredTrialCity: faker.random.arrayElement(
-          TrialSession.TRIAL_CITY_STRINGS,
-        ),
-        procedureType: faker.random.arrayElement(Case.PROCEDURE_TYPES),
+        preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
+        procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },
       stinFileId,
     });

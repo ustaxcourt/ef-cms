@@ -2,7 +2,7 @@ const client = require('../../../../../shared/src/persistence/dynamodbClientServ
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { User } = require('../../../business/entities/User');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 const { getPractitionerByBarNumber } = require('./getPractitionerByBarNumber');
 
@@ -11,7 +11,7 @@ describe('getPractitionerByBarNumber', () => {
     barNumber: 'PT1234',
     name: 'Test Practitioner',
     pk: 'user|9805d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.privatePractitioner,
+    role: ROLES.privatePractitioner,
     section: 'privatePractitioner',
     sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
     userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -21,7 +21,7 @@ describe('getPractitionerByBarNumber', () => {
     barNumber: 'PI5678',
     name: 'IRS Practitioner',
     pk: 'user|0105d1ab-18d0-43ec-bafb-654e83405416',
-    role: User.ROLES.irsPractitioner,
+    role: ROLES.irsPractitioner,
     section: 'irsPractitioner',
     sk: '0105d1ab-18d0-43ec-bafb-654e83405416',
     userId: '0105d1ab-18d0-43ec-bafb-654e83405416',
@@ -31,7 +31,7 @@ describe('getPractitionerByBarNumber', () => {
     barNumber: 'PI9999',
     name: 'Inactive Practitioner',
     pk: 'user|be4274f0-c525-45bc-8378-9f30fd841571',
-    role: User.ROLES.inactivePractitioner,
+    role: ROLES.inactivePractitioner,
     section: 'inactivePractitioner',
     sk: 'be4274f0-c525-45bc-8378-9f30fd841571',
     userId: 'be4274f0-c525-45bc-8378-9f30fd841571',

@@ -1,4 +1,4 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
@@ -24,7 +24,7 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -33,7 +33,7 @@ describe('resetContactsAction', () => {
         countryType: 'domestic',
         email: 'test@example.com',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 
@@ -52,7 +52,7 @@ describe('resetContactsAction', () => {
             phone: '1234567890',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -61,7 +61,7 @@ describe('resetContactsAction', () => {
         countryType: 'domestic',
         email: 'test@example.com',
       },
-      partyType: ContactFactory.PARTY_TYPES.petitioner,
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 
@@ -88,7 +88,7 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -98,7 +98,7 @@ describe('resetContactsAction', () => {
         email: 'test@example.com',
       },
       contactSecondary: { countryType: 'domestic' },
-      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
   });
 });

@@ -3,7 +3,7 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
-import { Scan } from '../../business/entities/Scan';
+import { SCAN_MODES } from '../../business/entities/EntityConstants';
 
 describe('getScannerInterface', () => {
   const jsdom = new JSDOM('');
@@ -21,8 +21,6 @@ describe('getScannerInterface', () => {
   const mockCloseSource = jest.fn();
   const mockOpenSource = jest.fn();
   const mockRemoveAllImages = jest.fn();
-
-  const { SCAN_MODES } = Scan;
 
   applicationContext.getScannerResourceUri.mockReturnValue('abc');
 

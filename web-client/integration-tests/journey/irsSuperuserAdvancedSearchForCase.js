@@ -1,5 +1,5 @@
+import { COUNTRY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
-import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const irsSuperuserAdvancedSearchForCase = test => {
@@ -50,7 +50,7 @@ export const irsSuperuserAdvancedSearchForCase = test => {
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'countryType',
-      value: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
 
     await test.runSequence('submitCaseAdvancedSearchSequence');

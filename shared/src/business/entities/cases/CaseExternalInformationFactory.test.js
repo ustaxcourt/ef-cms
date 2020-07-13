@@ -1,10 +1,8 @@
 const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
@@ -150,7 +148,7 @@ describe('CaseExternalInformationFactory entity', () => {
           name: 'Something',
         },
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
@@ -261,7 +259,7 @@ describe('CaseExternalInformationFactory entity', () => {
         caseType: 'Deficiency',
         filingType: 'A business',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
@@ -278,7 +276,7 @@ describe('CaseExternalInformationFactory entity', () => {
         caseType: 'Deficiency',
         filingType: 'something else',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.corporation,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
@@ -295,7 +293,7 @@ describe('CaseExternalInformationFactory entity', () => {
         caseType: 'Deficiency',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
@@ -320,7 +318,7 @@ describe('CaseExternalInformationFactory entity', () => {
         caseType: 'Deficiency',
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         stinFile: new File([], 'test.pdf'),
@@ -403,7 +401,7 @@ describe('CaseExternalInformationFactory entity', () => {
       caseExternal = new CaseExternalInformationFactory({
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'test.pdf'),
         stinFile: new File([], 'test.pdf'),
         wizardStep: '4',
@@ -458,7 +456,7 @@ describe('CaseExternalInformationFactory entity', () => {
         },
         filingType: 'Myself',
         hasIrsNotice: true,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
         preferredTrialCity: 'Boise, Idaho',

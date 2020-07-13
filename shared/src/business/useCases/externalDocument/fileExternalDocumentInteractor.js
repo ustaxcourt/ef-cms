@@ -7,7 +7,8 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
@@ -67,17 +68,19 @@ exports.fileExternalDocumentInteractor = async ({
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
-    secondaryDocument.eventCode = 'MISL';
   }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.lodged = true;
-      item.eventCode = 'MISL';
     });
   }
 
   const documentsToAdd = [
-    [documentIds.shift(), primaryDocumentMetadata, 'primaryDocument'],
+    [
+      documentIds.shift(),
+      { ...primaryDocumentMetadata, secondaryDocument },
+      'primaryDocument',
+    ],
   ];
 
   if (supportingDocuments) {
@@ -116,6 +119,11 @@ exports.fileExternalDocumentInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          partyPrimary:
+            baseMetadata.partyPrimary || documentMetadata.representingPrimary,
+          partySecondary:
+            baseMetadata.partySecondary ||
+            documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
@@ -127,7 +135,7 @@ exports.fileExternalDocumentInteractor = async ({
       );
 
       const highPriorityWorkItem =
-        caseEntity.status === Case.STATUS_TYPES.calendared;
+        caseEntity.status === CASE_STATUS_TYPES.calendared;
 
       const workItem = new WorkItem(
         {
@@ -147,7 +155,8 @@ exports.fileExternalDocumentInteractor = async ({
           highPriority: highPriorityWorkItem,
           isQC: true,
           section: DOCKET_SECTION,
-          sentBy: user.userId,
+          sentBy: user.name,
+          sentByUserId: user.userId,
           trialDate: caseEntity.trialDate,
         },
         { applicationContext },
@@ -186,7 +195,7 @@ exports.fileExternalDocumentInteractor = async ({
 
         await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
-          caseEntity: caseToUpdate,
+          caseEntity,
           documentEntity,
           servedParties,
         });

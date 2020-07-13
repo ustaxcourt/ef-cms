@@ -3,7 +3,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
+const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -41,6 +43,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  // TODO - account for all order types?
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
   }
@@ -89,7 +92,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
       documentId: documentContentsId,
-      useTempBucket: true,
+      useTempBucket: false,
     });
 
     if (documentMetadata.draftState) {
@@ -115,16 +118,36 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  if (documentMetadata.eventCode === 'NOT') {
-    documentEntity.setSigned(authorizedUser.userId);
-  }
-
   caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  if (documentMetadata.parentMessageId) {
+    const messages = await applicationContext
+      .getPersistenceGateway()
+      .getCaseMessageThreadByParentId({
+        applicationContext,
+        parentMessageId: documentMetadata.parentMessageId,
+      });
+
+    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+    const caseMessageEntity = new CaseMessage(mostRecentMessage, {
+      applicationContext,
+    }).validate();
+    caseMessageEntity.addAttachment({
+      documentId: documentEntity.documentId,
+      documentTitle: documentEntity.documentTitle,
+    });
+
+    await applicationContext.getPersistenceGateway().updateCaseMessage({
+      applicationContext,
+      caseMessage: caseMessageEntity.validate().toRawObject(),
+    });
+  }
 
   return caseEntity.toRawObject();
 };

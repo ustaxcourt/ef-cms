@@ -8,13 +8,20 @@ const {
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 const {
+  addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
+  coverSheet,
   docketRecord,
   noticeOfDocketChange,
+  noticeOfReceiptOfPetition,
+  order,
   pendingReport,
   receiptOfFiling,
+  standingPretrialNotice,
   standingPretrialOrder,
+  trialCalendar,
+  trialSessionPlanningReport,
 } = require('./documentGenerators');
 
 describe('documentGenerators', () => {
@@ -51,6 +58,36 @@ describe('documentGenerators', () => {
         );
     }
   });
+
+  describe('addressLabelCoverSheet', () => {
+    it('generates an Address Lable Cover Sheet document', async () => {
+      const pdf = await addressLabelCoverSheet({
+        applicationContext,
+        data: {
+          address1: '123 Some Street',
+          city: 'Some City',
+          countryName: 'USA',
+          docketNumberWithSuffix: '123-45S',
+          name: 'Test Person',
+          postalCode: '89890',
+          state: 'ZZ',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Address_Label_Cover_Sheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('caseInventoryReport', () => {
     it('generates a Case Inventory Report document', async () => {
       const pdf = await caseInventoryReport({
@@ -96,7 +133,7 @@ describe('documentGenerators', () => {
         inCareOf: 'Test Care Of',
         phone: '123-124-1234',
         postalCode: '12345',
-        state: 'ST',
+        state: 'AL',
       };
       const pdf = await changeOfAddress({
         applicationContext,
@@ -129,6 +166,38 @@ describe('documentGenerators', () => {
     });
   });
 
+  describe('coverSheet', () => {
+    it('Generates a CoverSheet document', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner',
+          caseTitle: 'Test Person',
+          certificateOfService: true,
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          dateReceived: '01/02/20',
+          dateServed: '01/03/20',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+          electronicallyFiled: true,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CoverSheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('docketRecord', () => {
     it('Generates a Printable Docket Record document', async () => {
       const pdf = await docketRecord({
@@ -145,7 +214,7 @@ describe('documentGenerators', () => {
               name: 'Test Petitioner',
               phone: '123-124-1234',
               postalCode: '12345',
-              state: 'STATE',
+              state: 'AL',
             },
             irsPractitioners: [
               {
@@ -158,7 +227,7 @@ describe('documentGenerators', () => {
                   country: 'USA',
                   phone: '234-123-4567',
                   postalCode: '12345',
-                  state: 'STATE',
+                  state: 'AL',
                 },
                 name: 'Test IRS Practitioner',
               },
@@ -175,7 +244,7 @@ describe('documentGenerators', () => {
                   country: 'USA',
                   phone: '234-123-4567',
                   postalCode: '12345',
-                  state: 'STATE',
+                  state: 'AL',
                 },
                 formattedName: 'Test Private Practitioner (PT20001)',
                 name: 'Test Private Practitioner',
@@ -222,7 +291,7 @@ describe('documentGenerators', () => {
   });
 
   describe('noticeOfDocketChange', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates a Notice of Docket Change document', async () => {
       const pdf = await noticeOfDocketChange({
         applicationContext,
         data: {
@@ -251,6 +320,84 @@ describe('documentGenerators', () => {
     });
   });
 
+  describe('noticeOfReceiptOfPetition', () => {
+    it('generates a Notice of Receipt of Petition document', async () => {
+      const pdf = await noticeOfReceiptOfPetition({
+        applicationContext,
+        data: {
+          address: {
+            address1: '123 Some St.',
+            city: 'Somecity',
+            countryName: '',
+            name: 'Test Petitioner',
+            postalCode: '80008',
+            state: 'ZZ',
+          },
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          preferredTrialCity: 'Birmingham, Alabama',
+          receivedAtFormatted: 'December 1, 2019',
+          servedDate: 'June 3, 2020',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Receipt_Petition', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('standingPretrialNotice', () => {
+    it('generates a Standing Pre-trial Notice document', async () => {
+      const pdf = await standingPretrialNotice({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle:
+            'Test Petitioner, Another Petitioner, and Yet Another Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          footerDate: '02/02/20',
+          trialInfo: {
+            address1: '123 Some St.',
+            address2: '3rd Floor',
+            address3: 'Suite B',
+            city: 'Some City',
+            courthouseName: 'Hall of Justice',
+            fullStartDate: 'Friday May 8, 2020',
+            judge: {
+              name: 'Test Judge',
+            },
+            postalCode: '12345',
+            startDay: 'Friday',
+            startTime: '10:00am',
+            state: 'AL',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Standing_Pretrial_Notice', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('standingPretrialOrder', () => {
     it('generates a Standing Pre-trial Order document', async () => {
       const pdf = await standingPretrialOrder({
@@ -266,7 +413,7 @@ describe('documentGenerators', () => {
             judge: {
               name: 'Test Judge',
             },
-            state: 'TEST STATE',
+            state: 'AL',
           },
         },
       });
@@ -285,6 +432,106 @@ describe('documentGenerators', () => {
     });
   });
 
+  describe('notice', () => {
+    it('generates a Notice document', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent: `<p>This is some sample notice text.</p>
+
+          <p>NOTICE that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
+
+          <p>NOTICE that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>`,
+          orderTitle: 'NOTICE',
+          signatureText: 'Test Signature',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('order', () => {
+    it('generates an Order document', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent: `<p>Upon due consideration ofthe parties' joint motion to remand, filed December 30, 2019, and the parties' joint motion for continuance, filed December 30, 2019, it is</p>
+
+          <p>ORDERED that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>`,
+          orderTitle: 'ORDER',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('pendingReport', () => {
     it('generates a Pending Report document', async () => {
       const pdf = await pendingReport({
@@ -292,35 +539,35 @@ describe('documentGenerators', () => {
         data: {
           pendingItems: [
             {
+              associatedJudgeFormatted: 'Chief Judge',
               caseTitle: 'Test Petitioner',
-              dateFiled: '02/02/20',
               docketNumberWithSuffix: '123-45S',
-              filingsAndProceedings: 'Order',
-              judge: 'Chief Judge',
+              formattedFiledDate: '02/02/20',
+              formattedName: 'Order',
               status: 'closed',
             },
             {
+              associatedJudgeFormatted: 'Chief Judge',
               caseTitle: 'Test Petitioner',
-              dateFiled: '02/22/20',
               docketNumberWithSuffix: '123-45S',
-              filingsAndProceedings: 'Motion for a New Trial',
-              judge: 'Chief Judge',
+              formattedFiledDate: '02/22/20',
+              formattedName: 'Motion for a New Trial',
               status: 'closed',
             },
             {
+              associatedJudgeFormatted: 'Chief Judge',
               caseTitle: 'Other Petitioner',
-              dateFiled: '03/03/20',
               docketNumberWithSuffix: '321-45S',
-              filingsAndProceedings: 'Order',
-              judge: 'Chief Judge',
+              formattedFiledDate: '03/03/20',
+              formattedName: 'Order',
               status: 'closed',
             },
             {
+              associatedJudgeFormatted: 'Chief Judge',
               caseTitle: 'Other Petitioner',
-              dateFiled: '03/23/20',
               docketNumberWithSuffix: '321-45S',
-              filingsAndProceedings: 'Order to Show Cause',
-              judge: 'Chief Judge',
+              formattedFiledDate: '03/23/20',
+              formattedName: 'Order to Show Cause',
               status: 'closed',
             },
           ],
@@ -404,6 +651,113 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Receipt_of_Filing', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('trialCalendar', () => {
+    it('generates a Trial Calendar document', async () => {
+      const pdf = await trialCalendar({
+        applicationContext,
+        data: {
+          cases: [
+            {
+              caseTitle: 'Paul Simon',
+              docketNumber: '123-45S',
+              petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
+              respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
+            },
+            {
+              caseTitle: 'Art Garfunkel',
+              docketNumber: '234-56',
+              petitionerCounsel: ['Mick Haller'],
+              respondentCounsel: ['Joy Falotico'],
+            },
+          ],
+          sessionDetail: {
+            address1: '123 Some Street',
+            address2: 'Suite B',
+            courtReporter: 'Lois Lane',
+            courthouseName: 'Test Courthouse',
+            formattedCityStateZip: 'New York, NY 10108',
+            irsCalendarAdministrator: 'iCalRS Admin',
+            judge: 'Joseph Dredd',
+            notes:
+              'The one with the velour shirt is definitely looking at me funny.',
+            sessionType: 'Hybrid',
+            startDate: 'May 1, 2020',
+            startTime: '10:00am',
+            trialClerk: 'Clerky McGee',
+            trialLocation: 'New York City, New York',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Trial_Calendar', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('trialSessionPlanningReport', () => {
+    it('generates a Trial Session Planning Report document', async () => {
+      const pdf = await trialSessionPlanningReport({
+        applicationContext,
+        data: {
+          locationData: [
+            {
+              allCaseCount: 5,
+              previousTermsData: [['(S) Buch', '(R) Cohen'], [], []],
+              regularCaseCount: 3,
+              smallCaseCount: 2,
+              stateAbbreviation: 'AR',
+              trialCityState: 'Little Rock, AR',
+            },
+            {
+              allCaseCount: 2,
+              previousTermsData: [[], [], []],
+              regularCaseCount: 1,
+              smallCaseCount: 1,
+              stateAbbreviation: 'AL',
+              trialCityState: 'Mobile, AL',
+            },
+          ],
+          previousTerms: [
+            {
+              name: 'Fall',
+              year: '2019',
+            },
+            {
+              name: 'Spring',
+              year: '2019',
+            },
+            {
+              name: 'Winter',
+              year: '2019',
+            },
+          ],
+          term: 'Winter 2020',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Trial_Session_Planning_Report', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

@@ -4,8 +4,8 @@ const {
 const {
   setWorkItemAsReadInteractor,
 } = require('./setWorkItemAsReadInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 describe('setWorkItemAsReadInteractor', () => {
   let user;
@@ -34,7 +34,7 @@ describe('setWorkItemAsReadInteractor', () => {
 
   it('returns the expected result', async () => {
     user = {
-      role: User.ROLES.petitionsClerk,
+      role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     };
     applicationContext

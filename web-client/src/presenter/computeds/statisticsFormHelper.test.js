@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { statisticsFormHelper as statisticsFormHelperComputed } from './statisticsFormHelper';
@@ -14,7 +14,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(statisticsFormHelper, {
       state: {
         form: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
         },
       },
@@ -26,7 +26,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(statisticsFormHelper, {
       state: {
         form: {
-          caseType: Case.CASE_TYPES_MAP.deficiency,
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
       },
@@ -38,7 +38,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(statisticsFormHelper, {
       state: {
         form: {
-          caseType: Case.CASE_TYPES_MAP.cdp,
+          caseType: CASE_TYPES_MAP.cdp,
           hasVerifiedIrsNotice: true,
         },
       },

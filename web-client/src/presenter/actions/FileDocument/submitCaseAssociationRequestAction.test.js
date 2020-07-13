@@ -1,3 +1,4 @@
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -18,7 +19,7 @@ describe('submitCaseAssociationRequestAction', () => {
     new User({
       email: 'practitioner1@example.com',
       name: 'richard',
-      role: User.ROLES.privatePractitioner,
+      role: ROLES.privatePractitioner,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     }),
   );

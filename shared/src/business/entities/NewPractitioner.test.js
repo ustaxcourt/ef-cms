@@ -1,5 +1,5 @@
 const { NewPractitioner } = require('./NewPractitioner');
-const { User } = require('./User');
+const { ROLES } = require('./EntityConstants');
 
 describe('NewPractitioner', () => {
   it('Creates a valid NewPractitioner with all required fields', () => {
@@ -25,14 +25,14 @@ describe('NewPractitioner', () => {
       lastName: 'Practitioner',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.NewPractitioner,
+      role: ROLES.NewPractitioner,
     });
     expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates an invalid NewPractitioner with missing required fields', () => {
     const user = new NewPractitioner({
-      role: User.ROLES.NewPractitioner,
+      role: ROLES.NewPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -58,7 +58,7 @@ describe('NewPractitioner', () => {
       firmName: 'GW Law Offices',
       originalBarState: 'Illinois',
       practitionerType: 'Attorney',
-      role: User.ROLES.NewPractitioner,
+      role: ROLES.NewPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });

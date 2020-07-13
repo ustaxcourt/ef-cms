@@ -58,7 +58,7 @@ describe('validatePetitionFromPaperAction', () => {
       .validatePetitionFromPaperInteractor.mockReturnValue({
         statistics: [
           { deficiency: 'enter deficiency amount', index: 1 },
-          { index: 2, totalPenalties: 'enter total penalties' },
+          { index: 2, irsTotalPenalties: 'enter total penalties' },
         ],
       });
 

@@ -1,4 +1,6 @@
+import { clone } from 'lodash';
 import { state } from 'cerebral';
+import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
 
 /**
  * submit advanced search form
@@ -12,8 +14,13 @@ export const submitOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
-  const searchParams = get(state.advancedSearchForm.orderSearch);
+  const searchParams = clone(get(state.advancedSearchForm.orderSearch));
 
+  if (searchParams.docketNumber) {
+    searchParams.docketNumber = trimDocketNumberSearch(
+      searchParams.docketNumber,
+    );
+  }
   const searchResults = await applicationContext
     .getUseCases()
     .orderAdvancedSearchInteractor({

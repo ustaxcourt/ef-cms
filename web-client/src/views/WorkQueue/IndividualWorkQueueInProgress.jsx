@@ -22,16 +22,16 @@ export const IndividualWorkQueueInProgress = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" colSpan="2">
-                <span className="padding-left-2px">Docket number</span>
+                <span className="padding-left-2px">Docket No.</span>
               </th>
               <th>Received</th>
-              <th>Case title</th>
+              <th>Case Title</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              {workQueueHelper.showCaseStatusColumn && <th>Case status</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {workQueueHelper.showCaseStatusColumn && <th>Case Status</th>}
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
-              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
+              {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => {
@@ -52,7 +52,7 @@ export const IndividualWorkQueueInProgress = connect(
                     <div className="message-document-title">
                       <a
                         className="case-link"
-                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
+                        href={item.editLink}
                         onClick={e => {
                           e.stopPropagation();
                         }}

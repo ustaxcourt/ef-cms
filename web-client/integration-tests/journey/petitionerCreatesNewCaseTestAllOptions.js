@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
+import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -282,7 +282,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+      value: PARTY_TYPES.partnershipOtherThanTaxMatters,
     });
 
     result = runCompute(startCaseHelper, {
@@ -304,7 +304,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: ContactFactory.PARTY_TYPES.partnershipBBA,
+      value: PARTY_TYPES.partnershipBBA,
     });
 
     result = runCompute(startCaseHelper, {
@@ -338,7 +338,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'estateType',
-      value: ContactFactory.PARTY_TYPES.estate,
+      value: PARTY_TYPES.estate,
     });
 
     result = runCompute(startCaseHelper, {
@@ -370,7 +370,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'estateType',
-      value: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+      value: PARTY_TYPES.estateWithoutExecutor,
     });
 
     result = runCompute(startCaseHelper, {
@@ -529,7 +529,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
-      value: ContactFactory.PARTY_TYPES.nextFriendForMinor,
+      value: PARTY_TYPES.nextFriendForMinor,
     });
 
     result = runCompute(startCaseHelper, {
@@ -561,7 +561,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'minorIncompetentType',
-      value: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+      value: PARTY_TYPES.nextFriendForIncompetentPerson,
     });
 
     result = runCompute(startCaseHelper, {

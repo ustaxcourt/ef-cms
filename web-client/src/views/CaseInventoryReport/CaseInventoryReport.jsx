@@ -107,13 +107,13 @@ export const CaseInventoryReport = connect(
                   <table className="usa-table row-border-only subsection case-inventory">
                     <thead>
                       <tr>
-                        <th>Docket number</th>
-                        <th>Case title</th>
+                        <th aria-label="docket number">Docket No.</th>
+                        <th>Case Title</th>
                         {caseInventoryReportHelper.showJudgeColumn && (
                           <th>Judge</th>
                         )}
                         {caseInventoryReportHelper.showStatusColumn && (
-                          <th>Case status</th>
+                          <th>Case Status</th>
                         )}
                       </tr>
                     </thead>
@@ -140,7 +140,7 @@ export const CaseInventoryReport = connect(
                     <Button
                       onClick={() => caseInventoryReportLoadMoreSequence()}
                     >
-                      Load {caseInventoryReportHelper.nextPageSize} More
+                      Load More
                     </Button>
                   )}
                 </div>
