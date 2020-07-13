@@ -4,6 +4,7 @@ const fakeData =
 const getFakeFile = returnArray => {
   const fakeFile = Buffer.from(fakeData, 'base64');
   fakeFile.name = 'fakeFile.pdf';
+  fakeFile.size = fakeFile.length;
 
   if (returnArray) {
     return new Uint8Array(fakeFile);
