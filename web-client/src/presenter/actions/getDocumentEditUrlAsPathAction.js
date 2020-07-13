@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store object
+ * @param {object} providers.props the cerebral props object
  * @returns {object} the next path to take
  */
 export const getDocumentEditUrlAsPathAction = ({
