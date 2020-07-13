@@ -1380,7 +1380,6 @@ module.exports = appContextUser => {
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
     },
-    // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
         generateNoticeOfTrialIssuedTemplate,
