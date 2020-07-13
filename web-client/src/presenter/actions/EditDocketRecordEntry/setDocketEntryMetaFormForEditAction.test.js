@@ -1,9 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormForEditAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('setDocketEntryMetaFormForEditAction', () => {
   let caseDetail;

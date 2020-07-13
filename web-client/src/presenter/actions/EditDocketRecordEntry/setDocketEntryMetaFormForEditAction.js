@@ -52,17 +52,12 @@ export const setDocketEntryMetaFormForEditAction = ({
     // TODO: Abstract this (also in getFormattedCaseDetail)
     if (docketRecordEntry.servedPartiesCode) {
       documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
+    } else if (documentDetail.servedAt) {
+      documentDetail.servedPartiesCode = applicationContext
+        .getUtilities()
+        .getServedPartiesCode(documentDetail.servedParties);
     } else {
-      if (
-        !!documentDetail.servedAt &&
-        documentDetail.servedParties &&
-        documentDetail.servedParties.length > 0
-      ) {
-        documentDetail.servedPartiesCode = 'B';
-      } else {
-        // TODO: Address Respondent and Petitioner codes
-        documentDetail.servedPartiesCode = '';
-      }
+      documentDetail.servedPartiesCode = '';
     }
 
     store.set(state.form, {
