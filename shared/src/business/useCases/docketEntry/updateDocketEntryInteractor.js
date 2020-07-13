@@ -111,11 +111,12 @@ exports.updateDocketEntryInteractor = async ({
     const workItemToDelete = currentDocument.workItems.find(
       workItem => !workItem.document.isFileAttached,
     );
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToDelete,
-    });
+    if (workItemToDelete) {
+      await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+        applicationContext,
+        workItem: workItemToDelete,
+      });
+    }
 
     const workItem = documentEntity.getQCWorkItem();
     Object.assign(workItem, {
