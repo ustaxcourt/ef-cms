@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setDocumentToEditAction } from './setDocumentToEditAction';
+import { setFormFromDraftStateAction } from './setFormFromDraftStateAction';
 
-describe('setDocumentToEditAction', () => {
+describe('setFormFromDraftStateAction', () => {
   const documentIdToEdit = '123';
   const documentToMatch = {
     documentId: documentIdToEdit,
@@ -16,8 +16,8 @@ describe('setDocumentToEditAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.documentToEdit for the given case and documentIdToEdit', async () => {
-    const result = await runAction(setDocumentToEditAction, {
+  it('sets state.form with the draft state of the documentToEdit', async () => {
+    const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
       },
@@ -35,11 +35,13 @@ describe('setDocumentToEditAction', () => {
         documentIdToEdit: documentIdToEdit,
       },
     });
-    expect(result.state.documentToEdit).toEqual(documentToMatch);
+    expect(result.state.form.documentType).toEqual(
+      documentToMatch.documentType,
+    );
   });
 
   it('does nothing if documentIdToEdit is not passed in via props', async () => {
-    const result = await runAction(setDocumentToEditAction, {
+    const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
       },
@@ -57,5 +59,30 @@ describe('setDocumentToEditAction', () => {
       },
     });
     expect(result.state.documentToEdit).toBeUndefined();
+    expect(result.state.form).toBeUndefined();
+  });
+
+  it('sets state.form to the documentIdToEdit if draftState does not exist for the selected document', async () => {
+    const result = await runAction(setFormFromDraftStateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {
+          caseId: 'c123',
+          documents: [
+            {
+              documentId: '321',
+              documentType: 'Petition',
+            },
+          ],
+        },
+        documentIdToEdit: '321',
+      },
+    });
+    expect(result.state.form).toEqual({
+      documentIdToEdit: '321',
+      documentType: 'Petition',
+    });
   });
 });
