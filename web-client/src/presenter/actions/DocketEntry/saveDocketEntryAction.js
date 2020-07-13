@@ -2,10 +2,11 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * saves and serves a new docket entry
+ * creates a new, or updates an existing docket entry
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  * @returns {Promise} async action
  */
@@ -86,6 +87,7 @@ export const saveDocketEntryAction = async ({
     caseDetail,
     caseId,
     docketNumber,
+    documentId,
     overridePaperServiceAddress: true,
   };
 };
