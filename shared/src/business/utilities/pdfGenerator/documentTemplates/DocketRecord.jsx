@@ -10,6 +10,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   return (
     <>
       {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
+      {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
       {contact.title && <div>{contact.title}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
