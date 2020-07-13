@@ -71,7 +71,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     // Set case type to deficiency
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Deficiency',
+      value: CASE_TYPES_MAP.deficiency,
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
