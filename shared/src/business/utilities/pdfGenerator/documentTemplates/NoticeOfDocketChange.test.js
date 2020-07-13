@@ -40,7 +40,7 @@ describe('NoticeOfDocketChange', () => {
       options.caseCaptionExtension,
     );
     expect(wrapper.find('#docket-number').text()).toEqual(
-      `Docket Number ${options.docketNumberWithSuffix}`,
+      `Docket No. ${options.docketNumberWithSuffix}`,
     );
     expect(wrapper.find('h3').at(0).text()).toEqual('Notice of Docket Change');
   });

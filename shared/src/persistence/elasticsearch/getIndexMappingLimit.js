@@ -1,3 +1,4 @@
+const { get } = require('lodash');
 /**
  * @param {object} params deconstructed arguments
  * @param {object} params.applicationContext the application context
@@ -10,6 +11,12 @@ exports.getIndexMappingLimit = async ({ applicationContext, index }) => {
   const indexSettings = await searchClient.indices.getSettings({
     index,
   });
-
-  return indexSettings.efcms.settings.index.mapping.total_fields.limit;
+  const mappingLimit = get(
+    indexSettings,
+    `${index}.settings.index.mapping.total_fields.limit`,
+  );
+  if (!mappingLimit) {
+    throw new Error(`Search client index "${index}" settings not found`);
+  }
+  return mappingLimit;
 };

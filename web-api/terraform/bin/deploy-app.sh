@@ -21,18 +21,15 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-# build the cognito authorizer using parcel
-pushd ../template/cognito-authorizer
-npx parcel build index.js --target node --bundle-node-modules --no-minify
-popd
+npm run build:assets
 
-pushd ../template/log-forwarder
-npx parcel build index.js --target node --bundle-node-modules --no-minify
+# build the cognito authorizer, api, and api-public with parcel
+pushd ../template/lambdas
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules
 popd
-
 
 # exit on any failure
 set -eo pipefail
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}"
+TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "dns_domain=${EFCMS_DOMAIN}" -var "environment=${ENVIRONMENT}" -var "cognito_suffix=${COGNITO_SUFFIX}" -var "ses_dmarc_rua=${SES_DMARC_EMAIL}" -var "es_instance_count=${ES_INSTANCE_COUNT}" -var "honeybadger_key=${CIRCLE_HONEYBADGER_API_KEY}" -var "irs_superuser_email=${IRS_SUPERUSER_EMAIL}"

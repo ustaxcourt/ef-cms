@@ -65,6 +65,9 @@ describe('serveCaseToIrsInteractor', () => {
         return cb(true);
       },
     });
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -255,6 +258,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentTitle: 'Request for Place of Trial Flavortown, AR',
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],
@@ -266,6 +270,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentTitle: 'Application for Waiver of Filing Fee',
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
+          filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
           workItems: [],

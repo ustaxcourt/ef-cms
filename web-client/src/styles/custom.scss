@@ -1505,4 +1505,13 @@ button.change-scanner-button {
 
 .message-detail--attachments {
   height: 1000px;
+
+  iframe {
+    border: none;
+  }
+}
+
+.message-detail .usa-accordion__heading .accordion-item-title {
+  font-size: 16px;
+  font-weight: $font-regular;
 }

@@ -1,4 +1,4 @@
-import { CaseInternal } from '../../../../../shared/src/business/entities/cases/CaseInternal';
+import { DEFAULT_PROCEDURE_TYPE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -17,9 +17,7 @@ describe('setDefaultStartCaseInternalFormAction', () => {
       state: { form: {} },
     });
 
-    expect(result.state.form.procedureType).toEqual(
-      CaseInternal.DEFAULT_PROCEDURE_TYPE,
-    );
+    expect(result.state.form.procedureType).toEqual(DEFAULT_PROCEDURE_TYPE);
   });
 
   it('does not override procedureType if it is already present on the form', async () => {

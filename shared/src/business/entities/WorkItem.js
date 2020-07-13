@@ -101,7 +101,11 @@ joiValidationDecorator(
       .allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
     createdAt: joiStrictTimestamp.optional(),
-    docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+    docketNumber: joi
+      .string()
+      .regex(DOCKET_NUMBER_MATCHER)
+      .required()
+      .description('Unique case identifier in XXXXX-YY format.'),
     docketNumberSuffix: joi
       .string()
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))

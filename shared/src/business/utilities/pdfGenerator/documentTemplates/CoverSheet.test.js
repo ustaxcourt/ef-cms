@@ -15,7 +15,7 @@ describe('CoverSheet', () => {
     expect(wrapper.find('#caption-title').text()).toEqual('Captain Fantastic');
     expect(wrapper.find('#caption-extension').text()).toEqual('Petitioner');
     expect(wrapper.find('#docket-number').text()).toContain(
-      'Docket Number 123-45S',
+      'Docket No. 123-45S',
     );
   });
 

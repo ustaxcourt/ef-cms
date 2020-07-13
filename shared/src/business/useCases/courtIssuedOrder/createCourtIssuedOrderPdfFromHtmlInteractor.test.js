@@ -12,6 +12,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
       caseCaption: 'Dr. Leo Marvin, Petitioner',
       caseId: '123',
+      docketNumberWithSuffix: '123-45W',
     });
 
     applicationContext
@@ -52,7 +53,15 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
     });
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          docketNumberWithSuffix: '123-45W',
+        }),
+      }),
+    );
   });
 
   it('returns the pdf url from the temp documents bucket', async () => {

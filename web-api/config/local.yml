@@ -1,6 +1,0 @@
-s3Endpoint: http://localhost:9000
-dynamodbEndpoint: http://localhost:8000
-masterDynamodbEndpoint: http://localhost:8000
-masterRegion: us-east-1
-nodeEnv: development
-clamavDefDir: ''

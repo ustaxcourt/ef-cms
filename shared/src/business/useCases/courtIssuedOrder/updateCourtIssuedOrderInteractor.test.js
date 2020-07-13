@@ -10,6 +10,7 @@ const { User } = require('../../entities/User');
 describe('updateCourtIssuedOrderInteractor', () => {
   let mockCurrentUser;
   let mockUserById;
+  const mockUserId = applicationContext.getUniqueId();
 
   let caseRecord = {
     caseCaption: 'Caption',
@@ -42,19 +43,22 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: '2db02773-6583-42d8-ab91-52529d1993cf',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'a75e4cc8-deed-42d0-b7b0-3846004fe3f9',
         documentType: 'Answer',
-        userId: '2db02773-6583-42d8-ab91-52529d1993cf',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'd3cc11ab-bbee-4d09-bc66-da267f3cfd07',
         documentType: 'Answer',
-        userId: '2db02773-6583-42d8-ab91-52529d1993cf',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
     ],
     filingType: 'Myself',
@@ -126,6 +130,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         caseId: caseRecord.caseId,
         documentType: 'Order to Show Cause',
+        draftState: {},
       },
     });
 
@@ -151,6 +156,9 @@ describe('updateCourtIssuedOrderInteractor', () => {
           richText: '<b>the contents!</b>',
         },
         richText: '<b>the contents!</b>',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
     });
 
@@ -175,6 +183,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         caseId: caseRecord.caseId,
         documentType: 'Order to Show Cause',
+        draftState: {},
         judge: 'Judge Judgy',
       },
     });

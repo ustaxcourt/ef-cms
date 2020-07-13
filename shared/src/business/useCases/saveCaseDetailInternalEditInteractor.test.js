@@ -30,6 +30,7 @@ describe('updateCase', () => {
       {
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Petition',
+        filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
         workItems: [
           {
@@ -47,11 +48,13 @@ describe('updateCase', () => {
       {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
       {
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Motion',
+        filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
     ],

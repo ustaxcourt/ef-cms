@@ -4,6 +4,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { createCaseMessageAction } from '../actions/CaseDetail/createCaseMessageAction';
+import { getCaseMessagesForCaseAction } from '../actions/CaseDetail/getCaseMessagesForCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -25,6 +26,7 @@ export const createCaseMessageSequence = [
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
+      getCaseMessagesForCaseAction,
     ]),
   },
 ];

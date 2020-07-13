@@ -238,7 +238,14 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   });
 
   if (caseEntity.isPaper) {
-    const paperServicePdfBuffer = Buffer.from(pdfData);
-    return paperServicePdfBuffer;
+    const {
+      url,
+    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+      applicationContext,
+      documentId: caseConfirmationPdfName,
+      useTempBucket: false,
+    });
+
+    return url;
   }
 };

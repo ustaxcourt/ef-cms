@@ -72,6 +72,7 @@
         - "pughsChambers"
         - "ruwesChambers"
         - "thorntonsChambers"
+        - "torosChambers"
         - "urdasChambers"
         - "vasquezsChambers"
         - "wellsChambers"

@@ -3,10 +3,10 @@ dynamsoft_s3_zip_path="${dynamsoft_s3_zip_path}"
 dynamsoft_url="${dynamsoft_url}"
 dynamsoft_product_keys="${dynamsoft_product_keys}"
 
-export DEBIAN_FRONTEND=noninteractive 
+export DEBIAN_FRONTEND=noninteractive
 sudo apt update
-sudo apt install -y nginx 
-sudo apt install -y awscli 
+sudo apt install -y nginx
+sudo apt install -y awscli
 sudo ufw allow 'Nginx HTTP'
 cd /var/www/html || exit
 

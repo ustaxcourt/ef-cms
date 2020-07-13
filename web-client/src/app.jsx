@@ -11,6 +11,7 @@ import {
   router,
 } from './router';
 
+import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
@@ -69,6 +70,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle';
 import { faRedoAlt } from '@fortawesome/free-solid-svg-icons/faRedoAlt';
+import { faReply } from '@fortawesome/free-solid-svg-icons/faReply';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons/faShareSquare';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons/faShieldAlt';
@@ -148,6 +150,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faAddressCard,
       faCalculator,
       faCalendarAlt,
       faCalendarCheck,
@@ -163,7 +166,6 @@ const app = {
       faClock,
       faClockSolid,
       faClone,
-      faEnvelopeOpen,
       faCloudDownloadAlt,
       faCloudUploadAlt,
       faCopy,
@@ -171,8 +173,8 @@ const app = {
       faDollarSign,
       faEdit,
       faEditSolid,
-      faEnvelopeSolid,
       faEnvelopeOpen,
+      faEnvelopeSolid,
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
@@ -202,6 +204,7 @@ const app = {
       faPrint,
       faQuestionCircle,
       faRedoAlt,
+      faReply,
       faSearch,
       faShareSquare,
       faShieldAlt,

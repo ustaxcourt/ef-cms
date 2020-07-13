@@ -243,7 +243,7 @@ export const AdvancedDocumentSearch = connect(
                     className="usa-label padding-top-105"
                     htmlFor="order-opinion"
                   >
-                    Opinion type
+                    Opinion Type
                   </label>
                   <BindedSelect
                     bind={`advancedSearchForm.${formType}.opinionType`}

@@ -43,6 +43,14 @@ export const petitionsClerkAddsNoticeToCase = test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
+    // TODO: this test will be re-enabled or removed during this story: https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/flexion/ef-cms/4613
+    // await test.runSequence('setPDFSignatureDataSequence', {
+    //   isPdfAlreadySigned: false,
+    //   signatureApplied: false,
+    //   signatureData: { scale: 1, x: 20, y: 20 },
+    // });
+    // await test.runSequence('saveDocumentSigningSequence');
+
     //skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

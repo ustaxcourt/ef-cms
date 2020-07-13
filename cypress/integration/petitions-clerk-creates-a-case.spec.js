@@ -32,4 +32,9 @@ describe('Create case and submit to IRS', function () {
     cy.get('button#cancel-create-case').scrollIntoView().click();
     cy.get('div.modal-header').should('exist');
   });
+
+  it('should route to Document QC inbox when the user confirms to cancel', () => {
+    cy.get('button.modal-button-confirm').scrollIntoView().click();
+    cy.url().should('include', 'document-qc/my/inbox');
+  });
 });

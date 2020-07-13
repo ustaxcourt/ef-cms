@@ -7,7 +7,6 @@ module.exports = {
     'src/**/*.js',
     '!src/sharedAppContext.js',
     '!src/applicationContextForTests.js',
-    '!src/**/ContactFactory.js',
     '!src/**/getScannerMockInterface.js',
     '!src/business/test/**/*.js',
     '!src/business/assets/*',

@@ -1,4 +1,4 @@
-import { AddressDisplay } from '../CaseDetail/PetitionerInformation';
+import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
@@ -98,11 +98,13 @@ export const ReviewSavedPetition = connect(
                         </span>
                         {form.contactPrimary && (
                           <address aria-labelledby="primary-label">
-                            {AddressDisplay(form.contactPrimary, constants, {
-                              nameOverride:
+                            <AddressDisplay
+                              contact={form.contactPrimary}
+                              nameOverride={
                                 startCaseHelper.showCaseTitleForPrimary &&
-                                startCaseHelper.caseTitle,
-                            })}
+                                startCaseHelper.caseTitle
+                              }
+                            />
                           </address>
                         )}
                       </div>
@@ -115,7 +117,7 @@ export const ReviewSavedPetition = connect(
                             >
                               Spouse’s information
                             </span>
-                            {AddressDisplay(form.contactSecondary, constants)}
+                            <AddressDisplay contact={form.contactSecondary} />
                           </>
                         )}
                       </div>
@@ -391,7 +393,7 @@ export const ReviewSavedPetition = connect(
         </section>
         {showModal == 'ConfirmServeToIrsModal' && <ConfirmServeToIrsModal />}
         {showModal == 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDocumentQCSequence" />
         )}
       </>
     );

@@ -34,7 +34,12 @@
         - "privatePractitioner"
         - "trialclerk"
     judgeFullName: 
-      type: "any"
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -50,14 +55,9 @@
                 override: true
               - "judge"
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 100
           otherwise: 
             type: "any"
             flags: 
@@ -65,7 +65,12 @@
             allow: 
               - null
     judgeTitle: 
-      type: "any"
+      type: "string"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -81,14 +86,9 @@
                 override: true
               - "judge"
           then: 
-            type: "string"
+            type: "any"
             flags: 
               presence: "optional"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  limit: 100
           otherwise: 
             type: "any"
             flags: 

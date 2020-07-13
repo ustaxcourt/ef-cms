@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -46,7 +47,13 @@ export const serveCourtIssuedDocumentSequence = [
       setSaveAlertsForNavigationAction,
       isPrintPreviewPreparedAction,
       {
-        no: [navigateToCaseDetailAction],
+        no: [
+          followRedirectAction,
+          {
+            default: navigateToCaseDetailAction,
+            success: [],
+          },
+        ],
         yes: [navigateToPrintPaperServiceAction],
       },
     ]),

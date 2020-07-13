@@ -36,8 +36,9 @@ describe('caseDetailSubnavHelper', () => {
       },
     });
     expect(result.showCaseInformationTab).toBeTruthy();
-    expect(result.showDeadlinesTab).toBeTruthy();
-    expect(result.showInProgressTab).toBeTruthy();
+    expect(result.showTrackedItemsTab).toBeTruthy();
+    expect(result.showDraftsTab).toBeTruthy();
+    expect(result.showMessagesTab).toBeTruthy();
     expect(result.showCorrespondenceTab).toBeTruthy();
     expect(result.showNotesTab).toBeTruthy();
   });
@@ -52,8 +53,9 @@ describe('caseDetailSubnavHelper', () => {
         ...getBaseState(user),
       },
     });
-    expect(result.showDeadlinesTab).toBeFalsy();
-    expect(result.showInProgressTab).toBeFalsy();
+    expect(result.showTrackedItemsTab).toBeFalsy();
+    expect(result.showDraftsTab).toBeFalsy();
+    expect(result.showMessagesTab).toBeFalsy();
     expect(result.showCorrespondenceTab).toBeFalsy();
     expect(result.showNotesTab).toBeFalsy();
   });

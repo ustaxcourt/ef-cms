@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * changes the route to view the case-detail of the caseId of props.caseId
  *
@@ -7,7 +9,12 @@
  * @param {object} providers.get the cerebral get method
  * @returns {Promise} async action
  */
-export const navigateToSignOrderAction = async ({ props, router }) => {
+export const navigateToSignOrderAction = async ({ get, props, router }) => {
   const { caseId, documentId } = props;
-  await router.route(`/case-detail/${caseId}/edit-order/${documentId}/sign`);
+  const parentMessageId = get(state.parentMessageId);
+  let route = `/case-detail/${caseId}/edit-order/${documentId}/sign`;
+  if (parentMessageId) {
+    route += `/${parentMessageId}`;
+  }
+  await router.route(route);
 };

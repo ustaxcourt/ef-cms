@@ -6,6 +6,7 @@ export const StateSelect = ({
   updateFormValueSequence,
   useFullStateName,
   usStates,
+  usStatesOther,
   validateStartCaseSequence,
 }) => {
   return (
@@ -34,17 +35,13 @@ export const StateSelect = ({
         })}
       </optgroup>
       <optgroup label="Other">
-        <option value="AA">AA</option>
-        <option value="AE">AE</option>
-        <option value="AP">AP</option>
-        <option value="AS">AS</option>
-        <option value="FM">FM</option>
-        <option value="GU">GU</option>
-        <option value="MH">MH</option>
-        <option value="MP">MP</option>
-        <option value="PW">PW</option>
-        <option value="PR">PR</option>
-        <option value="VI">VI</option>
+        {usStatesOther.map(abbrev => {
+          return (
+            <option key={abbrev} value={abbrev}>
+              {abbrev}
+            </option>
+          );
+        })}
       </optgroup>
     </select>
   );

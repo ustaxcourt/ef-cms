@@ -21,7 +21,7 @@ const renderTable = ({ data, label, options }) => {
               <div>{data.address2}</div>
               <div>{data.address3}</div>
               <div>
-                {data.city && <span>{data.city},</span>}
+                {data.city && <span>{data.city}, </span>}
                 {data.state} {data.postalCode}
                 {data.country && <div>{data.country}</div>}
                 {options.showAddressAndPhoneChange && (
