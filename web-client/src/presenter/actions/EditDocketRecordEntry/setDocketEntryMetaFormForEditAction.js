@@ -49,7 +49,6 @@ export const setDocketEntryMetaFormForEditAction = ({
         document => docketRecordEntry.documentId === document.documentId,
       ) || {};
 
-    // TODO: Abstract this (also in getFormattedCaseDetail)
     if (docketRecordEntry.servedPartiesCode) {
       documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
     } else if (documentDetail.servedAt) {
@@ -75,7 +74,6 @@ export const setDocketEntryMetaFormForEditAction = ({
       ...deconstructDateWrapper(documentDetail.date),
     });
 
-    // TODO: add to unit test
     return {
       key: 'initEventCode',
       value: documentDetail.eventCode,

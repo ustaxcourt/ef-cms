@@ -159,4 +159,21 @@ describe('setDocketEntryMetaFormForEditAction', () => {
 
     expect(result.state.form.servedPartiesCode).toEqual('R');
   });
+
+  it('returns initEventCode from the case document', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 4,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({
+      key: 'initEventCode',
+      value: 'A',
+    });
+  });
 });
