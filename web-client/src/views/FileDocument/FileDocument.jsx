@@ -14,7 +14,6 @@ import React from 'react';
 export const FileDocument = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
-    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
@@ -23,7 +22,6 @@ export const FileDocument = connect(
   },
   function FileDocument({
     fileDocumentHelper,
-    form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
@@ -49,7 +47,7 @@ export const FileDocument = connect(
 
         <SupportingDocuments />
 
-        {form.secondaryDocument.documentTitle && (
+        {fileDocumentHelper.showSecondaryDocument && (
           <>
             <SecondaryDocumentForm />
             <SecondarySupportingDocuments />

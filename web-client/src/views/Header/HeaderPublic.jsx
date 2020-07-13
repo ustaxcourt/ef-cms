@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -63,16 +63,13 @@ export const HeaderPublic = connect(
                   Welcome to the U.S. Tax Court’s Case Management System
                 </h1>
                 <div className="login-container">
-                  <button
+                  <Button
                     className="usa-button--unstyled"
+                    icon={['far', 'user']}
                     onClick={() => navigateToCognitoSequence()}
                   >
-                    <FontAwesomeIcon
-                      className="account-menu-icon margin-right-1"
-                      icon={['far', 'user']}
-                    />
                     Log In
-                  </button>
+                  </Button>
                 </div>
                 <div className="login-container mobile">
                   <button

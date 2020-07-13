@@ -200,6 +200,7 @@ describe('creation form', () => {
     });
 
     // wait for elasticsearch to refresh
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
 
     cy.url().should('include', 'file-a-petition/success');

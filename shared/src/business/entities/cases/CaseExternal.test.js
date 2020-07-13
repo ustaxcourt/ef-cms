@@ -11,7 +11,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -22,7 +22,7 @@ describe('CaseExternal entity', () => {
       const petition = new CaseExternal({
         caseType: 'Other',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -34,7 +34,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'not a biz',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -47,7 +47,7 @@ describe('CaseExternal entity', () => {
         caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
@@ -65,7 +65,7 @@ describe('CaseExternal entity', () => {
         partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -81,7 +81,7 @@ describe('CaseExternal entity', () => {
         partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: {},
         petitionFileSize: 0,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -95,7 +95,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -110,7 +110,7 @@ describe('CaseExternal entity', () => {
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'testPetitionFile.pdf'),
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -126,7 +126,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
         stinFileSize: MAX_FILE_SIZE_BYTES + 5,
@@ -142,7 +142,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
@@ -158,7 +158,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -172,7 +172,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'testStinFile.pdf'),
       });
@@ -191,7 +191,7 @@ describe('CaseExternal entity', () => {
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
         ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -209,7 +209,7 @@ describe('CaseExternal entity', () => {
         ownershipDisclosureFile: new File([], 'test.pdf'),
         ownershipDisclosureFileSize: 0,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -223,7 +223,7 @@ describe('CaseExternal entity', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -238,7 +238,7 @@ describe('CaseExternal entity', () => {
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
         partyType: PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(

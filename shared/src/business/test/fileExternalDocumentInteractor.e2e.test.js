@@ -17,7 +17,7 @@ const { User } = require('../entities/User');
 describe('fileExternalDocumentInteractor integration test', () => {
   const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-  beforeAll(() => {
+  beforeEach(() => {
     window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
 
     applicationContext.getCurrentUser.mockReturnValue({
@@ -44,7 +44,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
-          state: 'AP',
+          state: 'AL',
         },
         contactSecondary: {},
         docketRecord: [
@@ -77,7 +77,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         attachments: false,
         caseId,
         certificateOfService: false,
-        certificateOfServiceDate: 'undefined-undefined-undefined',
+        certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
@@ -139,7 +139,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         name: 'Test Petitioner',
         phone: '+1 (599) 681-5435',
         postalCode: '89614',
-        state: 'AP',
+        state: 'AL',
       },
       contactSecondary: {},
       docketNumber: '101-19',
@@ -220,6 +220,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
+          filedBy: 'Petr. Test Petitioner',
           hasSupportingDocuments: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',
@@ -236,7 +237,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 attachments: false,
                 certificateOfService: false,
-                certificateOfServiceDate: 'undefined-undefined-undefined',
+                certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
                 docketNumber: '201-19',
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:
@@ -548,5 +549,110 @@ describe('fileExternalDocumentInteractor integration test', () => {
         sentBy: 'Test Petitioner',
       },
     ]);
+  });
+
+  it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
+    const { caseId } = await createCaseInteractor({
+      applicationContext,
+      petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
+      petitionMetadata: {
+        caseCaption: 'Caption',
+        caseType: 'Innocent Spouse',
+        contactPrimary: {
+          address1: '19 First Freeway',
+          address2: 'Ad cumque quidem lau',
+          address3: 'Anim est dolor animi',
+          city: 'Rerum eaque cupidata',
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+          phone: '+1 (599) 681-5435',
+          postalCode: '89614',
+          state: 'AL',
+        },
+        contactSecondary: {},
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
+        filingType: 'Myself',
+        hasIrsNotice: false,
+        partyType: PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Aberdeen, South Dakota',
+        procedureType: 'Small',
+      },
+      stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
+    });
+
+    await fileExternalDocumentInteractor({
+      applicationContext,
+      documentIds: [
+        '12de0fac-f63c-464f-ac71-0f54fd248484',
+        '22de0fac-f63c-464f-ac71-0f54fd248484',
+        '32de0fac-f63c-464f-ac71-0f54fd248484',
+        '42de0fac-f63c-464f-ac71-0f54fd248484',
+      ],
+      documentMetadata: {
+        attachments: false,
+        caseId,
+        certificateOfService: false,
+        certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
+        docketNumber: '201-19',
+        documentTitle: 'Motion for Leave to File Brief in Support of Petition',
+        documentType: 'Motion for Leave to File',
+        eventCode: 'M115',
+        hasSupportingDocuments: true,
+        representingPrimary: true,
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          documentTitle: 'Brief in Support of Petition',
+          documentType: 'Brief in Support',
+          eventCode: 'BRF',
+          previousDocument: { documentType: 'Petition' },
+          scenario: 'Nonstandard A',
+        },
+        secondarySupportingDocuments: [
+          {
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            eventCode: 'BRF',
+            previousDocument: {
+              documentTitle: 'Amended Answer',
+              documentType: 'Amended',
+            },
+            scenario: 'Nonstandard A',
+          },
+        ],
+        supportingDocument: 'Brief in Support',
+        supportingDocuments: [
+          {
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            eventCode: 'BRF',
+            previousDocument: {
+              documentTitle: 'Amended Answer',
+              documentType: 'Amended',
+            },
+            scenario: 'Nonstandard A',
+          },
+        ],
+      },
+    });
+
+    const caseAfterDocument = await getCaseInteractor({
+      applicationContext,
+      caseId,
+    });
+    const filedDocument = caseAfterDocument.documents.find(
+      d => d.documentType === 'Motion for Leave to File',
+    );
+    expect(filedDocument).toMatchObject({
+      filedBy: 'Petr. Test Petitioner',
+    });
   });
 });

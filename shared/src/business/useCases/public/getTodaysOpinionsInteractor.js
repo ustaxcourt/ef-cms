@@ -4,7 +4,7 @@ const {
   createStartOfDayISO,
   deconstructDate,
 } = require('../../utilities/DateHandler');
-const { OPINION_DOCUMENT_TYPES } = require('../../entities/EntityConstants');
+const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * getTodaysOpinionsInteractor
@@ -22,7 +22,7 @@ exports.getTodaysOpinionsInteractor = async ({ applicationContext }) => {
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
       endDate: currentDateEnd,
       judgeType: 'judge',
       startDate: currentDateStart,

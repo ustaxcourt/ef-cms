@@ -24,7 +24,7 @@ describe('CaseExternalIncomplete entity', () => {
         irsNoticeDate: null,
         partyType: PARTY_TYPES.petitioner,
         petitionFileId: '102e29fa-bb8c-43ff-b18f-ddce9089dd80',
-        preferredTrialCity: 'Chattanooga, Tennessee',
+        preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
       });
       expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(

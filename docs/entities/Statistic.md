@@ -92,9 +92,17 @@
         - "Year"
         - "Period"
     lastDateOfPeriod: 
-      type: "any"
+      type: "date"
       flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
         description: "Last date of the statistics period."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            date: "now"
       whens: 
         - 
           ref: 
@@ -110,17 +118,9 @@
                 override: true
               - "Period"
           then: 
-            type: "date"
+            type: "any"
             flags: 
-              format: 
-                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
-            rules: 
-              - 
-                name: "max"
-                args: 
-                  date: "now"
           otherwise: 
             type: "any"
             flags: 
@@ -128,9 +128,20 @@
             allow: 
               - null
     year: 
-      type: "any"
+      type: "number"
       flags: 
         description: "The year of the statistics period."
+      rules: 
+        - 
+          name: "integer"
+        - 
+          name: "min"
+          args: 
+            limit: 1900
+        - 
+          name: "max"
+          args: 
+            limit: 2020
       whens: 
         - 
           ref: 
@@ -146,20 +157,9 @@
                 override: true
               - "Year"
           then: 
-            type: "number"
+            type: "any"
             flags: 
               presence: "required"
-            rules: 
-              - 
-                name: "integer"
-              - 
-                name: "min"
-                args: 
-                  limit: 1900
-              - 
-                name: "max"
-                args: 
-                  limit: 2020
           otherwise: 
             type: "any"
             flags: 

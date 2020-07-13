@@ -1,12 +1,12 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { props, sequences } from 'cerebral';
 import React from 'react';
 
 export const ConfirmEditModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.navigateToEditOrderSequence,
+    confirmSequence: sequences[props.confirmSequence],
   },
   function ConfirmEditModal({ cancelSequence, confirmSequence }) {
     return (

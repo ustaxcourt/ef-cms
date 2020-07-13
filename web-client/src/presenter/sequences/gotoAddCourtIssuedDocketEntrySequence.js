@@ -10,6 +10,7 @@ import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedD
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -21,6 +22,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setCurrentPageAction('Interstitial'),
       stopShowValidationAction,
       clearFormAction,
+      setRedirectUrlAction,
       getUsersInSectionAction({ section: 'judge' }),
       setUsersByKeyAction('judgeUsers'),
       getCaseAction,

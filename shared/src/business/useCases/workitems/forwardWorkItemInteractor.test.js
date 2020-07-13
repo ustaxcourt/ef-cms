@@ -21,6 +21,7 @@ const mockCase = {
       docketNumber: '101-18',
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Proposed Stipulated Decision',
+      filedBy: 'Test Petitioner',
       processingStatus: 'pending',
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
       workItems: [

@@ -9,6 +9,10 @@ const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
+  Case,
+  getPetitionDocumentFromDocuments,
+} = require('../entities/cases/Case');
+const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
@@ -54,6 +58,9 @@ const {
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+const {
+  getDocumentTypeForAddressChange,
+} = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
@@ -102,7 +109,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { Case } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
@@ -201,10 +207,16 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getDocumentTypeForAddressChange: jest
+      .fn()
+      .mockImplementation(getDocumentTypeForAddressChange),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getPetitionDocumentFromDocuments: jest
+      .fn()
+      .mockImplementation(getPetitionDocumentFromDocuments),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -323,6 +335,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
+    persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),

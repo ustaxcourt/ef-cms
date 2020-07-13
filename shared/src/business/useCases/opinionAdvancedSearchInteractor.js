@@ -6,7 +6,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const {
-  OPINION_DOCUMENT_TYPES,
+  OPINION_EVENT_CODES,
 } = require('../../business/entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -58,7 +58,7 @@ exports.opinionAdvancedSearchInteractor = async ({
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_DOCUMENT_TYPES,
+      documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
       ...rawSearch,
     });

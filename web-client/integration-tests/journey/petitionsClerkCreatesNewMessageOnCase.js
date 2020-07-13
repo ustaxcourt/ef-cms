@@ -1,7 +1,20 @@
 import { NewCaseMessage } from '../../../shared/src/business/entities/NewCaseMessage';
+import { caseMessageModalHelper as caseMessageModalHelperComputed } from '../../src/presenter/computeds/caseMessageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseMessageModalHelper = withAppContextDecorator(
+  caseMessageModalHelperComputed,
+);
 
 export const petitionsClerkCreatesNewMessageOnCase = test => {
+  const getHelper = () => {
+    return runCompute(caseMessageModalHelper, {
+      state: test.getState(),
+    });
+  };
+
   return it('petitions clerk creates new message on a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -18,6 +31,17 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
+
+    const messageDocument = getHelper().documents[0];
+    test.testMessageDocumentId = messageDocument.documentId;
+
+    await test.runSequence('updateCaseMessageModalAttachmentsSequence', {
+      documentId: messageDocument.documentId,
+    });
+
+    expect(test.getState('modal.form.subject')).toEqual(
+      messageDocument.documentType,
+    );
 
     test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
 

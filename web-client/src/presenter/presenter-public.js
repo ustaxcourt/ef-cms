@@ -12,6 +12,7 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
@@ -43,6 +44,7 @@ export const presenter = {
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
     notFoundErrorSequence,
+    openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
     submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,

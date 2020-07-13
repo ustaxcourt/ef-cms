@@ -9,6 +9,6 @@ exports.getPartnershipBBAPrimaryContact = ContactFactory.createContactFactory({
     secondaryName: 'Enter partnership representative name',
   },
   additionalValidation: {
-    secondaryName: joi.string().required(),
+    secondaryName: joi.string().max(500).required(),
   },
 });

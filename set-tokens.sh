@@ -1,3 +1,14 @@
+#!/bin/bash
+
+# Returns a petitionsclerk JWT token that is used for smoketests
+
+# Usage
+#   ./set-tokens.sh
+
+# Requirements
+#   - aws cli must be installed on your machine
+#   - aws credentials must be installed on your machine
+
 REGION="us-east-1"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")

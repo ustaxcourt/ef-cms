@@ -189,6 +189,7 @@ module.exports = {
         skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
+          'apigateway',
           'args',
           'armen',
           'armens',
@@ -318,6 +319,7 @@ module.exports = {
           'scss',
           'semibold',
           'seriatim',
+          'serverless',
           'servoss',
           'sisqo',
           'skipnav',

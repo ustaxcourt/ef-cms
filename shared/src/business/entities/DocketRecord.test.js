@@ -121,5 +121,65 @@ describe('DocketRecord', () => {
         index: 'Enter an index',
       });
     });
+
+    it('fails validation when isLegacy is true and isStricken is undefined', () => {
+      const invalidDocketRecord = new DocketRecord(
+        {
+          description: 'Test Docket Record',
+          eventCode: 'O',
+          filingDate: new Date('2000-01-01').toISOString(),
+          index: 0,
+          isLegacy: true,
+        },
+        { applicationContext },
+      );
+
+      expect(invalidDocketRecord.isValid()).toBeFalsy();
+    });
+
+    it('passes validation when isLegacy is true and isStricken is defined', () => {
+      const invalidDocketRecord = new DocketRecord(
+        {
+          description: 'Test Docket Record',
+          eventCode: 'O',
+          filingDate: new Date('2000-01-01').toISOString(),
+          index: 0,
+          isLegacy: true,
+          isStricken: false,
+        },
+        { applicationContext },
+      );
+
+      expect(invalidDocketRecord.isValid()).toBeTruthy();
+    });
+
+    it('passes validation when isLegacy is false and isStricken is undefined', () => {
+      const invalidDocketRecord = new DocketRecord(
+        {
+          description: 'Test Docket Record',
+          eventCode: 'O',
+          filingDate: new Date('2000-01-01').toISOString(),
+          index: 0,
+          isLegacy: false,
+        },
+        { applicationContext },
+      );
+
+      expect(invalidDocketRecord.isValid()).toBeTruthy();
+    });
+
+    it('passes validation when isLegacy is undefined and isStricken is undefined', () => {
+      const invalidDocketRecord = new DocketRecord(
+        {
+          description: 'Test Docket Record',
+          eventCode: 'O',
+          filingDate: new Date('2000-01-01').toISOString(),
+          index: 0,
+        },
+        { applicationContext },
+      );
+
+      expect(invalidDocketRecord.isValid()).toBeTruthy();
+    });
   });
 });

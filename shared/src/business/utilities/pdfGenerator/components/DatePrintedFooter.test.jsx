@@ -4,9 +4,9 @@ const { shallow } = require('enzyme');
 
 describe('DatePrintedFooter', () => {
   it('renders the date from props', () => {
-    let wrapper = shallow(<DatePrintedFooter datePrinted={'01/01/2020'} />);
+    let wrapper = shallow(<DatePrintedFooter datePrinted={'01/01/20'} />);
     expect(wrapper.find('.date-printed-footer').text()).toEqual(
-      'Printed 01/01/2020',
+      'Printed 01/01/20',
     );
   });
 });

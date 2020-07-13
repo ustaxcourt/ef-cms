@@ -4,10 +4,12 @@ import { runAction } from 'cerebral/test';
 
 const caseDetailMock = jest.fn();
 const documentDetailMock = jest.fn();
+const messageDetailMock = jest.fn();
 
 presenter.providers.path = {
   CaseDetail: caseDetailMock,
   DocumentDetail: documentDetailMock,
+  MessageDetail: messageDetailMock,
 };
 
 describe('getEditDocumentEntryPointAction', () => {

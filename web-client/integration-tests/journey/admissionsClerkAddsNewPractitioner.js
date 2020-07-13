@@ -73,7 +73,7 @@ export const admissionsClerkAddsNewPractitioner = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.state',
-      value: 'Oklahoma',
+      value: 'OK',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.postalCode',

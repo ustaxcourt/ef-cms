@@ -25,9 +25,6 @@ exports.headers = headers;
  */
 exports.handle = async (event, fun) => {
   const applicationContext = createApplicationContext({});
-  if (event.source === 'serverless-plugin-warmup') {
-    return exports.sendOk('Lambda is warm!');
-  }
   try {
     let response = await fun();
 
@@ -90,9 +87,6 @@ exports.handle = async (event, fun) => {
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
 exports.redirect = async (event, fun, statusCode = 302) => {
-  if (event.source === 'serverless-plugin-warmup') {
-    return exports.sendOk('Lambda is warm!');
-  }
   try {
     const { url } = await fun();
     return {
@@ -164,11 +158,10 @@ exports.getAuthHeader = event => {
         'Error: Authorization Bearer token is required',
       ); //temp until actual authorization is added
     }
+    return usernameTokenArray[1];
   } else {
-    throw new UnauthorizedError('Error: Authorization is required'); //temp until actual authorization is added
+    return null;
   }
-
-  return usernameTokenArray[1];
 };
 
 /**
@@ -179,6 +172,7 @@ exports.getAuthHeader = event => {
  */
 exports.getUserFromAuthHeader = event => {
   const token = exports.getAuthHeader(event);
+  if (!token) return null;
   const decoded = jwt.decode(token);
   if (decoded) {
     decoded.token = token;

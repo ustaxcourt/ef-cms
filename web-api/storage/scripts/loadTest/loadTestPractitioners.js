@@ -20,10 +20,10 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     .promise();
 
   const services = apis
-    .filter(api => api.name.includes(`${process.env.ENV}-ef-cms`))
+    .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
     .reduce((obj, api) => {
       obj[
-        api.name.replace(`${process.env.ENV}-`, '')
+        api.name.replace(`_${process.env.ENV}`, '')
       ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});
@@ -35,7 +35,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'practitioner1@example.com',
   });
 
-  const response = await axios.get(`${services['ef-cms-users-green']}`, {
+  const response = await axios.get(`${services['gateway_api']}/users`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

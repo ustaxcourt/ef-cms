@@ -133,7 +133,7 @@ describe('documentGenerators', () => {
         inCareOf: 'Test Care Of',
         phone: '123-124-1234',
         postalCode: '12345',
-        state: 'ST',
+        state: 'AL',
       };
       const pdf = await changeOfAddress({
         applicationContext,
@@ -174,10 +174,10 @@ describe('documentGenerators', () => {
           caseCaptionExtension: 'Petitioner',
           caseTitle: 'Test Person',
           certificateOfService: true,
-          dateFiledLodged: '01/01/2020',
+          dateFiledLodged: '01/01/20',
           dateFiledLodgedLabel: 'Filed',
-          dateReceived: '01/02/2020',
-          dateServed: '01/03/2020',
+          dateReceived: '01/02/20',
+          dateServed: '01/03/20',
           docketNumberWithSuffix: '123-45S',
           documentTitle: 'Petition',
           electronicallyFiled: true,
@@ -214,7 +214,7 @@ describe('documentGenerators', () => {
               name: 'Test Petitioner',
               phone: '123-124-1234',
               postalCode: '12345',
-              state: 'STATE',
+              state: 'AL',
             },
             irsPractitioners: [
               {
@@ -227,7 +227,7 @@ describe('documentGenerators', () => {
                   country: 'USA',
                   phone: '234-123-4567',
                   postalCode: '12345',
-                  state: 'STATE',
+                  state: 'AL',
                 },
                 name: 'Test IRS Practitioner',
               },
@@ -244,7 +244,7 @@ describe('documentGenerators', () => {
                   country: 'USA',
                   phone: '234-123-4567',
                   postalCode: '12345',
-                  state: 'STATE',
+                  state: 'AL',
                 },
                 formattedName: 'Test Private Practitioner (PT20001)',
                 name: 'Test Private Practitioner',
@@ -336,7 +336,7 @@ describe('documentGenerators', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
-          preferredTrialCity: 'Birmingham, AL',
+          preferredTrialCity: 'Birmingham, Alabama',
           receivedAtFormatted: 'December 1, 2019',
           servedDate: 'June 3, 2020',
         },
@@ -362,7 +362,8 @@ describe('documentGenerators', () => {
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
-          caseTitle: 'Test Petitioner',
+          caseTitle:
+            'Test Petitioner, Another Petitioner, and Yet Another Petitioner',
           docketNumberWithSuffix: '123-45S',
           footerDate: '02/02/20',
           trialInfo: {
@@ -378,7 +379,7 @@ describe('documentGenerators', () => {
             postalCode: '12345',
             startDay: 'Friday',
             startTime: '10:00am',
-            state: 'TEST STATE',
+            state: 'AL',
           },
         },
       });
@@ -412,7 +413,7 @@ describe('documentGenerators', () => {
             judge: {
               name: 'Test Judge',
             },
-            state: 'TEST STATE',
+            state: 'AL',
           },
         },
       });
@@ -431,8 +432,41 @@ describe('documentGenerators', () => {
     });
   });
 
+  describe('notice', () => {
+    it('generates a Notice document', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent: `<p>This is some sample notice text.</p>
+
+          <p>NOTICE that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
+
+          <p>NOTICE that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>`,
+          orderTitle: 'NOTICE',
+          signatureText: 'Test Signature',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
   describe('order', () => {
-    it('generates a Standing Pre-trial Order document', async () => {
+    it('generates an Order document', async () => {
       const pdf = await order({
         applicationContext,
         data: {
@@ -442,17 +476,45 @@ describe('documentGenerators', () => {
           orderContent: `<p>Upon due consideration ofthe parties' joint motion to remand, filed December 30, 2019, and the parties' joint motion for continuance, filed December 30, 2019, it is</p>
 
           <p>ORDERED that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
-          
-          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are 
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
           remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
-          
-          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office 
-          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a 
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
           reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
-          
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion for continuance is granted in that thesecases are stricken for trial from the Court's January 27, 2020, Los Angeles, California, trial session. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
+          <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>
+
+          <p>ORDERED that the joint motion to remand to respondent's Appeals Office is granted and these cases are
+          remanded to respondent's Appeals Office for a supplemental collection due process hearing. It is further</p>
+
+          <p>ORDERED that respondent shall offer petitioners an administrative hearing at respondent's Appeals Office
+          located closest to petitioners' residence (or at such other place as may be mutually agreed upon) at a
+          reasonable and mutually agreed upon date and time, but no later than April 1, 2020. It is further</p>
+
           <p>ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>`,
           orderTitle: 'ORDER',
-          signatureText: 'Test Signature',
         },
       });
 

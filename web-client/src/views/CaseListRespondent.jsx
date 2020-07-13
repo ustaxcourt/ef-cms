@@ -6,11 +6,13 @@ import { MyContactInformation } from './MyContactInformation';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const CaseListRespondent = connect(
   {
     caseType: state.openClosedCases.caseType,
+    clearOpenClosedCasesCurrentPageSequence:
+      sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
@@ -22,6 +24,7 @@ export const CaseListRespondent = connect(
   },
   function CaseListRespondent({
     caseType,
+    clearOpenClosedCasesCurrentPageSequence,
     closedTab,
     dashboardExternalHelper,
     externalUserCasesHelper,
@@ -30,6 +33,12 @@ export const CaseListRespondent = connect(
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
   }) {
+    useEffect(() => {
+      return () => {
+        clearOpenClosedCasesCurrentPageSequence();
+      };
+    }, []);
+
     const renderTable = (
       cases,
       showLoadMore,

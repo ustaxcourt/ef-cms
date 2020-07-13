@@ -70,7 +70,7 @@ If a change was made to the case type or case procedure resulting in a change to
 
 #### Received Date and Filing Date
 **Paper**
-* When a court user is uploading a peper document, they're asked to put ina  received date. That received date entered should be saved as both the received date and the filed date or lodged date, depending on what the user selects.
+* When a court user is uploading a paper document, they're asked to put in a received date. That received date entered should be saved as both the received date and the filed date or lodged date, depending on what the user selects.
 * Received date and filed date both show up on the cover sheet.
 * If the user then edits the date on the docket record (this story), the filed date or lodged date updates on the backend and a new cover sheet is generated that has the original received date and the new filed or lodged date.
 

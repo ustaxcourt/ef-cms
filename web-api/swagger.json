@@ -5802,6 +5802,387 @@
         }
       }
     },
+    "/messages/completed/section/{sectionId}": {
+      "parameters": [
+        {
+          "name": "sectionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the completed messages for the specific section",
+        "description": "Gets the completed messages for the specific user section.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/completed/{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the completed messages for the specific user",
+        "description": "Gets the completed messages for the specific user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/case/{caseId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["messages"],
+        "summary": "gets the messages for the specific case",
+        "description": "Gets the messages for the specific case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{parentMessageId}/complete": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "complete a case message",
+        "description": "Complete a message.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "parentMessageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "message info",
+          "description": "the case message info",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{parentMessageId}/reply": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "reply to a case message",
+        "description": "Reply to a message.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "parentMessageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "message info",
+          "description": "the case message info",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "attachments": {
+                "type": "array"
+              },
+              "caseId": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "toSection": {
+                "type": "string"
+              },
+              "toUserId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/{parentMessageId}/forward": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "forward a case message",
+        "description": "Forward a message.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseMessage"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "parentMessageId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "message info",
+          "description": "the case message info",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "attachments": {
+                "type": "array"
+              },
+              "caseId": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "toSection": {
+                "type": "string"
+              },
+              "toUserId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/public-api/todays-opinions": {
       "get": {
         "tags": ["case-documents"],
@@ -6214,6 +6595,10 @@
     "caseMessage": {
       "type": "object",
       "properties": {
+        "attachments": {
+          "type": "array",
+          "description": "array of document metadata objects attached to the message"
+        },
         "caseId": {
           "type": "string",
           "description": "id of the associated case"
@@ -6221,6 +6606,30 @@
         "caseStatus": {
           "type": "string",
           "description": "status of the associated case"
+        },
+        "caseTitle": {
+          "type": "string",
+          "description": "case title for the associated cases"
+        },
+        "completedAt": {
+          "type": "string",
+          "description": "when the message was marked as completed"
+        },
+        "completedBy": {
+          "type": "string",
+          "description": "the name of the user who completed the message thread"
+        },
+        "completedBySection": {
+          "type": "string",
+          "description": "the section of the user who completed the message thread"
+        },
+        "completedByUserId": {
+          "type": "string",
+          "description": "the ID of the user who completed the message thread"
+        },
+        "completedMessage": {
+          "type": "string",
+          "description": "the message entered when completing the message thread"
         },
         "createdAt": {
           "type": "string",
@@ -6250,6 +6659,14 @@
           "type": "string",
           "description": "the ID of the user who sent the message"
         },
+        "isCompleted": {
+          "type": "boolean",
+          "description": "whether the message thread has been completed"
+        },
+        "isRepliedTo": {
+          "type": "boolean",
+          "description": "whether the message has been replied to or forwarded"
+        },
         "message": {
           "type": "string",
           "description": "the message text"
@@ -6257,6 +6674,10 @@
         "messageId": {
           "type": "string",
           "description": "the unique ID generated by the system to represent the message"
+        },
+        "parentMessageId": {
+          "type": "string",
+          "description": "the unique ID generated by the system to represent the parent / initial message"
         },
         "subject": {
           "type": "string",

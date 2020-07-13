@@ -1,14 +1,21 @@
 import { state } from 'cerebral';
 
 /**
- * creates the default success alert object
+ * creates the success alert object
  *
  * @param {object} providers the providers object
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
- * @returns {object} the alertSuccess object with default strings
+ * @param {object} providers.store the cerebral store object
+ * @returns {object} the alertSuccess object
  */
-export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
+export const getFileExternalDocumentAlertSuccessAction = ({
+  get,
+  props,
+  store,
+}) => {
   const documentToEdit = get(state.documentToEdit);
+  const isCreatingOrder = get(state.isCreatingOrder);
 
   const alertSuccess = {
     message: 'Document filed and is accessible from the Docket Record.',
@@ -17,6 +24,12 @@ export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
   if (props.documentWithPendingAssociation) {
     alertSuccess.message =
       'Document filed and pending approval. Please check your dashboard for updates.';
+  }
+
+  if (isCreatingOrder) {
+    store.unset(state.isCreatingOrder);
+    alertSuccess.message =
+      'Your document has been successfully created and attached to this message';
   }
 
   if (documentToEdit) {

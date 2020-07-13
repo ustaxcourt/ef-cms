@@ -1,5 +1,5 @@
 const createApplicationContext = require('../applicationContext');
-const { redirect } = require('../middleware/apiGatewayHelper');
+const { genericHandler } = require('../genericHandler');
 
 /**
  * used for fetching a single case
@@ -8,7 +8,7 @@ const { redirect } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getPublicDocumentDownloadUrlLambda = event =>
-  redirect(event, async () => {
+  genericHandler(event, async () => {
     const applicationContext = createApplicationContext({});
     try {
       const results = await applicationContext

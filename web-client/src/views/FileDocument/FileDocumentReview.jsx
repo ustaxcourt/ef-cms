@@ -166,7 +166,7 @@ export const FileDocumentReview = connect(
                       </React.Fragment>
                     ))}
 
-                  {form.secondaryDocument.documentTitle && (
+                  {fileDocumentHelper.showSecondaryDocument && (
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         <div className="tablet:margin-bottom-0 margin-bottom-205">

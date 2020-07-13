@@ -29,7 +29,7 @@ describe('ChangeOfAddress', () => {
       inCareOf: 'Test Care Of',
       phone: '123-124-1234',
       postalCode: '12345',
-      state: 'ST',
+      state: 'AL',
     };
 
     options = {

@@ -9,6 +9,7 @@ const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
+  const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -39,19 +40,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
       {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'e3bb51b1-bb93-494b-8a20-8bce8327fd99',
+        filedBy: 'Test Petitioner',
+        userId: mockUserId,
       },
     ],
     filingType: 'Myself',
@@ -59,6 +63,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
+    status: 'New',
     userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
 
@@ -106,6 +111,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         caseId: caseRecord.caseId,
         docketNumber: '45678-18',
         documentType: 'Order to Show Cause',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -128,6 +136,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentTitle: 'Order to do anything',
         documentType: 'Order',
         eventCode: 'O',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -154,6 +165,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentTitle: 'Notice to be nice',
         documentType: 'Notice',
         eventCode: 'NOT',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -179,11 +193,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
         docketNumber: '45678-18',
         documentContents: 'I am some document contents',
         documentType: 'Order to Show Cause',
-        draftState: {
-          documentContents: 'I am some document contents',
-          editorDelta: 'I am some document contents',
-          richText: 'I am some document contents',
-        },
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -222,6 +234,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentTitle: 'TC Opinion',
         documentType: 'TCOP - T.C. Opinion',
         eventCode: 'TCOP',
+        judge: 'Dredd',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -239,6 +252,60 @@ describe('fileCourtIssuedOrderInteractor', () => {
         .toString()
         .indexOf('%PDF'),
     ).not.toEqual(-1);
+  });
+
+  it('should add order document to most recent case message if a parentMessageId is passed in', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseMessageThreadByParentId.mockReturnValue([
+        {
+          caseId: caseRecord.caseId,
+          caseStatus: caseRecord.status,
+          caseTitle: 'Petitioner',
+          createdAt: '2019-03-01T21:40:46.415Z',
+          docketNumber: caseRecord.docketNumber,
+          docketNumberWithSuffix: caseRecord.docketNumber,
+          from: 'Test Petitionsclerk',
+          fromSection: 'petitions',
+          fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+          message: 'hey there',
+          messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+          parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
+          subject: 'hello',
+          to: 'Test Petitionsclerk2',
+          toSection: 'petitions',
+          toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+        },
+      ]);
+
+    await fileCourtIssuedOrderInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
+        documentTitle: 'Order to do anything',
+        documentType: 'Order',
+        eventCode: 'O',
+        parentMessageId: '6c1fd626-c1e1-4367-bca6-e00f9ef98cf5',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseMessage,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseMessage.mock
+        .calls[0][0].caseMessage.attachments,
+    ).toEqual([
+      {
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Order to do anything',
+      },
+    ]);
   });
 
   it('should throw an error if fails to parse pdf', async () => {

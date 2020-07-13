@@ -292,7 +292,6 @@ export const uploadExternalDecisionDocument = async test => {
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: {},
     serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
@@ -319,7 +318,6 @@ export const uploadProposedStipulatedDecision = async test => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-    secondaryDocument: { certificateOfServiceDate: null },
     serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
@@ -392,7 +390,7 @@ export const uploadPetition = async (
   const userToken = jwt.sign(user, 'secret');
 
   const response = await axios.post(
-    'http://localhost:3002/',
+    'http://localhost:4000/cases',
     {
       petitionFileId,
       petitionMetadata,
@@ -451,7 +449,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:3000';
+  presenter.state.baseUrl = process.env.API_URL || 'http://localhost:4000';
 
   presenter.providers.applicationContext = applicationContext;
 

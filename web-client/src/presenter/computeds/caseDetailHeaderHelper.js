@@ -61,6 +61,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
 
+  const petitionDocument = applicationContext
+    .getUtilities()
+    .getPetitionDocumentFromDocuments(caseDetail.documents);
+  const petitionIsServed = petitionDocument && !!petitionDocument.servedAt;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
     showAddCorrespondenceButton,
@@ -69,7 +74,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showConsolidatedCaseIcon,
     showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
-    showExternalButtons: isExternalUser,
+    showExternalButtons: isExternalUser && petitionIsServed,
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,

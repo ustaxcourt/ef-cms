@@ -79,11 +79,12 @@ joiValidationDecorator(
       .description(
         'The total amount of penalties for the period or year on the IRS notice.',
       ),
-    lastDateOfPeriod: joi
+    lastDateOfPeriod: joiStrictTimestamp
+      .max('now')
       .when('yearOrPeriod', {
         is: 'Period',
         otherwise: joi.optional().allow(null),
-        then: joiStrictTimestamp.max('now').required(),
+        then: joi.required(),
       })
       .description('Last date of the statistics period.'),
     statisticId: joi
@@ -94,15 +95,14 @@ joiValidationDecorator(
       .required()
       .description('Unique statistic ID only used by the system.'),
     year: joi
+      .number()
+      .integer()
+      .min(1900)
+      .max(new Date().getFullYear())
       .when('yearOrPeriod', {
         is: 'Year',
         otherwise: joi.optional().allow(null),
-        then: joi
-          .number()
-          .integer()
-          .required()
-          .min(1900)
-          .max(new Date().getFullYear()),
+        then: joi.required(),
       })
       .description('The year of the statistics period.'),
     yearOrPeriod: joi
