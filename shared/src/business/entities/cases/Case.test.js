@@ -5,6 +5,7 @@ const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
   PARTY_TYPES,
@@ -2087,14 +2088,14 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('complete');
+      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
     it('should update a correspondence document', () => {
