@@ -41,6 +41,7 @@ const {
   formatCase,
   formatDocketRecordWithDocument,
   formatDocument,
+  getServedPartiesCode,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -210,6 +211,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPetitionDocumentFromDocuments: jest
       .fn()
       .mockImplementation(getPetitionDocumentFromDocuments),
+    getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
