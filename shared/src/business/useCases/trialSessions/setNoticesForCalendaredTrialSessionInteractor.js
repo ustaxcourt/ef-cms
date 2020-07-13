@@ -2,14 +2,15 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   NOTICE_OF_TRIAL,
   STANDING_PRETRIAL_NOTICE,
   STANDING_PRETRIAL_ORDER,
 } = require('../../entities/EntityConstants');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -124,7 +125,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
         eventCode: NOTICE_OF_TRIAL.eventCode,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
         userId: user.userId,
       },
@@ -180,7 +181,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         documentTitle: standingPretrialDocumentTitle,
         documentType: standingPretrialDocumentTitle,
         eventCode: standingPretrialDocumentEventCode,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },

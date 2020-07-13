@@ -25,6 +25,10 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   ...applicationContext,
 });
 
+const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = applicationContext.getConstants();
+
 const WORK_ITEM_ID_1 = '06f09800-2f9c-4040-b133-10966fbf6179';
 const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
 const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
@@ -754,7 +758,7 @@ describe('formatted work queue computed', () => {
       filedBy: 'Petr. Ori Petersen',
       partyPrimary: true,
       partySecondary: false,
-      processingStatus: 'complete',
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2019-12-16T16:48:02.888Z',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };

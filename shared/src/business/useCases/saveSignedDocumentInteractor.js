@@ -1,6 +1,9 @@
+const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SIGNED_DOCUMENT_TYPES,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { SIGNED_DOCUMENT_TYPES } = require('../entities/EntityConstants');
 
 /**
  * saveSignedDocumentInteractor
@@ -48,7 +51,7 @@ exports.saveSignedDocumentInteractor = async ({
         eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
         filedBy: originalDocumentEntity.filedBy,
         isPaper: false,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
@@ -63,7 +66,7 @@ exports.saveSignedDocumentInteractor = async ({
         ...originalDocumentEntity,
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
       { applicationContext },
