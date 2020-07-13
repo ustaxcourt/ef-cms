@@ -2743,7 +2743,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when the pending case status is ineligible', () => {
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         const result = caseEntity.canConsolidate();
 
         expect(result).toEqual(false);
@@ -2759,7 +2759,7 @@ describe('Case entity', () => {
         let result;
 
         // verify a failure on the current (this) case
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         result = caseEntity.canConsolidate();
         expect(result).toEqual(false);
 
@@ -2800,7 +2800,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
