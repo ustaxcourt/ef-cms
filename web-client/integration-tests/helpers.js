@@ -2,7 +2,6 @@
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -29,6 +28,8 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormData from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+
+const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const formattedCaseMessages = withAppContextDecorator(
@@ -379,7 +380,7 @@ export const uploadPetition = async (
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   const petitionMetadata = {
-    caseType: overrides.caseType || 'CDP (Lien/Levy)',
+    caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
     contactPrimary: {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',

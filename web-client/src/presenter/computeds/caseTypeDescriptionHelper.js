@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  */
 export const caseTypeDescriptionHelper = (get, applicationContext) => {
   const form = get(state.form);
-  const { CASE_TYPES } = applicationContext.getConstants();
+  const { CASE_TYPES, CASE_TYPES_MAP } = applicationContext.getConstants();
 
   let caseTypesWithDescriptions = [];
   if (form.hasIrsNotice) {
@@ -20,7 +20,7 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
         case 'Deficiency':
           caseDescription = 'Notice of Deficiency';
           break;
-        case 'CDP (Lien/Levy)':
+        case CASE_TYPES_MAP.cdp:
           caseDescription =
             'Notice of Determination Concerning Collection Action';
           break;
@@ -70,7 +70,7 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
     CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
-        case 'CDP (Lien/Levy)':
+        case CASE_TYPES_MAP.cdp:
           caseDescription = 'CDP (Lien/Levy)';
           break;
         case 'Innocent Spouse':
