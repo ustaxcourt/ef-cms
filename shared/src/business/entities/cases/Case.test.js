@@ -3,6 +3,7 @@ const {
   ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -1803,7 +1804,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'passport',
+          caseType: CASE_TYPES_MAP.passport,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -1822,7 +1823,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'cdp (lien/levy)',
+          caseType: CASE_TYPES_MAP.cdp,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -3364,7 +3365,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [],
         },
@@ -3385,7 +3386,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         {
@@ -3403,7 +3404,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
         },
         {
