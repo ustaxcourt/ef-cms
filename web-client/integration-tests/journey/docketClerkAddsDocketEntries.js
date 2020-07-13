@@ -26,7 +26,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile: expect.anything(), // matches anything but null or undefined
     });
 
     //primary document
