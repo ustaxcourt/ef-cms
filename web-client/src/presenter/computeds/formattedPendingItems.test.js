@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedPendingItems as formattedPendingItemsComputed } from './formattedPendingItems';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -6,6 +7,9 @@ const formattedPendingItems = withAppContextDecorator(
   formattedPendingItemsComputed,
 );
 
+const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = applicationContext.getConstants();
 const mockPendingItems = [
   {
     associatedJudge: 'Chief Judge',
@@ -27,7 +31,7 @@ const mockPendingItems = [
     partyPrimary: true,
     pending: true,
     privatePractitioners: [],
-    processingStatus: 'complete',
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '2019-01-10',
     relationship: 'primaryDocument',
     scenario: 'Standard',
@@ -112,7 +116,7 @@ const mockPendingItems = [
     pending: true,
     previousDocument: 'Petition',
     privatePractitioners: [],
-    processingStatus: 'complete',
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '2018-01-20',
     relationship: 'primaryDocument',
     scenario: 'Nonstandard C',
@@ -199,7 +203,7 @@ const mockPendingItems = [
     pending: true,
     previousDocument: 'Petition',
     privatePractitioners: [],
-    processingStatus: 'complete',
+    processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '2018-01-20',
     relationship: 'primaryDocument',
     scenario: 'Nonstandard C',
