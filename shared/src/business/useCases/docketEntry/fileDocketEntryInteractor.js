@@ -20,12 +20,14 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
+ * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
 exports.fileDocketEntryInteractor = async ({
   applicationContext,
   documentMetadata,
+  isSavingForLater,
   primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -119,11 +121,16 @@ exports.fileDocketEntryInteractor = async ({
       workItem.addMessage(message);
       documentEntity.addWorkItem(workItem);
 
-      // TODO: providers.isServing (boolean)
-      if (metadata.isFileAttached) {
+      if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);
-
         documentEntity.setAsServed(servedParties.all);
+      } else if (isSavingForLater) {
+        documentEntity.numberOfPages = await applicationContext
+          .getUseCaseHelpers()
+          .countPagesInDocument({
+            applicationContext,
+            documentId,
+          });
       }
 
       if (metadata.isPaper) {
