@@ -1193,9 +1193,10 @@ module.exports = appContextUser => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: () => {
-      const pdfjsLib = require('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    getPdfJs: async () => {
+      const pdfjsLib = require('pdfjs-dist/es5/build/pdf.js');
+      pdfjsLib.disableWorker = true;
+
       return pdfjsLib;
     },
     getPdfLib: () => {
