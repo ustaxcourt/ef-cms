@@ -100,7 +100,7 @@ describe('getCaseInventoryReport', () => {
 
     const results = await getCaseInventoryReport({
       applicationContext,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -109,13 +109,17 @@ describe('getCaseInventoryReport', () => {
       { match: { 'pk.S': 'case|' } },
       { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'status.S': 'New' },
+        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
+        {
+          associatedJudge: 'Chief Judge',
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
       ],
       totalCount: '1',
     });
@@ -139,7 +143,7 @@ describe('getCaseInventoryReport', () => {
     const results = await getCaseInventoryReport({
       applicationContext,
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy).toHaveBeenCalled();

@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
 const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 
 describe('getCaseByDocketNumber', () => {
@@ -12,7 +15,7 @@ describe('getCaseByDocketNumber', () => {
             caseId: '123',
             pk: 'case|123',
             sk: 'case|123',
-            status: 'New',
+            status: CASE_STATUS_TYPES.new,
           },
         ],
       }),
@@ -34,7 +37,7 @@ describe('getCaseByDocketNumber', () => {
       pk: 'case|123',
       privatePractitioners: [],
       sk: 'case|123',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
   });
 
@@ -46,7 +49,7 @@ describe('getCaseByDocketNumber', () => {
             caseId: '123',
             pk: 'case|123',
             sk: 'case|123',
-            status: 'New',
+            status: CASE_STATUS_TYPES.new,
           },
           {
             pk: 'case|123',
@@ -106,7 +109,7 @@ describe('getCaseByDocketNumber', () => {
         },
       ],
       sk: 'case|123',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
   });
 
