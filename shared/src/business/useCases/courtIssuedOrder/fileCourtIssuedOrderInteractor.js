@@ -5,9 +5,9 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
+const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
-CONST { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants')
 
 /**
  *
