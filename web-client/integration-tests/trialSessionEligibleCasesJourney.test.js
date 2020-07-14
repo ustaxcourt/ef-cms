@@ -1,5 +1,4 @@
-import { CHIEF_JUDGE } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -10,7 +9,11 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
-const { STATUS_TYPES } = applicationContext.getConstants();
+const {
+  CASE_TYPES_MAP,
+  CHIEF_JUDGE,
+  STATUS_TYPES,
+} = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
@@ -108,7 +111,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'CDP (Lien/Levy)',
+        caseType: CASE_TYPES_MAP.cdp,
         procedureType: 'Small',
       };
       loginAs(test, 'petitioner@example.com');
