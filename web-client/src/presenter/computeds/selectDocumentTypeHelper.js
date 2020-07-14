@@ -106,13 +106,14 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
 };
 
 export const getPreviouslyFiledDocuments = (
+  applicationContext,
   caseDetail,
   documentIdWhitelist,
 ) => {
+  const { STIN_DOCKET_ENTRY_TYPE } = applicationContext.getConstants();
   return caseDetail.documents
     .filter(
-      document =>
-        document.documentType !== 'Statement of Taxpayer Identification',
+      document => document.documentType !== STIN_DOCKET_ENTRY_TYPE.documentType,
     )
     .filter(
       document =>

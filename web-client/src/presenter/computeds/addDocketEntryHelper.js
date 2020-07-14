@@ -77,6 +77,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   }
 
   const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
+    applicationContext,
     caseDetail,
     documentIdWhitelist,
   );

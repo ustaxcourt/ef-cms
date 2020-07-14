@@ -2,6 +2,7 @@ const {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   PAYMENT_STATUS,
+  STIN_DOCKET_ENTRY_TYPE,
 } = require('../entities/EntityConstants');
 const {
   createCaseFromPaperInteractor,
@@ -121,8 +122,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
         },
         {
           createdAt: RECEIVED_DATE,
-          documentType: 'Statement of Taxpayer Identification',
-          eventCode: 'STIN',
+          documentType: STIN_DOCKET_ENTRY_TYPE.documentType,
+          eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
         },

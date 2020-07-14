@@ -1,12 +1,13 @@
-import { applicationContextPublic } from '../../src/applicationContextPublic';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const publicCaseDetailHelper = withAppContextDecorator(
   publicCaseDetailHelperComputed,
-  applicationContextPublic,
+  applicationContext,
 );
+const { STIN_DOCKET_ENTRY_TYPE } = applicationContext.getConstants();
 
 export const unauthedUserViewsCaseDetail = test => {
   return it('View case detail', async () => {
@@ -74,7 +75,7 @@ export const unauthedUserViewsCaseDetail = test => {
           documentType: 'Petition',
         }),
         expect.objectContaining({
-          documentType: 'Statement of Taxpayer Identification',
+          documentType: STIN_DOCKET_ENTRY_TYPE.documentType,
         }),
         expect.objectContaining({
           documentType: 'Order of Dismissal',
