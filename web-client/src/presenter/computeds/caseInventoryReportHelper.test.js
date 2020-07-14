@@ -6,6 +6,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('caseInventoryReportHelper', () => {
   const {
     CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -114,7 +115,7 @@ describe('caseInventoryReportHelper', () => {
             {
               correspondence: [],
               docketNumber: '123-19',
-              docketNumberSuffix: 'L',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               docketNumberWithSuffix: '123-19L',
             },
             {
