@@ -54,7 +54,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: large
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -218,7 +218,7 @@ jobs:
           discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx4096m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
