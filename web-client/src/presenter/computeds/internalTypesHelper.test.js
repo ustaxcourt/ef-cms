@@ -7,7 +7,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('internalTypesHelper', () => {
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const INTERNAL_CATEGORY_MAP = {
     Answer: [
       {
