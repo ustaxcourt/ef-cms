@@ -1,6 +1,9 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { chooseNextStepAction } from './chooseNextStepAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('chooseNextStepAction', () => {
   let isPaperStub;
@@ -23,7 +26,12 @@ describe('chooseNextStepAction', () => {
       },
       state: {
         caseDetail: {
+          contactPrimary: {
+            serviceIndicator: 'Paper',
+          },
+          irsPractitioners: [],
           isPaper: true,
+          privatePractitioners: [],
         },
       },
     });
@@ -35,6 +43,15 @@ describe('chooseNextStepAction', () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
+      },
+      state: {
+        caseDetail: {
+          contactPrimary: {
+            serviceIndicator: 'Electronic',
+          },
+          irsPractitioners: [],
+          privatePractitioners: [],
+        },
       },
     });
 
