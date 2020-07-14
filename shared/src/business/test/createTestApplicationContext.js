@@ -45,9 +45,11 @@ const {
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
   formatCase,
+  formatCaseDeadlines,
   formatDocketRecordWithDocument,
   formatDocument,
   getServedPartiesCode,
+  sortDocketRecords,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -201,6 +203,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -241,6 +244,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
+    sortDocketRecords: jest.fn().mockImplementation(sortDocketRecords),
   });
 
   const mockGetHttpClientReturnValue = {
