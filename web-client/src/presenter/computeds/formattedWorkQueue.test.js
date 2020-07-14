@@ -1522,7 +1522,6 @@ describe('formatted work queue computed', () => {
       const currentTime = applicationContext
         .getUtilities()
         .createISODateString();
-
       const yesterday = applicationContext
         .getUtilities()
         .calculateISODate({ dateString: currentTime, howMuch: -1 });

@@ -13,6 +13,9 @@ const {
   getPetitionDocumentFromDocuments,
 } = require('../entities/cases/Case');
 const {
+  compareCasesByDocketNumber,
+} = require('../utilities/getFormattedTrialSessionDetails');
+const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
@@ -187,6 +190,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    calculateISODate: jest
+      .fn()
+      .mockImplementation(DateHandler.calculateISODate),
+    compareCasesByDocketNumber: jest
+      .fn()
+      .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     createISODateString: jest
