@@ -12,6 +12,7 @@ describe('saveDocketEntryAction', () => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',
+      documents: [],
     };
   });
 
@@ -227,6 +228,11 @@ describe('saveDocketEntryAction', () => {
     applicationContext
       .getUseCases()
       .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+
+    caseDetail.documents.push({
+      documentId: 'document-id-123',
+      isFileAttached: true,
+    });
 
     const result = await runAction(saveDocketEntryAction, {
       modules: {
