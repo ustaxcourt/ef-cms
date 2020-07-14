@@ -22,6 +22,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -103,7 +104,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userHasAccessToCase &&
       userHasAccessToDocument &&
       !userPermissions.UPDATE_CASE &&
-      document.processingStatus === 'complete' &&
+      document.processingStatus ===
+        DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
       !document.isInProgress &&
       !document.isNotServedCourtIssuedDocument
     );
@@ -176,7 +178,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
           formattedResult.showLoadingIcon =
             !permissions.UPDATE_CASE &&
-            document.processingStatus !== 'complete';
+            document.processingStatus !==
+              DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
         }
 
         formattedResult.isPaper =
@@ -192,7 +195,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
         }
 
         formattedResult.showDocumentProcessing =
-          !permissions.UPDATE_CASE && document.processingStatus !== 'complete';
+          !permissions.UPDATE_CASE &&
+          document.processingStatus !==
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
         formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
           document.eventCode,

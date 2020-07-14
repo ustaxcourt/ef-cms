@@ -17,7 +17,10 @@ const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
-const DOCUMENT_PROCESSING_STATUS_OPTIONS = ['pending', 'complete'];
+const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
+  COMPLETE: 'complete',
+  PENDING: 'pending',
+};
 
 const CHIEF_JUDGE = 'Chief Judge';
 
