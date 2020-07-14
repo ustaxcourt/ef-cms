@@ -16,7 +16,7 @@ export const removeSignatureFromOrderSequence = showProgressSequenceDecorator([
   convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
-    error: [], // TODO: show an alert if this occurs?
+    error: [],
     success: [
       submitCourtIssuedOrderAction,
       set(state.alertSuccess, {

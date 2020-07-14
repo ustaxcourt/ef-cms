@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
-const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('getCaseInventoryReportInteractor', () => {
   beforeEach(() => {
@@ -23,7 +27,7 @@ describe('getCaseInventoryReportInteractor', () => {
     await expect(
       getCaseInventoryReportInteractor({
         applicationContext,
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
       }),
     ).rejects.toThrow('Unauthorized for case inventory report');
   });
@@ -41,7 +45,7 @@ describe('getCaseInventoryReportInteractor', () => {
       .getPersistenceGateway()
       .getCaseInventoryReport.mockReturnValue([
         {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           caseCaption: 'A Test Caption',
           docketNumber: '123-20',
           docketNumberSuffix: 'L',
@@ -51,7 +55,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       status: CASE_STATUS_TYPES.NEW,
     });
 
@@ -59,12 +63,12 @@ describe('getCaseInventoryReportInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseInventoryReport,
     ).toBeCalledWith({
       applicationContext: expect.anything(),
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       status: CASE_STATUS_TYPES.NEW,
     });
     expect(result).toEqual([
       {
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
         caseCaption: 'A Test Caption',
         docketNumber: '123-20',
         docketNumberSuffix: 'L',

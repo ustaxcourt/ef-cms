@@ -10,6 +10,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   return (
     <>
       {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
+      {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
       {contact.title && <div>{contact.title}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
@@ -98,7 +99,7 @@ const ServedDate = ({ document }) => {
         <span className="no-wrap">{arrDateServed.slice(1).join(' ')}</span>
       </>
     );
-  } else if (document && document.isNotServedCourtIssuedDocument) {
+  } else if (document && document.isNotServedDocument) {
     return 'Not served';
   } else {
     return '';

@@ -16,6 +16,7 @@ const axiosInstance = axios.create({
 });
 
 const {
+  CHIEF_JUDGE,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATUS_TYPES,
@@ -23,7 +24,7 @@ const {
 
 const firstConsolidatedCase = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The First Migrated Case',
   caseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   docketNumber: '101-21',
@@ -33,7 +34,7 @@ const firstConsolidatedCase = {
 };
 const secondConsolidatedCase = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Second Migrated Case',
   caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
   docketNumber: '102-21',
@@ -44,7 +45,7 @@ const secondConsolidatedCase = {
 
 const correspondenceCase = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Third Migrated Case',
   caseId: applicationContext.getUniqueId(),
   correspondence: [
@@ -62,7 +63,7 @@ const correspondenceCase = {
 
 const otherFilersCase = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fourth Migrated Case',
   caseId: applicationContext.getUniqueId(),
   docketNumber: '187-20',
@@ -100,7 +101,7 @@ const otherFilersCase = {
 
 const otherPetitionersCase = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fifth Migrated Case',
   caseId: applicationContext.getUniqueId(),
   docketNumber: '162-20',
