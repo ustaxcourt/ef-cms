@@ -1,4 +1,8 @@
-import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
+import {
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+} from '../entities/EntityConstants';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -18,7 +22,7 @@ const caseDetail = {
     state: 'AL',
   },
   docketNumber: '123-45',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketRecord: [
     {
       createdAt: '2011-10-05T14:48:00.000Z',

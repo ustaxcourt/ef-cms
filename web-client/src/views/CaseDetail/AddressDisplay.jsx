@@ -21,12 +21,7 @@ export const AddressDisplay = connect(
   }) {
     return (
       <>
-        <p
-          className={classNames(
-            noMargin ? 'no-margin' : 'margin-top-0',
-            'address-name',
-          )}
-        >
+        <p className="no-margin">
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           {contact.secondaryName && (
@@ -43,7 +38,7 @@ export const AddressDisplay = connect(
             </span>
           )}
         </p>
-        <p className={classNames(noMargin && 'no-margin')}>
+        <p className="no-margin">
           <span className="address-line">{contact.address1}</span>
           {contact.address2 && (
             <span className="address-line">{contact.address2}</span>

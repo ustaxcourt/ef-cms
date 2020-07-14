@@ -12,6 +12,7 @@ import { applicationContext } from '../../../../web-client/src/applicationContex
 import { calculateISODate, createISODateString } from './DateHandler';
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PAYMENT_STATUS,
   ROLES,
   SERVED_PARTIES_CODES,
@@ -26,7 +27,7 @@ const mockCaseDetailBase = {
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
   receivedAt: new Date(),
 };

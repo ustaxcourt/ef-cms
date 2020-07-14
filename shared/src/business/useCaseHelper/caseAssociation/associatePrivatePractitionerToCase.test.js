@@ -5,6 +5,7 @@ const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -25,7 +26,7 @@ describe('associatePrivatePractitionerToCase', () => {
     caseRecord = {
       caseCaption: 'Case Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',

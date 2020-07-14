@@ -3,6 +3,7 @@ const {
   isPrivateDocument,
   PublicCase,
 } = require('./PublicCase');
+const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -15,7 +16,7 @@ describe('PublicCase', () => {
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '101-20',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketRecord: [{}],
           documents: [{}],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -33,7 +34,7 @@ describe('PublicCase', () => {
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '111-12',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketRecord: [{ any: 'thing' }],
           documents: [{ any: 'thing' }],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -345,7 +346,7 @@ describe('PublicCase', () => {
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',
         docketNumber: '102-20',
-        docketNumberSuffix: 'SL',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         docketNumberWithSuffix: null,
         docketRecord: [{}],
         documents: [{}],

@@ -17,6 +17,7 @@ describe('formatted work queue computed', () => {
 
   const {
     CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -54,7 +55,7 @@ describe('formatted work queue computed', () => {
       to: 'Unassigned',
     },
     docketNumber: '101-18',
-    docketNumberSuffix: 'S',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
     document: {
       attachments: true,
@@ -122,7 +123,7 @@ describe('formatted work queue computed', () => {
     caseStatus: STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
-    docketNumberSuffix: 'S',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '101-18S',
     document: {
       attachments: true,
@@ -747,7 +748,7 @@ describe('formatted work queue computed', () => {
       caseStatus: 'New',
       createdAt: '2019-12-16T16:48:02.889Z',
       docketNumber: '114-19',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
       updatedAt: '2019-12-16T16:48:02.889Z',
       workItemId: '36f228c6-0ae5-4adf-aa44-35905b7fc8bd',

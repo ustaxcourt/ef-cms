@@ -29,6 +29,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
@@ -67,6 +68,7 @@ export const saveAndServeDocketEntrySequence = [
       validateDocketEntryAction,
       {
         error: [
+          suggestSaveForLaterValidationAction,
           setAlertErrorAction,
           setValidationErrorsAction,
           setValidationAlertErrorsAction,

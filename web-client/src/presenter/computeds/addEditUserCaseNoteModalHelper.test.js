@@ -23,7 +23,7 @@ describe('addEditUserCaseNoteModalHelper', () => {
 
     const result = runCompute(addEditUserCaseNoteModalHelper, {});
 
-    expect(result.notesLabel).toEqual("Judge's notes");
+    expect(result.notesLabel).toEqual('Judge‘s notes');
   });
 
   it('should return Notes as notesLabel if current user is a trial clerk', () => {

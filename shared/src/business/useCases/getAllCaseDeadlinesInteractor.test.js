@@ -1,6 +1,7 @@
 const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -84,7 +85,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
         deadlineDate: '2019-03-01T21:40:46.415Z',
         description: 'A deadline!',
         docketNumber: '101-19',
-        docketNumberSuffix: 'L',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
         entityName: 'CaseDeadline',
       },
     ]);
