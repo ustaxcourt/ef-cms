@@ -3,6 +3,7 @@
 Table of contents:
 
 - [Designing for users of EF-CMS](#designing-for-users-of-ef-cms)
+- [System architecture](#system-architecture)
 - [Developing EF-CMS on a local developer machine](#developing-ef-cms-on-a-local-developer-machine)
 - [Reviewing and accepting changes to EF-CMS](#reviewing-and-accepting-changes-to-ef-cms)
 - [Operating EF-CMS within AWS](#operating-ef-cms-within-aws)
@@ -14,6 +15,13 @@ Table of contents:
 | User personas | All user personas are documented in [user-personas.pdf](user-personas.pdf).
 | UX research | Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
 | Glossary of terminology | This project involves a great deal of specialized legal and court terminology. A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
+
+## System architecture
+
+| Item | Description
+|------|-------------
+| Diagram | See the [AWS system overview diagram](./images/aws-diagram.png).
+| Email | The [email documentation](./architecture/email.md) includes sending domains and information about SPF, DKIM, and DMARC records.
 
 ## Developing EF-CMS on a local developer machine
 
