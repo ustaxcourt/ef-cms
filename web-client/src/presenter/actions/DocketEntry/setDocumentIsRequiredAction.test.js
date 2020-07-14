@@ -9,4 +9,15 @@ describe('setDocumentIsRequiredAction', () => {
       isDocumentRequired: true,
     });
   });
+
+  it('sets state.form.isDocumentRequired to false if a docket entry is being modified with an existing document', async () => {
+    const result = await runAction(setDocumentIsRequiredAction, {
+      state: {
+        documentId: 'document-id-123',
+        isEditingDocketEntry: true,
+      },
+    });
+
+    expect(result.state.form).toBeUndefined();
+  });
 });
