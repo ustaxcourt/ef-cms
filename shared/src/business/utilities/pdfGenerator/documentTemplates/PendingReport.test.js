@@ -1,5 +1,8 @@
 const React = require('react');
-const { CASE_STATUS_TYPES } = require('../../../entities/EntityConstants.js');
+const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} = require('../../../entities/EntityConstants.js');
 const { mount, shallow } = require('enzyme');
 const { PendingReport } = require('./PendingReport.jsx');
 
@@ -9,7 +12,7 @@ describe('PendingReport', () => {
   beforeAll(() => {
     pendingItems = [
       {
-        associatedJudgeFormatted: 'Chief Judge',
+        associatedJudgeFormatted: CHIEF_JUDGE,
         caseTitle: 'Test Petitioner',
         docketNumberWithSuffix: '123-45S',
         formattedFiledDate: '02/02/20',
