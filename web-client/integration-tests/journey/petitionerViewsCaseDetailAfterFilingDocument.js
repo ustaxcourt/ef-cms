@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const {
   DOCKET_NUMBER_SUFFIXES,
-  STIN_DOCKET_ENTRY_TYPE,
+  INITIAL_DOCUMENT_TYPES,
 } = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
@@ -45,7 +45,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       expect.arrayContaining([
         expect.objectContaining({ eventCode: 'P' }),
         expect.objectContaining({
-          eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
         }),
         expect.objectContaining({
           eventCode: 'M014',

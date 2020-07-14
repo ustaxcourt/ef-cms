@@ -7,7 +7,7 @@ const publicCaseDetailHelper = withAppContextDecorator(
   publicCaseDetailHelperComputed,
   applicationContext,
 );
-const { STIN_DOCKET_ENTRY_TYPE } = applicationContext.getConstants();
+const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
 export const unauthedUserViewsCaseDetail = test => {
   return it('View case detail', async () => {
@@ -75,7 +75,7 @@ export const unauthedUserViewsCaseDetail = test => {
           documentType: 'Petition',
         }),
         expect.objectContaining({
-          documentType: STIN_DOCKET_ENTRY_TYPE.documentType,
+          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         }),
         expect.objectContaining({
           documentType: 'Order of Dismissal',
