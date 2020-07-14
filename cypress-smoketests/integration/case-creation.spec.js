@@ -1,4 +1,11 @@
 const {
+  closeScannerSetupDialog,
+  goToCreateCase,
+  goToReviewCase,
+  saveCaseForLater,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
+const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -17,12 +24,6 @@ const {
 const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
-const {
-  goToCreateCase,
-  goToReviewCase,
-  saveCaseForLater,
-  serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
 const { getUserToken, login } = require('../support/pages/login');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
@@ -104,6 +105,7 @@ describe('Petitions clerk', () => {
   it('should be able to create a case and save for later', () => {
     goToMyDocumentQC();
     goToCreateCase();
+    closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
     goToReviewCase();
     saveCaseForLater();
