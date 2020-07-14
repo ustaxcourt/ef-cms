@@ -1,8 +1,11 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+} = require('../../entities/EntityConstants');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -13,7 +16,7 @@ const MOCK_WORK_ITEM = {
   caseStatus: CASE_STATUS_TYPES.generalDocket,
   createdAt: '2018-12-27T18:06:02.971Z',
   docketNumber: '101-18',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   document: {
     createdAt: '2018-12-27T18:06:02.968Z',
     documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',

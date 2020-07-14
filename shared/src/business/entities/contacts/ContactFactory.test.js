@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -18,7 +19,7 @@ describe('ContactFactory', () => {
   describe('for Corporation Contacts', () => {
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -37,7 +38,7 @@ describe('ContactFactory', () => {
 
     it('can validate primary contact', () => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           address2: 'Suite 123',
@@ -71,7 +72,7 @@ describe('ContactFactory', () => {
 
   it('can validate Petitioner contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -102,7 +103,7 @@ describe('ContactFactory', () => {
 
   it('returns true when contactPrimary is defined and everything else is valid', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -133,7 +134,7 @@ describe('ContactFactory', () => {
 
   it('returns false for isValid if primary contact is missing', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -152,7 +153,7 @@ describe('ContactFactory', () => {
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -184,7 +185,7 @@ describe('ContactFactory', () => {
 
   it('a valid petition returns true for isValid', () => {
     const caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -215,7 +216,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
 
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -235,8 +236,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -268,8 +268,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Trust contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -288,8 +287,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Trust contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -320,8 +318,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Conservator contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -340,8 +337,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Conservator contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -370,8 +366,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Guardian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -390,8 +385,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Guardian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -420,8 +414,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Custodian contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -440,7 +433,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Custodian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -469,8 +462,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Donor contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -489,8 +481,7 @@ describe('ContactFactory', () => {
 
   it('can validate valid Donor contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -520,8 +511,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Transferee contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -539,7 +529,7 @@ describe('ContactFactory', () => {
   });
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -570,7 +560,7 @@ describe('ContactFactory', () => {
   it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
     expect(() => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -602,7 +592,7 @@ describe('ContactFactory', () => {
     const caseInternal = new CaseInternal(
       {
         caseCaption: 'Sisqo',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
