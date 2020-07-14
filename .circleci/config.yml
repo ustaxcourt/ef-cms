@@ -531,11 +531,11 @@ workflows:
       #       branches:
       #         ignore:
       #           - develop
-      # - e2e-pa11y:
-      #     filters:
-      #       branches:
-      #         ignore:
-      #           - develop
+      - e2e-pa11y:
+          filters:
+            branches:
+              ignore:
+                - develop
       # - e2e-cypress:
       #     filters:
       #       branches:
@@ -559,16 +559,4 @@ workflows:
       #       branches:
       #         ignore:
       #           - develop
-      - deploy:
-          # requires:
-          #   - build-client-coverage
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - migration
-                - master
-                - experimental1
-                - experimental2
+http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-2
