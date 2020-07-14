@@ -18,7 +18,7 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
   libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
   ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
   git bash openssh-client python python-dev python-pip python-setuptools ca-certificates less \
-  unzip wget jq shellcheck clamav 
+  unzip wget jq shellcheck clamav
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
@@ -46,8 +46,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
 RUN npm set progress=false && \
-  npm config set puppeteer_skip_chromium_download true && \
-  npm i
+  npm ci
 
 COPY . /home/app
 
