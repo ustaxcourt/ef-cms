@@ -4,9 +4,10 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('hasCaseInventoryReportFilterSelectedAction', () => {
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+
   const proceedMock = jest.fn();
   const noMock = jest.fn();
-  const { STATUS_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     presenter.providers.path = {
@@ -22,7 +23,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
         },
       },
     });

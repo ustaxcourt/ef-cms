@@ -6,18 +6,18 @@
  * @returns {string} the prettified scan mode label
  */
 export const getScanModeLabel = (applicationContext, scanMode) => {
-  const { SCAN_MODES } = applicationContext.getConstants();
+  const { SCAN_MODE_LABELS, SCAN_MODES } = applicationContext.getConstants();
   let scanModeLabel = '';
 
   switch (scanMode) {
     case SCAN_MODES.FEEDER:
-      scanModeLabel = 'Single sided';
+      scanModeLabel = SCAN_MODE_LABELS.FEEDER;
       break;
     case SCAN_MODES.FLATBED:
-      scanModeLabel = 'Flatbed';
+      scanModeLabel = SCAN_MODE_LABELS.FLATBED;
       break;
     case SCAN_MODES.DUPLEX:
-      scanModeLabel = 'Double sided';
+      scanModeLabel = SCAN_MODE_LABELS.DUPLEX;
   }
   return scanModeLabel;
 };

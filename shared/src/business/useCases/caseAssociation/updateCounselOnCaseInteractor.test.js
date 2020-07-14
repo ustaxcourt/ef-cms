@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -70,7 +71,7 @@ describe('updateCounselOnCaseInteractor', () => {
       .getCaseByCaseId.mockImplementation(({ caseId }) => ({
         caseCaption: 'Caption',
         caseId,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',

@@ -120,7 +120,7 @@ export const DocketRecord = connect(
                     <td className="hide-on-mobile">{entry.action}</td>
                     <td>
                       {entry.showNotServed && (
-                        <span className="text-secondary text-semibold">
+                        <span className="text-semibold not-served">
                           Not served
                         </span>
                       )}

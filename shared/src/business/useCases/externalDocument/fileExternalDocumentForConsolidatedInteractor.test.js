@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -27,7 +28,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Guy Fieri, Petitioner',
         caseId: caseId0,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
@@ -53,7 +54,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
         caseId: caseId1,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
@@ -79,7 +80,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'George Foreman, Petitioner',
         caseId: caseId2,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',

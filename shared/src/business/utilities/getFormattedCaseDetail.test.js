@@ -12,8 +12,10 @@ import { applicationContext } from '../../../../web-client/src/applicationContex
 import { calculateISODate, createISODateString } from './DateHandler';
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PAYMENT_STATUS,
   ROLES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -25,7 +27,7 @@ const mockCaseDetailBase = {
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
   receivedAt: new Date(),
 };
@@ -625,7 +627,7 @@ describe('formatDocument', () => {
       servedParties: ['someone', 'someone else'],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'B',
+      servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
@@ -635,7 +637,7 @@ describe('formatDocument', () => {
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'R',
+      servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
     });
   });
 });

@@ -45,7 +45,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
       loginAs(test, 'petitioner@example.com');
@@ -67,7 +67,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
       loginAs(test, 'petitioner@example.com');
@@ -89,7 +89,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
       };
       loginAs(test, 'petitioner@example.com');

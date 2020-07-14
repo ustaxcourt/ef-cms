@@ -1389,8 +1389,8 @@
         only: true
         presence: "optional"
       allow: 
-        - "pending"
         - "complete"
+        - "pending"
     qcAt: 
       type: "date"
       flags: 

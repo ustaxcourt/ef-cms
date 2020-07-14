@@ -130,7 +130,7 @@
     "swagger-cli": "^4.0.3",
     "tmp": "^0.2.1",
     "umzug": "^2.3.0",
-    "uswds": "^2.7.1",
+    "uswds": "^2.8.0",
     "uuid": "^8.2.0",
     "webpack": "^4.42.1",
     "websocket": "^1.0.31",
@@ -167,12 +167,10 @@
     "cypress:smoketests:open": "CYPRESS_BASE_URL=https://ui-$ENV.$EFCMS_DOMAIN cypress open -C cypress-smoketests.json --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY,ENV=$ENV",
     "cypress:smoketests": "CYPRESS_BASE_URL=https://ui-$ENV.$EFCMS_DOMAIN cypress run -C cypress-smoketests.json --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY,ENV=$ENV",
     "cypress": "TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 MASTER_DYNAMODB_ENDPOINT=http://localhost:8000  AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop cypress run --spec \"cypress/integration/*\"",
-    "init:api": "cd web-api/terraform/main && ../bin/deploy-init.sh",
-    "init:ui": "cd web-client/terraform/main && ../bin/deploy-init.sh",
-    "deploy:api": "cd web-api/terraform/main && ../bin/deploy-app.sh",
-    "deploy:ui": "cd web-client/terraform/main && ../bin/deploy-app.sh",
-    "deploy:environment-specific": "cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh",
     "deploy:account-specific": "cd iam/terraform/account-specific/main && ../bin/deploy-app.sh",
+    "deploy:api": "cd web-api/terraform/main && ../bin/deploy-app.sh",
+    "deploy:environment-specific": "cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh",
+    "deploy:ui": "cd web-client/terraform/main && ../bin/deploy-app.sh",
     "destroy:dev": "node env-destroy-utils/destroyEnvironment.js dev",
     "destroy:exp1": "node env-destroy-utils/destroyEnvironment.js exp1",
     "destroy:exp2": "node env-destroy-utils/destroyEnvironment.js exp2",
@@ -182,6 +180,8 @@
     "dynamo:export": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node web-api/dynamo-export.js > ./web-api/storage/fixtures/efcms.json",
     "dynamo:import": "pushd ./web-api && node ./create-dynamo-tables.js && node ./seed-dynamo.js ./storage/fixtures/efcms.json && popd",
     "dynamo:migrate:local": "./web-api/run-umzug.sh local",
+    "init:api": "cd web-api/terraform/main && ../bin/deploy-init.sh",
+    "init:ui": "cd web-client/terraform/main && ../bin/deploy-init.sh",
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:css": "stylelint web-client/src/**/*.scss",
     "lint:fix": "run-p lint:css:fix lint:js:fix",
@@ -203,7 +203,7 @@
     "start:api:ci": "CI=true npm run start:api",
     "start:api:resume": "RESUME=true npm run start:api",
     "start:api": "./run-local.sh",
-    "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true npm run start:client",
+    "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
     "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-hmr --no-cache --no-source-maps web-client/src/index.pug",
@@ -232,10 +232,10 @@
     "test:shared": "npm run build:assets && jest --maxWorkers=50% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
-    "watch": "nodemon -e yml --exec sls offline start",
     "verify-authorizers": "./web-api/verify-authorizers.sh",
+    "verify-private-elasticsearch": "./web-api/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./web-api/verify-private-s3-buckets.sh",
-    "verify-private-elasticsearch": "./web-api/verify-private-elasticsearch.sh"
+    "watch": "nodemon -e yml --exec sls offline start"
   },
   "staticFiles": {
     "staticPath": [
@@ -247,5 +247,10 @@
   },
   "resolutions": {
     "minimist": "^1.2.5"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   }
 }

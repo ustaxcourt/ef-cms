@@ -1,14 +1,17 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const formattedTrialSessionDetails = withAppContextDecorator(
-  formattedTrialSessionDetailsComputed,
-);
-
 describe('formattedTrialSessionDetails', () => {
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
+  const formattedTrialSessionDetails = withAppContextDecorator(
+    formattedTrialSessionDetailsComputed,
+  );
+
   const TRIAL_SESSION = {
     caseOrder: [],
     city: 'Hartford',
@@ -243,7 +246,7 @@ describe('formattedTrialSessionDetails', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              docketNumberSuffix: 'W',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             },
             {
               ...MOCK_CASE,
@@ -284,7 +287,7 @@ describe('formattedTrialSessionDetails', () => {
               ...MOCK_CASE,
               caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
               caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
-              docketNumberSuffix: 'W',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               removedFromTrial: true,
             },
           ],

@@ -4,8 +4,11 @@ const {
   addCoversheetInteractor,
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -541,7 +544,7 @@ describe('addCoversheetInteractor', () => {
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         },
         documentEntity: {
           ...testingCaseData.documents[0],
@@ -736,7 +739,7 @@ describe('addCoversheetInteractor', () => {
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           initialCaption: 'Janie and Jackie Petitioner, Petitioners',
           initialDocketNumberSuffix: 'Z',
         },
@@ -765,7 +768,7 @@ describe('addCoversheetInteractor', () => {
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           initialCaption: 'Janie and Jackie Petitioner, Petitioners',
           initialDocketNumberSuffix: 'Z',
         },

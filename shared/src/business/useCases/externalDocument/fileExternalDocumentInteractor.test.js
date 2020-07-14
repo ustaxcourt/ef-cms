@@ -2,6 +2,9 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -9,8 +12,6 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
@@ -21,7 +22,7 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
