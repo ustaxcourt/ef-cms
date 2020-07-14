@@ -1,4 +1,4 @@
-import { STIN_DOCKET_ENTRY_TYPE } from '../business/entities/EntityConstants';
+import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
 
 exports.MOCK_DOCUMENTS = [
   {
@@ -18,8 +18,8 @@ exports.MOCK_DOCUMENTS = [
     docketNumber: '101-18',
     documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Statement of Taxpayer Identification',
-    documentType: STIN_DOCKET_ENTRY_TYPE.documentType,
-    eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+    documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+    eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],

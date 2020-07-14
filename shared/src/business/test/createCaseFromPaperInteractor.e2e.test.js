@@ -1,8 +1,8 @@
 const {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
-  STIN_DOCKET_ENTRY_TYPE,
 } = require('../entities/EntityConstants');
 const {
   createCaseFromPaperInteractor,
@@ -122,8 +122,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
         },
         {
           createdAt: RECEIVED_DATE,
-          documentType: STIN_DOCKET_ENTRY_TYPE.documentType,
-          eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
         },

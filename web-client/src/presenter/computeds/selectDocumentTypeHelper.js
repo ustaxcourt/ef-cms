@@ -110,10 +110,11 @@ export const getPreviouslyFiledDocuments = (
   caseDetail,
   documentIdWhitelist,
 ) => {
-  const { STIN_DOCKET_ENTRY_TYPE } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   return caseDetail.documents
     .filter(
-      document => document.documentType !== STIN_DOCKET_ENTRY_TYPE.documentType,
+      document =>
+        document.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
     )
     .filter(
       document =>
