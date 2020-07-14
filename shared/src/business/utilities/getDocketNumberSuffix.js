@@ -13,13 +13,13 @@ const {
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
   switch (caseType) {
-    case 'Whistleblower':
+    case CASE_TYPES_MAP.whistleblower:
       return DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
-    case 'Passport':
+    case CASE_TYPES_MAP.passport:
       return DOCKET_NUMBER_SUFFIXES.PASSPORT;
-    case 'Declaratory Judgment (Exempt Organization)':
+    case CASE_TYPES_MAP.djExemptOrg:
       return DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS;
-    case 'Declaratory Judgment (Retirement Plan)':
+    case CASE_TYPES_MAP.djRetirementPlan:
       return DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION;
     case CASE_TYPES_MAP.cdp:
       return procedureType.toLowerCase() === 'small'

@@ -7,7 +7,11 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = applicationContext.getConstants();
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   test,
@@ -313,7 +317,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // Estate with executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -347,7 +351,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // Estate without executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -378,7 +382,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // trust and trustee party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -410,7 +414,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // conservator party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -442,7 +446,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // guardian party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -474,7 +478,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // custodian party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -506,7 +510,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // minor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -538,7 +542,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // legally incompetent person party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -570,7 +574,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // donor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -591,7 +595,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // transferee party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -613,7 +617,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     // surviving spouse party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     result = runCompute(startCaseHelper, {
@@ -719,7 +723,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'caseType',
-      value: overrides.caseType || 'Whistleblower',
+      value: overrides.caseType || CASE_TYPES_MAP.whistleblower,
     });
 
     expect(test.getState('form.contactPrimary')).toEqual({

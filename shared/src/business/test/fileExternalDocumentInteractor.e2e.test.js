@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
@@ -35,7 +36,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',
@@ -130,7 +131,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
       caseId,
-      caseType: 'Innocent Spouse',
+      caseType: CASE_TYPES_MAP.innocentSpouse,
       contactPrimary: {
         address1: '19 First Freeway',
         address2: 'Ad cumque quidem lau',
@@ -559,7 +560,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',
