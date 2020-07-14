@@ -1,5 +1,6 @@
 const faker = require('faker');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   FILING_TYPES,
   PARTY_TYPES,
@@ -117,7 +118,7 @@ const createCase = async ({
       petitionFileId,
       petitionMetadata: {
         caseCaption: petitionerName,
-        caseType: 'CDP (Lien/Levy)',
+        caseType: CASE_TYPES_MAP.cdp,
         contactPrimary: {
           address1: faker.address.streetAddress(),
           address2: faker.address.secondaryAddress(),
