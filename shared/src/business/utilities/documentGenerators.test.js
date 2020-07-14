@@ -20,6 +20,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   PARTY_TYPES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const {
   generatePdfFromHtmlInteractor,
@@ -294,7 +295,7 @@ describe('documentGenerators', () => {
                 isNotServedCourtIssuedDocument: false,
                 isStatusServed: true,
                 servedAtFormatted: '02/02/20',
-                servedPartiesCode: 'B',
+                servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
               },
               index: 1,
               record: {
