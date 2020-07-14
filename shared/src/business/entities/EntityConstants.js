@@ -802,6 +802,12 @@ const SCAN_MODES = {
   FLATBED: 'flatbed',
 };
 
+const SCAN_MODE_LABELS = {
+  DUPLEX: 'Double sided',
+  FEEDER: 'Single sided',
+  FLATBED: 'Flatbed',
+};
+
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
 
 const PRACTITIONER_TYPE_OPTIONS = ['Attorney', 'Non-Attorney'];
@@ -936,6 +942,7 @@ module.exports = {
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   ROLES,
+  SCAN_MODE_LABELS,
   SCAN_MODES,
   SCENARIOS,
   SECTIONS,

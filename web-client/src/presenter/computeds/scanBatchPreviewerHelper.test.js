@@ -1,15 +1,16 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { scanBatchPreviewerHelper as scanBatchPreviewerHelperComputed } from './scanBatchPreviewerHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const state = {
-  scanner: {
-    batches: [],
-  },
-};
-
 describe('scanBatchPreviewerHelper', () => {
+  const state = {
+    scanner: {
+      batches: [],
+    },
+  };
+  const { SCAN_MODES } = applicationContext.getConstants();
+
   const scanBatchPreviewerHelper = withAppContextDecorator(
     scanBatchPreviewerHelperComputed,
     applicationContext,
@@ -30,6 +31,7 @@ describe('scanBatchPreviewerHelper', () => {
       const result = runCompute(scanBatchPreviewerHelper, {
         state: testState,
       });
+
       expect(result.scannerSourceDisplayName).toEqual('None');
     });
 
@@ -37,7 +39,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: applicationContext.getConstants().SCAN_MODES.FEEDER,
+          scanMode: SCAN_MODES.FEEDER,
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -45,6 +47,7 @@ describe('scanBatchPreviewerHelper', () => {
       const result = runCompute(scanBatchPreviewerHelper, {
         state: testState,
       });
+
       expect(result.scannerSourceDisplayName).toEqual(
         'Some Scanner 247 (Single sided)',
       );
@@ -54,7 +57,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: applicationContext.getConstants().SCAN_MODES.DUPLEX,
+          scanMode: SCAN_MODES.DUPLEX,
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -62,6 +65,7 @@ describe('scanBatchPreviewerHelper', () => {
       const result = runCompute(scanBatchPreviewerHelper, {
         state: testState,
       });
+
       expect(result.scannerSourceDisplayName).toEqual(
         'Some Scanner 247 (Double sided)',
       );
@@ -70,12 +74,16 @@ describe('scanBatchPreviewerHelper', () => {
     it('returns correct values when a scanner is selected and is using flatbed', () => {
       let testState = {
         ...state,
-        scanner: { scanMode: 'flatbed', scannerSourceName: 'Some Scanner 247' },
+        scanner: {
+          scanMode: SCAN_MODES.FLATBED,
+          scannerSourceName: 'Some Scanner 247',
+        },
       };
 
       const result = runCompute(scanBatchPreviewerHelper, {
         state: testState,
       });
+
       expect(result.scannerSourceDisplayName).toEqual(
         'Some Scanner 247 (Flatbed)',
       );
