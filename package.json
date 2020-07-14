@@ -130,7 +130,7 @@
     "swagger-cli": "^4.0.3",
     "tmp": "^0.2.1",
     "umzug": "^2.3.0",
-    "uswds": "^2.7.1",
+    "uswds": "^2.8.0",
     "uuid": "^8.2.0",
     "webpack": "^4.42.1",
     "websocket": "^1.0.31",
@@ -247,5 +247,10 @@
   },
   "resolutions": {
     "minimist": "^1.2.5"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
   }
 }
