@@ -27,7 +27,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
       primaryDocumentFile:
-        'Scan or upload a document to serve, or click Save for Later to serve at a later time', // matches anything but null or undefined
+        'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
 
     //primary document
