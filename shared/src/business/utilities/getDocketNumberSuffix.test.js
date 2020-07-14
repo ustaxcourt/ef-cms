@@ -1,3 +1,4 @@
+const { CASE_TYPES_MAP } = require('../entities/EntityConstants');
 const { getDocketNumberSuffix } = require('./getDocketNumberSuffix');
 
 describe('getDocketNumberSuffix', () => {
@@ -43,7 +44,7 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns SL for "Lien/Levy" caseType and "small" for procedureType', () => {
     const suffix = getDocketNumberSuffix({
-      caseType: 'CDP (Lien/Levy)',
+      caseType: CASE_TYPES_MAP.cdp,
       docketNumber: '101-18',
       procedureType: 'Small',
     });
@@ -53,7 +54,7 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns L for "Lien/Levy" caseType and "regular" for procedureType', () => {
     const suffix = getDocketNumberSuffix({
-      caseType: 'CDP (Lien/Levy)',
+      caseType: CASE_TYPES_MAP.cdp,
       docketNumber: '101-18',
       procedureType: 'Regular',
     });

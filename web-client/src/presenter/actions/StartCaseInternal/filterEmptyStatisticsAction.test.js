@@ -4,6 +4,8 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('filterEmptyStatisticsAction', () => {
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -37,7 +39,7 @@ describe('filterEmptyStatisticsAction', () => {
       },
       state: {
         form: {
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [
             {

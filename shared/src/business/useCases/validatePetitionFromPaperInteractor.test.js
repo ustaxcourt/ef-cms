@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -33,7 +34,7 @@ describe('validate petition from paper', () => {
       applicationContext,
       petition: {
         caseCaption: 'testing',
-        caseType: 'CDP (Lien/Levy)',
+        caseType: CASE_TYPES_MAP.cdp,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
