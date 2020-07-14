@@ -109,53 +109,53 @@ exports.updateDocketEntryInteractor = async ({
   );
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
-  caseEntity.updateDocument(documentEntity);
 
   if (editableFields.isFileAttached) {
-    const workItemToDelete = currentDocument.workItems.find(
-      workItem => !workItem.document.isFileAttached,
-    );
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToDelete,
-    });
-
     const workItem = documentEntity.getQCWorkItem();
-    Object.assign(workItem, {
-      assigneeId: null,
-      assigneeName: null,
-      caseId: caseId,
-      caseIsInProgress: caseEntity.inProgress,
-      caseStatus: caseToUpdate.status,
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
-      },
-      isQC: true,
-      section: DOCKET_SECTION,
-      sentBy: user.userId,
-    });
-
-    workItem.setAsCompleted({
-      message: 'completed',
-      user,
-    });
-
-    workItem.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
-
-    documentEntity.addWorkItem(workItem);
 
     if (!isSavingForLater) {
+      const workItemToDelete = currentDocument.workItems.find(
+        workItem => !workItem.document.isFileAttached,
+      );
+
+      await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+        applicationContext,
+        workItem: workItemToDelete,
+      });
+
+      Object.assign(workItem, {
+        assigneeId: null,
+        assigneeName: null,
+        caseId: caseId,
+        caseIsInProgress: caseEntity.inProgress,
+        caseStatus: caseToUpdate.status,
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+        document: {
+          ...documentEntity.toRawObject(),
+          createdAt: documentEntity.createdAt,
+        },
+        isQC: true,
+        section: DOCKET_SECTION,
+        sentBy: user.userId,
+      });
+
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+
+      workItem.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
+
+      documentEntity.addWorkItem(workItem);
+
       const servedParties = aggregatePartiesForService(caseEntity);
 
       documentEntity.setAsServed(servedParties.all);
@@ -166,8 +166,6 @@ exports.updateDocketEntryInteractor = async ({
           applicationContext,
           documentId: primaryDocumentFileId,
         });
-
-      caseEntity.updateDocument(documentEntity);
     }
 
     await applicationContext
@@ -177,6 +175,8 @@ exports.updateDocketEntryInteractor = async ({
         workItem: workItem.validate().toRawObject(),
       });
   }
+
+  caseEntity.updateDocument(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
