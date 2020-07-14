@@ -32,7 +32,6 @@ const sendNotificationToConnection = async ({
       // what if error doesn't conform to the above?
       throw err;
     }
-    // TODO: what if error doesn't conform to the above?
   }
   return result;
 };
