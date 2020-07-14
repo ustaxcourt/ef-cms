@@ -12,7 +12,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
-const { CASE_TYPES_MAP } = applicationContext.getconstant();
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey (judge)', () => {
   beforeEach(() => {
