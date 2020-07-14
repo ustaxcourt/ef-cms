@@ -57,6 +57,49 @@ describe('saveDocketEntryAction', () => {
     });
   });
 
+  it('file a new docket entry with an uploaded file, but does not generate a coversheet when saved for later', async () => {
+    applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+
+    const result = await runAction(saveDocketEntryAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: 'document-id-123',
+        shouldGenerateCoversheet: false,
+      },
+      state: {
+        caseDetail,
+        document: '123-456-789-abc',
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().fileDocketEntryInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor,
+    ).toHaveBeenCalled();
+    expect(result.output).toEqual({
+      caseDetail,
+      caseId: caseDetail.caseId,
+      docketNumber: caseDetail.docketNumber,
+      documentId: 'document-id-123',
+      overridePaperServiceAddress: true,
+    });
+  });
+
   it('file a new docket entry without an uploaded file', async () => {
     applicationContext
       .getUseCases()

@@ -4,18 +4,18 @@ const {
 const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
-const { ROLES } = require('../../entities/EntityConstants');
+const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 const mockCases = [
   {
     associatedJudge: 'Chief Judge',
     docketNumber: '101-19',
-    status: 'New',
+    status: CASE_STATUS_TYPES.new,
   },
   {
     associatedJudge: 'Chief Judge',
     docketNumber: '101-20',
-    status: 'New',
+    status: CASE_STATUS_TYPES.new,
   },
 ];
 
@@ -91,7 +91,7 @@ describe('generateCaseInventoryReportPdf', () => {
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
-      filters: { status: 'New' },
+      filters: { status: CASE_STATUS_TYPES.new },
     });
 
     const {
@@ -129,7 +129,10 @@ describe('generateCaseInventoryReportPdf', () => {
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
-      filters: { associatedJudge: 'Chief Judge', status: 'New' },
+      filters: {
+        associatedJudge: 'Chief Judge',
+        status: CASE_STATUS_TYPES.new,
+      },
     });
 
     const {

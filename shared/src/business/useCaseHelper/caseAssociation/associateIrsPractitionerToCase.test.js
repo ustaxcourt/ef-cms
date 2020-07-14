@@ -6,6 +6,7 @@ const {
 } = require('./associateIrsPractitionerToCase');
 
 const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -44,7 +45,7 @@ describe('associateIrsPractitionerToCase', () => {
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    status: 'New',
+    status: CASE_STATUS_TYPES.NEW,
   };
 
   beforeEach(() => {
