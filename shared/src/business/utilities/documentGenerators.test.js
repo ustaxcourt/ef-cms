@@ -20,6 +20,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
@@ -107,7 +108,7 @@ describe('documentGenerators', () => {
               associatedJudge: 'Judge Armen',
               caseTitle: 'rick james b',
               docketNumber: '101-20',
-              docketNumberSuffix: 'L',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               status: CASE_STATUS_TYPES.closed,
             },
           ],
