@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 
 export const startCaseHelper = (get, applicationContext) => {
   const {
+    CASE_TYPES_MAP,
     FILING_TYPES,
     PARTY_TYPES,
     USER_ROLES,
@@ -65,7 +66,7 @@ export const startCaseHelper = (get, applicationContext) => {
     showMinorIncompetentFilingOptions:
       form.otherType === 'A minor or legally incompetent person',
     showNotHasIrsNoticeOptions: form.hasIrsNotice === false,
-    showOtherFilingTypeOptions: form.filingType === 'Other',
+    showOtherFilingTypeOptions: form.filingType === CASE_TYPES_MAP.other,
     showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
     showOwnershipDisclosureValid: form.ownershipDisclosureFile,
     showPetitionFileValid: form.petitionFile,
