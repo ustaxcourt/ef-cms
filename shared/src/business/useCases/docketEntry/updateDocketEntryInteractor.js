@@ -115,11 +115,12 @@ exports.updateDocketEntryInteractor = async ({
     const workItemToDelete = currentDocument.workItems.find(
       workItem => !workItem.document.isFileAttached,
     );
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToDelete,
-    });
+    if (workItemToDelete) {
+      await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+        applicationContext,
+        workItem: workItemToDelete,
+      });
+    }
 
     const workItem = documentEntity.getQCWorkItem();
     Object.assign(workItem, {
@@ -157,7 +158,6 @@ exports.updateDocketEntryInteractor = async ({
 
     if (!isSavingForLater) {
       const servedParties = aggregatePartiesForService(caseEntity);
-
       documentEntity.setAsServed(servedParties.all);
     } else {
       documentEntity.numberOfPages = await applicationContext
@@ -166,9 +166,8 @@ exports.updateDocketEntryInteractor = async ({
           applicationContext,
           documentId: primaryDocumentFileId,
         });
-
-      caseEntity.updateDocument(documentEntity);
     }
+    caseEntity.updateDocument(documentEntity);
 
     await applicationContext
       .getPersistenceGateway()

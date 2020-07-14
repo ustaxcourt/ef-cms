@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../../entities/EntityConstants');
 const {
@@ -48,7 +49,7 @@ describe('getCaseInventoryReportInteractor', () => {
           associatedJudge: CHIEF_JUDGE,
           caseCaption: 'A Test Caption',
           docketNumber: '123-20',
-          docketNumberSuffix: 'L',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
           status: CASE_STATUS_TYPES.NEW,
         },
       ]);
@@ -71,7 +72,7 @@ describe('getCaseInventoryReportInteractor', () => {
         associatedJudge: CHIEF_JUDGE,
         caseCaption: 'A Test Caption',
         docketNumber: '123-20',
-        docketNumberSuffix: 'L',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
         status: CASE_STATUS_TYPES.NEW,
       },
     ]);

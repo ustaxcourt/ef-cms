@@ -21,12 +21,13 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
 
     //primary document

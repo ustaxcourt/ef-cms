@@ -13,7 +13,11 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+const {
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+} = applicationContext.getConstants();
 
 describe('Modify Petitioner Contact Information', () => {
   beforeAll(() => {
@@ -41,7 +45,9 @@ describe('Modify Petitioner Contact Information', () => {
   });
 
   petitionerViewsDashboard(test, { caseIndex: 2 });
-  petitionerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
+  petitionerViewsCaseDetail(test, {
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+  });
   petitionerNavigatesToEditPrimaryContact(test);
   petitionerEditsCasePrimaryContactAddress(test);
   petitionerNavigatesToEditPrimaryContact(test);
@@ -53,7 +59,7 @@ describe('Modify Petitioner Contact Information', () => {
   loginAs(test, 'petitioner@example.com');
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
-    docketNumberSuffix: 'L',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });
   petitionerNavigatesToEditSecondaryContact(test);

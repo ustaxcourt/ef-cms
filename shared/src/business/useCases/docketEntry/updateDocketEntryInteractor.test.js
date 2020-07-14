@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -29,10 +30,22 @@ describe('updateDocketEntryInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
+  const documents = [
+    {
+      docketNumber: '45678-18',
+      documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentType: 'Answer',
+      eventCode: 'A',
+      filedBy: 'Test Petitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      workItems: [workItem],
+    },
+  ];
+
   const caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Deficiency',
+    caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
@@ -55,35 +68,7 @@ describe('updateDocketEntryInteractor', () => {
         index: 1,
       },
     ],
-    documents: [
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b1',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        workItems: [workItem],
-      },
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        workItems: [workItem],
-      },
-      {
-        docketNumber: '45678-18',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        workItems: [workItem],
-      },
-    ],
+    documents,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
@@ -181,6 +166,38 @@ describe('updateDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {
+    workItem.document.isFileAttached = true;
+    await expect(
+      updateDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: true,
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).resolves.not.toThrow();
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 

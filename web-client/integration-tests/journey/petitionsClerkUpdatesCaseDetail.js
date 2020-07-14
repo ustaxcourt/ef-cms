@@ -1,7 +1,9 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
+
+const { CASE_TYPES_MAP, PAYMENT_STATUS } = applicationContext.getConstants();
 
 export const petitionsClerkUpdatesCaseDetail = test => {
   return it('Petitions clerk updates case detail', async () => {
@@ -181,7 +183,7 @@ export const petitionsClerkUpdatesCaseDetail = test => {
     //user changes value and hits save
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: CASE_TYPES_MAP.whistleblower,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
