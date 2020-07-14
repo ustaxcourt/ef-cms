@@ -294,7 +294,7 @@ describe('documentGenerators', () => {
             {
               document: {
                 filedBy: 'Test Filer',
-                isNotServedCourtIssuedDocument: false,
+                isNotServedDocument: false,
                 isStatusServed: true,
                 servedAtFormatted: '02/02/20',
                 servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
