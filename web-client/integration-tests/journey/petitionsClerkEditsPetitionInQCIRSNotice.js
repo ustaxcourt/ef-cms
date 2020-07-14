@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from '../../src/presenter/computeds/caseDetailEditHelper';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
@@ -15,6 +16,8 @@ const reviewSavedPetitionHelper = withAppContextDecorator(
 const statisticsFormHelper = withAppContextDecorator(
   statisticsFormHelperComputed,
 );
+
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
   return it('Petitions clerk edits Petition IRS Notice', async () => {
@@ -34,7 +37,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     // Set case type
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'CDP (Lien/Levy)',
+      value: CASE_TYPES_MAP.cdp,
     });
 
     let noticeUiHelper = runCompute(caseDetailEditHelper, {
@@ -68,7 +71,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     // Set case type to deficiency
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Deficiency',
+      value: CASE_TYPES_MAP.deficiency,
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {

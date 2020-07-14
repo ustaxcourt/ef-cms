@@ -10,50 +10,50 @@ import { state } from 'cerebral';
  */
 export const caseTypeDescriptionHelper = (get, applicationContext) => {
   const form = get(state.form);
-  const { CASE_TYPES } = applicationContext.getConstants();
+  const { CASE_TYPES, CASE_TYPES_MAP } = applicationContext.getConstants();
 
   let caseTypesWithDescriptions = [];
   if (form.hasIrsNotice) {
     CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
-        case 'Deficiency':
+        case CASE_TYPES_MAP.deficiency:
           caseDescription = 'Notice of Deficiency';
           break;
-        case 'CDP (Lien/Levy)':
+        case CASE_TYPES_MAP.cdp:
           caseDescription =
             'Notice of Determination Concerning Collection Action';
           break;
-        case 'Innocent Spouse':
+        case CASE_TYPES_MAP.innocentSpouse:
           caseDescription =
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015';
           break;
-        case 'Partnership (Section 6226)':
+        case CASE_TYPES_MAP.partnershipSection6226:
           caseDescription =
             'Readjustment of Partnership Items Code Section 6226';
           break;
-        case 'Partnership (Section 6228)':
+        case CASE_TYPES_MAP.partnershipSection6228:
           caseDescription = 'Adjustment of Partnership Items Code Section 6228';
           break;
-        case 'Partnership (BBA Section 1101)':
+        case CASE_TYPES_MAP.partnershipSection1101:
           caseDescription = 'Partnership Action Under BBA Section 1101';
           break;
-        case 'Whistleblower':
+        case CASE_TYPES_MAP.whistleblower:
           caseDescription =
             'Notice of Determination Under Section 7623 Concerning Whistleblower Action';
           break;
-        case 'Worker Classification':
+        case CASE_TYPES_MAP.workerClassification:
           caseDescription = 'Notice of Determination of Worker Classification';
           break;
-        case 'Passport':
+        case CASE_TYPES_MAP.passport:
           caseDescription =
             'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State';
           break;
-        case 'Interest Abatement':
+        case CASE_TYPES_MAP.interestAbatement:
           caseDescription =
             'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim';
           break;
-        case 'Other':
+        case CASE_TYPES_MAP.other:
           caseDescription = 'Other';
           break;
         default:
@@ -70,29 +70,29 @@ export const caseTypeDescriptionHelper = (get, applicationContext) => {
     CASE_TYPES.forEach(caseType => {
       let caseDescription = '';
       switch (caseType) {
-        case 'CDP (Lien/Levy)':
+        case CASE_TYPES_MAP.cdp:
           caseDescription = 'CDP (Lien/Levy)';
           break;
-        case 'Innocent Spouse':
+        case CASE_TYPES_MAP.innocentSpouse:
           caseDescription = 'Innocent Spouse';
           break;
-        case 'Whistleblower':
+        case CASE_TYPES_MAP.whistleblower:
           caseDescription = 'Whistleblower';
           break;
-        case 'Worker Classification':
+        case CASE_TYPES_MAP.workerClassification:
           caseDescription = 'Worker Classification';
           break;
-        case 'Declaratory Judgment (Retirement Plan)':
+        case CASE_TYPES_MAP.djRetirementPlan:
           caseDescription = 'Declaratory Judgment (Retirement Plan)';
           break;
-        case 'Declaratory Judgment (Exempt Organization)':
+        case CASE_TYPES_MAP.djExemptOrg:
           caseDescription = 'Declaratory Judgment (Exempt Organization)';
           break;
-        case 'Interest Abatement':
+        case CASE_TYPES_MAP.interestAbatement:
           caseDescription =
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement';
           break;
-        case 'Other':
+        case CASE_TYPES_MAP.other:
           caseDescription = 'Other';
           break;
         default:

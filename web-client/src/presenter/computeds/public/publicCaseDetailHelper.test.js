@@ -3,13 +3,17 @@ import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from './publ
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-const publicCaseDetailHelper = withAppContextDecorator(
-  publicCaseDetailHelperComputed,
-  applicationContextPublic,
-);
-
-let state;
 describe('publicCaseDetailHelper', () => {
+  let state;
+
+  const publicCaseDetailHelper = withAppContextDecorator(
+    publicCaseDetailHelperComputed,
+    applicationContextPublic,
+  );
+  const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  } = applicationContextPublic.getConstants();
+
   beforeEach(() => {
     state = {
       caseDetail: {
@@ -78,14 +82,14 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Petition',
         documentType: 'Petition',
         eventCode: 'P',
-        processingStatus: 'pending',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
       {
         createdAt: '2018-11-21T20:49:28.192Z',
         documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Statement of Taxpayer Identification',
         documentType: 'Statement of Taxpayer Identification',
-        processingStatus: 'pending',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
       {
         additionalInfo: 'additionalInfo!',
@@ -97,7 +101,7 @@ describe('publicCaseDetailHelper', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
-        processingStatus: 'pending',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
       {
         createdAt: '2018-10-25T20:49:28.192Z',
@@ -105,7 +109,7 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Order to do something',
         documentType: 'Order',
         eventCode: 'O',
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
         status: 'served',
       },
@@ -115,21 +119,21 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Order to do something else',
         documentType: 'Order',
         eventCode: 'O',
-        processingStatus: 'pending',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
       {
         createdAt: '2018-12-25T20:49:28.192Z',
         documentId: '8675309b-28d0-43ec-bafb-654e83405415',
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
       {
         createdAt: '2018-12-25T20:49:28.192Z',
         documentId: 'e47e365d-6349-4d23-98b4-421efb4d8007',
         documentType: 'Transcript',
         eventCode: 'TRAN',
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
       },
     ];

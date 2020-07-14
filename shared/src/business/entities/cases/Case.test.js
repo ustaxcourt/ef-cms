@@ -3,8 +3,10 @@ const {
   ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
   PARTY_TYPES,
@@ -1803,7 +1805,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'passport',
+          caseType: CASE_TYPES_MAP.passport,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -1822,7 +1824,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'cdp (lien/levy)',
+          caseType: CASE_TYPES_MAP.cdp,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -2087,14 +2089,14 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('complete');
+      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
     it('should update a correspondence document', () => {
@@ -3364,7 +3366,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [],
         },
@@ -3385,7 +3387,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         {
@@ -3403,7 +3405,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
         },
         {

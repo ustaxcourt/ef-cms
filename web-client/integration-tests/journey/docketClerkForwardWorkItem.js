@@ -1,7 +1,9 @@
 import { ForwardMessage } from '../../../shared/src/business/entities/ForwardMessage';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { orderBy } from 'lodash';
 
 const { VALIDATION_ERROR_MESSAGES } = ForwardMessage;
+const { ADC_SECTION } = applicationContext.getConstants();
 
 export const docketClerkForwardWorkItem = test => {
   return it('Docket clerk forward work item', async () => {
@@ -45,7 +47,7 @@ export const docketClerkForwardWorkItem = test => {
       [test.workItemId]: {
         assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         forwardMessage: 'hello world',
-        section: 'adc',
+        section: ADC_SECTION,
       },
     });
 
