@@ -62,6 +62,7 @@ export const DraftDocumentViewerDocument = connect(
                   link
                   href={viewerDraftDocumentToDisplay.editUrl}
                   icon="edit"
+                  id="draft-edit-button-not-signed"
                 >
                   Edit
                 </Button>
