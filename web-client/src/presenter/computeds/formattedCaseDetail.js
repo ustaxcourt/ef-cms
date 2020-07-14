@@ -168,7 +168,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       if (document) {
         if (!isExternalUser) {
-          formattedResult.isInProgress = document.isInProgress;
+          formattedResult.isInProgress =
+            document.isInProgress || !document.servedAt;
 
           formattedResult.qcWorkItemsUntouched =
             !formattedResult.isInProgress &&

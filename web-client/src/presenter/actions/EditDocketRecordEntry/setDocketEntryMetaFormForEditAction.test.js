@@ -1,9 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormForEditAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('setDocketEntryMetaFormForEditAction', () => {
   let caseDetail;
@@ -158,5 +158,22 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
 
     expect(result.state.form.servedPartiesCode).toEqual('R');
+  });
+
+  it('returns initEventCode from the case document', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 4,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({
+      key: 'initEventCode',
+      value: 'A',
+    });
   });
 });

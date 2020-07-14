@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseInventoryReportModalAction } from './validateCaseInventoryReportModalAction';
@@ -5,6 +6,7 @@ import { validateCaseInventoryReportModalAction } from './validateCaseInventoryR
 describe('validateCaseInventoryReportModalAction', () => {
   let successStub;
   let errorStub;
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -24,7 +26,7 @@ describe('validateCaseInventoryReportModalAction', () => {
       state: {
         screenMetadata: {
           associatedJudge: 'Chief Judge',
-          status: 'New',
+          status: STATUS_TYPES.new,
         },
       },
     });

@@ -4,13 +4,13 @@ import { runAction } from 'cerebral/test';
 import { submitUpdateCaseModalAction } from './submitUpdateCaseModalAction';
 
 describe('submitUpdateCaseModalAction', () => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
+
   const caseMock = {
     caption: 'Test Caption',
     caseId: '123',
-    status: 'New',
+    status: STATUS_TYPES.new,
   };
-
-  const { STATUS_TYPES } = applicationContext.getConstants();
 
   presenter.providers.applicationContext = applicationContext;
 

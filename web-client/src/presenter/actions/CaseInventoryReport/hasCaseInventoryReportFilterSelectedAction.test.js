@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { hasCaseInventoryReportFilterSelectedAction } from './hasCaseInventoryReportFilterSelectedAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -5,6 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('hasCaseInventoryReportFilterSelectedAction', () => {
   const proceedMock = jest.fn();
   const noMock = jest.fn();
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     presenter.providers.path = {
@@ -36,7 +38,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
       state: {
         screenMetadata: {
-          status: 'New',
+          status: STATUS_TYPES.new,
         },
       },
     });
