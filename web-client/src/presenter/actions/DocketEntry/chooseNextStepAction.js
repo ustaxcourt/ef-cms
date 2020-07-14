@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+
 /**
  * used to direct the user to the correct next page - either the isElectronic or isPaper
  *
@@ -7,9 +8,14 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
  * @returns {*} returns the next action in the sequence's path
  */
-export const chooseNextStepAction = ({ get, path }) => {
-  const isPaper = get(state.caseDetail.isPaper);
-  if (isPaper) {
+export const chooseNextStepAction = ({ applicationContext, get, path }) => {
+  const caseDetail = get(state.caseDetail);
+
+  const hasPaper =
+    applicationContext.getUtilities().aggregatePartiesForService(caseDetail)
+      .paper.length > 0;
+
+  if (hasPaper) {
     return path.isPaper();
   } else {
     return path.isElectronic();
