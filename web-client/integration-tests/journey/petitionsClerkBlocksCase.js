@@ -1,5 +1,10 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
+
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  STATUS_TYPES,
+} = applicationContext.getConstants();
 
 export const petitionsClerkBlocksCase = (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
@@ -44,8 +49,8 @@ export const petitionsClerkBlocksCase = (test, trialLocation) => {
           caseCaption:
             'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
           docketNumber: test.docketNumber,
-          docketNumberSuffix: 'S',
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          status: STATUS_TYPES.generalDocketReadyForTrial,
         }),
       ]),
     );

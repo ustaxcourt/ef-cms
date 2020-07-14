@@ -6,6 +6,7 @@ const {
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
@@ -1355,7 +1356,7 @@ describe('Case entity', () => {
         },
       );
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
-      caseToVerify.docketNumberSuffix = 'W';
+      caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -1414,7 +1415,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.docketNumberSuffix = 'W';
+      caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });

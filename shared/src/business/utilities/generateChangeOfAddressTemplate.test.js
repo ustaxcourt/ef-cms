@@ -1,4 +1,7 @@
-import { COUNTRY_TYPES } from '../entities/EntityConstants';
+import {
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+} from '../entities/EntityConstants';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -15,7 +18,7 @@ const caseDetail = {
     state: 'AL',
   },
   docketNumber: '123-45',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
 };
 
 describe('getAddressPhoneDiff', () => {
