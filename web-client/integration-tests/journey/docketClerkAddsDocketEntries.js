@@ -21,7 +21,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
