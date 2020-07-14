@@ -7,6 +7,7 @@ const { CaseMessage } = require('../../entities/CaseMessage');
 const { Document } = require('../../entities/Document');
 const { orderBy } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+CONST { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants')
 
 /**
  *
@@ -110,7 +111,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
     { applicationContext },
