@@ -124,53 +124,6 @@ describe('fileDocketEntryInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
-  it('sets lodged to true on any secondaryDocument', async () => {
-    await fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata: {
-        caseId: caseRecord.caseId,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        isFileAttached: true,
-        lodged: true,
-        secondaryDocument: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-        },
-        secondarySupportingDocumentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-        },
-      },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      secondaryDocumentFileId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
-      secondarySupportingDocumentFileId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[4],
-    ).toMatchObject({
-      eventCode: 'MISP',
-      lodged: true,
-    });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[5],
-    ).toMatchObject({
-      eventCode: 'MISP',
-      lodged: true,
-    });
-  });
-
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
     await fileDocketEntryInteractor({
       applicationContext,

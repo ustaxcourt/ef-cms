@@ -14,6 +14,7 @@ const {
   CASE_STATUS_TYPES,
   PAYMENT_STATUS,
   ROLES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -625,7 +626,7 @@ describe('formatDocument', () => {
       servedParties: ['someone', 'someone else'],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'B',
+      servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
@@ -635,7 +636,7 @@ describe('formatDocument', () => {
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'R',
+      servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
     });
   });
 });

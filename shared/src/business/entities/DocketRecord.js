@@ -112,7 +112,7 @@ joiValidationDecorator(
     numberOfPages: joi.number().optional().allow(null),
     servedPartiesCode: joi
       .string()
-      .valid(...SERVED_PARTIES_CODES)
+      .valid(...Object.values(SERVED_PARTIES_CODES))
       .allow(null)
       .optional()
       .description('Served parties code to override system-computed code.'),

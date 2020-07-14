@@ -1,11 +1,13 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormForEditAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
-
 describe('setDocketEntryMetaFormForEditAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  const { SERVED_PARTIES_CODES } = applicationContext.getConstants();
+
   let caseDetail;
 
   beforeAll(() => {
@@ -26,7 +28,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
         {
           documentId: '456',
           index: 4,
-          servedPartiesCode: 'R',
+          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
         },
       ],
       documents: [
@@ -143,7 +145,9 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       },
     });
 
-    expect(result.state.form.servedPartiesCode).toEqual('B');
+    expect(result.state.form.servedPartiesCode).toEqual(
+      SERVED_PARTIES_CODES.BOTH,
+    );
   });
 
   it('overwrites documentDetail.servedPartiesCode if servedPartiesCode is present on docketRecordEntry', async () => {
@@ -157,6 +161,25 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       },
     });
 
-    expect(result.state.form.servedPartiesCode).toEqual('R');
+    expect(result.state.form.servedPartiesCode).toEqual(
+      SERVED_PARTIES_CODES.RESPONDENT,
+    );
+  });
+
+  it('returns initEventCode from the case document', async () => {
+    const result = await runAction(setDocketEntryMetaFormForEditAction, {
+      modules: { presenter },
+      props: {
+        docketRecordIndex: 4,
+      },
+      state: {
+        caseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({
+      key: 'initEventCode',
+      value: 'A',
+    });
   });
 });
