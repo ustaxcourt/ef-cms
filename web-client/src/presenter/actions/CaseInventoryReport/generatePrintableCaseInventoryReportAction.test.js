@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     applicationContext
@@ -22,7 +22,7 @@ describe('generatePrintableCaseInventoryReportAction', () => {
       },
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           status: STATUS_TYPES.new,
         },
       },
@@ -33,7 +33,7 @@ describe('generatePrintableCaseInventoryReportAction', () => {
         .generatePrintableCaseInventoryReportInteractor,
     ).toBeCalledWith({
       applicationContext: expect.anything(),
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       status: STATUS_TYPES.new,
     });
     expect(result.output.pdfUrl).toEqual('www.example.com');
