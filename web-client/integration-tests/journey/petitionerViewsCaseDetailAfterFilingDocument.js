@@ -1,6 +1,9 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   test,
@@ -11,7 +14,8 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       docketNumber: test.docketNumber,
     });
 
-    const docketNumberSuffix = overrides.docketNumberSuffix || 'W';
+    const docketNumberSuffix =
+      overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
     const caseDetail = test.getState('caseDetail');
     const caseDetailFormatted = runCompute(

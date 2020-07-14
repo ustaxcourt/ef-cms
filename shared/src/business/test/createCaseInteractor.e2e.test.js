@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
 } = require('../entities/EntityConstants');
 const {
   getDocumentQCInboxForSectionInteractor,
@@ -105,7 +106,7 @@ describe('createCase integration test', () => {
         },
       ],
       initialCaption: 'Rick Petitioner, Petitioner',
-      initialDocketNumberSuffix: 'S',
+      initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,

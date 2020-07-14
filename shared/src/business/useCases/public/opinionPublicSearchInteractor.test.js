@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   OPINION_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -30,7 +31,7 @@ describe('opinionPublicSearchInteractor', () => {
       },
       contactSecondary: {},
       docketNumber: '103-20',
-      docketNumberSuffix: 'L',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
       documentId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
       documentTitle: 'Memorandum Opinion Judge Armen',
       filingDate: '2020-05-12T18:42:10.471Z',

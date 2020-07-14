@@ -4,6 +4,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
 } = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 
@@ -99,7 +100,7 @@ describe('updateCase', () => {
         caseCaption: 'Johnny Joe Jacobson, Petitioner',
         caseId: '123',
         docketNumber: '101-18',
-        docketNumberSuffix: 'W',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         inProgress: true,
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:40:46.415Z',
@@ -131,7 +132,7 @@ describe('updateCase', () => {
       applicationContext.getDocumentClient().update.mock.calls[2][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':docketNumberSuffix': 'W',
+        ':docketNumberSuffix': DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
       },
     });
     expect(
@@ -505,7 +506,7 @@ describe('updateCase', () => {
           associatedJudge: 'Judge Buch',
           caseId: '123',
           docketNumber: '101-18',
-          docketNumberSuffix: 'W',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           inProgress: true,
           status: CASE_STATUS_TYPES.generalDocket,
           trialDate: '2019-03-01T21:40:46.415Z',
@@ -516,7 +517,7 @@ describe('updateCase', () => {
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
-        docketNumberSuffix: 'W',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         gsi1pk: 'user-case|123',
         pk: 'user|123',
         sk: 'case|123',
