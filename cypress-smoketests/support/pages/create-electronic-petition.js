@@ -39,19 +39,17 @@ exports.goToWizardStep5 = () => {
   cy.url().should('contain', '/file-a-petition/step-5');
 };
 
-exports.submitPetition = () => {
+exports.submitPetition = testData => {
   cy.get('button#submit-case').scrollIntoView().click();
 
   cy.server();
   cy.route('POST', '**/cases').as('postCase');
   cy.wait('@postCase');
-  let docketNumber;
   cy.get('@postCase').should(xhr => {
     expect(xhr.responseBody).to.have.property('docketNumber');
-    ({ docketNumber } = xhr.responseBody);
+    testData.createdDocketNumber = xhr.responseBody.docketNumber;
   });
   cy.url().should('include', 'file-a-petition/success');
-  return docketNumber;
 };
 
 exports.goToDashboard = () => {
