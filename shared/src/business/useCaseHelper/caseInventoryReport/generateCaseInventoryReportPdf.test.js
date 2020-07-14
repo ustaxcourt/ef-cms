@@ -2,18 +2,22 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   generateCaseInventoryReportPdf,
 } = require('./generateCaseInventoryReportPdf');
-const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 const mockCases = [
   {
-    associatedJudge: 'Chief Judge',
+    associatedJudge: CHIEF_JUDGE,
     docketNumber: '101-19',
     status: CASE_STATUS_TYPES.new,
   },
   {
-    associatedJudge: 'Chief Judge',
+    associatedJudge: CHIEF_JUDGE,
     docketNumber: '101-20',
     status: CASE_STATUS_TYPES.new,
   },
@@ -42,7 +46,7 @@ describe('generateCaseInventoryReportPdf', () => {
       generateCaseInventoryReportPdf({
         applicationContext,
         cases: mockCases,
-        filters: { associatedJudge: 'Chief Judge' },
+        filters: { associatedJudge: CHIEF_JUDGE },
       }),
     ).rejects.toThrow('Unauthorized for case inventory report');
   });
@@ -51,7 +55,7 @@ describe('generateCaseInventoryReportPdf', () => {
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
-      filters: { associatedJudge: 'Chief Judge' },
+      filters: { associatedJudge: CHIEF_JUDGE },
     });
 
     expect(
@@ -63,7 +67,7 @@ describe('generateCaseInventoryReportPdf', () => {
     const result = await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
-      filters: { associatedJudge: 'Chief Judge' },
+      filters: { associatedJudge: CHIEF_JUDGE },
     });
 
     expect(result).toEqual({ url: 'https://www.example.com' });
@@ -78,7 +82,7 @@ describe('generateCaseInventoryReportPdf', () => {
       generateCaseInventoryReportPdf({
         applicationContext,
         cases: mockCases,
-        filters: { associatedJudge: 'Chief Judge' },
+        filters: { associatedJudge: CHIEF_JUDGE },
       }),
     ).rejects.toThrow('bad!');
   });
@@ -110,7 +114,7 @@ describe('generateCaseInventoryReportPdf', () => {
     await generateCaseInventoryReportPdf({
       applicationContext,
       cases: mockCases,
-      filters: { associatedJudge: 'Chief Judge' },
+      filters: { associatedJudge: CHIEF_JUDGE },
     });
 
     const {
@@ -130,7 +134,7 @@ describe('generateCaseInventoryReportPdf', () => {
       applicationContext,
       cases: mockCases,
       filters: {
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
         status: CASE_STATUS_TYPES.new,
       },
     });
