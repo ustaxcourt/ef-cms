@@ -9,7 +9,7 @@ const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
-const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
+const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
