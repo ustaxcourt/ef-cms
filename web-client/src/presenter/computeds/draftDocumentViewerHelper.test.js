@@ -44,6 +44,27 @@ describe('draftDocumentViewerHelper', () => {
       .mockReturnValue(docketClerkUser);
   });
 
+  it('should return an empty object if viewerDraftDocumentToDisplay.eventCode is not defined', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual({
+      createdByLabel: '',
+      documentTitle: '',
+    });
+  });
   it('should return the document title', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
