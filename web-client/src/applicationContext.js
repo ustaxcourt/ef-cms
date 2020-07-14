@@ -98,6 +98,7 @@ import {
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  getServedPartiesCode,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardCaseMessageInteractor } from '../../shared/src/proxies/messages/forwardCaseMessageProxy';
@@ -557,6 +558,7 @@ const applicationContext = {
       getFormattedCaseDetail,
       getJudgeLastName,
       getPetitionDocumentFromDocuments,
+      getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
