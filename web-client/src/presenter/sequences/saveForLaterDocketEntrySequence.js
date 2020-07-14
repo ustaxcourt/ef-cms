@@ -16,6 +16,7 @@ import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAct
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setSaveDocketEntryForLaterMetaAction } from '../actions/DocketEntry/setSaveDocketEntryForLaterMetaAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -64,6 +65,7 @@ export const saveForLaterDocketEntrySequence = [
               {
                 error: [openFileUploadErrorModal],
                 success: [
+                  setSaveDocketEntryForLaterMetaAction,
                   saveDocketEntryAction,
                   closeFileUploadStatusModalAction,
                   afterEntrySaved,

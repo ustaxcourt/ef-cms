@@ -1,6 +1,8 @@
 import { InitialWorkItemMessage } from '../../../shared/src/business/entities/InitialWorkItemMessage';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
+const { ADC_SECTION } = applicationContext.getConstants();
 
 export const docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC = test => {
   return it('Docket clerk starts a new message thread on the Stipulated Decision document to adc', async () => {
@@ -57,7 +59,7 @@ export const docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC = test =
           toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
-      section: 'adc',
+      section: ADC_SECTION,
       sentBy: 'Test Docketclerk',
     });
 
