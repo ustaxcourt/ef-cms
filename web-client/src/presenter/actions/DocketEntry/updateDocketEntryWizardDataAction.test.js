@@ -16,7 +16,7 @@ describe('updateDocketEntryWizardDataAction', () => {
         documentId: '2',
         documentTitle: 'B Document',
         documentType: 'B Document',
-        relationship: 'secondaryDocument',
+        relationship: DOCUMENT_RELATIONSHIPS.SECONDARY,
       },
       {
         documentId: '3',

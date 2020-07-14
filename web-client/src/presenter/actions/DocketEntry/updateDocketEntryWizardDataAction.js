@@ -119,7 +119,9 @@ export const updateDocketEntryWizardDataAction = ({
           );
         if (previousDocument.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY) {
           store.merge(state.form, get(state.screenMetadata.primary));
-        } else if (previousDocument.relationship === 'secondaryDocument') {
+        } else if (
+          previousDocument.relationship === DOCUMENT_RELATIONSHIPS.SECONDARY
+        ) {
           store.merge(state.form, get(state.screenMetadata.secondary));
         }
       }

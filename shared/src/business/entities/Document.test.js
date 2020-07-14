@@ -1496,7 +1496,7 @@ describe('Document entity', () => {
       expect(createdDocument.isValid()).toEqual(false);
       expect(
         Object.keys(createdDocument.getFormattedValidationErrors()),
-      ).toEqual(['secondaryDocument']);
+      ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
