@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -23,7 +24,7 @@ describe('createCase integration test', () => {
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',

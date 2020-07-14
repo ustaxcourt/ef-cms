@@ -1,11 +1,15 @@
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
 const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
-const { COUNTRY_TYPES, PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
       const caseExternalIncomplete = new CaseExternalIncomplete({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
