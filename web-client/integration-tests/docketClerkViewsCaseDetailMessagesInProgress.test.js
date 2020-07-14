@@ -18,14 +18,14 @@ describe('a docket clerk views case detail messages in progress with a message o
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreateOrder(test);
   it('petitions clerk sends message to docket clerk on draft order', async () => {
     await viewDocumentDetailMessage({

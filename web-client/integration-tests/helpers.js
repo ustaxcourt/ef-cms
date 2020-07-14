@@ -2,7 +2,6 @@
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -12,6 +11,11 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
+import {
+  fakeData,
+  getFakeFile,
+} from '../../shared/src/business/test/createTestApplicationContext';
+import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import {
@@ -29,7 +33,12 @@ import FormData from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
+const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
+
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+const formattedCaseMessages = withAppContextDecorator(
+  formattedCaseMessagesComputed,
+);
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 Object.assign(applicationContext, {
@@ -45,15 +54,8 @@ Object.assign(applicationContext, {
   getScanner: getScannerInterface,
 });
 
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 export const fakeFile = (() => {
-  const myFile = new Buffer.from(fakeData, 'base64', {
-    type: 'application/pdf',
-  });
-  myFile.name = 'fakeFile.pdf';
-  myFile.size = myFile.length;
-  return myFile;
+  return getFakeFile();
 })();
 
 export const getFormattedDocumentQCMyInbox = async test => {
@@ -63,6 +65,16 @@ export const getFormattedDocumentQCMyInbox = async test => {
     workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+export const getMySentFormattedCaseMessages = async test => {
+  await test.runSequence('gotoCaseMessagesSequence', {
+    box: 'outbox',
+    queue: 'my',
+  });
+  return runCompute(formattedCaseMessages, {
     state: test.getState(),
   });
 };
@@ -352,8 +364,11 @@ export const forwardWorkItem = async (test, to, workItemId, message) => {
 export const uploadPetition = async (
   test,
   overrides = {},
-  loginUsername = 'petitioner',
+  loginUsername = 'petitioner@example.com',
 ) => {
+  if (!userMap[loginUsername]) {
+    throw new Error(`Unable to log into test as ${loginUsername}`);
+  }
   const user = {
     ...userMap[loginUsername],
     sub: userMap[loginUsername].userId,
@@ -362,7 +377,7 @@ export const uploadPetition = async (
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   const petitionMetadata = {
-    caseType: overrides.caseType || 'CDP (Lien/Levy)',
+    caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
     contactPrimary: {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',

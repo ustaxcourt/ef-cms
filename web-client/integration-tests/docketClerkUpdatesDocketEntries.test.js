@@ -21,7 +21,7 @@ describe('docket clerk updates docket entries', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -39,9 +39,9 @@ describe('docket clerk updates docket entries', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test);
   docketClerkEditsDocketEntryStandard(test);
   docketClerkEditsDocketEntryNonstandardA(test);
   docketClerkEditsDocketEntryNonstandardB(test);

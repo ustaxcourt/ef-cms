@@ -99,10 +99,7 @@ const practitionerValidation = {
     .valid(...ADMISSIONS_STATUS_OPTIONS)
     .required()
     .description('The Tax Court bar admission status for the practitioner.'),
-  alternateEmail: joi
-    .string()
-    .max(100)
-    .optional()
+  alternateEmail: JoiValidationConstants.EMAIL.optional()
     .allow(null)
     .description('An alternate email address for the practitioner.'),
   barNumber: joi

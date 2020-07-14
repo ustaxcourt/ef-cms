@@ -3,8 +3,10 @@ const {
   ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
   PARTY_TYPES,
@@ -69,6 +71,69 @@ describe('Case entity', () => {
       { filingDate: '2020-01-05T01:02:03.004Z' },
     ]);
   });
+
+  describe('adding and removing practitioners', () => {
+    let myCase;
+    beforeEach(() => {
+      myCase = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [{ name: 'Christopher Walken', userId: '123' }],
+          privatePractitioners: [{ name: 'Slim Shady', userId: '567' }],
+        },
+        { applicationContext },
+      );
+    });
+
+    describe('who are from IRS', () => {
+      it('updates a matching IRS practitioner found on the case', () => {
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        myCase.updateIrsPractitioner({
+          name: 'Christopher Running',
+          userId: '123',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Running',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updateIrsPractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.irsPractitioners.length).toEqual(1);
+        expect(myCase.irsPractitioners[0]).toMatchObject({
+          name: 'Christopher Walken',
+        });
+      });
+    });
+
+    describe('who are private', () => {
+      it('updates a matching private practitioner found on the case', () => {
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        myCase.updatePrivatePractitioner({
+          name: 'Stout Sunny',
+          userId: '567',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Stout Sunny',
+        });
+      });
+      it('updates nothing when provided object does not match', () => {
+        myCase.updatePrivatePractitioner({
+          name: 'Slow Jog',
+          userId: '000-111-222',
+        });
+        expect(myCase.privatePractitioners.length).toEqual(1);
+        expect(myCase.privatePractitioners[0]).toMatchObject({
+          name: 'Slim Shady',
+        });
+      });
+    });
+  });
+
   describe('conditionally sets userId on entity', () => {
     it('sets userId to current user if current user matches rawCase', () => {
       const myCase = new Case(
@@ -1740,7 +1805,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'passport',
+          caseType: CASE_TYPES_MAP.passport,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -1759,7 +1824,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'cdp (lien/levy)',
+          caseType: CASE_TYPES_MAP.cdp,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -2024,14 +2089,14 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('complete');
+      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
     it('should update a correspondence document', () => {
@@ -2679,7 +2744,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when the pending case status is ineligible', () => {
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         const result = caseEntity.canConsolidate();
 
         expect(result).toEqual(false);
@@ -2695,7 +2760,7 @@ describe('Case entity', () => {
         let result;
 
         // verify a failure on the current (this) case
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         result = caseEntity.canConsolidate();
         expect(result).toEqual(false);
 
@@ -2736,7 +2801,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3301,7 +3366,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [],
         },
@@ -3322,7 +3387,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         {
@@ -3340,7 +3405,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
         },
         {

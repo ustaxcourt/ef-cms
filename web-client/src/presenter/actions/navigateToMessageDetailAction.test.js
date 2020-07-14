@@ -15,7 +15,7 @@ describe('navigateToMessageDetailAction', () => {
     };
   });
 
-  it('navigates to message detail page without parent message id', async () => {
+  it('navigates to message detail page with parent message id', async () => {
     await runAction(navigateToMessageDetailAction, {
       modules: {
         presenter,

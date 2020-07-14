@@ -298,7 +298,7 @@
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -347,7 +347,7 @@
     "sk": "docket-record|2a3825e3-9144-446c-96c1-3c2b2f4b7b1c"
   },
   {
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "description": "Notice of Trial",
     "index": 3,
     "numberOfPages": 1,
@@ -373,7 +373,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "attachments": false,
@@ -465,7 +465,7 @@
     "servedParties": [
       {
         "name": "Reuben Blair",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "documentType": "Notice of Trial",
@@ -475,7 +475,7 @@
     "pending": false,
     "receivedAt": "2020-01-23T21:45:14.136Z",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "NDT",
+    "eventCode": "NTD",
     "createdAt": "2020-01-23T21:45:14.136Z",
     "processingStatus": "complete",
     "filedBy": "Test Docketclerk",
@@ -484,6 +484,7 @@
     "documentId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
     "numberOfPages": 1,
     "servedAt": "2020-01-23T21:45:14.148Z",
+    "signedAt": "2020-01-23T21:45:14.136Z",
     "pk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas",
     "status": "served"

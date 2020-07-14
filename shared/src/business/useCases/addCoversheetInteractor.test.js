@@ -20,8 +20,7 @@ describe('addCoversheetInteractor', () => {
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketNumber: '101-19',
@@ -758,6 +757,37 @@ describe('addCoversheetInteractor', () => {
 
       expect(result.docketNumberWithSuffix).toEqual('102-19Z');
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
+    });
+
+    it('does NOT display dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+          docketNumberSuffix: 'S',
+          initialCaption: 'Janie and Jackie Petitioner, Petitioners',
+          initialDocketNumberSuffix: 'Z',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'USCA',
+          isPaper: false,
+          lodged: true,
+          servedAt: '2019-04-20T14:45:15.595Z',
+        },
+        useInitialData: true,
+      });
+
+      expect(result.dateReceived).toBeUndefined();
+      expect(result.electronicallyFiled).toBeUndefined();
+      expect(result.dateServed).toBeUndefined();
     });
   });
 });

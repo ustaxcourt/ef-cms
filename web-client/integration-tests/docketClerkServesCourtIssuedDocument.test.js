@@ -30,12 +30,12 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -47,23 +47,23 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test, 4);
   petitionsClerkViewsDraftOrder(test, 0);
   petitionsClerkPrioritizesCase(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(test, 0);
+  docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkCancelsAddDocketEntryFromOrder(test, 1);
   docketClerkViewsDraftOrder(test, 1);
+  docketClerkSignsOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkSignsOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
-  docketClerkSignsOrder(test, 1);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
 });

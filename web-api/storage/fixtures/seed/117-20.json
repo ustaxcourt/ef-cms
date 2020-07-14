@@ -22,7 +22,7 @@
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -211,7 +211,7 @@
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",

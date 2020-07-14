@@ -11,14 +11,14 @@ describe('docket clerk edits a petition payment fee', () => {
 
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case petition payment fee', async () => {
     await test.runSequence('gotoEditPetitionDetailsSequence', {

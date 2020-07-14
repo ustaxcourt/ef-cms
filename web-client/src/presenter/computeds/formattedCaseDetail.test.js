@@ -152,6 +152,11 @@ describe('formattedCaseDetail', () => {
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
           filingDate: '2019-04-19T17:42:13.122Z',
         },
+        {
+          description: 'Hearing Exhibits for asdfasdfasdf',
+          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
       ],
       documents: [
         {
@@ -169,6 +174,7 @@ describe('formattedCaseDetail', () => {
           partyPrimary: true,
           relationship: 'primaryDocument',
           scenario: 'Standard',
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           supportingDocumentFreeText: 'Test',
@@ -192,6 +198,7 @@ describe('formattedCaseDetail', () => {
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
           scenario: 'Nonstandard F',
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
@@ -219,6 +226,7 @@ describe('formattedCaseDetail', () => {
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument: 'Declaration in Support',
           supportingDocumentFreeText: 'Rachael',
         },
@@ -240,23 +248,19 @@ describe('formattedCaseDetail', () => {
           previousDocument: 'Amended Petition',
           relationship: 'primarySupportingDocument',
           scenario: 'Nonstandard C',
+          servedAt: '2019-06-19T17:29:13.120Z',
         },
         {
-          additionalInfo: 'Additional Info',
-          additionalInfo2: 'Additional Info2',
-          category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
-          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
-          documentTitle: 'U.S.C.A anything',
-          documentType: 'U.S.C.A',
-          eventCode: 'USCA',
-          freeText: 'Test',
-          lodged: true,
-          partyIrsPractitioner: true,
-          partyPrivatePractitioner: true,
-          previousDocument: 'Amended Petition',
-          relationship: 'primarySupportingDocument',
-          scenario: 'Nonstandard C',
+          documentId: '42b49268-81d3-4b92-81c3-f1edc26ca844',
+          documentTitle: 'Hearing Exhibits for asdfasdfasdf',
+          documentType: 'Hearing Exhibits',
+          eventCode: 'HE',
+          freeText: 'adsf',
+          lodged: false,
+          relationship: 'primaryDocument',
+          scenario: 'Type A',
+          servedAt: '2019-06-19T17:29:13.120Z',
         },
       ],
       hasVerifiedIrsNotice: false,
@@ -299,13 +303,18 @@ describe('formattedCaseDetail', () => {
           filingsAndProceedings: '(Lodged)',
         },
       },
+      {
+        record: {
+          description: 'Hearing Exhibits for asdfasdfasdf',
+          filingsAndProceedings: '',
+        },
+      },
     ]);
     expect(result.formattedDocketEntries).toMatchObject([
       {
         description: 'Amended Petition',
         filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
         isInProgress: false,
-        isUnservable: true,
         showDocumentDescriptionWithoutLink: false,
         showDocumentProcessing: false,
         showDocumentViewerLink: true,
@@ -342,7 +351,75 @@ describe('formattedCaseDetail', () => {
         showDocumentViewerLink: true,
         showLinkToDocument: false,
       },
+      {
+        description: 'Hearing Exhibits for asdfasdfasdf',
+        filingsAndProceedingsWithAdditionalInfo: '',
+        isInProgress: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentProcessing: false,
+        showDocumentViewerLink: true,
+        showEditDocketRecordEntry: false,
+        showLinkToDocument: false,
+      },
     ]);
+  });
+
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      correspondence: [],
+      docketRecord: [
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+      ],
+      documents: [
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: true,
+        },
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: false,
+        },
+      ],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner' }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    const lodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+    );
+    const unlodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+    );
+
+    expect(lodgedDocument.eventCode).toEqual('MISCL');
+    expect(unlodgedDocument.eventCode).not.toEqual('MISCL');
   });
 
   describe('sorts docket records', () => {
@@ -872,6 +949,29 @@ describe('formattedCaseDetail', () => {
         },
       ]);
     });
+
+    it("doesn't format draft documents if there are none", () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...caseDetail,
+            documents: [
+              {
+                createdAt: '2019-02-28T21:14:39.488Z',
+                documentId: 'Petition',
+                documentType: 'Petition',
+                showValidationInput: '2019-02-28T21:14:39.488Z',
+                status: 'served',
+              },
+            ],
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDraftDocuments).toEqual([]);
+    });
   });
 
   describe('consolidatedCases', () => {
@@ -970,6 +1070,11 @@ describe('formattedCaseDetail', () => {
             documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'Court Issued - Unservable',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -989,7 +1094,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {
@@ -1018,6 +1123,21 @@ describe('formattedCaseDetail', () => {
             status: 'served',
             workItems: [
               { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
+            ],
+          },
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '90094dbb-72bf-481e-a592-8d50dad7ffa9',
+            documentTitle: 'U.S.C.A',
+            documentType: 'U.S.C.A.',
+            eventCode: 'USCA',
+            isCourtIssuedDocument: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
+            status: 'served',
+            workItems: [
+              { completedAt: '2019-06-19T17:29:13.120Z', isQC: true },
             ],
           },
         ],
@@ -1148,6 +1268,23 @@ describe('formattedCaseDetail', () => {
         result.formattedDocketEntries[4].showEditDocketRecordEntry,
       ).toEqual(true);
     });
+
+    it('should should the edit button if the document is an unservable court issued document', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[5].showEditDocketRecordEntry,
+      ).toEqual(true);
+    });
   });
 
   describe('showEditDocketRecordEntry', () => {
@@ -1207,7 +1344,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {
@@ -1348,7 +1485,7 @@ describe('formattedCaseDetail', () => {
             documentId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
-            eventCode: 'NDT',
+            eventCode: 'NTD',
             workItems: [{ isQC: true }],
           },
           {

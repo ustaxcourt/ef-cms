@@ -49,4 +49,6 @@
 
 **On Complete and Send Message**
 * Create a Message modal displays
+* QC'd Document Title populates as message Subject line but is editable
+* QC'd document is automatically attached to the message; user can attach up to 4 more documents
 * When message is sent, the user navigates back to My Document QC > Inbox with success message displayed

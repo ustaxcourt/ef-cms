@@ -17,6 +17,21 @@ const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
+const getServedPartiesCode = servedParties => {
+  let servedPartiesCode = '';
+  if (servedParties && servedParties.length > 0) {
+    if (
+      servedParties.length === 1 &&
+      servedParties[0].role === ROLES.irsSuperuser
+    ) {
+      servedPartiesCode = 'R';
+    } else {
+      servedPartiesCode = 'B';
+    }
+  }
+  return servedPartiesCode;
+};
+
 const formatDocument = (applicationContext, document) => {
   const result = cloneDeep(document);
 
@@ -41,7 +56,9 @@ const formatDocument = (applicationContext, document) => {
       .getUtilities()
       .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
   }
-
+  if (result.lodged) {
+    result.eventCode = 'MISCL';
+  }
   result.showLegacySealed = !!result.isLegacySealed;
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = !!result.servedAt;
@@ -73,19 +90,7 @@ const formatDocument = (applicationContext, document) => {
     }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
-  if (result.servedParties && result.servedParties.length > 0) {
-    if (
-      result.servedParties.length === 1 &&
-      result.servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      result.servedPartiesCode = 'R';
-    } else {
-      result.servedPartiesCode = 'B';
-    }
-  } else {
-    // TODO: Address Respondent and Petitioner codes
-    result.servedPartiesCode = '';
-  }
+  result.servedPartiesCode = getServedPartiesCode(result.servedParties);
 
   return result;
 };
@@ -172,10 +177,6 @@ const formatDocketRecordWithDocument = (
 
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
-      }
-
-      if (formattedDocument.lodged) {
-        record.eventCode = 'MISCL';
       }
     }
 
@@ -317,10 +318,6 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.caseTitle = applicationContext.getCaseTitle(
     caseDetail.caseCaption || '',
-  );
-
-  result.showCaseTitleForPrimary = !(
-    caseDetail.contactSecondary && caseDetail.contactSecondary.name
   );
 
   result.formattedPreferredTrialCity =
@@ -478,5 +475,6 @@ module.exports = {
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  getServedPartiesCode,
   sortDocketRecords,
 };

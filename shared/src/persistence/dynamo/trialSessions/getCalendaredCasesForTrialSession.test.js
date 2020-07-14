@@ -3,6 +3,9 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
+const {
   getCalendaredCasesForTrialSession,
 } = require('./getCalendaredCasesForTrialSession');
 
@@ -88,7 +91,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         ],
         removedFromTrial: true,
         sk: 'case|23',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });

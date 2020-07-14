@@ -11,29 +11,29 @@ const test = setupTest();
 describe('external user views open and closed cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create the case to close', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionersToCase(test, true);
   petitionsClerkAddsRespondentsToCase(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToClosed(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsOpenAndClosedCases(test);
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   privatePractitionerViewsOpenAndClosedCases(test);
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   irsPractitionerViewsOpenAndClosedCases(test);
 });

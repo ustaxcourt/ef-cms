@@ -21,7 +21,7 @@ describe('ExternalDocumentNonStandardJ', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
-        documentType: 'Stipulated Decision Entered',
+        documentType: 'Stipulated Decision',
         freeText: 'Test',
         freeText2: 'Test2',
         scenario: 'Nonstandard J',
@@ -35,7 +35,7 @@ describe('ExternalDocumentNonStandardJ', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
-        documentType: 'Stipulated Decision Entered',
+        documentType: 'Stipulated Decision',
         freeText: 'Test',
         freeText2: 'Test2',
         scenario: 'Nonstandard J',

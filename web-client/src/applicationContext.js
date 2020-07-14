@@ -98,6 +98,7 @@ import {
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  getServedPartiesCode,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardCaseMessageInteractor } from '../../shared/src/proxies/messages/forwardCaseMessageProxy';
@@ -492,7 +493,8 @@ const applicationContext = {
   getHttpClient: () => axios,
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return pdfjsLib;
   },
   getPdfLib: () => {
@@ -557,6 +559,7 @@ const applicationContext = {
       getFormattedCaseDetail,
       getJudgeLastName,
       getPetitionDocumentFromDocuments,
+      getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

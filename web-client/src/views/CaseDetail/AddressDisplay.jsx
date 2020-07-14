@@ -29,6 +29,13 @@ export const AddressDisplay = connect(
         >
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
+          {contact.secondaryName && (
+            <span>
+              <br />
+              c/o {contact.secondaryName}
+              {contact.title && <span>, {contact.title}</span>}
+            </span>
+          )}
           {contact.inCareOf && (
             <span>
               <br />

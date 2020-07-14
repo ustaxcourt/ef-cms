@@ -12,7 +12,7 @@ describe('docket clerk opinion advanced search', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('go to advanced opinion search tab', async () => {
     await refreshElasticsearchIndex();

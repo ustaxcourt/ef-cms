@@ -156,7 +156,7 @@
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -217,7 +217,7 @@
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",

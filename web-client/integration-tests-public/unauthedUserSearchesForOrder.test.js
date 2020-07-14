@@ -34,7 +34,7 @@ describe('Petitioner creates case', () => {
     };
   });
 
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
 
   it('Create case', async () => {
     const caseDetail = await uploadPetition(testClient, {
@@ -56,15 +56,15 @@ describe('Petitioner creates case', () => {
 });
 
 describe('Docket clerk creates orders to search for', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkSignsOrder(testClient, 0);
+  docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
   docketClerkCreatesAnOrder(testClient, {
@@ -72,8 +72,8 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkSignsOrder(testClient, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
   docketClerkCreatesAnOrder(testClient, {
@@ -81,6 +81,7 @@ describe('Docket clerk creates orders to search for', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkSignsOrder(testClient, 2);
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
 });
 
@@ -91,7 +92,7 @@ describe('Unauthed user searches for an order by keyword', () => {
 });
 
 describe('Docket clerk seals case', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 

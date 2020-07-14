@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-# 
+#
 # Creates a bunch of ready for trial cases in various trial locations.  This uses the
-# ux_testing_data.csv file for importing the cases.  The purpose of this script is to help UX 
+# ux_testing_data.csv file for importing the cases.  The purpose of this script is to help UX
 # with user testing whenever they needs a bunch of cases for seed data.
 
 # Requirements

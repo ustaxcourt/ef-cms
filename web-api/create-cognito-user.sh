@@ -3,7 +3,7 @@
 # Usage
 #   ./create-cognito-user.sh $ENV $email $password $role $section "$name"
 #   where $ENV is dev|stg|prod|test|...
-#   see shared/src/business/entities/User.js for valid roles and sections 
+#   see shared/src/business/entities/User.js for valid roles and sections
 
 # Requirements
 #   - curl must be installed on your machine
@@ -102,7 +102,7 @@ createAccount() {
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
     --output json \
-    --auth-parameters USERNAME="${email}",PASSWORD="${password}")  
+    --auth-parameters USERNAME="${email}",PASSWORD="${password}")
   session=$(echo "${response}" | jq -r ".Session")
 
   if [ "$session" != "null" ]; then

@@ -1,5 +1,4 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
-import { wait } from '../helpers';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
@@ -34,9 +33,6 @@ export const chambersUserSkipSigningOrder = test => {
     });
 
     await test.runSequence('submitCourtIssuedOrderSequence');
-
-    //TODO - fix this when cerebral runSequence starts properly awaiting things
-    await wait(1000);
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();

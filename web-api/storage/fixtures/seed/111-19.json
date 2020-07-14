@@ -21,7 +21,7 @@
       "name": "Guy Fieri",
       "state": "AR",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,

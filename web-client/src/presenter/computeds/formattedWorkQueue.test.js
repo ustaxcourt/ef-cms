@@ -1,9 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  CHIEF_JUDGE,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
   formatDateIfToday,
@@ -15,77 +10,42 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let globalUser;
+describe('formatted work queue computed', () => {
+  let globalUser;
+  let getBaseState;
+  let formattedWorkQueue;
 
-applicationContext.getCurrentUser = () => {
-  return globalUser;
-};
+  const {
+    CHIEF_JUDGE,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
-  ...applicationContext,
-});
-
-const WORK_ITEM_ID_1 = '06f09800-2f9c-4040-b133-10966fbf6179';
-const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
-const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
-const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
-
-const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
-
-const petitionsClerkUser = {
-  role: ROLES.petitionsClerk,
-  section: 'petitions',
-  userId: 'abc',
-};
-
-const docketClerkUser = {
-  role: ROLES.docketClerk,
-  section: 'docket',
-  userId: 'abc',
-};
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
+  const petitionsClerkUser = {
+    role: USER_ROLES.petitionsClerk,
+    section: 'petitions',
+    userId: 'abc',
   };
-};
 
-const FORMATTED_WORK_ITEM = {
-  assigneeId: 'abc',
-  assigneeName: 'Unassigned',
-  caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: CASE_STATUS_TYPES.generalDocket,
-  createdAtFormatted: '12/27/18',
-  currentMessage: {
+  const docketClerkUser = {
+    role: USER_ROLES.docketClerk,
+    section: 'docket',
+    userId: 'abc',
+  };
+
+  const WORK_ITEM_ID_1 = '06f09800-2f9c-4040-b133-10966fbf6179';
+  const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
+  const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
+  const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
+  const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
+
+  const FORMATTED_WORK_ITEM = {
+    assigneeId: 'abc',
+    assigneeName: 'Unassigned',
+    caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+    caseStatus: STATUS_TYPES.generalDocket,
     createdAtFormatted: '12/27/18',
-    from: 'Test Respondent',
-    fromUserId: 'respondent',
-    message: 'Answer filed by respondent is ready for review',
-    messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-    to: 'Unassigned',
-  },
-  docketNumber: '101-18',
-  docketNumberSuffix: 'S',
-  docketNumberWithSuffix: '101-18S',
-  document: {
-    attachments: true,
-    documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
-    documentType: 'Answer',
-  },
-  historyMessages: [
-    {
-      createdAtFormatted: '12/27/18',
-      from: 'Test Docketclerk',
-      fromUserId: 'docketclerk',
-      message: 'a message',
-      messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      to: 'Unassigned',
-    },
-  ],
-  isCourtIssuedDocument: false,
-  messages: [
-    {
+    currentMessage: {
       createdAtFormatted: '12/27/18',
       from: 'Test Respondent',
       fromUserId: 'respondent',
@@ -93,29 +53,73 @@ const FORMATTED_WORK_ITEM = {
       messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
       to: 'Unassigned',
     },
-    {
-      createdAtFormatted: '12/27/18',
-      from: 'Test Docketclerk',
-      fromUserId: 'docketclerk',
-      message: 'a message',
-      messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      to: 'Unassigned',
+    docketNumber: '101-18',
+    docketNumberSuffix: 'S',
+    docketNumberWithSuffix: '101-18S',
+    document: {
+      attachments: true,
+      documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
+      documentType: 'Answer',
     },
-  ],
-  section: 'petitions',
-  selected: true,
-  sentBy: 'respondent',
-  showComplete: true,
-  showSendTo: true,
-  workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
-};
+    historyMessages: [
+      {
+        createdAtFormatted: '12/27/18',
+        from: 'Test Docketclerk',
+        fromUserId: 'docketclerk',
+        message: 'a message',
+        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+        to: 'Unassigned',
+      },
+    ],
+    isCourtIssuedDocument: false,
+    messages: [
+      {
+        createdAtFormatted: '12/27/18',
+        from: 'Test Respondent',
+        fromUserId: 'respondent',
+        message: 'Answer filed by respondent is ready for review',
+        messageId: '09eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+        to: 'Unassigned',
+      },
+      {
+        createdAtFormatted: '12/27/18',
+        from: 'Test Docketclerk',
+        fromUserId: 'docketclerk',
+        message: 'a message',
+        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+        to: 'Unassigned',
+      },
+    ],
+    section: 'petitions',
+    selected: true,
+    sentBy: 'respondent',
+    showComplete: true,
+    showSendTo: true,
+    workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
+  };
 
-describe('formatted work queue computed', () => {
+  beforeAll(() => {
+    applicationContext.getCurrentUser = () => {
+      return globalUser;
+    };
+
+    getBaseState = user => {
+      globalUser = user;
+      return {
+        permissions: getUserPermissions(user),
+      };
+    };
+
+    formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
+      ...applicationContext,
+    });
+  });
+
   const workItem = {
     assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: CASE_STATUS_TYPES.generalDocket,
+    caseStatus: STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -439,7 +443,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for a given judge or chambers user', () => {
     const judgeUser = {
       name: 'Test Judge',
-      role: ROLES.judge,
+      role: USER_ROLES.judge,
       userId: JUDGE_USER_ID_1,
     };
 
@@ -483,7 +487,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on associatedJudge for an adc user', () => {
     const adcUser = {
       name: 'Test ADC',
-      role: ROLES.adc,
+      role: USER_ROLES.adc,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -527,7 +531,7 @@ describe('formatted work queue computed', () => {
   it('filters items based on in progress cases for a petitionsclerk', () => {
     const petitionsClerkUser = {
       name: 'Test PetitionsClerk',
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
     };
 
@@ -553,7 +557,7 @@ describe('formatted work queue computed', () => {
             ...qcWorkItem,
             associatedJudge: CHIEF_JUDGE,
             caseIsInProgress: true,
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: STATUS_TYPES.new,
             document: {
               ...qcWorkItem.document,
               status: 'processing',
@@ -1518,7 +1522,6 @@ describe('formatted work queue computed', () => {
       const currentTime = applicationContext
         .getUtilities()
         .createISODateString();
-
       const yesterday = applicationContext
         .getUtilities()
         .calculateISODate({ dateString: currentTime, howMuch: -1 });

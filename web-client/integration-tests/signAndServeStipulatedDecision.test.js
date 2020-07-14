@@ -40,14 +40,14 @@ describe('a user signs and serves a stipulated decision', () => {
   let signedDocumentId = null;
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
 
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
@@ -57,7 +57,7 @@ describe('a user signs and serves a stipulated decision', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('docketclerk assigns the stipulated decision to the adc', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
@@ -79,7 +79,7 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
-  loginAs(test, 'adc');
+  loginAs(test, 'adc@example.com');
   it('adc signs the proposed stipulated decision', async () => {
     const inbox = await getFormattedMyInbox(test);
     const stipulatedDecision = inbox.find(
@@ -90,7 +90,7 @@ describe('a user signs and serves a stipulated decision', () => {
     await signProposedStipulatedDecision(test, stipulatedDecision);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
     const inbox = await getFormattedMyInbox(test);
@@ -107,7 +107,7 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('docketclerk serves the signed stipulated decision', async () => {
     caseDetail = test.getState('caseDetail');

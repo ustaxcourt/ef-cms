@@ -1,7 +1,9 @@
 const joi = require('@hapi/joi');
 const {
+  CHAMBERS_SECTIONS,
   COUNTRY_TYPES,
   ROLES,
+  SECTIONS,
   US_STATES,
   US_STATES_OTHER,
 } = require('./EntityConstants');
@@ -98,12 +100,11 @@ const userValidation = {
         }),
     })
     .optional(),
-  email: joi.string().max(100).optional(),
+  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('User').required(),
   section: joi
     .string()
-    // Removed temporarily: Eric will re-add
-    // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
     .optional(),
   token: joi.string().optional(),
   userId: JoiValidationConstants.UUID.required(),

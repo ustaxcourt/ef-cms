@@ -3,8 +3,10 @@ import {
   assignWorkItems,
   findWorkItemByCaseId,
   getFormattedDocumentQCMyInbox,
+  getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
   getInboxCount,
+  getMySentFormattedCaseMessages,
   getNotifications,
   loginAs,
   setupTest,
@@ -27,7 +29,7 @@ describe('Create a work item', () => {
   let notificationsBefore;
   let decisionWorkItem;
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and cache the initial inbox counts', async () => {
     await getFormattedDocumentQCMyInbox(test);
@@ -39,7 +41,7 @@ describe('Create a work item', () => {
     notificationsBefore = getNotifications(test);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
@@ -66,7 +68,7 @@ describe('Create a work item', () => {
     await uploadExternalDecisionDocument(test);
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 3 document qc section inbox entries', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
@@ -164,5 +166,72 @@ describe('Create a work item', () => {
     expect(test.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );
+  });
+
+  it('docket clerk completes QC of a document and sends a case message', async () => {
+    test.setState('modal.showModal', '');
+
+    await test.runSequence('openCompleteAndSendCaseMessageModalSequence');
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'CreateCaseMessageModalDialog',
+    );
+
+    await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
+
+    let errors = test.getState('validationErrors');
+
+    expect(errors).toEqual({
+      message: 'Enter a message',
+      toSection: 'Select a section',
+      toUserId: 'Select a recipient',
+    });
+
+    const updatedDocumentTitle = 'Motion in Limine';
+    const caseMessageBody = 'This is a message in a bottle';
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'documentTitle',
+      value: updatedDocumentTitle,
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'message',
+      value: caseMessageBody,
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'toSection',
+      value: 'petitions',
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'toUserId',
+      value: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
+
+    errors = test.getState('validationErrors');
+
+    expect(errors).toEqual({});
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: 'Motion in Limine QC completed and message sent.',
+    });
+
+    expect(test.getState('currentPage')).toBe('Messages');
+
+    const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
+      item => item.docketNumber === caseDetail.docketNumber,
+    );
+    const qcDocumentTitleMyOutbox = myOutbox[0].document.documentTitle;
+
+    expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
+
+    const mySentCaseMessages = await getMySentFormattedCaseMessages(test);
+    const qcDocumentMessage = mySentCaseMessages.inProgressMessages[0].message;
+
+    expect(qcDocumentMessage).toBe(caseMessageBody);
   });
 });

@@ -4,6 +4,7 @@ import { state } from 'cerebral';
  * sets the state.modal.form to the props.value passed in
  *
  * @param {object} providers the providers object
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */

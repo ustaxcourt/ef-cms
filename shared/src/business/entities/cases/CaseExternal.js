@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi');
 const {
+  BUSINESS_TYPES,
   FILING_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
@@ -60,14 +61,14 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi.string().optional().allow(null), // TODO: enum
+  businessType: joi.string().valid(BUSINESS_TYPES).optional().allow(null),
   caseType: joi.string().when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: joi.object().optional(), // TODO: object definition
-  contactSecondary: joi.object().optional(), // TODO: object definition
+  contactPrimary: joi.object().optional(), // validated with the ContactFactory
+  contactSecondary: joi.object().optional(), // validated with the ContactFactory
   countryType: joi.string().optional(),
   filingType: joi
     .string()
@@ -96,7 +97,7 @@ CaseExternal.commonRequirements = {
     .string()
     .valid(...Object.values(PARTY_TYPES))
     .required(),
-  petitionFile: joi.object().required(), // TODO: object definition
+  petitionFile: joi.object().required(), // object of type File
   petitionFileSize: joi
     .number()
     .integer()
@@ -118,7 +119,7 @@ CaseExternal.commonRequirements = {
     .string()
     .valid(...PROCEDURE_TYPES)
     .required(),
-  stinFile: joi.object().required(), // TODO: object definition
+  stinFile: joi.object().required(), // object of type File
   stinFileSize: joi
     .number()
     .integer()

@@ -3,20 +3,26 @@ import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PrintPaperService = connect(
   {
     navigateToCaseDetailFromPaperServiceSequence:
       sequences.navigateToCaseDetailFromPaperServiceSequence,
+    printPaperServiceHelper: state.printPaperServiceHelper,
   },
-  function PrintPaperService({ navigateToCaseDetailFromPaperServiceSequence }) {
+  function PrintPaperService({
+    navigateToCaseDetailFromPaperServiceSequence,
+    printPaperServiceHelper,
+  }) {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
         <section className="usa-section grid-container">
-          <h2>Print Paper Service Documents</h2>
+          <h2>
+            Print {printPaperServiceHelper.documentTitle} for Paper Service
+          </h2>
           <div className="grid-row">
             <div className="grid-col-8">
               <WarningNotification />

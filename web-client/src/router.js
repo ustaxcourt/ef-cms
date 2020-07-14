@@ -833,10 +833,6 @@ const router = {
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         return app.getSequence('gotoPrintPaperServiceSequence')({
-          alertWarning: {
-            message:
-              'Document electronically served. Print and mail all paper service documents now.',
-          },
           docketNumber,
         });
       }),
@@ -1165,7 +1161,10 @@ const router = {
       const { path, token } = queryStringDecoder();
       if (token) {
         setPageTitle('Mock login');
-        return app.getSequence('submitLoginSequence')({ path, token });
+        return app.getSequence('submitLoginSequence')({
+          path,
+          token: `${token}@example.com`,
+        });
       }
 
       if (process.env.COGNITO) {

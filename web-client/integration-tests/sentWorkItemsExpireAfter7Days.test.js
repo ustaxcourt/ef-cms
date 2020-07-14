@@ -26,7 +26,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('creates the case', async () => {
     caseDetail = await uploadPetition(test);
@@ -113,7 +113,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     });
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
 
   it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
     const myOutbox = (await getFormattedMyOutbox(test)).filter(

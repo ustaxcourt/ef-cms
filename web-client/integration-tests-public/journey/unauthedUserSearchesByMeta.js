@@ -7,8 +7,7 @@ export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
-      petitionerName:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      petitionerName: 'Daenerys Stormborn',
       ...overrides,
     };
 

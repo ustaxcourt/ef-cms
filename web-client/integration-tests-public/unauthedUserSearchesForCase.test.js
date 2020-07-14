@@ -40,7 +40,7 @@ testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
   jest.setTimeout(10000);
-  loginAs(testClient, 'petitioner');
+  loginAs(testClient, 'petitioner@example.com');
   petitionerCancelsCreateCase(testClient);
   petitionerChoosesProcedureType(testClient);
   petitionerChoosesCaseType(testClient);
@@ -48,7 +48,7 @@ describe('Petitioner creates cases to search for', () => {
 });
 
 describe('Docket clerk creates a draft order (should not be viewable to the public)', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -62,7 +62,7 @@ describe('Docket clerk creates and serves an order (should be viewable to the pu
       getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
   });
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
@@ -74,7 +74,7 @@ describe('Docket clerk creates and serves an order (should be viewable to the pu
 });
 
 describe('Docket clerk creates and serves a transcript (should not be viewable to the public)', () => {
-  loginAs(testClient, 'docketclerk');
+  loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',

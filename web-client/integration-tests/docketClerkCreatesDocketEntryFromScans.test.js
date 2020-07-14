@@ -3,8 +3,10 @@ import {
   createPDFFromScannedBatches,
   selectScannerSource,
 } from './scanHelpers';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
+import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
 import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
@@ -19,6 +21,8 @@ const test = setupTest();
 describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
+
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
   beforeEach(() => {
     jest.setTimeout(30000);
@@ -36,14 +40,14 @@ describe('Create Docket Entry From Scans', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
+  petitionerCreatesNewCase(test, fakeFile, { caseType: CASE_TYPES_MAP.cdp });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test);
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
   docketClerkViewsEditDocketRecord(test);
@@ -62,7 +66,7 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
-  docketClerkSavesDocketEntry(test, true);
+  docketClerkSavesAndServesDocketEntry(test);
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsSectionQCInProgress(test, false);
 });

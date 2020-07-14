@@ -170,9 +170,9 @@ resource "aws_api_gateway_method_response" "clamav_method_response_post" {
   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
   status_code = "200"
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true 
-    "method.response.header.Access-Control-Allow-Headers" = true 
-    "method.response.header.Access-Control-Allow-Methods" = true 
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
   }
 }
 
