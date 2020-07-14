@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -8,6 +9,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
   beforeAll(() => {
@@ -37,7 +39,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
         receivedAtDay: '01',
         receivedAtMonth: '01',
@@ -61,7 +63,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
         receivedAtDay: '02',
         receivedAtMonth: '01',
@@ -85,7 +87,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 2/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
         receivedAtDay: '01',
         receivedAtMonth: '02',

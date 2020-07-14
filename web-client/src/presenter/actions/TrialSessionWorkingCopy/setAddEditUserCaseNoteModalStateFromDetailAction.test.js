@@ -6,6 +6,8 @@ import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUs
 describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
   it('should set the modal state from caseDetail and props', async () => {
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
@@ -18,7 +20,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
           caseDetail: {
             caseCaption: 'Sisqo, Petitioner',
             docketNumber: '101-19',
-            docketNumberSuffix: 'L',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
             judgesNote: { notes: 'i got some notes' },
           },
         },

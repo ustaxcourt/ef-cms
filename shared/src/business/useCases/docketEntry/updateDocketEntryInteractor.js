@@ -118,10 +118,14 @@ exports.updateDocketEntryInteractor = async ({
         workItem => !workItem.document.isFileAttached,
       );
 
-      await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-        applicationContext,
-        workItem: workItemToDelete,
-      });
+      if (workItemToDelete) {
+        await applicationContext
+          .getPersistenceGateway()
+          .deleteWorkItemFromInbox({
+            applicationContext,
+            workItem: workItemToDelete,
+          });
+      }
 
       Object.assign(workItem, {
         assigneeId: null,
@@ -157,7 +161,6 @@ exports.updateDocketEntryInteractor = async ({
       documentEntity.addWorkItem(workItem);
 
       const servedParties = aggregatePartiesForService(caseEntity);
-
       documentEntity.setAsServed(servedParties.all);
       documentEntity.setAsProcessingStatusAsCompleted();
     } else {
@@ -168,6 +171,7 @@ exports.updateDocketEntryInteractor = async ({
           documentId: primaryDocumentFileId,
         });
     }
+    caseEntity.updateDocument(documentEntity);
 
     await applicationContext
       .getPersistenceGateway()

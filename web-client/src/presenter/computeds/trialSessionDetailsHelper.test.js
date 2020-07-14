@@ -1,8 +1,11 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionDetailsHelper } from './trialSessionDetailsHelper';
 
 describe('trialSessionDetailsHelper', () => {
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
   const TRIAL_SESSION = {
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
@@ -30,7 +33,7 @@ describe('trialSessionDetailsHelper', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              docketNumberSuffix: 'W',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
             },
             {
