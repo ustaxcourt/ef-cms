@@ -44,7 +44,7 @@ describe('draftDocumentViewerHelper', () => {
       .mockReturnValue(docketClerkUser);
   });
 
-  it('should return an empty object if viewerDraftDocumentToDisplay.eventCode is not defined', () => {
+  it('should return an object with empty strings if viewerDraftDocumentToDisplay.eventCode is not defined', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(docketClerkUser),
