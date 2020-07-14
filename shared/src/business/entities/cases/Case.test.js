@@ -3,6 +3,7 @@ const {
   ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -1804,7 +1805,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'passport',
+          caseType: CASE_TYPES_MAP.passport,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -1823,7 +1824,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'cdp (lien/levy)',
+          caseType: CASE_TYPES_MAP.cdp,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -2743,7 +2744,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when the pending case status is ineligible', () => {
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         const result = caseEntity.canConsolidate();
 
         expect(result).toEqual(false);
@@ -2759,7 +2760,7 @@ describe('Case entity', () => {
         let result;
 
         // verify a failure on the current (this) case
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         result = caseEntity.canConsolidate();
         expect(result).toEqual(false);
 
@@ -2800,7 +2801,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3365,7 +3366,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [],
         },
@@ -3386,7 +3387,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         {
@@ -3404,7 +3405,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
         },
         {

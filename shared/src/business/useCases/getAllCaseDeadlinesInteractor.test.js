@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -24,7 +25,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       associatedJudge: 'Judge Buch',
       caseCaption: 'A caption, Petitioner',
       caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
-      caseType: 'CDP (Lien/Levy)',
+      caseType: CASE_TYPES_MAP.cdp,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',

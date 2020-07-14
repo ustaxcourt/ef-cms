@@ -1,4 +1,5 @@
 const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../business/entities/EntityConstants');
@@ -55,7 +56,7 @@ exports.MOCK_CASE = {
   partyType: PARTY_TYPES.petitioner,
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
-  status: 'New',
+  status: CASE_STATUS_TYPES.new,
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
@@ -107,7 +108,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   partyType: PARTY_TYPES.petitioner,
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
-  status: 'New',
+  status: CASE_STATUS_TYPES.new,
   userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
@@ -140,5 +141,5 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   partyType: PARTY_TYPES.petitioner,
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
-  status: 'New',
+  status: CASE_STATUS_TYPES.new,
 };

@@ -4,7 +4,7 @@ const {
 const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('getCaseInventoryReportInteractor', () => {
   beforeEach(() => {
@@ -45,14 +45,14 @@ describe('getCaseInventoryReportInteractor', () => {
           caseCaption: 'A Test Caption',
           docketNumber: '123-20',
           docketNumberSuffix: 'L',
-          status: 'New',
+          status: CASE_STATUS_TYPES.NEW,
         },
       ]);
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: CASE_STATUS_TYPES.NEW,
     });
 
     expect(
@@ -60,7 +60,7 @@ describe('getCaseInventoryReportInteractor', () => {
     ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: CASE_STATUS_TYPES.NEW,
     });
     expect(result).toEqual([
       {
@@ -68,7 +68,7 @@ describe('getCaseInventoryReportInteractor', () => {
         caseCaption: 'A Test Caption',
         docketNumber: '123-20',
         docketNumberSuffix: 'L',
-        status: 'New',
+        status: CASE_STATUS_TYPES.NEW,
       },
     ]);
   });
