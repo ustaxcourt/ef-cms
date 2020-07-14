@@ -1,7 +1,11 @@
+const {
+  CASE_TYPES_MAP,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { documents } = MOCK_CASE;
 
 const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
@@ -129,7 +133,7 @@ describe('Get case', () => {
         Promise.resolve([
           {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            caseType: 'Other',
+            caseType: CASE_TYPES_MAP.other,
             createdAt: new Date().toISOString(),
             docketNumber: '101-00',
             documents,
@@ -157,7 +161,7 @@ describe('Get case', () => {
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-            caseType: 'Other',
+            caseType: CASE_TYPES_MAP.other,
             createdAt: new Date().toISOString(),
             docketNumber: '101-18',
             documents,
@@ -231,7 +235,7 @@ describe('Get case', () => {
       .getCaseByDocketNumber.mockReturnValue({
         caseCaption: 'Caption',
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         createdAt: new Date().toISOString(),
         partyType: PARTY_TYPES.petitioner,
         petitioners: [{ name: 'Test Petitioner' }],
