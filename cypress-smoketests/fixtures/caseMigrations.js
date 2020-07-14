@@ -1,6 +1,7 @@
 const faker = require('faker');
 const {
   CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
   COUNTRY_TYPES,
   OTHER_FILER_TYPES,
 } = require('../../shared/src/business/entities/EntityConstants');
@@ -8,7 +9,7 @@ const { MOCK_CASE } = require('../../shared/src/test/mockCase');
 
 exports.BASE_CASE = {
   ...MOCK_CASE,
-  associatedJudge: 'Chief Judge',
+  associatedJudge: CHIEF_JUDGE,
   caseCaption: 'A Migrated Casee',
   caseId: undefined,
   preferredTrialCity: 'Washington, District of Columbia',
