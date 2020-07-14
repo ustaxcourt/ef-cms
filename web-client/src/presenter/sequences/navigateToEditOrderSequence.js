@@ -30,7 +30,7 @@ export const navigateToEditOrderSequence = [
   convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
-    error: [], // TODO: show an alert if this occurs?
+    error: [],
     success: [submitCourtIssuedOrderAction, navigateToPathAction],
   },
 ];

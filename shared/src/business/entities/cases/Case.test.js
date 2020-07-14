@@ -213,7 +213,7 @@ describe('Case entity', () => {
       ); //petitioner user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: true,
@@ -238,7 +238,7 @@ describe('Case entity', () => {
       ); //docketclerk user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: true,
@@ -253,7 +253,7 @@ describe('Case entity', () => {
       ); //petitioner user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: false,
@@ -268,7 +268,7 @@ describe('Case entity', () => {
       ); //docketclerk user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: false,

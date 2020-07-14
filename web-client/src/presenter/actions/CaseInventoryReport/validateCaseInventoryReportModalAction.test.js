@@ -4,9 +4,10 @@ import { runAction } from 'cerebral/test';
 import { validateCaseInventoryReportModalAction } from './validateCaseInventoryReportModalAction';
 
 describe('validateCaseInventoryReportModalAction', () => {
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+
   let successStub;
   let errorStub;
-  const { STATUS_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -25,7 +26,7 @@ describe('validateCaseInventoryReportModalAction', () => {
       },
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           status: STATUS_TYPES.new,
         },
       },
