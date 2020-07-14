@@ -317,7 +317,7 @@ joiValidationDecorator(
     receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     relationship: joi
       .string()
-      .valid(...DOCUMENT_RELATIONSHIPS)
+      .valid(...Object.values(DOCUMENT_RELATIONSHIPS))
       .optional(),
     scenario: joi
       .string()
