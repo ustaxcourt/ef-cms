@@ -2,11 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 
 describe('fileDocketEntryInteractor', () => {
@@ -22,7 +23,7 @@ describe('fileDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
