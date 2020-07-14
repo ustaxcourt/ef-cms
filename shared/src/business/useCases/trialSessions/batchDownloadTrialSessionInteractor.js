@@ -53,7 +53,7 @@ const batchDownloadTrialSessionInteractor = async ({
   const { trialLocation } = trialSessionDetails;
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
-    .replace(/,/g, ''); // TODO - create a sanitize utility for s3 ids // TODO - should we make these unique somehow?
+    .replace(/,/g, '');
 
   sessionCases = sessionCases
     .filter(caseToFilter => caseToFilter.status !== CASE_STATUS_TYPES.closed)
