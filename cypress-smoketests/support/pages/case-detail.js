@@ -1,7 +1,7 @@
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);
   cy.get('.ustc-search-button').click();
-  cy.get('.big-blue-header h1 a').contains(docketNumber).should('exist');
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };
 
 exports.createOrder = () => {
@@ -15,7 +15,7 @@ exports.createOrder = () => {
   cy.get('#save-order-button').click();
   cy.url().should('contain', '/sign');
   cy.get('#skip-signature-button').click();
-  cy.url().should('contain', '/case-detail');
+  cy.url().should('not.contain', '/sign');
 };
 
 exports.editAndSignOrder = () => {
@@ -26,5 +26,26 @@ exports.editAndSignOrder = () => {
   cy.url().should('contain', '/sign');
   cy.get('#sign-pdf-canvas').click();
   cy.get('#save-signature-button').click();
-  cy.url().should('contain', '/case-detail');
+  cy.url().should('not.contain', '/sign');
+};
+
+exports.addDocketEntryForOrderAndServe = () => {
+  cy.get('#add-court-issued-docket-entry-button').click();
+  cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('#serve-to-parties-btn').click();
+  cy.get('.modal-button-confirm').click();
+  cy.url().should('not.contain', '/add-court-issued-docket-entry');
+  cy.get('button:contains("Order to Show Cause")').click();
+  cy.get('div:contains("Served")').should('exist');
+};
+
+exports.addDocketEntryForOrderAndServePaper = () => {
+  cy.get('#add-court-issued-docket-entry-button').click();
+  cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('#serve-to-parties-btn').click();
+  cy.get('.modal-button-confirm').click();
+  cy.url().should('contain', '/print-paper-service');
+  cy.get('#print-paper-service-done-button').click();
+  cy.get('button:contains("Order to Show Cause")').click();
+  cy.get('div:contains("Served")').should('exist');
 };
