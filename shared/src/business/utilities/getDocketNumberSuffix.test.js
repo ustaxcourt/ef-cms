@@ -1,4 +1,7 @@
-const { CASE_TYPES_MAP } = require('../entities/EntityConstants');
+const {
+  CASE_TYPES_MAP,
+  DOCKET_NUMBER_SUFFIXES,
+} = require('../entities/EntityConstants');
 const { getDocketNumberSuffix } = require('./getDocketNumberSuffix');
 
 describe('getDocketNumberSuffix', () => {
@@ -9,7 +12,7 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('W');
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER);
   });
 
   it('returns P for Passport caseType', () => {
@@ -19,7 +22,7 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('P');
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.PASSPORT);
   });
 
   it('returns X for "Exempt Organization" caseType', () => {
@@ -29,7 +32,9 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('X');
+    expect(suffix).toEqual(
+      DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS,
+    );
   });
 
   it('returns R for "Retirement Plan" caseType', () => {
@@ -39,7 +44,9 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('R');
+    expect(suffix).toEqual(
+      DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION,
+    );
   });
 
   it('returns SL for "Lien/Levy" caseType and "small" for procedureType', () => {
@@ -49,7 +56,7 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('SL');
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY);
   });
 
   it('returns L for "Lien/Levy" caseType and "regular" for procedureType', () => {
@@ -59,7 +66,7 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Regular',
     });
 
-    expect(suffix).toEqual('L');
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.LIEN_LEVY);
   });
 
   it('returns S for all others with "small" for procedureType', () => {
@@ -69,7 +76,7 @@ describe('getDocketNumberSuffix', () => {
       procedureType: 'Small',
     });
 
-    expect(suffix).toEqual('S');
+    expect(suffix).toEqual(DOCKET_NUMBER_SUFFIXES.SMALL);
   });
 
   it('returns null for other instance', () => {

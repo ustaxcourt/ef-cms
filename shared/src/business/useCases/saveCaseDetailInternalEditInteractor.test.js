@@ -2,6 +2,7 @@ const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -144,7 +145,7 @@ describe('updateCase', () => {
         },
         createdAt: '2019-07-24T16:30:01.940Z',
         docketNumber: '168-19',
-        docketNumberSuffix: 'S',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         filingType: 'Myself and my spouse',
         hasVerifiedIrsNotice: false,
         isPaper: false,

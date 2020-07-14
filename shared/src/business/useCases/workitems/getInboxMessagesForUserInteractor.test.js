@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_NUMBER_SUFFIXES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   getInboxMessagesForUserInteractor,
 } = require('./getInboxMessagesForUserInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getInboxMessagesForUserInteractor', () => {
   const mockPetitionerUser = {
@@ -16,7 +19,7 @@ describe('getInboxMessagesForUserInteractor', () => {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
     docketNumber: '101-18',
-    docketNumberSuffix: 'S',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     document: {
       sentBy: 'petitioner',
     },

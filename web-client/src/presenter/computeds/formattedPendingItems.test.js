@@ -10,6 +10,7 @@ describe('formattedPendingItems', () => {
 
   const {
     CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     STATUS_TYPES,
   } = applicationContext.getConstants();
@@ -24,7 +25,7 @@ describe('formattedPendingItems', () => {
       certificateOfServiceDate: null,
       createdAt: '2019-01-10',
       docketNumber: '101-19',
-      docketNumberSuffix: 'W',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
       documentId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
       documentType: 'Administrative Record',
       eventCode: 'ADMR',
@@ -52,7 +53,7 @@ describe('formattedPendingItems', () => {
           completedMessage: 'completed',
           createdAt: '2019-11-13T00:38:59.048Z',
           docketNumber: '101-19',
-          docketNumberSuffix: 'W',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
             caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
             category: 'Miscellaneous',
@@ -106,7 +107,7 @@ describe('formattedPendingItems', () => {
       certificateOfServiceDate: null,
       createdAt: '2018-01-20',
       docketNumber: '101-19',
-      docketNumberSuffix: 'W',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
       documentId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
@@ -137,7 +138,7 @@ describe('formattedPendingItems', () => {
           completedMessage: 'completed',
           createdAt: '2019-11-13T02:26:51.448Z',
           docketNumber: '101-19',
-          docketNumberSuffix: 'W',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
             caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
             category: 'Supporting Document',
@@ -193,7 +194,7 @@ describe('formattedPendingItems', () => {
       certificateOfServiceDate: null,
       createdAt: '2018-01-20',
       docketNumber: '103-19',
-      docketNumberSuffix: 'W',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
       documentId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
@@ -224,7 +225,7 @@ describe('formattedPendingItems', () => {
           completedMessage: 'completed',
           createdAt: '2019-11-13T02:26:51.448Z',
           docketNumber: '101-19',
-          docketNumberSuffix: 'W',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           document: {
             caseId: '421872dc-e87d-4214-8ad0-c861d9b76c88',
             category: 'Supporting Document',
