@@ -49,21 +49,11 @@ export const setDocketEntryMetaFormForEditAction = ({
         document => docketRecordEntry.documentId === document.documentId,
       ) || {};
 
-    // TODO: Abstract this (also in getFormattedCaseDetail)
-    if (docketRecordEntry.servedPartiesCode) {
-      documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
-    } else {
-      if (
-        !!documentDetail.servedAt &&
-        documentDetail.servedParties &&
-        documentDetail.servedParties.length > 0
-      ) {
-        documentDetail.servedPartiesCode = 'B';
-      } else {
-        // TODO: Address Respondent and Petitioner codes
-        documentDetail.servedPartiesCode = '';
-      }
-    }
+    documentDetail.servedPartiesCode =
+      docketRecordEntry.servedPartiesCode ||
+      applicationContext
+        .getUtilities()
+        .getServedPartiesCode(documentDetail.servedParties);
 
     store.set(state.form, {
       ...docketRecordEntry,
@@ -80,7 +70,6 @@ export const setDocketEntryMetaFormForEditAction = ({
       ...deconstructDateWrapper(documentDetail.date),
     });
 
-    // TODO: add to unit test
     return {
       key: 'initEventCode',
       value: documentDetail.eventCode,
