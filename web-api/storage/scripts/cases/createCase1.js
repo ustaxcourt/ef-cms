@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../../../../shared/src/business/entities/EntityConstants');
@@ -44,7 +45,7 @@ module.exports.createCase1 = async () => {
       applicationContext,
       petitionFileId,
       petitionMetadata: {
-        caseType: 'Whistleblower',
+        caseType: CASE_TYPES_MAP.whistleblower,
         contactPrimary: {
           address1: '68 Fabien Freeway',
           address2: 'Suscipit animi solu',

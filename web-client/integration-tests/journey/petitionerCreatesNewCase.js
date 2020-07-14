@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-const { COUNTRY_TYPES } = applicationContext.getConstants();
+const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
 export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
   return it('petitioner creates a new case', async () => {
@@ -28,7 +28,7 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Other',
+      value: CASE_TYPES_MAP.other,
     });
 
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -95,7 +95,7 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: overrides.caseType || 'Whistleblower',
+      value: overrides.caseType || CASE_TYPES_MAP.whistleblower,
     });
 
     await test.runSequence('updateFormValueSequence', {

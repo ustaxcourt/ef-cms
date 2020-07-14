@@ -4,7 +4,7 @@ import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
-const { COUNTRY_TYPES } = applicationContext.getConstants();
+const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
 export const practitionerCreatesNewCase = (test, fakeFile) => {
   return it('Practitioner creates a new case', async () => {
@@ -154,7 +154,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: CASE_TYPES_MAP.whistleblower,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -182,7 +182,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: CASE_TYPES_MAP.whistleblower,
     });
 
     await test.runSequence('updateFormValueSequence', {

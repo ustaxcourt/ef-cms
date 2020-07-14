@@ -1,5 +1,9 @@
+const {
+  CASE_TYPES_MAP,
+  MAX_FILE_SIZE_BYTES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
 const { CaseExternal } = require('./CaseExternal');
-const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
@@ -8,7 +12,7 @@ describe('CaseExternal entity', () => {
     it('requires ownership disclosure if filing type is a business', () => {
       const caseExternal = new CaseExternal({
         businessType: PARTY_TYPES.corporation,
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'A business',
         hasIrsNotice: false,
         preferredTrialCity: 'Memphis, Tennessee',
@@ -20,7 +24,7 @@ describe('CaseExternal entity', () => {
     });
     it('does not require ownership disclosure if filing type not set', () => {
       const petition = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         hasIrsNotice: false,
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
@@ -31,7 +35,7 @@ describe('CaseExternal entity', () => {
     });
     it('does not require ownership disclosure if filing type not a business', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'not a biz',
         hasIrsNotice: false,
         preferredTrialCity: 'Memphis, Tennessee',
@@ -44,7 +48,7 @@ describe('CaseExternal entity', () => {
     it('requires stinFile', () => {
       const caseExternal = new CaseExternal({
         businessType: PARTY_TYPES.corporation,
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'A business',
         hasIrsNotice: false,
         preferredTrialCity: 'Memphis, Tennessee',
@@ -59,7 +63,7 @@ describe('CaseExternal entity', () => {
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than the PDF max file size', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -75,7 +79,7 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if petition file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -91,7 +95,7 @@ describe('CaseExternal entity', () => {
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -105,7 +109,7 @@ describe('CaseExternal entity', () => {
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -122,7 +126,7 @@ describe('CaseExternal entity', () => {
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than the file max size', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -138,7 +142,7 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if stin file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -154,7 +158,7 @@ describe('CaseExternal entity', () => {
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -168,7 +172,7 @@ describe('CaseExternal entity', () => {
 
     it('should error on stinFileSize when stinFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -185,7 +189,7 @@ describe('CaseExternal entity', () => {
   describe('ownership disclosure file size', () => {
     it('should inform you if ownership disclosure file size is greater than the PDF max file size', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
@@ -203,7 +207,7 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if ownership disclosure file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'test.pdf'),
@@ -219,7 +223,7 @@ describe('CaseExternal entity', () => {
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.nextFriendForMinor,
@@ -233,7 +237,7 @@ describe('CaseExternal entity', () => {
 
     it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),

@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -47,7 +48,7 @@ describe('migrateCaseInteractor', () => {
 
     caseMetadata = {
       caseCaption: 'Custom Caption',
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '99 South Oak Lane',
         address2: 'Address 2',
@@ -92,7 +93,7 @@ describe('migrateCaseInteractor', () => {
       migrateCaseInteractor({
         applicationContext,
         caseMetadata: {
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           docketNumber: '00101-00',
           filingType: 'Myself',
           hasIrsNotice: true,

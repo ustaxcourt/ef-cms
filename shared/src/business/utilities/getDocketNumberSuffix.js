@@ -10,13 +10,13 @@ const { CASE_TYPES_MAP } = require('../entities/EntityConstants');
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
   switch (caseType) {
-    case 'Whistleblower':
+    case CASE_TYPES_MAP.whistleblower:
       return 'W';
-    case 'Passport':
+    case CASE_TYPES_MAP.passport:
       return 'P';
-    case 'Declaratory Judgment (Exempt Organization)':
+    case CASE_TYPES_MAP.djExemptOrg:
       return 'X';
-    case 'Declaratory Judgment (Retirement Plan)':
+    case CASE_TYPES_MAP.djRetirementPlan:
       return 'R';
     case CASE_TYPES_MAP.cdp:
       return procedureType.toLowerCase() === 'small' ? 'SL' : 'L';
