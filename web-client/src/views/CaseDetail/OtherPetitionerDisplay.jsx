@@ -13,9 +13,13 @@ const OtherPetitionerDisplay = connect(
       <>
         <p className="margin-top-0 address-name">
           {petitioner.name}
-          <br />
-          {petitioner.secondaryName}
-          {petitioner.title && <span>, {petitioner.title}</span>}
+          {petitioner.secondaryName && (
+            <>
+              <br />
+              {petitioner.secondaryName}
+              {petitioner.title && <span>, {petitioner.title}</span>}
+            </>
+          )}
         </p>
         <p>
           <span className="address-line">{petitioner.address1}</span>
