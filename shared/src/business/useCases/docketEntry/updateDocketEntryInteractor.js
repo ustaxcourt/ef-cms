@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -20,6 +23,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.updateDocketEntryInteractor = async ({
   applicationContext,
   documentMetadata,
+  isSavingForLater,
   primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -150,6 +154,21 @@ exports.updateDocketEntryInteractor = async ({
     });
 
     documentEntity.addWorkItem(workItem);
+
+    if (!isSavingForLater) {
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      documentEntity.setAsServed(servedParties.all);
+    } else {
+      documentEntity.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentId: primaryDocumentFileId,
+        });
+
+      caseEntity.updateDocument(documentEntity);
+    }
 
     await applicationContext
       .getPersistenceGateway()

@@ -4,6 +4,8 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCaseInventoryReportAction', () => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -11,6 +13,7 @@ describe('getCaseInventoryReportAction', () => {
         foundCases: [{ docketNumber: '123-20' }],
         totalCount: 12,
       });
+
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -22,7 +25,7 @@ describe('getCaseInventoryReportAction', () => {
       state: {
         screenMetadata: {
           associatedJudge: 'Chief Judge',
-          status: 'New',
+          status: STATUS_TYPES.new,
         },
       },
     });
@@ -32,7 +35,7 @@ describe('getCaseInventoryReportAction', () => {
     ).toBeCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: STATUS_TYPES.new,
     });
     expect(result.state.caseInventoryReportData).toEqual({
       foundCases: [{ docketNumber: '123-20' }],
