@@ -99,7 +99,7 @@ exports.fileExternalDocumentInteractor = async ({
   documentsToAdd.push([
     documentIds.shift(),
     secondaryDocument,
-    'secondaryDocument',
+    DOCUMENT_RELATIONSHIPS.SECONDARY,
   ]);
 
   if (secondarySupportingDocuments) {
@@ -107,7 +107,7 @@ exports.fileExternalDocumentInteractor = async ({
       documentsToAdd.push([
         documentIds.shift(),
         secondarySupportingDocuments[i],
-        'supportingDocument',
+        DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
     }
   }

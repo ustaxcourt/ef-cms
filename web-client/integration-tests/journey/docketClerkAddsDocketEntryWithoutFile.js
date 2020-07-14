@@ -1,6 +1,8 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
 export const docketClerkAddsDocketEntryWithoutFile = test => {
   return it('Docketclerk adds docket entry data without a file', async () => {
@@ -13,7 +15,7 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
@@ -58,7 +60,7 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 

@@ -112,7 +112,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   documentsToAdd.push([
     documentIds.shift(),
     secondaryDocument,
-    'secondaryDocument',
+    DOCUMENT_RELATIONSHIPS.SECONDARY,
   ]);
 
   if (secondarySupportingDocuments) {
@@ -120,7 +120,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
       documentsToAdd.push([
         documentIds.shift(),
         secondarySupportingDocuments[i],
-        'supportingDocument',
+        DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
     }
   }
