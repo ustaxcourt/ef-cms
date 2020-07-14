@@ -40,6 +40,7 @@ export const AddressDisplay = connect(
             <span>
               <br />
               c/o {contact.inCareOf}
+              {contact.title && <span>, {contact.title}</span>}
             </span>
           )}
         </p>
