@@ -4,6 +4,8 @@ import { runAction } from 'cerebral/test';
 import { setSignatureNameForPdfSigningAction } from './setSignatureNameForPdfSigningAction';
 
 describe('setSignatureNameForPdfSigningAction', () => {
+  const { CHIEF_JUDGE } = applicationContext.getConstants();
+
   let user = {
     section: 'armenChambers',
   };
@@ -37,9 +39,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
     expect(result.state.pdfForSigning.nameForSigning).toEqual(
       'Maurice B. Foley',
     );
-    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
-      'Chief Judge',
-    );
+    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(CHIEF_JUDGE);
   });
 
   it('sets the chamber judge for chamber users', async () => {

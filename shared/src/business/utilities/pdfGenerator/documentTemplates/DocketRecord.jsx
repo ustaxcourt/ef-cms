@@ -99,7 +99,7 @@ const ServedDate = ({ document }) => {
         <span className="no-wrap">{arrDateServed.slice(1).join(' ')}</span>
       </>
     );
-  } else if (document && document.isNotServedCourtIssuedDocument) {
+  } else if (document && document.isNotServedDocument) {
     return 'Not served';
   } else {
     return '';

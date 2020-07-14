@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseTypeDescriptionHelper as caseTypeDescriptionHelperComputed } from './caseTypeDescriptionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -5,6 +6,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 const caseTypeDescriptionHelper = withAppContextDecorator(
   caseTypeDescriptionHelperComputed,
 );
+
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('caseTypeDescriptionHelper', () => {
   it('should return case types with proper descriptions for hasIrsNotice true', () => {
@@ -17,48 +20,51 @@ describe('caseTypeDescriptionHelper', () => {
       caseTypes: [
         {
           description: 'Notice of Determination Concerning Collection Action',
-          type: 'CDP (Lien/Levy)',
+          type: CASE_TYPES_MAP.cdp,
         },
-        { description: 'Notice of Deficiency', type: 'Deficiency' },
+        {
+          description: 'Notice of Deficiency',
+          type: CASE_TYPES_MAP.deficiency,
+        },
         {
           description:
             'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
-          type: 'Innocent Spouse',
+          type: CASE_TYPES_MAP.innocentSpouse,
         },
         {
           description:
             'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
-          type: 'Interest Abatement',
+          type: CASE_TYPES_MAP.interestAbatement,
         },
         {
           description: 'Other',
-          type: 'Other',
+          type: CASE_TYPES_MAP.other,
         },
         {
           description: 'Partnership Action Under BBA Section 1101',
-          type: 'Partnership (BBA Section 1101)',
+          type: CASE_TYPES_MAP.partnershipSection1101,
         },
         {
           description: 'Readjustment of Partnership Items Code Section 6226',
-          type: 'Partnership (Section 6226)',
+          type: CASE_TYPES_MAP.partnershipSection6226,
         },
         {
           description: 'Adjustment of Partnership Items Code Section 6228',
-          type: 'Partnership (Section 6228)',
+          type: CASE_TYPES_MAP.partnershipSection6228,
         },
         {
           description:
             'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
-          type: 'Passport',
+          type: CASE_TYPES_MAP.passport,
         },
         {
           description:
             'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
-          type: 'Whistleblower',
+          type: CASE_TYPES_MAP.whistleblower,
         },
         {
           description: 'Notice of Determination of Worker Classification',
-          type: 'Worker Classification',
+          type: CASE_TYPES_MAP.workerClassification,
         },
       ],
     });
@@ -74,36 +80,36 @@ describe('caseTypeDescriptionHelper', () => {
       caseTypes: [
         {
           description: 'CDP (Lien/Levy)',
-          type: 'CDP (Lien/Levy)',
+          type: CASE_TYPES_MAP.cdp,
         },
         {
           description: 'Declaratory Judgment (Exempt Organization)',
-          type: 'Declaratory Judgment (Exempt Organization)',
+          type: CASE_TYPES_MAP.djExemptOrg,
         },
         {
           description: 'Declaratory Judgment (Retirement Plan)',
-          type: 'Declaratory Judgment (Retirement Plan)',
+          type: CASE_TYPES_MAP.djRetirementPlan,
         },
         {
           description: 'Innocent Spouse',
-          type: 'Innocent Spouse',
+          type: CASE_TYPES_MAP.innocentSpouse,
         },
         {
           description:
             'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement',
-          type: 'Interest Abatement',
+          type: CASE_TYPES_MAP.interestAbatement,
         },
         {
           description: 'Other',
-          type: 'Other',
+          type: CASE_TYPES_MAP.other,
         },
         {
           description: 'Whistleblower',
-          type: 'Whistleblower',
+          type: CASE_TYPES_MAP.whistleblower,
         },
         {
           description: 'Worker Classification',
-          type: 'Worker Classification',
+          type: CASE_TYPES_MAP.workerClassification,
         },
       ],
     });

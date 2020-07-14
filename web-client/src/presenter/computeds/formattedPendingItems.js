@@ -15,13 +15,15 @@ export const formatPendingItem = (item, { applicationContext }) => {
 };
 
 export const formattedPendingItems = (get, applicationContext) => {
+  const { CHIEF_JUDGE } = applicationContext.getConstants();
+
   let items = get(state.pendingItems).map(item =>
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
   const judges = (get(state.judges) || [])
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
-    .concat('Chief Judge')
+    .concat(CHIEF_JUDGE)
     .sort();
 
   items = items.sort((a, b) =>

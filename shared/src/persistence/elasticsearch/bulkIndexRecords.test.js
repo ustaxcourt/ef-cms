@@ -1,12 +1,15 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../business/entities/EntityConstants');
 const { bulkIndexRecords } = require('./bulkIndexRecords');
 
 describe('bulkIndexRecords', () => {
   const newImageRecord = {
     caseId: { S: '6f3d97f8-1bdd-4779-a150-c076d08ad8fd' },
-    caseStatus: { S: 'New' },
+    caseStatus: { S: CASE_STATUS_TYPES.new },
     createdAt: { S: '2020-06-10T15:10:23.553Z' },
     docketNumber: { S: '105-19' },
     docketNumberWithSuffix: { S: '105-19' },

@@ -1,3 +1,6 @@
+const {
+  CASE_STATUS_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00005-case-message-required-fields');
 
@@ -42,7 +45,7 @@ describe('case messages required fields migration', () => {
         Item: {
           caseCaption: 'Test Person, Petitioner',
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          status: 'New',
+          status: CASE_STATUS_TYPES.new,
         },
       }),
     });
