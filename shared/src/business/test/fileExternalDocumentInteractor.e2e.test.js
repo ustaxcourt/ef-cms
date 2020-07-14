@@ -2,6 +2,7 @@ const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -145,7 +146,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
       contactSecondary: {},
       docketNumber: '101-19',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       docketRecord: [
         {
           description: 'Petition',
@@ -398,7 +399,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       filingType: 'Myself',
       initialCaption: 'Test Petitioner, Petitioner',
-      initialDocketNumberSuffix: 'S',
+      initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       isPaper: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,

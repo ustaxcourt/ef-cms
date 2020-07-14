@@ -1,10 +1,12 @@
 import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
+
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
     advancedDocumentSearchHelperComputed,
@@ -167,7 +169,7 @@ describe('advancedDocumentSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '102-19',
-            docketNumberSuffix: 'P',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order for Stuff',
@@ -195,7 +197,7 @@ describe('advancedDocumentSearchHelper', () => {
       {
         caseTitle: 'Test Petitioner',
         docketNumber: '102-19',
-        docketNumberSuffix: 'P',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Order for Stuff',
@@ -234,7 +236,7 @@ describe('advancedDocumentSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '102-19',
-            docketNumberSuffix: 'P',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Opinion for Stuff',
@@ -264,7 +266,7 @@ describe('advancedDocumentSearchHelper', () => {
       {
         caseTitle: 'Test Petitioner',
         docketNumber: '102-19',
-        docketNumberSuffix: 'P',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Summary Opinion',

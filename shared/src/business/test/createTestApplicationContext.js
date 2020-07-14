@@ -6,6 +6,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -175,6 +178,9 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    aggregatePartiesForService: jest
+      .fn()
+      .mockImplementation(aggregatePartiesForService),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
