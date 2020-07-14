@@ -1,11 +1,12 @@
 const {
-  completeWorkItemInteractor,
-} = require('../useCases/workitems/completeWorkItemInteractor');
-const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
+const {
+  completeWorkItemInteractor,
+} = require('../useCases/workitems/completeWorkItemInteractor');
 const {
   createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
@@ -32,7 +33,7 @@ describe('completeWorkItemInteractor integration test', () => {
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',

@@ -1,10 +1,8 @@
 const {
   CASE_STATUS_TYPES,
-  PARTY_TYPES,
-} = require('../entities/EntityConstants');
-const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
@@ -120,7 +118,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '193 South Hague Freeway',
           address2: 'Sunt maiores vitae ',

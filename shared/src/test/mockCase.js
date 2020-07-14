@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../business/entities/EntityConstants');
@@ -8,7 +9,7 @@ const { MOCK_DOCUMENTS } = require('./mockDocuments');
 exports.MOCK_CASE = {
   caseCaption: 'Test Petitioner, Petitioner',
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  caseType: CASE_TYPES_MAP.other,,
+  caseType: CASE_TYPES_MAP.other,
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
