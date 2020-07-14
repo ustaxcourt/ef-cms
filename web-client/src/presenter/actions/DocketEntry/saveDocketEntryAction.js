@@ -16,7 +16,11 @@ export const saveDocketEntryAction = async ({
   props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
+  const {
+    isSavingForLater,
+    primaryDocumentFileId,
+    shouldGenerateCoversheet,
+  } = props;
   const isFileAttached = get(state.form.primaryDocumentFile);
   const isUpdating = get(state.isEditingDocketEntry);
   const documentId =
@@ -39,6 +43,7 @@ export const saveDocketEntryAction = async ({
     createdAt: documentMetadata.dateReceived,
     docketNumber,
     isFileAttached: !!isFileAttached,
+    isInProgress: isSavingForLater,
     isPaper: true,
     receivedAt: documentMetadata.dateReceived,
   };
@@ -63,6 +68,7 @@ export const saveDocketEntryAction = async ({
       .updateDocketEntryInteractor({
         applicationContext,
         documentMetadata,
+        isSavingForLater,
         primaryDocumentFileId: documentId,
       });
   } else {
@@ -71,11 +77,12 @@ export const saveDocketEntryAction = async ({
       .fileDocketEntryInteractor({
         applicationContext,
         documentMetadata,
+        isSavingForLater,
         primaryDocumentFileId: documentId,
       });
   }
 
-  if (isFileAttached) {
+  if (isFileAttached && shouldGenerateCoversheet !== false) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
