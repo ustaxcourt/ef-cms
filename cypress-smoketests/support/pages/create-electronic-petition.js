@@ -45,10 +45,13 @@ exports.submitPetition = () => {
   cy.server();
   cy.route('POST', '**/cases').as('postCase');
   cy.wait('@postCase');
+  let docketNumber;
   cy.get('@postCase').should(xhr => {
     expect(xhr.responseBody).to.have.property('docketNumber');
+    ({ docketNumber } = xhr.responseBody);
   });
   cy.url().should('include', 'file-a-petition/success');
+  return docketNumber;
 };
 
 exports.goToDashboard = () => {
