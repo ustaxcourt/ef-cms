@@ -47,7 +47,9 @@ exports.submitPetition = testData => {
   cy.wait('@postCase');
   cy.get('@postCase').should(xhr => {
     expect(xhr.responseBody).to.have.property('docketNumber');
-    testData.createdDocketNumber = xhr.responseBody.docketNumber;
+    if (testData) {
+      testData.createdDocketNumber = xhr.responseBody.docketNumber;
+    }
   });
   cy.url().should('include', 'file-a-petition/success');
 };
