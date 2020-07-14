@@ -3,6 +3,7 @@ const {
   getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -70,7 +71,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
-    status: 'New',
+    status: CASE_STATUS_TYPES.new,
     userId: 'ddd6c900-388b-4151-8014-b3378076bfb0',
   };
 

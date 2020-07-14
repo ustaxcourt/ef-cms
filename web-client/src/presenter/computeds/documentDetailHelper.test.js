@@ -1,7 +1,3 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { Correspondence } from '../../../../shared/src/business/entities/Correspondence';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -12,39 +8,40 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const getDateISO = () => new Date().toISOString();
-
-let globalUser;
-
-const documentDetailHelper = withAppContextDecorator(
-  documentDetailHelperComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
-);
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    constants: { STATUS_TYPES: CASE_STATUS_TYPES, USER_ROLES: ROLES },
-    permissions: getUserPermissions(user),
-  };
-};
-
 describe('document detail helper', () => {
+  let globalUser;
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const getDateISO = () => new Date().toISOString();
+  const documentDetailHelper = withAppContextDecorator(
+    documentDetailHelperComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
+      },
+    },
+  );
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      constants: {
+        STATUS_TYPES: STATUS_TYPES,
+        USER_ROLES: USER_ROLES,
+      },
+      permissions: getUserPermissions(user),
+    };
+  };
+
   describe('formatDocumentWorkItems', () => {
     it('should return filtered and formatted completedWorkItems, incompleteWorkItems, and qcWorkItem', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const workItems = [
         {
           assigneeId: user.userId,
-          caseStatus: CASE_STATUS_TYPES.new,
+          caseStatus: STATUS_TYPES.new,
           completedAt: '2018-12-21T20:49:28.192Z',
           createdAt: '2018-11-21T20:49:28.192Z',
           document: {
@@ -62,7 +59,7 @@ describe('document detail helper', () => {
         },
         {
           assigneeId: user.userId,
-          caseStatus: CASE_STATUS_TYPES.new,
+          caseStatus: STATUS_TYPES.new,
           createdAt: '2018-11-22T20:49:28.192Z',
           document: {
             documentId: 'abc',
@@ -79,7 +76,7 @@ describe('document detail helper', () => {
         },
         {
           assigneeId: user.userId,
-          caseStatus: CASE_STATUS_TYPES.new,
+          caseStatus: STATUS_TYPES.new,
           createdAt: '2018-11-23T20:49:28.192Z',
           document: {
             documentId: 'abc',
@@ -119,7 +116,7 @@ describe('document detail helper', () => {
 
   it('showAction function should return true for complete for document Id abc', () => {
     const user = {
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: '123',
     };
     const result = runCompute(documentDetailHelper, {
@@ -128,7 +125,7 @@ describe('document detail helper', () => {
         caseDetail: {
           docketRecord: [],
           documents: [{ documentId: 'abc' }],
-          status: CASE_STATUS_TYPES.generalDocket,
+          status: STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -141,7 +138,7 @@ describe('document detail helper', () => {
 
   it('should set showSignDocumentButton to true when user has COURT_ISSUED_DOCUMENT permission and there is a valid document to sign that is not already signed', () => {
     const user = {
-      role: ROLES.petitionsClerk,
+      role: USER_ROLES.petitionsClerk,
       userId: '123',
     };
     const result = runCompute(documentDetailHelper, {
@@ -156,7 +153,7 @@ describe('document detail helper', () => {
               workItems: [
                 {
                   assigneeId: user.userId,
-                  caseStatus: CASE_STATUS_TYPES.new,
+                  caseStatus: STATUS_TYPES.new,
                   document: {
                     documentId: 'abc',
                     documentType: 'Proposed Stipulated Decision',
@@ -172,7 +169,7 @@ describe('document detail helper', () => {
               ],
             },
           ],
-          status: CASE_STATUS_TYPES.new,
+          status: STATUS_TYPES.new,
         },
         documentId: 'abc',
         permissions: {
@@ -186,7 +183,7 @@ describe('document detail helper', () => {
   describe('createdFiledLabel', () => {
     it('should set createFiledLabel to `Created` for a court-issued document', async () => {
       const user = {
-        role: ROLES.docketClerk,
+        role: USER_ROLES.docketClerk,
         userId: '123',
       };
 
@@ -201,7 +198,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -214,7 +211,7 @@ describe('document detail helper', () => {
 
     it('should set createFiledLabel to `Filed` for a non court-issued document', async () => {
       const user = {
-        role: ROLES.docketClerk,
+        role: USER_ROLES.docketClerk,
         userId: '123',
       };
 
@@ -229,7 +226,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -244,7 +241,7 @@ describe('document detail helper', () => {
   describe('showCreatedFiled', () => {
     it('should set showCreatedFiled to true if the document is not an order or court-issued document', async () => {
       const user = {
-        role: ROLES.docketClerk,
+        role: USER_ROLES.docketClerk,
         userId: '123',
       };
 
@@ -259,7 +256,7 @@ describe('document detail helper', () => {
                 documentType: 'Answer',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -272,7 +269,7 @@ describe('document detail helper', () => {
 
     it('should set showCreatedFiled to true if the document is an order and is in draft state (not on the docket record)', async () => {
       const user = {
-        role: ROLES.docketClerk,
+        role: USER_ROLES.docketClerk,
         userId: '123',
       };
 
@@ -287,7 +284,7 @@ describe('document detail helper', () => {
                 documentType: 'Order',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -300,7 +297,7 @@ describe('document detail helper', () => {
 
     it('should set showCreatedFiled to false if the document is an order and is in not draft state (on the docket record)', async () => {
       const user = {
-        role: ROLES.docketClerk,
+        role: USER_ROLES.docketClerk,
         userId: '123',
       };
 
@@ -315,7 +312,7 @@ describe('document detail helper', () => {
                 documentType: 'Order',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           workItemActions: {
@@ -330,7 +327,7 @@ describe('document detail helper', () => {
   describe('showAddCourtIssuedDocketEntryButton', () => {
     it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -345,7 +342,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -359,7 +356,7 @@ describe('document detail helper', () => {
 
     it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -375,7 +372,7 @@ describe('document detail helper', () => {
                 signedAt: getDateISO(),
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -389,7 +386,7 @@ describe('document detail helper', () => {
 
     it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned order', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -404,7 +401,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -418,7 +415,7 @@ describe('document detail helper', () => {
 
     it('should set showAddCourtIssuedDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a served order', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -434,7 +431,7 @@ describe('document detail helper', () => {
                 servedAt: getDateISO(),
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -448,7 +445,7 @@ describe('document detail helper', () => {
 
     it('should set showAddCourtIssuedDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitioner,
+        role: USER_ROLES.petitioner,
         userId: '123',
       };
 
@@ -463,7 +460,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: false },
@@ -477,7 +474,7 @@ describe('document detail helper', () => {
 
     it('should set showAddCourtIssuedDocketEntryButton false when the document type is not an order or stipulated decision', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -492,7 +489,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -508,7 +505,7 @@ describe('document detail helper', () => {
   describe('showEditDocketEntry and showEditCourtIssuedDocketEntry', () => {
     it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -529,7 +526,7 @@ describe('document detail helper', () => {
                 signedAt: getDateISO(),
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -544,7 +541,7 @@ describe('document detail helper', () => {
 
     it('should set showEditDocketEntry false when the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -559,7 +556,7 @@ describe('document detail helper', () => {
                 documentType: 'Stipulated Decision',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -573,7 +570,7 @@ describe('document detail helper', () => {
 
     it('should set showEditDocketEntry false on a QCed document even when it is a served order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -589,7 +586,7 @@ describe('document detail helper', () => {
                 servedAt: getDateISO(),
                 workItems: [
                   {
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -609,7 +606,7 @@ describe('document detail helper', () => {
                 ],
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -623,7 +620,7 @@ describe('document detail helper', () => {
 
     it('should set showEditDocketEntry false when the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -638,7 +635,7 @@ describe('document detail helper', () => {
                 documentType: 'Order of Dismissal',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -652,7 +649,7 @@ describe('document detail helper', () => {
 
     it('should set showEditDocketEntry false when the document is petition and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
 
@@ -667,7 +664,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: CASE_STATUS_TYPES.new,
+            status: STATUS_TYPES.new,
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
@@ -683,7 +680,7 @@ describe('document detail helper', () => {
   describe('formattedDocument', () => {
     it('should search for the specified document in the case correspondence list', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const mockCorrespondence = new Correspondence({
@@ -707,7 +704,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -727,7 +724,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -760,7 +757,7 @@ describe('document detail helper', () => {
 
     it('should search for the specified document in the case documents list', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const mockCorrespondence = new Correspondence({
@@ -777,7 +774,7 @@ describe('document detail helper', () => {
         userId: 'petitioner',
         workItems: [
           {
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: STATUS_TYPES.new,
             completedAt: '2018-11-21T20:49:28.192Z',
             completedBy: 'William T. Riker',
             document: {
@@ -797,7 +794,7 @@ describe('document detail helper', () => {
           },
           {
             assigneeId: 'abc',
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: STATUS_TYPES.new,
             document: {
               documentType: 'Proposed Stipulated Decision',
               receivedAt: '2018-11-21T20:49:28.192Z',
@@ -837,7 +834,7 @@ describe('document detail helper', () => {
 
     it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -855,7 +852,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -875,7 +872,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -909,7 +906,7 @@ describe('document detail helper', () => {
 
     it('should indicate QC completed by "qcByUser" on Document if present', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -932,7 +929,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     completedBy: 'William T. Riker',
                     document: {
@@ -952,7 +949,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -986,7 +983,7 @@ describe('document detail helper', () => {
 
     it('should filter out completed work items with Served on IRS messages', () => {
       const user = {
-        role: ROLES.adc,
+        role: USER_ROLES.adc,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1004,7 +1001,7 @@ describe('document detail helper', () => {
                 userId: 'petitioner',
                 workItems: [
                   {
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -1023,7 +1020,7 @@ describe('document detail helper', () => {
                   },
                   {
                     assigneeId: 'abc',
-                    caseStatus: CASE_STATUS_TYPES.new,
+                    caseStatus: STATUS_TYPES.new,
                     document: {
                       documentType: 'Proposed Stipulated Decision',
                       receivedAt: '2018-11-21T20:49:28.192Z',
@@ -1054,7 +1051,7 @@ describe('document detail helper', () => {
 
     it("default to empty array when a document's workItems are non-existent", () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1082,7 +1079,7 @@ describe('document detail helper', () => {
   describe('showConfirmEditOrder, showSignedAt, and showRemoveSignature', () => {
     it('should show confirm edit order, signed at, and remove signature for a signed order', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1100,7 +1097,7 @@ describe('document detail helper', () => {
           },
           documentId: '123-abc',
           user: {
-            role: ROLES.petitionsClerk,
+            role: USER_ROLES.petitionsClerk,
           },
         },
       });
@@ -1112,7 +1109,7 @@ describe('document detail helper', () => {
 
     it('should show confirm edit order, signed at, but NOT remove signature for a signed notice', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1131,7 +1128,7 @@ describe('document detail helper', () => {
           },
           documentId: '123-abc',
           user: {
-            role: ROLES.petitionsClerk,
+            role: USER_ROLES.petitionsClerk,
           },
         },
       });
@@ -1143,7 +1140,7 @@ describe('document detail helper', () => {
 
     it('should NOT show confirm edit order OR remove signature when the documentType is not an order', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1161,7 +1158,7 @@ describe('document detail helper', () => {
           },
           documentId: '123-abc',
           user: {
-            role: ROLES.petitionsClerk,
+            role: USER_ROLES.petitionsClerk,
           },
         },
       });
@@ -1173,7 +1170,7 @@ describe('document detail helper', () => {
 
     it('should NOT show confirm edit order OR remove signature when the document has not been signed', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1191,7 +1188,7 @@ describe('document detail helper', () => {
           },
           documentId: '123-abc',
           user: {
-            role: ROLES.petitionsClerk,
+            role: USER_ROLES.petitionsClerk,
           },
         },
       });
@@ -1205,7 +1202,7 @@ describe('document detail helper', () => {
   describe('showPrintCaseConfirmationButton', () => {
     it("should show the 'Print Confirmation' button if a document has been served and the document is a petition ", () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1231,7 +1228,7 @@ describe('document detail helper', () => {
 
     it("should not show the 'Print Confirmation' button if a document has not been served", () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1243,7 +1240,7 @@ describe('document detail helper', () => {
               {
                 documentId: 'abc',
                 documentType: 'Petition',
-                status: 'new',
+                status: STATUS_TYPES.new,
               },
             ],
           },
@@ -1257,7 +1254,7 @@ describe('document detail helper', () => {
 
     it("should not show the 'Print Confirmation' button if the document is not a petition ", () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1285,7 +1282,7 @@ describe('document detail helper', () => {
   describe('isDraftDocument', () => {
     it('should return isDraftDocument false if the document is served', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1311,7 +1308,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument true if the document is an unserved Stipulated Decision', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1336,7 +1333,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument true if the document is an order that is NOT on the docket record', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1361,7 +1358,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument false if the document is an order that is on the docket record', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1390,7 +1387,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument true if the document is a court-issued document that is NOT on the docket record', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1415,7 +1412,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument false if the document is a court-issued document that is on the docket record', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1440,7 +1437,7 @@ describe('document detail helper', () => {
 
     it('should return isDraftDocument false if the document is unserved but is not an internal document type', () => {
       const user = {
-        role: ROLES.petitionsClerk,
+        role: USER_ROLES.petitionsClerk,
         userId: '123',
       };
       const result = runCompute(documentDetailHelper, {
@@ -1466,7 +1463,7 @@ describe('document detail helper', () => {
     describe('editUrl', () => {
       it('should go to the sign url when the document is a stip decision', () => {
         const user = {
-          role: ROLES.petitionsClerk,
+          role: USER_ROLES.petitionsClerk,
           userId: '123',
         };
         const result = runCompute(documentDetailHelper, {
@@ -1494,7 +1491,7 @@ describe('document detail helper', () => {
 
       it('should go to the edit upload pdf url when the document is a Miscellaneous document', () => {
         const user = {
-          role: ROLES.petitionsClerk,
+          role: USER_ROLES.petitionsClerk,
           userId: '123',
         };
         const result = runCompute(documentDetailHelper, {
@@ -1522,7 +1519,7 @@ describe('document detail helper', () => {
 
       it('should go to the edit order url when the document is a Order document', () => {
         const user = {
-          role: ROLES.petitionsClerk,
+          role: USER_ROLES.petitionsClerk,
           userId: '123',
         };
         const result = runCompute(documentDetailHelper, {
