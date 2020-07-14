@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -40,7 +41,7 @@ describe('createCaseInteractor', () => {
         applicationContext,
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitioner,
@@ -63,7 +64,7 @@ describe('createCaseInteractor', () => {
       applicationContext,
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
@@ -113,7 +114,7 @@ describe('createCaseInteractor', () => {
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
@@ -164,7 +165,7 @@ describe('createCaseInteractor', () => {
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',

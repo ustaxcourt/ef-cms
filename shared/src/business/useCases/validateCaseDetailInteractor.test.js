@@ -1,4 +1,5 @@
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -57,7 +58,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -123,7 +124,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -159,7 +160,7 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'Other',
+        filingType: CASE_TYPES_MAP.other,
         hasVerifiedIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         partyType: PARTY_TYPES.petitioner,
@@ -177,7 +178,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -213,7 +214,7 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'Other',
+        filingType: CASE_TYPES_MAP.other,
         hasVerifiedIrsNotice: false,
         irsNoticeDate: null,
         partyType: PARTY_TYPES.petitioner,
