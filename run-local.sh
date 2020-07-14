@@ -60,9 +60,9 @@ if [[ -z "${RUN_DIR}" ]]; then
 fi
 
 node -r esm web-api/streams-local.js &
-nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/websockets-local.js" &
-nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-local.js" &
-nodemon -e js --ignore web-client/ --ignore dist/ --exec "node -r esm web-api/src/app-public-local.js"
+nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress/ --ignore cypress-smoketests/ --exec "node -r esm web-api/websockets-local.js" &
+nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress/ --ignore cypress-smoketests/ --exec "node -r esm web-api/src/app-local.js" &
+nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress/ --ignore cypress-smoketests/ --exec "node -r esm web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"

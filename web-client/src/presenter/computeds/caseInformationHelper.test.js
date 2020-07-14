@@ -3,13 +3,13 @@ import { caseInformationHelper } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 
-const getBaseState = user => {
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
 describe('case information helper', () => {
+  const getBaseState = user => {
+    return {
+      permissions: getUserPermissions(user),
+    };
+  };
+
   it('should show add counsel section if user is an internal user', () => {
     const user = {
       role: ROLES.docketClerk,

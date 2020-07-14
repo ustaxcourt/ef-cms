@@ -1,4 +1,4 @@
-const { ROLES } = require('../business/entities/EntityConstants');
+import { ADC_SECTION, ROLES } from '../business/entities/EntityConstants';
 
 exports.MOCK_USERS = {
   '330d4b65-620a-489d-8414-6623653ebc4f': {
@@ -47,7 +47,7 @@ exports.MOCK_USERS = {
   'g7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'ADC',
     role: ROLES.adc,
-    section: 'adc',
+    section: ADC_SECTION,
     userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
   },
 };

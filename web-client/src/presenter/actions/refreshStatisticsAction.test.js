@@ -4,6 +4,8 @@ import { refreshStatisticsAction } from './refreshStatisticsAction';
 import { runAction } from 'cerebral/test';
 
 describe('refreshStatisticsAction', () => {
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -15,7 +17,7 @@ describe('refreshStatisticsAction', () => {
       },
       state: {
         form: {
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
           statistics: [
             {
@@ -36,7 +38,7 @@ describe('refreshStatisticsAction', () => {
       },
       state: {
         form: {
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [
             {
@@ -67,7 +69,7 @@ describe('refreshStatisticsAction', () => {
       },
       state: {
         form: {
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics,
         },
@@ -84,7 +86,7 @@ describe('refreshStatisticsAction', () => {
       },
       state: {
         form: {
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: null,
         },
