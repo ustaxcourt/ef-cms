@@ -10,15 +10,23 @@ Removes all downloaded dependencies and reinstalls everything from scratch.
 
 Prepares AWS for a deployment to an AWS account.
 
-`npm run deploy:environment-specific ENV`
+`npm run deploy:environment-specific -- ENV`
 
 Prepares AWS for a deployment to an environment.
 
-`npm run deploy:api ENV`
+`npm run init:api -- ENV`
+
+Initializes the API code in your workspace to AWS.
+
+`npm run init:ui -- ENV`
+
+Initializes the UI code in your workspace to AWS.
+
+`npm run deploy:api -- ENV`
 
 Deploys the API code in your workspace to AWS.
 
-`npm run deploy:ui ENV`
+`npm run deploy:ui -- ENV`
 
 Deploys the UI code in your workspace to AWS.
 
