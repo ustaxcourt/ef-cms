@@ -49,6 +49,7 @@ describe('Petitioner', () => {
     completeWizardStep4();
     goToWizardStep5();
     createdDocketNumber = submitPetition();
+    expect(createdDocketNumber).toBeDefined();
     goToDashboard();
   });
 });
