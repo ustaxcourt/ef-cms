@@ -10,6 +10,7 @@ describe('caseInventoryReportHelper', () => {
     ...applicationContext.getConstants(),
     CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
   };
+
   const caseInventoryReportHelper = withAppContextDecorator(
     caseInventoryReportHelperComputed,
     {
