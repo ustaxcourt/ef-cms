@@ -3,6 +3,7 @@ import {
   createPDFFromScannedBatches,
   selectScannerSource,
 } from './scanHelpers';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
@@ -20,6 +21,8 @@ const test = setupTest();
 describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
   let scannerSourceName = 'scanner A';
+
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
   beforeEach(() => {
     jest.setTimeout(30000);
@@ -40,7 +43,7 @@ describe('Create Docket Entry From Scans', () => {
   loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
+  petitionerCreatesNewCase(test, fakeFile, { caseType: CASE_TYPES_MAP.cdp });
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
