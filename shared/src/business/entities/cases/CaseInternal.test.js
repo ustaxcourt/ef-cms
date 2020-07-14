@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -30,7 +31,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
             address1: '876 12th Ave',
             city: 'Nashville',
@@ -71,7 +72,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
             address1: '876 12th Ave',
             city: 'Nashville',
@@ -105,7 +106,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
             address1: '876 12th Ave',
             city: 'Nashville',
@@ -303,7 +304,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
             address1: '876 12th Ave',
             city: 'Nashville',
@@ -340,7 +341,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
             address1: '876 12th Ave',
             city: 'Nashville',
