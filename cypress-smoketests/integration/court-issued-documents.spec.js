@@ -22,7 +22,7 @@ const {
 const { getUserToken, login } = require('../support/pages/login');
 
 let token = null;
-let createdDocketNumber;
+const testData = {};
 
 describe('Petitioner', () => {
   before(async () => {
@@ -48,7 +48,7 @@ describe('Petitioner', () => {
     goToWizardStep4();
     completeWizardStep4();
     goToWizardStep5();
-    createdDocketNumber = submitPetition();
+    submitPetition(testData);
     goToDashboard();
   });
 });
@@ -67,7 +67,7 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to create an order on the case', () => {
-    goToCaseDetail(createdDocketNumber);
+    goToCaseDetail(testData.createdDocketNumber);
     createOrder();
     editAndSignOrder();
   });
