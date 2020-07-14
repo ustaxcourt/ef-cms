@@ -28,7 +28,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
 const RenderContact = ({ contact, countryTypes }) => {
   return (
     <div className="party-details">
-      <p>{contact.name}</p>
+      <p className="margin-bottom-0">{contact.name}</p>
       <RenderAddress contact={contact} countryTypes={countryTypes} />
     </div>
   );
@@ -47,7 +47,9 @@ const RenderPractitioner = ({
 
   return (
     <div className="party-details">
-      <p>{practitioner.formattedName || practitioner.name}</p>
+      <p className="margin-bottom-0">
+        {practitioner.formattedName || practitioner.name}
+      </p>
       <RenderAddress
         contact={{
           ...practitioner.contact,
