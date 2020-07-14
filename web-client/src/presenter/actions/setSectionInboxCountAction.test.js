@@ -1,10 +1,11 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setSectionInboxCountAction } from './setSectionInboxCountAction';
 
 describe('setSectionInboxCountAction', () => {
+  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
+
   let workItems;
 
   beforeAll(() => {
@@ -24,7 +25,7 @@ describe('setSectionInboxCountAction', () => {
         isQC: false,
       },
       {
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
         document: {
           isFileAttached: true,
         },
@@ -51,7 +52,7 @@ describe('setSectionInboxCountAction', () => {
 
   it('sets sectionInboxCount for a docketClerk user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
+      role: USER_ROLES.docketClerk,
     });
 
     const result = await runAction(setSectionInboxCountAction, {
@@ -74,7 +75,7 @@ describe('setSectionInboxCountAction', () => {
   it('sets sectionInboxCount for a judge user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Judge Barker',
-      role: ROLES.judge,
+      role: USER_ROLES.judge,
     });
 
     const result = await runAction(setSectionInboxCountAction, {
@@ -99,7 +100,7 @@ describe('setSectionInboxCountAction', () => {
   it('sets sectionInboxCount for a chambers user', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'ADC',
-      role: ROLES.adc,
+      role: USER_ROLES.adc,
     });
 
     const result = await runAction(setSectionInboxCountAction, {

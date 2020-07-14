@@ -1,3 +1,5 @@
+const { CASE_TYPES_MAP } = require('../entities/EntityConstants');
+
 /**
  * a function used for getting the suffix associated with a caseType and procedureType
  *
@@ -16,7 +18,7 @@ exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
       return 'X';
     case 'Declaratory Judgment (Retirement Plan)':
       return 'R';
-    case 'CDP (Lien/Levy)':
+    case CASE_TYPES_MAP.cdp:
       return procedureType.toLowerCase() === 'small' ? 'SL' : 'L';
     default:
       return procedureType.toLowerCase() === 'small' ? 'S' : null;

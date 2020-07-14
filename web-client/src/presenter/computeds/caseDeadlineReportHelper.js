@@ -12,12 +12,14 @@ export const sortByDateAndDocketNumber = applicationContext => (a, b) => {
 };
 
 export const caseDeadlineReportHelper = (get, applicationContext) => {
+  const { CHIEF_JUDGE } = applicationContext.getConstants();
+
   let caseDeadlines = get(state.allCaseDeadlines) || [];
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
   const judges = (get(state.judges) || [])
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
-    .concat('Chief Judge')
+    .concat(CHIEF_JUDGE)
     .sort();
 
   filterStartDate = applicationContext

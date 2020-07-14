@@ -1,6 +1,9 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
 const { getCasesByLeadCaseId } = require('./getCasesByLeadCaseId');
 
 describe('getCasesByLeadCaseId', () => {
@@ -25,7 +28,7 @@ describe('getCasesByLeadCaseId', () => {
         pk: 'case|123',
         privatePractitioners: [],
         sk: 'case|123',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       });
 
     const result = await getCasesByLeadCaseId({
@@ -46,7 +49,7 @@ describe('getCasesByLeadCaseId', () => {
         pk: 'case|123',
         privatePractitioners: [],
         sk: 'case|123',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });

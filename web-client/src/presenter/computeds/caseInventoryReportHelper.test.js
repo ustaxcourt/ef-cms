@@ -1,32 +1,33 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-applicationContext.getCurrentUser = () => ({
-  role: ROLES.docketClerk,
-  userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
-});
-
-const testCaseInventoryPageSize = 25;
-
-const constants = {
-  ...applicationContext.getConstants(),
-  CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
-};
-const caseInventoryReportHelper = withAppContextDecorator(
-  caseInventoryReportHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => constants,
-  },
-);
-
 describe('caseInventoryReportHelper', () => {
+  const {
+    CHIEF_JUDGE,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+  const testCaseInventoryPageSize = 25;
+  const constants = {
+    ...applicationContext.getConstants(),
+    CASE_INVENTORY_PAGE_SIZE: testCaseInventoryPageSize,
+  };
+
+  const caseInventoryReportHelper = withAppContextDecorator(
+    caseInventoryReportHelperComputed,
+    {
+      ...applicationContext,
+      getConstants: () => constants,
+    },
+  );
+
+  applicationContext.getCurrentUser = () => ({
+    role: USER_ROLES.docketClerk,
+    userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
+  });
+
   it('should return all case statuses', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
@@ -34,7 +35,7 @@ describe('caseInventoryReportHelper', () => {
       },
     });
 
-    expect(result.caseStatuses).toEqual(Object.values(CASE_STATUS_TYPES));
+    expect(result.caseStatuses).toEqual(Object.values(STATUS_TYPES));
   });
 
   it('should return all judges from state along with Chief Judge sorted alphabetically', () => {
@@ -50,7 +51,7 @@ describe('caseInventoryReportHelper', () => {
     });
 
     expect(result.judges).toEqual([
-      'Chief Judge',
+      CHIEF_JUDGE,
       'Joseph Dredd',
       'Judith Blum',
       'Roy Scream',
@@ -73,7 +74,10 @@ describe('caseInventoryReportHelper', () => {
   it('should return showJudgeColumn and showStatusColumn false if associatedJudge and status are set on screenMetadata', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
-        screenMetadata: { associatedJudge: 'Chief Judge', status: 'New' },
+        screenMetadata: {
+          associatedJudge: CHIEF_JUDGE,
+          status: STATUS_TYPES.new,
+        },
       },
     });
 
@@ -224,7 +228,7 @@ describe('caseInventoryReportHelper', () => {
           totalCount: 0,
         },
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           page: 1,
         },
       },
