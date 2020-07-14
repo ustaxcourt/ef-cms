@@ -49,15 +49,11 @@ export const setDocketEntryMetaFormForEditAction = ({
         document => docketRecordEntry.documentId === document.documentId,
       ) || {};
 
-    if (docketRecordEntry.servedPartiesCode) {
-      documentDetail.servedPartiesCode = docketRecordEntry.servedPartiesCode;
-    } else if (documentDetail.servedAt) {
-      documentDetail.servedPartiesCode = applicationContext
+    documentDetail.servedPartiesCode =
+      docketRecordEntry.servedPartiesCode ||
+      applicationContext
         .getUtilities()
         .getServedPartiesCode(documentDetail.servedParties);
-    } else {
-      documentDetail.servedPartiesCode = '';
-    }
 
     store.set(state.form, {
       ...docketRecordEntry,
