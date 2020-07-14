@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -12,6 +13,7 @@ import { trialClerkViewsTrialSessionWorkingCopy } from './journey/trialClerkView
 import { trialClerkViewsTrialSessionWorkingCopyWithNotes } from './journey/trialClerkViewsTrialSessionWorkingCopyWithNotes';
 
 const test = setupTest();
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Clerk Views Trial Session Working Copy', () => {
   beforeEach(() => {
@@ -39,7 +41,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
 
   const caseOverrides = {
     ...overrides,
-    caseType: 'Deficiency',
+    caseType: CASE_TYPES_MAP.deficiency,
     procedureType: 'Small',
     receivedAtDay: '01',
     receivedAtMonth: '01',
