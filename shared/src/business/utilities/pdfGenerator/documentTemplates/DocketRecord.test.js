@@ -90,7 +90,7 @@ describe('DocketRecord', () => {
         document: {
           additionalInfo2: 'Addl Info',
           filedBy: 'Test Filer',
-          isNotServedCourtIssuedDocument: false,
+          isNotServedDocument: false,
           isStatusServed: true,
           servedAtFormatted: '02/02/20',
           servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
@@ -399,7 +399,7 @@ describe('DocketRecord', () => {
 
   it('displays `Not Served` in the served column if the document is an unserved court-issued document', () => {
     entries[0].document.isStatusServed = false;
-    entries[0].document.isNotServedCourtIssuedDocument = true;
+    entries[0].document.isNotServedDocument = true;
 
     const wrapper = mount(
       <DocketRecord
