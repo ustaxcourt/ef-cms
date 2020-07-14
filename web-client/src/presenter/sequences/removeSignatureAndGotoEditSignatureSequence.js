@@ -21,7 +21,7 @@ export const removeSignatureAndGotoEditSignatureSequence = showProgressSequenceD
     clearModalStateAction,
     overwriteOrderFileAction,
     {
-      error: [], // TODO: show an alert if this occurs?
+      error: [],
       success: [submitCourtIssuedOrderAction, navigateToSignOrderAction],
     },
   ],
