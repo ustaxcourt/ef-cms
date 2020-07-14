@@ -63,8 +63,7 @@ const formatDocument = (applicationContext, document) => {
   result.isInProgress =
     !result.isCourtIssuedDocument && result.isFileAttached === false;
 
-  result.isNotServedCourtIssuedDocument =
-    result.isCourtIssuedDocument && !result.servedAt;
+  result.isNotServedCourtIssuedDocument = !result.servedAt;
 
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
