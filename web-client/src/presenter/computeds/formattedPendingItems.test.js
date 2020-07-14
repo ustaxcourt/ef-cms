@@ -9,13 +9,14 @@ describe('formattedPendingItems', () => {
   );
 
   const {
+    CHIEF_JUDGE,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     STATUS_TYPES,
   } = applicationContext.getConstants();
 
   const mockPendingItems = [
     {
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       caseCaption: 'Brett Osborne, Petitioner',
       caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
       caseStatus: STATUS_TYPES.new,
@@ -97,7 +98,7 @@ describe('formattedPendingItems', () => {
       ],
     },
     {
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       caseCaption: 'Brett Osborne, Petitioner',
       caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
       caseStatus: STATUS_TYPES.new,
@@ -281,8 +282,8 @@ describe('formattedPendingItems', () => {
     expect(result).toMatchObject({
       items: [
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
           caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/20/18',
@@ -299,8 +300,8 @@ describe('formattedPendingItems', () => {
           receivedAt: '2018-01-20',
         },
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
           caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/10/19',
@@ -308,7 +309,7 @@ describe('formattedPendingItems', () => {
           receivedAt: '2019-01-10',
         },
       ],
-      judges: ['Chief Judge'],
+      judges: [CHIEF_JUDGE],
     });
   });
 
@@ -317,14 +318,14 @@ describe('formattedPendingItems', () => {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
         pendingItems: mockPendingItems,
-        screenMetadata: { pendingItemsFilters: { judge: 'Chief Judge' } },
+        screenMetadata: { pendingItemsFilters: { judge: CHIEF_JUDGE } },
       },
     });
     expect(result).toMatchObject({
       items: [
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
           caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/20/18',
@@ -332,8 +333,8 @@ describe('formattedPendingItems', () => {
           receivedAt: '2018-01-20',
         },
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
           caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
           caseStatus: STATUS_TYPES.new,
           formattedFiledDate: '01/10/19',
@@ -341,7 +342,7 @@ describe('formattedPendingItems', () => {
           receivedAt: '2019-01-10',
         },
       ],
-      judges: ['A', 'B', 'Chief Judge'],
+      judges: ['A', 'B', CHIEF_JUDGE],
     });
   });
 });
