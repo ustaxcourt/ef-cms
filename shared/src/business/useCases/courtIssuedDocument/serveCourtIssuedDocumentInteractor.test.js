@@ -9,11 +9,12 @@ const {
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
-  ENTERED_AND_SERVED_EVENT_CODES,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
-
+const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
