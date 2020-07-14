@@ -65,16 +65,16 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           !document ||
           (document &&
             (!document.isCourtIssuedDocument ||
-              document.isNotServedCourtIssuedDocument ||
+              document.isNotServedDocument ||
               document.isTranscript)),
         showLinkToDocument:
           document &&
           document.processingStatus ===
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
           document.isCourtIssuedDocument &&
-          !document.isNotServedCourtIssuedDocument &&
+          !document.isNotServedDocument &&
           !document.isTranscript,
-        showNotServed: document && document.isNotServedCourtIssuedDocument,
+        showNotServed: document && document.isNotServedDocument,
         showServed: document && document.isStatusServed,
         signatory: record.signatory,
       };
