@@ -1,7 +1,7 @@
 import { getDefaultDraftViewerDocumentToDisplayAction } from '../../actions/getDefaultDraftViewerDocumentToDisplayAction';
-import { setViewerDocumentToDisplayAction } from '../../actions/setViewerDocumentToDisplayAction';
+import { setViewerDraftDocumentToDisplayAction } from '../../actions/setViewerDraftDocumentToDisplayAction';
 
 export const loadDefaultDraftViewerDocumentToDisplaySequence = [
   getDefaultDraftViewerDocumentToDisplayAction,
-  setViewerDocumentToDisplayAction,
+  setViewerDraftDocumentToDisplayAction,
 ];
