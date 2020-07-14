@@ -107,7 +107,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       document.processingStatus ===
         DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
       !document.isInProgress &&
-      !document.isNotServedCourtIssuedDocument
+      !document.isNotServedDocument
     );
   };
 
@@ -145,7 +145,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         !document ||
         (userHasAccessToCase && userHasAccessToDocument && record.isStricken) ||
         (document &&
-          (document.isNotServedCourtIssuedDocument || document.isInProgress) &&
+          (document.isNotServedDocument || document.isInProgress) &&
           !(
             userPermissions.DOCKET_ENTRY ||
             userPermissions.CREATE_ORDER_DOCKET_ENTRY
@@ -202,8 +202,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document.eventCode,
         );
         formattedResult.showNotServed =
-          !formattedResult.isUnservable &&
-          document.isNotServedCourtIssuedDocument;
+          !formattedResult.isUnservable && document.isNotServedDocument;
         formattedResult.showServed = document.isStatusServed;
 
         formattedResult.showDocumentViewerLink = getShowDocumentViewerLink({
