@@ -310,7 +310,7 @@ joiValidationDecorator(
       ),
     processingStatus: joi
       .string()
-      .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
+      .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
       .optional(),
     qcAt: JoiValidationConstants.ISO_DATE.optional(),
     qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
@@ -518,7 +518,7 @@ Document.prototype.unsignDocument = function () {
 };
 
 Document.prototype.setAsProcessingStatusAsCompleted = function () {
-  this.processingStatus = 'complete';
+  this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 };
 
 Document.prototype.getQCWorkItem = function () {

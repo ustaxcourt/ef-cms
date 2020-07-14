@@ -1,14 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * sets the document to be edited from the current caseDetail
+ * sets the state.form from the document's draft state
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
- * @returns {void} sets the documentToEdit on state
  */
-export const setDocumentToEditAction = ({ props, store }) => {
+export const setFormFromDraftStateAction = ({ props, store }) => {
   const { caseDetail, documentIdToEdit } = props;
 
   if (documentIdToEdit) {
@@ -16,6 +15,11 @@ export const setDocumentToEditAction = ({ props, store }) => {
       document => document.documentId === documentIdToEdit,
     );
 
-    store.set(state.documentToEdit, documentToEdit);
+    store.set(state.form, {
+      ...documentToEdit.draftState,
+      documentIdToEdit,
+      documentTitle: documentToEdit.documentTitle,
+      documentType: documentToEdit.documentType,
+    });
   }
 };
