@@ -13,7 +13,7 @@ export const paperDocketEntryHelper = get => {
     item => item.documentId === documentId,
   );
 
-  const docketEntryHasDocument = !!document.isFileAttached;
+  const docketEntryHasDocument = document && document.isFileAttached;
 
   return {
     docketEntryHasDocument,
