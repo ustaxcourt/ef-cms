@@ -1,4 +1,11 @@
 const {
+  addDocketEntryForOrderAndServe,
+  addDocketEntryForOrderAndServePaper,
+  createOrder,
+  editAndSignOrder,
+  goToCaseDetail,
+} = require('../support/pages/case-detail');
+const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -15,11 +22,15 @@ const {
   submitPetition,
 } = require('../support/pages/create-electronic-petition');
 const {
-  createOrder,
-  editAndSignOrder,
-  goToCaseDetail,
-} = require('../support/pages/case-detail');
+  fillInCreateCaseFromPaperForm,
+} = require('../../cypress/support/pages/create-paper-petition');
+const {
+  goToCreateCase,
+  goToReviewCase,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
 const { getUserToken, login } = require('../support/pages/login');
+const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;
 const testData = {};
@@ -53,6 +64,28 @@ describe('Petitioner', () => {
   });
 });
 
+describe('Petitions clerk', () => {
+  before(async () => {
+    const results = await getUserToken(
+      'petitionsclerk1@example.com',
+      'Testing1234$',
+    );
+    token = results.AuthenticationResult.IdToken;
+  });
+
+  it('should be able to login', () => {
+    login(token);
+  });
+
+  it('should be able to create a case with paper service', () => {
+    goToMyDocumentQC();
+    goToCreateCase();
+    fillInCreateCaseFromPaperForm();
+    goToReviewCase(testData);
+    serveCaseToIrs();
+  });
+});
+
 describe('Docket Clerk', () => {
   before(async () => {
     const results = await getUserToken(
@@ -66,9 +99,17 @@ describe('Docket Clerk', () => {
     login(token);
   });
 
-  it('should be able to create an order on the case', () => {
+  it('should be able to create an order on the electronically-filed case and serve it', () => {
     goToCaseDetail(testData.createdDocketNumber);
     createOrder();
     editAndSignOrder();
+    addDocketEntryForOrderAndServe();
+  });
+
+  it('should be able to create an order on the paper-filed case and serve it', () => {
+    goToCaseDetail(testData.createdPaperDocketNumber);
+    createOrder();
+    editAndSignOrder();
+    addDocketEntryForOrderAndServePaper();
   });
 });
