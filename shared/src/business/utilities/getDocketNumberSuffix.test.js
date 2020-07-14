@@ -4,7 +4,7 @@ const { getDocketNumberSuffix } = require('./getDocketNumberSuffix');
 describe('getDocketNumberSuffix', () => {
   it('returns W for Whistleblower caseType', () => {
     const suffix = getDocketNumberSuffix({
-      caseType: 'Whistleblower',
+      caseType: CASE_TYPES_MAP.whistleblower,
       docketNumber: '101-18',
       procedureType: 'Small',
     });

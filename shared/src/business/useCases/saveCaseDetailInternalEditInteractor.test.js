@@ -3,17 +3,21 @@ const {
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Other',
+    caseType: CASE_TYPES_MAP.other,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
