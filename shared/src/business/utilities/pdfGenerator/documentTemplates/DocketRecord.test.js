@@ -32,6 +32,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner',
       phone: '123-124-1234',
       postalCode: '12345',
+      secondaryName: 'Secondary Name',
       state: 'AL',
     };
 
@@ -126,6 +127,9 @@ describe('DocketRecord', () => {
     const contactPrimaryEl = contacts.find('.party-details');
 
     expect(contactPrimaryEl.text()).toContain(contactPrimary.name);
+    expect(contactPrimaryEl.text()).toContain(
+      `c/o ${contactPrimary.secondaryName}`,
+    );
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address1);
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address2);
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address3);
@@ -135,7 +139,6 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(contactPrimary.phone);
 
     expect(contactPrimaryEl.text()).not.toContain(contactPrimary.country);
-    expect(contactPrimaryEl.text()).not.toContain('c/o');
   });
 
   it("displays a party's country if international", () => {
