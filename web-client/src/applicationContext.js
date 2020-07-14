@@ -36,6 +36,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
@@ -535,6 +536,7 @@ const applicationContext = {
   getUserPermissions,
   getUtilities: () => {
     return {
+      aggregatePartiesForService,
       calculateISODate,
       compareCasesByDocketNumber,
       compareISODateStrings,
