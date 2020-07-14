@@ -14,6 +14,7 @@ const {
   PAYMENT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  STIN_DOCKET_ENTRY_TYPE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
@@ -3326,7 +3327,7 @@ describe('Case entity', () => {
             {
               description: 'second record',
               documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: 'STIN',
+              eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
               filingDate: '2018-03-01T00:02:00.000Z',
               index: 1,
             },
