@@ -49,12 +49,12 @@
     inCareOf: 
       type: "string"
       flags: 
-        presence: "required"
+        presence: "optional"
       rules: 
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 500
     name: 
       type: "string"
       flags: 

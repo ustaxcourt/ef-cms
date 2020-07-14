@@ -1,12 +1,14 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { blockedCasesReportHelper as blockedCasesReportHelperComputed } from './blockedCasesReportHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const blockedCasesReportHelper = withAppContextDecorator(
-  blockedCasesReportHelperComputed,
-);
-
 describe('blockedCasesReportHelper', () => {
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
+  const blockedCasesReportHelper = withAppContextDecorator(
+    blockedCasesReportHelperComputed,
+  );
   it('returns blockedCasesCount as undefined if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {},
@@ -67,7 +69,7 @@ describe('blockedCasesReportHelper', () => {
               'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
             caseId: '3',
             docketNumber: '103-18',
-            docketNumberSuffix: 'S',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
             docketNumberWithSuffix: '103-18S',
           },
           {
@@ -95,7 +97,7 @@ describe('blockedCasesReportHelper', () => {
           caseId: '3',
           caseTitle: 'Tatum Craig, Wayne Obrien, Partnership Representative',
           docketNumber: '103-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketNumberWithSuffix: '103-18S',
         },
         {

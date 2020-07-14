@@ -19,7 +19,10 @@ const {
 } = require('./documentGenerators');
 const {
   CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const {
   generatePdfFromHtmlInteractor,
@@ -105,7 +108,7 @@ describe('documentGenerators', () => {
               associatedJudge: 'Judge Armen',
               caseTitle: 'rick james b',
               docketNumber: '101-20',
-              docketNumberSuffix: 'L',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               status: CASE_STATUS_TYPES.closed,
             },
           ],
@@ -291,10 +294,10 @@ describe('documentGenerators', () => {
             {
               document: {
                 filedBy: 'Test Filer',
-                isNotServedCourtIssuedDocument: false,
+                isNotServedDocument: false,
                 isStatusServed: true,
                 servedAtFormatted: '02/02/20',
-                servedPartiesCode: 'B',
+                servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
               },
               index: 1,
               record: {
@@ -608,7 +611,7 @@ describe('documentGenerators', () => {
         data: {
           pendingItems: [
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/02/20',
@@ -616,7 +619,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/22/20',
@@ -624,7 +627,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/03/20',
@@ -632,7 +635,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/23/20',

@@ -4,7 +4,12 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInventoryReportHelper', () => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    CHIEF_JUDGE,
+    DOCKET_NUMBER_SUFFIXES,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const testCaseInventoryPageSize = 25;
   const constants = {
     ...applicationContext.getConstants(),
@@ -47,7 +52,7 @@ describe('caseInventoryReportHelper', () => {
     });
 
     expect(result.judges).toEqual([
-      'Chief Judge',
+      CHIEF_JUDGE,
       'Joseph Dredd',
       'Judith Blum',
       'Roy Scream',
@@ -71,7 +76,7 @@ describe('caseInventoryReportHelper', () => {
     const result = runCompute(caseInventoryReportHelper, {
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           status: STATUS_TYPES.new,
         },
       },
@@ -110,7 +115,7 @@ describe('caseInventoryReportHelper', () => {
             {
               correspondence: [],
               docketNumber: '123-19',
-              docketNumberSuffix: 'L',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               docketNumberWithSuffix: '123-19L',
             },
             {
@@ -224,7 +229,7 @@ describe('caseInventoryReportHelper', () => {
           totalCount: 0,
         },
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           page: 1,
         },
       },

@@ -1,11 +1,15 @@
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
 const { CaseExternal } = require('./CaseExternal');
-const { COUNTRY_TYPES, PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternal', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
@@ -23,7 +27,7 @@ describe('CaseExternal', () => {
 
     it('should validate without inCareOf', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -52,7 +56,7 @@ describe('CaseExternal', () => {
 
     it('can validate primary contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',

@@ -5,8 +5,12 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  DOCKET_SECTION,
+  PARTY_TYPES,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -15,8 +19,6 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { v4: uuidv4 } = require('uuid');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
@@ -88,7 +90,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
@@ -151,7 +153,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
