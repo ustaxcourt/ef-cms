@@ -57,7 +57,7 @@ export const AddDocketEntry = connect(
                 <PrimaryDocumentForm />
                 <div className="margin-top-5">
                   <Button
-                    id="save-and-finish"
+                    id="save-and-serve"
                     type="submit"
                     onClick={() => {
                       saveAndServeDocketEntrySequence();
@@ -65,11 +65,9 @@ export const AddDocketEntry = connect(
                   >
                     Save and Serve
                   </Button>
-
-                  {/* TODO: update button attr 'id' (and potential pa11y) */}
                   <Button
                     secondary
-                    id="save-and-add-supporting"
+                    id="save-for-later"
                     onClick={() => {
                       saveForLaterDocketEntrySequence();
                     }}
