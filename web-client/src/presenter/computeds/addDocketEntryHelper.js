@@ -29,10 +29,7 @@ export const getSupportingDocumentTypeList = categoryMap => {
 };
 
 export const addDocketEntryHelper = (get, applicationContext) => {
-  const {
-    INTERNAL_CATEGORY_MAP,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -40,10 +37,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   const showDateReceivedEdit = caseDetail.isPaper;
   const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
-  const validationErrors = get(state.validationErrors);
-  const showSecondaryParty =
-    caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
-    caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
@@ -61,12 +54,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   ];
 
   const amendmentEventCodes = ['AMAT', 'ADMT'];
-
-  const partyValidationError =
-    validationErrors &&
-    (validationErrors.partyPrimary ||
-      validationErrors.partySecondary ||
-      validationErrors.partyIrsPractitioner);
 
   const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
@@ -128,7 +115,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
-    partyValidationError,
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
@@ -139,7 +125,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
     showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
       form.documentType,
