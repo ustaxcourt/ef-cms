@@ -677,6 +677,34 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petr. Bob');
     });
 
+    it('should generate correct filedBy string for partyPrimary and otherFilingParty', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Petition',
+          certificateOfService: false,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Amended Petition',
+          documentType: 'Amended Petition',
+          eventCode: 'PAP',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          objections: 'No',
+          otherFilingParty: 'Bob Barker',
+          partyPrimary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Standard',
+          supportingDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          supportingDocumentFreeText: 'Test',
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail, true);
+      expect(document.filedBy).toEqual('Petr. Bob, Bob Barker');
+    });
+
     it('should generate correct filedBy string for only partySecondary', () => {
       const document = new Document(
         {
@@ -733,6 +761,68 @@ describe('Document entity', () => {
       );
       document.generateFiledBy(caseDetail, true);
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+    });
+
+    it('should generate correct filedBy string for partyPrimary, partyIrsPractitioner, and otherFilingParty', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          otherFilingParty: 'Bob Barker',
+          partyIrsPractitioner: true,
+          partyPrimary: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail, true);
+      expect(document.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
+    });
+
+    it('should generate correct filedBy string for only otherFilingParty', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          otherFilingParty: 'Bob Barker',
+          partyIrsPractitioner: false,
+          partyPrimary: false,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail, true);
+      expect(document.filedBy).toEqual('Bob Barker');
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner only once', () => {
