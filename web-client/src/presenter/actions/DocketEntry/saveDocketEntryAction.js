@@ -30,9 +30,15 @@ export const saveDocketEntryAction = async ({
       ? get(state.documentId)
       : applicationContext.getUniqueId();
   const isServingUpdatedDocketEntry = isUpdating && !isSavingForLater;
+
+  let caseDetail = get(state.caseDetail);
+  const docketEntryHasDocument = caseDetail.documents.find(
+    item => item.documentId === documentId,
+  );
+
   const generateCoversheet =
     (isFileAttached && shouldGenerateCoversheet !== false) ||
-    isServingUpdatedDocketEntry;
+    (isServingUpdatedDocketEntry && docketEntryHasDocument.isFileAttached);
 
   let documentMetadata = omit(
     {
@@ -46,7 +52,7 @@ export const saveDocketEntryAction = async ({
     caseId,
     createdAt: documentMetadata.dateReceived,
     docketNumber,
-    isFileAttached: !!isFileAttached || isServingUpdatedDocketEntry,
+    isFileAttached: !!isFileAttached || generateCoversheet,
     isPaper: true,
     isUpdating,
     receivedAt: documentMetadata.dateReceived,
@@ -63,8 +69,6 @@ export const saveDocketEntryAction = async ({
       documentId,
     });
   }
-
-  let caseDetail;
 
   if (isUpdating) {
     caseDetail = await applicationContext
