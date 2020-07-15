@@ -1,4 +1,4 @@
-# contacts/NextFriendForIncompetentPersonContact
+# contacts/NextFriendForMinorContact(DOMESTIC)
  ```
 ---
   type: "object"

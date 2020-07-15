@@ -31,7 +31,7 @@ jobs:
             ./run-shellcheck.sh
       - run:
           name: Web API - Test
-          command: npm run test:api
+          command: npm run test:api:ci
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
@@ -54,7 +54,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -73,7 +73,7 @@ jobs:
           command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Shared - Test
-          command: npm run test:shared
+          command: npm run test:shared:ci
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
@@ -96,7 +96,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -115,7 +115,7 @@ jobs:
           command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit
+          command: npm run build:assets && CI=false npm run test:client:unit:ci
       - persist_to_workspace:
           root: ~/
           paths:
@@ -250,6 +250,8 @@ jobs:
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
             npm run test:pa11y:public --node-flags --max-old-space-size=1024
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
           path: /tmp/pa11y
 

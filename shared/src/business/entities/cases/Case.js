@@ -356,13 +356,9 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  caseCaption: joi
-    .string()
-    .max(500)
-    .required()
-    .description(
-      'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
-    ),
+  caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
+    'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
+  ),
   caseId: JoiValidationConstants.UUID.required().description(
     'Unique case ID only used by the system.',
   ),

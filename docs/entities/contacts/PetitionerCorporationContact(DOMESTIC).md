@@ -1,4 +1,4 @@
-# contacts/PartnershipOtherThanTaxMattersPrimaryContact
+# contacts/PetitionerCorporationContact(DOMESTIC)
  ```
 ---
   type: "object"
@@ -76,7 +76,7 @@
     secondaryName: 
       type: "string"
       flags: 
-        presence: "required"
+        presence: "optional"
       rules: 
         - 
           name: "max"
