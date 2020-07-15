@@ -88,10 +88,10 @@ ZAP Scanning Report
                 <td><a href="#medium">Medium</a></td><td align="center">0</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td><a href="#low">Low</a></td><td align="center">1</td>
+                <td><a href="#low">Low</a></td><td align="center">3</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td><a href="#info">Informational</a></td><td align="center">2</td>
+                <td><a href="#info">Informational</a></td><td align="center">1</td>
             </tr>
         </table>
         <div class="spacer-lg"></div>
@@ -101,17 +101,224 @@ ZAP Scanning Report
                 <th width="60%" height="24">Name</th><th width="20%" align="center">Risk Level</th><th width="20%" align="center">Number of Instances</th>
             </tr>
             <tr bgcolor="#e8e8e8">
+                <td>Application Error Disclosure</td><td align="center">Low</td><td align="center">1</td>
+            </tr>
+            <tr bgcolor="#e8e8e8">
+                <td>A Server Error response code was returned by the server</td><td align="center">Low</td><td align="center">7</td>
+            </tr>
+            <tr bgcolor="#e8e8e8">
                 <td>Strict-Transport-Security Header Not Set</td><td align="center">Low</td><td align="center">1</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>A Client Error response code was returned by the server</td><td align="center">Informational</td><td align="center">9</td>
-            </tr>
-            <tr bgcolor="#e8e8e8">
-                <td>ELMAH Information Leak</td><td align="center">Informational</td><td align="center">1</td>
+                <td>A Client Error response code was returned by the server</td><td align="center">Informational</td><td align="center">2</td>
             </tr>
         </table>
         <div class="spacer-lg"></div>
         <h3>Alert Detail</h3>
+        <div class="spacer"></div>
+        <table width="100%" class="results">
+              
+  
+  
+            <tr height="24" class="risk-low">
+                <a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">Application Error Disclosure</th>
+            </tr>
+              
+  
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Description</td><td width="80%"><p>This page contains an error/warning message that may disclose sensitive information like the location of the file that produced the unhandled exception. This information can be used to launch further attacks against the web application. The alert could be a false positive if the error message is found inside a documentation page.</p></td>
+            </tr>
+            <TR vAlign="top">
+                <TD colspan="2"></TD>
+            </TR>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500 Internal Server Error</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Instances</td><td width="80%">1</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Solution</td><td width="80%"><p>Review the source code of this page. Implement custom error pages. Consider implementing a mechanism to provide a unique error reference/identifier to the client (browser) while logging the details on the server side and not exposing them to the user.</p></td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Reference</td><td width="80%"><p></p></td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">CWE Id</td><td width="80%">200</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">WASC Id</td><td width="80%">13</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Source ID</td><td width="80%">3</td>
+            </tr>
+            
+        </table>
+        <div class="spacer"></div>
+        <table width="100%" class="results">
+              
+  
+  
+            <tr height="24" class="risk-low">
+                <a name="low"></a><th width="20%">Low (High)</th><th width="80%">A Server Error response code was returned by the server</th>
+            </tr>
+              
+  
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Description</td><td width="80%"><p>A response code of 500 was returned by the server.</p><p>This may indicate that the application is failing to handle unexpected input correctly.</p><p>Raised by the 'Alert on HTTP Response Code Error' script</p></td>
+            </tr>
+            <TR vAlign="top">
+                <TD colspan="2"></TD>
+            </TR>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/elmah.axd</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/4948595536736358255</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/swagger.json/</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/7151684807917383863</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Instances</td><td width="80%">7</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Solution</td><td width="80%"><p></p></td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Reference</td><td width="80%"><p></p></td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">CWE Id</td><td width="80%">388</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">WASC Id</td><td width="80%">20</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Source ID</td><td width="80%">4</td>
+            </tr>
+            
+        </table>
         <div class="spacer"></div>
         <table width="100%" class="results">
               
@@ -134,7 +341,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -181,7 +388,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Description</td><td width="80%"><p>A response code of 401 was returned by the server.</p><p>This may indicate that the application is failing to handle unexpected input correctly.</p><p>Raised by the 'Alert on HTTP Response Code Error' script</p></td>
+                <td width="20%">Description</td><td width="80%"><p>A response code of 403 was returned by the server.</p><p>This may indicate that the application is failing to handle unexpected input correctly.</p><p>Raised by the 'Alert on HTTP Response Code Error' script</p></td>
             </tr>
             <TR vAlign="top">
                 <TD colspan="2"></TD>
@@ -190,21 +397,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/6386985448066838891</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us/</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -218,7 +411,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-api-dev.ustc-case-mgmt.flexion.us</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -232,91 +425,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger.json/</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/1503397539741274706</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/elmah.axd</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">9</td>
+                <td width="20%">Instances</td><td width="80%">2</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -337,73 +446,6 @@ ZAP Scanning Report
               
             <tr bgcolor="#e8e8e8">
                 <td width="20%">Source ID</td><td width="80%">4</td>
-            </tr>
-            
-        </table>
-        <div class="spacer"></div>
-        <table width="100%" class="results">
-              
-  
-  
-            <tr height="24" class="risk-info">
-                <th width="20%"><a name="info"></a>Informational (Low)</th><th width="80%">ELMAH Information Leak</th>
-            </tr>
-              
-  
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Description</td><td width="80%"><p>The Error Logging Modules and Handlers (ELMAH [elmah.axd]) HTTP Module was found to be available. This module can leak a significant amount of valuable information.</p></td>
-            </tr>
-            <TR vAlign="top">
-                <TD colspan="2"></TD>
-            </TR>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/elmah.axd</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403 Forbidden</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">1</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Solution</td><td width="80%"><p>Consider whether or not ELMAH is actually required in production, if it isn't then disable it. If it is then ensure access to it requires authentication and authorization. See also: https://elmah.github.io/a/securing-error-log-pages/</p></td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Other information</td><td width="80%"><p>Based on response status code ELMAH may be protected by an authentication or authorization mechanism.  </p></td>
-            </tr>
-            <TR vAlign="top">
-                <TD colspan="2"></TD>
-            </TR>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Reference</td><td width="80%"><p>https://www.troyhunt.com/aspnet-session-hijacking-with-google/</p><p>https://www.nuget.org/packages/elmah</p><p>https://elmah.github.io/</p></td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">CWE Id</td><td width="80%">215</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">WASC Id</td><td width="80%">13</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%">Source ID</td><td width="80%">1</td>
             </tr>
             
         </table>
