@@ -1,4 +1,4 @@
-# contacts/PetitionerIntermediaryContact
+# contacts/PartnershipBBAPrimaryContact(DOMESTIC)
  ```
 ---
   type: "object"
@@ -54,7 +54,7 @@
         - 
           name: "max"
           args: 
-            limit: 100
+            limit: 500
     name: 
       type: "string"
       flags: 
@@ -76,7 +76,7 @@
     secondaryName: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
         - 
           name: "max"

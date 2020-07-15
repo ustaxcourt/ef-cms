@@ -1,4 +1,4 @@
-# contacts/PetitionerCorporationContact
+# contacts/PetitionerPrimaryContact(DOMESTIC)
  ```
 ---
   type: "object"
