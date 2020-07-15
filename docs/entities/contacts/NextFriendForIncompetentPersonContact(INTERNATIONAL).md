@@ -1,15 +1,24 @@
-# contacts/OtherFilerContact
+# contacts/NextFriendForIncompetentPersonContact(INTERNATIONAL)
  ```
 ---
   type: "object"
   keys: 
+    country: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
     countryType: 
       type: "string"
       flags: 
         only: true
         presence: "required"
       allow: 
-        - "domestic"
+        - "international"
     address1: 
       type: "string"
       flags: 
@@ -76,7 +85,7 @@
     secondaryName: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
         - 
           name: "max"
@@ -85,11 +94,12 @@
     title: 
       type: "string"
       flags: 
-        only: true
-        presence: "required"
-      allow: 
-        - "Intervenor"
-        - "Participant"
+        presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 500
     serviceIndicator: 
       type: "string"
       flags: 
@@ -138,90 +148,14 @@
             type: "any"
             flags: 
               presence: "optional"
-    state: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "required"
-      allow: 
-        - "AK"
-        - "AL"
-        - "AR"
-        - "AZ"
-        - "CA"
-        - "CO"
-        - "CT"
-        - "DC"
-        - "DE"
-        - "FL"
-        - "GA"
-        - "HI"
-        - "IA"
-        - "ID"
-        - "IL"
-        - "IN"
-        - "KS"
-        - "KY"
-        - "LA"
-        - "MA"
-        - "MD"
-        - "ME"
-        - "MI"
-        - "MN"
-        - "MO"
-        - "MS"
-        - "MT"
-        - "NC"
-        - "ND"
-        - "NE"
-        - "NH"
-        - "NJ"
-        - "NM"
-        - "NV"
-        - "NY"
-        - "OH"
-        - "OK"
-        - "OR"
-        - "PA"
-        - "RI"
-        - "SC"
-        - "SD"
-        - "TN"
-        - "TX"
-        - "UT"
-        - "VA"
-        - "VT"
-        - "WA"
-        - "WI"
-        - "WV"
-        - "WY"
-        - "AA"
-        - "AE"
-        - "AP"
-        - "AS"
-        - "FM"
-        - "GU"
-        - "MH"
-        - "MP"
-        - "PR"
-        - "PW"
-        - "VI"
     postalCode: 
       type: "string"
       flags: 
         presence: "required"
       rules: 
         - 
-          name: "pattern"
+          name: "max"
           args: 
-            regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
-    otherFilerType: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "required"
-      allow: 
-        - "Intervenor"
-        - "Participant"
+            limit: 100
 
  ```
