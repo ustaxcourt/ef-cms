@@ -15,6 +15,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.documentId === viewerDocumentToDisplay.documentId,
     );
 
+  const isCorrespondence = caseDocument && !caseDocument.entityName; // TODO: Sure this up a little
+
   const documentRequiresSignature =
     caseDocument &&
     EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
@@ -39,10 +41,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
+    !isCorrespondence &&
     !isDocumentOnDocketRecord &&
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
-    !documentIsSigned && !isDocumentOnDocketRecord;
+    !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord;
   const showEditButtonForDocument = !isDocumentOnDocketRecord;
