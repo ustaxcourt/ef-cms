@@ -50,6 +50,21 @@ describe('updateDocketEntryWizardDataAction', () => {
     expect(result.state.form.certificateOfServiceYear).toEqual(undefined);
   });
 
+  it('should clear otherFilingParty when hasOtherFilingParty is updated', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      modules: { presenter },
+      props: {
+        key: 'hasOtherFilingParty',
+      },
+      state: {
+        form: {
+          otherFilingParty: 'Not the petitioner',
+        },
+      },
+    });
+    expect(result.state.form.otherFilingParty).toEqual(undefined);
+  });
+
   it('unsets form state values when props.key=eventCode', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       modules: { presenter },
