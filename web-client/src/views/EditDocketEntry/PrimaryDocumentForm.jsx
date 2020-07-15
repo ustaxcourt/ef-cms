@@ -269,7 +269,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <Inclusions />
+          <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
           <FilingPartiesForm
             updateSequence={updateDocketEntryFormValueSequence}
