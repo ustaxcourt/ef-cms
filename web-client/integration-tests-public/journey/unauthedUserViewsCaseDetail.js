@@ -1,13 +1,13 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextPublic } from '../../src/applicationContextPublic';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const publicCaseDetailHelper = withAppContextDecorator(
   publicCaseDetailHelperComputed,
-  applicationContext,
+  applicationContextPublic,
 );
-const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+const { INITIAL_DOCUMENT_TYPES } = applicationContextPublic.getConstants();
 
 export const unauthedUserViewsCaseDetail = test => {
   return it('View case detail', async () => {

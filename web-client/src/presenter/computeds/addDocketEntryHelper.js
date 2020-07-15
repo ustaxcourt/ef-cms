@@ -105,11 +105,13 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   );
 
   const optionsForCategory = getOptionsForCategory(
+    applicationContext,
     caseDetail,
     categoryInformation,
   );
 
   const secondaryOptionsForCategory = getOptionsForCategory(
+    applicationContext,
     caseDetail,
     secondaryCategoryInformation,
   );
