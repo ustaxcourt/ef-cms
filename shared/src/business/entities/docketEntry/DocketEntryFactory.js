@@ -185,7 +185,8 @@ function DocketEntryFactory(rawProps) {
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
-    rawProps.partyIrsPractitioner !== true
+    rawProps.partyIrsPractitioner !== true &&
+    rawProps.hasOtherFilingParty !== true
   ) {
     addToSchema('partyPrimary');
   }
