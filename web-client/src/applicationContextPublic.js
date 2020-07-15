@@ -3,6 +3,7 @@ import {
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  INITIAL_DOCUMENT_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -56,6 +57,7 @@ const applicationContextPublic = {
       CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
       COUNTRY_TYPES: COUNTRY_TYPES,
       DOCUMENT_PROCESSING_STATUS_OPTIONS,
+      INITIAL_DOCUMENT_TYPES,
       US_STATES,
       US_STATES_OTHER,
     }),
