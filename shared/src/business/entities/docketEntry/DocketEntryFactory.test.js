@@ -193,5 +193,43 @@ describe('DocketEntryFactory', () => {
         });
       });
     });
+
+    describe('otherFilingParty', () => {
+      beforeEach(() => {
+        rawEntity.dateReceived = createISODateString();
+        rawEntity.documentType = 'Order';
+        rawEntity.eventCode = 'O';
+        rawEntity.partyPrimary = true;
+      });
+
+      it('should pass validation when hasOtherFilingParty is not defined', () => {
+        rawEntity.hasOtherFilingParty = undefined;
+
+        expect(errors()).toBeNull();
+      });
+
+      it('should pass validation when hasOtherFilingParty is true and otherFilingParties has value', () => {
+        rawEntity.hasOtherFilingParty = true;
+        rawEntity.otherFilingParty = 'An Other Party';
+
+        expect(errors()).toBeNull();
+      });
+
+      it('should fail validation when hasOtherFilingParty is true and otherFilingParties has no value', () => {
+        rawEntity.hasOtherFilingParty = true;
+        rawEntity.otherFilingParty = undefined;
+
+        expect(errors()).toEqual({
+          otherFilingParty: 'Enter other filing party name.',
+        });
+      });
+
+      it('should pass validation when hasOtherFilingParty is false and otherFilingParties has no value', () => {
+        rawEntity.hasOtherFilingParty = false;
+        rawEntity.otherFilingParty = undefined;
+
+        expect(errors()).toBeNull();
+      });
+    });
   });
 });
