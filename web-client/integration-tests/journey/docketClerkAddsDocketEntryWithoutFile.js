@@ -12,11 +12,6 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
-      value: false,
-    });
-
     await test.runSequence('saveForLaterDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
@@ -55,11 +50,6 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Administrative Record',
-    });
-
-    await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
-      value: false,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

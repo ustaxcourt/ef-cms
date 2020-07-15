@@ -271,13 +271,13 @@
         presence: "optional"
       allow: 
         - null
-        - "W"
-        - "P"
         - "X"
         - "R"
-        - "SL"
         - "L"
+        - "P"
         - "S"
+        - "SL"
+        - "W"
     docketNumberWithSuffix: 
       type: "string"
       flags: 
@@ -398,13 +398,13 @@
         presence: "optional"
         description: "Case docket number suffix before modification."
       allow: 
-        - "W"
-        - "P"
         - "X"
         - "R"
-        - "SL"
         - "L"
+        - "P"
         - "S"
+        - "SL"
+        - "W"
         - "_"
         - null
     irsNoticeDate: 
