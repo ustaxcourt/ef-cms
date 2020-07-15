@@ -14,11 +14,13 @@ export const updateCaseMessageModalAttachmentsAction = ({
   store,
 }) => {
   const { attachments } = get(state.modal.form);
-  const { documents } = get(state.caseDetail);
+  const { correspondence, documents } = get(state.caseDetail);
   const documentId = props.documentId || get(state.documentId);
 
   if (documentId) {
-    const document = documents.find(d => d.documentId === documentId);
+    const document = [...documents, ...correspondence].find(
+      d => d.documentId === documentId,
+    );
 
     const documentTitle = document.documentTitle || document.documentType;
 
