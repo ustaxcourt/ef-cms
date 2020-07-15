@@ -17,7 +17,10 @@ export const updateDocketEntryWizardDataAction = ({
   props,
   store,
 }) => {
-  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
+  const {
+    DOCUMENT_RELATIONSHIPS,
+    INTERNAL_CATEGORY_MAP,
+  } = applicationContext.getConstants();
   let entry, form;
   let supporting = get(state.screenMetadata.supporting);
   const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
@@ -114,9 +117,11 @@ export const updateDocketEntryWizardDataAction = ({
               includes(filedDocumentIds, doc.documentId) &&
               (doc.documentTitle || doc.documentType) === props.value,
           );
-        if (previousDocument.relationship === 'primaryDocument') {
+        if (previousDocument.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY) {
           store.merge(state.form, get(state.screenMetadata.primary));
-        } else if (previousDocument.relationship === 'secondaryDocument') {
+        } else if (
+          previousDocument.relationship === DOCUMENT_RELATIONSHIPS.SECONDARY
+        ) {
           store.merge(state.form, get(state.screenMetadata.secondary));
         }
       }
