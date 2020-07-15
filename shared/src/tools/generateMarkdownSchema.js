@@ -125,7 +125,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/NextFriendForIncompetentPersonContact',
+  'contacts/NextFriendForIncompetentPersonContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getNextFriendForIncompetentPersonContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/NextFriendForIncompetentPersonContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -133,7 +140,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/NextFriendForMinorContact',
+  'contacts/NextFriendForMinorContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getNextFriendForMinorContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/NextFriendForMinorContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -141,7 +155,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PartnershipAsTaxMattersPartnerContact',
+  'contacts/PartnershipAsTaxMattersPartnerContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPartnershipAsTaxMattersPartnerPrimaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PartnershipAsTaxMattersPartnerContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -149,7 +170,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PartnershipBBAPrimaryContact',
+  'contacts/PartnershipBBAPrimaryContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPartnershipBBAPrimaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PartnershipBBAPrimaryContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -157,7 +185,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PartnershipOtherThanTaxMattersPrimaryContact',
+  'contacts/PartnershipOtherThanTaxMattersPrimaryContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPartnershipOtherThanTaxMattersPrimaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PartnershipOtherThanTaxMattersPrimaryContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -165,7 +200,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerConservatorContact',
+  'contacts/PetitionerConservatorContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerConservatorContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerConservatorContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -173,7 +215,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerCorporationContact',
+  'contacts/PetitionerCorporationContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerCorporationContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerCorporationContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -181,7 +230,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerCustodianContact',
+  'contacts/PetitionerCustodianContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerCustodianContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerCustodianContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -189,7 +245,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerDeceasedSpouseContact',
+  'contacts/PetitionerDeceasedSpouseContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerDeceasedSpouseContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerDeceasedSpouseContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -197,7 +260,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerEstateWithExecutorPrimaryContact',
+  'contacts/PetitionerEstateWithExecutorPrimaryContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerEstateWithExecutorPrimaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerEstateWithExecutorPrimaryContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -205,7 +275,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerGuardianContact',
+  'contacts/PetitionerGuardianContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerGuardianContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerGuardianContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -213,7 +290,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerIntermediaryContact',
+  'contacts/PetitionerIntermediaryContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerIntermediaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerIntermediaryContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -221,7 +305,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerPrimaryContact',
+  'contacts/PetitionerPrimaryContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerPrimaryContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerPrimaryContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -229,7 +320,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerSpouseContact',
+  'contacts/PetitionerSpouseContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerSpouseContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerSpouseContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -237,7 +335,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/PetitionerTrustContact',
+  'contacts/PetitionerTrustContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getPetitionerTrustContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/PetitionerTrustContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -245,7 +350,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/SurvivingSpouseContact',
+  'contacts/SurvivingSpouseContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getSurvivingSpouseContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/SurvivingSpouseContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(
@@ -253,7 +365,14 @@ generateMarkdownSchema(
     countryType: COUNTRY_TYPES.DOMESTIC,
     isPaper: true,
   }),
-  'contacts/OtherFilerContact',
+  'contacts/OtherFilerContact(DOMESTIC)',
+);
+generateMarkdownSchema(
+  getOtherFilerContact({
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    isPaper: true,
+  }),
+  'contacts/OtherFilerContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(Batch, 'Batch');
