@@ -135,7 +135,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 3000
     documentType: 
       type: "string"
       flags: 
