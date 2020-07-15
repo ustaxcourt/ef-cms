@@ -4,10 +4,7 @@ import { runAction } from 'cerebral/test';
 import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardDataAction';
 
 describe('updateDocketEntryWizardDataAction', () => {
-<<<<<<< HEAD
-=======
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
->>>>>>> dbe641c8d3ad94a24ab5b0677ede7a5a8ae8bfdd
   const caseDetail = {
     documents: [
       {
@@ -19,21 +16,13 @@ describe('updateDocketEntryWizardDataAction', () => {
         documentId: '2',
         documentTitle: 'B Document',
         documentType: 'B Document',
-<<<<<<< HEAD
-        relationship: 'secondaryDocument',
-=======
         relationship: DOCUMENT_RELATIONSHIPS.SECONDARY,
->>>>>>> dbe641c8d3ad94a24ab5b0677ede7a5a8ae8bfdd
       },
       {
         documentId: '3',
         documentTitle: 'C Document',
         documentType: 'C Document',
-<<<<<<< HEAD
-        relationship: 'primaryDocument',
-=======
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
->>>>>>> dbe641c8d3ad94a24ab5b0677ede7a5a8ae8bfdd
       },
     ],
   };
