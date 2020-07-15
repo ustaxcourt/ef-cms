@@ -2173,7 +2173,7 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
-    it('does not remove a practitionerfrom associated case privatePractitioners array', () => {
+    it('does not remove a practitioner from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
           privatePractitioners: [
