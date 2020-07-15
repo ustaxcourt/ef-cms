@@ -94,7 +94,6 @@ exports.updateDocketEntryInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.generateFiledBy(caseToUpdate, true);
 
   const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
     documentEntity.documentId,
