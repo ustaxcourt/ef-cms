@@ -10,6 +10,7 @@ import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/g
 import { getConstants } from '../../getConstants';
 import { getDefaultDocketViewerDocumentToDisplayAction } from '../actions/getDefaultDocketViewerDocumentToDisplayAction';
 import { getDefaultDraftViewerDocumentToDisplayAction } from '../actions/getDefaultDraftViewerDocumentToDisplayAction';
+import { getDefaultViewerCorrespondenceToDisplayAction } from '../actions/getDefaultViewerCorrespondenceToDisplayAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { parallel, set } from 'cerebral/factories';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -22,6 +23,7 @@ import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTa
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setViewerCorrespondenceToDisplayAction } from '../actions/setViewerCorrespondenceToDisplayAction';
 import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -34,8 +36,10 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getDefaultDocketViewerDocumentToDisplayAction,
   getDefaultDraftViewerDocumentToDisplayAction,
+  getDefaultViewerCorrespondenceToDisplayAction,
   setViewerDocumentToDisplayAction,
   setViewerDraftDocumentToDisplayAction,
+  setViewerCorrespondenceToDisplayAction,
   getCaseDeadlinesForCaseAction,
   getCaseMessagesForCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
