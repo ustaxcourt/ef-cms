@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -15,15 +16,20 @@ import React from 'react';
 
 export const AddDocketEntry = connect(
   {
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openConfirmPaperServiceModalSequence:
+      sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
     saveForLaterDocketEntrySequence: sequences.saveForLaterDocketEntrySequence,
     showModal: state.modal.showModal,
   },
   function AddDocketEntry({
+    form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
+    openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     saveAndServeDocketEntrySequence,
     saveForLaterDocketEntrySequence,
@@ -60,7 +66,7 @@ export const AddDocketEntry = connect(
                     id="save-and-serve"
                     type="submit"
                     onClick={() => {
-                      saveAndServeDocketEntrySequence();
+                      openConfirmPaperServiceModalSequence();
                     }}
                   >
                     Save and Serve
@@ -107,6 +113,12 @@ export const AddDocketEntry = connect(
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal
             confirmSequence={saveAndServeDocketEntrySequence}
+          />
+        )}
+        {showModal === 'ConfirmInitiateServiceModal' && (
+          <ConfirmInitiateServiceModal
+            confirmSequence={saveAndServeDocketEntrySequence}
+            documentTitle={form.documentTitle}
           />
         )}
       </>
