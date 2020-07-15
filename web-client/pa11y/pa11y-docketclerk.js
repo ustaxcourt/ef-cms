@@ -64,8 +64,8 @@ module.exports = [
       'wait for #tab-document-info to be visible',
       'click element #tab-document-info',
       'wait for #has-other-filing-party to be visible',
-      // 'click element #has-other-filing-party',
-      // 'wait for input#other-filing-party to be visible',
+      'click element label#has-other-filing-party-label',
+      'wait for input#other-filing-party to be visible',
     ],
     notes: 'checks a11y of edit docket entry add other filing party',
     url:
