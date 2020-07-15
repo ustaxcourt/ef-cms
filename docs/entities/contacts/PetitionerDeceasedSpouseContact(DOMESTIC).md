@@ -1,4 +1,4 @@
-# contacts/PetitionerSpouseContact
+# contacts/PetitionerDeceasedSpouseContact(DOMESTIC)
  ```
 ---
   type: "object"
@@ -49,12 +49,12 @@
     inCareOf: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     name: 
       type: "string"
       flags: 
@@ -73,6 +73,8 @@
           name: "max"
           args: 
             limit: 100
+      allow: 
+        - null
     secondaryName: 
       type: "string"
       flags: 
