@@ -38,7 +38,7 @@ export const CorrespondenceViewerCorrespondence = connect(
           </div>
         )}
 
-        {!process.env.CI && viewerCorrespondenceToDisplay && (
+        {viewerCorrespondenceToDisplay && (
           <>
             <h3 className="margin-bottom-1">
               {viewerCorrespondenceToDisplay.documentTitle}
@@ -52,6 +52,7 @@ export const CorrespondenceViewerCorrespondence = connect(
               {correspondenceViewerHelper.showEditCorrespondenceButton && (
                 <Button
                   link
+                  className="edit-correspondence-button"
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${viewerCorrespondenceToDisplay.documentId}`}
                   icon="edit"
                   iconColor="white"
@@ -91,10 +92,13 @@ export const CorrespondenceViewerCorrespondence = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe
-              src={iframeSrc}
-              title={viewerCorrespondenceToDisplay.documentTitle}
-            />
+
+            {!process.env.CI && (
+              <iframe
+                src={iframeSrc}
+                title={viewerCorrespondenceToDisplay.documentTitle}
+              />
+            )}
           </>
         )}
       </div>

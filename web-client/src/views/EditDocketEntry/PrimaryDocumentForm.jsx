@@ -1,4 +1,5 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
@@ -12,12 +13,10 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
-import classNames from 'classnames';
 
 export const PrimaryDocumentForm = connect(
   {
     addDocketEntryHelper: state.addDocketEntryHelper,
-    caseDetail: state.caseDetail,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryFormValueSequence:
@@ -28,7 +27,6 @@ export const PrimaryDocumentForm = connect(
   },
   function PrimaryDocumentForm({
     addDocketEntryHelper,
-    caseDetail,
     form,
     internalTypesHelper,
     updateDocketEntryFormValueSequence,
@@ -273,131 +271,11 @@ export const PrimaryDocumentForm = connect(
 
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
-          <FormGroup errorText={addDocketEntryHelper.partyValidationError}>
-            <fieldset
-              className={classNames(
-                'usa-fieldset',
-                !addDocketEntryHelper.showObjection && 'margin-bottom-0',
-              )}
-            >
-              <legend className="usa-legend">
-                Who is filing this document?
-              </legend>
-              <div className="usa-checkbox">
-                <input
-                  checked={form.partyPrimary || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name="partyPrimary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-primary"
-                >
-                  {caseDetail.contactPrimary.name}
-                </label>
-              </div>
-              {addDocketEntryHelper.showSecondaryParty && (
-                <div className="usa-checkbox">
-                  <input
-                    checked={form.partySecondary || false}
-                    className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="partySecondary"
-                    type="checkbox"
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="party-secondary"
-                  >
-                    {caseDetail.contactSecondary.name}
-                  </label>
-                </div>
-              )}
-              <div className="usa-checkbox">
-                <input
-                  checked={form.partyIrsPractitioner || false}
-                  className="usa-checkbox__input"
-                  id="party-irs-practitioner"
-                  name="partyIrsPractitioner"
-                  type="checkbox"
-                  onChange={e => {
-                    updateDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-irs-practitioner"
-                >
-                  Respondent
-                </label>
-              </div>
-              <div className="usa-checkbox">
-                <input
-                  checked={form.hasOtherFilingParty || false}
-                  className="usa-checkbox__input"
-                  id="has-other-filing-party"
-                  name="hasOtherFilingParty"
-                  type="checkbox"
-                  onChange={e => {
-                    updateDocketEntryFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="has-other-filing-party"
-                >
-                  Other
-                </label>
-              </div>
-              {form.hasOtherFilingParty && (
-                <FormGroup errorText={validationErrors.otherFilingParty}>
-                  <div>
-                    <label
-                      className="usa-label"
-                      htmlFor="other-filing-party"
-                      id="other-filing-party"
-                    >
-                      Other filing party name
-                    </label>
-                    <input
-                      aria-describedby="other-filing-party-label"
-                      className="usa-input"
-                      id="other-filing-party"
-                      name="otherFilingParty"
-                      type="text"
-                      value={form.otherFilingParty || ''}
-                      onChange={e => {
-                        updateDocketEntryFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </FormGroup>
-              )}
-            </fieldset>
-          </FormGroup>
+          <FilingPartiesForm
+            updateSequence={updateDocketEntryFormValueSequence}
+            validateSequence={validateDocketEntrySequence}
+          />
+
           {addDocketEntryHelper.showObjection && (
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
