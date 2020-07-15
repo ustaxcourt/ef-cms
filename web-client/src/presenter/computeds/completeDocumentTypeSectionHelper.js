@@ -32,7 +32,11 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
     CATEGORY_MAP[selectedDocumentCategory] || []
   ).find(entry => entry.documentType === selectedDocumentType);
 
-  returnData.primary = getOptionsForCategory(caseDetail, categoryInformation);
+  returnData.primary = getOptionsForCategory(
+    applicationContext,
+    caseDetail,
+    categoryInformation,
+  );
   if (returnData.primary.showSecondaryDocumentSelect) {
     returnData.secondary = {};
     returnData.primary.showSecondaryDocumentSelect = false;
@@ -48,6 +52,7 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
       ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
       returnData.secondary = getOptionsForCategory(
+        applicationContext,
         caseDetail,
         secondaryCategoryInformation,
       );
