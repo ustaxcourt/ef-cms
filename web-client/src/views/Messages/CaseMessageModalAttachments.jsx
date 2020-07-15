@@ -88,6 +88,12 @@ export const CaseMessageModalAttachments = connect(
                   {caseMessageModalHelper.documents.map(getDocumentOption)}
                 </optgroup>
               )}
+
+              {caseMessageModalHelper.correspondence.length > 0 && (
+                <optgroup label="Correspondence">
+                  {caseMessageModalHelper.correspondence.map(getDocumentOption)}
+                </optgroup>
+              )}
             </select>
           </FormGroup>
         )}

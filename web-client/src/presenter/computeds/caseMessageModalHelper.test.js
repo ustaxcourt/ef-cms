@@ -19,6 +19,12 @@ describe('caseMessageModalHelper', () => {
 
     caseDetail = {
       ...MOCK_CASE,
+      correspondence: [
+        {
+          documentId: '986',
+          documentTitle: 'Test Correspondence',
+        },
+      ],
       docketRecord: [
         { documentId: '123', index: 1 },
         { documentId: '234', index: 2 },
@@ -50,6 +56,24 @@ describe('caseMessageModalHelper', () => {
       { documentId: '234' },
     ]);
     expect(result.documents.length).toEqual(2);
+  });
+
+  it('returns correspondence from formattedCaseDetail', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.correspondence).toMatchObject([
+      { documentId: '986', documentTitle: 'Test Correspondence' },
+    ]);
   });
 
   it('returns draftDocuments from formattedCaseDetail', () => {
