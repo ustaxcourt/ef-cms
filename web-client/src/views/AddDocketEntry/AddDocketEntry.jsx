@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -15,7 +16,7 @@ import React from 'react';
 export const AddDocketEntry = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isEditingDocketEntry: state.isEditingDocketEntry,
+    paperDocketEntryHelper: state.paperDocketEntryHelper,
     saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
     saveForLaterDocketEntrySequence: sequences.saveForLaterDocketEntrySequence,
     showModal: state.modal.showModal,
@@ -23,6 +24,7 @@ export const AddDocketEntry = connect(
   function AddDocketEntry({
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
+    paperDocketEntryHelper,
     saveAndServeDocketEntrySequence,
     saveForLaterDocketEntrySequence,
     showModal,
@@ -42,7 +44,7 @@ export const AddDocketEntry = connect(
             </div>
 
             <div className="grid-col-7">
-              {isEditingDocketEntry && (
+              {paperDocketEntryHelper.showAddDocumentWarning && (
                 <Hint exclamation fullWidth>
                   This docket entry is incomplete. Add a document and save to
                   complete this entry.
@@ -90,10 +92,15 @@ export const AddDocketEntry = connect(
               </section>
             </div>
             <div className="grid-col-7">
-              <ScanBatchPreviewer
-                documentType="primaryDocumentFile"
-                title="Add Document"
-              />
+              {paperDocketEntryHelper.docketEntryHasDocument && (
+                <DocumentDisplayIframe />
+              )}
+              {!paperDocketEntryHelper.docketEntryHasDocument && (
+                <ScanBatchPreviewer
+                  documentType="primaryDocumentFile"
+                  title="Add Document"
+                />
+              )}
             </div>
           </div>
         </section>
