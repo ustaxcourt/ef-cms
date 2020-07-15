@@ -9,7 +9,9 @@ import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAc
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
+import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
@@ -75,11 +77,22 @@ export const saveAndServeDocketEntrySequence = [
           generateTitleAction,
           stopShowValidationAction,
           clearAlertsAction,
-          openFileUploadStatusModalAction,
-          uploadDocketEntryFileAction,
+          isFileAttachedAction,
           {
-            error: [openFileUploadErrorModal],
-            success: [saveDocketEntryAction, afterEntryCreated],
+            no: [saveDocketEntryAction, afterEntryCreated],
+            yes: [
+              openFileUploadStatusModalAction,
+              getDocumentIdAction,
+              uploadDocketEntryFileAction,
+              {
+                error: [openFileUploadErrorModal],
+                success: [
+                  saveDocketEntryAction,
+                  closeFileUploadStatusModalAction,
+                  afterEntryCreated,
+                ],
+              },
+            ],
           },
         ],
       },

@@ -137,7 +137,7 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       if (metadata.isPaper) {
-        if (metadata.isFileAttached) {
+        if (metadata.isFileAttached && !isSavingForLater) {
           workItem.setAsCompleted({
             message: 'completed',
             user,
