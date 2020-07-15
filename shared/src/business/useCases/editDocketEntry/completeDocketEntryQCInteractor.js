@@ -6,6 +6,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  DOCUMENT_RELATIONSHIPS,
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
@@ -103,7 +104,7 @@ exports.completeDocketEntryQCInteractor = async ({
     {
       ...currentDocument,
       ...editableFields,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
