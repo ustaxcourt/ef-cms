@@ -50,6 +50,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -74,6 +75,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -98,6 +100,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -126,6 +129,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -154,6 +158,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -182,6 +187,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -206,11 +212,42 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
         viewerDocumentToDisplay: {
           documentId: '123',
+        },
+      },
+    });
+
+    expect(result.showAddDocketEntryButton).toEqual(false);
+  });
+
+  it('return showAddDocketEntryButton false if the document is a correspondence file', () => {
+    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [
+            {
+              documentId: '567',
+              documentTitle: 'Test Correspondence',
+            },
+          ],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '567',
         },
       },
     });
@@ -230,6 +267,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -255,6 +293,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -281,6 +320,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -306,6 +346,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -336,6 +377,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -363,7 +405,11 @@ describe('messageDocumentHelper', () => {
             },
           ],
           documents: [
-            { documentId: '123', signedAt: '2020-06-25T20:49:28.192Z' },
+            {
+              documentId: '123',
+              entityName: 'Document',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
           ],
         },
         viewerDocumentToDisplay: {
@@ -373,6 +419,36 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showApplySignatureButton).toEqual(false);
+  });
+
+  it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {
+    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [
+            {
+              documentId: '567',
+              documentTitle: 'Test Correspondence',
+            },
+          ],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '567',
+        },
+      },
+    });
+
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
@@ -388,6 +464,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
               signedAt: '123',
             },
           ],
@@ -413,6 +490,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -437,6 +515,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -465,6 +544,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
             },
           ],
         },
@@ -491,6 +571,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
               eventCode: 'MISC', // Does not require a signature
             },
           ],
@@ -518,6 +599,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
+              entityName: 'Document',
               eventCode: 'O', // Requires a signature
             },
           ],
