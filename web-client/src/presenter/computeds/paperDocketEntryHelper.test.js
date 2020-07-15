@@ -38,7 +38,7 @@ describe('paperDocketEntryHelper', () => {
     expect(result.showAddDocumentWarning).toBeFalsy();
   });
 
-  it('should set showAddDocumentWarning to FALSE if documentId is set in the state and user is editing docket entry with NO document attached', () => {
+  it('should set showAddDocumentWarning to TRUE if documentId is set in the state and user is editing docket entry with NO document attached', () => {
     const result = runCompute(paperDocketEntryHelper, {
       state: {
         caseDetail: {
