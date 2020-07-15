@@ -1,5 +1,4 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -28,7 +27,6 @@ describe('addDocketEntryHelper', () => {
       showObjection: false,
       showPrimaryDocumentValid: false,
       showSecondaryDocumentValid: false,
-      showSecondaryParty: false,
     };
 
     const result = runCompute(addDocketEntryHelper, {
@@ -70,12 +68,6 @@ describe('addDocketEntryHelper', () => {
     expect(result.showPrimaryDocumentValid).toBeTruthy();
   });
 
-  it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
-    state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showSecondaryParty).toBeTruthy();
-  });
-
   it('generates correctly formatted service date', () => {
     state.form.certificateOfServiceDate = '2012-05-31';
     const result = runCompute(addDocketEntryHelper, { state });
@@ -85,17 +77,6 @@ describe('addDocketEntryHelper', () => {
   it('does not generate a formatted service date if a service date is not entered on the form', () => {
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
-  });
-
-  it('does not show party validation error if none of the party validation errors exists', () => {
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.partyValidationError).toBeUndefined();
-  });
-
-  it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { partyPrimary: 'You did something bad.' };
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
   it('should show track option as default', () => {
