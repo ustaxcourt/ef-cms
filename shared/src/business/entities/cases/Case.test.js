@@ -3326,7 +3326,7 @@ describe('Case entity', () => {
             {
               description: 'second record',
               documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: 'STIN',
+              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
               filingDate: '2018-03-01T00:02:00.000Z',
               index: 1,
             },
