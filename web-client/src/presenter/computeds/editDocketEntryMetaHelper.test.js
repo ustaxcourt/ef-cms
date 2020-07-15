@@ -11,11 +11,7 @@ const editDocketEntryMetaHelper = withAppContextDecorator(
 );
 
 describe('editDocketEntryMetaHelper', () => {
-  let PARTY_TYPES;
-
-  beforeAll(() => {
-    ({ PARTY_TYPES } = applicationContext.getConstants());
-  });
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   describe('showObjection', () => {
     it('should show objection field if the documentType allows (e.g. Motions)', () => {
