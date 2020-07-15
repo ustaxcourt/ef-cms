@@ -1,4 +1,4 @@
-# contacts/PartnershipAsTaxMattersPartnerContact
+# contacts/PetitionerEstateWithExecutorPrimaryContact(DOMESTIC)
  ```
 ---
   type: "object"
@@ -90,7 +90,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 100
     serviceIndicator: 
       type: "string"
       flags: 

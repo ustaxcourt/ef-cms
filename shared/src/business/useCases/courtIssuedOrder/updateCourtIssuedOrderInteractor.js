@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
+const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -86,7 +87,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
       documentId: documentIdToEdit,
       filedBy: user.name,
       numberOfPages,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
     { applicationContext },

@@ -3,7 +3,10 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
+} = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetail = (test, overrides = {}) => {
   return it('petitioner views case detail', async () => {
@@ -34,7 +37,9 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetailFormatted.documents).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ eventCode: 'P' }),
-        expect.objectContaining({ eventCode: 'STIN' }),
+        expect.objectContaining({
+          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        }),
       ]),
     );
     expect(

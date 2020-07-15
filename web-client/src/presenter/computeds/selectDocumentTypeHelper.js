@@ -1,7 +1,11 @@
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
-export const getOptionsForCategory = (caseDetail, categoryInformation) => {
+export const getOptionsForCategory = (
+  applicationContext,
+  caseDetail,
+  categoryInformation,
+) => {
   let options = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
@@ -17,7 +21,10 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
     case 'Nonstandard A': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+          applicationContext,
+          caseDetail,
+        ),
         showNonstandardForm: true,
       };
       break;
@@ -33,7 +40,10 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
     case 'Nonstandard C': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+          applicationContext,
+          caseDetail,
+        ),
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: categoryInformation.labelFreeText,
@@ -43,7 +53,10 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
     case 'Nonstandard D': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+          applicationContext,
+          caseDetail,
+        ),
         showDateFields: true,
         showNonstandardForm: true,
         textInputLabel: categoryInformation.labelFreeText,
@@ -62,7 +75,10 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
       options = {
         ordinalField: categoryInformation.ordinalField,
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getPreviouslyFiledDocuments(caseDetail),
+        previouslyFiledDocuments: getPreviouslyFiledDocuments(
+          applicationContext,
+          caseDetail,
+        ),
         showNonstandardForm: true,
       };
       break;
@@ -106,13 +122,15 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
 };
 
 export const getPreviouslyFiledDocuments = (
+  applicationContext,
   caseDetail,
   documentIdWhitelist,
 ) => {
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   return caseDetail.documents
     .filter(
       document =>
-        document.documentType !== 'Statement of Taxpayer Identification',
+        document.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
     )
     .filter(
       document =>
@@ -138,7 +156,11 @@ export const selectDocumentTypeHelper = (get, applicationContext) => {
     CATEGORY_MAP[selectedDocumentCategory] || []
   ).find(entry => entry.documentType === selectedDocumentType);
 
-  returnData.primary = getOptionsForCategory(caseDetail, categoryInformation);
+  returnData.primary = getOptionsForCategory(
+    applicationContext,
+    caseDetail,
+    categoryInformation,
+  );
 
   if (returnData.primary.showSecondaryDocumentSelect) {
     returnData.filteredSecondaryDocumentTypes = [];
@@ -160,6 +182,7 @@ export const selectDocumentTypeHelper = (get, applicationContext) => {
         ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
         returnData.secondary = getOptionsForCategory(
+          applicationContext,
           caseDetail,
           secondaryCategoryInformation,
         );
