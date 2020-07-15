@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
@@ -13,24 +14,24 @@ const { Message } = require('./Message');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
-const A_VALID_DOCUMENT = {
-  documentType: 'Petition',
-  eventCode: 'A',
-  filedBy: 'Test Petitioner',
-  role: ROLES.petitioner,
-  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-};
-const caseDetail = {
-  contactPrimary: {
-    name: 'Bob',
-  },
-  contactSecondary: {
-    name: 'Bill',
-  },
-};
-const mockUserId = applicationContext.getUniqueId();
-
 describe('Document entity', () => {
+  const A_VALID_DOCUMENT = {
+    documentType: 'Petition',
+    eventCode: 'A',
+    filedBy: 'Test Petitioner',
+    role: ROLES.petitioner,
+    userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+  };
+  const caseDetail = {
+    contactPrimary: {
+      name: 'Bob',
+    },
+    contactSecondary: {
+      name: 'Bill',
+    },
+  };
+  const mockUserId = applicationContext.getUniqueId();
+
   describe('isPendingOnCreation', () => {
     beforeAll(() => {
       jest.spyOn(Document, 'isPendingOnCreation');
@@ -664,7 +665,7 @@ describe('Document entity', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -692,7 +693,7 @@ describe('Document entity', () => {
           objections: 'No',
           partyPrimary: false,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -723,7 +724,7 @@ describe('Document entity', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
@@ -753,7 +754,7 @@ describe('Document entity', () => {
           partyPrimary: false,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
@@ -789,7 +790,7 @@ describe('Document entity', () => {
           partyPrimary: false,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
@@ -828,7 +829,7 @@ describe('Document entity', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
@@ -860,7 +861,7 @@ describe('Document entity', () => {
           privatePractitioners: {
             name: 'Test Practitioner',
           },
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
@@ -891,7 +892,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
@@ -922,7 +923,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: false,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
@@ -957,7 +958,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
@@ -994,7 +995,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
@@ -1019,7 +1020,7 @@ describe('Document entity', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -1047,7 +1048,7 @@ describe('Document entity', () => {
           objections: 'No',
           partyPrimary: false,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -1077,7 +1078,7 @@ describe('Document entity', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
@@ -1110,7 +1111,7 @@ describe('Document entity', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
@@ -1145,7 +1146,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1176,7 +1177,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: false,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1211,7 +1212,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1248,7 +1249,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1495,7 +1496,7 @@ describe('Document entity', () => {
       expect(createdDocument.isValid()).toEqual(false);
       expect(
         Object.keys(createdDocument.getFormattedValidationErrors()),
-      ).toEqual(['secondaryDocument']);
+      ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
