@@ -35,7 +35,6 @@ export const EditDocketEntry = connect(
     return (
       <>
         <CaseDetailHeader />
-
         <section className="usa-section grid-container">
           {editDocketEntryHelper.showPaperServiceWarning && (
             <Hint exclamation fullWidth>

@@ -49,13 +49,13 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
-const DOCUMENT_RELATIONSHIPS = [
-  'primaryDocument',
-  'primarySupportingDocument',
-  'secondaryDocument',
-  'secondarySupportingDocument',
-  'supportingDocument',
-];
+const DOCUMENT_RELATIONSHIPS = {
+  PRIMARY: 'primaryDocument',
+  PRIMARY_SUPPORTING: 'primarySupportingDocument',
+  SECONDARY: 'secondaryDocument',
+  SECONDARY_SUPPORTING: 'secondarySupportingDocument',
+  SUPPORTING: 'supportingDocument',
+};
 
 // This docket entry type isn't defined anywhere else
 const STIN_DOCKET_ENTRY_TYPE = {

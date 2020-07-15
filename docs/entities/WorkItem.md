@@ -143,13 +143,13 @@
         only: true
         presence: "optional"
       allow: 
-        - "W"
-        - "P"
         - "X"
         - "R"
-        - "SL"
         - "L"
+        - "P"
         - "S"
+        - "SL"
+        - "W"
         - null
     document: 
       type: "object"
