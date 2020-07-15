@@ -207,6 +207,7 @@
         - "PR"
         - "PW"
         - "VI"
+        - "N/A"
     postalCode: 
       type: "string"
       flags: 
