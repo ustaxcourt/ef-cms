@@ -186,11 +186,9 @@ joiValidationDecorator(
     documentId: JoiValidationConstants.UUID.required().description(
       'ID of the associated PDF document in the S3 bucket.',
     ),
-    documentTitle: joi
-      .string()
-      .max(500)
-      .optional()
-      .description('The title of this document.'),
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+      'The title of this document.',
+    ),
     documentType: joi
       .string()
       .valid(...ALL_DOCUMENT_TYPES)
