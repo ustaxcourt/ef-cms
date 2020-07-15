@@ -52,6 +52,7 @@ export const CorrespondenceViewerCorrespondence = connect(
               {correspondenceViewerHelper.showEditCorrespondenceButton && (
                 <Button
                   link
+                  className="edit-correspondence-button"
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${viewerCorrespondenceToDisplay.documentId}`}
                   icon="edit"
                   iconColor="white"
