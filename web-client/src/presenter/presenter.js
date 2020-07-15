@@ -148,6 +148,8 @@ import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCou
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
+import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
+import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
@@ -190,6 +192,7 @@ import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConf
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
 import { openConfirmEditSignatureModalSequence } from './sequences/openConfirmEditSignatureModalSequence';
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
+import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServeToIrsModalSequence';
@@ -581,6 +584,8 @@ export const presenter = {
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
     leaveCaseForLaterServiceSequence,
+    loadDefaultDocketViewerDocumentToDisplaySequence,
+    loadDefaultDraftViewerDocumentToDisplaySequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
@@ -623,6 +628,7 @@ export const presenter = {
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
     openConfirmInitiateServiceModalSequence,
+    openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
     openConfirmServeToIrsModalSequence,

@@ -1,33 +1,34 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDocketEntryWizardDataAction } from './updateDocketEntryWizardDataAction';
 
-const caseDetail = {
-  documents: [
-    {
-      documentId: '1',
-      documentTitle: 'A Document',
-      documentType: 'A Document',
-    },
-    {
-      documentId: '2',
-      documentTitle: 'B Document',
-      documentType: 'B Document',
-      relationship: 'secondaryDocument',
-    },
-    {
-      documentId: '3',
-      documentTitle: 'C Document',
-      documentType: 'C Document',
-      relationship: 'primaryDocument',
-    },
-  ],
-};
-
-presenter.providers.applicationContext = applicationContextForClient;
-
 describe('updateDocketEntryWizardDataAction', () => {
+  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
+  const caseDetail = {
+    documents: [
+      {
+        documentId: '1',
+        documentTitle: 'A Document',
+        documentType: 'A Document',
+      },
+      {
+        documentId: '2',
+        documentTitle: 'B Document',
+        documentType: 'B Document',
+        relationship: DOCUMENT_RELATIONSHIPS.SECONDARY,
+      },
+      {
+        documentId: '3',
+        documentTitle: 'C Document',
+        documentType: 'C Document',
+        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+      },
+    ],
+  };
+
+  presenter.providers.applicationContext = applicationContext;
+
   it('clear Certificate Of Service date items when certificateOfService is updated', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       modules: { presenter },
@@ -47,6 +48,21 @@ describe('updateDocketEntryWizardDataAction', () => {
     expect(result.state.form.certificateOfServiceDay).toEqual(undefined);
     expect(result.state.form.certificateOfServiceMonth).toEqual(undefined);
     expect(result.state.form.certificateOfServiceYear).toEqual(undefined);
+  });
+
+  it('should clear otherFilingParty when hasOtherFilingParty is updated', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      modules: { presenter },
+      props: {
+        key: 'hasOtherFilingParty',
+      },
+      state: {
+        form: {
+          otherFilingParty: 'Not the petitioner',
+        },
+      },
+    });
+    expect(result.state.form.otherFilingParty).toEqual(undefined);
   });
 
   it('unsets form state values when props.key=eventCode', async () => {
@@ -102,14 +118,14 @@ describe('updateDocketEntryWizardDataAction', () => {
       documentId: '3',
       documentTitle: 'C Document',
       documentType: 'C Document',
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
     });
     expect(result.state.form).toEqual({
       previousDocument: {
         documentId: '3',
         documentTitle: 'C Document',
         documentType: 'C Document',
-        relationship: 'primaryDocument',
+        relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       },
       something: true,
       somethingElse: false,

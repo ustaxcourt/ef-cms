@@ -13,5 +13,7 @@ export const setDocumentIsRequiredAction = ({ get, store }) => {
 
   if (!isEditingDocketEntry && !documentId) {
     store.set(state.form.isDocumentRequired, true);
+  } else {
+    store.unset(state.form.isDocumentRequired);
   }
 };

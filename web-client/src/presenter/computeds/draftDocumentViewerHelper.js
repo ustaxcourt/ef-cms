@@ -15,9 +15,11 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
 
   const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
 
-  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
-    viewerDraftDocumentToDisplay.eventCode,
-  );
+  const documentRequiresSignature =
+    viewerDraftDocumentToDisplay &&
+    EVENT_CODES_REQUIRING_SIGNATURE.includes(
+      viewerDraftDocumentToDisplay.eventCode,
+    );
 
   const formattedDocumentToDisplay =
     viewerDraftDocumentToDisplay &&

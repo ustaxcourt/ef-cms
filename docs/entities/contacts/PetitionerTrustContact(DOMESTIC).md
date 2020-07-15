@@ -1,4 +1,4 @@
-# contacts/SurvivingSpouseContact
+# contacts/PetitionerTrustContact(DOMESTIC)
  ```
 ---
   type: "object"
