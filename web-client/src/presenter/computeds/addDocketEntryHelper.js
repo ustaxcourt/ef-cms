@@ -77,6 +77,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   }
 
   const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
+    applicationContext,
     caseDetail,
     documentIdWhitelist,
   );
@@ -104,11 +105,13 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   );
 
   const optionsForCategory = getOptionsForCategory(
+    applicationContext,
     caseDetail,
     categoryInformation,
   );
 
   const secondaryOptionsForCategory = getOptionsForCategory(
+    applicationContext,
     caseDetail,
     secondaryCategoryInformation,
   );

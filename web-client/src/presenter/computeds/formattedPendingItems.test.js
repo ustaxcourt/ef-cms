@@ -4,16 +4,17 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedPendingItems', () => {
-  const formattedPendingItems = withAppContextDecorator(
-    formattedPendingItemsComputed,
-  );
-
   const {
     CHIEF_JUDGE,
     DOCKET_NUMBER_SUFFIXES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    DOCUMENT_RELATIONSHIPS,
     STATUS_TYPES,
   } = applicationContext.getConstants();
+
+  const formattedPendingItems = withAppContextDecorator(
+    formattedPendingItemsComputed,
+  );
 
   const mockPendingItems = [
     {
@@ -38,7 +39,7 @@ describe('formattedPendingItems', () => {
       privatePractitioners: [],
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2019-01-10',
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       scenario: 'Standard',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [
@@ -73,7 +74,7 @@ describe('formattedPendingItems', () => {
             privatePractitioners: [],
             processingStatus: 'pending',
             receivedAt: '2019-01-10',
-            relationship: 'primaryDocument',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Standard',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -123,7 +124,7 @@ describe('formattedPendingItems', () => {
       privatePractitioners: [],
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2018-01-20',
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       scenario: 'Nonstandard C',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [
@@ -160,7 +161,7 @@ describe('formattedPendingItems', () => {
             privatePractitioners: [],
             processingStatus: 'pending',
             receivedAt: '2019-01-20',
-            relationship: 'primaryDocument',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Nonstandard C',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -210,7 +211,7 @@ describe('formattedPendingItems', () => {
       privatePractitioners: [],
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2018-01-20',
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       scenario: 'Nonstandard C',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       workItems: [
@@ -247,7 +248,7 @@ describe('formattedPendingItems', () => {
             privatePractitioners: [],
             processingStatus: 'pending',
             receivedAt: '2019-01-20',
-            relationship: 'primaryDocument',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Nonstandard C',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },

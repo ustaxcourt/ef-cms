@@ -12,6 +12,7 @@ describe('publicCaseDetailHelper', () => {
   );
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    INITIAL_DOCUMENT_TYPES,
   } = applicationContextPublic.getConstants();
 
   beforeEach(() => {
@@ -88,7 +89,7 @@ describe('publicCaseDetailHelper', () => {
         createdAt: '2018-11-21T20:49:28.192Z',
         documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Statement of Taxpayer Identification',
-        documentType: 'Statement of Taxpayer Identification',
+        documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
       {
