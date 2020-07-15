@@ -42,6 +42,7 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   );
 
   const optionsForCategory = getOptionsForCategory(
+    applicationContext,
     caseDetail,
     categoryInformation,
   );

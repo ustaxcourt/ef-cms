@@ -3,6 +3,7 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -210,7 +211,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         {
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
-          documentType: 'Statement of Taxpayer Identification',
+          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
