@@ -67,6 +67,7 @@ exports.updateDocketEntryInteractor = async ({
     mailingDate: documentMetadata.mailingDate,
     objections: documentMetadata.objections,
     ordinalValue: documentMetadata.ordinalValue,
+    otherFilingParty: documentMetadata.otherFilingParty,
     partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
     partyPrimary: documentMetadata.partyPrimary,
     partySecondary: documentMetadata.partySecondary,

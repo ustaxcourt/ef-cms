@@ -89,6 +89,7 @@ exports.completeDocketEntryQCInteractor = async ({
     mailingDate: entryMetadata.mailingDate,
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
+    otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     partyPrimary: entryMetadata.partyPrimary,
     partySecondary: entryMetadata.partySecondary,
