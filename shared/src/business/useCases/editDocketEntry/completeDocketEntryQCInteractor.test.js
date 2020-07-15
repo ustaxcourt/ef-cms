@@ -170,6 +170,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
+          partyPrimary: true,
         },
       }),
     ).resolves.not.toThrow();
@@ -208,6 +209,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -238,6 +240,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -264,6 +267,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -288,6 +292,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
+        partyPrimary: true,
       },
     });
 
@@ -317,6 +322,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -356,6 +362,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -394,6 +401,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
+        partyPrimary: true,
       },
     });
 

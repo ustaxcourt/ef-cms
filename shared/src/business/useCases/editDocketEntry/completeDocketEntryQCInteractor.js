@@ -103,6 +103,7 @@ exports.completeDocketEntryQCInteractor = async ({
   const updatedDocument = new Document(
     {
       ...currentDocument,
+      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
