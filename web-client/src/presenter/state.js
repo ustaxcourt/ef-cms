@@ -59,6 +59,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
+import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -146,6 +147,7 @@ const helpers = {
   messageDocumentHelper,
   messagesHelper,
   orderTypesHelper,
+  paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
   practitionerDetailHelper,
