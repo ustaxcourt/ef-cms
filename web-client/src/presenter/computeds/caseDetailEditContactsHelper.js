@@ -142,7 +142,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactSecondary: {
           displayPhone: true,
           header: 'Spouse Information',
-          nameLabel: "Spouse's name",
+          nameLabel: 'Spouse‘s name',
         },
       };
       break;
