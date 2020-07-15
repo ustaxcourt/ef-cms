@@ -217,7 +217,7 @@ export const CourtIssuedDocketEntry = connect(
                   )}
                   <Button
                     secondary
-                    id="save-and-add-supporting"
+                    id="save-entry-button"
                     onClick={() => submitCourtIssuedDocketEntrySequence()}
                   >
                     Save Entry
