@@ -6,6 +6,7 @@ export const caseMessageModalHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const {
+    correspondence,
     docketRecordWithDocument,
     draftDocuments,
   } = applicationContext
@@ -32,6 +33,7 @@ export const caseMessageModalHelper = (get, applicationContext) => {
     form.attachments && form.attachments.length > 0;
 
   return {
+    correspondence,
     documents,
     draftDocuments,
     showAddDocumentForm: canAddDocument && shouldShowAddDocumentForm,
