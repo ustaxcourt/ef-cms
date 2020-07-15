@@ -113,8 +113,6 @@ exports.completeDocketEntryQCInteractor = async ({
     },
     { applicationContext },
   ).validate();
-
-  updatedDocument.generateFiledBy(caseToUpdate, true);
   updatedDocument.setQCed(user);
 
   let updatedDocumentTitle = updatedDocument.documentTitle;

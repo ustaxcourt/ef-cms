@@ -462,52 +462,46 @@ and contact info from the case detail
  * @param {object} caseDetail the case detail
  * @param {boolean} force flag to force filedBy's generation
  */
-Document.prototype.generateFiledBy = function (caseDetail, force = false) {
-  if (force || !this.filedBy) {
-    let partiesArray = [];
-    this.partyIrsPractitioner && partiesArray.push('Resp.');
+Document.prototype.generateFiledBy = function (caseDetail) {
+  let partiesArray = [];
+  this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-    Array.isArray(this.privatePractitioners) &&
-      this.privatePractitioners.forEach(practitioner => {
-        practitioner.partyPrivatePractitioner &&
-          partiesArray.push(`Counsel ${practitioner.name}`);
-      });
+  Array.isArray(this.privatePractitioners) &&
+    this.privatePractitioners.forEach(practitioner => {
+      practitioner.partyPrivatePractitioner &&
+        partiesArray.push(`Counsel ${practitioner.name}`);
+    });
 
-    if (
-      this.partyPrimary &&
-      !this.partySecondary &&
-      caseDetail.contactPrimary
-    ) {
-      partiesArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
-    } else if (
-      this.partySecondary &&
-      !this.partyPrimary &&
-      caseDetail.contactSecondary
-    ) {
-      partiesArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
-    } else if (
-      this.partyPrimary &&
-      this.partySecondary &&
-      caseDetail.contactPrimary &&
-      caseDetail.contactSecondary
-    ) {
-      partiesArray.push(
-        `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
-      );
-    }
+  if (this.partyPrimary && !this.partySecondary && caseDetail.contactPrimary) {
+    partiesArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+  } else if (
+    this.partySecondary &&
+    !this.partyPrimary &&
+    caseDetail.contactSecondary
+  ) {
+    partiesArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
+  } else if (
+    this.partyPrimary &&
+    this.partySecondary &&
+    caseDetail.contactPrimary &&
+    caseDetail.contactSecondary
+  ) {
+    partiesArray.push(
+      `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
+    );
+  }
 
-    const filedByArray = [];
-    if (partiesArray.length) {
-      filedByArray.push(partiesArray.join(' & '));
-    }
-    if (this.otherFilingParty) {
-      filedByArray.push(this.otherFilingParty);
-    }
+  const filedByArray = [];
+  if (partiesArray.length) {
+    filedByArray.push(partiesArray.join(' & '));
+  }
+  if (this.otherFilingParty) {
+    filedByArray.push(this.otherFilingParty);
+  }
 
-    const filedByString = filedByArray.join(', ');
-    if (filedByString) {
-      this.filedBy = filedByString;
-    }
+  const filedByString = filedByArray.join(', ');
+  if (filedByString) {
+    this.filedBy = filedByString;
   }
 };
 /**

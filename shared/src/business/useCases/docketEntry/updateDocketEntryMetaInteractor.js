@@ -84,10 +84,13 @@ exports.updateDocketEntryMetaInteractor = async ({
   const documentEntityForFiledBy = new Document(
     {
       ...docketEntryMeta,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
   const newFiledBy = documentEntityForFiledBy.filedBy;
 
   const docketRecordEntity = new DocketRecord(
