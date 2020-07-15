@@ -1348,6 +1348,7 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
+          initialDocketNumberSuffix: 'S',
           isPaper: false,
           status: CASE_STATUS_TYPES.generalDocket,
         },
@@ -1355,7 +1356,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('S');
       caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
@@ -1374,6 +1375,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -2100,6 +2102,19 @@ describe('Case entity', () => {
       ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
+    it('should not change any documents if no match is found', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+
+      myCase.updateDocument({
+        documentId: '11001001',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
+
+      expect(myCase.documents).toMatchObject(MOCK_DOCUMENTS);
+    });
+
     it('should update a correspondence document', () => {
       const mockCorrespondence = new Correspondence({
         documentId: '123-abc',
@@ -2158,6 +2173,27 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
+    it('does not remove a practitioner from associated case privatePractitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          privatePractitioners: [
+            new PrivatePractitioner({ userId: 'privatePractitioner1' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner2' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+
+      caseToVerify.removePrivatePractitioner({
+        userId: 'privatePractitioner99',
+      });
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+    });
     it('removes the user from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
@@ -2219,6 +2255,26 @@ describe('Case entity', () => {
   });
 
   describe('removeIrsPractitioner', () => {
+    it('does not remove a practitioner if not found in irsPractitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          irsPractitioners: [
+            new IrsPractitioner({ userId: 'irsPractitioner1' }),
+            new IrsPractitioner({ userId: 'irsPractitioner2' }),
+            new IrsPractitioner({ userId: 'irsPractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+
+      caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner99' });
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    });
+
     it('removes the user from associated case irsPractitioners array', () => {
       const caseToVerify = new Case(
         {
