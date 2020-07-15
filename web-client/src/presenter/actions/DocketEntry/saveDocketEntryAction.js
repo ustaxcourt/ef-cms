@@ -29,6 +29,16 @@ export const saveDocketEntryAction = async ({
       : isUpdating
       ? get(state.documentId)
       : applicationContext.getUniqueId();
+  const isServingUpdatedDocketEntry = isUpdating && !isSavingForLater;
+
+  let caseDetail = get(state.caseDetail);
+  const docketEntryHasDocument = caseDetail.documents.find(
+    item => item.documentId === documentId,
+  );
+
+  const generateCoversheet =
+    (isFileAttached && shouldGenerateCoversheet !== false) ||
+    (isServingUpdatedDocketEntry && docketEntryHasDocument.isFileAttached);
 
   let documentMetadata = omit(
     {
@@ -42,9 +52,9 @@ export const saveDocketEntryAction = async ({
     caseId,
     createdAt: documentMetadata.dateReceived,
     docketNumber,
-    isFileAttached: !!isFileAttached,
-    isInProgress: isSavingForLater,
+    isFileAttached: !!isFileAttached || generateCoversheet,
     isPaper: true,
+    isUpdating,
     receivedAt: documentMetadata.dateReceived,
   };
 
@@ -59,8 +69,6 @@ export const saveDocketEntryAction = async ({
       documentId,
     });
   }
-
-  let caseDetail;
 
   if (isUpdating) {
     caseDetail = await applicationContext
@@ -82,7 +90,7 @@ export const saveDocketEntryAction = async ({
       });
   }
 
-  if (isFileAttached && shouldGenerateCoversheet !== false) {
+  if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
