@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * gets the first draft document from the current case detail to set as the default viewerCorrespondenceToDisplay
+ * gets the first correspondence document from the current case detail to set as the default viewerCorrespondenceToDisplay
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

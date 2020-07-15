@@ -34,7 +34,7 @@ export const Correspondence = connect(
                   <thead>
                     <tr>
                       <th className="small">Date</th>
-                      <th>Correspondence Descirption</th>
+                      <th>Correspondence Description</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -15,7 +15,7 @@ export const setViewerCorrespondenceToDisplayAction = async ({
   store,
 }) => {
   const { viewerCorrespondenceToDisplay } = props;
-  const { caseId } = get(state.caseDetail);
+  const caseId = get(state.caseDetail.caseId);
 
   store.set(state.viewerCorrespondenceToDisplay, viewerCorrespondenceToDisplay);
 
