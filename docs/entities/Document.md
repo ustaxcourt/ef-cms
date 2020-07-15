@@ -1212,6 +1212,11 @@
           name: "max"
           args: 
             limit: 500
+    hasOtherFilingParty: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Whether the document has other filing party."
     hasSupportingDocuments: 
       type: "boolean"
       flags: 
@@ -1343,6 +1348,32 @@
       type: "string"
       flags: 
         presence: "optional"
+    otherFilingParty: 
+      type: "string"
+      flags: 
+        description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "hasOtherFilingParty"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     partyIrsPractitioner: 
       type: "boolean"
       flags: 

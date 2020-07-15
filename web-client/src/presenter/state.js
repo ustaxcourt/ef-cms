@@ -39,6 +39,7 @@ import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import {
   formattedCaseDetail,
   formattedClosedCases,
@@ -130,6 +131,7 @@ const helpers = {
   externalUserCasesHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
+  filingPartiesFormHelper,
   formattedCaseDetail,
   formattedCaseMessages,
   formattedClosedCases,
