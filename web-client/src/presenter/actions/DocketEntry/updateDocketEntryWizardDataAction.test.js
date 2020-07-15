@@ -342,22 +342,4 @@ describe('updateDocketEntryWizardDataAction', () => {
 
     expect(result.state.form.additionalInfo2).toEqual('abc');
   });
-
-  it('sets the value of hasOtherFilingParty on the form to the value of the props provided', async () => {
-    const result = await runAction(updateDocketEntryWizardDataAction, {
-      modules: { presenter },
-
-      props: {
-        key: 'hasOtherFilingParty',
-        value: true,
-      },
-      state: {
-        form: {
-          hasOtherFilingParty: false,
-        },
-      },
-    });
-
-    expect(result.state.form.hasOtherFilingParty).toEqual(true);
-  });
 });
