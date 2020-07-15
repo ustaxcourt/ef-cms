@@ -270,6 +270,7 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
+import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -701,6 +702,7 @@ export const presenter = {
     setSelectedBatchIndexSequence,
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
+    setViewerCorrespondenceToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     setWorkItemActionSequence,
