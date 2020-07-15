@@ -220,16 +220,6 @@ describe('Case entity', () => {
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
     });
 
-    it('does not create a secondary contact when one is not needed by the party type', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, contactSecondary: undefined },
-        { applicationContext },
-      );
-      expect(myCase).toMatchObject({
-        contactSecondary: undefined,
-      });
-    });
-
     it('returns private data if filtered is true and the user is internal', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -3677,6 +3667,18 @@ describe('Case entity', () => {
       );
 
       expect(caseEntity.isSealed).toBeTruthy();
+    });
+  });
+
+  describe('secondsry contact', () => {
+    it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, contactSecondary: undefined },
+        { applicationContext },
+      );
+      expect(myCase).toMatchObject({
+        contactSecondary: undefined,
+      });
     });
   });
 });
