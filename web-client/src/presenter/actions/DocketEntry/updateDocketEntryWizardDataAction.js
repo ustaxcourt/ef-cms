@@ -127,5 +127,8 @@ export const updateDocketEntryWizardDataAction = ({
         store.unset(state.form[props.key]);
       }
       break;
+    case 'hasOtherFilingParty':
+      store.unset(state.form.otherFilingParty);
+      break;
   }
 };
