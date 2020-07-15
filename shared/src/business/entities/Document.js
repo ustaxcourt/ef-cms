@@ -460,7 +460,6 @@ Document.prototype.setAsServed = function (servedParties = null) {
 and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
- * @param {boolean} force flag to force filedBy's generation
  */
 Document.prototype.generateFiledBy = function (caseDetail) {
   let partiesArray = [];
