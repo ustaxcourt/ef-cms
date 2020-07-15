@@ -48,7 +48,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
     !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord;
-  const showEditButtonForDocument = !isDocumentOnDocketRecord;
+  const showEditButtonForDocument =
+    !isDocumentOnDocketRecord && !isCorrespondence;
+  const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -64,6 +66,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
     showEditButtonSigned:
       showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
+    showEditCorrespondenceButton:
+      showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showEditSignatureButton:
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
   };
