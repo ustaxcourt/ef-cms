@@ -195,6 +195,7 @@
     "loadtest:practitioners": "./web-api/load-test-practitioners.sh dev us-east-1 200",
     "loadtest:small": "./web-api/load-test-trial-session.sh dev us-east-1 100",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
+    "reset-cases": "./clear-env.sh",
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
     "seed:s3:lint": "pushd ./web-api/storage/fixtures && grep documentId seed/*json | ./validate-seed.js && popd",
