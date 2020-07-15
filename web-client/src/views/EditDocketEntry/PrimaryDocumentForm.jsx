@@ -348,6 +348,54 @@ export const PrimaryDocumentForm = connect(
                   Respondent
                 </label>
               </div>
+              <div className="usa-checkbox">
+                <input
+                  checked={form.hasOtherFilingParty || false}
+                  className="usa-checkbox__input"
+                  id="has-other-filing-party"
+                  name="hasOtherFilingParty"
+                  type="checkbox"
+                  onChange={e => {
+                    updateDocketEntryFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="has-other-filing-party"
+                >
+                  Other
+                </label>
+              </div>
+              {form.hasOtherFilingParty && (
+                <FormGroup errorText={validationErrors.otherFilingParty}>
+                  <div>
+                    <label
+                      className="usa-label"
+                      htmlFor="other-filing-party"
+                      id="other-filing-party"
+                    >
+                      Other filing party name
+                    </label>
+                    <input
+                      aria-describedby="other-filing-party-label"
+                      className="usa-input"
+                      id="other-filing-party"
+                      name="otherFilingParty"
+                      type="text"
+                      value={form.otherFilingParty || ''}
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </FormGroup>
+              )}
             </fieldset>
           </FormGroup>
           {addDocketEntryHelper.showObjection && (
