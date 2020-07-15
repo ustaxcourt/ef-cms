@@ -14,10 +14,11 @@ describe('setDocumentIsRequiredAction', () => {
     const result = await runAction(setDocumentIsRequiredAction, {
       state: {
         documentId: 'document-id-123',
+        isDocumentRequired: true,
         isEditingDocketEntry: true,
       },
     });
 
-    expect(result.state.form).toBeUndefined();
+    expect(result.state.form.isDocumentRequired).toBeUndefined();
   });
 });

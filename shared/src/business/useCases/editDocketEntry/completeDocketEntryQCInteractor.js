@@ -6,6 +6,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  DOCUMENT_RELATIONSHIPS,
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
@@ -89,6 +90,7 @@ exports.completeDocketEntryQCInteractor = async ({
     mailingDate: entryMetadata.mailingDate,
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
+    otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     partyPrimary: entryMetadata.partyPrimary,
     partySecondary: entryMetadata.partySecondary,
@@ -102,7 +104,7 @@ exports.completeDocketEntryQCInteractor = async ({
     {
       ...currentDocument,
       ...editableFields,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
