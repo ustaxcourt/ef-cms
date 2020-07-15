@@ -3,12 +3,14 @@ import { CorrespondenceViewerCorrespondence } from './CorrespondenceViewerCorres
 import { DeleteCorrespondenceModal } from './DeleteCorrespondenceModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const Correspondence = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    loadDefaultViewerCorrespondenceSequence:
+      sequences.loadDefaultViewerCorrespondenceSequence,
     setViewerCorrespondenceToDisplaySequence:
       sequences.setViewerCorrespondenceToDisplaySequence,
     showModal: state.modal.showModal,
@@ -16,10 +18,16 @@ export const Correspondence = connect(
   },
   function Correspondence({
     formattedCaseDetail,
+    loadDefaultViewerCorrespondenceSequence,
     setViewerCorrespondenceToDisplaySequence,
     showModal,
     viewerCorrespondenceToDisplay,
   }) {
+    useEffect(() => {
+      loadDefaultViewerCorrespondenceSequence();
+      return;
+    }, []);
+
     return (
       <>
         <CorrespondenceHeader />
@@ -43,8 +51,10 @@ export const Correspondence = connect(
                         <tr
                           className={classNames(
                             'row-button',
-                            viewerCorrespondenceToDisplay.documentId ===
-                              document.documentId && 'active',
+                            viewerCorrespondenceToDisplay &&
+                              viewerCorrespondenceToDisplay.documentId ===
+                                document.documentId &&
+                              'active',
                           )}
                           key={idx}
                           onClick={() => {
