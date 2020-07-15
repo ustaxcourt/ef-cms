@@ -61,7 +61,11 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi.string().valid(BUSINESS_TYPES).optional().allow(null),
+  businessType: joi
+    .string()
+    .valid(...Object.values(BUSINESS_TYPES))
+    .optional()
+    .allow(null),
   caseType: joi.string().when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),

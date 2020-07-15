@@ -7,8 +7,12 @@ const { isEmpty } = require('lodash');
  * @returns {Promise} the template with the brackets replaced with replacement values
  */
 const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
+  let pdfjsVersion;
+
   try {
     const pdfjsLib = await applicationContext.getPdfJs();
+    pdfjsVersion = pdfjsLib && pdfjsLib.version;
+
     const document = await pdfjsLib.getDocument(pdfBuffer).promise;
 
     let scrapedText = '';
@@ -39,6 +43,7 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
 
     return scrapedText;
   } catch (e) {
+    await applicationContext.notifyHoneybadger(e, { pdfjsVersion });
     throw new Error('error scraping PDF');
   }
 };
