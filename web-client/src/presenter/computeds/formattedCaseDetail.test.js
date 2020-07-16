@@ -1734,10 +1734,16 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.documents[0].showNotServed).toEqual(true);
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(true);
     });
 
     it('should be false if the document type is unservable', () => {
+      //CTRA is a document type that cannot be served
+      caseDetail.docketRecord[0].eventCode = 'CTRA';
+      caseDetail.documents[0].eventCode = 'CTRA';
+      caseDetail.docketRecord[0].documentType = 'Corrected Transcript';
+      caseDetail.documents[0].documentType = 'Corrected Transcript';
+
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -1747,10 +1753,13 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.documents[0].showNotServed).toEqual(false);
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
     });
 
     it('should be false if the document type is servable and has servedAt', () => {
+      caseDetail.docketRecord[0].servedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].servedAt = '2019-06-19T17:29:13.120Z';
+
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -1760,7 +1769,7 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.documents[0].showNotServed).toEqual(false);
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
     });
   });
 });
