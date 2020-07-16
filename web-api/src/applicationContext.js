@@ -1193,7 +1193,7 @@ module.exports = appContextUser => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: () => {
+    getPdfJs: async () => {
       const pdfjsLib = require('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
