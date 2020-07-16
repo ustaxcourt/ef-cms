@@ -92,7 +92,7 @@ describe('caseMessageModalHelper', () => {
     expect(result.draftDocuments).toMatchObject([{ documentId: '345' }]);
   });
 
-  it('returns hasCorrespodnence true when there are correspondence documents on the case', () => {
+  it('returns hasCorrespondence true when there are correspondence documents on the case', () => {
     const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail: {
@@ -111,7 +111,7 @@ describe('caseMessageModalHelper', () => {
     expect(result.hasCorrespondence).toEqual(true);
   });
 
-  it('returns hasCorrespodnence false when there are NO correspondence documents on the case', () => {
+  it('returns hasCorrespondence false when there are NO correspondence documents on the case', () => {
     const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail: {
