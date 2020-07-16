@@ -52,8 +52,15 @@ export const DocumentViewer = connect(
                           <div className="grid-col-3">
                             {record.createdAtFormatted}
                           </div>
-                          <div className="grid-col-8 no-indent">
+                          <div className="grid-col-5 no-indent">
                             {record.description}
+                          </div>
+                          <div className="grid-col-3">
+                            {record.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
                           </div>
                         </div>
                       </Button>

@@ -164,6 +164,7 @@ const formatDocketRecordWithDocument = (
         formattedDocument.isCourtIssuedDocument &&
         !formattedDocument.servedAt
       ) {
+        //FIXME - need to display?
         record.createdAtFormatted = undefined;
       }
 
