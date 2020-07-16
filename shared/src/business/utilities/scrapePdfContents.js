@@ -43,8 +43,7 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
     return scrapedText;
   } catch (e) {
     const pdfjsVersion = pdfjsLib && pdfjsLib.version;
-    await applicationContext.notifyHoneybadger(e, { pdfjsVersion });
-    throw new Error('error scraping PDF');
+    throw new Error(`Error scraping PDF with PDF.JS v${pdfjsVersion}`);
   }
 };
 

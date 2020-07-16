@@ -97,7 +97,7 @@
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "parcel-plugin-static-files-copy": "^2.4.3",
     "pdf-lib": "^1.8.0",
-    "pdfjs-dist": "^2.5.207",
+    "pdfjs-dist": "2.3.200",
     "pixelmatch": "^5.2.1",
     "pngjs": "^5.0.0",
     "prettier": "^2.0.4",
