@@ -66,6 +66,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
     freeText2: docketEntryMeta.freeText2,
+    hasOtherFilingParty: docketEntryMeta.hasOtherFilingParty,
     judge: docketEntryMeta.judge,
     lodged: docketEntryMeta.lodged,
     objections: docketEntryMeta.objections,
