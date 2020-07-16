@@ -1,4 +1,5 @@
 import { formatDateIfToday } from './formattedWorkQueue';
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -14,32 +15,6 @@ const formatMessage = (message, applicationContext) => {
       applicationContext,
     ),
   };
-};
-
-const formatAttachment = (
-  caseDetail,
-  attachment,
-  UNSERVABLE_EVENT_CODES,
-  draftDocuments,
-) => {
-  const caseDocument = caseDetail.documents.find(
-    document => document.documentId === attachment.documentId,
-  );
-
-  if (caseDocument) {
-    const isUnservable = UNSERVABLE_EVENT_CODES.includes(
-      caseDocument.eventCode,
-    );
-
-    const isDraftDocument =
-      draftDocuments &&
-      !!draftDocuments.find(
-        draft => draft.documentId === attachment.documentId,
-      );
-
-    attachment.showNotServed =
-      !isUnservable && !caseDocument.servedAt && !isDraftDocument;
-  }
 };
 
 export const formattedMessageDetail = (get, applicationContext) => {
@@ -70,12 +45,12 @@ export const formattedMessageDetail = (get, applicationContext) => {
 
   if (formattedMessages[0].attachments) {
     formattedMessages[0].attachments.map(attachment => {
-      formatAttachment(
-        caseDetail,
-        attachment,
+      attachment.showNotServed = getShowNotServedForDocument({
         UNSERVABLE_EVENT_CODES,
+        caseDetail,
+        documentId: attachment.documentId,
         draftDocuments,
-      );
+      });
     });
   }
 
