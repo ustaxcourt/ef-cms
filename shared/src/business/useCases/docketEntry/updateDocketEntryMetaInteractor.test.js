@@ -168,7 +168,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
-        filedBy: 'New Filer',
+        partyPrimary: true,
       },
       docketRecordIndex: 0,
     });
@@ -179,8 +179,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
     );
-    expect(updatedDocketEntry.filedBy).toEqual('New Filer');
-    expect(updatedDocument.filedBy).toEqual('New Filer');
+    expect(updatedDocketEntry.filedBy).toEqual('Petr. Test Petitioner');
+    expect(updatedDocument.filedBy).toEqual('Petr. Test Petitioner');
   });
 
   it('should update the docket record filingDate', async () => {
