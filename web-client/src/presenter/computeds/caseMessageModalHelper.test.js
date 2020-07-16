@@ -138,13 +138,13 @@ describe('caseMessageModalHelper', () => {
     expect(result.hasDocuments).toEqual(false);
   });
 
-  it('returns hasDocuments true when there are documents on the case', () => {
+  it('returns hasDocuments true when there are documents with files attached on the case', () => {
     const result = runCompute(caseMessageModalHelper, {
       state: {
         caseDetail: {
           correspondence: [],
           docketRecord: [{ documentId: '123', index: 1 }],
-          documents: [{ documentId: '123' }],
+          documents: [{ documentId: '123', isFileAttached: true }],
         },
         modal: {
           form: {},
