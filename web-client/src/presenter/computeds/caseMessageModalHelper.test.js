@@ -25,8 +25,16 @@ describe('caseMessageModalHelper', () => {
         { index: 3 }, // note: no document
       ],
       documents: [
-        { documentId: '123', documentType: 'Petition' },
-        { documentId: '234', documentTitle: 'Some Document' },
+        {
+          documentId: '123',
+          documentType: 'Petition',
+          isFileAttached: true,
+        },
+        {
+          documentId: '234',
+          documentTitle: 'Some Document',
+          isFileAttached: true,
+        },
         { documentId: '345', documentType: 'Order' },
       ],
     };
