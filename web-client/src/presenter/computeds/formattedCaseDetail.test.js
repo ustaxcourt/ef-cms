@@ -1675,7 +1675,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe.only('showNotServed', () => {
+  describe('showNotServed', () => {
     let baseContact;
     let contactPrimary;
     let contactSecondary;
