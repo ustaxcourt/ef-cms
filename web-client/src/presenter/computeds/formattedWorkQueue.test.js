@@ -914,7 +914,9 @@ describe('formatted work queue computed', () => {
             receivedAt: '2018-01-01',
             relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Standard',
+            servedAt: '2019-03-01T21:40:46.415Z',
           },
+          inProgress: false,
           isInitializeCase: false,
           isQC: true,
           isRead: true,
@@ -929,6 +931,46 @@ describe('formatted work queue computed', () => {
       });
       expect(result).toEqual(
         `/case-detail/${baseWorkItem.docketNumber}/document-view?documentId=${baseDocument.documentId}`,
+      );
+    });
+
+    it('should return docket entry edit link if document is in progress and user is docketclerk', () => {
+      const { permissions } = getBaseState(docketClerkUser);
+
+      const result = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        workItem: {
+          ...baseWorkItem,
+          completedAt: '2019-03-01T21:40:46.415Z',
+          document: {
+            ...baseDocument,
+            category: 'Miscellaneous',
+            documentTitle: 'Administrative Record',
+            documentType: 'Administrative Record',
+            eventCode: 'ADMR',
+            isFileAttached: true,
+            isPaper: true,
+            pending: false,
+            receivedAt: '2018-01-01',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+            scenario: 'Standard',
+          },
+          inProgress: true,
+          isInitializeCase: false,
+          isQC: true,
+          isRead: true,
+          messages: [baseMessage],
+          section: 'docket',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: false,
+        },
+      });
+      expect(result).toEqual(
+        `/case-detail/${baseWorkItem.docketNumber}/documents/${baseDocument.documentId}/complete`,
       );
     });
 
