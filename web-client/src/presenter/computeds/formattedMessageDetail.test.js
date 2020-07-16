@@ -1,4 +1,4 @@
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedMessageDetail as formattedMessageDetailComputed } from './formattedMessageDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -183,6 +183,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
@@ -214,6 +215,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
@@ -245,6 +247,7 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: {
+            docketRecord: [{ documentId }],
             documents: [
               {
                 documentId,
@@ -252,6 +255,38 @@ describe('formattedMessageDetail', () => {
                 documentType: 'Order',
                 eventCode: 'O',
                 servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                {
+                  documentId,
+                  documentTitle: 'Some Stuff',
+                },
+              ],
+              createdAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+      });
+
+      expect(result.attachments[0].showNotServed).toEqual(false);
+    });
+
+    it('should be false if the document type is servable and not served and the document is a draft', () => {
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
               },
             ],
           },
