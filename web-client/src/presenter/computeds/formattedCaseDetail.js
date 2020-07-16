@@ -185,7 +185,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         formattedResult.showServed = document.isStatusServed;
 
         showDocumentLinks = getShowDocumentViewerLink({
-          hasDocument: !!document,
+          hasDocument: document.isFileAttached,
           isCourtIssuedDocument: document.isCourtIssuedDocument,
           isExternalUser,
           isServed: !!document.servedAt,
