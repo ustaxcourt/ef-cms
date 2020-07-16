@@ -65,6 +65,7 @@ exports.updateDocketEntryInteractor = async ({
     eventCode: documentMetadata.eventCode,
     freeText: documentMetadata.freeText,
     freeText2: documentMetadata.freeText2,
+    hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
     isFileAttached: documentMetadata.isFileAttached,
     lodged: documentMetadata.lodged,
     mailingDate: documentMetadata.mailingDate,

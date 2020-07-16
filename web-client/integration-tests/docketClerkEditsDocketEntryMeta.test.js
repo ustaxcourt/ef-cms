@@ -11,6 +11,7 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates } from './journey/docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates';
 import { docketClerkVerifiesDocketEntryMetaUpdates } from './journey/docketClerkVerifiesDocketEntryMetaUpdates';
+import { docketClerkVerifiesDocketEntryMetaUpdatesInEditForm } from './journey/docketClerkVerifiesDocketEntryMetaUpdatesInEditForm';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
@@ -47,6 +48,8 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
   docketClerkEditsDocketEntryMeta(test);
   docketClerkVerifiesDocketEntryMetaUpdates(test, 3);
+  docketClerkNavigatesToEditDocketEntryMeta(test, 3);
+  docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(test);
 
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',

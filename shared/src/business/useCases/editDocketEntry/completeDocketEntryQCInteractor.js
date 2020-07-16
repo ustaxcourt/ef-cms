@@ -85,6 +85,7 @@ exports.completeDocketEntryQCInteractor = async ({
     eventCode: entryMetadata.eventCode,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
+    hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: entryMetadata.isFileAttached,
     lodged: entryMetadata.lodged,
     mailingDate: entryMetadata.mailingDate,
