@@ -2,10 +2,10 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
-  saveWorkItemForDocketEntryWithoutFile,
-} = require('./saveWorkItemForDocketEntryWithoutFile');
+  saveWorkItemForDocketEntryInProgress,
+} = require('./saveWorkItemForDocketEntryInProgress');
 
-describe('saveWorkItemForDocketEntryWithoutFile', () => {
+describe('saveWorkItemForDocketEntryInProgress', () => {
   let putStub;
   let getStub;
 
@@ -35,7 +35,7 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
       get: getStub,
       put: putStub,
     });
-    await saveWorkItemForDocketEntryWithoutFile({
+    await saveWorkItemForDocketEntryInProgress({
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
