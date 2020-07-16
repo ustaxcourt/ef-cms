@@ -2,21 +2,30 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DraftDocumentViewerDocument } from './DraftDocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    loadDefaultDraftViewerDocumentToDisplaySequence:
+      sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence:
       sequences.setViewerDraftDocumentToDisplaySequence,
-    viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
+    viewerDraftDocumentIdToDisplay:
+      state.viewerDraftDocumentToDisplay.documentId,
   },
   function DraftDocumentViewer({
     formattedCaseDetail,
+    loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
-    viewerDraftDocumentToDisplay,
+    viewerDraftDocumentIdToDisplay,
   }) {
+    useEffect(() => {
+      loadDefaultDraftViewerDocumentToDisplaySequence();
+      return;
+    }, []);
+
     return (
       <>
         <div className="grid-row grid-gap-5">
@@ -28,7 +37,7 @@ export const DraftDocumentViewer = connect(
                     <Button
                       className={classNames(
                         'usa-button--unstyled attachment-viewer-button',
-                        viewerDraftDocumentToDisplay.documentId ===
+                        viewerDraftDocumentIdToDisplay ===
                           draftDocument.documentId && 'active',
                       )}
                       key={index}

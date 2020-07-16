@@ -12,11 +12,6 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
-      value: false,
-    });
-
     await test.runSequence('saveForLaterDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
@@ -57,14 +52,33 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       value: 'Administrative Record',
     });
 
-    await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
-      value: false,
-    });
-
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
       value: 'No',
     });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'hasOtherFilingParty',
+      value: true,
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({
+      otherFilingParty: VALIDATION_ERROR_MESSAGES.otherFilingParty,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'otherFilingParty',
+      value: 'Brianna Noble',
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
   });
 };

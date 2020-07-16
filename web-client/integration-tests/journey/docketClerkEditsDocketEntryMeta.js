@@ -42,9 +42,29 @@ export const docketClerkEditsDocketEntryMeta = test => {
       value: 'Added new nickname of "Sauceboss"',
     });
 
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'hasOtherFilingParty',
+      value: true,
+    });
+
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       caseId: test.docketNumber,
     });
+
+    expect(test.getState('validationErrors')).toEqual({
+      otherFilingParty: 'Enter other filing party name.',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'otherFilingParty',
+      value: 'Brianna Noble',
+    });
+
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      caseId: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',

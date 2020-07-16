@@ -16,6 +16,33 @@ describe('documentViewerHelper', () => {
     });
   });
 
+  it('should return an empty object if the requested documentId is not found in the docket record', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: 'abc',
+              index: 1,
+            },
+          ],
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Petition',
+            },
+          ],
+        },
+
+        viewerDocumentToDisplay: {
+          documentId: '999',
+        },
+      },
+    });
+    expect(result).toEqual({});
+  });
+
   it('should return the document description', () => {
     const result = runCompute(documentViewerHelper, {
       state: {

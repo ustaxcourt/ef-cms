@@ -55,7 +55,7 @@ export const startCaseHelper = (get, applicationContext) => {
     minorIncompetentLegend:
       user.role === USER_ROLES.petitioner
         ? 'What is your role in filing for this minor or legally incompetent person?'
-        : "What is the petitioner's role in filing for this minor or incompetent person?",
+        : 'What is the petitioner‘s role in filing for this minor or incompetent person?',
     noticeLegend:
       user.role === USER_ROLES.petitioner
         ? 'Did you receive a notice from the IRS?'

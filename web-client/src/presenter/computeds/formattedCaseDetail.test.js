@@ -1,8 +1,9 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+// import { applicationContext } from '../../applicationContext';
+// import {
+//   formattedCaseDetail as formattedCaseDetailComputed,
+//   getShowDocumentViewerLink,
+// } from './formattedCaseDetail';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
   getShowDocumentViewerLink,
@@ -11,39 +12,44 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let globalUser;
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
-);
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
-const petitionsClerkUser = {
-  role: ROLES.petitionsClerk,
-  userId: '123',
-};
-const docketClerkUser = {
-  role: ROLES.docketClerk,
-  userId: '234',
-};
-const petitionerUser = {
-  role: ROLES.petitioner,
-  userId: '456',
-};
-
 describe('formattedCaseDetail', () => {
+  let globalUser;
+  const {
+    DOCUMENT_RELATIONSHIPS,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
+      },
+    },
+  );
+
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      permissions: getUserPermissions(user),
+    };
+  };
+
+  const petitionsClerkUser = {
+    role: USER_ROLES.petitionsClerk,
+    userId: '123',
+  };
+  const docketClerkUser = {
+    role: USER_ROLES.docketClerk,
+    userId: '234',
+  };
+  const petitionerUser = {
+    role: USER_ROLES.petitioner,
+    userId: '456',
+  };
+
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -175,7 +181,7 @@ describe('formattedCaseDetail', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument:
@@ -199,7 +205,7 @@ describe('formattedCaseDetail', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument: 'Brief in Support',
@@ -225,7 +231,7 @@ describe('formattedCaseDetail', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
@@ -249,7 +255,7 @@ describe('formattedCaseDetail', () => {
           partyIrsPractitioner: true,
           partyPrivatePractitioner: true,
           previousDocument: 'Amended Petition',
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           servedAt: '2019-06-19T17:29:13.120Z',
         },
@@ -261,7 +267,7 @@ describe('formattedCaseDetail', () => {
           eventCode: 'HE',
           freeText: 'adsf',
           lodged: false,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Type A',
           servedAt: '2019-06-19T17:29:13.120Z',
         },
@@ -739,7 +745,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -763,7 +769,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -986,7 +992,7 @@ describe('formattedCaseDetail', () => {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
             petitioners: [{ name: 'Bobby Flay' }],
-            status: CASE_STATUS_TYPES.calendared,
+            status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
             trialSessionId: '123',
@@ -995,7 +1001,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1019,7 +1025,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',

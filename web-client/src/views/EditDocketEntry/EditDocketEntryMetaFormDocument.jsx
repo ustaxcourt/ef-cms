@@ -1,4 +1,5 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
@@ -11,11 +12,9 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
-import classNames from 'classnames';
 
 export const EditDocketEntryMetaFormDocument = connect(
   {
-    caseDetail: state.caseDetail,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
@@ -25,7 +24,6 @@ export const EditDocketEntryMetaFormDocument = connect(
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormDocument({
-    caseDetail,
     editDocketEntryMetaHelper,
     form,
     internalTypesHelper,
@@ -216,84 +214,12 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup>
           <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
         </FormGroup>
-        <FormGroup errorText={editDocketEntryMetaHelper.partyValidationError}>
-          <fieldset
-            className={classNames(
-              'usa-fieldset',
-              !editDocketEntryMetaHelper.showObjection && 'margin-bottom-0',
-            )}
-          >
-            <legend className="usa-legend">Who is filing this document?</legend>
-            <div className="usa-checkbox">
-              <input
-                checked={form.partyPrimary || false}
-                className="usa-checkbox__input"
-                id="party-primary"
-                name="partyPrimary"
-                type="checkbox"
-                onChange={e => {
-                  updateDocketEntryMetaDocumentFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateDocketRecordSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="party-primary"
-              >
-                {caseDetail.contactPrimary.name}
-              </label>
-            </div>
-            {editDocketEntryMetaHelper.showSecondaryParty && (
-              <div className="usa-checkbox">
-                <input
-                  checked={form.partySecondary || false}
-                  className="usa-checkbox__input"
-                  id="party-secondary"
-                  name="partySecondary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateDocketEntryMetaDocumentFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateDocketRecordSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-secondary"
-                >
-                  {caseDetail.contactSecondary.name}
-                </label>
-              </div>
-            )}
-            <div className="usa-checkbox">
-              <input
-                checked={form.partyIrsPractitioner || false}
-                className="usa-checkbox__input"
-                id="party-irs-practitioner"
-                name="partyIrsPractitioner"
-                type="checkbox"
-                onChange={e => {
-                  updateDocketEntryMetaDocumentFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateDocketRecordSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="party-irs-practitioner"
-              >
-                Respondent
-              </label>
-            </div>
-          </fieldset>
-        </FormGroup>
+
+        <FilingPartiesForm
+          updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
+          validateSequence={validateDocketRecordSequence}
+        />
+
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
             <fieldset className="usa-fieldset margin-bottom-0">

@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  DOCUMENT_RELATIONSHIPS,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -11,7 +15,6 @@ const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -59,7 +62,7 @@ exports.fileDocketEntryInteractor = async ({
   ]);
 
   const documentsToFile = [
-    [primaryDocumentFileId, documentMetadata, 'primaryDocument'],
+    [primaryDocumentFileId, documentMetadata, DOCUMENT_RELATIONSHIPS.PRIMARY],
   ];
 
   for (let document of documentsToFile) {
@@ -134,7 +137,7 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       if (metadata.isPaper) {
-        if (metadata.isFileAttached) {
+        if (metadata.isFileAttached && !isSavingForLater) {
           workItem.setAsCompleted({
             message: 'completed',
             user,
