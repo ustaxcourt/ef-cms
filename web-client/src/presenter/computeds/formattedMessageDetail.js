@@ -16,15 +16,46 @@ const formatMessage = (message, applicationContext) => {
   };
 };
 
+const formatAttachment = (
+  caseDetail,
+  attachment,
+  UNSERVABLE_EVENT_CODES,
+  draftDocuments,
+) => {
+  const caseDocument = caseDetail.documents.find(
+    document => document.documentId === attachment.documentId,
+  );
+
+  if (caseDocument) {
+    const isUnservable = UNSERVABLE_EVENT_CODES.includes(
+      caseDocument.eventCode,
+    );
+
+    //fixme add test
+
+    attachment.showNotServed =
+      !isUnservable &&
+      !caseDocument.servedAt &&
+      !draftDocuments.includes(caseDocument);
+  }
+};
+
 export const formattedMessageDetail = (get, applicationContext) => {
   const messageDetail = get(state.messageDetail);
+  const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
+
+  const { draftDocuments } = applicationContext.getUtilities().formatCase({
+    applicationContext,
+    caseDetail,
+  });
 
   const formattedMessages = orderBy(
     messageDetail.map(message => formatMessage(message, applicationContext)),
     'createdAt',
     'desc',
   );
+  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
   const { isCompleted } = formattedMessages[0];
 
@@ -35,6 +66,17 @@ export const formattedMessageDetail = (get, applicationContext) => {
   }
 
   const hasOlderMessages = formattedMessages.length > 1;
+
+  if (formattedMessages[0].attachments) {
+    formattedMessages[0].attachments.map(attachment => {
+      formatAttachment(
+        caseDetail,
+        attachment,
+        UNSERVABLE_EVENT_CODES,
+        draftDocuments,
+      );
+    });
+  }
 
   return {
     attachments: formattedMessages[0].attachments,
