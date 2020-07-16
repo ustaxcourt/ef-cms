@@ -648,6 +648,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/print-paper-petition-receipt/*',
+      ifHasAccess((docketNumber, nextPage) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Petition Receipt`,
+        );
+
+        return app.getSequence('gotoPrintPaperPetitionReceiptSequence')({
+          docketNumber,
+          nextPage,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/confirmation',
       ifHasAccess(docketNumber => {
         setPageTitle(
