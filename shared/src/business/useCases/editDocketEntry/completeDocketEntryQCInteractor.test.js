@@ -419,4 +419,35 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
   });
+
+  it('should update only allowed editable fields on a docket entry document', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'My Edited Document',
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[0],
+    ).toMatchObject({
+      documentTitle: 'My Edited Document',
+      documentType: 'Notice of Change of Address',
+      eventCode: 'NCA',
+      freeText: 'Some text about this document',
+      hasOtherFilingParty: true,
+      otherFilingParty: 'Bert Brooks',
+    });
+  });
 });
