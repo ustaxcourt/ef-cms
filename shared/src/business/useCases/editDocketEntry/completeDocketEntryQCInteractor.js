@@ -6,6 +6,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  DOCUMENT_RELATIONSHIPS,
   NOTICE_OF_DOCKET_CHANGE,
 } = require('../../entities/EntityConstants');
 const {
@@ -84,11 +85,13 @@ exports.completeDocketEntryQCInteractor = async ({
     eventCode: entryMetadata.eventCode,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
+    hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: entryMetadata.isFileAttached,
     lodged: entryMetadata.lodged,
     mailingDate: entryMetadata.mailingDate,
     objections: entryMetadata.objections,
     ordinalValue: entryMetadata.ordinalValue,
+    otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     partyPrimary: entryMetadata.partyPrimary,
     partySecondary: entryMetadata.partySecondary,
@@ -101,8 +104,9 @@ exports.completeDocketEntryQCInteractor = async ({
   const updatedDocument = new Document(
     {
       ...currentDocument,
+      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
@@ -111,8 +115,6 @@ exports.completeDocketEntryQCInteractor = async ({
     },
     { applicationContext },
   ).validate();
-
-  updatedDocument.generateFiledBy(caseToUpdate, true);
   updatedDocument.setQCed(user);
 
   let updatedDocumentTitle = updatedDocument.documentTitle;

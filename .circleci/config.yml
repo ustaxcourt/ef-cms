@@ -31,7 +31,7 @@ jobs:
             ./run-shellcheck.sh
       - run:
           name: Web API - Test
-          command: npm run test:api
+          command: npm run test:api:ci
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
@@ -54,7 +54,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -73,7 +73,7 @@ jobs:
           command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Shared - Test
-          command: npm run test:shared
+          command: npm run test:shared:ci
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
@@ -96,7 +96,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -115,7 +115,7 @@ jobs:
           command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit
+          command: npm run build:assets && CI=false npm run test:client:unit:ci
       - persist_to_workspace:
           root: ~/
           paths:
@@ -251,7 +251,7 @@ jobs:
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
             npm run test:pa11y:public --node-flags --max-old-space-size=1024
       - store_artifacts:
-          path: /root/project/web-client/pa11y/screenshots
+          path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
           path: /tmp/pa11y
 
@@ -450,14 +450,15 @@ jobs:
             else
               echo "skipping…"
             fi
-      - run:
-          name: 'Deploy - Cypress Smoke Tests'
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
-            else
-              echo "skipping…"
-            fi
+      # Disabled temporarily until we find a better approach for smoke testing
+      # - run:
+      #     name: 'Deploy - Cypress Smoke Tests'
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+      #         docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "ENV=${ENV}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run cypress:smoketests"
+      #       else
+      #         echo "skipping…"
+      #       fi
       # - run:
       #     name: 'Deploy - Pa11y Smoke Tests'
       #     command: |
@@ -466,18 +467,18 @@ jobs:
       #       else
       #         echo "skipping…"
       #       fi
-      # - run:
-      #     name: 'Deploy - Authorizer Smoke Tests'
-      #     command: |
-      #       docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
-      # - run:
-      #     name: 'Deploy - Verify Private S3 Buckets'
-      #     command: |
-      #       docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
-      # - run:
-      #     name: 'Deploy - Verify Private Elasticsearch'
-      #     command: |
-      #       docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
+      - run:
+          name: 'Deploy - Authorizer Smoke Tests'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
+      - run:
+          name: 'Deploy - Verify Private S3 Buckets'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
+      - run:
+          name: 'Deploy - Verify Private Elasticsearch'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
@@ -533,11 +534,11 @@ workflows:
       #       branches:
       #         ignore:
       #           - develop
-      - e2e-pa11y:
-          filters:
-            branches:
-              ignore:
-                - develop
+      # - e2e-pa11y:
+      #     filters:
+      #       branches:
+      #         ignore:
+      #           - develop
       # - e2e-cypress:
       #     filters:
       #       branches:
@@ -561,3 +562,16 @@ workflows:
       #       branches:
       #         ignore:
       #           - develop
+      - deploy:
+          requires:
+            - build-client-coverage
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - test
+                - migration
+                - master
+                - experimental1
+                - experimental2

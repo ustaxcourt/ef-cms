@@ -15,7 +15,10 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   props,
 }) => {
   const { documentId } = props;
-  let viewerDocumentToDisplay = null;
+
+  let viewerDocumentToDisplay = get(state.viewerDocumentToDisplay) || null;
+
+  if (viewerDocumentToDisplay) return { viewerDocumentToDisplay };
 
   const { docketRecord, documents } = get(state.caseDetail);
 
