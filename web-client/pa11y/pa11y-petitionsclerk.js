@@ -248,7 +248,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for #correspondence-documents-table to be visible',
+      'wait for .document-viewer to be visible',
     ],
     notes: 'checks a11y of correspondence tab',
     url:
@@ -264,7 +264,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for #correspondence-documents-table to be visible',
+      'wait for .document-viewer to be visible',
       'click element .edit-correspondence-button',
       'wait for element #edit-correspondence-header to be visible',
     ],

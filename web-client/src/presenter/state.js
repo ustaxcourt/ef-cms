@@ -23,6 +23,7 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -38,6 +39,7 @@ import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import {
   formattedCaseDetail,
   formattedClosedCases,
@@ -59,6 +61,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
+import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
@@ -112,6 +115,7 @@ const helpers = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
+  correspondenceViewerHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
@@ -127,6 +131,7 @@ const helpers = {
   externalUserCasesHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
+  filingPartiesFormHelper,
   formattedCaseDetail,
   formattedCaseMessages,
   formattedClosedCases,
@@ -146,6 +151,7 @@ const helpers = {
   messageDocumentHelper,
   messagesHelper,
   orderTypesHelper,
+  paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
   practitionerDetailHelper,

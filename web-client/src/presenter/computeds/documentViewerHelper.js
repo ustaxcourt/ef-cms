@@ -19,6 +19,9 @@ export const documentViewerHelper = (get, applicationContext) => {
         entry.document &&
         entry.document.documentId === viewerDocumentToDisplay.documentId,
     );
+  if (!formattedDocumentToDisplay) {
+    return {};
+  }
 
   const filedLabel = formattedDocumentToDisplay.document.filedBy
     ? `Filed ${formattedDocumentToDisplay.document.createdAtFormatted} by ${formattedDocumentToDisplay.document.filedBy}`

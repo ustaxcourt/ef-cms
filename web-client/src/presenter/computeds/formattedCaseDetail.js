@@ -63,6 +63,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const {
     formatCase,
     formatCaseDeadlines,
+    setServiceIndicatorsForCase,
     sortDocketRecords,
   } = applicationContext.getUtilities();
 
@@ -76,11 +77,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
   }
 
   const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
+
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,

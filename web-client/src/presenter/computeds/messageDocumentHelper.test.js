@@ -45,6 +45,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -68,6 +69,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -91,6 +93,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(clerkOfCourtUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -114,6 +117,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -141,6 +145,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -168,6 +173,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(clerkOfCourtUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -195,6 +201,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(judgeUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -218,6 +225,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -242,6 +250,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -267,6 +276,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -291,6 +301,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -316,6 +327,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -344,6 +356,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -370,6 +383,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -394,6 +408,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -417,6 +432,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [],
           documents: [
             {
@@ -440,6 +456,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -465,6 +482,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
@@ -491,6 +509,7 @@ describe('messageDocumentHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
+          correspondence: [],
           docketRecord: [
             {
               documentId: '123',
