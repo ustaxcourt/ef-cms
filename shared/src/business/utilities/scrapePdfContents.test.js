@@ -69,6 +69,6 @@ this is some more content`,
         applicationContext,
         pdfBuffer: [],
       }),
-    ).rejects.toThrow('error scraping PDF');
+    ).rejects.toThrow('Error scraping PDF with PDF.JS v1');
   });
 });
