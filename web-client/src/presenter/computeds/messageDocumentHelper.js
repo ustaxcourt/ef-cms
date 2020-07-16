@@ -7,9 +7,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
+  const { correspondence, documents } = caseDetail;
+
   const caseDocument =
     viewerDocumentToDisplay &&
-    caseDetail.documents.find(
+    [...correspondence, ...documents].find(
       d => d.documentId === viewerDocumentToDisplay.documentId,
     );
 

@@ -2,40 +2,48 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
 export const DocumentViewer = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    loadDefaultDocketViewerDocumentToDisplaySequence:
+      sequences.loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence:
       sequences.setViewerDocumentToDisplaySequence,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
+    viewDocumentId: state.viewerDocumentToDisplay.documentId,
   },
   function DocumentViewer({
     formattedCaseDetail,
+    loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence,
-    viewerDocumentToDisplay,
+    viewDocumentId,
   }) {
+    useEffect(() => {
+      loadDefaultDocketViewerDocumentToDisplaySequence();
+      return;
+    }, []);
+
     return (
       <>
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
               {formattedCaseDetail.docketRecordWithDocument.map(
-                ({ document, index, record }, idx) => {
-                  if (document) {
+                ({ document: recordDocument, index, record }, idx) => {
+                  if (recordDocument) {
                     return (
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay.documentId ===
-                            document.documentId && 'active',
+                          viewDocumentId === recordDocument.documentId &&
+                            'active',
                         )}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: document,
+                            viewerDocumentToDisplay: recordDocument,
                           });
                         }}
                       >

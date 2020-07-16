@@ -18,7 +18,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 4700
     caseType: 
       type: "string"
       flags: 
