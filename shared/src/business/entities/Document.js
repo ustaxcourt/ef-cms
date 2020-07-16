@@ -59,8 +59,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
     this.signedAt = rawDocument.signedAt;
     this.signedByUserId = rawDocument.signedByUserId;
     this.signedJudgeName = rawDocument.signedJudgeName;
-    this.isFileAttached =
-      rawDocument.isFileAttached === undefined ? true : false;
     this.userId = rawDocument.userId;
     this.workItems = (rawDocument.workItems || []).map(
       workItem => new WorkItem(workItem, { applicationContext }),

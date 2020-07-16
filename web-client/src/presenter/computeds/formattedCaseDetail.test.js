@@ -174,6 +174,7 @@ describe('formattedCaseDetail', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           objections: 'No',
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -195,6 +196,7 @@ describe('formattedCaseDetail', () => {
           eventCode: 'ADED',
           exhibits: true,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
           partyPrimary: true,
@@ -223,6 +225,7 @@ describe('formattedCaseDetail', () => {
           exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
@@ -246,6 +249,7 @@ describe('formattedCaseDetail', () => {
             'Unsworn Declaration under Penalty of Perjury in Support',
           eventCode: 'USDL',
           freeText: 'Test',
+          isFileAttached: true,
           lodged: true,
           partyIrsPractitioner: true,
           partyPrivatePractitioner: true,
@@ -261,6 +265,7 @@ describe('formattedCaseDetail', () => {
           documentType: 'Hearing Exhibits',
           eventCode: 'HE',
           freeText: 'adsf',
+          isFileAttached: true,
           lodged: false,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Type A',
@@ -325,6 +330,7 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
+        //
         description:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
         filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
@@ -1480,6 +1486,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            isFileAttached: true,
             workItems: [{ isQC: true }],
           },
           {
@@ -1490,6 +1497,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
+            isFileAttached: true,
             workItems: [{ isQC: true }],
           },
           {
@@ -1501,6 +1509,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
+            isFileAttached: true,
             workItems: [
               { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
             ],
@@ -1514,6 +1523,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
+            isFileAttached: true,
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
@@ -1753,7 +1763,6 @@ describe('formattedCaseDetail', () => {
           hasDocument: true,
           isCourtIssuedDocument: false,
           isExternalUser: true,
-          // isUnservable: true,
           isServed: true,
           userHasAccessToCase: true,
         },
