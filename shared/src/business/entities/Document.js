@@ -460,10 +460,9 @@ Document.prototype.setAsServed = function (servedParties = null) {
 and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
- * @param {boolean} force flag to force filedBy's generation
  */
-Document.prototype.generateFiledBy = function (caseDetail, force = false) {
-  if (force || !this.filedBy) {
+Document.prototype.generateFiledBy = function (caseDetail) {
+  if (!this.filedBy) {
     let partiesArray = [];
     this.partyIrsPractitioner && partiesArray.push('Resp.');
 
