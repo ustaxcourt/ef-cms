@@ -85,6 +85,7 @@ exports.completeDocketEntryQCInteractor = async ({
     eventCode: entryMetadata.eventCode,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
+    hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: entryMetadata.isFileAttached,
     lodged: entryMetadata.lodged,
     mailingDate: entryMetadata.mailingDate,
@@ -103,6 +104,7 @@ exports.completeDocketEntryQCInteractor = async ({
   const updatedDocument = new Document(
     {
       ...currentDocument,
+      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
@@ -113,8 +115,6 @@ exports.completeDocketEntryQCInteractor = async ({
     },
     { applicationContext },
   ).validate();
-
-  updatedDocument.generateFiledBy(caseToUpdate, true);
   updatedDocument.setQCed(user);
 
   let updatedDocumentTitle = updatedDocument.documentTitle;

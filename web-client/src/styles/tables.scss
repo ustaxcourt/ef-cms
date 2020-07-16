@@ -585,7 +585,9 @@ table.case-list tbody tr:nth-child(even) td {
 
 .document-viewer {
   tr {
-    cursor: pointer;
+    &.row-button {
+      cursor: pointer;
+    }
 
     &.active {
       background-color: color($theme-color-base-lightest);
