@@ -49,13 +49,13 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
-const DOCUMENT_RELATIONSHIPS = [
-  'primaryDocument',
-  'primarySupportingDocument',
-  'secondaryDocument',
-  'secondarySupportingDocument',
-  'supportingDocument',
-];
+const DOCUMENT_RELATIONSHIPS = {
+  PRIMARY: 'primaryDocument',
+  PRIMARY_SUPPORTING: 'primarySupportingDocument',
+  SECONDARY: 'secondaryDocument',
+  SECONDARY_SUPPORTING: 'secondarySupportingDocument',
+  SUPPORTING: 'supportingDocument',
+};
 
 // This docket entry type isn't defined anywhere else
 const STIN_DOCKET_ENTRY_TYPE = {
@@ -471,6 +471,8 @@ const US_STATES_OTHER = [
   'PW',
   'VI',
 ];
+
+const STATE_NOT_AVAILABLE = 'N/A';
 
 const PARTY_TYPES = {
   conservator: 'Conservator',
@@ -962,6 +964,7 @@ module.exports = {
   SIGNED_DOCUMENT_TYPES,
   STANDING_PRETRIAL_NOTICE,
   STANDING_PRETRIAL_ORDER,
+  STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,

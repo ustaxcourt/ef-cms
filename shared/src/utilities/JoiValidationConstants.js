@@ -3,6 +3,8 @@ const { FORMATS } = require('../business/utilities/DateHandler');
 const { MAX_FILE_SIZE_BYTES } = require('../business/entities/EntityConstants');
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 exports.JoiValidationConstants = {
+  CASE_CAPTION: joi.string().max(4700),
+  DOCUMENT_TITLE: joi.string().max(3000),
   EMAIL: joi.string().email({ tlds: false }).max(100),
   // eslint-disable-next-line spellcheck/spell-checker
   // TODO: remove FORMATS.YYYYMMDD from valid timestamp formats after devex task

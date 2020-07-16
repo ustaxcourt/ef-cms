@@ -2,11 +2,14 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  DOCKET_SECTION,
+  DOCUMENT_RELATIONSHIPS,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { omit } = require('lodash');
@@ -67,6 +70,7 @@ exports.updateDocketEntryInteractor = async ({
     mailingDate: documentMetadata.mailingDate,
     objections: documentMetadata.objections,
     ordinalValue: documentMetadata.ordinalValue,
+    otherFilingParty: documentMetadata.otherFilingParty,
     partyIrsPractitioner: documentMetadata.partyIrsPractitioner,
     partyPrimary: documentMetadata.partyPrimary,
     partySecondary: documentMetadata.partySecondary,
@@ -79,9 +83,10 @@ exports.updateDocketEntryInteractor = async ({
   const documentEntity = new Document(
     {
       ...currentDocument,
+      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       documentId: primaryDocumentFileId,
-      relationship: 'primaryDocument',
+      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
@@ -90,7 +95,6 @@ exports.updateDocketEntryInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.generateFiledBy(caseToUpdate, true);
 
   const existingDocketRecordEntry = caseEntity.getDocketRecordByDocumentId(
     documentEntity.documentId,

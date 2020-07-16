@@ -29,6 +29,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ],
   eventCode: 'Select a document type',
   lodged: 'Enter selection for filing status.',
+  otherFilingParty: 'Enter other filing party name.',
   primaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -60,6 +61,8 @@ function DocketEntryFactory(rawProps) {
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
     this.lodged = rawPropsParam.lodged;
     this.objections = rawPropsParam.objections;
+    this.hasOtherFilingParty = rawPropsParam.hasOtherFilingParty;
+    this.otherFilingParty = rawPropsParam.otherFilingParty;
     this.ordinalValue = rawPropsParam.ordinalValue;
     this.partyPrimary = rawPropsParam.partyPrimary;
     this.trialLocation = rawPropsParam.trialLocation;
@@ -92,10 +95,21 @@ function DocketEntryFactory(rawProps) {
       .valid(...ALL_EVENT_CODES)
       .required(),
     freeText: joi.string().optional(),
+    hasOtherFilingParty: joi.boolean().optional(),
     hasSupportingDocuments: joi.boolean(),
     isDocumentRequired: joi.boolean().optional(),
     lodged: joi.boolean(),
     ordinalValue: joi.string().optional(),
+    otherFilingParty: joi
+      .string()
+      .when('hasOtherFilingParty', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.required(),
+      })
+      .description(
+        'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
+      ),
     previousDocument: joi.object().optional(),
     primaryDocumentFile: joi.object().when('isDocumentRequired', {
       is: true,
@@ -171,7 +185,8 @@ function DocketEntryFactory(rawProps) {
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
-    rawProps.partyIrsPractitioner !== true
+    rawProps.partyIrsPractitioner !== true &&
+    rawProps.hasOtherFilingParty !== true
   ) {
     addToSchema('partyPrimary');
   }

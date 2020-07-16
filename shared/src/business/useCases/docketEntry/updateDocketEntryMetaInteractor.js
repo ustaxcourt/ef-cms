@@ -70,6 +70,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     lodged: docketEntryMeta.lodged,
     objections: docketEntryMeta.objections,
     ordinalValue: docketEntryMeta.ordinalValue,
+    otherFilingParty: docketEntryMeta.otherFilingParty,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
     partyPrimary: docketEntryMeta.partyPrimary,
     partySecondary: docketEntryMeta.partySecondary,
@@ -83,10 +84,14 @@ exports.updateDocketEntryMetaInteractor = async ({
   const documentEntityForFiledBy = new Document(
     {
       ...docketEntryMeta,
+      filedBy: undefined, // allow constructor to re-generate
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  documentEntityForFiledBy.generateFiledBy(caseToUpdate, true);
   const newFiledBy = documentEntityForFiledBy.filedBy;
 
   const docketRecordEntity = new DocketRecord(
