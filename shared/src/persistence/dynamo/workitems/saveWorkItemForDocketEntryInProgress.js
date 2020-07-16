@@ -2,14 +2,14 @@ const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
 /**
- * saveWorkItemForNonPaper
+ * saveWorkItemForDocketEntryInProgress
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
  * @returns {Promise} promise
  */
-exports.saveWorkItemForDocketEntryWithoutFile = async ({
+exports.saveWorkItemForDocketEntryInProgress = async ({
   applicationContext,
   workItem,
 }) => {

@@ -16,7 +16,9 @@ export const caseMessageModalHelper = (get, applicationContext) => {
   const form = get(state.modal.form);
   const screenMetadata = get(state.screenMetadata);
 
-  const currentAttachmentCount = (form.attachments || []).length;
+  const attachments = get(state.modal.form.attachments) || [];
+
+  const currentAttachmentCount = attachments.length;
   const canAddDocument =
     currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
@@ -25,7 +27,13 @@ export const caseMessageModalHelper = (get, applicationContext) => {
   const documents = [];
   docketRecordWithDocument.forEach(entry => {
     if (entry.document) {
-      documents.push(entry.document);
+      const document = caseDetail.documents.find(
+        item => item.documentId === entry.document.documentId,
+      );
+
+      if (document.isFileAttached) {
+        documents.push(entry.document);
+      }
     }
   });
 

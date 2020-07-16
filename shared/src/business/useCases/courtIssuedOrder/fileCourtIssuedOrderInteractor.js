@@ -111,6 +111,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
+      isFileAttached: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
