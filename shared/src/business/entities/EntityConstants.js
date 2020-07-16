@@ -879,7 +879,11 @@ const ALL_DOCUMENT_TYPES = (() => {
 })();
 
 const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
-const OTHER_FILER_TYPES = [UNIQUE_OTHER_FILER_TYPE, 'Participant'];
+const OTHER_FILER_TYPES = [
+  UNIQUE_OTHER_FILER_TYPE,
+  'Tax Matters Partner',
+  'Partner Other Than Tax Matters Partner',
+];
 
 const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
