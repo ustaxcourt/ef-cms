@@ -17,6 +17,7 @@ export const ConfirmModal = connect(
     children,
     className,
     confirmLabel,
+    confirmSequenceProps,
     displaySuccessBanner,
     hasErrorState,
     headerIcon,
@@ -45,7 +46,11 @@ export const ConfirmModal = connect(
 
     const runConfirmSequence = event => {
       event.stopPropagation();
-      onConfirm?.call();
+      if (onConfirm && confirmSequenceProps) {
+        onConfirm(confirmSequenceProps);
+      } else {
+        onConfirm?.call();
+      }
     };
 
     useEffect(() => {
