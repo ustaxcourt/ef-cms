@@ -780,8 +780,8 @@ const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
-  saveWorkItemForDocketEntryWithoutFile,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
+  saveWorkItemForDocketEntryInProgress,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -1307,7 +1307,7 @@ module.exports = appContextUser => {
         saveDocumentFromLambda,
         saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
-        saveWorkItemForDocketEntryWithoutFile,
+        saveWorkItemForDocketEntryInProgress,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
