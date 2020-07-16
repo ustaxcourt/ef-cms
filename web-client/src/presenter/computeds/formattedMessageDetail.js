@@ -31,12 +31,14 @@ const formatAttachment = (
       caseDocument.eventCode,
     );
 
-    //fixme add test
+    const isDraftDocument =
+      draftDocuments &&
+      !!draftDocuments.find(
+        draft => draft.documentId === attachment.documentId,
+      );
 
     attachment.showNotServed =
-      !isUnservable &&
-      !caseDocument.servedAt &&
-      !draftDocuments.includes(caseDocument);
+      !isUnservable && !caseDocument.servedAt && !isDraftDocument;
   }
 };
 
@@ -45,10 +47,9 @@ export const formattedMessageDetail = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
 
-  const { draftDocuments } = applicationContext.getUtilities().formatCase({
-    applicationContext,
-    caseDetail,
-  });
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail);
 
   const formattedMessages = orderBy(
     messageDetail.map(message => formatMessage(message, applicationContext)),
