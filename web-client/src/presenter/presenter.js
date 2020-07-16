@@ -126,6 +126,7 @@ import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
+import { gotoPrintPaperPetitionReceiptSequence } from './sequences/gotoPrintPaperPetitionReceiptSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrintableCaseInventoryReportSequence';
@@ -563,6 +564,7 @@ export const presenter = {
     gotoPetitionQcSequence,
     gotoPractitionerDetailSequence,
     gotoPrimaryContactEditSequence,
+    gotoPrintPaperPetitionReceiptSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintableCaseConfirmationSequence,
     gotoPrintableCaseInventoryReportSequence,
