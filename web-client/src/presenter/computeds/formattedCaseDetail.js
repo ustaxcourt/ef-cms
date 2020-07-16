@@ -138,6 +138,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         numberOfPages: 0,
         ...record,
         ...document,
+        createdAtFormatted: record.createdAtFormatted,
         descriptionDisplay: record.description,
         index,
       };
