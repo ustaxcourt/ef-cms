@@ -77,7 +77,7 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showEditCorrespondenceButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplay.documentId}`}
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
                   icon="edit"
                 >
                   Edit
