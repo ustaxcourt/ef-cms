@@ -1,8 +1,3 @@
-// import { applicationContext } from '../../applicationContext';
-// import {
-//   formattedCaseDetail as formattedCaseDetailComputed,
-//   getShowDocumentViewerLink,
-// } from './formattedCaseDetail';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
