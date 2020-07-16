@@ -1,9 +1,22 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const ConfirmServeToIrsModal = () => (
+  <ConfirmModal
+    cancelLabel="No, Take Me Back"
+    confirmLabel="Yes, Serve"
+    confirmSequenceProps={{ stayOnPage: true }}
+    preventCancelOnBlur={true}
+    title="Are You Sure You Want to Serve This Petition to the IRS?"
+    onCancelSequence="clearModalSequence"
+    onConfirmSequence="serveCaseToIrsSequence"
+  ></ConfirmModal>
+);
 
 export const DocumentViewerDocument = connect(
   {
@@ -12,6 +25,9 @@ export const DocumentViewerDocument = connect(
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    openConfirmServeToIrsModalSequence:
+      sequences.openConfirmServeToIrsModalSequence,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DocumentViewerDocument({
@@ -19,6 +35,8 @@ export const DocumentViewerDocument = connect(
     documentViewerHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
+    openConfirmServeToIrsModalSequence,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -64,6 +82,18 @@ export const DocumentViewerDocument = connect(
             </div>
 
             <div className="message-document-actions">
+              {documentViewerHelper.showNotServed && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeToIrsModalSequence();
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
               <Button
                 link
                 icon="file-pdf"
@@ -83,6 +113,9 @@ export const DocumentViewerDocument = connect(
                 src={iframeSrc}
                 title={documentViewerHelper.description}
               />
+            )}
+            {showModal == 'ConfirmServeToIrsModal' && (
+              <ConfirmServeToIrsModal />
             )}
           </>
         )}

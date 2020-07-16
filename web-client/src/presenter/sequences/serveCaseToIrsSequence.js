@@ -7,6 +7,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { shouldNavigateAction } from '../actions/shouldNavigateAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const serveCaseToIrsSequence = [
@@ -19,7 +20,11 @@ export const serveCaseToIrsSequence = [
         getServeToIrsAlertSuccessAction,
         setAlertSuccessAction,
         setSaveAlertsForNavigationAction,
-        navigateToDocumentQCAction,
+        shouldNavigateAction,
+        {
+          no: [],
+          yes: [navigateToDocumentQCAction],
+        },
       ],
       paper: [
         clearModalAction,

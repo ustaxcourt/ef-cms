@@ -15,6 +15,7 @@ const ConfirmServeToIrsModal = () => (
   <ConfirmModal
     cancelLabel="No, Take Me Back"
     confirmLabel="Yes, Serve"
+    confirmSequenceProps={{ stayOnPage: false }}
     preventCancelOnBlur={true}
     title="Are You Sure You Want to Serve This Petition to the IRS?"
     onCancelSequence="clearModalSequence"

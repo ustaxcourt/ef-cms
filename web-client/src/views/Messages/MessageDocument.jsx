@@ -1,8 +1,21 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const ConfirmServeToIrsModal = () => (
+  <ConfirmModal
+    cancelLabel="No, Take Me Back"
+    confirmLabel="Yes, Serve"
+    confirmSequenceProps={{ stayOnPage: true }}
+    preventCancelOnBlur={true}
+    title="Are You Sure You Want to Serve This Petition to the IRS?"
+    onCancelSequence="clearModalSequence"
+    onConfirmSequence="serveCaseToIrsSequence"
+  ></ConfirmModal>
+);
 
 export const MessageDocument = connect(
   {
@@ -14,7 +27,10 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence:
       sequences.openConfirmEditSignatureModalSequence,
+    openConfirmServeToIrsModalSequence:
+      sequences.openConfirmServeToIrsModalSequence,
     parentMessageId: state.parentMessageId,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
@@ -24,7 +40,9 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
+    openConfirmServeToIrsModalSequence,
     parentMessageId,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -118,6 +136,19 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showNotServed && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeToIrsModalSequence();
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -137,6 +168,9 @@ export const MessageDocument = connect(
                 src={iframeSrc}
                 title={viewerDocumentToDisplay.documentTitle}
               />
+            )}
+            {showModal == 'ConfirmServeToIrsModal' && (
+              <ConfirmServeToIrsModal />
             )}
           </>
         )}
