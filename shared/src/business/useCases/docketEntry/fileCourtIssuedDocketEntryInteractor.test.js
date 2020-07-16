@@ -6,11 +6,11 @@ const {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;

@@ -1674,4 +1674,102 @@ describe('formattedCaseDetail', () => {
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
+
+  describe('showNotServed', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('should be true if the document type is servable and does not have a servedAt', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(true);
+    });
+
+    it('should be false if the document type is unservable', () => {
+      //CTRA is a document type that cannot be served
+      caseDetail.docketRecord[0].eventCode = 'CTRA';
+      caseDetail.documents[0].eventCode = 'CTRA';
+      caseDetail.docketRecord[0].documentType = 'Corrected Transcript';
+      caseDetail.documents[0].documentType = 'Corrected Transcript';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+    });
+
+    it('should be false if the document type is servable and has servedAt', () => {
+      caseDetail.docketRecord[0].servedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].servedAt = '2019-06-19T17:29:13.120Z';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+    });
+  });
 });
