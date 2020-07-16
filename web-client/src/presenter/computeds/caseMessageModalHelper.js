@@ -27,7 +27,13 @@ export const caseMessageModalHelper = (get, applicationContext) => {
   const documents = [];
   docketRecordWithDocument.forEach(entry => {
     if (entry.document) {
-      documents.push(entry.document);
+      const document = caseDetail.documents.find(
+        item => item.documentId === entry.document.documentId,
+      );
+
+      if (document.isFileAttached) {
+        documents.push(entry.document);
+      }
     }
   });
 
