@@ -7,6 +7,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setDocumentToFormAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoEditCorrespondenceDocument = [
@@ -18,6 +19,7 @@ const gotoEditCorrespondenceDocument = [
   setCaseAction,
   setDocumentIdAction,
   setDocumentToFormAction,
+  setRedirectUrlAction,
   setCurrentPageAction('EditCorrespondenceDocument'),
 ];
 

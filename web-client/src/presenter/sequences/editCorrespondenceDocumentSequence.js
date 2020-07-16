@@ -1,5 +1,6 @@
 import { chooseByTruthyStateActionFactory } from '../actions/editUploadCourtIssuedDocument/chooseByTruthyStateActionFactory';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { getEditCorrespondenceDocumentAlertSuccessAction } from '../actions/CorrespondenceDocument/getEditCorrespondenceDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -31,7 +32,11 @@ const onSuccess = [
   setSaveAlertsForNavigationAction,
   setCaseDetailPageTabActionGenerator(),
   setCaseDetailPageTabFrozenAction,
-  navigateToCaseDetailAction,
+  followRedirectAction,
+  {
+    default: [navigateToCaseDetailAction],
+    success: [],
+  },
 ];
 
 export const editCorrespondenceDocumentSequence = [
