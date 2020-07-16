@@ -12,6 +12,11 @@
 * If document name, COS, Filed vs Lodged are changed, and/or add additional information 1 is added a Notice of Docket Change is added to the docket record and a new coversheet is created to go on top of the old coversheet on the updated document
 * When other changes are made no change of docket record is issued but original coversheet is updated as needed
 
+**Who is Filing this Document**
+* If "Other" is checked, "Other filing party name" field displays
+* any existing data from QC or Add Docket Entry should be displayed in fields
+* On save, updates to Filed By should display on docket entry and a Notice of Docket Change is not generated when updated from this flow
+
 #### Service
 * Allows Docket Clerk to update the parties served
 

@@ -34,7 +34,7 @@ export const DocumentViewerDocument = connect(
           </div>
         )}
 
-        {!process.env.CI && viewerDocumentToDisplay && (
+        {viewerDocumentToDisplay && (
           <>
             {documentViewerHelper.showSealedInBlackstone && (
               <div className="sealed-in-blackstone margin-bottom-1">
@@ -57,6 +57,9 @@ export const DocumentViewerDocument = connect(
               <div className="grid-col-6 text-align-right">
                 {documentViewerHelper.servedLabel &&
                   documentViewerHelper.servedLabel}
+                {documentViewerHelper.showNotServed && (
+                  <span className="text-semibold not-served">Not served</span>
+                )}
               </div>
             </div>
 
@@ -75,7 +78,12 @@ export const DocumentViewerDocument = connect(
                 View Full PDF
               </Button>
             </div>
-            <iframe src={iframeSrc} title={documentViewerHelper.description} />
+            {!process.env.CI && (
+              <iframe
+                src={iframeSrc}
+                title={documentViewerHelper.description}
+              />
+            )}
           </>
         )}
       </div>
