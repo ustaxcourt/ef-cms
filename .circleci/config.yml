@@ -563,8 +563,8 @@ workflows:
       #         ignore:
       #           - develop
       - deploy:
-          requires:
-            - build-client-coverage
+          # requires:
+          #   - build-client-coverage
           filters:
             branches:
               only:

@@ -340,7 +340,6 @@ module.exports = [
       'screen capture ./web-client/pa11y/pa11y-screenshots/7.png',
       'wait for element #secondaryDocument-certificateOfService-label to be visible',
       'click #secondaryDocument-certificateOfService-label',
-      'screen capture ./web-client/pa11y/screenshots/8.png',
       'wait for element .secondaryDocument-service-date to be visible',
       'wait for element #add-secondary-supporting-document-button to be visible',
       'screen capture ./web-client/pa11y/pa11y-screenshots/8.png',
@@ -349,7 +348,7 @@ module.exports = [
     ],
     notes: ['File a document, step 2'],
     url:
-      'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-20/file-a-document&info=doctype-selection-2',
+      'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
   {
     actions: [
