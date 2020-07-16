@@ -3,7 +3,10 @@ import {
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
+import {
+  formattedCaseDetail as formattedCaseDetailComputed,
+  getShowDocumentViewerLink,
+} from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -1671,6 +1674,181 @@ describe('formattedCaseDetail', () => {
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+  });
+
+  describe('getShowDocumentViewerLink', () => {
+    const tests = [
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: false,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: false,
+          isExternalUser: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: true,
+          isStricken: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isUnservable: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          userHasAccessToCase: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          // isUnservable: true,
+          isServed: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          userHasAccessToCase: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: true,
+          userHasNoAccessToDocument: true,
+        },
+        output: false,
+      },
+    ];
+
+    tests.forEach(({ inputs, output }) => {
+      it(`returns expected output of '${output}' for inputs ${JSON.stringify(
+        inputs,
+      )}`, () => {
+        const result = getShowDocumentViewerLink(inputs);
+        expect(result).toEqual(output);
+      });
     });
   });
 });

@@ -14,6 +14,34 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
+export const getShowDocumentViewerLink = ({
+  hasDocument,
+  isCourtIssuedDocument,
+  isExternalUser,
+  isServed,
+  isStricken,
+  isUnservable,
+  userHasAccessToCase,
+  userHasNoAccessToDocument,
+}) => {
+  if (!hasDocument) return false;
+
+  if (isExternalUser) {
+    if (isStricken) return false;
+    if (userHasNoAccessToDocument) return false;
+
+    if (isCourtIssuedDocument) {
+      if (isUnservable) return true;
+      if (!isServed) return false;
+    } else {
+      if (!userHasAccessToCase) return false;
+      if (!isServed) return false;
+    }
+  }
+
+  return true;
+};
+
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
@@ -82,35 +110,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     };
   }
 
-  const getShowDocumentViewerLink = ({ document, userPermissions }) => {
-    return (
-      userPermissions.UPDATE_CASE &&
-      (!document.isInProgress ||
-        ((userPermissions.DOCKET_ENTRY ||
-          userPermissions.CREATE_ORDER_DOCKET_ENTRY) &&
-          document.isInProgress))
-    );
-  };
-
-  const getShowLinkToDocument = ({
-    document,
-    record,
-    userHasAccessToCase,
-    userHasAccessToDocument,
-    userPermissions,
-  }) => {
-    return (
-      (isExternalUser ? !record.isStricken : userHasAccessToCase) &&
-      userHasAccessToCase &&
-      userHasAccessToDocument &&
-      !userPermissions.UPDATE_CASE &&
-      document.processingStatus ===
-        DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-      !document.isInProgress &&
-      !document.isNotServedDocument
-    );
-  };
-
   const getShowEditDocketRecordEntry = ({ document, userPermissions }) => {
     const hasSystemGeneratedDocument =
       document && systemGeneratedEventCodes.includes(document.eventCode);
@@ -130,29 +129,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     );
   };
 
-  const getShowDocumentDescriptionWithoutLink = ({
-    document,
-    record,
-    showDocumentViewerLink,
-    userHasAccessToCase,
-    userHasAccessToDocument,
-    userPermissions,
-  }) => {
-    return (
-      !showDocumentViewerLink &&
-      (!userHasAccessToCase ||
-        !userHasAccessToDocument ||
-        !document ||
-        (userHasAccessToCase && userHasAccessToDocument && record.isStricken) ||
-        (document &&
-          (document.isNotServedDocument || document.isInProgress) &&
-          !(
-            userPermissions.DOCKET_ENTRY ||
-            userPermissions.CREATE_ORDER_DOCKET_ENTRY
-          )))
-    );
-  };
-
   result.formattedDocketEntries = result.docketRecordWithDocument.map(
     ({ document, index, record }) => {
       const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
@@ -165,6 +141,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
         descriptionDisplay: record.description,
         index,
       };
+
+      let showDocumentLinks = false;
 
       if (document) {
         if (!isExternalUser) {
@@ -206,18 +184,22 @@ export const formattedCaseDetail = (get, applicationContext) => {
           !formattedResult.isUnservable && document.isNotServedDocument;
         formattedResult.showServed = document.isStatusServed;
 
-        formattedResult.showDocumentViewerLink = getShowDocumentViewerLink({
-          document,
-          userPermissions: permissions,
+        showDocumentLinks = getShowDocumentViewerLink({
+          hasDocument: !!document,
+          isCourtIssuedDocument: document.isCourtIssuedDocument,
+          isExternalUser,
+          isServed: !!document.servedAt,
+          isStricken: record.isStricken,
+          isUnservable: formattedResult.isUnservable,
+          userHasAccessToCase,
+          userHasNoAccessToDocument: !userHasAccessToDocument,
         });
 
-        formattedResult.showLinkToDocument = getShowLinkToDocument({
-          document,
-          record,
-          userHasAccessToCase,
-          userHasAccessToDocument,
-          userPermissions: permissions,
-        });
+        formattedResult.showDocumentViewerLink =
+          !isExternalUser && showDocumentLinks;
+
+        formattedResult.showLinkToDocument =
+          isExternalUser && showDocumentLinks;
       }
 
       formattedResult.filingsAndProceedingsWithAdditionalInfo = '';
@@ -233,16 +215,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         userPermissions: permissions,
       });
 
-      formattedResult.showDocumentDescriptionWithoutLink = getShowDocumentDescriptionWithoutLink(
-        {
-          document,
-          record,
-          showDocumentViewerLink: formattedResult.showDocumentViewerLink,
-          userHasAccessToCase,
-          userHasAccessToDocument,
-          userPermissions: permissions,
-        },
-      );
+      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
 
       return formattedResult;
     },
