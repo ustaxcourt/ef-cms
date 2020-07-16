@@ -136,7 +136,7 @@ describe('Case entity', () => {
   });
 
   describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if current user matches rawCase', () => {
+    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
       const myCase = new Case(
         { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
         { applicationContext },
@@ -221,16 +221,6 @@ describe('Case entity', () => {
         },
       );
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
-    });
-
-    it('does not create a secondary contact when one is not needed by the party type', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, contactSecondary: undefined },
-        { applicationContext },
-      );
-      expect(myCase).toMatchObject({
-        contactSecondary: undefined,
-      });
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
@@ -3736,6 +3726,18 @@ describe('Case entity', () => {
       );
 
       expect(caseEntity.isSealed).toBeTruthy();
+    });
+  });
+
+  describe('secondary contact', () => {
+    it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, contactSecondary: undefined },
+        { applicationContext },
+      );
+      expect(myCase).toMatchObject({
+        contactSecondary: undefined,
+      });
     });
   });
 });
