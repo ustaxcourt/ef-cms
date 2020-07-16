@@ -133,7 +133,7 @@ describe('Case entity', () => {
   });
 
   describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if current user matches rawCase', () => {
+    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
       const myCase = new Case(
         { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
         { applicationContext },
@@ -3670,7 +3670,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('secondsry contact', () => {
+  describe('secondary contact', () => {
     it('does not create a secondary contact when one is not needed by the party type', () => {
       const myCase = new Case(
         { ...MOCK_CASE, contactSecondary: undefined },
