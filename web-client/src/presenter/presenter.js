@@ -150,6 +150,7 @@ import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSe
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
+import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
@@ -273,6 +274,7 @@ import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
+import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -585,6 +587,7 @@ export const presenter = {
     leaveCaseForLaterServiceSequence,
     loadDefaultDocketViewerDocumentToDisplaySequence,
     loadDefaultDraftViewerDocumentToDisplaySequence,
+    loadDefaultViewerCorrespondenceSequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
@@ -707,6 +710,7 @@ export const presenter = {
     setSelectedBatchIndexSequence,
     setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
+    setViewerCorrespondenceToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     setWorkItemActionSequence,

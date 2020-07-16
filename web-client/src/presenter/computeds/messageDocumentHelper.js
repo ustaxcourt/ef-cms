@@ -7,11 +7,15 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
+  const { correspondence, documents } = caseDetail;
+
   const caseDocument =
     viewerDocumentToDisplay &&
-    caseDetail.documents.find(
+    [...correspondence, ...documents].find(
       d => d.documentId === viewerDocumentToDisplay.documentId,
     );
+
+  const isCorrespondence = caseDocument && !caseDocument.entityName; // TODO: Sure this up a little
 
   const documentRequiresSignature =
     caseDocument &&
@@ -37,13 +41,16 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
+    !isCorrespondence &&
     !isDocumentOnDocketRecord &&
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
-    !documentIsSigned && !isDocumentOnDocketRecord;
+    !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord;
-  const showEditButtonForDocument = !isDocumentOnDocketRecord;
+  const showEditButtonForDocument =
+    !isDocumentOnDocketRecord && !isCorrespondence;
+  const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -59,6 +66,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
     showEditButtonSigned:
       showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
+    showEditCorrespondenceButton:
+      showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showEditSignatureButton:
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
   };

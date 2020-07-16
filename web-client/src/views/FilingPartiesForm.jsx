@@ -113,6 +113,7 @@ export const FilingPartiesForm = connect(
             <label
               className="usa-checkbox__label inline-block"
               htmlFor="has-other-filing-party"
+              id="has-other-filing-party-label"
             >
               Other
             </label>
@@ -123,7 +124,7 @@ export const FilingPartiesForm = connect(
                 <label
                   className="usa-label"
                   htmlFor="other-filing-party"
-                  id="other-filing-party"
+                  id="other-filing-party-label"
                 >
                   Other filing party name
                 </label>
