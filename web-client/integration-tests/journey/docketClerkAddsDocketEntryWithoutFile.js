@@ -56,5 +56,29 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       key: 'objections',
       value: 'No',
     });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'hasOtherFilingParty',
+      value: true,
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({
+      otherFilingParty: VALIDATION_ERROR_MESSAGES.otherFilingParty,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'otherFilingParty',
+      value: 'Brianna Noble',
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
   });
 };
