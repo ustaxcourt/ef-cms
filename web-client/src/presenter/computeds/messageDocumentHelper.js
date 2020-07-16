@@ -10,16 +10,17 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const { correspondence, documents } = caseDetail;
 
   const caseDocument =
-    viewerDocumentToDisplay &&
-    [...correspondence, ...documents].find(
-      d => d.documentId === viewerDocumentToDisplay.documentId,
-    );
+    (viewerDocumentToDisplay &&
+      [...correspondence, ...documents].find(
+        d => d.documentId === viewerDocumentToDisplay.documentId,
+      )) ||
+    {};
 
-  const isCorrespondence = caseDocument && !caseDocument.entityName; // TODO: Sure this up a little
+  const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 
-  const documentRequiresSignature =
-    caseDocument &&
-    EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
+  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+    caseDocument.eventCode,
+  );
 
   const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
 
