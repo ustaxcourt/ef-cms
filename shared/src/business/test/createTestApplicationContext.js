@@ -166,6 +166,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         numPages: 5,
       }),
     }),
+    version: '1',
   };
 
   const mockGetScannerReturnValue = {

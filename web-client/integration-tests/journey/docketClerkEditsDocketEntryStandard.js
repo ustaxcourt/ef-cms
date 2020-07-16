@@ -90,7 +90,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       documentTitle: 'Entry of Appearance',
       documentType: 'Entry of Appearance',
       eventCode: 'EA',
-      filedBy: 'Petr. Mona Schultz',
+      filedBy: 'Petr. Mona Schultz, Brianna Noble',
       partyPrimary: true,
       receivedAt: '2018-01-01',
     });
