@@ -228,4 +228,32 @@ describe('updateDocketEntryInteractor', () => {
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
+
+  it('should update only allowed editable fields on a docket entry document', async () => {
+    await updateDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        caseId: caseRecord.caseId,
+        documentTitle: 'My Edited Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[0],
+    ).toMatchObject({
+      documentTitle: 'My Edited Document',
+      freeText: 'Some text about this document',
+      hasOtherFilingParty: true,
+      otherFilingParty: 'Bert Brooks',
+    });
+  });
 });
