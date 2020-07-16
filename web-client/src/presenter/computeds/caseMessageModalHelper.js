@@ -16,7 +16,9 @@ export const caseMessageModalHelper = (get, applicationContext) => {
   const form = get(state.modal.form);
   const screenMetadata = get(state.screenMetadata);
 
-  const currentAttachmentCount = (form.attachments || []).length;
+  const attachments = get(state.modal.form.attachments) || [];
+
+  const currentAttachmentCount = attachments.length;
   const canAddDocument =
     currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
