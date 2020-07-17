@@ -3,7 +3,7 @@ export const addEditUserCaseNoteModalHelper = (get, applicationContext) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const notesLabel =
-    currentUser.role === USER_ROLES.trialClerk ? 'Notes' : 'Judge‘s notes';
+    currentUser.role === USER_ROLES.trialClerk ? 'Notes' : 'Judge’s notes';
 
   return {
     notesLabel,
