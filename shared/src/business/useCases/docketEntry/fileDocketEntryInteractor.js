@@ -143,6 +143,14 @@ exports.fileDocketEntryInteractor = async ({
             message: 'completed',
             user,
           });
+
+          const servedParties = aggregatePartiesForService(caseEntity);
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
+            documentEntity,
+            servedParties,
+          });
         }
 
         workItem.assignToUser({
