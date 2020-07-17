@@ -174,7 +174,7 @@
         "phone": "1234567890",
         "postalCode": "05198",
         "state": "AK",
-        "title": "Participant"
+        "title": "Tax Matters Partner"
       },
       {
         "address1": "1337 12th Ave",
@@ -183,7 +183,7 @@
         "countryType": "domestic",
         "email": "testUser@example.com",
         "name": "Guy Fieri",
-        "otherFilerType": "Participant",
+        "otherFilerType": "Tax Matters Partner",
         "phone": "1234567890",
         "postalCode": "05198",
         "state": "AK",
