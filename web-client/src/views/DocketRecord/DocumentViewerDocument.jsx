@@ -86,7 +86,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${documentViewerHelper.documentId}`,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
                     });
                   }}
                 >
@@ -102,7 +102,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${documentViewerHelper.documentId}`,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
                     });
                   }}
                 >
@@ -113,7 +113,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-detail`}
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.documentId}`}
                   icon="paper-plane"
                   iconColor="white"
                 >
