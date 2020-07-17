@@ -447,4 +447,114 @@ describe('documentViewerHelper', () => {
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
   });
+
+  describe('showServePaperFiledDocumentButton', () => {
+    const documentId = applicationContext.getUniqueId();
+
+    it('should be true if the document type is an external document (and not a Petition) that does not have a served at and permisisons.SERVE_DOCUMENT is true', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Answer',
+                eventCode: 'A',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(true);
+    });
+
+    it('should be false if the document type is not an external document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be false if the document type is an external document and has servedAt', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Answer',
+                eventCode: 'A',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be false if the document type is an external document without servedAt but the user does not have permission to serve the document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Answer',
+                eventCode: 'A',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+  });
 });
