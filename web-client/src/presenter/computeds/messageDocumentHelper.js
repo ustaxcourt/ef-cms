@@ -99,5 +99,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
     showNotServed,
     showServeCourtIssuedDocumentButton,
+    showServePetitionButton: false, // TODO: temp
   };
 };
