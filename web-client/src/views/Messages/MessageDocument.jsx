@@ -20,9 +20,9 @@ export const MessageDocument = connect(
     openConfirmServePaperFiledDocumentSequence:
       sequences.openConfirmServePaperFiledDocumentSequence,
     parentMessageId: state.parentMessageId,
-    saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -36,8 +36,8 @@ export const MessageDocument = connect(
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
-    saveAndServeDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -192,7 +192,7 @@ export const MessageDocument = connect(
             )}
             {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
-                confirmSequence={saveAndServeDocketEntrySequence}
+                confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
