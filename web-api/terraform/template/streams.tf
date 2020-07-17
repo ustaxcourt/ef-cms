@@ -10,7 +10,7 @@ resource "aws_lambda_function" "zip_streams" {
   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler       = "streams.handler"
   source_code_hash = data.archive_file.zip_streams.output_base64sha256
-  timeout = "29"
+  timeout = "900"
   memory_size = "3008"
 
   runtime = "nodejs12.x"

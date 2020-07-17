@@ -5,6 +5,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
+    INITIAL_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
@@ -42,6 +43,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
       docketEntry =>
         docketEntry.documentId === viewerDocumentToDisplay.documentId,
     );
+
+  const isPetitionDocument =
+    caseDocument &&
+    caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
 
   const isInternalUser = applicationContext
     .getUtilities()
@@ -83,7 +88,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
-    showNotServed && !isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+    showNotServed &&
+    !isCourtIssuedDocument &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showServePetitionButton =
+    showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
   return {
     showAddDocketEntryButton:
@@ -103,5 +114,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showNotServed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
+    showServePetitionButton,
   };
 };
