@@ -180,7 +180,7 @@ export const serveDocument = async ({ docketNumber, documentId, test }) => {
   });
 
   await test.runSequence('openConfirmInitiateServiceModalSequence');
-  await test.runSequence('serveCourtIssuedDocumentSequence');
+  await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
 };
 
 export const createCourtIssuedDocketEntry = async ({
