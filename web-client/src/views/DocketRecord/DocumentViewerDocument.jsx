@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,6 +13,11 @@ export const DocumentViewerDocument = connect(
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    openConfirmServeCourtIssuedDocumentSequence:
+      sequences.openConfirmServeCourtIssuedDocumentSequence,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DocumentViewerDocument({
@@ -19,6 +25,9 @@ export const DocumentViewerDocument = connect(
     documentViewerHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
+    serveCourtIssuedDocumentSequence,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -64,6 +73,21 @@ export const DocumentViewerDocument = connect(
             </div>
 
             <div className="message-document-actions">
+              {documentViewerHelper.showServeCourtIssuedDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeCourtIssuedDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${documentViewerHelper.documentId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
               <Button
                 link
                 icon="file-pdf"
@@ -82,6 +106,12 @@ export const DocumentViewerDocument = connect(
               <iframe
                 src={iframeSrc}
                 title={documentViewerHelper.description}
+              />
+            )}
+            {showModal == 'ConfirmInitiateServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
           </>
