@@ -193,14 +193,23 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/petition-qc/document-detail',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+          redirectUrl: `/case-detail/${docketNumber}/document-view?`,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    registerRoute(
       '/case-detail/*/petition-qc/*',
       ifHasAccess((docketNumber, parentMessageId) => {
-        const { tab } = route.query();
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
           redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
-          tab,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
