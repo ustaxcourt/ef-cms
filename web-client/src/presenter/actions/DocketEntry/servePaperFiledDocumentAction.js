@@ -14,8 +14,7 @@ export const servePaperFiledDocumentAction = async ({
   get,
 }) => {
   const { caseId } = get(state.caseDetail);
-  //FIXME - make sure sequence sets doc id in state
-  const { documentId } = get(state.documentId);
+  const documentId = get(state.documentId);
 
   const {
     paperServicePdfUrl,
@@ -27,8 +26,9 @@ export const servePaperFiledDocumentAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Document has been served.',
+      message: 'Document served.',
     },
+    hasPaper: !!paperServicePdfUrl,
     pdfUrl: paperServicePdfUrl,
   };
 };
