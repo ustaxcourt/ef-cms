@@ -10,7 +10,7 @@ const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * servePaperFiledDocumentInteractor
+ * serveExternallyFiledDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -18,7 +18,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.documentId the id of the document to serve
  * @returns {object} the paper service pdf url
  */
-exports.servePaperFiledDocumentInteractor = async ({
+exports.serveExternallyFiledDocumentInteractor = async ({
   applicationContext,
   caseId,
   documentId,
