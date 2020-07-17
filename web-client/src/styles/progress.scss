@@ -47,16 +47,3 @@
     text-align: left;
   }
 }
-
-* {
-  animation: fadein 0.1s;
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
