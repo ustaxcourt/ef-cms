@@ -14,6 +14,9 @@ const {
   servePaperFiledDocumentInteractor,
 } = require('./servePaperFiledDocumentInteractor');
 
+jest.mock('../addCoversheetInteractor');
+
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('servePaperFiledDocumentInteractor', () => {
@@ -26,9 +29,13 @@ describe('servePaperFiledDocumentInteractor', () => {
       // sample.pdf is a 1 page document
       return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
     };
-    const testPdfDoc = testPdfDocBytes();
 
+    const testPdfDoc = testPdfDocBytes();
     const PDF_MOCK_BUFFER = 'Hello World';
+
+    addCoverToPdf.mockResolvedValue({
+      pdfData: testPdfDoc,
+    });
 
     caseRecord = {
       caseCaption: 'Caption',
@@ -140,10 +147,7 @@ describe('servePaperFiledDocumentInteractor', () => {
       documentId: DOCUMENT_ID,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls.length,
-    ).toEqual(1);
+    expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
   it('should send electronic-service parties emails', async () => {
