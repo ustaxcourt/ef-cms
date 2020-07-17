@@ -31,8 +31,8 @@ export const DocumentViewer = connect(
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
               {formattedCaseDetail.formattedDocketEntries.map((entry, idx) => {
+                // TODO: should live in a computed
                 if (entry.isFileAttached) {
-                  // should live in a computed
                   return (
                     <Button
                       className={classNames(
