@@ -6,7 +6,6 @@ import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/complet
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
@@ -61,7 +60,6 @@ export const saveAndServeDocketEntrySequence = [
       clearAlertsAction,
       startShowValidationAction,
       computeFormDateAction,
-      computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
       setDocumentIsRequiredAction,
