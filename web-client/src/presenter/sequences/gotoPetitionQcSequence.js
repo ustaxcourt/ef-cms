@@ -8,11 +8,13 @@ import { setDefaultFormDocumentForPreviewAction } from '../actions/setDefaultFor
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoPetitionQcSequence = [
   setCurrentPageAction('Interstitial'),
   clearFormsAction,
+  setRedirectUrlAction,
   stopShowValidationAction,
   setDocumentDetailTabAction,
   getCaseAction,
