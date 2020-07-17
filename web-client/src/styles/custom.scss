@@ -1503,7 +1503,7 @@ button.change-scanner-button {
   align-self: center;
 }
 
-.message-detail--attachments {
+.document-viewer--documents {
   height: 1000px;
 
   iframe {
@@ -1514,4 +1514,8 @@ button.change-scanner-button {
 .message-detail .usa-accordion__heading .accordion-item-title {
   font-size: 16px;
   font-weight: $font-regular;
+}
+
+.sealed-in-blackstone {
+  color: color($theme-color-secondary-dark);
 }

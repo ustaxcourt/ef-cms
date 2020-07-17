@@ -1,6 +1,5 @@
 const React = require('react');
-import { PrimaryHeader } from '../components/PrimaryHeader';
-
+const { PrimaryHeader } = require('../components/PrimaryHeader');
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
 
 export const CaseInventoryReport = ({

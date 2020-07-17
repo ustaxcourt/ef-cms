@@ -5,7 +5,7 @@ const { ROLES } = require('../entities/EntityConstants');
 describe('getUploadPolicyInteractor', () => {
   it('throw unauthorized error on invalid role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'petitioner',
     });
     let error;

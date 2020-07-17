@@ -31,6 +31,24 @@ describe('updateCaseMessageModalAttachmentsAction', () => {
     ]);
   });
 
+  it('appends the given document meta from state to the form.modal.attachments array', async () => {
+    const result = await runAction(updateCaseMessageModalAttachmentsAction, {
+      state: {
+        caseDetail,
+        documentId: '123',
+        modal: {
+          form: {
+            attachments: [],
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.attachments).toEqual([
+      { documentId: '123', documentTitle: 'Petition' },
+    ]);
+  });
+
   it('does not modify the array if no documentId is given', async () => {
     const result = await runAction(updateCaseMessageModalAttachmentsAction, {
       props: {

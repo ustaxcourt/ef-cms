@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
@@ -13,6 +13,7 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Modify Petitioner Contact Information', () => {
   beforeAll(() => {
@@ -21,13 +22,13 @@ describe('Modify Petitioner Contact Information', () => {
 
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -49,7 +50,7 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCasePrimaryContactAddressAndPhone(test);
 
   // attempt to modify secondary contact information
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsDashboard(test, { caseIndex: 2 });
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: 'L',
@@ -62,6 +63,6 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerNavigatesToEditSecondaryContact(test);
   petitionerEditsCaseSecondaryContactAddressAndPhone(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsNoticeOfChangeOfAddress(test);
 });

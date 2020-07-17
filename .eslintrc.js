@@ -67,7 +67,7 @@ module.exports = {
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 80 }], // todo: plugin default is 20, try to lower this
+    complexity: ['error', { max: 40 }], // todo: plugin default is 20, try to lower this
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -381,7 +381,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.json'],
       },
     },
     react: {

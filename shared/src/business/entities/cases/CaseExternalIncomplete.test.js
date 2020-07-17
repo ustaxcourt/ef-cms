@@ -1,5 +1,5 @@
 const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
-const { PARTY_TYPES } = require('../EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
@@ -11,7 +11,7 @@ describe('CaseExternalIncomplete entity', () => {
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Priscilla Kline',
           phone: '+1 (215) 128-6587',

@@ -4,7 +4,11 @@ const {
 const {
   associatePrivatePractitionerWithCaseInteractor,
 } = require('./associatePrivatePractitionerWithCaseInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let caseRecord = {
@@ -14,7 +18,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -37,13 +41,14 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentTitle: 'Petition',
         documentType: 'Petition',
+        eventCode: 'P',
         filedBy: 'Test Petitioner',
         processingStatus: 'pending',
         userId: 'd13d017b-28d1-45b6-aa7d-f54865b0121b',
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

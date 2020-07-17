@@ -25,13 +25,13 @@ export const updateMessageValueInModalSequence = [
         no: [
           set(state.modal.showChambersSelect, false),
           set(state.modal.form.section, props.value),
-          ...getUsersInSectionSequence,
+          getUsersInSectionSequence,
         ],
       },
     ],
     chambers: [
       set(state.modal.form.section, props.value),
-      ...getUsersInSectionSequence,
+      getUsersInSectionSequence,
     ],
     default: [set(state.modal.form[props.key], props.value)],
   },

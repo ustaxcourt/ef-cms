@@ -3,12 +3,14 @@ import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperC
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const confirmInitiateServiceModalHelper = withAppContextDecorator(
-  confirmInitiateServiceModalHelperComputed,
-  applicationContext,
-);
-
 describe('confirmInitiateServiceModalHelper', () => {
+  const confirmInitiateServiceModalHelper = withAppContextDecorator(
+    confirmInitiateServiceModalHelperComputed,
+    applicationContext,
+  );
+
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   it('returns the expected contacts needed if someone needs paper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
@@ -18,7 +20,7 @@ describe('confirmInitiateServiceModalHelper', () => {
             address2: 'Ullamco quibusdam ea',
             address3: 'Consectetur quos do',
             city: 'asdf',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'petitioner@example.com',
             name: 'Callie Bullock',
             postalCode: '33333',
@@ -27,7 +29,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           contactSecondary: {
             address1: 'asdf',
             city: 'asadf',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Chelsea Hogan',
             postalCode: '33333',
             state: 'AL',
@@ -55,7 +57,7 @@ describe('confirmInitiateServiceModalHelper', () => {
             address2: 'Ullamco quibusdam ea',
             address3: 'Consectetur quos do',
             city: 'asdf',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'petitioner@example.com',
             name: 'Callie Bullock',
             postalCode: '33333',

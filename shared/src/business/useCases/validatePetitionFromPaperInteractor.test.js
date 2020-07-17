@@ -1,8 +1,12 @@
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
+const {
   validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES, PAYMENT_STATUS } = require('../entities/EntityConstants');
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
@@ -34,7 +38,7 @@ describe('validate petition from paper', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',

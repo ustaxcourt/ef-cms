@@ -48,7 +48,11 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
-  email: joi.string().max(500).optional(),
+  email: joi.string().email({ tlds: false }).max(100).when('hasEAccess', {
+    is: true,
+    then: joi.required(),
+    otherwise: joi.optional(),
+  }),
   inCareOf: joi.string().max(500).optional(),
   name: joi.string().max(500).required(),
   phone: joi.string().max(500).required(),
@@ -58,7 +62,14 @@ const commonValidationRequirements = {
     .string()
     .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .optional(),
+  hasEAccess: joi
+    .boolean()
+    .optional()
+    .description(
+      'Flag that indicates if the contact has "eAccess" login credentials to the legacy system.',
+    ),
 };
+
 const domesticValidationObject = {
   countryType: joi.string().valid(COUNTRY_TYPES.DOMESTIC).required(),
   ...commonValidationRequirements,
@@ -363,7 +374,7 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
       : {},
     secondary: constructors.secondary
       ? new constructors.secondary(contactInfo.secondary || {})
-      : {},
+      : undefined,
   };
 };
 
@@ -378,8 +389,9 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
 ContactFactory.createContactFactory = ({
   additionalErrorMappings,
   additionalValidation,
+  contactName,
 }) => {
-  return ({ countryType, isPaper }) => {
+  const ContactFactoryConstructor = ({ countryType, isPaper }) => {
     /**
      * creates a contact entity
      *
@@ -404,7 +416,10 @@ ContactFactory.createContactFactory = ({
       this.title = rawContact.title;
       this.additionalName = rawContact.additionalName;
       this.otherFilerType = rawContact.otherFilerType;
+      this.hasEAccess = rawContact.hasEAccess || undefined;
     }
+
+    GenericContactConstructor.contactName = () => contactName;
 
     GenericContactConstructor.errorToMessageMap = {
       ...ContactFactory.getErrorToMessageMap({ countryType }),
@@ -422,6 +437,10 @@ ContactFactory.createContactFactory = ({
 
     return GenericContactConstructor;
   };
+
+  ContactFactoryConstructor.contactName = contactName;
+
+  return ContactFactoryConstructor;
 };
 
 exports.ContactFactory = ContactFactory;

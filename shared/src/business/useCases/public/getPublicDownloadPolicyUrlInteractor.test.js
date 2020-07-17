@@ -75,7 +75,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         {
           documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
           documentTitle: 'Order to do something',
-          documentType: 'O - Order',
+          documentType: 'Order',
           eventCode: 'O',
           servedAt: '2019-03-01T21:40:46.415Z',
         },

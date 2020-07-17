@@ -22,7 +22,7 @@ describe('CourtIssuedDocumentTypeH', () => {
         attachments: false,
         date,
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         freeText: 'Some free text',
         scenario: 'Type H',
       });
@@ -36,7 +36,7 @@ describe('CourtIssuedDocumentTypeH', () => {
         attachments: false,
         date: '2019-04-10T04:00:00.000Z',
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         freeText: 'Some free text',
         scenario: 'Type H',
       });
@@ -50,7 +50,7 @@ describe('CourtIssuedDocumentTypeH', () => {
         attachments: false,
         date: '2019-04-10T04:00:00.000Z',
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         freeText: 'Some free text',
         scenario: 'Type H',
       });

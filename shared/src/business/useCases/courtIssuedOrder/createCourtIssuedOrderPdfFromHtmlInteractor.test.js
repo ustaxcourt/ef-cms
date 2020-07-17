@@ -4,6 +4,7 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -22,14 +23,14 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'docketclerk',
+      role: ROLES.docketClerk,
       userId: '321',
     });
   });
 
   it('throws an error if the user is not authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'petitioner',
+      role: ROLES.petitioner,
       userId: '432',
     });
 

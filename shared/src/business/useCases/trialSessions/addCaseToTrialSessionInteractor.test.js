@@ -1,5 +1,9 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-const { CHIEF_JUDGE, ROLES } = require('../../entities/EntityConstants');
+const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 const MOCK_TRIAL = {
@@ -51,7 +55,7 @@ describe('addCaseToTrialSessionInteractor', () => {
             deleteCaseTrialSortMappingRecords: () => null,
             getCaseByCaseId: () => ({
               ...MOCK_CASE,
-              status: 'Calendared',
+              status: CASE_STATUS_TYPES.calendared,
             }),
             getTrialSessionById: () => MOCK_TRIAL,
             updateCase: obj => obj.caseToUpdate,
@@ -129,7 +133,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     expect(latestCase).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
-      status: 'Calendared',
+      status: CASE_STATUS_TYPES.calendared,
       trialDate: '2025-12-01T00:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',

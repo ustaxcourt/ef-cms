@@ -1,9 +1,8 @@
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
-import { wait } from '../helpers';
 
 export const petitionsClerkCreateOrder = test => {
-  return it('Petitions clerk adds Order to case', async () => {
+  return it('Petitions clerk creates order', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -28,9 +27,6 @@ export const petitionsClerkCreateOrder = test => {
     });
 
     await test.runSequence('submitCourtIssuedOrderSequence');
-
-    //TODO - fix this when cerebral runSequence starts properly awaiting things
-    await wait(1000);
 
     //skip signing and go back to caseDetail
     await test.runSequence('gotoCaseDetailSequence', {

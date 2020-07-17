@@ -1,7 +1,6 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-
 const {
   generateCourtIssuedDocumentTitleInteractor,
 } = require('./generateCourtIssuedDocumentTitleInteractor');

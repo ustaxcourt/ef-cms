@@ -48,7 +48,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         originalBarState: 'Oklahoma',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
+        section: ROLES.privatePractitioner,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
@@ -75,7 +75,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       originalBarState: 'Oklahoma',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
-      section: 'privatePractitioner',
+      section: ROLES.privatePractitioner,
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -105,7 +105,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         originalBarState: 'Oklahoma',
         practitionerType: 'Attorney',
         role: ROLES.irsPractitioner,
-        section: 'privatePractitioner',
+        section: ROLES.privatePractitioner,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
@@ -131,7 +131,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       name: 'IRS Practitioner',
       originalBarState: 'Oklahoma',
       practitionerType: 'Attorney',
-      role: 'privatePractitioner',
+      role: ROLES.privatePractitioner,
       section: 'privatePractitioner',
       suffix: undefined,
       token: undefined,

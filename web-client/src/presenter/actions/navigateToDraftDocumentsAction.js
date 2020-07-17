@@ -14,13 +14,13 @@ export const navigateToDraftDocumentsAction = async ({
   props,
   router,
 }) => {
-  const caseId =
-    props.caseId ||
+  const docketNumber =
+    props.docketNumber ||
     (props.caseDetail
-      ? props.caseDetail.caseId
+      ? props.caseDetail.docketNumber
       : get(state.caseDetail.docketNumber));
 
-  if (caseId) {
-    await router.route(`/case-detail/${caseId}/draft-documents`);
+  if (docketNumber) {
+    await router.route(`/case-detail/${docketNumber}/draft-documents`);
   }
 };

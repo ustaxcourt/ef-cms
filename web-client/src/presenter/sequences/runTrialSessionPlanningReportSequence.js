@@ -17,7 +17,7 @@ export const runTrialSessionPlanningReportSequence = [
       clearModalAction,
       runTrialSessionPlanningReportAction,
       clearModalStateAction,
-      ...setPdfPreviewUrlSequence,
+      setPdfPreviewUrlSequence,
       navigateToTrialSessionPlanningReportAction,
     ]),
   },

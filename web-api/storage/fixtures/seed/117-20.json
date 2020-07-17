@@ -22,7 +22,7 @@
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -36,7 +36,6 @@
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
     "correspondence": [],
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "sortableDocketNumber": 20000117,
     "noticeOfTrialDate": "2020-06-25T20:40:13.682Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -212,7 +211,7 @@
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -226,7 +225,6 @@
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
     "correspondence": [],
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "sortableDocketNumber": 20000117,
     "noticeOfTrialDate": "2020-06-25T20:40:13.682Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

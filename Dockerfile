@@ -20,14 +20,16 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
   git bash openssh-client python python-dev python-pip python-setuptools ca-certificates less \
   unzip wget jq shellcheck clamav
 
-ENV AWS_CLI_VERSION 1.16.31
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+RUN rm awscliv2.zip
 
 RUN freshclam
+
 RUN pip install --upgrade pip
-RUN apt-get install -y awscli && \
-  pip install --upgrade awscli==${AWS_CLI_VERSION} && \
-  wget -q -O terraform_0.11.14_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip && \
-  unzip -o terraform_0.11.14_linux_amd64.zip terraform && \
+RUN wget -q -O terraform_0.12.28_linux_amd64.zip https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_amd64.zip && \
+  unzip -o terraform_0.12.28_linux_amd64.zip terraform && \
   cp terraform /usr/local/bin/ && \
   curl -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip' && \
   mkdir sonar_scanner && \
@@ -44,8 +46,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
 RUN npm set progress=false && \
-  npm config set puppeteer_skip_chromium_download true && \
-  npm i
+  npm ci
 
 COPY . /home/app
 

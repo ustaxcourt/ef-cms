@@ -17,19 +17,19 @@ describe('updateDocketEntryMetaInteractor', () => {
     documents = [
       {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-        documentType: 'Order',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Test Petitioner',
         filingDate: '2019-01-01T00:01:00.000Z',
         freeText: 'some free text',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: [{ name: 'Some Party' }],
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
         userId: mockUserId,
       },
       {
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentType: 'Order',
+        eventCode: 'O',
         filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: [{ name: 'Some Other Party' }],

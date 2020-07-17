@@ -17,9 +17,7 @@ const {
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 
-const joiStrictTimestamp = getTimestampSchema();
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
   dateReceived: [
@@ -83,7 +81,7 @@ function DocketEntryFactory(rawProps) {
     additionalInfo2: joi.string(),
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
-    dateReceived: joiStrictTimestamp.max('now').required(),
+    dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),
     documentType: joi
       .string()
       .valid(...ALL_DOCUMENT_TYPES)
@@ -106,12 +104,14 @@ function DocketEntryFactory(rawProps) {
         then: joi.required(),
       },
     ),
-    serviceDate: joiStrictTimestamp.max('now').optional(),
+    serviceDate: JoiValidationConstants.ISO_DATE.max('now').optional(),
     trialLocation: joi.string().optional(),
   });
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: joiStrictTimestamp.max('now').required(),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+      'now',
+    ).required(),
     objections: joi.string().required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrimary: joi.boolean().invalid(false).required(),

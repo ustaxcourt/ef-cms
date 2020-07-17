@@ -27,6 +27,7 @@ export const setDocumentToEditAction = ({
     const draftState = documentToEdit.draftState || {};
     draftState.documentIdToEdit = documentIdToEdit;
     draftState.documentType = documentToEdit.documentType;
+    draftState.documentTitle = documentToEdit.documentTitle;
 
     store.set(state.documentToEdit, documentToEdit);
     store.set(state.form, draftState);

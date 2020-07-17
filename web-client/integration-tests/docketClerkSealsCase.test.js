@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedUserAdvancedSearchForSealedCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
@@ -11,19 +11,20 @@ import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassoci
 
 const test = setupTest();
 test.draftOrders = [];
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Docket Clerk seals a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'NOTAREALNAMEFORTESTING',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -35,36 +36,36 @@ describe('Docket Clerk seals a case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkSealsCase(test);
 
   //verify that an internal user can still find this case via advanced search by name
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   associatedUserAdvancedSearchForSealedCase(test);
 
   //associated users
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(test);
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(test);
   associatedUserAdvancedSearchForSealedCase(test);
 
   //unassociated users
-  loginAs(test, 'privatePractitioner3');
+  loginAs(test, 'privatePractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
 
-  loginAs(test, 'irsPractitioner3');
+  loginAs(test, 'irsPractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(test);
   unassociatedUserAdvancedSearchForSealedCase(test);
 });

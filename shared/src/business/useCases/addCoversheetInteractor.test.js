@@ -20,8 +20,7 @@ describe('addCoversheetInteractor', () => {
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      name: 'Daenerys Stormborn',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketNumber: '101-19',
@@ -31,6 +30,7 @@ describe('addCoversheetInteractor', () => {
         createdAt: '2019-04-19T14:45:15.595Z',
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
@@ -60,6 +60,7 @@ describe('addCoversheetInteractor', () => {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+        eventCode: 'M008',
         filedBy: 'Test Petitioner1',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
@@ -207,6 +208,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
           lodged: true,
@@ -230,6 +232,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
@@ -253,6 +256,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -275,6 +279,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -299,6 +304,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: null,
         },
       });
@@ -321,6 +327,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
@@ -344,6 +351,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
           lodged: true,
@@ -368,6 +376,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
@@ -392,6 +401,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
@@ -415,6 +425,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -439,6 +450,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -462,6 +474,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
           lodged: true,
@@ -487,6 +500,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
           lodged: true,
@@ -511,6 +525,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
           lodged: true,
@@ -536,6 +551,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
           lodged: true,
@@ -560,6 +576,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: false,
         },
@@ -583,6 +600,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -606,6 +624,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
           mailingDate: '04/16/2019',
@@ -630,6 +649,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           filingDate: '2019-04-19T14:45:15.595Z',
           isPaper: true,
         },
@@ -653,6 +673,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           isPaper: true,
           lodged: true,
         },
@@ -676,12 +697,13 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           isPaper: true,
           lodged: true,
         },
       });
 
-      expect(result.caseCaptionExtension).toEqual('Petitioner');
+      expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
     });
 
     it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {
@@ -699,6 +721,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           isPaper: true,
           lodged: true,
         },
@@ -725,6 +748,7 @@ describe('addCoversheetInteractor', () => {
           documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
           documentType:
             'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'M008',
           isPaper: false,
           lodged: true,
         },

@@ -28,30 +28,4 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
       });
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
-
-  if (!isEmpty(documentMetadata.supportingDocumentMetadata)) {
-    documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor({
-        applicationContext,
-        documentMetadata: documentMetadata.supportingDocumentMetadata,
-      });
-    store.set(
-      state.form.supportingDocumentMetadata.documentTitle,
-      documentTitle,
-    );
-  }
-
-  if (!isEmpty(documentMetadata.secondarySupportingDocumentMetadata)) {
-    documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor({
-        applicationContext,
-        documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
-      });
-    store.set(
-      state.form.secondarySupportingDocumentMetadata.documentTitle,
-      documentTitle,
-    );
-  }
 };

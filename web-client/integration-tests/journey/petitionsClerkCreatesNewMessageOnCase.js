@@ -22,12 +22,12 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
 
     await test.runSequence('openCreateCaseMessageModalSequence');
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
       key: 'toSection',
       value: 'petitions',
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
@@ -45,7 +45,7 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
 
     test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',
       value: test.testMessageSubject,
     });
@@ -56,7 +56,7 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
       message: NewCaseMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: 'bears, beets, battlestar galactica',
     });

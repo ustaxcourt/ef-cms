@@ -1,10 +1,11 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
 describe('resetContactsAction', () => {
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -17,7 +18,7 @@ describe('resetContactsAction', () => {
           contactPrimary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'test@example.com',
             name: 'Bob',
             phone: '1234567890',
@@ -30,7 +31,7 @@ describe('resetContactsAction', () => {
     });
     expect(state.form).toEqual({
       contactPrimary: {
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
       },
       partyType: PARTY_TYPES.petitioner,
@@ -46,7 +47,7 @@ describe('resetContactsAction', () => {
             address1: '123 Abc Ln',
             city: 'Bobville',
             country: 'Germany',
-            countryType: 'international',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
             email: 'test@example.com',
             name: 'Bob',
             phone: '1234567890',
@@ -58,7 +59,7 @@ describe('resetContactsAction', () => {
     });
     expect(state.form).toEqual({
       contactPrimary: {
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
       },
       partyType: PARTY_TYPES.petitioner,
@@ -73,7 +74,7 @@ describe('resetContactsAction', () => {
           contactPrimary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'test@example.com',
             name: 'Bob',
             phone: '1234567890',
@@ -83,7 +84,7 @@ describe('resetContactsAction', () => {
           contactSecondary: {
             address1: '123 Abc Ln',
             city: 'Bobville',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Bob',
             state: 'AL',
             zip: '12345',
@@ -94,10 +95,10 @@ describe('resetContactsAction', () => {
     });
     expect(state.form).toEqual({
       contactPrimary: {
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
       },
-      contactSecondary: { countryType: 'domestic' },
+      contactSecondary: { countryType: COUNTRY_TYPES.DOMESTIC },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
   });

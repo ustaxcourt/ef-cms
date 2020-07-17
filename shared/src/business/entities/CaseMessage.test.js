@@ -1,4 +1,5 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { CaseMessage } = require('./CaseMessage');
 
 describe('CaseMessage', () => {
@@ -11,7 +12,7 @@ describe('CaseMessage', () => {
       const message = new CaseMessage(
         {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',
@@ -48,7 +49,7 @@ describe('CaseMessage', () => {
       const message = new CaseMessage(
         {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',
@@ -86,7 +87,7 @@ describe('CaseMessage', () => {
             },
           ],
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',
@@ -121,7 +122,7 @@ describe('CaseMessage', () => {
             },
           ],
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',
@@ -146,7 +147,7 @@ describe('CaseMessage', () => {
       const message = new CaseMessage(
         {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',
@@ -189,7 +190,7 @@ describe('CaseMessage', () => {
       const message = new CaseMessage(
         {
           caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-          caseStatus: 'General Docket - Not at Issue',
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
           caseTitle: 'Test Petitioner',
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: '123-45',

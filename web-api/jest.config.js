@@ -13,7 +13,6 @@ module.exports = {
     '!src/**/*.test.js',
     '!src/app.js',
     '!src/app-public.js',
-    '!src/lambdaWrapper.js',
     '!src/app-local.js',
     '!src/app-public-local.js',
   ],

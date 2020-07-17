@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 
 describe('navigateToSignOrderAction', () => {
   let routeStub;
-  const CASE_ID = 'fc1b424c-885f-450d-baee-b1965fd67149';
+  const DOCKET_NUMBER = '123-20';
   const DOCUMENT_ID = 'e1c27a56-721e-4f46-a1e8-7b83842e9f21';
   const PARENT_MESSAGE_ID = '14ccdbd2-896a-4a28-a603-b8b3030c84f7';
 
@@ -22,14 +22,14 @@ describe('navigateToSignOrderAction', () => {
         presenter,
       },
       props: {
-        caseId: CASE_ID,
+        docketNumber: DOCKET_NUMBER,
         documentId: DOCUMENT_ID,
       },
       state: { form: {} },
     });
 
     expect(routeStub).toHaveBeenCalledWith(
-      `/case-detail/${CASE_ID}/edit-order/${DOCUMENT_ID}/sign`,
+      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCUMENT_ID}/sign`,
     );
   });
 
@@ -39,7 +39,7 @@ describe('navigateToSignOrderAction', () => {
         presenter,
       },
       props: {
-        caseId: CASE_ID,
+        docketNumber: DOCKET_NUMBER,
         documentId: DOCUMENT_ID,
       },
       state: {
@@ -48,7 +48,7 @@ describe('navigateToSignOrderAction', () => {
     });
 
     expect(routeStub).toHaveBeenCalledWith(
-      `/case-detail/${CASE_ID}/edit-order/${DOCUMENT_ID}/sign/${PARENT_MESSAGE_ID}`,
+      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCUMENT_ID}/sign/${PARENT_MESSAGE_ID}`,
     );
   });
 });

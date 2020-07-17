@@ -60,6 +60,7 @@ export const submitDocketEntryWithFileAction = async ({
 
   return {
     caseDetail,
-    caseId: docketNumber,
+    caseId,
+    docketNumber,
   };
 };

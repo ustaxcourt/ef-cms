@@ -7,6 +7,8 @@ describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
 
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
@@ -30,7 +32,7 @@ describe('validatePrimaryContactAction', () => {
       state: {
         form: {
           contactPrimary: {},
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -54,13 +56,13 @@ describe('validatePrimaryContactAction', () => {
             address1: '',
             address2: 'asdf',
             city: 'Flavortown',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
             state: 'TN',
           },
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });

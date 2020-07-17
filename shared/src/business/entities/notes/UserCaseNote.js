@@ -1,8 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
 UserCaseNote.validationName = 'UserCaseNote';
 
 /**
@@ -24,20 +26,10 @@ UserCaseNote.VALIDATION_ERROR_MESSAGES = {
 };
 
 UserCaseNote.schema = joi.object().keys({
-  caseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  caseId: JoiValidationConstants.UUID.required(),
   entityName: joi.string().valid('UserCaseNote').required(),
   notes: joi.string().required(),
-  userId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  userId: JoiValidationConstants.UUID.required(),
 });
 
 joiValidationDecorator(

@@ -2,15 +2,17 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  TRANSCRIPT_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
+} = require('../../entities/EntityConstants');
 const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -66,6 +68,8 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, documentId });
 
+  const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
+
   const documentEntity = new Document(
     {
       ...omit(document, 'filedBy'),
@@ -112,6 +116,10 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     { applicationContext },
   );
 
+  if (isUnservable) {
+    workItem.setAsCompleted({ message: 'completed', user });
+  }
+
   const message = new Message(
     {
       from: user.name,
@@ -143,7 +151,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
         documentId: documentEntity.documentId,
         editState: JSON.stringify(documentMeta),
         eventCode: documentEntity.eventCode,
-        filingDate: documentEntity.filingDate || createISODateString(),
+        filingDate: documentEntity.filingDate,
         numberOfPages,
       },
       { applicationContext },
@@ -158,19 +166,33 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     });
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().createUserInboxRecord({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    }),
-    applicationContext.getPersistenceGateway().createSectionInboxRecord({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    }),
     applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
     }),
   ];
+
+  if (isUnservable) {
+    saveItems.push(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+        applicationContext,
+        section: user.section,
+        userId: user.userId,
+        workItem: workItem.validate().toRawObject(),
+      }),
+    );
+  } else {
+    saveItems.push(
+      applicationContext.getPersistenceGateway().createUserInboxRecord({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      }),
+      applicationContext.getPersistenceGateway().createSectionInboxRecord({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      }),
+    );
+  }
 
   await Promise.all(saveItems);
 

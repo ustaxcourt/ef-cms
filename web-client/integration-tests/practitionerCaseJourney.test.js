@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -13,6 +13,7 @@ import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard
 import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Practitioner requests access to case', () => {
   beforeAll(() => {
@@ -20,19 +21,19 @@ describe('Practitioner requests access to case', () => {
   });
 
   //tests for practitioner starting a new case
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -44,7 +45,7 @@ describe('Practitioner requests access to case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForNonexistentCase(test);
   practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
@@ -56,13 +57,13 @@ describe('Practitioner requests access to case', () => {
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case #2', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -74,7 +75,7 @@ describe('Practitioner requests access to case', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'privatePractitioner');
+  loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
   practitionerViewsCaseDetail(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);

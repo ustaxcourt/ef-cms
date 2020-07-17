@@ -88,8 +88,8 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 
+import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
@@ -147,6 +147,7 @@ const app = {
 
     presenter.state.constants = applicationContext.getConstants();
 
+    config.autoAddCss = false;
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,

@@ -20,7 +20,7 @@ EOF
 
 resource "aws_iam_role_policy" "api_gateway_invocation_policy" {
   name = "api_gateway_invocation_policy_${var.environment}"
-  role = "${aws_iam_role.api_gateway_invocation_role.id}"
+  role = aws_iam_role.api_gateway_invocation_role.id
 
   policy = <<EOF
 {

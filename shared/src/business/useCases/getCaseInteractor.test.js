@@ -11,23 +11,6 @@ const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
 const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
 describe('Get case', () => {
-  it('success case by case id', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: petitionsclerkId,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(MOCK_CASE));
-
-    const caseRecord = await getCaseInteractor({
-      applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
-  });
-
   it('successfully retrieves a case with documents that have documentContents', async () => {
     const mockCaseWithDocumentContents = {
       ...MOCK_CASE,
@@ -54,7 +37,7 @@ describe('Get case', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCaseWithDocumentContents);
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithDocumentContents);
     applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
       Buffer.from(
         JSON.stringify({
@@ -66,7 +49,7 @@ describe('Get case', () => {
 
     const caseRecord = await getCaseInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '123-19',
     });
 
     expect(
@@ -93,17 +76,14 @@ describe('Get case', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(null));
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(null));
 
     await expect(
       getCaseInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        petitioners: [{ name: 'Test Petitioner' }],
+        docketNumber: '123-19',
       }),
-    ).rejects.toThrow(
-      'Case c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.',
-    );
+    ).rejects.toThrow('Case 123-19 was not found.');
   });
 
   it('success case by docket number', async () => {
@@ -117,7 +97,7 @@ describe('Get case', () => {
 
     const caseRecord = await getCaseInteractor({
       applicationContext,
-      caseId: '00101-00',
+      docketNumber: '101-00',
     });
 
     expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
@@ -134,7 +114,7 @@ describe('Get case', () => {
     await expect(
       getCaseInteractor({
         applicationContext,
-        caseId: '00-11111',
+        docketNumber: '00-11111',
       }),
     ).rejects.toThrow('Case 00-11111 was not found.');
   });
@@ -163,7 +143,7 @@ describe('Get case', () => {
     await expect(
       getCaseInteractor({
         applicationContext,
-        caseId: '00101-00',
+        docketNumber: '00101-00',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -205,7 +185,7 @@ describe('Get case', () => {
       try {
         result = await getCaseInteractor({
           applicationContext,
-          caseId: '101-18',
+          docketNumber: '101-18',
         });
       } catch (err) {
         error = err;
@@ -226,7 +206,7 @@ describe('Get case', () => {
       try {
         result = await getCaseInteractor({
           applicationContext,
-          caseId: '00101-18',
+          docketNumber: '00101-18',
         });
       } catch (err) {
         error = err;
@@ -262,7 +242,7 @@ describe('Get case', () => {
     await expect(
       getCaseInteractor({
         applicationContext,
-        caseId: '00101-08',
+        docketNumber: '00101-08',
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });

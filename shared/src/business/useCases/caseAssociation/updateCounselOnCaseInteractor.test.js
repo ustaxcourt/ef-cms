@@ -2,12 +2,17 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updateCounselOnCaseInteractor,
 } = require('./updateCounselOnCaseInteractor');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -69,7 +74,7 @@ describe('updateCounselOnCaseInteractor', () => {
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'fieri@example.com',
           name: 'Guy Fieri',
           phone: '1234567890',
@@ -89,7 +94,7 @@ describe('updateCounselOnCaseInteractor', () => {
         documents: MOCK_CASE.documents,
         filingType: 'Myself',
         irsPractitioners: mockIrsPractitioners,
-        partyType: 'Petitioner',
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Fresno, California',
         privatePractitioners: mockPrivatePractitioners,
         procedureType: 'Regular',
@@ -118,7 +123,7 @@ describe('updateCounselOnCaseInteractor', () => {
       userData: {
         representingPrimary: true,
         representingSecondary: false,
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userIdToUpdate: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     });
@@ -135,7 +140,7 @@ describe('updateCounselOnCaseInteractor', () => {
       userData: {
         representingPrimary: true,
         representingSecondary: false,
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
@@ -153,7 +158,7 @@ describe('updateCounselOnCaseInteractor', () => {
         email: 'not.editable@example.com',
         representingPrimary: true,
         representingSecondary: false,
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
@@ -166,7 +171,9 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(updatedPractitioner.email).toBeUndefined();
     expect(updatedPractitioner.representingPrimary).toBe(true);
     expect(updatedPractitioner.representingSecondary).toBe(false);
-    expect(updatedPractitioner.serviceIndicator).toBe('Electronic');
+    expect(updatedPractitioner.serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 
   it('throws an error if the userIdToUpdate is not a privatePractitioner or irsPractitioner role', async () => {

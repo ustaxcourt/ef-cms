@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "image_repository" {
 
 # keep the last 10 images
 resource "aws_ecr_lifecycle_policy" "repo_policy" {
-  repository = "${aws_ecr_repository.image_repository.name}"
+  repository = aws_ecr_repository.image_repository.name
 
   policy = <<EOF
 {

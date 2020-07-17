@@ -17,7 +17,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
           judgeFullName: 'Lila A. Fenwick',
           judgeTitle: 'Special Trial Judge',
           name: 'Lila A. Fenwick',
-          role: 'judge',
+          role: ROLES.judge,
           userId: 'should be filtered out',
         },
         {
@@ -26,7 +26,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
           judgeFullName: 'Stephanie Kulp Seymour',
           judgeTitle: 'Special Trial Judge',
           name: 'Stephanie Kulp Seymour',
-          role: 'judge',
+          role: ROLES.judge,
           userId: 'should be filtered out',
         },
       ]);
@@ -43,13 +43,13 @@ describe('getJudgesForPublicSearchInteractor', () => {
         judgeFullName: 'Lila A. Fenwick',
         judgeTitle: 'Special Trial Judge',
         name: 'Lila A. Fenwick',
-        role: 'judge',
+        role: ROLES.judge,
       },
       {
         judgeFullName: 'Stephanie Kulp Seymour',
         judgeTitle: 'Special Trial Judge',
         name: 'Stephanie Kulp Seymour',
-        role: 'judge',
+        role: ROLES.judge,
       },
     ]);
   });

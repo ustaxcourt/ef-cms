@@ -21,9 +21,6 @@ describe('caseExistsAndIsNotSealedAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        code: '123',
-      },
       state: {},
     });
 
@@ -42,9 +39,6 @@ describe('caseExistsAndIsNotSealedAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        code: '123',
-      },
       state: {},
     });
 
@@ -61,9 +55,6 @@ describe('caseExistsAndIsNotSealedAction', () => {
     await runAction(caseExistsAndIsNotSealedAction, {
       modules: {
         presenter,
-      },
-      props: {
-        code: '123',
       },
       state: {},
     });

@@ -8,7 +8,7 @@ const basePractitioner = {
   name: 'Test Practitioner',
   representingPrimary: true,
   role: ROLES.privatePractitioner,
-  serviceIndicator: 'Paper',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
 };
 
 const baseRespondent = {
@@ -16,7 +16,7 @@ const baseRespondent = {
   name: 'Test Respondent',
   respondentId: '123-abc-123-abc',
   role: ROLES.irsPractitioner,
-  serviceIndicator: 'Paper',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: 'abc-123-abc-123',
 };
 

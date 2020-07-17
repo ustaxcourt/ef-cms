@@ -17,7 +17,7 @@
       "name": "Brett Osborne",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -41,7 +41,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "custom:role": "petitioner",
         "iat": 1551476326,
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
@@ -94,6 +94,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "workItems": [
@@ -183,6 +184,7 @@
     "entityName": "Document",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
+    "eventCode": "STIN",
     "pending": false,
     "receivedAt": "2020-03-06T20:04:07.530Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

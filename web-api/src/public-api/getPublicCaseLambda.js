@@ -12,7 +12,7 @@ exports.getPublicCaseLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext.getUseCases().getPublicCaseInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        docketNumber: event.pathParameters.docketNumber,
       });
     },
     {

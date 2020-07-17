@@ -1,5 +1,3 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-
 import {
   fakeFile,
   loginAs,
@@ -9,6 +7,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -33,13 +32,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   let caseDetail;
   let pendingItemsCount;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   it('login as a docket clerk and check pending items count', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDetail.docketNumber,
@@ -54,7 +53,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
@@ -63,8 +62,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await uploadProposedStipulatedDecision(test);
   });
 
-  loginAs(test, 'docketclerk');
-  it('login as a docket clerk and check pending items count has increased', async () => {
+  loginAs(test, 'docketclerk@example.com');
+  it('login as a docket clerk, check pending items count has increased and view pending document', async () => {
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
@@ -82,5 +81,16 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       .length;
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
+
+    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
+      docketRecordTab: 'documentView',
+      viewerDocumentToDisplay: {
+        documentId: formatted.pendingItemsDocketEntries[0].documentId,
+      },
+    });
+
+    expect(
+      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
   });
 });

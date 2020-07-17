@@ -1,5 +1,5 @@
 const { CaseExternal } = require('./CaseExternal');
-const { PARTY_TYPES } = require('../EntityConstants');
+const { COUNTRY_TYPES, PARTY_TYPES } = require('../EntityConstants');
 
 describe('CaseExternal', () => {
   describe('for Minor without Guardian Contacts', () => {
@@ -28,7 +28,7 @@ describe('CaseExternal', () => {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',

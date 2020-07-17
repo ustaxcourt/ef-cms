@@ -15,6 +15,10 @@ export const validatePetitionerInformationFormAction = ({
   get,
   path,
 }) => {
+  let SERVICE_INDICATOR_TYPES;
+
+  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
   const {
@@ -37,8 +41,11 @@ export const validatePetitionerInformationFormAction = ({
     });
 
   if (
-    ['Paper', 'None'].includes(oldContactPrimary.serviceIndicator) &&
-    contactPrimary.serviceIndicator === 'Electronic'
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldContactPrimary.serviceIndicator) &&
+    contactPrimary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactPrimary = {
       ...errors.contactPrimary,
@@ -48,8 +55,11 @@ export const validatePetitionerInformationFormAction = ({
 
   if (
     oldContactSecondary &&
-    ['Paper', 'None'].includes(oldContactSecondary.serviceIndicator) &&
-    contactSecondary.serviceIndicator === 'Electronic'
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldContactSecondary.serviceIndicator) &&
+    contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
     errors.contactSecondary = {
       ...errors.contactSecondary,

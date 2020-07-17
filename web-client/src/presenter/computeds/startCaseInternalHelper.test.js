@@ -1,4 +1,3 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { startCaseInternalHelper as startCaseInternalHelperComputed } from './startCaseInternalHelper';
@@ -10,6 +9,10 @@ const startCaseInternalHelper = withAppContextDecorator(
 );
 
 describe('case detail edit computed', () => {
+  let PARTY_TYPES;
+
+  ({ PARTY_TYPES } = applicationContext.getConstants());
+
   it('sets partyTypes from constants ', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {},

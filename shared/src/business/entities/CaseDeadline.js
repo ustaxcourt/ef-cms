@@ -1,11 +1,11 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const joiStrictTimestamp = getTimestampSchema();
-
 /**
  * Case Deadline entity
  *
@@ -41,26 +41,18 @@ CaseDeadline.VALIDATION_ERROR_MESSAGES = {
 };
 
 CaseDeadline.schema = joi.object().keys({
-  caseDeadlineId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required()
-    .description('Unique Case Deadline ID only used by the system.'),
-  caseId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required()
-    .description('Unique Case ID only used by the system.'),
-  createdAt: joiStrictTimestamp
-    .required()
-    .description('When the Case Deadline was added to the system.'),
-  deadlineDate: joiStrictTimestamp
-    .required()
-    .description('When the Case Deadline expires.'),
+  caseDeadlineId: JoiValidationConstants.UUID.required().description(
+    'Unique Case Deadline ID only used by the system.',
+  ),
+  caseId: JoiValidationConstants.UUID.required().description(
+    'Unique Case ID only used by the system.',
+  ),
+  createdAt: JoiValidationConstants.ISO_DATE.required().description(
+    'When the Case Deadline was added to the system.',
+  ),
+  deadlineDate: JoiValidationConstants.ISO_DATE.required().description(
+    'When the Case Deadline expires.',
+  ),
   description: joi
     .string()
     .max(120)

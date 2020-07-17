@@ -36,16 +36,16 @@ describe('Blocking a Case', () => {
     trialLocation,
   };
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(test);
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   //manual block and unblock - check eligible list
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
   petitionsClerkBlocksCase(test, trialLocation);
@@ -79,7 +79,7 @@ describe('Blocking a Case', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
   //automatic block with a pending item
-  loginAs(test, 'irsPractitioner');
+  loginAs(test, 'irsPractitioner@example.com');
 
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
     await viewCaseDetail({
@@ -89,7 +89,7 @@ describe('Blocking a Case', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   it('petitions clerk views blocked report with an automatically blocked case for pending item', async () => {
     await refreshElasticsearchIndex();
 

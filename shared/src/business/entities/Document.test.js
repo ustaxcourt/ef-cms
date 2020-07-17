@@ -1,4 +1,5 @@
 const {
+  EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   OPINION_DOCUMENT_TYPES,
@@ -13,6 +14,7 @@ const { WorkItem } = require('./WorkItem');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
+  eventCode: 'A',
   filedBy: 'Test Petitioner',
   role: ROLES.petitioner,
   userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
@@ -500,8 +502,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
@@ -531,9 +533,9 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
+          documentType: 'Order',
           draftState: null,
-          eventCode: 'TRAN',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -551,8 +553,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -569,8 +571,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
         },
@@ -585,8 +587,8 @@ describe('Document entity', () => {
         {
           ...A_VALID_DOCUMENT,
           documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'TRAN',
+          documentType: 'Order',
+          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           isOrder: true,
           secondaryDate: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
@@ -1469,9 +1471,7 @@ describe('Document entity', () => {
 
   describe('getFormattedType', () => {
     it('strips out the dash and returns the verbiage after it', () => {
-      expect(Document.getFormattedType('TCOP - T.C. Opinion')).toEqual(
-        'T.C. Opinion',
-      );
+      expect(Document.getFormattedType('T.C. Opinion')).toEqual('T.C. Opinion');
     });
     it("returns the verbiage if there's no dash", () => {
       expect(Document.getFormattedType('Summary Opinion')).toEqual(

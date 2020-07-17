@@ -1,6 +1,11 @@
 const {
+  COUNTRY_TYPES,
+  PETITIONS_SECTION,
+} = require('../../entities/EntityConstants');
+const {
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -9,7 +14,6 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -94,7 +98,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
       initialDocument.setAsServed([
         {
           name: 'IRS',
-          role: 'irsSuperuser',
+          role: ROLES.irsSuperuser,
         },
       ]);
       caseEntity.updateDocument(initialDocument);
@@ -197,7 +201,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   const address = {
     ...caseEntity.contactPrimary,
     countryName:
-      caseEntity.contactPrimary.countryType !== 'domestic'
+      caseEntity.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
         ? caseEntity.contactPrimary.country
         : '',
   };

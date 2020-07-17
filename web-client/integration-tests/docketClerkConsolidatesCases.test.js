@@ -23,7 +23,7 @@ describe('Case Consolidation Journey', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create the lead case', async () => {
     const caseDetail = await uploadPetition(test, overrides);
@@ -32,10 +32,10 @@ describe('Case Consolidation Journey', () => {
     test.docketNumber = test.leadDocketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create the case to consolidate with', async () => {
     const caseDetail = await uploadPetition(test, overrides);
@@ -44,20 +44,20 @@ describe('Case Consolidation Journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkOpensCaseConsolidateModal(test);
   docketClerkSearchesForCaseToConsolidateWith(test);
   docketClerkConsolidatesCases(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsDashboard(test);
   petitionerVerifiesConsolidatedCases(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkUnconsolidatesCase(test);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerViewsDashboard(test);
   petitionerVerifiesUnconsolidatedCases(test);
 });

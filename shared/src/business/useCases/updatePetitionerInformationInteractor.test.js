@@ -1,9 +1,12 @@
 const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
+const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 let { applicationContext } = require('../test/createTestApplicationContext');
 
@@ -54,7 +57,7 @@ describe('update petitioner contact information on a case', () => {
         applicationContext,
         caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactPrimary: MOCK_CASE.contactPrimary,
-        contactSecondary: { countryType: 'domestic' },
+        contactSecondary: { countryType: COUNTRY_TYPES.DOMESTIC },
         partyType: PARTY_TYPES.petitionerSpouse,
       }),
     ).rejects.toThrow();
@@ -71,7 +74,7 @@ describe('update petitioner contact information on a case', () => {
       contactPrimary: {
         address1: '456 Center St', // the address changes ONLY
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
         name: 'Test Petitioner',
         phone: '1234567',
@@ -106,7 +109,7 @@ describe('update petitioner contact information on a case', () => {
       contactSecondary: {
         address1: '789 Division St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
@@ -130,7 +133,7 @@ describe('update petitioner contact information on a case', () => {
       contactSecondary: {
         address1: '789 Division St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
@@ -147,7 +150,7 @@ describe('update petitioner contact information on a case', () => {
       contactSecondary: {
         address1: '789 Division St APT 123', //changed address1
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
