@@ -702,11 +702,43 @@ describe('messageDocumentHelper', () => {
     expect(result.showDocumentNotSignedAlert).toEqual(true);
   });
 
-  describe('showServeCourtIssuedDocumentButton', () => {
-    it('should be false if the document is a served court-issued document and the user has SERVE_DOCUMENT permission', () => {
+  describe('serving documents', () => {
+    beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    });
+
+    it('should set showNotServed to true when the document is servable, unserved, and not a draft document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
-          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                entityName: 'Document',
+                eventCode: 'O', // Requires a signature
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showNotServed).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to true when the document is a servable court issued document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             correspondence: [],
             docketRecord: [
@@ -718,9 +750,8 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Order',
-                entityName: 'Document',
+                entityName: 'Document', //court issued document type
                 eventCode: 'O',
-                servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
           },
@@ -730,71 +761,13 @@ describe('messageDocumentHelper', () => {
         },
       });
 
-      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+      expect(result.showServeCourtIssuedDocumentButton).toBe(true);
     });
 
-    it('should be false if the document is a not-served externally-filed document and the user has SERVE_DOCUMENT permission', () => {
+    it('should set showServePaperFiledDocumentButton to false when the document is a servable court issued document that is unserved, and not a draft document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
-          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
-          caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Answer',
-                entityName: 'Document',
-                eventCode: 'A',
-              },
-            ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
-      });
-
-      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
-    });
-
-    it('should be false if the document is a not-served court-issued document and the user does not have SERVE_DOCUMENT permission', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(judgeUser), // does not have SERVE_DOCUMENT permission
-          caseDetail: {
-            correspondence: [],
-            docketRecord: [
-              {
-                documentId: '123',
-              },
-            ],
-            documents: [
-              {
-                documentId: '123',
-                documentType: 'Answer',
-                entityName: 'Document',
-                eventCode: 'A',
-              },
-            ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
-      });
-
-      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
-    });
-
-    it('should be true if the document is a not-served court-issued document and the user has SERVE_DOCUMENT permission', () => {
-      const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             correspondence: [],
             docketRecord: [
@@ -806,7 +779,7 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Order',
-                entityName: 'Document',
+                entityName: 'Document', //court issued document type
                 eventCode: 'O',
               },
             ],
@@ -817,7 +790,105 @@ describe('messageDocumentHelper', () => {
         },
       });
 
-      expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+
+    it('should set showServePaperFiledDocumentButton to true when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to false when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton and showServePaperFiledDocumentButton to false when permissions.SERVE_DOCUMENTS is false', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+              {
+                documentId: '456',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+              {
+                documentId: '456',
+                documentType: 'Order',
+                entityName: 'Document', //court issued document type
+                eventCode: 'O',
+              },
+            ],
+          },
+          permissions: { SERVE_DOCUMENT: false },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
     });
   });
 
