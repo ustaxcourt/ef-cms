@@ -41,6 +41,6 @@ export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
     expect(helper.showPaperAlert).toEqual(true);
     expect(helper.contactsNeedingPaperService.length).toEqual(3);
 
-    await test.runSequence('serveCourtIssuedDocumentSequence');
+    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });
 };
