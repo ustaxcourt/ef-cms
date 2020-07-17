@@ -701,4 +701,123 @@ describe('messageDocumentHelper', () => {
 
     expect(result.showDocumentNotSignedAlert).toEqual(true);
   });
+
+  describe('showServeCourtIssuedDocumentButton', () => {
+    it('should be false is the document is a served court-issued document and the user has SERVE_DOCUMENT permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document',
+                eventCode: 'O',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be false is the document is a not-served externally-filed document and the user has SERVE_DOCUMENT permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be false is the document is a not-served court-issued document and the user does not have SERVE_DOCUMENT permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(judgeUser), // does not have SERVE_DOCUMENT permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be true is the document is a not-served court-issued document and the user has SERVE_DOCUMENT permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document',
+                eventCode: 'O',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
+    });
+  });
 });
