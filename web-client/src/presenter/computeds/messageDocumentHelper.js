@@ -1,47 +1,52 @@
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
-  const { USER_ROLES } = applicationContext.getConstants();
+  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
-  const attachmentDocumentToDisplay = get(state.attachmentDocumentToDisplay);
+  const permissions = get(state.permissions);
+  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
   const caseDocument =
-    attachmentDocumentToDisplay &&
+    viewerDocumentToDisplay &&
     caseDetail.documents.find(
-      d => d.documentId === attachmentDocumentToDisplay.documentId,
+      d => d.documentId === viewerDocumentToDisplay.documentId,
     );
 
-  const documentIsSigned =
-    attachmentDocumentToDisplay && !!caseDocument.signedAt;
+  const documentRequiresSignature =
+    caseDocument &&
+    EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
+
+  const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
 
   const isDocumentOnDocketRecord =
-    attachmentDocumentToDisplay &&
+    viewerDocumentToDisplay &&
     caseDetail.docketRecord.find(
       docketEntry =>
-        docketEntry.documentId === attachmentDocumentToDisplay.documentId,
+        docketEntry.documentId === viewerDocumentToDisplay.documentId,
     );
 
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
 
-  const isDocketPetitionsClerkRole = [
-    USER_ROLES.clerkOfCourt,
-    USER_ROLES.docketClerk,
-    USER_ROLES.petitionsClerk,
-  ].includes(user.role);
+  const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
 
-  const showAddDocketEntryButtonForRole = isDocketPetitionsClerkRole;
+  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
   const showApplyEditSignatureButtonForRole = isInternalUser;
 
-  const showAddDocketEntryButtonForDocument = !isDocumentOnDocketRecord;
+  const showAddDocketEntryButtonForDocument =
+    !isDocumentOnDocketRecord &&
+    (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord;
   const showEditButtonForDocument = !isDocumentOnDocketRecord;
+
+  const showDocumentNotSignedAlert =
+    documentRequiresSignature && !documentIsSigned;
 
   return {
     showAddDocketEntryButton:
@@ -49,6 +54,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyEditSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
     showEditButtonSigned:

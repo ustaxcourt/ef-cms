@@ -10,7 +10,7 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
@@ -136,7 +136,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
     user = new User({
-      name: 'Petitioner',
+      name: PARTY_TYPES.petitioner,
       role: ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });

@@ -1,6 +1,5 @@
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
-
 import React, { useEffect } from 'react';
 
 const PdfPreviewComponent = connect(

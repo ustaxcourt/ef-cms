@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'OFFX - Order time is extended for petr(s) to pay the filing fee',
+      value: 'Order time is extended for petr(s) to pay the filing fee',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -98,8 +98,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
       date: '2050-01-01',
       documentTitle:
         'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
-      documentType:
-        'OFFX - Order time is extended for petr(s) to pay the filing fee',
+      documentType: 'Order time is extended for petr(s) to pay the filing fee',
       eventCode: 'OFFX',
     });
 
@@ -113,8 +112,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
       day: '1',
       documentTitle:
         'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
-      documentType:
-        'OFFX - Order time is extended for petr(s) to pay the filing fee',
+      documentType: 'Order time is extended for petr(s) to pay the filing fee',
       eventCode: 'OFFX',
       generatedDocumentTitle:
         'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',

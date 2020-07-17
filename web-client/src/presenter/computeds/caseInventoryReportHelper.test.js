@@ -2,7 +2,6 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-
 import { applicationContext } from '../../applicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
 import { runCompute } from 'cerebral/test';

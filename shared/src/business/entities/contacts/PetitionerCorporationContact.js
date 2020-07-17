@@ -11,4 +11,5 @@ exports.getPetitionerCorporationContact = ContactFactory.createContactFactory({
   additionalValidation: {
     inCareOf: joi.string().max(100).required(),
   },
+  contactName: 'PetitionerCorporationContact',
 });

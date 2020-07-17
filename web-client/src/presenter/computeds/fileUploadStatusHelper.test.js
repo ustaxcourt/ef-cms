@@ -1,6 +1,5 @@
-import { runCompute } from 'cerebral/test';
-
 import { fileUploadStatusHelper } from './fileUploadStatusHelper';
+import { runCompute } from 'cerebral/test';
 
 describe('fileUploadStatusHelper', () => {
   it('returns `Preparing Upload` for infinity time remaining', () => {

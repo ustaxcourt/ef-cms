@@ -13,10 +13,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { Statistic } = require('../Statistic');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * CaseInternal Entity
@@ -184,13 +181,14 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    petitionPaymentDate: joiStrictTimestamp
-      .max('now')
-      .when('petitionPaymentStatus', {
+    petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now').when(
+      'petitionPaymentStatus',
+      {
         is: PAYMENT_STATUS.PAID,
         otherwise: joi.optional().allow(null),
         then: joi.required(),
-      }),
+      },
+    ),
     petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
     petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
     petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
@@ -205,7 +203,7 @@ const paperRequirements = joi
       .string()
       .valid(...PROCEDURE_TYPES)
       .required(),
-    receivedAt: joiStrictTimestamp.max('now').required(),
+    receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {

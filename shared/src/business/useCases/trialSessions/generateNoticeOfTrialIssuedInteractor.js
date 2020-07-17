@@ -1,4 +1,4 @@
-const { formatNow } = require('../../utilities/DateHandler');
+const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
  * generateNoticeOfTrialIssuedInteractor
@@ -28,46 +28,28 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
       docketNumber,
     });
 
-  const {
-    address1,
-    address2,
-    city,
-    courthouseName,
-    judge,
-    postalCode,
-    startDate,
-    startTime,
-    state,
-  } = trialSession;
+  const { docketNumberWithSuffix } = caseDetail;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  const { caseCaption, docketNumberWithSuffix } = caseDetail;
-  const footerDate = formatNow('MMDDYYYY');
+  const trialInfo = {
+    address1: trialSession.address1,
+    address2: trialSession.address2,
+    city: trialSession.city,
+    courthouseName: trialSession.courthouseName,
+    judge: trialSession.judge.name,
+    postalCode: trialSession.postalCode,
+    startDate: trialSession.startDate,
+    startTime: trialSession.startTime,
+    state: trialSession.state,
+  };
 
-  const contentHtml = await applicationContext
-    .getTemplateGenerators()
-    .generateNoticeOfTrialIssuedTemplate({
-      applicationContext,
-      content: {
-        caseCaption,
-        docketNumber,
-        docketNumberWithSuffix,
-        trialInfo: {
-          address1,
-          address2,
-          city,
-          courthouseName,
-          judge,
-          postalCode,
-          startDate,
-          startTime,
-          state,
-        },
-      },
-    });
-
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+  return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({
     applicationContext,
-    contentHtml,
-    footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,
+    data: {
+      caseCaptionExtension,
+      caseTitle,
+      docketNumberWithSuffix,
+      trialInfo,
+    },
   });
 };

@@ -193,6 +193,12 @@
       items: 
         - 
           type: "object"
+          rules: 
+            - 
+              name: "instance"
+              args: 
+                constructor: [object Function]
+                name: "Message"
     section: 
       type: "string"
       flags: 
@@ -255,6 +261,7 @@
       type: "string"
       flags: 
         presence: "required"
+        description: "The name of the user that sent the WorkItem"
       rules: 
         - 
           name: "max"

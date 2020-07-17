@@ -1,5 +1,3 @@
-import { state } from './state-public';
-
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
@@ -14,6 +12,7 @@ import { navigateToPublicSiteSequence } from './sequences/public/navigateToPubli
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/public/submitPublicOpinionAdvancedSearchSequence';

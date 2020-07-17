@@ -27,13 +27,13 @@ describe('Chambers dashboard', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsDashboard(test);
 
-  loginAs(test, 'armensChambers');
+  loginAs(test, 'armensChambers@example.com');
   chambersUserViewsCaseDetail(test);
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);

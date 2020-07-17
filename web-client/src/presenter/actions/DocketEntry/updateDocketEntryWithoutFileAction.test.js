@@ -38,7 +38,8 @@ describe('updateDocketEntryWithoutFileAction', () => {
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
-      caseId: caseDetail.docketNumber,
+      caseId: caseDetail.caseId,
+      docketNumber: caseDetail.docketNumber,
     });
   });
 });

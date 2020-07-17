@@ -7,6 +7,8 @@ describe('validateSecondaryContactAction', () => {
   let successStub;
   let errorStub;
 
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
@@ -17,6 +19,8 @@ describe('validateSecondaryContactAction', () => {
       success: successStub,
     };
   });
+
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   it('runs validation on the secondary contact with a successful result', async () => {
     applicationContext
@@ -30,7 +34,7 @@ describe('validateSecondaryContactAction', () => {
       state: {
         form: {
           contactSecondary: {},
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });
@@ -54,13 +58,13 @@ describe('validateSecondaryContactAction', () => {
             address1: '',
             address2: 'asdf',
             city: 'Flavortown',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
             state: 'TN',
           },
-          partyType: 'Petitioner & spouse',
+          partyType: PARTY_TYPES.petitionerSpouse,
         },
       },
     });

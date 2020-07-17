@@ -38,6 +38,8 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  formatCase,
+  formatDocketRecordWithDocument,
   formatDocument,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
@@ -49,6 +51,9 @@ const {
 const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
+const {
+  getCaseByDocketNumber,
+} = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
@@ -195,9 +200,13 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    formatCase: jest.fn().mockImplementation(formatCase),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
+    formatDocketRecordWithDocument: jest
+      .fn()
+      .mockImplementation(formatDocketRecordWithDocument),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
@@ -257,6 +266,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
+    noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -309,6 +319,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
+    getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),

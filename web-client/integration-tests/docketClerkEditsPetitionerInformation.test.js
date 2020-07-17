@@ -1,7 +1,8 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('docket clerk edits the petitioner information', () => {
   beforeEach(() => {
@@ -10,14 +11,14 @@ describe('docket clerk edits the petitioner information', () => {
 
   let caseDetail;
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a tax payer and create a case', async () => {
     caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -29,7 +30,7 @@ describe('docket clerk edits the petitioner information', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case contact information', async () => {
     await test.runSequence('gotoEditPetitionerInformationSequence', {

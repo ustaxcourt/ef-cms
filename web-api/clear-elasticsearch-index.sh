@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# 
+#
 # This script is script part of the clear-env.sh script.  It is used for deleting the elasticsearch index
 # so that data can be reseeded if needed.
 

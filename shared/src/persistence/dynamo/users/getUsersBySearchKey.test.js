@@ -1,10 +1,9 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const { getUsersBySearchKey } = require('./getUsersBySearchKey');
-const { ROLES } = require('../../../business/entities/EntityConstants');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const { getUsersBySearchKey } = require('./getUsersBySearchKey');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('getUsersBySearchKey', () => {
   beforeEach(() => {

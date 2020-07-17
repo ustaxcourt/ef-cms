@@ -7,6 +7,7 @@ describe('validatePetitionerInformationFormAction', () => {
   let successStub;
   let errorStub;
   let SERVICE_INDICATOR_TYPES;
+  let PARTY_TYPES;
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -18,7 +19,10 @@ describe('validatePetitionerInformationFormAction', () => {
       success: successStub,
     };
 
-    ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+    ({
+      PARTY_TYPES,
+      SERVICE_INDICATOR_TYPES,
+    } = applicationContext.getConstants());
   });
 
   it('runs validation on the petitioner information form with a successful result', async () => {
@@ -38,7 +42,7 @@ describe('validatePetitionerInformationFormAction', () => {
         },
         form: {
           contactPrimary: {},
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -63,7 +67,7 @@ describe('validatePetitionerInformationFormAction', () => {
         },
         form: {
           contactPrimary: {},
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });
@@ -94,7 +98,7 @@ describe('validatePetitionerInformationFormAction', () => {
           contactSecondary: {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           },
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
     });

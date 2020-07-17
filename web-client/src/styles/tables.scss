@@ -582,3 +582,23 @@ table.case-list tbody tr:nth-child(even) td {
     }
   }
 }
+
+.document-viewer {
+  tr {
+    cursor: pointer;
+
+    &.active {
+      background-color: color($theme-color-base-lightest);
+      box-shadow: 10px 0 0 0 color($theme-color-primary) inset;
+      color: color($theme-color-base-darkest);
+      text-decoration: none;
+    }
+  }
+
+  td {
+    &.small {
+      max-width: $table-column-width-small;
+      padding: 18px 15px 15px 15px;
+    }
+  }
+}

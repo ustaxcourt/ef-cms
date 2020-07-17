@@ -7,6 +7,7 @@ describe('getEditedDocumentDetailParamsAction', () => {
       state: {
         caseDetail: {
           caseId: '123',
+          docketNumber: '123-19',
         },
         documentToEdit: {
           documentId: '321',
@@ -15,6 +16,7 @@ describe('getEditedDocumentDetailParamsAction', () => {
     });
     expect(result.output).toMatchObject({
       caseId: '123',
+      docketNumber: '123-19',
       documentId: '321',
     });
   });

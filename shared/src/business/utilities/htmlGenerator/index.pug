@@ -13,23 +13,4 @@ html(lang="en")
 
   body
     .main
-      if options.overwriteMain
-        | !{content.main}
-
-      else
-        .court-header
-          .us-tax-court-seal
-          h1 United States Tax Court
-          if options.h2
-            h2= options.h2
-          .clear
-
-        .case-information
-          #caption #{content.caseCaptionWithPostfix}
-          #docket-number Docket Number #{content.docketNumberWithSuffix}
-          .clear
-
-        if options.h3
-          h3= options.h3
-
-        | !{content.main}
+      | !{content}

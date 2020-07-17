@@ -36,7 +36,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     expect(test.getState('form.documentType')).toEqual(
-      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
+      draftOrderDocument.documentType,
     );
 
     // eventCode: O
@@ -186,7 +186,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     expect(test.getState('form.documentType')).toEqual(
-      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
+      draftOrderDocument.documentType,
     );
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');

@@ -1,5 +1,5 @@
+const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 const { NewPractitioner } = require('./NewPractitioner');
-const { ROLES } = require('./EntityConstants');
 
 describe('NewPractitioner', () => {
   it('Creates a valid NewPractitioner with all required fields', () => {
@@ -13,7 +13,7 @@ describe('NewPractitioner', () => {
         address3: 'Under the stairs',
         city: 'Chicago',
         country: 'Brazil',
-        countryType: 'international',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -48,7 +48,7 @@ describe('NewPractitioner', () => {
         address3: 'Under the stairs',
         city: 'Chicago',
         country: 'Brazil',
-        countryType: 'international',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
