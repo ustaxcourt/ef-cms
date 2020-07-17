@@ -169,6 +169,13 @@ exports.updateDocketEntryInteractor = async ({
       const servedParties = aggregatePartiesForService(caseEntity);
       documentEntity.setAsServed(servedParties.all);
       documentEntity.setAsProcessingStatusAsCompleted();
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity,
+        servedParties,
+      });
     } else {
       documentEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()

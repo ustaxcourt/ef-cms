@@ -122,6 +122,9 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
