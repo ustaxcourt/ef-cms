@@ -21,7 +21,7 @@ describe('servePaperFiledDocumentInteractor', () => {
   const CASE_ID = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
   const DOCUMENT_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
 
-  beforeEach(() => {
+  beforeAll(() => {
     const testPdfDocBytes = () => {
       // sample.pdf is a 1 page document
       return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
@@ -30,6 +30,32 @@ describe('servePaperFiledDocumentInteractor', () => {
 
     const PDF_MOCK_BUFFER = 'Hello World';
 
+    applicationContext.getPug.mockImplementation(() => ({
+      compile: () => () => '',
+    }));
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: testPdfDoc,
+      }),
+    });
+    applicationContext
+      .getStorageClient()
+      .upload.mockImplementation((params, resolve) => resolve());
+    applicationContext.getChromiumBrowser().newPage.mockReturnValue({
+      addStyleTag: () => {},
+      pdf: () => {
+        return PDF_MOCK_BUFFER;
+      },
+      setContent: () => {},
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({
+        url: 'www.example.com',
+      });
+  });
+
+  beforeEach(() => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: CASE_ID,
@@ -64,9 +90,6 @@ describe('servePaperFiledDocumentInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    applicationContext.getPug.mockImplementation(() => ({
-      compile: () => () => '',
-    }));
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -82,26 +105,6 @@ describe('servePaperFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(caseRecord);
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: testPdfDoc,
-      }),
-    });
-    applicationContext
-      .getStorageClient()
-      .upload.mockImplementation((params, resolve) => resolve());
-    applicationContext.getChromiumBrowser().newPage.mockReturnValue({
-      addStyleTag: () => {},
-      pdf: () => {
-        return PDF_MOCK_BUFFER;
-      },
-      setContent: () => {},
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({
-        url: 'www.example.com',
-      });
   });
 
   it('should throw an error if not authorized', async () => {
