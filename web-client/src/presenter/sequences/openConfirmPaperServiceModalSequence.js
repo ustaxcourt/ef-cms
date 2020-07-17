@@ -4,6 +4,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -16,6 +17,7 @@ export const openConfirmPaperServiceModalSequence = [
   computeFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
+  setDocumentIsRequiredAction,
   validateDocketEntryAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
