@@ -13,6 +13,19 @@ describe('chooseWorkQueueAction', () => {
       },
     };
   });
+  it('throws an exception if the work queue path cannot be found', async () => {
+    await expect(
+      runAction(chooseWorkQueueAction, {
+        props: {
+          box: 'wooden',
+          queue: 'de Lancie',
+          workQueueIsInternal: 'okay',
+        },
+        providers,
+        state: {},
+      }),
+    ).rejects.toThrow();
+  });
   it('sets the workQueueIsInternal to value from props if provided and executes default work queue path', async () => {
     const result = await runAction(chooseWorkQueueAction, {
       props: {
