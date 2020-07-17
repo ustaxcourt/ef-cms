@@ -1,7 +1,15 @@
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
-  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    EVENT_CODES_REQUIRING_SIGNATURE,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -23,6 +31,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
   );
 
   const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
+
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail);
 
   const isDocumentOnDocketRecord =
     viewerDocumentToDisplay &&
@@ -56,6 +68,20 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
 
+  const showNotServed = getShowNotServedForDocument({
+    UNSERVABLE_EVENT_CODES,
+    caseDetail,
+    documentId: caseDocument.documentId,
+    draftDocuments,
+  });
+
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    caseDocument.documentType,
+  );
+
+  const showServeCourtIssuedDocumentButton =
+    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+
   return {
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
@@ -71,5 +97,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showEditSignatureButton:
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
+    showNotServed,
+    showServeCourtIssuedDocumentButton,
   };
 };
