@@ -216,5 +216,8 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
   });
 });
