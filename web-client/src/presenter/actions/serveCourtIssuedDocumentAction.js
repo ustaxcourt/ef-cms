@@ -12,8 +12,9 @@ import { state } from 'cerebral';
 export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
-  const documentId = get(state.documentId);
+  const documentId = get(state.documentId) || props.documentId;
   const caseId = get(state.caseDetail.caseId);
 
   const result = await applicationContext
