@@ -59,6 +59,11 @@ export const documentViewerHelper = (get, applicationContext) => {
     !formattedDocumentToDisplay.document.isPetition &&
     permissions.SERVE_DOCUMENT;
 
+  const showServePetitionButton =
+    showNotServed &&
+    formattedDocumentToDisplay.document.isPetition &&
+    permissions.SERVE_PETITION;
+
   return {
     description: formattedDocumentToDisplay.record.description,
     filedLabel,
@@ -67,5 +72,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showSealedInBlackstone: formattedDocumentToDisplay.document.isLegacySealed,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
+    showServePetitionButton,
   };
 };
