@@ -17,11 +17,13 @@ export const servePaperFiledDocumentAction = async ({
 
   const {
     paperServicePdfUrl,
-  } = await applicationContext.getUseCases().servePaperFiledDocumentInteractor({
-    applicationContext,
-    caseId,
-    documentId,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .serveExternallyFiledDocumentInteractor({
+      applicationContext,
+      caseId,
+      documentId,
+    });
 
   return {
     alertSuccess: {
