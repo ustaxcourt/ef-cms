@@ -1,21 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
-
-const ConfirmServeToIrsModal = () => (
-  <ConfirmModal
-    cancelLabel="No, Take Me Back"
-    confirmLabel="Yes, Serve"
-    confirmSequenceProps={{ stayOnPage: true }}
-    preventCancelOnBlur={true}
-    title="Are You Sure You Want to Serve This Petition to the IRS?"
-    onCancelSequence="clearModalSequence"
-    onConfirmSequence="serveCaseToIrsSequence"
-  ></ConfirmModal>
-);
 
 export const MessageDocument = connect(
   {
@@ -27,9 +15,11 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence:
       sequences.openConfirmEditSignatureModalSequence,
-    openConfirmServeToIrsModalSequence:
-      sequences.openConfirmServeToIrsModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence:
+      sequences.openConfirmServeCourtIssuedDocumentSequence,
     parentMessageId: state.parentMessageId,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -40,8 +30,9 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
-    openConfirmServeToIrsModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
     parentMessageId,
+    serveCourtIssuedDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -136,13 +127,16 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
-              {messageDocumentHelper.showNotServed && (
+              {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
                 <Button
                   link
                   icon="paper-plane"
                   iconColor="white"
                   onClick={() => {
-                    openConfirmServeToIrsModalSequence();
+                    openConfirmServeCourtIssuedDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
                   }}
                 >
                   Serve
@@ -169,8 +163,11 @@ export const MessageDocument = connect(
                 title={viewerDocumentToDisplay.documentTitle}
               />
             )}
-            {showModal == 'ConfirmServeToIrsModal' && (
-              <ConfirmServeToIrsModal />
+            {showModal == 'ConfirmInitiateServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
             )}
           </>
         )}
