@@ -3,6 +3,7 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 
 describe('getShowNotServedForDocument', () => {
   const documentId = applicationContext.getUniqueId();
+
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
   it('should return true if the document type is servable and does not have a servedAt', () => {
@@ -98,6 +99,23 @@ describe('getShowNotServedForDocument', () => {
         documents: [],
       },
       documentId,
+      draftDocuments: [{ documentId }],
+    });
+
+    expect(showNotServed).toEqual(false);
+  });
+
+  it('should return false when the document is a correspondence document', () => {
+    // Correspondence documents should not be in case.documents and also are not served
+    const correrspondenceDocumentId = applicationContext.getUniqueId();
+
+    const showNotServed = getShowNotServedForDocument({
+      UNSERVABLE_EVENT_CODES,
+      caseDetail: {
+        docketRecord: [],
+        documents: [{ documentId }],
+      },
+      correrspondenceDocumentId,
       draftDocuments: [{ documentId }],
     });
 
