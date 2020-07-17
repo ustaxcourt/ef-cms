@@ -207,7 +207,6 @@ const router = {
     registerRoute(
       '/case-detail/*/petition-qc/*',
       ifHasAccess((docketNumber, parentMessageId) => {
-        console.log('parentMessageId', parentMessageId);
         const { tab } = route.query();
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
