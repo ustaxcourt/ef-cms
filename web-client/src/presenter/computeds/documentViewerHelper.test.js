@@ -7,7 +7,6 @@ const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
   applicationContext,
 );
-
 describe('documentViewerHelper', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser = jest.fn().mockReturnValue({
@@ -34,7 +33,9 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: '999',
         },
@@ -62,6 +63,9 @@ describe('documentViewerHelper', () => {
           ],
         },
 
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -89,6 +93,9 @@ describe('documentViewerHelper', () => {
               filedBy: 'Test Petitioner',
             },
           ],
+        },
+        permissions: {
+          SERVE_DOCUMENT: false,
         },
 
         viewerDocumentToDisplay: {
@@ -119,6 +126,9 @@ describe('documentViewerHelper', () => {
           ],
         },
 
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -147,6 +157,9 @@ describe('documentViewerHelper', () => {
           ],
         },
 
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -173,6 +186,9 @@ describe('documentViewerHelper', () => {
           ],
         },
 
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -199,7 +215,9 @@ describe('documentViewerHelper', () => {
             },
           ],
         },
-
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -226,6 +244,9 @@ describe('documentViewerHelper', () => {
           ],
         },
 
+        permissions: {
+          SERVE_DOCUMENT: false,
+        },
         viewerDocumentToDisplay: {
           documentId: 'abc',
         },
@@ -251,6 +272,9 @@ describe('documentViewerHelper', () => {
               },
             ],
           },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
           viewerDocumentToDisplay: {
             documentId,
           },
@@ -273,6 +297,9 @@ describe('documentViewerHelper', () => {
                 eventCode: 'CTRA',
               },
             ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
           },
           viewerDocumentToDisplay: {
             documentId,
@@ -298,6 +325,9 @@ describe('documentViewerHelper', () => {
               },
             ],
           },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
           viewerDocumentToDisplay: {
             documentId,
           },
@@ -305,6 +335,116 @@ describe('documentViewerHelper', () => {
       });
 
       expect(result.showNotServed).toEqual(false);
+    });
+  });
+
+  describe('showServeCourtIssuedDocumentButton', () => {
+    const documentId = applicationContext.getUniqueId();
+
+    it('should be true if the document type is a servable court issued document that does not have a served at', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
+    });
+
+    it('should be false if the document type is not a court issued document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Petition',
+                eventCode: 'P',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be false if the document type is a servable court issued document and has servedAt', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be false if the document type is a servable court issued document without servedAt but the user does not have permission to serve the document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
   });
 });
