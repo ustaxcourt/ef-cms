@@ -55,7 +55,7 @@ describe('servePaperFiledDocumentAction', () => {
     });
   });
 
-  it('returns hasPdf false when there is no paperServicePdfUrl after the document has been served', async () => {
+  it('returns hasPaper false when there is no paperServicePdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
