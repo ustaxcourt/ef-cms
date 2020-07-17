@@ -29,6 +29,6 @@ export const petitionsClerkServesOrder = test => {
     expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
 
     await test.runSequence('openConfirmInitiateServiceModalSequence');
-    await test.runSequence('serveCourtIssuedDocumentSequence');
+    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });
 };
