@@ -17,9 +17,12 @@ export const MessageDocument = connect(
       sequences.openConfirmEditSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence:
       sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     parentMessageId: state.parentMessageId,
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -31,8 +34,10 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
     serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -143,6 +148,33 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -163,9 +195,15 @@ export const MessageDocument = connect(
                 title={viewerDocumentToDisplay.documentTitle}
               />
             )}
-            {showModal == 'ConfirmInitiateServiceModal' && (
+            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
