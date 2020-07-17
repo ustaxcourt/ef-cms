@@ -1,4 +1,3 @@
-import { followRedirectAction } from '../actions/followRedirectAction';
 import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/getServeToIrsAlertSuccessAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -8,9 +7,5 @@ export const navigateToDocumentQcFromPrintPaperPetitionReceiptSequence = [
   setSaveAlertsForNavigationAction,
   getServeToIrsAlertSuccessAction,
   setAlertSuccessAction,
-  followRedirectAction,
-  {
-    default: [navigateToDocumentQCAction],
-    success: [],
-  },
+  navigateToDocumentQCAction,
 ];
