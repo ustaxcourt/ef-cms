@@ -1,5 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
+import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -10,6 +13,9 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
+  computeFormDateAction,
+  computeCertificateOfServiceFormDateAction,
+  computeDateReceivedAction,
   validateDocketEntryAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
