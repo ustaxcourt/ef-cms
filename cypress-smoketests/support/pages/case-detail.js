@@ -36,6 +36,7 @@ exports.addDocketEntryForOrderAndServe = () => {
   cy.get('.modal-button-confirm').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
   cy.get('button:contains("Order to Show Cause")').click();
+  cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('div:contains("Served")').should('exist');
 };
 
@@ -47,5 +48,6 @@ exports.addDocketEntryForOrderAndServePaper = () => {
   cy.url().should('contain', '/print-paper-service');
   cy.get('#print-paper-service-done-button').click();
   cy.get('button:contains("Order to Show Cause")').click();
+  cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('div:contains("Served")').should('exist');
 };
