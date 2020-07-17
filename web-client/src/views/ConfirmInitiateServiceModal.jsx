@@ -10,15 +10,15 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
     documentTitle: props.documentTitle,
-    serveCourtIssuedDocumentSequence:
-      sequences.serveCourtIssuedDocumentSequence,
+    serveCourtIssuedDocumentFromDocketEntrySequence:
+      sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
   },
   function ConfirmInitiateServiceModal({
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
-    serveCourtIssuedDocumentSequence,
+    serveCourtIssuedDocumentFromDocketEntrySequence,
   }) {
     return (
       <ModalDialog
@@ -26,7 +26,9 @@ export const ConfirmInitiateServiceModal = connect(
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={confirmSequence || serveCourtIssuedDocumentSequence}
+        confirmSequence={
+          confirmSequence || serveCourtIssuedDocumentFromDocketEntrySequence
+        }
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">

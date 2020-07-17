@@ -28,6 +28,6 @@ export const docketClerkServesDocument = (test, draftOrderIndex) => {
 
     await test.runSequence('openConfirmInitiateServiceModalSequence');
 
-    await test.runSequence('serveCourtIssuedDocumentSequence');
+    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });
 };

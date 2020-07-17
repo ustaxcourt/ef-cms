@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,7 +15,12 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence:
       sequences.openConfirmEditSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence:
+      sequences.openConfirmServeCourtIssuedDocumentSequence,
     parentMessageId: state.parentMessageId,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
@@ -24,7 +30,10 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
     parentMessageId,
+    serveCourtIssuedDocumentSequence,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -118,6 +127,22 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeCourtIssuedDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -136,6 +161,12 @@ export const MessageDocument = connect(
               <iframe
                 src={iframeSrc}
                 title={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiateServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
           </>
