@@ -3,9 +3,9 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openConfirmServeCourtIssuedDocumentSequence = [
+export const openConfirmServePaperFiledDocumentSequence = [
   setRedirectUrlAction,
   setDocumentIdAction,
   clearModalStateAction,
-  setShowModalFactoryAction('ConfirmInitiateCourtIssuedDocumentServiceModal'),
+  setShowModalFactoryAction('ConfirmInitiatePaperDocumentServiceModal'),
 ];

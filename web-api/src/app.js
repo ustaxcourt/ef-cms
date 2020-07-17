@@ -266,6 +266,9 @@ const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
 const {
+  servePaperFiledDocumentLambda,
+} = require('./documents/servePaperFiledDocumentLambda');
+const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
 const {
@@ -425,6 +428,10 @@ app.post(
 app.post(
   '/case-documents/:caseId/:documentId/sign',
   lambdaWrapper(saveSignedDocumentLambda),
+);
+app.post(
+  '/case-documents/:caseId/:documentId/serve',
+  lambdaWrapper(servePaperFiledDocumentLambda),
 );
 app.get(
   '/case-documents/:caseId/:documentId/download-policy-url',

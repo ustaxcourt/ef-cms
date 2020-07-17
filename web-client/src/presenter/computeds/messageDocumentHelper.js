@@ -82,6 +82,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showServeCourtIssuedDocumentButton =
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
 
+  const showServePaperFiledDocumentButton =
+    showNotServed && !isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+
   return {
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
@@ -99,5 +102,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
     showNotServed,
     showServeCourtIssuedDocumentButton,
+    showServePaperFiledDocumentButton,
   };
 };

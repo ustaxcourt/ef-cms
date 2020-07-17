@@ -17,7 +17,10 @@ export const MessageDocument = connect(
       sequences.openConfirmEditSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence:
       sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     parentMessageId: state.parentMessageId,
+    saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
     showModal: state.modal.showModal,
@@ -31,7 +34,9 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
+    saveAndServeDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
@@ -143,6 +148,22 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -163,9 +184,15 @@ export const MessageDocument = connect(
                 title={viewerDocumentToDisplay.documentTitle}
               />
             )}
-            {showModal == 'ConfirmInitiateServiceModal' && (
+            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={saveAndServeDocketEntrySequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
