@@ -171,6 +171,9 @@ describe('updateDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
