@@ -193,12 +193,12 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/petition-qc/document-detail',
-      ifHasAccess(docketNumber => {
+      '/case-detail/*/petition-qc/document-view/*',
+      ifHasAccess((docketNumber, documentId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
         return app.getSequence('gotoPetitionQcSequence')({
           docketNumber,
-          redirectUrl: `/case-detail/${docketNumber}/document-view?`,
+          redirectUrl: `/case-detail/${docketNumber}/document-view?documentId=${documentId}`,
         });
       }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
