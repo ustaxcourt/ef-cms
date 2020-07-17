@@ -173,6 +173,15 @@ exports.fileDocketEntryInteractor = async ({
           { applicationContext },
         ),
       );
+
+      const servedParties = aggregatePartiesForService(caseEntity);
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity,
+        servedParties,
+      });
     }
   }
 
