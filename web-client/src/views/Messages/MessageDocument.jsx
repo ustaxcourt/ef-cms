@@ -143,6 +143,17 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"

@@ -703,7 +703,7 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
-    it('should be false is the document is a served court-issued document and the user has SERVE_DOCUMENT permission', () => {
+    it('should be false if the document is a served court-issued document and the user has SERVE_DOCUMENT permission', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
@@ -733,7 +733,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
 
-    it('should be false is the document is a not-served externally-filed document and the user has SERVE_DOCUMENT permission', () => {
+    it('should be false if the document is a not-served externally-filed document and the user has SERVE_DOCUMENT permission', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
@@ -762,7 +762,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
 
-    it('should be false is the document is a not-served court-issued document and the user does not have SERVE_DOCUMENT permission', () => {
+    it('should be false if the document is a not-served court-issued document and the user does not have SERVE_DOCUMENT permission', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(judgeUser), // does not have SERVE_DOCUMENT permission
@@ -791,7 +791,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
 
-    it('should be true is the document is a not-served court-issued document and the user has SERVE_DOCUMENT permission', () => {
+    it('should be true if the document is a not-served court-issued document and the user has SERVE_DOCUMENT permission', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser), // has SERVE_DOCUMENT permission
@@ -818,6 +818,96 @@ describe('messageDocumentHelper', () => {
       });
 
       expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
+    });
+  });
+
+  describe('showServePetitionButton', () => {
+    it('should be false if the document is a served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be false if the document is a not-served Petition document and the user does not have SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(judgeUser), // does not have SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be true if the document is a not-served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(true);
     });
   });
 });
