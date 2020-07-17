@@ -40,10 +40,10 @@ import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
-import { closeModalAndReturnToDocumentQCSequence } from './sequences/closeModalAndReturnToDocumentQCSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeCaseMessageSequence } from './sequences/completeCaseMessageSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
@@ -479,10 +479,10 @@ export const presenter = {
     clearOpenClosedCasesCurrentPageSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
+    closeModalAndNavigateSequence,
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
-    closeModalAndReturnToDocumentQCSequence,
     closeModalAndReturnToTrialSessionsSequence,
     completeCaseMessageSequence,
     completeDocketEntryQCAndSendMessageSequence,
