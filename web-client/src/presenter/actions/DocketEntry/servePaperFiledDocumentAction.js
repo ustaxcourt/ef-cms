@@ -12,7 +12,7 @@ export const servePaperFiledDocumentAction = async ({
   applicationContext,
   get,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const caseId = get(state.caseDetail.caseId);
   const documentId = get(state.documentId);
 
   const {
