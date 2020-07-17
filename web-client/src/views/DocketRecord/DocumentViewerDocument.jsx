@@ -15,8 +15,11 @@ export const DocumentViewerDocument = connect(
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
       sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -26,7 +29,9 @@ export const DocumentViewerDocument = connect(
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -88,6 +93,23 @@ export const DocumentViewerDocument = connect(
                   Serve
                 </Button>
               )}
+
+              {documentViewerHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${documentViewerHelper.documentId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -111,6 +133,12 @@ export const DocumentViewerDocument = connect(
             {showModal == 'ConfirmInitiateServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
