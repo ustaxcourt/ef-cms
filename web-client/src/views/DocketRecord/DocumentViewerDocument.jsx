@@ -110,6 +110,17 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
+              {documentViewerHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-detail`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
