@@ -1,12 +1,12 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for serving paper filed documents
+ * used for serving externally filed documents
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.servePaperFiledDocumentLambda = event =>
+exports.serveExternallyFiledDocumentLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
@@ -16,7 +16,7 @@ exports.servePaperFiledDocumentLambda = event =>
 
       return await applicationContext
         .getUseCases()
-        .servePaperFiledDocumentInteractor({
+        .serveExternallyFiledDocumentInteractor({
           applicationContext,
           caseId,
           documentId,

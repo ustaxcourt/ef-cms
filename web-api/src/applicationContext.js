@@ -813,8 +813,8 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
-  servePaperFiledDocumentInteractor,
-} = require('../../shared/src/business/useCases/document/servePaperFiledDocumentInteractor');
+  serveExternallyFiledDocumentInteractor,
+} = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1532,7 +1532,7 @@ module.exports = appContextUser => {
         sealCaseInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
-        servePaperFiledDocumentInteractor,
+        serveExternallyFiledDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

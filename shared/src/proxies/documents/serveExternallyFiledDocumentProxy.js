@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * servePaperFiledDocumentInteractor
+ * serveExternallyFiledDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.documentId the id of the document to serve
  * @returns {Promise<*>} the promise of the api call
  */
-exports.servePaperFiledDocumentInteractor = ({
+exports.serveExternallyFiledDocumentInteractor = ({
   applicationContext,
   caseId,
   documentId,

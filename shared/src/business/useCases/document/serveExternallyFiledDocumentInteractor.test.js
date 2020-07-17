@@ -11,12 +11,15 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  servePaperFiledDocumentInteractor,
-} = require('./servePaperFiledDocumentInteractor');
+  serveExternallyFiledDocumentInteractor,
+} = require('./serveExternallyFiledDocumentInteractor');
 
+jest.mock('../addCoversheetInteractor');
+
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
-describe('servePaperFiledDocumentInteractor', () => {
+describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
   const CASE_ID = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
   const DOCUMENT_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
@@ -26,9 +29,13 @@ describe('servePaperFiledDocumentInteractor', () => {
       // sample.pdf is a 1 page document
       return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
     };
-    const testPdfDoc = testPdfDocBytes();
 
+    const testPdfDoc = testPdfDocBytes();
     const PDF_MOCK_BUFFER = 'Hello World';
+
+    addCoverToPdf.mockResolvedValue({
+      pdfData: testPdfDoc,
+    });
 
     applicationContext.getPug.mockImplementation(() => ({
       compile: () => () => '',
@@ -111,14 +118,14 @@ describe('servePaperFiledDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      servePaperFiledDocumentInteractor({
+      serveExternallyFiledDocumentInteractor({
         applicationContext,
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the document with a servedAt date', async () => {
-    await servePaperFiledDocumentInteractor({
+    await serveExternallyFiledDocumentInteractor({
       applicationContext,
       caseId: CASE_ID,
       documentId: DOCUMENT_ID,
@@ -137,20 +144,17 @@ describe('servePaperFiledDocumentInteractor', () => {
   });
 
   it('should add a coversheet to the document', async () => {
-    await servePaperFiledDocumentInteractor({
+    await serveExternallyFiledDocumentInteractor({
       applicationContext,
       caseId: CASE_ID,
       documentId: DOCUMENT_ID,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls.length,
-    ).toEqual(1);
+    expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
   it('should send electronic-service parties emails', async () => {
-    await servePaperFiledDocumentInteractor({
+    await serveExternallyFiledDocumentInteractor({
       applicationContext,
       caseId: CASE_ID,
       documentId: DOCUMENT_ID,
@@ -189,7 +193,7 @@ describe('servePaperFiledDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByCaseId.mockReturnValue(caseRecord);
 
-    const result = await servePaperFiledDocumentInteractor({
+    const result = await serveExternallyFiledDocumentInteractor({
       applicationContext,
       caseId: CASE_ID,
       documentId: DOCUMENT_ID,

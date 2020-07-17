@@ -22,7 +22,7 @@ describe('servePaperFiledDocumentAction', () => {
   it('serves a paper filed document', async () => {
     applicationContext
       .getUseCases()
-      .servePaperFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
         return { paperServicePdfUrl };
       });
 
@@ -44,8 +44,8 @@ describe('servePaperFiledDocumentAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().servePaperFiledDocumentInteractor.mock
-        .calls[0][0],
+      applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
+        .mock.calls[0][0],
     ).toMatchObject({ caseId, documentId });
 
     expect(result.output).toEqual({
@@ -55,10 +55,10 @@ describe('servePaperFiledDocumentAction', () => {
     });
   });
 
-  it('returns hasPdf false when there is no paperServicePdfUrl after the document has been served', async () => {
+  it('returns hasPaper false when there is no paperServicePdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
-      .servePaperFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
         return {};
       });
 
@@ -80,8 +80,8 @@ describe('servePaperFiledDocumentAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().servePaperFiledDocumentInteractor.mock
-        .calls[0][0],
+      applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
+        .mock.calls[0][0],
     ).toMatchObject({ caseId, documentId });
 
     expect(result.output).toEqual({
