@@ -21,6 +21,6 @@ USER_POOL_ID="${USER_POOL_ID%\"}"
 USER_POOL_ID="${USER_POOL_ID#\"}"
 
 ENV=${ENV} STAGE=${ENV} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
-S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=ustc-case-mgmt.flexion.us-documents-${ENV}-${REGION} \
+S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-${REGION} \
 USER_POOL_ID=${USER_POOL_ID} \
 node ./bulkImportPractitionerUsers.js ${FILE_NAME} >> bulk-import-log.txt
