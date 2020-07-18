@@ -15,8 +15,11 @@ export const DocumentViewerDocument = connect(
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
       sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
@@ -26,7 +29,9 @@ export const DocumentViewerDocument = connect(
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
     showModal,
     viewerDocumentToDisplay,
   }) {
@@ -81,13 +86,41 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       documentId: viewerDocumentToDisplay.documentId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${documentViewerHelper.documentId}`,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
                     });
                   }}
                 >
                   Serve
                 </Button>
               )}
+
+              {documentViewerHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?documentId=${viewerDocumentToDisplay.documentId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {documentViewerHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.documentId}`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -111,6 +144,12 @@ export const DocumentViewerDocument = connect(
             {showModal == 'ConfirmInitiateServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={servePaperFiledDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
