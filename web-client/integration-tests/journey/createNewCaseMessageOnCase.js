@@ -40,7 +40,7 @@ export const createNewCaseMessageOnCase = test => {
     });
 
     expect(test.getState('modal.form.subject')).toEqual(
-      messageDocument.documentType,
+      messageDocument.documentTitle || messageDocument.documentType,
     );
 
     test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
