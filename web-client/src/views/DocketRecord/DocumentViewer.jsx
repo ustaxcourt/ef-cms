@@ -39,6 +39,7 @@ export const DocumentViewer = connect(
                         'usa-button--unstyled attachment-viewer-button',
                         viewDocumentId === entry.documentId && 'active',
                       )}
+                      isActive={viewDocumentId === entry.documentId}
                       key={idx}
                       onClick={() => {
                         setViewerDocumentToDisplaySequence({
