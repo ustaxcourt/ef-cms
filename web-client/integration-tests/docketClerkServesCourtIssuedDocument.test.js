@@ -3,8 +3,10 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
+import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -46,9 +48,14 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order to Show Cause',
+    eventCode: 'OSC',
+    expectedDocumentType: 'Order to Show Cause',
+  });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 4);
+  petitionsClerkViewsCaseDetail(test, 5);
   petitionsClerkViewsDraftOrder(test, 0);
   petitionsClerkPrioritizesCase(test);
 
@@ -66,4 +73,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
+
+  docketClerkViewsDraftOrder(test, 2);
+  docketClerkSignsOrder(test, 2);
+  docketClerkAddsDocketEntryFromOrder(test, 2);
+  docketClerkViewsCaseDetailDocumentView(test);
+  docketClerkServesDocumentFromCaseDetailDocumentView(test);
 });
