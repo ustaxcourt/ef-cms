@@ -1,7 +1,3 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { refreshElasticsearchIndex, viewCaseDetail } from '../helpers';
-import { runCompute } from 'cerebral/test';
-
 export const docketClerkServesDocumentFromCaseDetailDocumentView = test => {
   return it('Docketclerk serves document from case detail document view', async () => {
     await test.runSequence('openConfirmServeCourtIssuedDocumentSequence', {
@@ -14,5 +10,11 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView = test => {
     );
 
     await test.runSequence('serveCourtIssuedDocumentSequence');
+
+    expect(test.getState('alertSuccess')).toEqual({
+      message: 'Document served. ',
+    });
+
+    expect(test.getState('currentPage')).toEqual('DocumentDetail');
   });
 };

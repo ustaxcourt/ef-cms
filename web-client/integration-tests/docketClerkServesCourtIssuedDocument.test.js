@@ -3,6 +3,7 @@ import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docket
 import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkServesDocumentFromCaseDetailDocumentView } from './journey/docketClerkServesDocumentFromCaseDetailDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
 import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
@@ -77,6 +78,5 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkViewsCaseDetailDocumentView(test, 0);
-  docketClerkServesDocumentFromDocumentDetailView(test, 0);
-  //serve order from documents view
+  docketClerkServesDocumentFromCaseDetailDocumentView(test, 0);
 });
