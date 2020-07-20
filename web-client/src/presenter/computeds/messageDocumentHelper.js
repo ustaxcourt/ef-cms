@@ -6,6 +6,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     COURT_ISSUED_DOCUMENT_TYPES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
+    NOTICE_EVENT_CODES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
@@ -41,6 +42,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
         docketEntry.documentId === viewerDocumentToDisplay.documentId,
     );
 
+  const isNotice =
+    viewerDocumentToDisplay &&
+    NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
+
   const isPetitionDocument =
     caseDocument &&
     caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
@@ -62,7 +67,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
-    documentIsSigned && !isDocumentOnDocketRecord;
+    documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
   const showEditButtonForDocument =
     !isDocumentOnDocketRecord && !isCorrespondence;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
