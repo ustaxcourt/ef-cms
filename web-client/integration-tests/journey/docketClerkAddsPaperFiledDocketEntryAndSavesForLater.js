@@ -4,8 +4,11 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
-export const docketClerkAddsDocketEntries = (test, fakeFile) => {
-  return it('Docketclerk adds docket entries', async () => {
+export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
+  test,
+  fakeFile,
+) => {
+  return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -19,7 +22,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('saveForLaterDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -28,8 +31,6 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
-      primaryDocumentFile:
-        'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
 
     //primary document
@@ -61,9 +62,10 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: true,
     });
 
+    const docketEntryEventCode = 'M115';
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'M115',
+      value: docketEntryEventCode,
     });
 
     expect(test.getState('form.documentType')).toEqual(
@@ -75,21 +77,11 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    expect(test.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
-      secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
-    });
-
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'objections',
       value: 'No',
     });
 
-    //secondary document
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.eventCode',
       value: 'APPW',
@@ -120,13 +112,17 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('saveForLaterDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: true,
+      isAddAnother: false,
     });
 
+    test.documentId = test
+      .getState('caseDetail.documents')
+      .find(doc => doc.eventCode === docketEntryEventCode).documentId;
+
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added. Continue adding docket entries below.',
+      'Your entry has been added to docket record.',
     );
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
