@@ -96,6 +96,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.lodged = rawDocument.lodged;
   this.mailingDate = rawDocument.mailingDate;
   this.objections = rawDocument.objections;
+  this.documentIdBeforeSignature = rawDocument.documentIdBeforeSignature;
   this.ordinalValue = rawDocument.ordinalValue;
   this.otherFilingParty = rawDocument.otherFilingParty;
   this.partyPrimary = rawDocument.partyPrimary;
@@ -188,6 +189,9 @@ joiValidationDecorator(
     ),
     documentId: JoiValidationConstants.UUID.required().description(
       'ID of the associated PDF document in the S3 bucket.',
+    ),
+    documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
+      'The id for the original document that was uploaded.',
     ),
     documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
       'The title of this document.',
