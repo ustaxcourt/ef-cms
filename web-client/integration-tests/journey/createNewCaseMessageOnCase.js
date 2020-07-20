@@ -8,14 +8,14 @@ const caseMessageModalHelper = withAppContextDecorator(
   caseMessageModalHelperComputed,
 );
 
-export const petitionsClerkCreatesNewMessageOnCase = test => {
+export const createNewCaseMessageOnCase = test => {
   const getHelper = () => {
     return runCompute(caseMessageModalHelper, {
       state: test.getState(),
     });
   };
 
-  return it('petitions clerk creates new message on a case', async () => {
+  return it('user creates new message on a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
