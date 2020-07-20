@@ -1,13 +1,16 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
+import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
+import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
+import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
+import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -15,26 +18,50 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setSaveDocketEntryForLaterMetaAction } from '../actions/DocketEntry/setSaveDocketEntryForLaterMetaAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetDocumentIsRequiredAction } from '../actions/DocketEntry/unsetDocumentIsRequiredAction';
+import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const afterEntrySaved = showProgressSequenceDecorator([
+const gotoCaseDetail = [
   getDocketEntryAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,
   navigateToCaseDetailAction,
-]);
+];
 
-export const saveForLaterDocketEntrySequence = [
+const afterEntrySaved = [
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  chooseNextStepAction,
+  {
+    isElectronic: gotoCaseDetail,
+    isPaper: [
+      getIsSavingForLaterAction,
+      {
+        no: [
+          setDocumentIdAction,
+          setPdfPreviewUrlAction,
+          gotoPrintPaperServiceSequence,
+          completeDocketEntryQCAction,
+        ],
+        yes: gotoCaseDetail,
+      },
+    ],
+  },
+];
+
+export const fileDocketEntrySequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
@@ -42,13 +69,13 @@ export const saveForLaterDocketEntrySequence = [
       clearAlertsAction,
       startShowValidationAction,
       computeFormDateAction,
-      computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
-      unsetDocumentIsRequiredAction,
+      setDocumentIsRequiredAction,
       validateDocketEntryAction,
       {
         error: [
+          suggestSaveForLaterValidationAction,
           setAlertErrorAction,
           setValidationErrorsAction,
           setValidationAlertErrorsAction,
@@ -59,19 +86,21 @@ export const saveForLaterDocketEntrySequence = [
           clearAlertsAction,
           isFileAttachedAction,
           {
-            no: [saveDocketEntryAction, afterEntrySaved],
+            no: showProgressSequenceDecorator([
+              saveDocketEntryAction,
+              afterEntrySaved,
+            ]),
             yes: [
               openFileUploadStatusModalAction,
               getDocumentIdAction,
               uploadDocketEntryFileAction,
               {
                 error: [openFileUploadErrorModal],
-                success: [
-                  setSaveDocketEntryForLaterMetaAction,
+                success: showProgressSequenceDecorator([
                   saveDocketEntryAction,
                   closeFileUploadStatusModalAction,
                   afterEntrySaved,
-                ],
+                ]),
               },
             ],
           },
