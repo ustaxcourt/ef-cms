@@ -74,7 +74,7 @@ const formatDocument = (applicationContext, document) => {
 
   result.isInProgress =
     (!result.isCourtIssuedDocument && result.isFileAttached === false) ||
-    (result.isFileAttached === true && !result.servedAt);
+    !result.servedAt;
 
   result.isNotServedDocument = !result.servedAt;
 
