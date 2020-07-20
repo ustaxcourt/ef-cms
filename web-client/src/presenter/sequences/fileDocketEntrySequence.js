@@ -49,13 +49,13 @@ const afterEntrySaved = [
     isPaper: [
       getIsSavingForLaterAction,
       {
-        no: gotoCaseDetail,
-        yes: [
+        no: [
           setDocumentIdAction,
           setPdfPreviewUrlAction,
           gotoPrintPaperServiceSequence,
           completeDocketEntryQCAction,
         ],
+        yes: gotoCaseDetail,
       },
     ],
   },
