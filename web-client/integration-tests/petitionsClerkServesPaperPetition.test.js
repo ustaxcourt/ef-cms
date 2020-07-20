@@ -1,9 +1,10 @@
 import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const test = setupTest({
   useCases: {
@@ -12,7 +13,7 @@ const test = setupTest({
 });
 test.draftOrders = [];
 
-describe('Petitions Clerk Serves Paper Petition From Message Detail', () => {
+describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
     global.window.pdfjsObj = {
@@ -28,4 +29,14 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail', () => {
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1ServesPetitionFromMessageDetail(test);
+
+  loginAs(test, 'petitioner@example.com');
+  it('Create case', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(test);
 });
