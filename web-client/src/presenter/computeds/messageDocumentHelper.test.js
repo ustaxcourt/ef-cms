@@ -422,6 +422,64 @@ describe('messageDocumentHelper', () => {
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
+  it('returns showEditSignatureButton false for NOT document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NOT',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditSignatureButton).toEqual(false);
+  });
+
+  it('returns showEditSignatureButton false for NTD document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NTD',
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NTD',
+        },
+      },
+    });
+
+    expect(result.showEditSignatureButton).toEqual(false);
+  });
+
   it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
