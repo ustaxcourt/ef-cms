@@ -31,13 +31,15 @@ export const DocumentViewer = connect(
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
               {formattedCaseDetail.formattedDocketEntries.map((entry, idx) => {
-                if (entry.documentId) {
+                // TODO: should live in a computed
+                if (entry.isFileAttached) {
                   return (
                     <Button
                       className={classNames(
                         'usa-button--unstyled attachment-viewer-button',
                         viewDocumentId === entry.documentId && 'active',
                       )}
+                      isActive={viewDocumentId === entry.documentId}
                       key={idx}
                       onClick={() => {
                         setViewerDocumentToDisplaySequence({
@@ -45,7 +47,7 @@ export const DocumentViewer = connect(
                         });
                       }}
                     >
-                      <div className="grid-row">
+                      <div className="grid-row margin-left-205">
                         <div className="grid-col-1">{entry.index}</div>
                         <div className="grid-col-3">
                           {entry.createdAtFormatted}

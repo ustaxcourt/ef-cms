@@ -23,5 +23,5 @@ if [ -z "$CLEAN_ONLY" ]; then
   npm i
   npm update
   npx npm-force-resolutions
-  npm prune
+  npm i
 fi

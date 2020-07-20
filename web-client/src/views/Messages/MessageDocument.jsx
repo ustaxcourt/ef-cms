@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,7 +15,15 @@ export const MessageDocument = connect(
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence:
       sequences.openConfirmEditSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence:
+      sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     parentMessageId: state.parentMessageId,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
@@ -24,7 +33,12 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmEditSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
+    serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -118,6 +132,49 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeCourtIssuedDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
@@ -136,6 +193,18 @@ export const MessageDocument = connect(
               <iframe
                 src={iframeSrc}
                 title={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={servePaperFiledDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
           </>

@@ -701,4 +701,284 @@ describe('messageDocumentHelper', () => {
 
     expect(result.showDocumentNotSignedAlert).toEqual(true);
   });
+
+  describe('serving documents', () => {
+    beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    });
+
+    it('should set showNotServed to true when the document is servable, unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                entityName: 'Document',
+                eventCode: 'O', // Requires a signature
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showNotServed).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to true when the document is a servable court issued document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document', //court issued document type
+                eventCode: 'O',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(true);
+    });
+
+    it('should set showServePaperFiledDocumentButton to false when the document is a servable court issued document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document', //court issued document type
+                eventCode: 'O',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+
+    it('should set showServePaperFiledDocumentButton to true when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to false when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton and showServePaperFiledDocumentButton to false when permissions.SERVE_DOCUMENTS is false', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+              {
+                documentId: '456',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document', //paper filed document type
+                eventCode: 'A',
+              },
+              {
+                documentId: '456',
+                documentType: 'Order',
+                entityName: 'Document', //court issued document type
+                eventCode: 'O',
+              },
+            ],
+          },
+          permissions: { SERVE_DOCUMENT: false },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+  });
+
+  describe('showServePetitionButton', () => {
+    it('should be false if the document is a served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be false if the document is a not-served Petition document and the user does not have SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(judgeUser), // does not have SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be true if the document is a not-served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(true);
+    });
+  });
 });

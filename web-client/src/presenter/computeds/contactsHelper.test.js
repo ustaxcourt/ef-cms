@@ -275,7 +275,7 @@ describe('contactsHelper', () => {
       contactSecondary: {
         displayPhone: true,
         header: 'Tell Us About Your Spouse',
-        nameLabel: 'Spouse‘s name',
+        nameLabel: 'Spouse’s name',
       },
     });
   });

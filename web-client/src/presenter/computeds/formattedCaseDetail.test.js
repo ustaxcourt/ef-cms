@@ -330,7 +330,6 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
       {
-        //
         description:
           'First Amended Unsworn Declaration under Penalty of Perjury in Support',
         filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
@@ -372,6 +371,131 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
     ]);
+  });
+
+  describe('createdAtFormatted', () => {
+    const baseCaseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      hasVerifiedIrsNotice: false,
+      privatePractitioners: [],
+    };
+
+    it('should be a formatted date string if the document is on the docket record and is served', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Amended Petition',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Amended Petition',
+            documentType: 'Amended Petition',
+            eventCode: 'PAP',
+            isFileAttached: true,
+            partyPrimary: true,
+            scenario: 'Standard',
+            servedAt: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: '04/19/19',
+        },
+      ]);
+    });
+
+    it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Amended Petition',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Amended Petition',
+            documentType: 'Amended Petition',
+            eventCode: 'PAP',
+            isFileAttached: true,
+            partyPrimary: true,
+            scenario: 'Standard',
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: '04/19/19',
+        },
+      ]);
+    });
+
+    it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Order',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            isFileAttached: true,
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: undefined,
+        },
+      ]);
+    });
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
@@ -494,7 +618,6 @@ describe('formattedCaseDetail', () => {
           },
         ],
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
       };
     });
     it('sorts the docket record in the expected default order (ascending date)', () => {
@@ -634,7 +757,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -651,7 +773,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -668,7 +789,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -685,7 +805,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -704,7 +823,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -723,7 +841,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -745,7 +862,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -769,7 +885,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -793,7 +908,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
         {
@@ -838,7 +952,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
         {
@@ -863,7 +976,6 @@ describe('formattedCaseDetail', () => {
         caseDeadlines: [],
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -916,7 +1028,6 @@ describe('formattedCaseDetail', () => {
           },
         ],
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
       };
     });
 
@@ -992,7 +1103,6 @@ describe('formattedCaseDetail', () => {
           {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
-            petitioners: [{ name: 'Bobby Flay' }],
             status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
@@ -1001,7 +1111,6 @@ describe('formattedCaseDetail', () => {
         ],
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1025,7 +1134,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1847,6 +1955,34 @@ describe('formattedCaseDetail', () => {
           hasDocument: true,
           isExternalUser: true,
           userHasNoAccessToDocument: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: true,
+          userHasNoAccessToDocument: false,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+          userHasNoAccessToDocument: false,
         },
         output: false,
       },
