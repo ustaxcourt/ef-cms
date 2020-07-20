@@ -8,5 +8,5 @@
  * @returns {*} returns the next action in the sequence's path
  */
 export const getIsSavingForLaterAction = ({ path, props }) => {
-  return props.isSavingForLater ? path.no() : path.yes();
+  return props.isSavingForLater ? path.yes() : path.no();
 };
