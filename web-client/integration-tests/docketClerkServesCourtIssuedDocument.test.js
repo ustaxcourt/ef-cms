@@ -55,7 +55,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 4);
+  petitionsClerkViewsCaseDetail(test, 5);
   petitionsClerkViewsDraftOrder(test, 0);
   petitionsClerkPrioritizesCase(test);
 
@@ -74,9 +74,9 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
 
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailDocumentView(test, 0);
-  docketClerkServesDocumentFromCaseDetailDocumentView(test, 0);
+  docketClerkViewsDraftOrder(test, 2);
+  docketClerkSignsOrder(test, 2);
+  docketClerkAddsDocketEntryFromOrder(test, 2);
+  docketClerkViewsCaseDetailDocumentView(test);
+  docketClerkServesDocumentFromCaseDetailDocumentView(test);
 });

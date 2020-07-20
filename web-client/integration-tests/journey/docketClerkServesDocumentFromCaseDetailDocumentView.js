@@ -15,6 +15,8 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView = test => {
       message: 'Document served. ',
     });
 
-    expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(
+      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+    ).toEqual('documentView');
   });
 };
