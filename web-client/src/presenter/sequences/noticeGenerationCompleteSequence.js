@@ -6,7 +6,6 @@ import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
-import { setAlternateBackLocationAction } from '../actions/setAlternateBackLocationAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
@@ -32,7 +31,6 @@ export const noticeGenerationCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
-      setAlternateBackLocationAction,
       navigateToPrintPaperServiceAction,
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,

@@ -8,7 +8,7 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
@@ -677,9 +677,6 @@ joiValidationDecorator(
 );
 
 const orderDocumentTypes = ORDER_TYPES.map(orderType => orderType.documentType);
-const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-  courtIssuedDoc => courtIssuedDoc.documentType,
-);
 
 /**
  * builds the case caption from case contact name(s) based on party type
@@ -1611,7 +1608,7 @@ Case.prototype.isDocumentDraft = function (documentId) {
   );
   const isStipDecision = document.documentType === 'Stipulated Decision';
   const isDraftOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
   return (
