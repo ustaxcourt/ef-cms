@@ -46,7 +46,7 @@ export const DocumentViewer = connect(
                         });
                       }}
                     >
-                      <div className="grid-row">
+                      <div className="grid-row padding-left-205">
                         <div className="grid-col-1">{entry.index}</div>
                         <div className="grid-col-3">
                           {entry.createdAtFormatted}
