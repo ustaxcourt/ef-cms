@@ -47,11 +47,7 @@ const caseDetailOrPrintPaperService = [
     isPaper: [
       getIsSavingForLaterAction,
       {
-        no: [
-          setDocumentIdAction,
-          setPdfPreviewUrlAction,
-          gotoPrintPaperServiceSequence,
-        ],
+        no: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
         yes: gotoCaseDetail,
       },
     ],
@@ -61,6 +57,7 @@ const caseDetailOrPrintPaperService = [
 const afterEntrySaved = [
   setCaseAction,
   closeFileUploadStatusModalAction,
+  setDocumentIdAction,
   getIsSavingForLaterAction,
   {
     no: [completeDocketEntryQCAction, caseDetailOrPrintPaperService],
