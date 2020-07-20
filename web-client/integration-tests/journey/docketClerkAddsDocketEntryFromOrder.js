@@ -18,6 +18,7 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     const { documentId } = test.draftOrders[draftOrderIndex];
+    test.documentId = documentId;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.documentId === documentId,
