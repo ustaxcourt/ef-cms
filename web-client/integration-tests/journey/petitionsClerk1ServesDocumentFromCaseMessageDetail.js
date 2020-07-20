@@ -1,5 +1,5 @@
-export const petitionsClerk1ServesOrderFromCaseMessageDetail = test => {
-  return it('petitions clerk 1 serves order from case message detail', async () => {
+export const petitionsClerk1ServesDocumentFromCaseMessageDetail = test => {
+  return it('petitions clerk 1 serves document from case message detail', async () => {
     await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
       documentId: test.documentId,
       redirectUrl: `/case-messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
