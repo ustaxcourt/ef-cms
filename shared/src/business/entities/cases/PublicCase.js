@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi');
 const {
-  COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
@@ -101,14 +101,10 @@ joiValidationDecorator(
 
 const isDraftDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
-  const courtIssuedDocumentTypes = map(
-    COURT_ISSUED_EVENT_CODES,
-    'documentType',
-  );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
   const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
   const isDocumentOnDocketRecord = docketRecord.find(
@@ -123,15 +119,11 @@ const isDraftDocument = function (document, docketRecord) {
 
 const isPrivateDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
-  const courtIssuedDocumentTypes = map(
-    COURT_ISSUED_EVENT_CODES,
-    'documentType',
-  );
 
   const isStipDecision = document.documentType === 'Stipulated Decision';
   const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
   const isDocumentOnDocketRecord = docketRecord.find(
