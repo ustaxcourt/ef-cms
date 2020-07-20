@@ -188,6 +188,7 @@
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "sk": "document|0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "partySecondary": false,
+    "isFileAttached": true,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "numberOfPages": 1,
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
@@ -253,6 +254,7 @@
     "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0",
     "sk": "document|cb323daf-c541-4645-bb44-232255d03d40",
     "partySecondary": false,
+    "isFileAttached": true,
     "numberOfPages": 1,
     "documentId": "cb323daf-c541-4645-bb44-232255d03d40",
     "pk": "case|0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
