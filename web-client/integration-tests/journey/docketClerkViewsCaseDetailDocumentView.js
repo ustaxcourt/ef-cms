@@ -7,13 +7,10 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkViewsCaseDetailDocumentView = (
-  test,
-  docketNumber = null,
-) => {
+export const docketClerkViewsCaseDetailDocumentView = test => {
   return it('Docketclerk views case detail document view', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: docketNumber || test.docketNumber,
+      docketNumber: test.docketNumber,
     });
 
     const caseDetail = test.getState('caseDetail');
