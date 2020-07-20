@@ -47,11 +47,11 @@ exports.genericHandler = (event, cb, options = {}) => {
       options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
     const {
       isPublicUser,
-      logEvent = false,
+      logEvent = true,
       logEventLabel = 'Event',
-      logResults = false,
+      logResults = true,
       logResultsLabel = 'Results',
-      logUser = false,
+      logUser = true,
       logUserLabel = 'User',
       skipFiltering,
     } = options;
