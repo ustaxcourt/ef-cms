@@ -16,23 +16,21 @@ import React from 'react';
 
 export const AddDocketEntry = connect(
   {
+    fileDocketEntrySequence: sequences.fileDocketEntrySequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openConfirmPaperServiceModalSequence:
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
-    saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
-    saveForLaterDocketEntrySequence: sequences.saveForLaterDocketEntrySequence,
     showModal: state.modal.showModal,
   },
   function AddDocketEntry({
+    fileDocketEntrySequence,
     form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
-    saveAndServeDocketEntrySequence,
-    saveForLaterDocketEntrySequence,
     showModal,
   }) {
     return (
@@ -75,7 +73,10 @@ export const AddDocketEntry = connect(
                     secondary
                     id="save-for-later"
                     onClick={() => {
-                      saveForLaterDocketEntrySequence();
+                      fileDocketEntrySequence({
+                        isSavingForLater: true,
+                        shouldGenerateCoversheet: false,
+                      });
                     }}
                   >
                     Save for Later
@@ -111,13 +112,11 @@ export const AddDocketEntry = connect(
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={saveAndServeDocketEntrySequence}
-          />
+          <FileUploadErrorModal confirmSequence={fileDocketEntrySequence} />
         )}
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            confirmSequence={saveAndServeDocketEntrySequence}
+            confirmSequence={fileDocketEntrySequence}
             documentTitle={form.documentTitle}
           />
         )}

@@ -9,6 +9,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openConfirmPaperServiceModalSequence = [
@@ -20,7 +21,11 @@ export const openConfirmPaperServiceModalSequence = [
   setDocumentIsRequiredAction,
   validateDocketEntryAction,
   {
-    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
+    error: [
+      suggestSaveForLaterValidationAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       generateTitleAction,
       clearModalStateAction,
