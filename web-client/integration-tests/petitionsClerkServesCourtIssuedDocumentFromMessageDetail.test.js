@@ -24,10 +24,9 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
     global.window.pdfjsObj = {
       getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
-
-    loginAs(test, 'petitioner@example.com');
   });
 
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
