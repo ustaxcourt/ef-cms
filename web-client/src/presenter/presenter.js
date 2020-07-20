@@ -77,6 +77,7 @@ import { editCorrespondenceDocumentSequence } from './sequences/editCorresponden
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
+import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardCaseMessageSequence } from './sequences/forwardCaseMessageSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
@@ -243,9 +244,7 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
-import { saveAndServeDocketEntrySequence } from './sequences/saveAndServeDocketEntrySequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
-import { saveForLaterDocketEntrySequence } from './sequences/saveForLaterDocketEntrySequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
@@ -518,6 +517,7 @@ export const presenter = {
     editUploadCourtIssuedDocumentSequence,
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
+    fileDocketEntrySequence,
     formCancelToggleCancelSequence,
     forwardCaseMessageSequence,
     generateCaseCaptionSequence,
@@ -684,9 +684,7 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
-    saveAndServeDocketEntrySequence,
     saveDocumentSigningSequence,
-    saveForLaterDocketEntrySequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
     sealCaseSequence,
