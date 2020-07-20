@@ -172,6 +172,10 @@ const otherPetitionersCase = {
 };
 
 describe('Case journey', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   it('should migrate cases', async () => {
     jest.setTimeout(3000);
 

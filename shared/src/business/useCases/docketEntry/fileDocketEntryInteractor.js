@@ -128,7 +128,7 @@ exports.fileDocketEntryInteractor = async ({
       if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);
         documentEntity.setAsServed(servedParties.all);
-      } else if (isSavingForLater) {
+      } else if (metadata.isFileAttached && isSavingForLater) {
         documentEntity.numberOfPages = await applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument({

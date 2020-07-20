@@ -16,30 +16,23 @@ export const saveDocketEntryAction = async ({
   props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
-  const {
-    isSavingForLater,
-    primaryDocumentFileId,
-    shouldGenerateCoversheet,
-  } = props;
-  const isFileAttached = get(state.form.primaryDocumentFile);
+  const { isSavingForLater, primaryDocumentFileId } = props;
+  const isFileAttachedNow = get(state.form.primaryDocumentFile);
+  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
   const isUpdating = get(state.isEditingDocketEntry);
-  const documentId =
-    isFileAttached || primaryDocumentFileId
-      ? primaryDocumentFileId
-      : isUpdating
-      ? get(state.documentId)
-      : applicationContext.getUniqueId();
-  const isServingUpdatedDocketEntry = isUpdating && !isSavingForLater;
+  const generateCoversheet = isFileAttached && !isSavingForLater;
 
-  let caseDetail = get(state.caseDetail);
-  const docketEntryHasDocument = caseDetail.documents.find(
-    item => item.documentId === documentId,
-  );
+  let documentId;
 
-  const generateCoversheet =
-    (isFileAttached && shouldGenerateCoversheet !== false) ||
-    (isServingUpdatedDocketEntry && docketEntryHasDocument.isFileAttached);
+  if (isUpdating) {
+    documentId = get(state.documentId);
+  } else if (isFileAttached) {
+    documentId = primaryDocumentFileId;
+  } else {
+    documentId = applicationContext.getUniqueId();
+  }
 
+  let caseDetail;
   let documentMetadata = omit(
     {
       ...get(state.form),
@@ -58,7 +51,7 @@ export const saveDocketEntryAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
-  if (isFileAttached) {
+  if (isFileAttachedNow) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
