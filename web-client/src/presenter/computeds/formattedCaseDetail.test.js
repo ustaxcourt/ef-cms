@@ -1,5 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
+import {
+  formattedCaseDetail as formattedCaseDetailComputed,
+  getShowDocumentViewerLink,
+} from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -171,6 +174,7 @@ describe('formattedCaseDetail', () => {
           eventCode: 'PAP',
           exhibits: false,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           objections: 'No',
           partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -192,6 +196,7 @@ describe('formattedCaseDetail', () => {
           eventCode: 'ADED',
           exhibits: true,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
           partyPrimary: true,
@@ -220,6 +225,7 @@ describe('formattedCaseDetail', () => {
           exhibits: true,
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
+          isFileAttached: true,
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
@@ -243,6 +249,7 @@ describe('formattedCaseDetail', () => {
             'Unsworn Declaration under Penalty of Perjury in Support',
           eventCode: 'USDL',
           freeText: 'Test',
+          isFileAttached: true,
           lodged: true,
           partyIrsPractitioner: true,
           partyPrivatePractitioner: true,
@@ -258,6 +265,7 @@ describe('formattedCaseDetail', () => {
           documentType: 'Hearing Exhibits',
           eventCode: 'HE',
           freeText: 'adsf',
+          isFileAttached: true,
           lodged: false,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Type A',
@@ -363,6 +371,131 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
     ]);
+  });
+
+  describe('createdAtFormatted', () => {
+    const baseCaseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      hasVerifiedIrsNotice: false,
+      privatePractitioners: [],
+    };
+
+    it('should be a formatted date string if the document is on the docket record and is served', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Amended Petition',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Amended Petition',
+            documentType: 'Amended Petition',
+            eventCode: 'PAP',
+            isFileAttached: true,
+            partyPrimary: true,
+            scenario: 'Standard',
+            servedAt: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: '04/19/19',
+        },
+      ]);
+    });
+
+    it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Amended Petition',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Amended Petition',
+            documentType: 'Amended Petition',
+            eventCode: 'PAP',
+            isFileAttached: true,
+            partyPrimary: true,
+            scenario: 'Standard',
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: '04/19/19',
+        },
+      ]);
+    });
+
+    it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
+      const caseDetail = {
+        ...baseCaseDetail,
+        docketRecord: [
+          {
+            description: 'Order',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            filingDate: '2019-04-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            createdAt: '2019-04-19T17:29:13.120Z',
+            documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            isFileAttached: true,
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          validationErrors: {},
+        },
+      });
+      expect(result.formattedDocketEntries).toMatchObject([
+        {
+          createdAtFormatted: undefined,
+        },
+      ]);
+    });
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
@@ -485,7 +618,6 @@ describe('formattedCaseDetail', () => {
           },
         ],
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
       };
     });
     it('sorts the docket record in the expected default order (ascending date)', () => {
@@ -625,7 +757,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -642,7 +773,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -659,7 +789,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -676,7 +805,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -695,7 +823,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -714,7 +841,6 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         privatePractitioners: [{ name: 'Jackie Chan' }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -736,7 +862,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -760,7 +885,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -784,7 +908,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
         {
@@ -829,7 +952,6 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const caseDeadlines = [
         {
@@ -854,7 +976,6 @@ describe('formattedCaseDetail', () => {
         caseDeadlines: [],
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -907,7 +1028,6 @@ describe('formattedCaseDetail', () => {
           },
         ],
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
       };
     });
 
@@ -983,7 +1103,6 @@ describe('formattedCaseDetail', () => {
           {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
-            petitioners: [{ name: 'Bobby Flay' }],
             status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
@@ -992,7 +1111,6 @@ describe('formattedCaseDetail', () => {
         ],
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1016,7 +1134,6 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
         correspondence: [],
-        petitioners: [{ name: 'bob' }],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1477,6 +1594,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
             documentType: 'Motion to Dismiss for Lack of Jurisdiction',
             eventCode: 'M073',
+            isFileAttached: true,
             workItems: [{ isQC: true }],
           },
           {
@@ -1487,6 +1605,7 @@ describe('formattedCaseDetail', () => {
             documentTitle: 'System Generated',
             documentType: 'Notice of Trial',
             eventCode: 'NTD',
+            isFileAttached: true,
             workItems: [{ isQC: true }],
           },
           {
@@ -1498,6 +1617,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
+            isFileAttached: true,
             workItems: [
               { completedAt: '2019-06-19T17:29:13.120Z', isQC: false },
             ],
@@ -1511,6 +1631,7 @@ describe('formattedCaseDetail', () => {
             documentType: 'Order',
             eventCode: 'O',
             isCourtIssuedDocument: true,
+            isFileAttached: true,
             numberOfPages: 9,
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
@@ -1672,6 +1793,306 @@ describe('formattedCaseDetail', () => {
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+  });
+
+  describe('getShowDocumentViewerLink', () => {
+    const tests = [
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: false,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: false,
+          isExternalUser: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: true,
+          isStricken: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isUnservable: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          userHasAccessToCase: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          userHasAccessToCase: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isServed: false,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isExternalUser: true,
+          userHasNoAccessToDocument: true,
+        },
+        output: false,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: true,
+          userHasNoAccessToDocument: false,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+          userHasNoAccessToDocument: false,
+        },
+        output: false,
+      },
+    ];
+
+    tests.forEach(({ inputs, output }) => {
+      it(`returns expected output of '${output}' for inputs ${JSON.stringify(
+        inputs,
+      )}`, () => {
+        const result = getShowDocumentViewerLink(inputs);
+        expect(result).toEqual(output);
+      });
+    });
+  });
+
+  describe('showNotServed', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('should be true if the document type is servable and does not have a servedAt', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(true);
+    });
+
+    it('should be false if the document type is unservable', () => {
+      //CTRA is a document type that cannot be served
+      caseDetail.docketRecord[0].eventCode = 'CTRA';
+      caseDetail.documents[0].eventCode = 'CTRA';
+      caseDetail.docketRecord[0].documentType = 'Corrected Transcript';
+      caseDetail.documents[0].documentType = 'Corrected Transcript';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+    });
+
+    it('should be false if the document type is servable and has servedAt', () => {
+      caseDetail.docketRecord[0].servedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].servedAt = '2019-06-19T17:29:13.120Z';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
     });
   });
 });

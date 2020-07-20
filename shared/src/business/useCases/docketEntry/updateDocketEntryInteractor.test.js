@@ -171,6 +171,9 @@ describe('updateDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
@@ -255,5 +258,32 @@ describe('updateDocketEntryInteractor', () => {
       hasOtherFilingParty: true,
       otherFilingParty: 'Bert Brooks',
     });
+  });
+
+  it('updates document and workitem metadata with no file attached', async () => {
+    await expect(
+      updateDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: false,
+          partyPrimary: true,
+        },
+        isSavingForLater: true,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).resolves.not.toThrow();
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 });

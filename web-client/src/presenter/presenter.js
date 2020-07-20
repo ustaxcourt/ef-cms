@@ -40,16 +40,17 @@ import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
+import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
-import { closeModalAndReturnToDocumentQCSequence } from './sequences/closeModalAndReturnToDocumentQCSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeCaseMessageSequence } from './sequences/completeCaseMessageSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
+import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
@@ -76,6 +77,7 @@ import { editCorrespondenceDocumentSequence } from './sequences/editCorresponden
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
+import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardCaseMessageSequence } from './sequences/forwardCaseMessageSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
@@ -159,7 +161,6 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
-import { navigateToDocumentQcFromPrintPaperPetitionReceiptSequence } from './sequences/navigateToDocumentQcFromPrintPaperPetitionReceiptSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
@@ -196,6 +197,8 @@ import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirm
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
+import { openConfirmServeCourtIssuedDocumentSequence } from './sequences/openConfirmServeCourtIssuedDocumentSequence';
+import { openConfirmServePaperFiledDocumentSequence } from './sequences/openConfirmServePaperFiledDocumentSequence';
 import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServeToIrsModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateCaseMessageModalSequence } from './sequences/openCreateCaseMessageModalSequence';
@@ -241,9 +244,7 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
-import { saveAndServeDocketEntrySequence } from './sequences/saveAndServeDocketEntrySequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
-import { saveForLaterDocketEntrySequence } from './sequences/saveForLaterDocketEntrySequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
@@ -255,7 +256,9 @@ import { selectDocumentForScanSequence } from './sequences/selectDocumentForScan
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
+import { serveCourtIssuedDocumentFromDocketEntrySequence } from './sequences/serveCourtIssuedDocumentFromDocketEntrySequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
+import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -477,16 +480,17 @@ export const presenter = {
     clearOpenClosedCasesCurrentPageSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
+    closeModalAndNavigateSequence,
     closeModalAndReturnToCaseDetailDraftDocumentsSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
-    closeModalAndReturnToDocumentQCSequence,
     closeModalAndReturnToTrialSessionsSequence,
     completeCaseMessageSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,
     completeDocumentSigningSequence,
+    completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
     contactPrimaryCountryTypeChangeSequence,
@@ -513,6 +517,7 @@ export const presenter = {
     editUploadCourtIssuedDocumentSequence,
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
+    fileDocketEntrySequence,
     formCancelToggleCancelSequence,
     forwardCaseMessageSequence,
     generateCaseCaptionSequence,
@@ -596,7 +601,6 @@ export const presenter = {
     navigateToCaseDetailFromPaperServiceSequence,
     navigateToCaseDetailSequence,
     navigateToCaseDetailWithDraftDocumentSequence,
-    navigateToDocumentQcFromPrintPaperPetitionReceiptSequence,
     navigateToEditOrderSequence,
     navigateToPathSequence,
     navigateToPrintPaperServiceSequence,
@@ -633,6 +637,8 @@ export const presenter = {
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     openConfirmServeToIrsModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateCaseMessageModalSequence,
@@ -678,9 +684,7 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
-    saveAndServeDocketEntrySequence,
     saveDocumentSigningSequence,
-    saveForLaterDocketEntrySequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
     sealCaseSequence,
@@ -692,7 +696,9 @@ export const presenter = {
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
+    serveCourtIssuedDocumentFromDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,
     setCaseDetailPrimaryTabSequence,
     setCaseTypeToDisplaySequence,

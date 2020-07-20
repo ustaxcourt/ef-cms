@@ -98,7 +98,8 @@
         presence: "required"
       allow: 
         - "Intervenor"
-        - "Participant"
+        - "Tax Matters Partner"
+        - "Partner Other Than Tax Matters Partner"
     serviceIndicator: 
       type: "string"
       flags: 
@@ -163,6 +164,7 @@
         presence: "required"
       allow: 
         - "Intervenor"
-        - "Participant"
+        - "Tax Matters Partner"
+        - "Partner Other Than Tax Matters Partner"
 
  ```

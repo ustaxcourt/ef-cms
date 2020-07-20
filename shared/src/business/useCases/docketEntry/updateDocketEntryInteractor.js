@@ -169,6 +169,13 @@ exports.updateDocketEntryInteractor = async ({
       const servedParties = aggregatePartiesForService(caseEntity);
       documentEntity.setAsServed(servedParties.all);
       documentEntity.setAsProcessingStatusAsCompleted();
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity,
+        servedParties,
+      });
     } else {
       documentEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()
@@ -182,6 +189,41 @@ exports.updateDocketEntryInteractor = async ({
     await applicationContext
       .getPersistenceGateway()
       .saveWorkItemForDocketClerkFilingExternalDocument({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+  } else if (!editableFields.isFileAttached && isSavingForLater) {
+    const workItem = documentEntity.getQCWorkItem();
+
+    Object.assign(workItem, {
+      assigneeId: null,
+      assigneeName: null,
+      caseId: caseId,
+      caseIsInProgress: caseEntity.inProgress,
+      caseStatus: caseToUpdate.status,
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+      document: {
+        ...documentEntity.toRawObject(),
+        createdAt: documentEntity.createdAt,
+      },
+      inProgress: isSavingForLater,
+      section: DOCKET_SECTION,
+      sentBy: user.userId,
+    });
+
+    workItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemForDocketEntryInProgress({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
       });
