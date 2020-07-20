@@ -66,6 +66,7 @@ exports.saveSignedDocumentInteractor = async ({
         ...originalDocumentEntity,
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
+        documentIdBeforeSignature: originalDocumentId,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
