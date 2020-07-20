@@ -100,6 +100,34 @@ describe('Document entity', () => {
     });
   });
 
+  describe('signedAt', () => {
+    it('should implicitly set a signedAt for Notice event codes', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'NOT',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.signedAt).toBeTruthy();
+    });
+
+    it('should NOT implicitly set a signedAt for non Notice event codes', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'O',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.signedAt).toEqual(null);
+    });
+  });
+
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new Document({}, {})).toThrow();
