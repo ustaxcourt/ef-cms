@@ -5,7 +5,7 @@ const {
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
-  COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
@@ -13,10 +13,6 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
 const { ROLES } = require('../entities/EntityConstants');
-
-const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-  courtIssuedDoc => courtIssuedDoc.documentType,
-);
 
 const getServedPartiesCode = servedParties => {
   let servedPartiesCode = '';
@@ -67,7 +63,7 @@ const formatDocument = (applicationContext, document) => {
     result.documentType === 'Petition' || result.eventCode === 'P';
 
   result.isCourtIssuedDocument =
-    !!courtIssuedDocumentTypes.includes(result.documentType) ||
+    !!COURT_ISSUED_DOCUMENT_TYPES.includes(result.documentType) ||
     result.documentType === 'Stipulated Decision';
 
   const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
