@@ -141,7 +141,7 @@ export const DocumentViewerDocument = connect(
                 title={documentViewerHelper.description}
               />
             )}
-            {showModal == 'ConfirmInitiateServiceModal' && (
+            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
                 documentTitle={viewerDocumentToDisplay.documentTitle}
