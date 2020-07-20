@@ -122,11 +122,10 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
 
     await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: true,
     });
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added. Continue adding docket entries below.',
+      'Your entry has been added to docket record.',
     );
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
