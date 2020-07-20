@@ -269,6 +269,7 @@
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|89c781f6-71ba-4ead-93d8-c681c2183a73",
     "numberOfPages": 1,
+    "isFileAttached": true,
     "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
     "pk": "case|fa1179bd-04f5-4934-a716-964d8d7babc6"
   },
@@ -284,6 +285,7 @@
     "processingStatus": "complete",
     "filedBy": "Test Petitioner",
     "numberOfPages": 1,
+    "isFileAttached": true,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
