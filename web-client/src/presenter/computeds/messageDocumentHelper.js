@@ -3,14 +3,11 @@ import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
   const {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_DOCUMENT_TYPES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
-  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
-  );
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -80,7 +77,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     draftDocuments,
   });
 
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     caseDocument.documentType,
   );
 

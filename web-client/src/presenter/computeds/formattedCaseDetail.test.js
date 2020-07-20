@@ -1958,6 +1958,34 @@ describe('formattedCaseDetail', () => {
         },
         output: false,
       },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: true,
+          userHasNoAccessToDocument: false,
+        },
+        output: true,
+      },
+      {
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: false,
+          isExternalUser: true,
+          isInitialDocument: true,
+          isServed: false,
+          isStricken: false,
+          isUnservable: false,
+          userHasAccessToCase: false,
+          userHasNoAccessToDocument: false,
+        },
+        output: false,
+      },
     ];
 
     tests.forEach(({ inputs, output }) => {

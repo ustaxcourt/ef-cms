@@ -222,6 +222,7 @@ export const MessageDetail = connect(
                           'usa-button--unstyled attachment-viewer-button',
                           viewerDocumentToDisplay === attachment && 'active',
                         )}
+                        isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({

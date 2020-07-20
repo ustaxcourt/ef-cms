@@ -39,6 +39,7 @@ export const DocumentViewer = connect(
                         'usa-button--unstyled attachment-viewer-button',
                         viewDocumentId === entry.documentId && 'active',
                       )}
+                      isActive={viewDocumentId === entry.documentId}
                       key={idx}
                       onClick={() => {
                         setViewerDocumentToDisplaySequence({
@@ -46,7 +47,7 @@ export const DocumentViewer = connect(
                         });
                       }}
                     >
-                      <div className="grid-row">
+                      <div className="grid-row margin-left-205">
                         <div className="grid-col-1">{entry.index}</div>
                         <div className="grid-col-3">
                           {entry.createdAtFormatted}

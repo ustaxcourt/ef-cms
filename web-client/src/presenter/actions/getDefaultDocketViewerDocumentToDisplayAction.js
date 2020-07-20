@@ -6,17 +6,18 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get method
- * @param {object} providers.props the cerebral props object
  * @returns {object} object containing viewerDocumentToDisplay
  */
 export const getDefaultDocketViewerDocumentToDisplayAction = ({
   applicationContext,
   get,
-  props,
 }) => {
-  const { documentId } = props;
+  const documentId = get(state.documentId);
+  let viewerDocumentToDisplay = null;
 
-  let viewerDocumentToDisplay = get(state.viewerDocumentToDisplay) || null;
+  if (!documentId) {
+    viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
+  }
 
   if (viewerDocumentToDisplay) return { viewerDocumentToDisplay };
 
