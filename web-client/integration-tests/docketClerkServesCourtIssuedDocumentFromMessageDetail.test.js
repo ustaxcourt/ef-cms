@@ -1,9 +1,6 @@
 import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
-import { docketClerkCancelsAddDocketEntryFromOrder } from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkCreatesCaseMessageFromOrder } from './journey/docketClerkCreatesCaseMessageFromOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
