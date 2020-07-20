@@ -115,7 +115,6 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
 
     await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: false,
       isSavingForLater: true,
     });
 
