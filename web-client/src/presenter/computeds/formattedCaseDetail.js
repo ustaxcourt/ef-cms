@@ -18,6 +18,7 @@ export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
+  isInitialDocument,
   isServed,
   isStricken,
   isUnservable,
@@ -35,6 +36,7 @@ export const getShowDocumentViewerLink = ({
       if (!isServed) return false;
     } else {
       if (!userHasAccessToCase) return false;
+      if (isInitialDocument) return true;
       if (!isServed) return false;
     }
   }
@@ -51,6 +53,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -146,7 +149,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
       let showDocumentLinks = false;
 
       if (document) {
-        if (!isExternalUser) {
+        if (isExternalUser) {
+          formattedResult.isInProgress = false;
+          formattedResult.hideIcons = true;
+          formattedResult.qcWorkItemsUntouched = false;
+        } else {
           formattedResult.isInProgress =
             document.isInProgress || !document.servedAt;
 
@@ -185,10 +192,14 @@ export const formattedCaseDetail = (get, applicationContext) => {
           !formattedResult.isUnservable && document.isNotServedDocument;
         formattedResult.showServed = document.isStatusServed;
 
+        const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
+          .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
+          .includes(document.documentType);
         showDocumentLinks = getShowDocumentViewerLink({
           hasDocument: document.isFileAttached,
           isCourtIssuedDocument: document.isCourtIssuedDocument,
           isExternalUser,
+          isInitialDocument,
           isServed: !!document.servedAt,
           isStricken: record.isStricken,
           isUnservable: formattedResult.isUnservable,
