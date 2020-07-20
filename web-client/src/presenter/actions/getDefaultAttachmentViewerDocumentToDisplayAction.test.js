@@ -30,7 +30,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: undefined,
+      viewerDocumentToDisplay: null,
     });
   });
 });
