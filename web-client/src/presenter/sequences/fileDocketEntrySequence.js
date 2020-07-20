@@ -40,9 +40,7 @@ const gotoCaseDetail = [
   navigateToCaseDetailAction,
 ];
 
-const afterEntrySaved = [
-  setCaseAction,
-  closeFileUploadStatusModalAction,
+const caseDetailOrPrintPaperService = [
   chooseNextStepAction,
   {
     isElectronic: gotoCaseDetail,
@@ -53,11 +51,20 @@ const afterEntrySaved = [
           setDocumentIdAction,
           setPdfPreviewUrlAction,
           gotoPrintPaperServiceSequence,
-          completeDocketEntryQCAction,
         ],
         yes: gotoCaseDetail,
       },
     ],
+  },
+];
+
+const afterEntrySaved = [
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  getIsSavingForLaterAction,
+  {
+    no: [completeDocketEntryQCAction, caseDetailOrPrintPaperService],
+    yes: [caseDetailOrPrintPaperService],
   },
 ];
 
