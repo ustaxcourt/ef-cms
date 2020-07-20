@@ -47,7 +47,7 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
         .formatDateString(petitionPaymentWaivedDate, 'MMDDYY')}`;
       break;
     default:
-      petitionPaymentStatusFormatted = 'Not paid';
+      petitionPaymentStatusFormatted = PAYMENT_STATUS.UNPAID;
   }
 
   const preferredTrialCityFormatted = preferredTrialCity

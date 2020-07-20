@@ -5,7 +5,6 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 

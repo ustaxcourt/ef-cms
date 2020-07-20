@@ -31,7 +31,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
     );
 
     expect(test.getState('form.documentType')).toEqual(
-      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
+      draftOrderDocument.documentType,
     );
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {

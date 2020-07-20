@@ -4,11 +4,12 @@ const {
   createStartOfDayISO,
 } = require('../../utilities/DateHandler');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { isEmpty } = require('lodash');
-const joiStrictTimestamp = getTimestampSchema();
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -92,15 +93,17 @@ DocumentSearch.schema = joi
       .description('The docket number to filter the search results by'),
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
-      otherwise: joiStrictTimestamp
-        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
+      otherwise: JoiValidationConstants.ISO_DATE.format(
+        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+      )
         .less(joi.ref('tomorrow'))
         .optional()
         .description(
           'The end date search filter is not required if there is no start date',
         ),
-      then: joiStrictTimestamp
-        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
+      then: JoiValidationConstants.ISO_DATE.format(
+        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+      )
         .min(joi.ref('startDate'))
         .less(joi.ref('tomorrow'))
         .optional()
@@ -122,15 +125,17 @@ DocumentSearch.schema = joi
       .description('The opinion document type to filter the search results by'),
     startDate: joi.alternatives().conditional('endDate', {
       is: joi.exist().not(null),
-      otherwise: joiStrictTimestamp
-        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
+      otherwise: JoiValidationConstants.ISO_DATE.format(
+        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+      )
         .max('now')
         .optional()
         .description(
           'The start date to search by, which cannot be greater than the current date, and is optional when there is no end date provided',
         ),
-      then: joiStrictTimestamp
-        .format(DocumentSearch.VALID_DATE_SEARCH_FORMATS)
+      then: JoiValidationConstants.ISO_DATE.format(
+        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+      )
         .max('now')
         .required()
         .description(

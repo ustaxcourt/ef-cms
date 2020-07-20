@@ -1,5 +1,3 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkEditsPetitionerInformation } from './journey/docketClerkEditsPetitionerInformation';
@@ -7,6 +5,8 @@ import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketC
 import { docketClerkEditsServiceIndicatorForPractitioner } from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import { docketClerkEditsServiceIndicatorForRespondent } from './journey/docketClerkEditsServiceIndicatorForRespondent';
 import { docketClerkServesOrderOnPaperParties } from './journey/docketClerkServesOrderOnPaperParties';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -21,9 +21,12 @@ test.draftOrders = [];
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    global.window.pdfjsObj = {
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
+    };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test);
@@ -31,15 +34,15 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkEditsPetitionerInformation(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkEditsServiceIndicatorForPetitioner(test);
   docketClerkEditsServiceIndicatorForPractitioner(test);
   docketClerkEditsServiceIndicatorForRespondent(test);
@@ -49,6 +52,7 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
+  docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesOrderOnPaperParties(test, 0);
 });

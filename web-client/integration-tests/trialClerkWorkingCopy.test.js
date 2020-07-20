@@ -32,7 +32,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   const createdCaseIds = [];
   const createdDocketNumbers = [];
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsNewTrialSession(test);
@@ -45,7 +45,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     receivedAtMonth: '01',
     receivedAtYear: '2019',
   };
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -54,17 +54,17 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSubmitsCaseToIrs(test);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   markAllCasesAsQCed(test, () => createdCaseIds);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
-  loginAs(test, 'trialclerk');
+  loginAs(test, 'trialclerk@example.com');
   trialClerkViewsTrialSessionWorkingCopy(test);
   trialClerkAddsNotesFromWorkingCopyCaseList(test);
   trialClerkViewsNotesFromCaseDetail(test);

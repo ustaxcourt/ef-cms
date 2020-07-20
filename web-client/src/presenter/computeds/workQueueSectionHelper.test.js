@@ -1,6 +1,12 @@
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+import { workQueueSectionHelper as workQueueSectionHelperComputed } from './workQueueSectionHelper';
 
-import { workQueueSectionHelper } from './workQueueSectionHelper';
+const workQueueSectionHelper = withAppContextDecorator(
+  workQueueSectionHelperComputed,
+  applicationContext,
+);
 
 describe('workQueueSectionHelper', () => {
   it('returns the expected state when set', () => {

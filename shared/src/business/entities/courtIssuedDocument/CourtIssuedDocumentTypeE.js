@@ -6,13 +6,13 @@ const {
   FORMATS,
 } = require('../../utilities/DateHandler');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 const yesterdayMoment = calculateISODate({ howMuch: -1, unit: 'days' });
 const yesterdayFormatted = formatDateString(
@@ -41,7 +41,7 @@ CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeE.schema = {
   attachments: joi.boolean().required(),
-  date: joiStrictTimestamp.min(yesterdayFormatted).required(),
+  date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
 };

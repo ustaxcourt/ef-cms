@@ -1,23 +1,19 @@
 import { state } from 'cerebral';
-import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
+import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
- * sets the state.caseId based on what the search term in the input box was
+ * sets the docket number from the advanced search form in props
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store used for setting the state.caseId
- * @returns {object} the caseId set to the docketNumber provided in the search term
+ * @returns {object} the docketNumber provided in the search form
  */
-export const setDocketNumberFromAdvancedSearchAction = ({ get, store }) => {
+export const setDocketNumberFromAdvancedSearchAction = ({ get }) => {
   const searchTerm = get(
     state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
   );
   const docketNumber = trimDocketNumberSearch(searchTerm);
-  //TODO - refactor this. why are we setting state.caseId to docketNumber?
-  //also see setCaseIdFromSearchAction and navigateToCaseDetailAction
-  store.set(state.caseId, docketNumber);
   return {
-    caseId: docketNumber,
+    docketNumber,
   };
 };

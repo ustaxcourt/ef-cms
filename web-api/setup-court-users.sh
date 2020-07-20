@@ -114,7 +114,7 @@ do
   judgeTitle="${ADDR[9]/$'\r'}"
   createAccount "${fakeEmail}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}" &
 
-  if [[ "$i" == "20" ]]; then
+  if [[ "$i" == "15" ]]; then
     wait
     let i=1
   else

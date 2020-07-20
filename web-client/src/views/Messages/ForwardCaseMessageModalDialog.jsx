@@ -10,9 +10,11 @@ export const ForwardCaseMessageModalDialog = connect(
     constants: state.constants,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
-    updateCreateCaseMessageValueInModalSequence:
-      sequences.updateCreateCaseMessageValueInModalSequence,
-    updateModalValueSequence: sequences.updateModalValueSequence,
+    updateChambersInCreateCaseMessageModalSequence:
+      sequences.updateChambersInCreateCaseMessageModalSequence,
+    updateModalFormValueSequence: sequences.updateModalFormValueSequence,
+    updateSectionInCreateCaseMessageModalSequence:
+      sequences.updateSectionInCreateCaseMessageModalSequence,
     users: state.users,
     validateCreateCaseMessageInModalSequence:
       sequences.validateCreateCaseMessageInModalSequence,
@@ -23,8 +25,9 @@ export const ForwardCaseMessageModalDialog = connect(
     constants,
     form,
     showChambersSelect,
-    updateCreateCaseMessageValueInModalSequence,
-    updateModalValueSequence,
+    updateChambersInCreateCaseMessageModalSequence,
+    updateModalFormValueSequence,
+    updateSectionInCreateCaseMessageModalSequence,
     users,
     validateCreateCaseMessageInModalSequence,
     validationErrors,
@@ -50,8 +53,8 @@ export const ForwardCaseMessageModalDialog = connect(
             className="usa-select"
             id="toSection"
             name="toSection"
-            onChange={async e => {
-              await updateCreateCaseMessageValueInModalSequence({
+            onChange={e => {
+              updateSectionInCreateCaseMessageModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -78,8 +81,8 @@ export const ForwardCaseMessageModalDialog = connect(
               id="chambers"
               name="chambers"
               onChange={e => {
-                updateCreateCaseMessageValueInModalSequence({
-                  key: e.target.name,
+                updateChambersInCreateCaseMessageModalSequence({
+                  key: 'toSection',
                   value: e.target.value,
                 });
                 validateCreateCaseMessageInModalSequence();
@@ -105,7 +108,7 @@ export const ForwardCaseMessageModalDialog = connect(
             id="toUserId"
             name="toUserId"
             onChange={e => {
-              updateCreateCaseMessageValueInModalSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -128,11 +131,11 @@ export const ForwardCaseMessageModalDialog = connect(
           <input
             className="usa-input"
             id="subject"
-            name="form.subject"
+            name="subject"
             type="text"
             value={form.subject || ''}
             onChange={e => {
-              updateModalValueSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
@@ -148,9 +151,9 @@ export const ForwardCaseMessageModalDialog = connect(
           <textarea
             className="usa-textarea"
             id="message"
-            name="form.message"
+            name="message"
             onChange={e => {
-              updateModalValueSequence({
+              updateModalFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });

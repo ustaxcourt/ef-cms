@@ -1,6 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoPrintDocketRecordPreviewAction } from './gotoPrintDocketRecordPreviewAction';
-
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 

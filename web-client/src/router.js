@@ -159,6 +159,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/document-view?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          docketRecordTab: 'documentView',
+          documentId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-petitioner-information',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -210,7 +224,6 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
         );
         return app.getSequence('gotoReviewSavedPetitionSequence')({
-          caseId: docketNumber,
           docketNumber,
           documentId,
         });
@@ -1152,7 +1165,10 @@ const router = {
       const { path, token } = queryStringDecoder();
       if (token) {
         setPageTitle('Mock login');
-        return app.getSequence('submitLoginSequence')({ path, token });
+        return app.getSequence('submitLoginSequence')({
+          path,
+          token: `${token}@example.com`,
+        });
       }
 
       if (process.env.COGNITO) {
