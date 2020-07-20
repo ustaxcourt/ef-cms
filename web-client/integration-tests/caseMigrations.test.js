@@ -88,11 +88,11 @@ const otherFilersCase = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'mayor@flavortown.com',
       name: 'Guy Fieri',
-      otherFilerType: 'Participant',
+      otherFilerType: 'Tax Matters Partner',
       phone: '1234567890',
       postalCode: '05198',
       state: 'AK',
-      title: 'Participant',
+      title: 'Tax Matters Partner',
     },
   ],
   preferredTrialCity: 'Washington, District of Columbia',
@@ -172,6 +172,10 @@ const otherPetitionersCase = {
 };
 
 describe('Case journey', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   it('should migrate cases', async () => {
     jest.setTimeout(3000);
 

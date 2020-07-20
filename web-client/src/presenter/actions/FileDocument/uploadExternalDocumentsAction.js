@@ -24,6 +24,7 @@ export const uploadExternalDocumentsAction = async ({
     ...form,
     caseId,
     docketNumber,
+    isFileAttached: true,
   };
 
   const documentFiles = {
@@ -32,17 +33,20 @@ export const uploadExternalDocumentsAction = async ({
 
   if (form.secondaryDocumentFile) {
     documentFiles.secondary = form.secondaryDocumentFile;
+    documentFiles.isFileAttached = true;
   }
 
   if (form.hasSupportingDocuments) {
     form.supportingDocuments.forEach((item, idx) => {
       documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
+      item.isFileAttached = !!item.supportingDocumentFile;
     });
   }
 
   if (form.hasSecondarySupportingDocuments) {
     form.secondarySupportingDocuments.forEach((item, idx) => {
       documentFiles[`secondarySupporting${idx}`] = item.supportingDocumentFile;
+      item.isFileAttached = !!item.supportingDocumentFile;
     });
   }
 

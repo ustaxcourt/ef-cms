@@ -30,37 +30,43 @@ export const DocumentViewer = connect(
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
-              {formattedCaseDetail.docketRecordWithDocument.map(
-                ({ document: recordDocument, index, record }, idx) => {
-                  if (recordDocument) {
-                    return (
-                      <Button
-                        className={classNames(
-                          'usa-button--unstyled attachment-viewer-button',
-                          viewDocumentId === recordDocument.documentId &&
-                            'active',
-                        )}
-                        key={idx}
-                        onClick={() => {
-                          setViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: recordDocument,
-                          });
-                        }}
-                      >
-                        <div className="grid-row">
-                          <div className="grid-col-1">{index}</div>
-                          <div className="grid-col-3">
-                            {record.createdAtFormatted}
-                          </div>
-                          <div className="grid-col-8 no-indent">
-                            {record.description}
-                          </div>
+              {formattedCaseDetail.formattedDocketEntries.map((entry, idx) => {
+                // TODO: should live in a computed
+                if (entry.isFileAttached) {
+                  return (
+                    <Button
+                      className={classNames(
+                        'usa-button--unstyled attachment-viewer-button',
+                        viewDocumentId === entry.documentId && 'active',
+                      )}
+                      isActive={viewDocumentId === entry.documentId}
+                      key={idx}
+                      onClick={() => {
+                        setViewerDocumentToDisplaySequence({
+                          viewerDocumentToDisplay: entry,
+                        });
+                      }}
+                    >
+                      <div className="grid-row margin-left-205">
+                        <div className="grid-col-1">{entry.index}</div>
+                        <div className="grid-col-3">
+                          {entry.createdAtFormatted}
                         </div>
-                      </Button>
-                    );
-                  }
-                },
-              )}
+                        <div className="grid-col-5 no-indent">
+                          {entry.description}
+                        </div>
+                        <div className="grid-col-3">
+                          {entry.showNotServed && (
+                            <span className="text-semibold not-served">
+                              Not served
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Button>
+                  );
+                }
+              })}
             </div>
           </div>
 

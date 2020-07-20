@@ -1,7 +1,14 @@
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
-  const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_DOCUMENT_TYPES,
+    EVENT_CODES_REQUIRING_SIGNATURE,
+    INITIAL_DOCUMENT_TYPES,
+    NOTICE_EVENT_CODES,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -10,18 +17,23 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const { correspondence, documents } = caseDetail;
 
   const caseDocument =
-    viewerDocumentToDisplay &&
-    [...correspondence, ...documents].find(
-      d => d.documentId === viewerDocumentToDisplay.documentId,
-    );
+    (viewerDocumentToDisplay &&
+      [...correspondence, ...documents].find(
+        d => d.documentId === viewerDocumentToDisplay.documentId,
+      )) ||
+    {};
 
-  const isCorrespondence = caseDocument && !caseDocument.entityName; // TODO: Sure this up a little
+  const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
 
-  const documentRequiresSignature =
-    caseDocument &&
-    EVENT_CODES_REQUIRING_SIGNATURE.includes(caseDocument.eventCode);
+  const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
+    caseDocument.eventCode,
+  );
 
   const documentIsSigned = viewerDocumentToDisplay && !!caseDocument.signedAt;
+
+  const { draftDocuments } = applicationContext
+    .getUtilities()
+    .formatCase(applicationContext, caseDetail);
 
   const isDocumentOnDocketRecord =
     viewerDocumentToDisplay &&
@@ -29,6 +41,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
       docketEntry =>
         docketEntry.documentId === viewerDocumentToDisplay.documentId,
     );
+
+  const isNotice =
+    viewerDocumentToDisplay &&
+    NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
+
+  const isPetitionDocument =
+    caseDocument &&
+    caseDocument.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode;
 
   const isInternalUser = applicationContext
     .getUtilities()
@@ -47,13 +67,36 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
   const showEditSignatureButtonForDocument =
-    documentIsSigned && !isDocumentOnDocketRecord;
+    documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
   const showEditButtonForDocument =
     !isDocumentOnDocketRecord && !isCorrespondence;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
+
+  const showNotServed = getShowNotServedForDocument({
+    UNSERVABLE_EVENT_CODES,
+    caseDetail,
+    documentId: caseDocument.documentId,
+    draftDocuments,
+  });
+
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
+    caseDocument.documentType,
+  );
+
+  const showServeCourtIssuedDocumentButton =
+    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+
+  const showServePaperFiledDocumentButton =
+    showNotServed &&
+    !isCourtIssuedDocument &&
+    !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showServePetitionButton =
+    showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
   return {
     showAddDocketEntryButton:
@@ -70,5 +113,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showEditSignatureButton:
       showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
+    showNotServed,
+    showServeCourtIssuedDocumentButton,
+    showServePaperFiledDocumentButton,
+    showServePetitionButton,
   };
 };

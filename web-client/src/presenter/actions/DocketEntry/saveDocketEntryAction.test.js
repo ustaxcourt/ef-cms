@@ -68,8 +68,8 @@ describe('saveDocketEntryAction', () => {
         presenter,
       },
       props: {
+        isSavingForLater: true,
         primaryDocumentFileId: 'document-id-123',
-        shouldGenerateCoversheet: false,
       },
       state: {
         caseDetail,
@@ -110,6 +110,9 @@ describe('saveDocketEntryAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        isSavingForLater: true,
+      },
       state: {
         caseDetail,
         document: '123-456-789-abc',
@@ -149,12 +152,12 @@ describe('saveDocketEntryAction', () => {
       },
       props: {
         isSavingForLater: true,
-        primaryDocumentFileId: 'document-id-123',
-        shouldGenerateCoversheet: false,
       },
       state: {
         caseDetail,
+        documentId: 'document-id-123',
         form: {
+          isFileAttached: true,
           primaryDocumentFile: {},
         },
         isEditingDocketEntry: true,
@@ -245,7 +248,9 @@ describe('saveDocketEntryAction', () => {
         caseDetail,
         document: '123-456-789-abc',
         documentId: 'document-id-123',
-        form: {},
+        form: {
+          isFileAttached: true,
+        },
         isEditingDocketEntry: true,
       },
     });

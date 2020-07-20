@@ -52,6 +52,15 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
+  it('should authorize a petitions serve petition', () => {
+    expect(
+      isAuthorized(
+        { role: ROLES.petitionsClerk, userId: 'petitionsclerk' },
+        ROLE_PERMISSIONS.SERVE_PETITION,
+      ),
+    ).toBeTruthy();
+  });
+
   it('should authorize a docket clerk for work items', () => {
     expect(
       isAuthorized(

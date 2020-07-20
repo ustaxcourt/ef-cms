@@ -222,6 +222,7 @@ export const MessageDetail = connect(
                           'usa-button--unstyled attachment-viewer-button',
                           viewerDocumentToDisplay === attachment && 'active',
                         )}
+                        isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
@@ -229,7 +230,18 @@ export const MessageDetail = connect(
                           });
                         }}
                       >
-                        {attachment.documentTitle}
+                        <div className="grid-row margin-left-205">
+                          <div className="grid-col-8">
+                            {attachment.documentTitle}
+                          </div>
+                          <div className="grid-col-4">
+                            {attachment.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </Button>
                     );
                   })}

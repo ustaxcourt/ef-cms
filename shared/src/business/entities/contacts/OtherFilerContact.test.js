@@ -46,7 +46,8 @@ describe('OtherFilerContact', () => {
 
     expect(contact.getFormattedValidationErrors()).toEqual({
       otherFilerType: 'Select a filer type',
-      title: 'Title must be Intervenor or Participant',
+      title:
+        'Title must be Intervenor, Tax Matters Partner, or Partner Other Than Tax Matters Partner',
     });
   });
 });
