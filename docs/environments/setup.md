@@ -34,11 +34,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
     (cd iam/terraform/account-specific/main && ../bin/deploy-app.sh)
     ```
 
-- Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/) which will be used by CircleCI to deploy code.
-  - In IAM, attach the `circle_ci_policy` created by Terraform to your `CircleCI` user.
+- Add an Access Key to the `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/) which will be used by CircleCI to deploy code.
   - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
-
-- Create a [Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) which matches the configured `EFCMS_DOMAIN` decided above, making sure it is a `Public Hosted Zone` so it’s accessible over the internet. Make sure the domain name ends with a period.
 
 - From the `iam/terraform/environment-specific/main` directory, use Terraform to create the Lambda roles & policies needed to run the backend:
   ```bash
@@ -48,14 +45,9 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   ../bin/deploy-app.sh test
   ../bin/deploy-app.sh prod
   ```
-  - Make a note of the ARNs that are output, to use shortly for the CircleCI setup.
 
 - Configure the Dynamsoft TWAIN library, which is used to enable scanning from EF-CMS:
-
-  - Create a private S3 bucket and put the Dynamsoft Dynamic Web TWAIN ZIP file inside that bucket.
-  - Setup a role & policy for accessing the Dynamsoft ZIP file that is hosted on a private S3 bucket:
-    - The role name must match `dynamsoft_s3_download_role`, and it must be for `EC2`.
-    - The policy must have `s3:GetObject` access to your bucket.
+  - Upload the library `.tar.gz` to a folder called Dynamsoft in the S3 bucket named `${EFCMS_DOMAIN}-software`. Note its ARN for CircleCI setup later.
   - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
 
 ## 4. Configure CircleCI to test and release code to this environment.
