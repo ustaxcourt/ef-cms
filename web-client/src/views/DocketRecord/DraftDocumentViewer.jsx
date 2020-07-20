@@ -40,6 +40,10 @@ export const DraftDocumentViewer = connect(
                         viewerDraftDocumentIdToDisplay ===
                           draftDocument.documentId && 'active',
                       )}
+                      isActive={
+                        viewerDraftDocumentIdToDisplay ===
+                        draftDocument.documentId
+                      }
                       key={index}
                       onClick={() => {
                         setViewerDraftDocumentToDisplaySequence({
