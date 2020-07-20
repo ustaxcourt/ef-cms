@@ -5,6 +5,7 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsCaseDetailAfterServingCourtIssuedDocument } from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
+import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkViewsCaseDetailDocumentView';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -46,6 +47,11 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
+  docketClerkCreatesAnOrder(test, {
+    documentTitle: 'Order to Show Cause',
+    eventCode: 'OSC',
+    expectedDocumentType: 'Order to Show Cause',
+  });
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test, 4);
@@ -66,4 +72,11 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
   docketClerkServesDocument(test, 1);
   docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
+
+  docketClerkViewsDraftOrder(test, 0);
+  docketClerkSignsOrder(test, 0);
+  docketClerkAddsDocketEntryFromOrder(test, 0);
+  docketClerkViewsCaseDetailDocumentView(test, 0);
+  docketClerkServesDocumentFromDocumentDetailView(test, 0);
+  //serve order from documents view
 });
