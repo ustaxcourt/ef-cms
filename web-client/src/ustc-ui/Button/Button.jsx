@@ -11,6 +11,7 @@ export const Button = props => {
     iconColor, // e.g. blue
     iconRight = false,
     iconSize = '1x',
+    isActive = false,
     link,
     marginDirection = 'right',
     overrideMargin = false,
@@ -19,7 +20,11 @@ export const Button = props => {
     ...remainingProps
   } = props;
 
-  const Element = href ? 'a' : 'button';
+  const isLink = Boolean(href);
+  const Element = isLink ? 'a' : 'button';
+  if (isActive && !isLink && remainingProps['aria-pressed'] === undefined) {
+    remainingProps['aria-pressed'] = true;
+  }
 
   const classes = classNames(
     className,
