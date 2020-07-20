@@ -1,6 +1,11 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { refreshElasticsearchIndex, viewCaseDetail } from '../helpers';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 export const docketClerkViewsCaseDetailDocumentView = (
   test,
@@ -17,7 +22,7 @@ export const docketClerkViewsCaseDetailDocumentView = (
       docketNumber: caseDetail.docketNumber,
       test,
     });
-    const formatted = runCompute(formattedCaseDetailComputed, {
+    const formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
 
