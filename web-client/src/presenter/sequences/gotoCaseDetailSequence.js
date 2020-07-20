@@ -18,6 +18,7 @@ import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -27,6 +28,7 @@ import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
+  setDocumentIdAction,
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getCaseMessagesForCaseAction,
@@ -40,6 +42,7 @@ const gotoCaseDetailExternal = [
 ];
 
 const gotoCaseDetailInternalWithNotes = [
+  setDocumentIdAction,
   getJudgesCaseNoteForCaseAction,
   setJudgesCaseNoteOnCaseDetailAction,
   gotoCaseDetailInternal,
