@@ -269,6 +269,7 @@
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "sk": "document|3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "partySecondary": false,
+    "isFileAttached": true,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "numberOfPages": 1,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
@@ -334,6 +335,7 @@
     "caseId": "c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "sk": "document|d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "partySecondary": false,
+    "isFileAttached": true,
     "documentId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "numberOfPages": 1,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3"
