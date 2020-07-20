@@ -3,12 +3,9 @@ import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
   const {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
-  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
-  );
   const caseDetail = get(state.caseDetail);
 
   const formattedCaseDetail = applicationContext
@@ -47,7 +44,7 @@ export const documentViewerHelper = (get, applicationContext) => {
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     formattedDocumentToDisplay.document.documentType,
   );
   const showServeCourtIssuedDocumentButton =
