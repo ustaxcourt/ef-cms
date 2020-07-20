@@ -47,7 +47,7 @@ export const DraftDocumentViewer = connect(
                         });
                       }}
                     >
-                      <div className="grid-row">
+                      <div className="grid-row margin-left-205">
                         <div className="grid-col-3">
                           {draftDocument.createdAtFormatted}
                         </div>
