@@ -42,5 +42,8 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
     queuePrefs.workQueueIsInternal ? 'messages' : 'documentqc'
   }${queuePrefs.queue}${queuePrefs.box}`;
 
+  if (typeof path[workQueuePath] !== 'function') {
+    throw new Error(`Work queue path "${workQueuePath}" not found`);
+  }
   return path[workQueuePath]();
 };
