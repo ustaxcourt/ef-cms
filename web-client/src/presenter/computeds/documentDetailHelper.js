@@ -44,7 +44,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     courtIssuedDoc => courtIssuedDoc.documentType,
   );
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
-  const MISCELLANEOUS_DOCUMENT_TYPE = 'MISC - Miscellaneous';
+  const MISCELLANEOUS_DOCUMENT_TYPE = 'Miscellaneous';
 
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);

@@ -1,8 +1,10 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
+const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 export const practitionerCreatesNewCase = (test, fakeFile) => {
   return it('Practitioner creates a new case', async () => {
@@ -52,7 +54,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.country',
@@ -60,8 +62,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
-      value:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      value: 'Daenerys Stormborn',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -84,16 +85,15 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
       address1: '123 Abc Ln',
       city: 'Cityville',
       country: 'Switzerland',
-      countryType: 'international',
-      name:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
+      name: 'Daenerys Stormborn',
       phone: '1234567890',
       postalCode: '23-skidoo',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactSecondary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactSecondary.country',
@@ -124,7 +124,7 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
       address1: '123 Abc Ln',
       city: 'Cityville',
       country: 'Switzerland',
-      countryType: 'international',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
       name: 'Test Spouse',
       phone: '1234567890',
       postalCode: '23-skidoo',

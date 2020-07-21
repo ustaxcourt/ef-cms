@@ -44,8 +44,7 @@ export const docketClerkServesOrderWithPaperService = (
     expect(helper.showPaperAlert).toEqual(true);
     expect(helper.contactsNeedingPaperService).toEqual([
       {
-        name:
-          'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Petitioner',
+        name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
     await test.runSequence('serveCourtIssuedDocumentSequence');

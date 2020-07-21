@@ -22,7 +22,7 @@ EOF
 
 resource "aws_iam_role_policy" "header_security_lambda_policy" {
   name = "header_security_lambda_policy_${var.environment}"
-  role = "${aws_iam_role.header_security_lambda_role.id}"
+  role = aws_iam_role.header_security_lambda_role.id
 
   policy = <<EOF
 {

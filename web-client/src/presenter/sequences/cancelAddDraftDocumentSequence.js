@@ -8,7 +8,7 @@ export const cancelAddDraftDocumentSequence = [
   clearModalAction,
   followRedirectAction,
   {
-    default: [...navigateToCaseDetailSequence],
+    default: [navigateToCaseDetailSequence],
     success: [],
   },
 ];

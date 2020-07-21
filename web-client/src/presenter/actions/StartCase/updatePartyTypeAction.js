@@ -1,6 +1,5 @@
-import { state } from 'cerebral';
-
 import { showContactsHelper } from '../../computeds/showContactsHelper';
+import { state } from 'cerebral';
 
 /**
  * updates the partyType, filingType, otherType, businessType,
@@ -42,10 +41,10 @@ export const updatePartyTypeAction = async ({
     store.set(state.form.otherType, props.value);
 
     switch (props.value) {
-      case 'Donor':
+      case PARTY_TYPES.donor:
         partyType = PARTY_TYPES.donor;
         break;
-      case 'Transferee':
+      case PARTY_TYPES.transferee:
         partyType = PARTY_TYPES.transferee;
         break;
       case 'Deceased Spouse':

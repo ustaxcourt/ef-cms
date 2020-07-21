@@ -3,31 +3,31 @@ variable "aws_region" {
 }
 
 variable "environment" {
-  type = "string"
+  type = string
 }
 
 variable "dns_domain" {
-  type = "string"
+  type = string
 }
 
 variable "cognito_suffix" {
-  type = "string"
+  type = string
 }
 
 variable "ses_dmarc_rua" {
-  type = "string"
+  type = string
 }
 
 variable "es_instance_count" {
-  type = "string"
+  type = string
   default = "1"
 }
 
 variable "honeybadger_key" {
-  type = "string"
+  type = string
   default = "default_key"
 }
 
 variable "irs_superuser_email" {
-  type = "string"
+  type = string
 }

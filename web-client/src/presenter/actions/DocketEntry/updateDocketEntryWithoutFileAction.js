@@ -43,6 +43,7 @@ export const updateDocketEntryWithoutFileAction = async ({
 
   return {
     caseDetail,
-    caseId: docketNumber,
+    caseId,
+    docketNumber,
   };
 };

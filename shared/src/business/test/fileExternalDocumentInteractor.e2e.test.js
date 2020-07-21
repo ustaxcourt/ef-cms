@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -28,7 +29,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { caseId, docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -39,7 +40,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
@@ -122,7 +123,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const caseAfterDocument = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     expect(caseAfterDocument).toMatchObject({
@@ -134,7 +135,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         address2: 'Ad cumque quidem lau',
         address3: 'Anim est dolor animi',
         city: 'Rerum eaque cupidata',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '+1 (599) 681-5435',
@@ -552,7 +553,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { caseId, docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -563,7 +564,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
@@ -646,7 +647,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const caseAfterDocument = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
     const filedDocument = caseAfterDocument.documents.find(
       d => d.documentType === 'Motion for Leave to File',

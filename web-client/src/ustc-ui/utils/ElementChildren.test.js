@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { forEach, getDefaultAttribute, map } from './ElementChildren';
+import React from 'react';
 
 describe('map', () => {
   it('should map items and not alter non elements', () => {

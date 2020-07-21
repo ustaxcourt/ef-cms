@@ -1,10 +1,8 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
-
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsClerkCompletesAndSetsTrialSession';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
@@ -34,7 +32,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   const createdDocketNumbers = [];
 
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
-    loginAs(test, 'petitioner');
+    loginAs(test, 'petitioner@example.com');
     it(`Create case ${id}`, async () => {
       const caseDetail = await uploadPetition(test, caseOverrides);
       expect(caseDetail.docketNumber).toBeDefined();
@@ -43,14 +41,14 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
       test.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSubmitsCaseToIrs(test);
 
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkSetsCaseReadyForTrial(test);
   };
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
 
@@ -59,7 +57,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     makeCaseReadyForTrial(test, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   markAllCasesAsQCed(test, () => {
     return [createdCaseIds[0], createdCaseIds[1]];
   });

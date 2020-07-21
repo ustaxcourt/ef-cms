@@ -1,10 +1,9 @@
-import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
-
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
 import { docketClerkViewsSectionInboxHighPriority } from './journey/docketClerkViewsSectionInboxHighPriority';
 import { docketClerkViewsSectionInboxNotHighPriority } from './journey/docketClerkViewsSectionInboxNotHighPriority';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
@@ -19,18 +18,18 @@ describe('petitioner files document', () => {
     test.closeSocket();
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test);
   docketClerkViewsTrialSessionList(test);
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
   it('manually add the case to the session', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -46,10 +45,10 @@ describe('petitioner files document', () => {
     await wait(1000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerFilesDocumentForCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkViewsSectionInboxHighPriority(test);
   docketClerkRemovesCaseFromTrial(test);
   docketClerkViewsSectionInboxNotHighPriority(test);

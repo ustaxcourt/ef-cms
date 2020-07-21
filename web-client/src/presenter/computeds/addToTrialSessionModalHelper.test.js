@@ -1,7 +1,6 @@
+import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
 
 const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,

@@ -16,7 +16,7 @@ describe('petitioner files document', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerCancelsCreateCase(test);
   petitionerChoosesProcedureType(test);
   petitionerChoosesCaseType(test);

@@ -1,4 +1,7 @@
 const React = require('react');
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('./../../../entities/EntityConstants');
 const { mount, shallow } = require('enzyme');
 const { PetitionService } = require('./PetitionService.jsx');
 
@@ -16,7 +19,7 @@ describe('PetitionService', () => {
     name: 'Test Petitioner',
     phone: '1234567890',
     postalCode: '12345',
-    serviceIndicator: 'Electronic',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     state: 'AL',
   };
 
@@ -26,7 +29,7 @@ describe('PetitionService', () => {
     city: 'Somecity',
     name: 'Secondary Petitioner',
     postalCode: '12345',
-    serviceIndicator: 'Paper',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     state: 'AL',
   };
 

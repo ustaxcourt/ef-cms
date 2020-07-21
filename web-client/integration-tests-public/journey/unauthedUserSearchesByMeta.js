@@ -1,10 +1,13 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
+const { COUNTRY_TYPES } = applicationContext.getConstants();
+
 export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
   return it('Search for cases by meta data', async () => {
     const queryParams = {
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
-      petitionerName:
-        'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons',
+      petitionerName: 'Daenerys Stormborn',
       ...overrides,
     };
 
@@ -20,7 +23,7 @@ export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
     });
     expect(test.getState('searchResults')).toBeUndefined();
     expect(test.getState('advancedSearchForm')).toEqual({
-      caseSearchByName: { countryType: 'domestic' },
+      caseSearchByName: { countryType: COUNTRY_TYPES.DOMESTIC },
       currentPage: 1,
     });
   });

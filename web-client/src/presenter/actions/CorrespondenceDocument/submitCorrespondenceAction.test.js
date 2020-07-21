@@ -53,7 +53,8 @@ describe('submitCorrespondenceAction', () => {
         caseId: 'case-id-123',
         correspondence: [],
       },
-      caseId: '101-20',
+      caseId: 'case-id-123',
+      docketNumber: '101-20',
       documentId: 'correspondence-document-id-123',
     });
   });
@@ -90,7 +91,8 @@ describe('submitCorrespondenceAction', () => {
         caseId: 'case-id-123',
         correspondence: [],
       },
-      caseId: '101-20',
+      caseId: 'case-id-123',
+      docketNumber: '101-20',
       documentId: 'correspondence-document-id-123',
     });
   });

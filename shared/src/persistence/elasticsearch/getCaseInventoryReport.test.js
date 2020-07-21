@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../business/entities/EntityConstants');
 const { getCaseInventoryReport } = require('./getCaseInventoryReport');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -12,13 +15,13 @@ describe('getCaseInventoryReport', () => {
   const mockDataOne = {
     associatedJudge: 'Chief Judge',
     caseId: '1',
-    status: 'New',
+    status: CASE_STATUS_TYPES.new,
   };
 
   const mockDataTwo = {
     associatedJudge: 'Chief Judge',
     caseId: '2',
-    status: 'Closed',
+    status: CASE_STATUS_TYPES.closed,
   };
 
   beforeEach(() => {
@@ -68,8 +71,16 @@ describe('getCaseInventoryReport', () => {
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+        {
+          associatedJudge: 'Chief Judge',
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
+        {
+          associatedJudge: 'Chief Judge',
+          caseId: '2',
+          status: CASE_STATUS_TYPES.closed,
+        },
       ],
       totalCount: '2',
     });
@@ -142,14 +153,22 @@ describe('getCaseInventoryReport', () => {
         match_phrase: { 'associatedJudge.S': 'Chief Judge' },
       },
       {
-        match_phrase: { 'status.S': 'New' },
+        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+        {
+          associatedJudge: 'Chief Judge',
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
+        {
+          associatedJudge: 'Chief Judge',
+          caseId: '2',
+          status: CASE_STATUS_TYPES.closed,
+        },
       ],
       totalCount: '2',
     });
@@ -161,7 +180,7 @@ describe('getCaseInventoryReport', () => {
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
@@ -176,7 +195,7 @@ describe('getCaseInventoryReport', () => {
       applicationContext,
       associatedJudge: 'Chief Judge',
       pageSize: 3,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(3);
@@ -189,7 +208,7 @@ describe('getCaseInventoryReport', () => {
       applicationContext,
       associatedJudge: 'Chief Judge',
       pageSize: 11,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
@@ -203,7 +222,7 @@ describe('getCaseInventoryReport', () => {
     await getCaseInventoryReport({
       applicationContext,
       associatedJudge: 'Chief Judge',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.from).toEqual(0);
@@ -216,7 +235,7 @@ describe('getCaseInventoryReport', () => {
       applicationContext,
       associatedJudge: 'Chief Judge',
       from: 11,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.from).toEqual(11);

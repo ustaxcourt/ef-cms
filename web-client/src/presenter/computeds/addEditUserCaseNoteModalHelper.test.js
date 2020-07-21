@@ -1,8 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { addEditUserCaseNoteModalHelper as addEditUserCaseNoteModalHelperComputed } from './addEditUserCaseNoteModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-import { addEditUserCaseNoteModalHelper as addEditUserCaseNoteModalHelperComputed } from './addEditUserCaseNoteModalHelper';
 
 let currentUser;
 

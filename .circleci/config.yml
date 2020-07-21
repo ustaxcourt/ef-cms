@@ -1,7 +1,6 @@
 version: 2.1
 jobs:
-  bundle:
-    resource_class: large
+  build-api:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
@@ -22,25 +21,10 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm ci && npm rebuild node-sass
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project
-
-  build-api:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    steps:
-      - attach_workspace:
-          at: ~/
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Lint
-          command: |
-            npm run lint
+          command: npm run lint
       - run:
           name: Shellcheck
           command: |
@@ -72,8 +56,21 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -101,8 +98,21 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit
@@ -125,23 +135,37 @@ jobs:
     resource_class: xlarge
     parallelism: 5
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
       - run:
           name: Web Client - Integration Test
           command: |
-            SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 SKIP_CACHE_INVALIDATION=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:4000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+            CI=true NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000 npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
           root: ~/
           paths:
+            - project/web-client
             - project/web-client/coverage-integration-*
 
   build-client-coverage:
@@ -196,8 +220,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -231,8 +268,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -270,8 +320,21 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
     steps:
-      - attach_workspace:
-          at: ~/
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: npm set progress=false && npm ci && npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -332,10 +395,10 @@ jobs:
       #     command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./switch-environment-color.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
-          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0 && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0"
+          command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
       - run:
           name: 'Deploy - Public Web Client - S3'
-          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --cache-control max-age=0"
+          command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist-public.sh $ENV && aws s3 sync dist-public s3://ui-public-${ENV}.${EFCMS_DOMAIN} --delete && aws s3 cp s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0 && aws s3 sync dist-public s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 cp s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html s3://failover-ui-public-${ENV}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0"
       - run:
           name: 'Deploy - Web API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
@@ -401,6 +464,18 @@ jobs:
             else
               echo "skipping…"
             fi
+      - run:
+          name: 'Deploy - Authorizer Smoke Tests'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
+      - run:
+          name: 'Deploy - Verify Private S3 Buckets'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
+      - run:
+          name: 'Deploy - Verify Private Elasticsearch'
+          command: |
+            docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
 
@@ -408,28 +483,13 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - bundle
-      - build-shared:
-          requires:
-            - bundle
-      - build-api:
-          requires:
-            - bundle
-      - build-client-unit:
-          requires:
-            - bundle
-      - build-client-integration:
-          requires:
-            - bundle
-      - e2e-pa11y:
-          requires:
-            - bundle
-      - e2e-cypress:
-          requires:
-            - bundle
-      - e2e-cypress-public:
-          requires:
-            - bundle
+      - build-shared
+      - build-api
+      - build-client-unit
+      - build-client-integration
+      - e2e-pa11y
+      - e2e-cypress
+      - e2e-cypress-public
       - build-client-coverage:
           requires:
             - build-shared
@@ -451,56 +511,37 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - bundle:
-          filters:
-            branches:
-              ignore:
-                - develop
       - build-shared:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-api:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-unit:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - build-client-integration:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-pa11y:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-cypress:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:
                 - develop
       - e2e-cypress-public:
-          requires:
-            - bundle
           filters:
             branches:
               ignore:

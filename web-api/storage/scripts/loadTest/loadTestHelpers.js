@@ -1,6 +1,8 @@
 const faker = require('faker');
 const {
+  COUNTRY_TYPES,
   FILING_TYPES,
+  PARTY_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   TRIAL_CITY_STRINGS,
@@ -121,7 +123,7 @@ const createCase = async ({
           address2: faker.address.secondaryAddress(),
           address3: faker.address.streetSuffix(),
           city: faker.address.city(),
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: faker.internet.email(),
           name: petitionerName,
           phone: faker.phone.phoneNumber(),
@@ -130,7 +132,7 @@ const createCase = async ({
         },
         filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
         procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },

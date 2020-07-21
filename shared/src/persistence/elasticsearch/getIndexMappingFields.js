@@ -1,3 +1,4 @@
+const { get } = require('lodash');
 /**
  * @param {object} arguments deconstructed arguments
  * @param {object} arguments.applicationContext the application context
@@ -11,8 +12,7 @@ exports.getIndexMappingFields = async ({ applicationContext, index }) => {
     const indexMapping = await searchClient.indices.getMapping({
       index,
     });
-
-    return indexMapping.efcms.mappings.properties;
+    return get(indexMapping, `${index}.mappings.properties`);
   } catch (e) {
     await applicationContext.notifyHoneybadger(e, { index });
   }

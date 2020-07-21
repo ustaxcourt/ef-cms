@@ -65,7 +65,7 @@ exports.associatePrivatePractitionerToCase = async ({
       caseEntity.contactPrimary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
-    if (representingSecondary) {
+    if (caseEntity.contactSecondary && representingSecondary) {
       caseEntity.contactSecondary.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }

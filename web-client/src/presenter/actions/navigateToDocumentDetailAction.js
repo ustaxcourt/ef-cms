@@ -7,9 +7,9 @@
  * @returns {Promise} async action
  */
 export const navigateToDocumentDetailAction = async ({ props, router }) => {
-  if (props.caseId && props.documentId) {
+  if (props.docketNumber && props.documentId) {
     await router.route(
-      `/case-detail/${props.caseId}/documents/${props.documentId}`,
+      `/case-detail/${props.docketNumber}/documents/${props.documentId}`,
     );
   }
 };

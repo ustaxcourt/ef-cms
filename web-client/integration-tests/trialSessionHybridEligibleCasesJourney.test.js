@@ -27,7 +27,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   const createdCaseIds = [];
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
     docketClerkViewsNewTrialSession(test);
@@ -43,7 +43,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -51,10 +51,10 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
@@ -67,7 +67,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -75,10 +75,10 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
@@ -91,7 +91,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -99,16 +99,16 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
   });
 
   describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -130,7 +130,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
       createdCaseIds[0],
       createdCaseIds[1],
@@ -139,12 +139,12 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSetsATrialSessionsSchedule(test);
   });
 
   describe(`Result: Case #1 and #2 are assigned to '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #1 and #2 are assigned to '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {

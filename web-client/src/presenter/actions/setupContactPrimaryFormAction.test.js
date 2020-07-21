@@ -1,7 +1,14 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runAction } from 'cerebral/test';
 import { setupContactPrimaryFormAction } from './setupContactPrimaryFormAction';
 
 describe('setupContactPrimaryFormAction', () => {
+  let PARTY_TYPES;
+
+  beforeAll(() => {
+    ({ PARTY_TYPES } = applicationContext.getConstants());
+  });
+
   it('should set contactPrimary, caseId, and partyType from props.caseDetail on form', async () => {
     const result = await runAction(setupContactPrimaryFormAction, {
       props: {
@@ -10,7 +17,7 @@ describe('setupContactPrimaryFormAction', () => {
           contactPrimary: {
             name: 'Rachael Ray',
           },
-          partyType: 'Petitioner',
+          partyType: PARTY_TYPES.petitioner,
         },
       },
       state: {
@@ -23,7 +30,7 @@ describe('setupContactPrimaryFormAction', () => {
       contactPrimary: {
         name: 'Rachael Ray',
       },
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
     });
   });
 });

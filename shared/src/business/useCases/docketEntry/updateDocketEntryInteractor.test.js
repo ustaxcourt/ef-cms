@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   updateDocketEntryInteractor,
 } = require('./updateDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('updateDocketEntryInteractor', () => {
   let mockCurrentUser;
@@ -15,6 +19,7 @@ describe('updateDocketEntryInteractor', () => {
     document: {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentType: 'Answer',
+      eventCode: 'A',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     },
     isQC: true,
@@ -31,7 +36,7 @@ describe('updateDocketEntryInteractor', () => {
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -55,6 +60,7 @@ describe('updateDocketEntryInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b1',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
@@ -63,6 +69,7 @@ describe('updateDocketEntryInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
@@ -71,13 +78,14 @@ describe('updateDocketEntryInteractor', () => {
         docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
       },
     ],
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
@@ -113,6 +121,7 @@ describe('updateDocketEntryInteractor', () => {
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -127,7 +136,7 @@ describe('updateDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
-          eventCode: 'P',
+          eventCode: 'MISP',
           isFileAttached: false,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -155,7 +164,7 @@ describe('updateDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
-          eventCode: 'P',
+          eventCode: 'MISP',
           isFileAttached: true,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -183,7 +192,7 @@ describe('updateDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
-          eventCode: 'P',
+          eventCode: 'MISP',
           isPaper: true,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

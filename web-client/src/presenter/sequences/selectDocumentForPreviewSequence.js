@@ -3,5 +3,5 @@ import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 
 export const selectDocumentForPreviewSequence = [
   selectDocumentForPreviewAction,
-  ...setPdfPreviewUrlSequence,
+  setPdfPreviewUrlSequence,
 ];

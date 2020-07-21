@@ -10,4 +10,5 @@ exports.getPetitionerGuardianContact = ContactFactory.createContactFactory({
   additionalValidation: {
     secondaryName: joi.string().max(500).required(),
   },
+  contactName: 'PetitionerGuardianContact',
 });

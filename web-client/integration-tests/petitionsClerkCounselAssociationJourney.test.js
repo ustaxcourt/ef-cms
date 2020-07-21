@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
@@ -8,19 +8,20 @@ import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsCler
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest();
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Petitions Clerk Counsel Association Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -32,7 +33,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);

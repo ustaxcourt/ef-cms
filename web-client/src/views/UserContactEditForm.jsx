@@ -8,6 +8,7 @@ import React from 'react';
 
 export const UserContactEditForm = connect(
   {
+    COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     bind: props.bind,
     changeCountryTypeSequence: props.changeCountryTypeSequence,
     form: state.form,
@@ -21,6 +22,7 @@ export const UserContactEditForm = connect(
   function UserContactEditForm({
     bind,
     changeCountryTypeSequence,
+    COUNTRY_TYPES,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
@@ -38,7 +40,7 @@ export const UserContactEditForm = connect(
           onChange={onChangeSequenceName}
           onChangeCountryType={changeCountryTypeSequence}
         />
-        {form.contact.countryType === 'domestic' ? (
+        {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
           <Address
             bind={bind}
             type={type}

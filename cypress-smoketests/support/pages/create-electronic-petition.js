@@ -41,6 +41,14 @@ exports.goToWizardStep5 = () => {
 
 exports.submitPetition = () => {
   cy.get('button#submit-case').scrollIntoView().click();
+
+  cy.server();
+  cy.route('POST', '**/cases').as('postCase');
+  cy.wait('@postCase');
+  cy.get('@postCase').should(xhr => {
+    expect(xhr.responseBody).to.have.property('docketNumber');
+  });
+  cy.url().should('include', 'file-a-petition/success');
 };
 
 exports.goToDashboard = () => {

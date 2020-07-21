@@ -16,7 +16,7 @@ describe('chambers user skips signing an order', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test);
@@ -24,7 +24,7 @@ describe('chambers user skips signing an order', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'armensChambers');
+  loginAs(test, 'armensChambers@example.com');
   chambersUserViewsCaseDetail(test);
   chambersUserViewsDraftDocuments(test);
   chambersUserAddsOrderToCase(test);

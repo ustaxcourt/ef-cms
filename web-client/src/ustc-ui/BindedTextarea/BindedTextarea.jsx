@@ -4,7 +4,6 @@ import {
   useCerebralStateFactory,
 } from '../utils/useCerebralState';
 import { props, sequences, state } from 'cerebral';
-
 import React, { useState } from 'react';
 import classNames from 'classnames';
 

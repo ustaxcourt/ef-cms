@@ -149,7 +149,7 @@
       "name": "Eve Brewer",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "caseCaption": "Eve Brewer, Petitioner",
@@ -160,7 +160,6 @@
     "orderForRatification": false,
     "initialDocketNumberSuffix": "S",
     "docketNumberSuffix": "S",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "noticeOfTrialDate": "2020-01-21T16:41:39.474Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
@@ -229,7 +228,7 @@
     "section": "irsPractitioner",
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner"
+    "email": "irsPractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -251,7 +250,7 @@
     "representingPrimary": true,
     "pk": "case|c862926c-119f-49d5-8cc3-6e93ab703fa3",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "email": "privatePractitioner1"
+    "email": "privatePractitioner1@example.com"
   },
   {
     "documentType": "Statement of Taxpayer Identification",

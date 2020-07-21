@@ -1,7 +1,7 @@
 const { remove } = require('./requests');
 
 /**
- * getCaseInteractor
+ * archiveDraftDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

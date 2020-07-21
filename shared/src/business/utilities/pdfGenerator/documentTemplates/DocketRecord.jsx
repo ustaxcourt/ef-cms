@@ -1,5 +1,4 @@
 const React = require('react');
-
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
@@ -26,17 +25,10 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({
-  caseTitle,
-  contact,
-  countryTypes,
-  showCaseTitleForPrimary,
-}) => {
-  const name = showCaseTitleForPrimary ? caseTitle : contact.name;
-
+const RenderContact = ({ contact, countryTypes }) => {
   return (
     <div className="party-details">
-      <p>{name}</p>
+      <p>{contact.name}</p>
       <RenderAddress contact={contact} countryTypes={countryTypes} />
     </div>
   );
@@ -136,7 +128,6 @@ export const DocketRecord = ({
             caseTitle={options.caseTitle}
             contact={caseDetail.contactPrimary}
             countryTypes={countryTypes}
-            showCaseTitleForPrimary={caseDetail.showCaseTitleForPrimary}
           />
           {caseDetail.contactSecondary && (
             <RenderContact

@@ -10,7 +10,7 @@ describe('Prioritize a Case', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile, 'Jackson, Mississippi');
   petitionsClerkPrioritizesCase(test);
   petitionsClerkUnprioritizesCase(test);

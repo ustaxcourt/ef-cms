@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'OF - Order for Filing Fee',
+      value: 'Order for Filing Fee',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     expect(updatedOrderDocument).toMatchObject({
       date: '2050-01-01',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
-      documentType: 'OF - Order for Filing Fee',
+      documentType: 'Order for Filing Fee',
       eventCode: 'OF',
     });
 
@@ -109,7 +109,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       date: '2050-01-01',
       day: '1',
       documentTitle: 'Order for Filing Fee on 01-01-2050',
-      documentType: 'OF - Order for Filing Fee',
+      documentType: 'Order for Filing Fee',
       eventCode: 'OF',
       generatedDocumentTitle: 'Order for Filing Fee on 01-01-2050',
       month: '1',

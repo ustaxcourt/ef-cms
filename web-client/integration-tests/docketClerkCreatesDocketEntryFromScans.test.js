@@ -36,12 +36,12 @@ describe('Create Docket Entry From Scans', () => {
     };
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
   docketClerkSavesDocketEntry(test, false);
   docketClerkViewsQCInProgress(test, true);

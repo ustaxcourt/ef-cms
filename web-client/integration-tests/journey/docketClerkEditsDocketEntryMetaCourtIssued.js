@@ -10,7 +10,7 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = test => {
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'OAP - Order for Amended Petition',
+      value: 'Order for Amended Petition',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',

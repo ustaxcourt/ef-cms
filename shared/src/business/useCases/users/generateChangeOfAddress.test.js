@@ -1,6 +1,11 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
 jest.mock('../addCoversheetInteractor', () => ({
@@ -11,8 +16,9 @@ jest.mock('../addCoversheetInteractor', () => ({
 
 describe('generateChangeOfAddress', () => {
   beforeAll(() => {
+    const { COUNTRY_TYPES } = applicationContext.getConstants();
     applicationContext.getCurrentUser.mockReturnValue({
-      role: 'docketclerk',
+      role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
     applicationContext.getPersistenceGateway().getCasesByUser.mockReturnValue([
@@ -26,7 +32,7 @@ describe('generateChangeOfAddress', () => {
               address2: 'Apartment 4',
               address3: 'Under the stairs',
               city: 'Chicago',
-              countryType: 'domestic',
+              countryType: COUNTRY_TYPES.DOMESTIC,
               phone: '+1 (555) 555-5555',
               postalCode: '61234',
               state: 'IL',
@@ -34,9 +40,9 @@ describe('generateChangeOfAddress', () => {
             email: 'privatePractitioner1@example.com',
             name: 'Test Private Practitioner',
             representingPrimary: true,
-            role: 'privatePractitioner',
+            role: ROLES.privatePractitioner,
             section: 'privatePractitioner',
-            serviceIndicator: 'Electronic',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
             userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
           },
         ],
@@ -53,7 +59,7 @@ describe('generateChangeOfAddress', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -65,7 +71,7 @@ describe('generateChangeOfAddress', () => {
           address2: 'Apartment 4',
           address3: 'Under the stairs',
           city: 'Chicago',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           phone: '+1 (555) 555-5555',
           postalCode: '61234',
           state: 'IL',
@@ -73,9 +79,9 @@ describe('generateChangeOfAddress', () => {
         email: 'privatePractitioner1',
         name: 'Test Private Practitioner',
         representingPrimary: true,
-        role: 'privatePractitioner',
+        role: ROLES.privatePractitioner,
         section: 'privatePractitioner',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     });
@@ -103,7 +109,7 @@ describe('generateChangeOfAddress', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
@@ -115,7 +121,7 @@ describe('generateChangeOfAddress', () => {
           address2: 'Apartment 4',
           address3: 'Under the stairs',
           city: 'Chicago',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           phone: '+1 (555) 555-5555',
           postalCode: '61234',
           state: 'IL',
@@ -123,9 +129,9 @@ describe('generateChangeOfAddress', () => {
         email: 'privatePractitioner1',
         name: 'Test Private Practitioner',
         representingPrimary: true,
-        role: 'privatePractitioner',
+        role: ROLES.privatePractitioner,
         section: 'privatePractitioner',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     });

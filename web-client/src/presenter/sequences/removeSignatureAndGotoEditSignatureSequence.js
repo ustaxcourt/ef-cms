@@ -14,7 +14,7 @@ export const removeSignatureAndGotoEditSignatureSequence = showProgressSequenceD
     clearAlertsAction,
     setPropsForRemoveSignatureAction,
     setDocumentToEditAction,
-    ...convertHtml2PdfSequence,
+    convertHtml2PdfSequence,
     clearModalAction,
     clearModalStateAction,
     overwriteOrderFileAction,

@@ -5,6 +5,8 @@ const {
   associatePrivatePractitionerToCase,
 } = require('./associatePrivatePractitionerToCase');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -27,7 +29,7 @@ describe('associatePrivatePractitionerToCase', () => {
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '1234567',
@@ -38,7 +40,7 @@ describe('associatePrivatePractitionerToCase', () => {
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Test Petitioner Secondary',
         phone: '1234567',
         postalCode: '12345',
@@ -61,13 +63,14 @@ describe('associatePrivatePractitionerToCase', () => {
           documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           documentTitle: 'Petition',
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Test Petitioner',
           processingStatus: 'pending',
           userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
         },
       ],
       filingType: 'Myself',
-      partyType: 'Petitioner & spouse',
+      partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     };
