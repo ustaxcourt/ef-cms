@@ -93,7 +93,6 @@ Error: Error applying plan:
 
 When this happens, re-run the deploy.
 
-
 ### aws-xray-sdk version 3.1.0
 
 We have locked aws-xray-sdk to version 2.5.0 because when upgrading to 3.1.0, an error is thrown during the web-api terraform deploy:
