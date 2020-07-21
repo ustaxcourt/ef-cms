@@ -47,8 +47,6 @@ exports.removeSignatureFromDocumentInteractor = async ({
     documentId,
   });
 
-  // update document???
-
   // update case
   const caseToUpdate = caseEntity.validate().toRawObject();
   await applicationContext.getPersistenceGateway().updateCase({
