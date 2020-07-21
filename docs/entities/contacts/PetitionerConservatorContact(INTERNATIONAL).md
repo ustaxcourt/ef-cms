@@ -55,6 +55,18 @@
           name: "max"
           args: 
             limit: 500
+    contactId: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "Unique contact ID only used by the system."
+      rules: 
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     inCareOf: 
       type: "string"
       flags: 
