@@ -335,7 +335,6 @@ describe('Document entity', () => {
       let mockDocumentData = {
         ...A_VALID_DOCUMENT,
         documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-        draftState: null,
         secondaryDate: '2019-03-01T21:40:46.415Z',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -551,7 +550,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
-            draftState: null,
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
             isOrder: true,
@@ -571,7 +569,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
-            draftState: null,
             eventCode: 'A',
             isDraft: false,
             isOrder: true,
@@ -591,7 +588,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
-            draftState: null,
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
             secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -610,7 +606,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Answer',
-            draftState: null,
             eventCode: 'A',
             isDraft: false,
             secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -629,7 +624,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
-            draftState: null,
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
             isOrder: true,
@@ -650,7 +644,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
-            draftState: null,
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -685,7 +678,6 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: 'Order',
-            draftState: null,
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
@@ -1644,9 +1636,6 @@ describe('Document entity', () => {
       const document = new Document(
         {
           ...A_VALID_DOCUMENT,
-          draftState: {
-            documentContents: 'Yee to the haw',
-          },
         },
         { applicationContext },
       );
@@ -1657,7 +1646,6 @@ describe('Document entity', () => {
         },
       ]);
       expect(document.servedAt).toBeDefined();
-      expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
     });
   });
