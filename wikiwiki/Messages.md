@@ -84,7 +84,7 @@
 * Order is added to Drafts documents table
 * Order is attached to Message
 * Order is displayed as attachment on Message Detail screen
-* If signature was added, Edit Signature action is displayed
+* If signature was added, Remove Signature action is displayed
 * If signature was skipped, Apply Signature action is displayed
 
 ## Message Thread
@@ -103,7 +103,7 @@ Users can take any of the  following actions on a Draft Document directly from t
 **Apply Signature (if no signature has been added)**
 * Allows users to add a signature to a document and return to the Message
 
-**Edit Signature  (if the document has been signed)**
+**Remove Signature  (if the document has been signed)**
 * Allows users to add a signature to a document and return to the Message
 
 **View Full PDF**

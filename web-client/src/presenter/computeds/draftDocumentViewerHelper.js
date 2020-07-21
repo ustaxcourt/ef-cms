@@ -56,7 +56,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
-  const showApplyEditSignatureButtonForRole = isInternalUser;
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
@@ -65,7 +65,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     );
 
   const showApplySignatureButtonForDocument = !documentIsSigned;
-  const showEditSignatureButtonForDocument = documentIsSigned && !isNotice;
+  const showRemoveSignatureButtonForDocument = documentIsSigned && !isNotice;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
@@ -76,12 +76,13 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
-      showApplyEditSignatureButtonForRole &&
+      showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned: showEditButtonForRole && !documentIsSigned,
     showEditButtonSigned: showEditButtonForRole && documentIsSigned,
-    showEditSignatureButton:
-      showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
+    showRemoveSignatureButton:
+      showApplyRemoveSignatureButtonForRole &&
+      showRemoveSignatureButtonForDocument,
   };
 };
