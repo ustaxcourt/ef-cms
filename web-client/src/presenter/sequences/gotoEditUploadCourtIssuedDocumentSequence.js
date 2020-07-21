@@ -7,6 +7,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setDocumentToFormAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoEditUploadCourtIssuedDocument = [
@@ -14,6 +15,7 @@ const gotoEditUploadCourtIssuedDocument = [
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
+  setRedirectUrlAction,
   getCaseAction,
   setCaseAction,
   setDocumentIdAction,
