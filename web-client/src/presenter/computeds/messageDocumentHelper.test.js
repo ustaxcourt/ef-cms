@@ -1081,4 +1081,56 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePetitionButton).toEqual(true);
     });
   });
+
+  describe('editUrl', () => {
+    it('should return an editUrl for draft documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Miscellaneous',
+                entityName: 'Document',
+                eventCode: 'MISC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.editUrl).toBeTruthy();
+    });
+
+    it('should return an editUrl as an empty string if the document is not found', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Miscellaneous',
+                entityName: 'Document',
+                eventCode: 'MISC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '234',
+          },
+        },
+      });
+
+      expect(result.editUrl).toEqual('');
+    });
+  });
 });
