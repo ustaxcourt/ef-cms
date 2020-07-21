@@ -135,6 +135,7 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   if (Array.isArray(rawDocument.servedParties)) {
     this.servedParties = rawDocument.servedParties.map(item => {
       return {
+        email: item.email,
         name: item.name,
         role: item.role,
       };
@@ -403,6 +404,7 @@ joiValidationDecorator(
     servedParties: joi
       .array()
       .items({
+        email: JoiValidationConstants.EMAIL.optional(),
         name: joi
           .string()
           .max(100)
@@ -410,7 +412,7 @@ joiValidationDecorator(
           .description('The name of a party from a contact, or "IRS"'),
         role: joi
           .string()
-          .valid(ROLES.irsSuperuser)
+          .valid(...Object.values(ROLES))
           .optional()
           .description('Currently only required for the IRS'),
       })
