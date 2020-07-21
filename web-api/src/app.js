@@ -251,6 +251,9 @@ const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
+  removeSignatureFromDocumentLambda,
+} = require('./documents/removeSignatureFromDocumentLambda');
+const {
   replyToCaseMessageLambda,
 } = require('./messages/replyToCaseMessageLambda');
 const {
@@ -650,6 +653,10 @@ app.post(
 app.post(
   '/clamav/documents/:documentId/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
+);
+app.post(
+  '/case-documents/:caseId/:documentId/remove-signature',
+  lambdaWrapper(removeSignatureFromDocumentLambda),
 );
 
 /**
