@@ -5,11 +5,9 @@ import { state } from 'cerebral';
  * on the next step the user chose
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
  * @returns {object} the alertSuccess object with default strings
  */
-export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
-  const { isAddAnother } = props;
+export const getDocketEntryAlertSuccessAction = ({ get }) => {
   const isUpdatingWithFile = get(state.isUpdatingWithFile);
 
   let message = '';
@@ -18,10 +16,6 @@ export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
     message = 'Entry updated.';
   } else {
     message = 'Your entry has been added to docket record.';
-  }
-
-  if (isAddAnother) {
-    message = 'Entry added. Continue adding docket entries below.';
   }
 
   return {
