@@ -48,11 +48,10 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketRecord = (rawCase.docketRecord || []).map(
     entry => new PublicDocketRecordEntry(entry, { applicationContext }),
   );
-
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
+    .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
-    .filter(document => document.isDraft)
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
