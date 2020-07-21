@@ -27,7 +27,7 @@ export const DraftDocuments = connect(
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
         {showModal === 'ConfirmEditSignatureModal' && (
-          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+          <ConfirmEditSignatureModal confirmSequence="removeSignatureSequence" />
         )}
       </>
     );
