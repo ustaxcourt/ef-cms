@@ -750,6 +750,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeSignatureFromDocumentInteractor,
+} = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
+const {
   replyToCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToCaseMessageInteractor');
 const {
@@ -1523,6 +1526,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removeSignatureFromDocumentInteractor,
         replyToCaseMessageInteractor,
         reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
