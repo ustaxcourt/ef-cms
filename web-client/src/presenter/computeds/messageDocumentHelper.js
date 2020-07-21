@@ -35,13 +35,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .formatCase(applicationContext, caseDetail);
 
-  const isDocumentOnDocketRecord =
-    viewerDocumentToDisplay &&
-    caseDetail.docketRecord.find(
-      docketEntry =>
-        docketEntry.documentId === viewerDocumentToDisplay.documentId,
-    );
-
   const isNotice =
     viewerDocumentToDisplay &&
     NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
@@ -62,14 +55,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForDocument =
     !isCorrespondence &&
-    !isDocumentOnDocketRecord &&
+    caseDocument.isDraft &&
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
-    !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
+    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
   const showEditSignatureButtonForDocument =
-    documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
-  const showEditButtonForDocument =
-    !isDocumentOnDocketRecord && !isCorrespondence;
+    documentIsSigned && caseDocument.isDraft && !isNotice;
+  const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
