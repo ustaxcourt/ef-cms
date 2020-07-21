@@ -302,4 +302,32 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       secondaryDate: '2019-03-01T21:40:46.415Z',
     });
   });
+
+  it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
+    await fileCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      documentMeta: {
+        caseId: caseRecord.caseId,
+        date: '2019-03-01T21:40:46.415Z',
+        documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        documentTitle: 'Transcript of [anything] on [date]',
+        documentType: 'Transcript',
+        eventCode: 'TRAN',
+        freeText: 'Dogs',
+        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
+        isDraft: true,
+      },
+    });
+
+    const lastDocumentIndex =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents.length - 1;
+
+    const newlyFiledDocument = applicationContext.getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.documents[lastDocumentIndex];
+
+    expect(newlyFiledDocument).toMatchObject({
+      isDraft: false,
+    });
+  });
 });
