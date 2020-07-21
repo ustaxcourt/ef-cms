@@ -104,7 +104,6 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
-
   return result;
 };
 
@@ -166,7 +165,8 @@ const formatDocketRecordWithDocument = (
 
       if (
         formattedDocument.isCourtIssuedDocument &&
-        !formattedDocument.servedAt
+        !formattedDocument.servedAt &&
+        !formattedDocument.isUnservable
       ) {
         record.createdAtFormatted = undefined;
       }
