@@ -1018,6 +1018,7 @@ describe('formattedCaseDetail', () => {
             documentId: 'd-1-2-3',
             documentTitle: 'Order to do something',
             documentType: 'Order',
+            isDraft: true,
           },
           {
             archived: false,
@@ -1025,6 +1026,7 @@ describe('formattedCaseDetail', () => {
             documentId: 'd-2-3-4',
             documentTitle: 'Stipulated Decision',
             documentType: 'Stipulated Decision',
+            isDraft: true,
           },
         ],
         hasVerifiedIrsNotice: false,

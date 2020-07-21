@@ -1090,6 +1090,7 @@ describe('messageDocumentHelper', () => {
                 documentType: 'Miscellaneous',
                 entityName: 'Document',
                 eventCode: 'MISC',
+                isDraft: true,
               },
             ],
           },
