@@ -71,6 +71,7 @@ const otherFilersCase = {
     {
       address1: '42 Lamb Sauce Blvd',
       city: 'Nashville',
+      contactId: '46f9ecf7-53d4-43d0-b4ac-8dd340faa219',
       country: 'USA',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'gordon@thelambsauce.com',
@@ -84,6 +85,7 @@ const otherFilersCase = {
     {
       address1: '1337 12th Ave',
       city: 'Flavortown',
+      contactId: '023c3342-4185-4203-8872-9ad792ec0789',
       country: 'USA',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'mayor@flavortown.com',
@@ -134,6 +136,7 @@ const otherPetitionersCase = {
       address2: 'Maxime dolorum quae ',
       address3: 'Ut numquam ducimus ',
       city: 'Placeat sed dolorum',
+      contactId: 'dd0ac156-aa2d-46e7-8b5a-902f1d16f199',
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Keelie Bruce',
       phone: '+1 (785) 771-2329',
@@ -162,6 +165,7 @@ const otherPetitionersCase = {
       email: 'someone@example.com',
       hasEAccess: true,
       name: 'Keelie Bruce',
+      representing: ['dd0ac156-aa2d-46e7-8b5a-902f1d16f199'],
       role: 'privatePractitioner',
       secondaryName: 'Logan Fields',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -234,6 +238,9 @@ describe('Case journey', () => {
     expect(test.getState('caseDetail.privatePractitioners.0.barNumber')).toBe(
       'PT1234',
     );
+    expect(
+      test.getState('caseDetail.privatePractitioners.0.representing.0'),
+    ).toBe('dd0ac156-aa2d-46e7-8b5a-902f1d16f199');
     expect(
       test.getState('caseDetail.privatePractitioners.0.contact.city'),
     ).toBe('Placeat sed dolorum');

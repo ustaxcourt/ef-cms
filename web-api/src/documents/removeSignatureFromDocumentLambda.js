@@ -1,7 +1,7 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * fixme
+ * used for removing signature from a signed document
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
