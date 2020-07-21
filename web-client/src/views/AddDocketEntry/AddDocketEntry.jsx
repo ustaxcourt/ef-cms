@@ -75,7 +75,6 @@ export const AddDocketEntry = connect(
                     onClick={() => {
                       fileDocketEntrySequence({
                         isSavingForLater: true,
-                        shouldGenerateCoversheet: false,
                       });
                     }}
                   >

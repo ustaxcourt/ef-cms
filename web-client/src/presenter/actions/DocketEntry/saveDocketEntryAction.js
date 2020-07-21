@@ -45,7 +45,7 @@ export const saveDocketEntryAction = async ({
     caseId,
     createdAt: documentMetadata.dateReceived,
     docketNumber,
-    isFileAttached: !!isFileAttached || generateCoversheet,
+    isFileAttached: !!isFileAttached,
     isPaper: true,
     isUpdating,
     receivedAt: documentMetadata.dateReceived,
