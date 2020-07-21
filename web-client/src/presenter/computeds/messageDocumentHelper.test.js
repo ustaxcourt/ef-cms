@@ -743,8 +743,8 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
-              eventCode: 'MISC',
-              isDraft: true, // Does not require a signature
+              eventCode: 'MISC', // Does not require a signature
+              isDraft: true,
             },
           ],
         },
@@ -772,8 +772,8 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
-              eventCode: 'O',
-              isDraft: false, // Requires a signature
+              eventCode: 'O', // Requires a signature
+              isDraft: false,
             },
           ],
         },
@@ -807,7 +807,7 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 entityName: 'Document',
                 eventCode: 'O',
-                isDraft: false, // Requires a signature
+                isDraft: false,
               },
             ],
           },
@@ -836,8 +836,7 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 documentType: 'Order',
                 entityName: 'Document',
-                //court issued document type
-                eventCode: 'O',
+                eventCode: 'O', //court issued document type
                 isDraft: false,
               },
             ],
@@ -867,7 +866,6 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 documentType: 'Order',
                 entityName: 'Document',
-                //court issued document type
                 eventCode: 'O',
                 isDraft: false,
               },
@@ -898,7 +896,6 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 documentType: 'Answer',
                 entityName: 'Document',
-                //paper filed document type
                 eventCode: 'A',
                 isDraft: false,
               },
@@ -929,8 +926,7 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 documentType: 'Answer',
                 entityName: 'Document',
-                //paper filed document type
-                eventCode: 'A',
+                eventCode: 'A', // paper filed document
                 isDraft: false,
               },
             ],
@@ -963,16 +959,14 @@ describe('messageDocumentHelper', () => {
                 documentId: '123',
                 documentType: 'Answer',
                 entityName: 'Document',
-                //paper filed document type
-                eventCode: 'A',
+                eventCode: 'A', // paper filed document type
                 isDraft: false,
               },
               {
                 documentId: '456',
                 documentType: 'Order',
                 entityName: 'Document',
-                //court issued document type
-                eventCode: 'O',
+                eventCode: 'O', //court issued document type
                 isDraft: false,
               },
             ],
