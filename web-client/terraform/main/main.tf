@@ -10,6 +10,7 @@ terraform {
 module "environment" {
   source = "../common"
 
+  zone_name              = var.zone_name
   environment            = var.environment
   dns_domain             = var.dns_domain
   cloudfront_default_ttl = var.cloudfront_default_ttl
@@ -27,7 +28,7 @@ provider "aws" {
 }
 
 data "aws_route53_zone" "zone" {
-  name = "${var.dns_domain}."
+  name = "${var.zone_name}."
 }
 
 module "dynamsoft_us_east" {
@@ -38,6 +39,7 @@ module "dynamsoft_us_east" {
   providers = {
     aws = aws.us-east-1
   }
+  zone_name              = var.zone_name
   ami                    = "ami-0a313d6098716f372"
   availability_zones     = ["us-east-1a"]
   is_dynamsoft_enabled   = var.is_dynamsoft_enabled
@@ -54,6 +56,7 @@ module "dynamsoft_us_west" {
   providers = {
     aws = aws.us-west-1
   }
+  zone_name              = var.zone_name
   ami                    = "ami-06397100adf427136"
   availability_zones     = ["us-west-1a"]
   is_dynamsoft_enabled   = var.is_dynamsoft_enabled

@@ -120,7 +120,7 @@ resource "aws_elb" "dynamsoft_elb" {
 }
 
 data "aws_route53_zone" "zone" {
-  name = "${var.dns_domain}."
+  name = "${var.zone_name}."
 }
 
 
