@@ -404,9 +404,6 @@ joiValidationDecorator(
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
-    // isDraft => true when document is created
-    // isDraft => false when docket entry is added for the document
-    // NOTE: isDraft would be always false for non-court issued documents
     signedAt: joi
       .string()
       .when('isDraft', {
@@ -426,9 +423,6 @@ joiValidationDecorator(
         then: JoiValidationConstants.UUID.required(),
       })
       .description('The id of the user who applied the signature.'),
-    // isDraft => true when document is created
-    // isDraft => false when docket entry is added for the document
-    // NOTE: isDraft would be always false for non-court issued documents
     signedJudgeName: joi
       .when('isDraft', {
         is: false,

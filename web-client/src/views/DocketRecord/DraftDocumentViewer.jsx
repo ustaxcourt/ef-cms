@@ -55,7 +55,7 @@ export const DraftDocumentViewer = connect(
                         <div className="grid-col-3">
                           {draftDocument.createdAtFormatted}
                         </div>
-                        <div className="grid-col-9 no-indent">
+                        <div className="grid-col-9">
                           {draftDocument.descriptionDisplay}
                         </div>
                       </div>
