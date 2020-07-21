@@ -263,7 +263,7 @@ describe('messageDocumentHelper', () => {
     expect(result.showAddDocketEntryButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton true and showEditSignatureButton false for an internal user and an unsigned document that is not on the docket record', () => {
+  it('return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -287,10 +287,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(true);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
+  it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -314,11 +314,11 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(true);
+    expect(result.showRemoveSignatureButton).toEqual(true);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showEditSignatureButton false for an external user and an unsigned document that is not on the docket record', () => {
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user and an unsigned document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -342,10 +342,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton false and showApplySignatureButton false for an external user and a signed document that is not on the docket record', () => {
+  it('return showRemoveSignatureButton false and showApplySignatureButton false for an external user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -369,11 +369,11 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showEditSignatureButton false for an unsigned document that is already on the docket record', () => {
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an unsigned document that is already on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -401,10 +401,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
+  it('return showRemoveSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -432,11 +432,11 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('returns showEditSignatureButton false for NOT document type and internal users', () => {
+  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -463,10 +463,10 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('returns showEditSignatureButton false for NTD document type and internal users', () => {
+  it('returns showRemoveSignatureButton false for NTD document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -493,7 +493,7 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
   it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {

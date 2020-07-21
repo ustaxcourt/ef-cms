@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
 import React from 'react';
 
-export const ConfirmEditSignatureModal = connect(
+export const ConfirmRemoveSignatureModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],

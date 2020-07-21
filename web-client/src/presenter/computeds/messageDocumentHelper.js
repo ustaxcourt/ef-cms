@@ -51,7 +51,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
-  const showApplyEditSignatureButtonForRole = isInternalUser;
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
     !isCorrespondence &&
@@ -59,9 +59,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
-  const showEditSignatureButtonForDocument =
-    documentIsSigned && caseDocument.isDraft && !isNotice;
   const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
+  !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+  const showRemoveSignatureButtonForDocument =
+    documentIsSigned && caseDocument.isDraft && !isNotice;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
@@ -94,7 +95,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
-      showApplyEditSignatureButtonForRole &&
+      showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
@@ -103,9 +104,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showEditSignatureButton:
-      showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
     showNotServed,
+    showRemoveSignatureButton:
+      showApplyRemoveSignatureButtonForRole &&
+      showRemoveSignatureButtonForDocument,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
