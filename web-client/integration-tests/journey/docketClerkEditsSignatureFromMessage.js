@@ -24,7 +24,7 @@ export const docketClerkEditsSignatureFromMessage = test => {
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('openConfirmEditSignatureModalSequence', {
+    await test.runSequence('openConfirmRemoveSignatureModalSequence', {
       documentIdToEdit: orderDocument.documentId,
     });
 
