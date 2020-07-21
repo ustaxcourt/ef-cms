@@ -15,6 +15,7 @@ describe('require isFileAttached on documents', () => {
       documentType: 'Order',
       draftState: {},
       eventCode: 'O',
+      isDraft: true,
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
       sk: 'document|1079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
       userId: '5579c990-cc6c-4b99-8fca-8e31f2d9e755',
@@ -25,6 +26,7 @@ describe('require isFileAttached on documents', () => {
       documentType: 'Order',
       draftState: {},
       eventCode: 'O',
+      isDraft: true,
       isFileAttached: false,
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
       sk: 'document|1079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
@@ -36,6 +38,7 @@ describe('require isFileAttached on documents', () => {
       documentType: 'Order',
       draftState: {},
       eventCode: 'O',
+      isDraft: true,
       isFileAttached: true,
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a4',
       sk: 'document|1079c990-cc6c-4b99-8fca-8e31f2d9e7a1',
@@ -73,7 +76,7 @@ describe('require isFileAttached on documents', () => {
 
   it('adds true or false to all records', async () => {
     await up(documentClient, '', forAllRecords);
-    console.log(putStub.mock.calls);
+
     expect(putStub.mock.calls[0][0]['Item'].isFileAttached).toEqual(true);
     expect(putStub.mock.calls[1][0]['Item'].isFileAttached).toEqual(false);
     expect(putStub.mock.calls[2][0]['Item'].isFileAttached).toEqual(true);
