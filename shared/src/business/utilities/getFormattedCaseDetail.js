@@ -226,7 +226,6 @@ const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const formatCaseEntity = new Case(caseDetail, { applicationContext });
   const result = cloneDeep(caseDetail);
 
   result.docketRecordWithDocument = [];
