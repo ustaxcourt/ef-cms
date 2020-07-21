@@ -266,7 +266,7 @@ export const MessageDetail = connect(
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
         {showModal === 'ConfirmEditSignatureModal' && (
-          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+          <ConfirmEditSignatureModal confirmSequence="removeSignatureSequence" />
         )}
       </>
     );
