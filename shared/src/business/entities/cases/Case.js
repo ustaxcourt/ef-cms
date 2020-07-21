@@ -8,13 +8,11 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   MAX_FILE_SIZE_MB,
-  ORDER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -676,8 +674,6 @@ joiValidationDecorator(
   joi.object().keys(Case.VALIDATION_RULES),
   Case.VALIDATION_ERROR_MESSAGES,
 );
-
-const orderDocumentTypes = ORDER_TYPES.map(orderType => orderType.documentType);
 
 /**
  * builds the case caption from case contact name(s) based on party type

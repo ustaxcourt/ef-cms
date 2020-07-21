@@ -1,9 +1,5 @@
-const {
-  isDraftDocument,
-  isPrivateDocument,
-  PublicCase,
-} = require('./PublicCase');
 const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
+const { isPrivateDocument, PublicCase } = require('./PublicCase');
 
 describe('PublicCase', () => {
   describe('validation', () => {
