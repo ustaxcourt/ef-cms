@@ -13,8 +13,8 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence:
-      sequences.openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence:
+      sequences.openConfirmRemoveSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence:
       sequences.openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence:
@@ -32,7 +32,7 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
@@ -108,17 +108,17 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
-              {messageDocumentHelper.showEditSignatureButton && (
+              {messageDocumentHelper.showRemoveSignatureButton && (
                 <Button
                   link
                   icon="pencil-alt"
                   onClick={() =>
-                    openConfirmEditSignatureModalSequence({
+                    openConfirmRemoveSignatureModalSequence({
                       documentIdToEdit: viewerDocumentToDisplay.documentId,
                     })
                   }
                 >
-                  Edit Signature
+                  Remove Signature
                 </Button>
               )}
 
