@@ -38,7 +38,7 @@
     "csv-parse": "^4.10.1",
     "cypress": "^4.9.0",
     "deep-freeze": "0.0.1",
-    "diff-arrays-of-objects": "^1.1.5",
+    "diff-arrays-of-objects": "^1.1.7",
     "dynamodb-admin": "^4.0.0",
     "dynamodb-streams-readable": "^1.0.7",
     "elasticsearch": "^16.6.0",
