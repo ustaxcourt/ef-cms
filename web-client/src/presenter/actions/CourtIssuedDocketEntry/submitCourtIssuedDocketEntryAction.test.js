@@ -6,7 +6,11 @@ import { submitCourtIssuedDocketEntryAction } from './submitCourtIssuedDocketEnt
 describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('Calls the interactor for filing a court-issued docket entry', async () => {
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  } = applicationContext.getConstants();
+
+  it('should call the interactor for filing a court-issued docket entry', async () => {
     await runAction(submitCourtIssuedDocketEntryAction, {
       modules: {
         presenter,
@@ -20,7 +24,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',
           documentTitle: '[Anything]',
-          documentType: 'O - Order',
+          documentType: 'Order',
           eventCode: 'O',
           freeText: 'Testing',
           generatedDocumentTitle: 'Order F',
@@ -32,5 +36,61 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     expect(
       applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor,
     ).toHaveBeenCalled();
+  });
+
+  it('should generate a coversheet for court issued documents that require one', async () => {
+    await runAction(submitCourtIssuedDocketEntryAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          caseId: '123',
+        },
+        documentId: 'abc',
+        form: {
+          attachments: false,
+          date: '2019-01-01T00:00:00.000Z',
+          documentTitle: '[Anything]',
+          documentType: 'Order',
+          eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
+          freeText: 'Testing',
+          generatedDocumentTitle: 'Order F',
+          scenario: 'Type A',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not generate a coversheet for court issued documents that do not require one', async () => {
+    await runAction(submitCourtIssuedDocketEntryAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          caseId: '123',
+        },
+        documentId: 'abc',
+        form: {
+          attachments: false,
+          date: '2019-01-01T00:00:00.000Z',
+          documentTitle: '[Anything]',
+          documentType: 'Order',
+          eventCode: 'O',
+          freeText: 'Testing',
+          generatedDocumentTitle: 'Order F',
+          scenario: 'Type A',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
   });
 });

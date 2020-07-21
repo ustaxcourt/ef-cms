@@ -21,7 +21,7 @@
       "name": "Letti Toretto",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -33,7 +33,6 @@
     "orderForRatification": false,
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -99,6 +98,7 @@
     "processingStatus": "complete",
     "filedBy": "Petr. Letti Toretto",
     "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "isFileAttached": true,
     "sk": "document|3cf1f474-1dcd-47aa-8455-8f9a93d80183",
     "partySecondary": false,
     "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
@@ -162,6 +162,7 @@
     "processingStatus": "complete",
     "filedBy": "Petr. Letti Toretto",
     "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "isFileAttached": true,
     "sk": "document|6d83425c-8ef3-4c66-b776-6c7957c53f4d",
     "partySecondary": false,
     "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",

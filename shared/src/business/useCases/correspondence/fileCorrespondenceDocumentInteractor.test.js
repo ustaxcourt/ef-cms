@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -22,7 +23,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Deficiency',
+    caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
@@ -36,34 +37,22 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     docketNumber: '123-45',
     docketRecord: [
       {
-        description: 'Docket Record 0',
-        docketRecordId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        eventCode: 'O',
-        filingDate: createISODateString(),
-        index: 0,
-      },
-      {
         description: 'Docket Record 1',
         docketRecordId: mockDocumentId,
         documentId: mockDocumentId,
         eventCode: 'OAJ',
         filingDate: createISODateString(),
-        index: 1,
+        index: 0,
       },
     ],
     documents: [
       {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        documentType: 'O - Order',
-        eventCode: 'O',
-        serviceStamp: 'Served',
-        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-      },
-      {
         documentId: mockDocumentId,
-        documentType: 'OAJ - Order that case is assigned',
+        documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: '611dc444-fd8f-43a0-8844-c4d57745c718',
+        signedJudgeName: 'Judy',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
     ],

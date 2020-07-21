@@ -23,20 +23,23 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
+import { documentViewerHelper } from './computeds/documentViewerHelper';
+import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
 import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
 import {
   formattedCaseDetail,
   formattedClosedCases,
@@ -58,10 +61,12 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
+import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
+import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -110,20 +115,23 @@ const helpers = {
   confirmInitiateServiceModalHelper,
   contactEditHelper,
   contactsHelper,
+  correspondenceViewerHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
   docketRecordHelper,
   documentDetailHelper,
   documentSigningHelper,
+  documentViewerHelper,
+  draftDocumentViewerHelper,
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
   externalUserCasesHelper,
-  extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
   fileUploadStatusHelper,
+  filingPartiesFormHelper,
   formattedCaseDetail,
   formattedCaseMessages,
   formattedClosedCases,
@@ -143,10 +151,12 @@ const helpers = {
   messageDocumentHelper,
   messagesHelper,
   orderTypesHelper,
+  paperDocketEntryHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
   practitionerDetailHelper,
   practitionerSearchFormHelper,
+  printPaperServiceHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,

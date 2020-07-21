@@ -30,7 +30,10 @@
 * If Certificate of Service is edited during QC, a new coversheet is generated and Notice of Docket Change is added to the Docket Record
 
 **Filing Party**
-* If edited during QC, Notice of Docket Change is added to the Docket Record
+* If edited during QC (including adding an Other Filing Party), a Notice of Docket Change is added to the Docket Record
+* On click of “Other” checkbox, the “Other Filing Party Name” field displays
+Other Filing Party Name
+
 
 **Track Document**
 * If checked, the document will be added to the Pending Report and remains there until manually removed
@@ -49,4 +52,6 @@
 
 **On Complete and Send Message**
 * Create a Message modal displays
+* QC'd Document Title populates as message Subject line but is editable
+* QC'd document is automatically attached to the message; user can attach up to 4 more documents
 * When message is sent, the user navigates back to My Document QC > Inbox with success message displayed

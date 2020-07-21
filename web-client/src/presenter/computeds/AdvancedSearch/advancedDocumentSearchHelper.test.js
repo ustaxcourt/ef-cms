@@ -1,10 +1,12 @@
 import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
+
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
     advancedDocumentSearchHelperComputed,
@@ -125,7 +127,7 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberSuffix: 'Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
-            documentType: 'O - Order',
+            documentType: 'Order',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
           },
@@ -159,7 +161,7 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberWithSuffix: '101-19Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
-            documentType: 'O - Order',
+            documentType: 'Order',
             eventCode: 'O',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
@@ -167,7 +169,7 @@ describe('advancedDocumentSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '102-19',
-            docketNumberSuffix: 'P',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order for Stuff',
@@ -195,7 +197,7 @@ describe('advancedDocumentSearchHelper', () => {
       {
         caseTitle: 'Test Petitioner',
         docketNumber: '102-19',
-        docketNumberSuffix: 'P',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Order for Stuff',
@@ -226,7 +228,7 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberWithSuffix: '101-19Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'My Opinion',
-            documentType: 'TCOP - T.C. Opinion',
+            documentType: 'T.C. Opinion',
             eventCode: 'TCOP',
             filingDate: '2019-03-01T05:00:00.000Z',
             judge: 'Judge Buch',
@@ -234,7 +236,7 @@ describe('advancedDocumentSearchHelper', () => {
           {
             caseCaption: 'Test Petitioner, Petitioner',
             docketNumber: '102-19',
-            docketNumberSuffix: 'P',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
             docketNumberWithSuffix: '102-19P',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Opinion for Stuff',
@@ -255,7 +257,7 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberWithSuffix: '101-19Z',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'T.C. Opinion',
-        documentType: 'TCOP - T.C. Opinion',
+        documentType: 'T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
         formattedDocumentType: 'T.C. Opinion',
         formattedFiledDate: '03/01/19',
@@ -264,7 +266,7 @@ describe('advancedDocumentSearchHelper', () => {
       {
         caseTitle: 'Test Petitioner',
         docketNumber: '102-19',
-        docketNumberSuffix: 'P',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Summary Opinion',
@@ -293,7 +295,7 @@ describe('advancedDocumentSearchHelper', () => {
             docketNumberSuffix: 'Z',
             documentContents: 'Test Petitioner, Petitioner',
             documentTitle: 'Order',
-            documentType: 'O - Order',
+            documentType: 'Order',
             filingDate: '2019-03-01T05:00:00.000Z',
             isSealed: true,
             judge: 'Judge Buch',

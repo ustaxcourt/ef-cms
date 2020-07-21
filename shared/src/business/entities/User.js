@@ -1,7 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  CHAMBERS_SECTIONS,
   COUNTRY_TYPES,
   ROLES,
+  SECTIONS,
+  STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
 } = require('./EntityConstants');
@@ -90,7 +93,11 @@ const userValidation = {
       }),
       state: joi
         .string()
-        .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+        .valid(
+          ...Object.keys(US_STATES),
+          ...US_STATES_OTHER,
+          STATE_NOT_AVAILABLE,
+        )
         .when('countryType', {
           is: COUNTRY_TYPES.INTERNATIONAL,
           otherwise: joi.required(),
@@ -98,20 +105,14 @@ const userValidation = {
         }),
     })
     .optional(),
-  email: joi.string().max(100).optional(),
+  email: JoiValidationConstants.EMAIL.optional(),
   entityName: joi.string().valid('User').required(),
   section: joi
     .string()
-    // Removed temporarily: Eric will re-add
-    // .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
+    .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
     .optional(),
   token: joi.string().optional(),
-  userId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  userId: JoiValidationConstants.UUID.required(),
   ...baseUserValidation,
 };
 

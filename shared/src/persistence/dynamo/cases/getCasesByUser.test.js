@@ -1,10 +1,12 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
-const { getCasesByUser } = require('./getCasesByUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
-
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
+const { getCasesByUser } = require('./getCasesByUser');
 
 let queryStub = jest.fn().mockReturnValue({
   promise: async () => ({
@@ -31,7 +33,7 @@ describe('getCasesByUser', () => {
           caseId: '123',
           pk: 'case|123',
           sk: 'case|123',
-          status: 'New',
+          status: CASE_STATUS_TYPES.new,
         },
       ])
       .mockReturnValueOnce([
@@ -39,7 +41,7 @@ describe('getCasesByUser', () => {
           caseId: '123',
           pk: 'case|123',
           sk: 'case|123',
-          status: 'New',
+          status: CASE_STATUS_TYPES.new,
         },
       ]);
   });
@@ -60,7 +62,7 @@ describe('getCasesByUser', () => {
         pk: 'case|123',
         privatePractitioners: [],
         sk: 'case|123',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });

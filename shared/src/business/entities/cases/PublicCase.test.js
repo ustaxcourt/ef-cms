@@ -3,6 +3,7 @@ const {
   isPrivateDocument,
   PublicCase,
 } = require('./PublicCase');
+const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -15,7 +16,7 @@ describe('PublicCase', () => {
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '101-20',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketRecord: [{}],
           documents: [{}],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -33,7 +34,7 @@ describe('PublicCase', () => {
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketNumber: '111-12',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           docketRecord: [{ any: 'thing' }],
           documents: [{ any: 'thing' }],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -142,9 +143,9 @@ describe('PublicCase', () => {
         documents: [
           {
             documentId: '123',
-            documentType: 'OAJ - Order that case is assigned',
+            documentType: 'Order that case is assigned',
           },
-          { documentId: '234', documentType: 'O - Order' },
+          { documentId: '234', documentType: 'Order' },
           { documentId: '345', documentType: 'Petition' },
           { documentId: '987', eventCode: 'TRAN' },
         ],
@@ -179,7 +180,7 @@ describe('PublicCase', () => {
           createdAt: undefined,
           documentId: '123',
           documentTitle: undefined,
-          documentType: 'OAJ - Order that case is assigned',
+          documentType: 'Order that case is assigned',
           eventCode: undefined,
           filedBy: undefined,
           isPaper: undefined,
@@ -253,7 +254,7 @@ describe('PublicCase', () => {
     it('should return true for a court-issued order document that is not on the docket record', () => {
       const isPrivate = isDraftDocument(
         {
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [],
       );
@@ -264,7 +265,7 @@ describe('PublicCase', () => {
       const isPrivate = isDraftDocument(
         {
           documentId: '123',
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [{ documentId: '123' }],
       );
@@ -307,7 +308,7 @@ describe('PublicCase', () => {
     it('should return true for a court-issued order document that is not on the docket record', () => {
       const isPrivate = isPrivateDocument(
         {
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [],
       );
@@ -318,7 +319,7 @@ describe('PublicCase', () => {
       const isPrivate = isPrivateDocument(
         {
           documentId: '123',
-          documentType: 'O - Order',
+          documentType: 'Order',
         },
         [{ documentId: '123' }],
       );
@@ -345,7 +346,7 @@ describe('PublicCase', () => {
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',
         docketNumber: '102-20',
-        docketNumberSuffix: 'SL',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         docketNumberWithSuffix: null,
         docketRecord: [{}],
         documents: [{}],

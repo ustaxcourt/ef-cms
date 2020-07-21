@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -8,6 +9,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
   beforeAll(() => {
@@ -27,7 +29,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   const createdCaseIds = [];
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
     docketClerkViewsNewTrialSession(test);
@@ -37,13 +39,13 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
         receivedAtDay: '01',
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -51,23 +53,23 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
         receivedAtDay: '02',
         receivedAtMonth: '01',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -75,23 +77,23 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
     describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 2/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
         receivedAtDay: '01',
         receivedAtMonth: '02',
         receivedAtYear: '2019',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -99,16 +101,16 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
   });
 
   describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -130,7 +132,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
       createdCaseIds[0],
       createdCaseIds[1],
@@ -139,12 +141,12 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSetsATrialSessionsSchedule(test);
   });
 
   describe(`Result: Case #1 and #2 are assigned to '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #1 and #2 are assigned to '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {

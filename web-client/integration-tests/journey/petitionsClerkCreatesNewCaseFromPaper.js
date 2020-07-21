@@ -1,8 +1,5 @@
-import {
-  DEFAULT_PROCEDURE_TYPE,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} from '../../../shared/src/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -10,6 +7,12 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
 );
+const {
+  COUNTRY_TYPES,
+  DEFAULT_PROCEDURE_TYPE,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} = applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   test,
@@ -88,7 +91,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'caseType',
-      value: 'Deficiency',
+      value: CASE_TYPES_MAP.deficiency,
     },
     {
       key: 'partyType',
@@ -96,7 +99,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'contactPrimary.countryType',
-      value: 'international',
+      value: COUNTRY_TYPES.INTERNATIONAL,
     },
     {
       key: 'contactPrimary.country',

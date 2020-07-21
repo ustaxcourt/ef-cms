@@ -4,9 +4,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
@@ -28,7 +33,8 @@ describe('completeDocketEntryQCInteractor', () => {
       document: {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        filedBy: 'Test Petitoner',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       isQC: true,
@@ -42,11 +48,11 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
@@ -71,27 +77,29 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          filedBy: 'Test Petitoner',
+          filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItems: [workItem],
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
           documentType: 'Answer',
-          filedBy: 'Test Petitoner',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItems: [workItem],
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
-          filedBy: 'Test Petitoner',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItems: [workItem],
         },
       ],
       filingType: 'Myself',
-      partyType: 'Petitioner',
+      partyType: PARTY_TYPES.petitioner,
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -162,6 +170,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
+          partyPrimary: true,
         },
       }),
     ).resolves.not.toThrow();
@@ -183,7 +192,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
       phone: '1234567890',
@@ -200,6 +209,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -230,6 +240,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -256,6 +267,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -280,6 +292,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
+        partyPrimary: true,
       },
     });
 
@@ -292,7 +305,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'AK',
@@ -309,6 +322,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -331,7 +345,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
       state: 'AK',
@@ -348,6 +362,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'MISP',
+        partyPrimary: true,
       },
     });
 
@@ -370,7 +385,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Petitioner',
       postalCode: '12345',
@@ -386,6 +401,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
+        partyPrimary: true,
       },
     });
 
@@ -402,5 +418,36 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
+  });
+
+  it('should update only allowed editable fields on a docket entry document', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'My Edited Document',
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        freeText: 'Some text about this document',
+        hasOtherFilingParty: true,
+        isPaper: true,
+        otherFilingParty: 'Bert Brooks',
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.documents[0],
+    ).toMatchObject({
+      documentTitle: 'My Edited Document',
+      documentType: 'Notice of Change of Address',
+      eventCode: 'NCA',
+      freeText: 'Some text about this document',
+      hasOtherFilingParty: true,
+      otherFilingParty: 'Bert Brooks',
+    });
   });
 });

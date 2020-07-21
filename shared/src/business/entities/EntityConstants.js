@@ -1,15 +1,15 @@
-const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
-const documentMapExternal = require('../../tools/externalFilingEvents.json');
-const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy } = require('lodash');
+const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
+const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
+const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
+const { flatten, sortBy, without } = require('lodash');
 
-// a number (100 to 9999) followed by a - and a 2 digit year
+// a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
-const SERVED_PARTIES_CODES = ['R', 'B', 'P'];
+const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
@@ -17,11 +17,22 @@ const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
-const DOCUMENT_PROCESSING_STATUS_OPTIONS = ['pending', 'complete'];
+const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
+  COMPLETE: 'complete',
+  PENDING: 'pending',
+};
 
 const CHIEF_JUDGE = 'Chief Judge';
 
-const DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
+const DOCKET_NUMBER_SUFFIXES = {
+  DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS: 'X',
+  DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION: 'R',
+  LIEN_LEVY: 'L',
+  PASSPORT: 'P',
+  SMALL: 'S',
+  SMALL_LIEN_LEVY: 'SL',
+  WHISTLEBLOWER: 'W',
+};
 
 const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
@@ -38,62 +49,98 @@ const CASE_STATUS_TYPES = {
   submitted: 'Submitted', // Submitted to the judge for decision
 };
 
-const DOCUMENT_RELATIONSHIPS = [
-  'primaryDocument',
-  'primarySupportingDocument',
-  'secondaryDocument',
-  'secondarySupportingDocument',
-  'supportingDocument',
+const DOCUMENT_RELATIONSHIPS = {
+  PRIMARY: 'primaryDocument',
+  PRIMARY_SUPPORTING: 'primarySupportingDocument',
+  SECONDARY: 'secondaryDocument',
+  SECONDARY_SUPPORTING: 'secondarySupportingDocument',
+  SUPPORTING: 'supportingDocument',
+};
+
+// This docket entry type isn't defined anywhere else
+const STIN_DOCKET_ENTRY_TYPE = {
+  documentType: 'Statement of Taxpayer Identification',
+  eventCode: 'STIN',
+};
+
+const pickEventCode = d => d.eventCode;
+
+const UNSERVABLE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.isUnservable,
+).map(pickEventCode);
+
+const ORDER_TYPES = [
+  {
+    documentType: 'Order',
+    eventCode: 'O',
+  },
+  {
+    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+    documentType: 'Order of Dismissal for Lack of Jurisdiction',
+    eventCode: 'ODJ',
+  },
+  {
+    documentTitle: 'Order of Dismissal',
+    documentType: 'Order of Dismissal',
+    eventCode: 'OD',
+  },
+  {
+    documentTitle: 'Order of Dismissal and Decision',
+    documentType: 'Order of Dismissal and Decision',
+    eventCode: 'ODD',
+  },
+  {
+    documentTitle: 'Order to Show Cause',
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  {
+    documentTitle: 'Order and Decision',
+    documentType: 'Order and Decision',
+    eventCode: 'OAD',
+  },
+  {
+    documentTitle: 'Decision',
+    documentType: 'Decision',
+    eventCode: 'DEC',
+  },
+  {
+    documentType: 'Notice',
+    eventCode: 'NOT',
+  },
 ];
 
-const ORDER_DOCUMENT_TYPES = [
-  'O',
-  'OAJ',
-  'OAL',
-  'OAP',
-  'OAPF',
-  'OAR',
-  'OAS',
-  'OASL',
-  'OAW',
-  'OAX',
-  'OCA',
-  'OD',
-  'ODD',
-  'ODL',
-  'ODP',
-  'ODR',
-  'ODS',
-  'ODSL',
-  'ODW',
-  'ODX',
-  'OF',
-  'OFAB',
-  'OFFX',
-  'OFWD',
-  'OFX',
-  'OIP',
-  'OJR',
-  'OODS',
-  'OPFX',
-  'OPX',
-  'ORAP',
-  'OROP',
-  'OSC',
-  'OSCP',
-  'OST',
-  'OSUB',
-  'OAD',
-  'ODJ',
-];
+const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
+  pickEventCode,
+);
 
-const DOCUMENT_NOTICE_EVENT_CODES = ['NOT'];
-const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(documentMapExternal);
-const DOCUMENT_EXTERNAL_CATEGORIES_MAP = documentMapExternal;
-const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
-const DOCUMENT_INTERNAL_CATEGORIES_MAP = documentMapInternal;
-const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
-const OPINION_EVENT_CODES = ['MOP', 'SOP', 'TCOP'];
+const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.isNotice,
+).map(pickEventCode);
+
+const OPINION_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.isOpinion,
+);
+const OPINION_EVENT_CODES = OPINION_DOCUMENT_TYPES.map(pickEventCode);
+
+const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+);
+const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
+  DOCUMENT_INTERNAL_CATEGORIES_MAP,
+);
+const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.requiresCoversheet,
+).map(pickEventCode);
+const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.requiresSignature,
+).map(pickEventCode);
+
+// _without returns a new array with values from arg1 sans values subsequent args
+const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
+  EVENT_CODES_REQUIRING_SIGNATURE,
+  'NTD',
+);
 
 const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -103,30 +150,21 @@ const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ).map(t => t.documentType);
 
-const AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES = [
-  'Notice of Change of Address',
-  'Notice of Change of Telephone Number',
-  'Notice of Change of Address and Telephone Number',
-];
+const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
+  t => t.documentType,
+);
 
-const AUTOGENERATED_INTERNAL_DOCUMENT_TYPES = [
-  'Request for Place of Trial ',
-  'Notice of Change of Address',
-  'Notice of Change of Telephone Number',
-  'Notice of Change of Address and Telephone Number',
-];
+const AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+)
+  .filter(d => d.isAutogenerated)
+  .map(d => d.documentType);
 
-const OPINION_DOCUMENT_TYPES = [
-  {
-    documentType: 'MOP - Memorandum Opinion',
-  },
-  {
-    documentType: 'Summary Opinion',
-  },
-  {
-    documentType: 'TCOP - T.C. Opinion',
-  },
-];
+const AUTOGENERATED_INTERNAL_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+)
+  .filter(d => d.isAutogenerated)
+  .map(d => d.documentType);
 
 const SCENARIOS = [
   'Standard',
@@ -152,12 +190,13 @@ const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
 const OBJECTIONS_OPTIONS = ['No', 'Yes', 'Unknown'];
 
-const CONTACT_CHANGE_DOCUMENT_TYPES = [
-  'Notice of Change of Address',
-  'Notice of Change of Telephone Number',
-  'Notice of Change of Address and Telephone Number',
-];
+const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
+  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+)
+  .filter(d => d.isContactChange)
+  .map(d => d.documentType);
 
+// TODO: ????
 const TRACKED_DOCUMENT_TYPES = {
   application: {
     category: 'Application',
@@ -175,6 +214,7 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
+// TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
     documentType: 'Application for Waiver of Filing Fee',
@@ -193,42 +233,61 @@ const INITIAL_DOCUMENT_TYPES = {
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
   },
-  stin: {
-    documentType: 'Statement of Taxpayer Identification',
-    eventCode: 'STIN',
+  stin: STIN_DOCKET_ENTRY_TYPE,
+};
+
+// These docket entry types aren't defined anywhere else
+const MINUTE_ENTRIES_MAP = {
+  captionOfCaseIsAmended: {
+    description:
+      'Caption of case is amended from [lastCaption] [CASE_CAPTION_POSTFIX] to [caseCaption] [CASE_CAPTION_POSTFIX]',
+    eventCode: 'MINC',
+  },
+  dockedNumberIsAmended: {
+    description:
+      'Docket Number is amended from [lastDocketNumber] to [newDocketNumber]',
+    eventCode: 'MIND',
+  },
+  filingFeePaid: {
+    description: 'Filing Fee Paid',
+    eventCode: 'FEE',
+  },
+  filingFeeWaived: {
+    description: 'Filing Fee Waived',
+    eventCode: 'FEEW',
   },
 };
 
-const NOTICE_OF_DOCKET_CHANGE = {
-  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
-  documentType: 'Notice of Docket Change',
-  eventCode: 'NODC',
-};
-
-const NOTICE_OF_TRIAL = {
-  documentTitle: 'Notice of Trial on [Date] at [Time]',
-  documentType: 'Notice of Trial',
-  eventCode: 'NDT',
-};
-
-const STANDING_PRETRIAL_NOTICE = {
-  documentTitle: 'Standing Pretrial Notice',
-  documentType: 'Standing Pretrial Notice',
-  eventCode: 'SPTN',
-};
-
-const STANDING_PRETRIAL_ORDER = {
-  documentTitle: 'Standing Pretrial Order',
-  documentType: 'Standing Pretrial Order',
-  eventCode: 'SPTO',
-};
-
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
-  noticeOfDocketChange: NOTICE_OF_DOCKET_CHANGE,
-  noticeOfTrial: NOTICE_OF_TRIAL,
-  standingPretrialNotice: STANDING_PRETRIAL_NOTICE,
-  standingPretrialOrder: STANDING_PRETRIAL_ORDER,
+  noticeOfDocketChange: {
+    documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+    documentType: 'Notice of Docket Change',
+    eventCode: 'NODC',
+  },
+  noticeOfTrial: {
+    documentTitle: 'Notice of Trial on [Date] at [Time]',
+    documentType: 'Notice of Trial',
+    eventCode: 'NTD',
+  },
+  standingPretrialNotice: {
+    documentTitle: 'Standing Pretrial Notice',
+    documentType: 'Standing Pretrial Notice',
+    eventCode: 'SPTN',
+  },
+  standingPretrialOrder: {
+    documentTitle: 'Standing Pretrial Order',
+    documentType: 'Standing Pretrial Order',
+    eventCode: 'SPTO',
+  },
 };
+
+const NOTICE_OF_DOCKET_CHANGE =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange;
+const NOTICE_OF_TRIAL = SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial;
+const STANDING_PRETRIAL_NOTICE =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice;
+const STANDING_PRETRIAL_ORDER =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder;
 
 const SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
@@ -240,23 +299,6 @@ const SIGNED_DOCUMENT_TYPES = {
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = [
   'Entry of Appearance',
   'Substitution of Counsel',
-];
-
-const EVENT_CODES = [
-  INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
-  INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-  INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-  INITIAL_DOCUMENT_TYPES.stin.eventCode,
-  NOTICE_OF_DOCKET_CHANGE.eventCode,
-  NOTICE_OF_TRIAL.eventCode,
-  STANDING_PRETRIAL_NOTICE.eventCode,
-  STANDING_PRETRIAL_ORDER.eventCode,
-  'FEE',
-  'FEEW',
-  'MGRTED',
-  'MIND',
-  'MINC',
 ];
 
 const PAYMENT_STATUS = {
@@ -434,6 +476,8 @@ const US_STATES_OTHER = [
   'VI',
 ];
 
+const STATE_NOT_AVAILABLE = 'N/A';
+
 const PARTY_TYPES = {
   conservator: 'Conservator',
   corporation: 'Corporation',
@@ -480,47 +524,6 @@ const OTHER_TYPES = {
   nextFriendForIncompetentPerson: PARTY_TYPES.nextFriendForIncompetentPerson,
   nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
 };
-
-const ORDER_TYPES = [
-  {
-    documentType: 'Order',
-    eventCode: 'O',
-  },
-  {
-    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-    documentType: 'Order of Dismissal for Lack of Jurisdiction',
-    eventCode: 'ODJ',
-  },
-  {
-    documentTitle: 'Order of Dismissal',
-    documentType: 'Order of Dismissal',
-    eventCode: 'OD',
-  },
-  {
-    documentTitle: 'Order of Dismissal and Decision',
-    documentType: 'Order of Dismissal and Decision',
-    eventCode: 'ODD',
-  },
-  {
-    documentTitle: 'Order to Show Cause',
-    documentType: 'Order to Show Cause',
-    eventCode: 'OSC',
-  },
-  {
-    documentTitle: 'Order and Decision',
-    documentType: 'Order and Decision',
-    eventCode: 'OAD',
-  },
-  {
-    documentTitle: 'Decision',
-    documentType: 'Decision',
-    eventCode: 'DEC',
-  },
-  {
-    documentType: 'Notice',
-    eventCode: 'NOT',
-  },
-];
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -642,38 +645,149 @@ const IRS_SYSTEM_SECTION = 'irsSystem';
 const PETITIONS_SECTION = 'petitions';
 const TRIAL_CLERKS_SECTION = 'trialClerks';
 
-const ARMENS_CHAMBERS_SECTION = 'armensChambers';
-const ASHFORDS_CHAMBERS_SECTION = 'ashfordsChambers';
-const BUCHS_CHAMBERS_SECTION = 'buchsChambers';
-const CARLUZZOS_CHAMBERS_SECTION = 'carluzzosChambers';
-const COHENS_CHAMBERS_SECTION = 'cohensChambers';
-const COLVINS_CHAMBERS_SECTION = 'colvinsChambers';
-const COPELANDS_CHAMBERS_SECTION = 'copelandsChambers';
-const FOLEYS_CHAMBERS_SECTION = 'foleysChambers';
-const GALES_CHAMBERS_SECTION = 'galesChambers';
-const GERBERS_CHAMBERS_SECTION = 'gerbersChambers';
-const GOEKES_CHAMBERS_SECTION = 'goekesChambers';
-const GUSTAFSONS_CHAMBERS_SECTION = 'gustafsonsChambers';
-const GUYS_CHAMBERS_SECTION = 'guysChambers';
-const HALPERNS_CHAMBERS_SECTION = 'halpernsChambers';
-const HOLMES_CHAMBERS_SECTION = 'holmesChambers';
-const JACOBS_CHAMBERS_SECTION = 'jacobsChambers';
-const JONES_CHAMBERS_SECTION = 'jonesChambers';
-const KERRIGANS_CHAMBERS_SECTION = 'kerrigansChambers';
-const LAUBERS_CHAMBERS_SECTION = 'laubersChambers';
-const LEYDENS_CHAMBERS_SECTION = 'leydensChambers';
-const MARVELS_CHAMBERS_SECTION = 'marvelsChambers';
-const MORRISONS_CHAMBERS_SECTION = 'morrisonsChambers';
-const NEGAS_CHAMBERS_SECTION = 'negasChambers';
-const PANUTHOS_CHAMBERS_SECTION = 'panuthosChambers';
-const PARIS_CHAMBERS_SECTION = 'parisChambers';
-const PUGHS_CHAMBERS_SECTION = 'pughsChambers';
-const RUWES_CHAMBERS_SECTION = 'ruwesChambers';
-const THORNTONS_CHAMBERS_SECTION = 'thorntonsChambers';
-const TOROS_CHAMBERS_SECTION = 'torosChambers';
-const URDAS_CHAMBERS_SECTION = 'urdasChambers';
-const VASQUEZS_CHAMBERS_SECTION = 'vasquezsChambers';
-const WELLS_CHAMBERS_SECTION = 'wellsChambers';
+const JUDGES_CHAMBERS = {
+  ARMENS_CHAMBERS_SECTION: {
+    label: 'Armen’s Chambers',
+    section: 'armensChambers',
+  },
+  ASHFORDS_CHAMBERS_SECTION: {
+    label: 'Ashford’s Chambers',
+    section: 'ashfordsChambers',
+  },
+  BUCHS_CHAMBERS_SECTION: {
+    label: 'Buch’s Chambers',
+    section: 'buchsChambers',
+  },
+  CARLUZZOS_CHAMBERS_SECTION: {
+    label: 'Carluzzo’s Chambers',
+    section: 'carluzzosChambers',
+  },
+  COHENS_CHAMBERS_SECTION: {
+    label: 'Cohen’s Chambers',
+    section: 'cohensChambers',
+  },
+  COLVINS_CHAMBERS_SECTION: {
+    label: 'Colvin’s Chambers',
+    section: 'colvinsChambers',
+  },
+  COPELANDS_CHAMBERS_SECTION: {
+    label: 'Copeland’s Chambers',
+    section: 'copelandsChambers',
+  },
+  FOLEYS_CHAMBERS_SECTION: {
+    label: 'Foley’s Chambers',
+    section: 'foleysChambers',
+  },
+  GALES_CHAMBERS_SECTION: {
+    label: 'Gale’s Chambers',
+    section: 'galesChambers',
+  },
+  GERBERS_CHAMBERS_SECTION: {
+    label: 'Gerber’s Chambers',
+    section: 'gerbersChambers',
+  },
+  GOEKES_CHAMBERS_SECTION: {
+    label: 'Goeke’s Chambers',
+    section: 'goekesChambers',
+  },
+  GUSTAFSONS_CHAMBERS_SECTION: {
+    label: 'Gustafson’s Chambers',
+    section: 'gustafsonsChambers',
+  },
+  GUYS_CHAMBERS_SECTION: {
+    label: 'Guy’s Chambers',
+    section: 'guysChambers',
+  },
+  HALPERNS_CHAMBERS_SECTION: {
+    label: 'Halpern’s Chambers',
+    section: 'halpernsChambers',
+  },
+  HOLMES_CHAMBERS_SECTION: {
+    label: 'Holmes’ Chambers',
+    section: 'holmesChambers',
+  },
+  JACOBS_CHAMBERS_SECTION: {
+    label: 'Jacobs’ Chambers',
+    section: 'jacobsChambers',
+  },
+  JONES_CHAMBERS_SECTION: {
+    label: 'Jones’ Chambers',
+    section: 'jonesChambers',
+  },
+  KERRIGANS_CHAMBERS_SECTION: {
+    label: 'Kerrigan’s Chambers',
+    section: 'kerrigansChambers',
+  },
+  LAUBERS_CHAMBERS_SECTION: {
+    label: 'Lauber’s Chambers',
+    section: 'laubersChambers',
+  },
+  LEYDENS_CHAMBERS_SECTION: {
+    label: 'Leyden’s Chambers',
+    section: 'leydensChambers',
+  },
+  MARVELS_CHAMBERS_SECTION: {
+    label: 'Marvel’s Chambers',
+    section: 'marvelsChambers',
+  },
+  MORRISONS_CHAMBERS_SECTION: {
+    label: 'Morrison’s Chambers',
+    section: 'morrisonsChambers',
+  },
+  NEGAS_CHAMBERS_SECTION: {
+    label: 'Nega’s Chambers',
+    section: 'negasChambers',
+  },
+  PANUTHOS_CHAMBERS_SECTION: {
+    label: 'Panuthos’ Chambers',
+    section: 'panuthosChambers',
+  },
+  PARIS_CHAMBERS_SECTION: {
+    label: 'Paris’ Chambers',
+    section: 'parisChambers',
+  },
+  PUGHS_CHAMBERS_SECTION: {
+    label: 'Pugh’s Chambers',
+    section: 'pughsChambers',
+  },
+  RUWES_CHAMBERS_SECTION: {
+    label: 'Ruwe’s Chambers',
+    section: 'ruwesChambers',
+  },
+  THORNTONS_CHAMBERS_SECTION: {
+    label: 'Thornton’s Chambers',
+    section: 'thorntonsChambers',
+  },
+  TOROS_CHAMBERS_SECTION: {
+    label: 'Toro’s Chambers',
+    section: 'torosChambers',
+  },
+  URDAS_CHAMBERS_SECTION: {
+    label: 'Urda’s Chambers',
+    section: 'urdasChambers',
+  },
+  VASQUEZS_CHAMBERS_SECTION: {
+    label: 'Vasquez’s Chambers',
+    section: 'vasquezsChambers',
+  },
+  WELLS_CHAMBERS_SECTION: {
+    label: 'Wells’ Chambers',
+    section: 'wellsChambers',
+  },
+};
+
+const chambersSections = [];
+const chambersSectionsLabels = [];
+
+Object.keys(JUDGES_CHAMBERS).forEach(k => {
+  const chambers = JUDGES_CHAMBERS[k];
+
+  chambersSections.push(chambers.section);
+  chambersSectionsLabels[chambers.section] = chambers.label;
+});
+
+const CHAMBERS_SECTIONS = sortBy(chambersSections);
+const CHAMBERS_SECTIONS_LABELS = chambersSectionsLabels;
 
 const SECTIONS = sortBy([
   ADC_SECTION,
@@ -683,42 +797,6 @@ const SECTIONS = sortBy([
   DOCKET_SECTION,
   PETITIONS_SECTION,
   TRIAL_CLERKS_SECTION,
-]);
-
-const CHAMBERS_SECTIONS = sortBy([
-  ARMENS_CHAMBERS_SECTION,
-  ASHFORDS_CHAMBERS_SECTION,
-  BUCHS_CHAMBERS_SECTION,
-  CARLUZZOS_CHAMBERS_SECTION,
-  COHENS_CHAMBERS_SECTION,
-  COLVINS_CHAMBERS_SECTION,
-  COPELANDS_CHAMBERS_SECTION,
-  FOLEYS_CHAMBERS_SECTION,
-  GALES_CHAMBERS_SECTION,
-  GERBERS_CHAMBERS_SECTION,
-  GOEKES_CHAMBERS_SECTION,
-  GUSTAFSONS_CHAMBERS_SECTION,
-  GUYS_CHAMBERS_SECTION,
-  HALPERNS_CHAMBERS_SECTION,
-  HOLMES_CHAMBERS_SECTION,
-  JACOBS_CHAMBERS_SECTION,
-  JONES_CHAMBERS_SECTION,
-  KERRIGANS_CHAMBERS_SECTION,
-  LAUBERS_CHAMBERS_SECTION,
-  LEYDENS_CHAMBERS_SECTION,
-  MARVELS_CHAMBERS_SECTION,
-  MORRISONS_CHAMBERS_SECTION,
-  NEGAS_CHAMBERS_SECTION,
-  PANUTHOS_CHAMBERS_SECTION,
-  PARIS_CHAMBERS_SECTION,
-  PUGHS_CHAMBERS_SECTION,
-  RUWES_CHAMBERS_SECTION,
-  THORNTONS_CHAMBERS_SECTION,
-  URDAS_CHAMBERS_SECTION,
-  TOROS_CHAMBERS_SECTION,
-  VASQUEZS_CHAMBERS_SECTION,
-  TOROS_CHAMBERS_SECTION,
-  WELLS_CHAMBERS_SECTION,
 ]);
 
 const TRIAL_STATUS_TYPES = [
@@ -736,6 +814,12 @@ const SCAN_MODES = {
   DUPLEX: 'duplex',
   FEEDER: 'feeder',
   FLATBED: 'flatbed',
+};
+
+const SCAN_MODE_LABELS = {
+  DUPLEX: 'Double sided',
+  FEEDER: 'Single sided',
+  FLATBED: 'Flatbed',
 };
 
 const EMPLOYER_OPTIONS = ['IRS', 'DOJ', 'Private'];
@@ -760,15 +844,12 @@ const CASE_SEARCH_PAGE_SIZE = 5;
 const ALL_EVENT_CODES = flatten([
   ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
   ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(INITIAL_DOCUMENT_TYPES),
+  ...Object.values(MINUTE_ENTRIES_MAP),
+  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES),
 ])
   .map(item => item.eventCode)
-  .concat(
-    EVENT_CODES,
-    COURT_ISSUED_EVENT_CODES.map(item => item.eventCode),
-    OPINION_EVENT_CODES,
-    ORDER_DOCUMENT_TYPES,
-    ORDER_TYPES.map(item => item.eventCode),
-  )
+  .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
   .sort();
 
 const ALL_DOCUMENT_TYPES = (() => {
@@ -778,7 +859,6 @@ const ALL_DOCUMENT_TYPES = (() => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
-  const courtIssuedDocTypes = COURT_ISSUED_EVENT_CODES.map(t => t.documentType);
   const initialTypes = Object.keys(INITIAL_DOCUMENT_TYPES).map(
     t => INITIAL_DOCUMENT_TYPES[t].documentType,
   );
@@ -794,16 +874,21 @@ const ALL_DOCUMENT_TYPES = (() => {
     ...PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
     ...filingEventTypes,
     ...orderDocTypes,
-    ...courtIssuedDocTypes,
+    ...COURT_ISSUED_DOCUMENT_TYPES,
     ...signedTypes,
     ...systemGeneratedTypes,
   ];
-
-  return documentTypes;
+  return documentTypes.sort();
 })();
 
 const UNIQUE_OTHER_FILER_TYPE = 'Intervenor';
-const OTHER_FILER_TYPES = [UNIQUE_OTHER_FILER_TYPE, 'Participant'];
+const OTHER_FILER_TYPES = [
+  UNIQUE_OTHER_FILER_TYPE,
+  'Tax Matters Partner',
+  'Partner Other Than Tax Matters Partner',
+];
+
+const CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT = 5;
 
 module.exports = {
   ADC_SECTION,
@@ -819,6 +904,7 @@ module.exports = {
   AUTOMATIC_BLOCKED_REASONS,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
+  CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   CASE_SEARCH_MIN_YEAR,
   CASE_SEARCH_PAGE_SIZE,
   CASE_STATUS_TYPES,
@@ -826,11 +912,14 @@ module.exports = {
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
+  CHAMBERS_SECTIONS_LABELS,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   COUNTRY_TYPES,
+  COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DEFAULT_PROCEDURE_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -844,20 +933,23 @@ module.exports = {
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
-  EVENT_CODES,
+  EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
+  EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JUDGES_CHAMBERS,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
+  MINUTE_ENTRIES_MAP,
   NOTICE_OF_DOCKET_CHANGE,
   NOTICE_OF_TRIAL,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   OPINION_EVENT_CODES,
-  ORDER_DOCUMENT_TYPES,
+  ORDER_EVENT_CODES,
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,
@@ -868,6 +960,7 @@ module.exports = {
   PRACTITIONER_TYPE_OPTIONS,
   PROCEDURE_TYPES,
   ROLES,
+  SCAN_MODE_LABELS,
   SCAN_MODES,
   SCENARIOS,
   SECTIONS,
@@ -879,6 +972,7 @@ module.exports = {
   SIGNED_DOCUMENT_TYPES,
   STANDING_PRETRIAL_NOTICE,
   STANDING_PRETRIAL_ORDER,
+  STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -890,6 +984,7 @@ module.exports = {
   TRIAL_LOCATION_MATCHER,
   TRIAL_STATUS_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
+  UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
 };

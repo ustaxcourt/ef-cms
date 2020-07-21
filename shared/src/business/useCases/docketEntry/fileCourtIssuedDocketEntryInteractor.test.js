@@ -3,12 +3,14 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
   PARTY_TYPES,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -29,11 +31,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
@@ -105,7 +107,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
-          documentType: 'TRAN - Transcript',
+          documentType: 'Transcript',
           eventCode: 'TRAN',
           userId: mockUserId,
         },
@@ -280,7 +282,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         date: '2019-03-01T21:40:46.415Z',
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         eventCode: 'TRAN',
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
@@ -289,6 +291,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]

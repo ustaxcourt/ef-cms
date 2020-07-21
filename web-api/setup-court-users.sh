@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Usage
-#   creates the COURT users inside our system.  
+#   creates the COURT users inside our system.
 #   The court users come directly from a court_users.csv
 
 # Requirements
@@ -14,6 +14,9 @@
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
 
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
+[ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
+[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
+[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 
 ENV=$1
 REGION="us-east-1"
@@ -94,7 +97,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-let i=1
+(( i=1 ))
 
 while read -r line
 do
@@ -110,9 +113,8 @@ do
   judgeFullName="${ADDR[8]/$'\r'}"
   judgeTitle="${ADDR[9]/$'\r'}"
   createAccount "${fakeEmail}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}" &
-  pids[${i}]=$!
 
-  if [[ "$i" == "20" ]]; then
+  if [[ "$i" == "15" ]]; then
     wait
     let i=1
   else

@@ -1,11 +1,16 @@
 jest.mock('uuid');
 const uuid = require('uuid');
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES, PAYMENT_STATUS } = require('../entities/EntityConstants');
-const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -69,13 +74,13 @@ describe('createCaseFromPaperInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
@@ -116,25 +121,36 @@ describe('createCaseFromPaperInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
           postalCode: '69580',
           state: 'AR',
         },
-        contactSecondary: { name: 'Bob Prince' },
+        contactSecondary: {
+          address1: '99 South Oak Lane',
+          address2: 'Culpa numquam saepe ',
+          address3: 'Eaque voluptates com',
+          city: 'Dignissimos voluptat',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner1@example.com',
+          name: 'Bob Prince',
+          phone: '+1 (215) 128-6587',
+          postalCode: '69580',
+          state: 'AR',
+        },
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: DATE,
         mailingDate: 'test',
-        partyType: PARTY_TYPES.petitioner,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionFile: new File([], 'petitionFile.pdf'),
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -163,13 +179,13 @@ describe('createCaseFromPaperInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',
@@ -211,13 +227,13 @@ describe('createCaseFromPaperInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseCaption: 'caseCaption',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
           address3: 'Eaque voluptates com',
           city: 'Dignissimos voluptat',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner1@example.com',
           name: 'Diana Prince',
           phone: '+1 (215) 128-6587',

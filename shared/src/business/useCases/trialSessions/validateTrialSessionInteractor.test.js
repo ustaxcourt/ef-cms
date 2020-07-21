@@ -7,9 +7,8 @@ const {
 const {
   validateTrialSessionInteractor,
 } = require('./validateTrialSessionInteractor');
-const { omit } = require('lodash');
-
 const { formatNow } = require('../../utilities/DateHandler');
+const { omit } = require('lodash');
 
 describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {

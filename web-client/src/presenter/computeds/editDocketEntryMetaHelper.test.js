@@ -11,12 +11,14 @@ const editDocketEntryMetaHelper = withAppContextDecorator(
 );
 
 describe('editDocketEntryMetaHelper', () => {
+  const { PARTY_TYPES } = applicationContext.getConstants();
+
   describe('showObjection', () => {
     it('should show objection field if the documentType allows (e.g. Motions)', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -32,7 +34,7 @@ describe('editDocketEntryMetaHelper', () => {
         state: {
           caseDetail: {
             documents: [],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -52,7 +54,7 @@ describe('editDocketEntryMetaHelper', () => {
         state: {
           caseDetail: {
             documents: [],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -71,7 +73,7 @@ describe('editDocketEntryMetaHelper', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
         state: {
           caseDetail: {
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
           },
           form: {
             documentId: '123',
@@ -80,120 +82,6 @@ describe('editDocketEntryMetaHelper', () => {
         },
       });
       expect(result.showObjection).toBeFalsy();
-    });
-  });
-
-  describe('partyValidationError', () => {
-    it('should return "error" if there are party validation errors for a primary party', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {
-            partyPrimary: 'error',
-          },
-        },
-      });
-      expect(result.partyValidationError).toEqual('error');
-    });
-
-    it('should return "error" if there are party validation errors for a secondary party', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {
-            partySecondary: 'error',
-          },
-        },
-      });
-      expect(result.partyValidationError).toEqual('error');
-    });
-
-    it('should return "error" if there are party validation errors for a respondent party', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {
-            partyIrsPractitioner: 'error',
-          },
-        },
-      });
-      expect(result.partyValidationError).toEqual('error');
-    });
-
-    it('should be falsy if there are no party validation errors at all', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {},
-        },
-      });
-      expect(result.partyValidationError).toBeFalsy();
-    });
-  });
-  describe('showSecondaryParty', () => {
-    it('should show secondary party if party type is petitioner and spouse', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner & spouse',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {},
-        },
-      });
-      expect(result.showSecondaryParty).toBeTruthy();
-    });
-
-    it('should show secondary party if party type is petitioner and deceased spouse', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner & deceased spouse',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {},
-        },
-      });
-      expect(result.showSecondaryParty).toBeTruthy();
-    });
-
-    it('should not show secondary party if party type is anything other than petitioner and their spouse', () => {
-      const result = runCompute(editDocketEntryMetaHelper, {
-        state: {
-          caseDetail: {
-            partyType: 'Petitioner',
-          },
-          form: {
-            documentId: '123',
-          },
-          validationErrors: {},
-        },
-      });
-      expect(result.showSecondaryParty).toBeFalsy();
     });
   });
 });

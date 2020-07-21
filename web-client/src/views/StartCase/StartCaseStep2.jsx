@@ -88,7 +88,7 @@ export const StartCaseStep2 = connect(
                   >
                     Download Petition form (T.C. Form 2)
                   </Button>
-                  <p className="margin-top-0">if you haven‘t already done so</p>
+                  <p className="margin-top-0">if you haven’t already done so</p>
                 </div>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"

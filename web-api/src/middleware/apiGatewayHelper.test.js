@@ -290,7 +290,7 @@ describe('getAuthHeader', () => {
     expect(error).toBeDefined();
   });
 
-  it('should not return the user token and should throw an error if token is not present in query or anywhere else', () => {
+  it('should return null and should not throw an error if token is not present', () => {
     let error;
     let response;
     try {

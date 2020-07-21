@@ -53,8 +53,8 @@ export const DocketRecord = connect(
                 return (
                   <tr
                     className={classNames(
-                      entry.showInProgress && 'in-progress',
-                      entry.showQcUntouched && 'qc-untouched',
+                      entry.isInProgress && 'in-progress',
+                      entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
                     key={entry.index}
                   >
@@ -78,23 +78,37 @@ export const DocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {entry.isPaper && (
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                      )}
+                      {!entry.hideIcons && (
+                        <>
+                          {entry.isPaper && (
+                            <FontAwesomeIcon
+                              icon={['fas', 'file-alt']}
+                              title="is paper"
+                            />
+                          )}
 
-                      {entry.showInProgress && (
-                        <FontAwesomeIcon icon={['fas', 'thumbtack']} />
-                      )}
+                          {entry.isInProgress && (
+                            <FontAwesomeIcon
+                              icon={['fas', 'thumbtack']}
+                              title="in progress"
+                            />
+                          )}
 
-                      {entry.showQcUntouched && (
-                        <FontAwesomeIcon icon={['fa', 'star']} />
-                      )}
+                          {entry.qcWorkItemsUntouched && (
+                            <FontAwesomeIcon
+                              icon={['fa', 'star']}
+                              title="is untouched"
+                            />
+                          )}
 
-                      {entry.showLoadingIcon && (
-                        <FontAwesomeIcon
-                          className="fa-spin spinner"
-                          icon="spinner"
-                        />
+                          {entry.showLoadingIcon && (
+                            <FontAwesomeIcon
+                              className="fa-spin spinner"
+                              icon="spinner"
+                              title="is loading"
+                            />
+                          )}
+                        </>
                       )}
                     </td>
                     <td>
@@ -110,7 +124,7 @@ export const DocketRecord = connect(
                     <td className="hide-on-mobile">{entry.action}</td>
                     <td>
                       {entry.showNotServed && (
-                        <span className="text-secondary text-semibold">
+                        <span className="text-semibold not-served">
                           Not served
                         </span>
                       )}

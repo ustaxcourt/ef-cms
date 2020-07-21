@@ -2,10 +2,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('./fileExternalDocumentForConsolidatedInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
@@ -23,11 +28,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Guy Fieri, Petitioner',
         caseId: caseId0,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'fieri@example.com',
           name: 'Guy Fieri',
           phone: '1234567890',
@@ -49,11 +54,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
         caseId: caseId1,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'ferrari@example.com',
           name: 'Enzo Ferrari',
           phone: '1234567890',
@@ -75,11 +80,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'George Foreman, Petitioner',
         caseId: caseId2,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'foreman@example.com',
           name: 'George Foreman',
           phone: '1234567890',
@@ -102,13 +107,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Guy Fieri',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Guy Fieri',
-      role: 'admin',
+      role: ROLES.admin,
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
@@ -179,8 +184,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
   });
 
+  // skipping this test until we have better acceptance criteria about consolidated cases
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
-    // skipping until we finalize how this will be handled
     await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
       documentIds: [documentId0],

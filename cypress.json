@@ -7,5 +7,6 @@
   "defaultCommandTimeout": 20000,
   "requestTimeout": 12000,
   "viewportWidth": 1200,
-  "viewportHeight": 900
+  "viewportHeight": 900,
+  "testFiles": "*.spec.js"
 }

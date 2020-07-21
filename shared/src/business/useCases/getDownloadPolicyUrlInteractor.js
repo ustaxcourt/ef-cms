@@ -31,16 +31,6 @@ exports.getDownloadPolicyUrlInteractor = async ({
   const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
 
   if (!isInternalUser && !isIrsSuperuser) {
-    //verify that the user has access to this document
-    const userAssociatedWithCase = await applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser({ applicationContext, caseId, userId: user.userId });
-
-    if (!userAssociatedWithCase) {
-      throw new UnauthorizedError('Unauthorized');
-    }
-
-    //verify that the document is available
     const caseData = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
@@ -58,6 +48,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
       const selectedDocument = caseData.documents.find(
         document => document.documentId === documentId,
       );
+
+      const documentEntity = caseEntity.getDocumentById({ documentId });
+
       const documentIsAvailable = documentMeetsAgeRequirements(
         selectedDocument,
       );
@@ -66,6 +59,26 @@ exports.getDownloadPolicyUrlInteractor = async ({
         throw new UnauthorizedError(
           'Unauthorized to view document at this time',
         );
+      }
+
+      if (documentEntity.isCourtIssued()) {
+        if (!documentEntity.servedAt) {
+          throw new UnauthorizedError(
+            'Unauthorized to view document at this time',
+          );
+        }
+      } else {
+        const userAssociatedWithCase = await applicationContext
+          .getPersistenceGateway()
+          .verifyCaseForUser({
+            applicationContext,
+            caseId,
+            userId: user.userId,
+          });
+
+        if (!userAssociatedWithCase) {
+          throw new UnauthorizedError('Unauthorized');
+        }
       }
     }
   } else if (isIrsSuperuser) {

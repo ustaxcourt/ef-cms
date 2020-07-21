@@ -1,6 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
+import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
+import { ConfirmEditSignatureModal } from './ConfirmEditSignatureModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
 import { MessageDocument } from './MessageDocument';
@@ -63,7 +65,6 @@ const CompletedMessage = ({ message }) => (
 
 export const MessageDetail = connect(
   {
-    attachmentDocumentToDisplay: state.attachmentDocumentToDisplay,
     cerebralBindSimpleSetStateSequence:
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
@@ -74,12 +75,12 @@ export const MessageDetail = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setAttachmentDocumentToDisplaySequence:
-      sequences.setAttachmentDocumentToDisplaySequence,
+    setViewerDocumentToDisplaySequence:
+      sequences.setViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
+    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
-    attachmentDocumentToDisplay,
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
@@ -87,8 +88,9 @@ export const MessageDetail = connect(
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setAttachmentDocumentToDisplaySequence,
+    setViewerDocumentToDisplaySequence,
     showModal,
+    viewerDocumentToDisplay,
   }) {
     return (
       <>
@@ -207,28 +209,39 @@ export const MessageDetail = connect(
 
           <div className="grid-row grid-gap-5">
             <div className="grid-col-4">
-              <div className="border border-base-lighter message-detail--attachments">
+              <div className="border border-base-lighter document-viewer--documents">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
                   formattedMessageDetail.attachments.map((attachment, idx) => {
-                    const active =
-                      attachmentDocumentToDisplay === attachment
-                        ? 'active'
-                        : '';
                     return (
                       <Button
-                        className={`usa-button--unstyled attachment-viewer-button ${active}`}
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          viewerDocumentToDisplay === attachment && 'active',
+                        )}
+                        isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
-                          setAttachmentDocumentToDisplaySequence({
-                            attachmentDocumentToDisplay: attachment,
+                          setViewerDocumentToDisplaySequence({
+                            viewerDocumentToDisplay: attachment,
                           });
                         }}
                       >
-                        {attachment.documentTitle}
+                        <div className="grid-row margin-left-205">
+                          <div className="grid-col-8">
+                            {attachment.documentTitle}
+                          </div>
+                          <div className="grid-col-4">
+                            {attachment.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </Button>
                     );
                   })}
@@ -248,6 +261,12 @@ export const MessageDetail = connect(
         )}
         {showModal === 'ReplyToMessageModal' && (
           <ReplyToCaseMessageModalDialog />
+        )}
+        {showModal === 'ConfirmEditModal' && (
+          <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
+        )}
+        {showModal === 'ConfirmEditSignatureModal' && (
+          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
         )}
       </>
     );

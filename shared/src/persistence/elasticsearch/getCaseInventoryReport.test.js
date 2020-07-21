@@ -2,6 +2,10 @@ const AWS = require('aws-sdk');
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+} = require('../../business/entities/EntityConstants');
 const { getCaseInventoryReport } = require('./getCaseInventoryReport');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -10,15 +14,15 @@ describe('getCaseInventoryReport', () => {
   const CASE_INVENTORY_MAX_PAGE_SIZE = 10;
 
   const mockDataOne = {
-    associatedJudge: 'Chief Judge',
+    associatedJudge: CHIEF_JUDGE,
     caseId: '1',
-    status: 'New',
+    status: CASE_STATUS_TYPES.new,
   };
 
   const mockDataTwo = {
-    associatedJudge: 'Chief Judge',
+    associatedJudge: CHIEF_JUDGE,
     caseId: '2',
-    status: 'Closed',
+    status: CASE_STATUS_TYPES.closed,
   };
 
   beforeEach(() => {
@@ -51,7 +55,7 @@ describe('getCaseInventoryReport', () => {
 
     const results = await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -62,14 +66,22 @@ describe('getCaseInventoryReport', () => {
       { match: { 'pk.S': 'case|' } },
       { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'associatedJudge.S': 'Chief Judge' },
+        match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          caseId: '2',
+          status: CASE_STATUS_TYPES.closed,
+        },
       ],
       totalCount: '2',
     });
@@ -89,7 +101,7 @@ describe('getCaseInventoryReport', () => {
 
     const results = await getCaseInventoryReport({
       applicationContext,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -98,13 +110,17 @@ describe('getCaseInventoryReport', () => {
       { match: { 'pk.S': 'case|' } },
       { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'status.S': 'New' },
+        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
       ],
       totalCount: '1',
     });
@@ -127,8 +143,8 @@ describe('getCaseInventoryReport', () => {
 
     const results = await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
-      status: 'New',
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -139,17 +155,25 @@ describe('getCaseInventoryReport', () => {
       { match: { 'pk.S': 'case|' } },
       { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'associatedJudge.S': 'Chief Judge' },
+        match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
       {
-        match_phrase: { 'status.S': 'New' },
+        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
     expect(results).toEqual({
       foundCases: [
-        { associatedJudge: 'Chief Judge', caseId: '1', status: 'New' },
-        { associatedJudge: 'Chief Judge', caseId: '2', status: 'Closed' },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          caseId: '1',
+          status: CASE_STATUS_TYPES.new,
+        },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          caseId: '2',
+          status: CASE_STATUS_TYPES.closed,
+        },
       ],
       totalCount: '2',
     });
@@ -160,8 +184,8 @@ describe('getCaseInventoryReport', () => {
 
     await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
-      status: 'New',
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
@@ -174,9 +198,9 @@ describe('getCaseInventoryReport', () => {
 
     await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       pageSize: 3,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(3);
@@ -187,9 +211,9 @@ describe('getCaseInventoryReport', () => {
 
     await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       pageSize: 11,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.size).toEqual(
@@ -202,8 +226,8 @@ describe('getCaseInventoryReport', () => {
 
     await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
-      status: 'New',
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.from).toEqual(0);
@@ -214,9 +238,9 @@ describe('getCaseInventoryReport', () => {
 
     await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       from: 11,
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
 
     expect(searchSpy.mock.calls[0][0].body.from).toEqual(11);
@@ -232,7 +256,7 @@ describe('getCaseInventoryReport', () => {
 
     const results = await getCaseInventoryReport({
       applicationContext,
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -243,7 +267,7 @@ describe('getCaseInventoryReport', () => {
       { match: { 'pk.S': 'case|' } },
       { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'associatedJudge.S': 'Chief Judge' },
+        match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
 

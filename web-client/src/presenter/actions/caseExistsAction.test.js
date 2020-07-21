@@ -24,9 +24,6 @@ describe('caseExistsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        code: '123',
-      },
       state: {},
     });
 
@@ -44,9 +41,6 @@ describe('caseExistsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        code: '123',
-      },
       state: {},
     });
 
@@ -63,9 +57,6 @@ describe('caseExistsAction', () => {
     await runAction(caseExistsAction, {
       modules: {
         presenter,
-      },
-      props: {
-        code: '123',
       },
       state: {},
     });

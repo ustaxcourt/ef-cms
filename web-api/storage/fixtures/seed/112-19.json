@@ -22,7 +22,7 @@
       "name": "Brian Earl Spilner",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
@@ -34,7 +34,6 @@
     "orderForRatification": false,
     "initialDocketNumberSuffix": "L",
     "docketNumberSuffix": "L",
-    "orderToChangeDesignatedPlaceOfTrial": false,
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
@@ -99,6 +98,7 @@
     "processingStatus": "complete",
     "filedBy": "Petr. Brian Earl Spilner",
     "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+    "isFileAttached": true,
     "sk": "document|1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
     "partySecondary": false,
     "documentId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
@@ -163,6 +163,7 @@
     "processingStatus": "complete",
     "filedBy": "Petr. Brian Earl Spilner",
     "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+    "isFileAttached": true,
     "sk": "document|337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
     "partySecondary": false,
     "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",

@@ -1,5 +1,4 @@
 {
-  "baseUrl": "https://ui-dev.ustc-case-mgmt.flexion.us",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true
@@ -10,8 +9,8 @@
   "screenshotsFolder": "cypress-smoketests/screenshots",
   "videosFolder": "cypress-smoketests/videos",
   "supportFile": "cypress-smoketests/support/index.js",
-  "defaultCommandTimeout": 12000,
-  "requestTimeout": 12000,
+  "defaultCommandTimeout": 20000,
+  "requestTimeout": 20000,
   "viewportWidth": 1200,
   "viewportHeight": 900
 }

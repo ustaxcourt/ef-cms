@@ -1,10 +1,14 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
 const { getClosedCasesByUser } = require('./getClosedCasesByUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 jest.mock('./getUserCases', () => ({
+  // TODO - can't replace status with EntityConstants CASE_STATUS_TYPES due to jest.mock error
   getUserCases: jest.fn().mockReturnValue([
     {
       caseId: '123',
@@ -38,7 +42,7 @@ describe('getClosedCasesByUser', () => {
         caseId: '121',
         pk: 'case|121',
         sk: 'case|121',
-        status: 'Closed',
+        status: CASE_STATUS_TYPES.closed,
       },
     ]);
   });

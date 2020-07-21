@@ -36,6 +36,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associateIrsPractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateIrsPractitionerWithCaseProxy';
@@ -94,9 +95,11 @@ import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEm
 import {
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  getServedPartiesCode,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardCaseMessageInteractor } from '../../shared/src/proxies/messages/forwardCaseMessageProxy';
@@ -169,9 +172,11 @@ import { replyToCaseMessageInteractor } from '../../shared/src/proxies/messages/
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
+import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
+import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
@@ -179,7 +184,6 @@ import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
-import { signDocumentInteractor } from '../../shared/src/proxies/documents/signDocumentProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -379,15 +383,16 @@ const allUseCases = {
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
+  saveSignedDocumentInteractor,
   sealCaseInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
+  serveExternallyFiledDocumentInteractor,
   setItemInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
-  signDocumentInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
@@ -491,7 +496,8 @@ const applicationContext = {
   getHttpClient: () => axios,
   getPdfJs: async () => {
     const pdfjsLib = await import('pdfjs-dist');
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return pdfjsLib;
   },
   getPdfLib: () => {
@@ -532,6 +538,7 @@ const applicationContext = {
   getUserPermissions,
   getUtilities: () => {
     return {
+      aggregatePartiesForService,
       calculateISODate,
       compareCasesByDocketNumber,
       compareISODateStrings,
@@ -545,6 +552,7 @@ const applicationContext = {
       formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
+      formatDocketRecordWithDocument,
       formatDocument,
       formatDollars,
       formatJudgeName,
@@ -555,6 +563,7 @@ const applicationContext = {
       getFormattedCaseDetail,
       getJudgeLastName,
       getPetitionDocumentFromDocuments,
+      getServedPartiesCode,
       getTrialSessionStatus,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

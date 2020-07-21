@@ -5,11 +5,11 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../EntityConstants');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * PublicDocument
@@ -39,19 +39,9 @@ joiValidationDecorator(
   joi.object().keys({
     additionalInfo: joi.string().max(500).optional(),
     additionalInfo2: joi.string().max(500).optional(),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
-    createdAt: joiStrictTimestamp.optional(),
-    documentId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
+    caseId: JoiValidationConstants.UUID.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
+    documentId: JoiValidationConstants.UUID.optional(),
     documentTitle: joi.string().max(500).optional(),
     documentType: joi
       .string()
@@ -65,11 +55,14 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     processingStatus: joi
       .string()
-      .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
+      .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
       .optional(),
-    receivedAt: joiStrictTimestamp.optional(),
-    servedAt: joiStrictTimestamp.optional(),
-    servedParties: joi.array().optional(), // TODO: object definition
+    receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+    servedAt: JoiValidationConstants.ISO_DATE.optional(),
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().max(500).required() })
+      .optional(),
   }),
   {},
 );

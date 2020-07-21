@@ -9,7 +9,7 @@ describe('Docket Clerk Creates A Trial', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test);
   docketClerkViewsTrialSessionList(test);
   docketClerkEditsTrialSession(test);

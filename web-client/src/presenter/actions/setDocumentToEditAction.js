@@ -1,4 +1,3 @@
-import { getDocumentEditUrl } from '../utilities/getDocumentEditUrl';
 import { state } from 'cerebral';
 
 /**
@@ -9,11 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void} sets the documentToEdit on state
  */
-export const setDocumentToEditAction = ({
-  applicationContext,
-  props,
-  store,
-}) => {
+export const setDocumentToEditAction = ({ props, store }) => {
   const { caseDetail, documentIdToEdit } = props;
 
   if (documentIdToEdit) {
@@ -21,20 +16,6 @@ export const setDocumentToEditAction = ({
       document => document.documentId === documentIdToEdit,
     );
 
-    // TODO - refactor for clarity
-    const draftState = documentToEdit.draftState || {};
-    draftState.documentIdToEdit = documentIdToEdit;
-    draftState.documentType = documentToEdit.documentType;
-
     store.set(state.documentToEdit, documentToEdit);
-    store.set(state.form, draftState);
-
-    return {
-      path: getDocumentEditUrl({
-        applicationContext,
-        caseDetail,
-        document: documentToEdit,
-      }),
-    };
   }
 };

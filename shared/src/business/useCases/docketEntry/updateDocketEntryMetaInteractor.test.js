@@ -17,19 +17,19 @@ describe('updateDocketEntryMetaInteractor', () => {
     documents = [
       {
         documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-        documentType: 'Order',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Test Petitioner',
         filingDate: '2019-01-01T00:01:00.000Z',
         freeText: 'some free text',
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: [{ name: 'Some Party' }],
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
         userId: mockUserId,
       },
       {
         documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentType: 'Order',
+        eventCode: 'O',
         filingDate: '2019-01-01T00:01:00.000Z',
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: [{ name: 'Some Other Party' }],
@@ -168,7 +168,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
-        filedBy: 'New Filer',
+        partyPrimary: true,
       },
       docketRecordIndex: 0,
     });
@@ -179,8 +179,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocument = result.documents.find(
       document => document.documentId === updatedDocketEntry.documentId,
     );
-    expect(updatedDocketEntry.filedBy).toEqual('New Filer');
-    expect(updatedDocument.filedBy).toEqual('New Filer');
+    expect(updatedDocketEntry.filedBy).toEqual('Petr. Test Petitioner');
+    expect(updatedDocument.filedBy).toEqual('Petr. Test Petitioner');
   });
 
   it('should update the docket record filingDate', async () => {
@@ -220,6 +220,29 @@ describe('updateDocketEntryMetaInteractor', () => {
       document => document.documentId === updatedDocketEntry.documentId,
     );
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
+  });
+
+  it('should update the document hasOtherFilingParty and otherFilingParty values', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        ...docketRecord[0],
+        ...documents[0],
+        hasOtherFilingParty: true,
+        otherFilingParty: 'Brianna Noble',
+      },
+      docketRecordIndex: 0,
+    });
+
+    const updatedDocketEntry = result.docketRecord.find(
+      record => record.index === 0,
+    );
+    const updatedDocument = result.documents.find(
+      document => document.documentId === updatedDocketEntry.documentId,
+    );
+    expect(updatedDocument.hasOtherFilingParty).toBe(true);
+    expect(updatedDocument.otherFilingParty).toBe('Brianna Noble');
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {

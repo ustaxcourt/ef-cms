@@ -50,13 +50,10 @@ export const formatWorkItem = ({
   workQueueIsInternal,
 }) => {
   const {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_DOCUMENT_TYPES,
     ORDER_TYPES_MAP,
   } = applicationContext.getConstants();
 
-  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
-  );
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderDoc => orderDoc.documentType,
   );
@@ -121,7 +118,7 @@ export const formatWorkItem = ({
   );
   result.historyMessages = result.messages.slice(1);
 
-  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
     result.document.documentType,
   );
   result.isOrder = !!orderDocumentTypes.includes(result.document.documentType);
@@ -202,6 +199,8 @@ export const getWorkItemDocumentLink = ({
       });
       if (editLinkExtension) {
         editLink += editLinkExtension;
+      } else {
+        editLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
       }
     } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
       if (result.caseIsInProgress) {

@@ -31,7 +31,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
     );
 
     expect(test.getState('form.documentType')).toEqual(
-      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
+      draftOrderDocument.documentType,
     );
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -42,7 +42,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added to Docket Record.',
+      'Your entry has been added to docket record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {

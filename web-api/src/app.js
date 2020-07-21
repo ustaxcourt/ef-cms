@@ -260,8 +260,14 @@ const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
 const {
+  saveSignedDocumentLambda,
+} = require('./documents/saveSignedDocumentLambda');
+const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
+const {
+  serveExternallyFiledDocumentLambda,
+} = require('./documents/serveExternallyFiledDocumentLambda');
 const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
@@ -364,7 +370,6 @@ const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
-const { signDocumentLambda } = require('./documents/signDocumentLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -422,7 +427,11 @@ app.post(
 );
 app.post(
   '/case-documents/:caseId/:documentId/sign',
-  lambdaWrapper(signDocumentLambda),
+  lambdaWrapper(saveSignedDocumentLambda),
+);
+app.post(
+  '/case-documents/:caseId/:documentId/serve',
+  lambdaWrapper(serveExternallyFiledDocumentLambda),
 );
 app.get(
   '/case-documents/:caseId/:documentId/download-policy-url',
@@ -623,7 +632,7 @@ app.get(
 );
 app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
 app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
-app.get('/cases/:caseId', lambdaWrapper(getCaseLambda));
+app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
 
 /**

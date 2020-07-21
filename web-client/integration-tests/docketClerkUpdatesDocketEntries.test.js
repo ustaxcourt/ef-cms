@@ -1,4 +1,4 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkEditsDocketEntryNonstandardA } from './journey/docketClerkEditsDocketEntryNonstandardA';
 import { docketClerkEditsDocketEntryNonstandardB } from './journey/docketClerkEditsDocketEntryNonstandardB';
@@ -14,19 +14,20 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 test.draftOrders = [];
+const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('docket clerk updates docket entries', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
@@ -38,9 +39,9 @@ describe('docket clerk updates docket entries', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test);
   docketClerkEditsDocketEntryStandard(test);
   docketClerkEditsDocketEntryNonstandardA(test);
   docketClerkEditsDocketEntryNonstandardB(test);

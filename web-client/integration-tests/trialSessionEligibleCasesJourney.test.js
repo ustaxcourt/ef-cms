@@ -1,4 +1,4 @@
-import { CHIEF_JUDGE } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -9,6 +9,11 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
+const {
+  CASE_TYPES_MAP,
+  CHIEF_JUDGE,
+  STATUS_TYPES,
+} = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
@@ -30,7 +35,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
-    loginAs(test, 'docketclerk');
+    loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
     docketClerkViewsNewTrialSession(test);
@@ -40,10 +45,10 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #1', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -52,20 +57,20 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
     describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #2', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -74,20 +79,20 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
     describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #3', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -96,20 +101,20 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
     describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        caseType: 'CDP (Lien/Levy)',
+        caseType: CASE_TYPES_MAP.cdp,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #4', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -118,10 +123,10 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
 
@@ -131,7 +136,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: 'Passport',
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner');
+      loginAs(test, 'petitioner@example.com');
       it('Create case #5', async () => {
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
@@ -140,16 +145,16 @@ describe('Trial Session Eligible Cases Journey', () => {
         test.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk');
+      loginAs(test, 'petitionsclerk@example.com');
       petitionsClerkSubmitsCaseToIrs(test);
 
-      loginAs(test, 'docketclerk');
+      loginAs(test, 'docketclerk@example.com');
       docketClerkSetsCaseReadyForTrial(test);
     });
   });
 
   describe(`Result: Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -169,13 +174,15 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Mark case #2 as high priority for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #2 should show as first case eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail').highPriority).toBeFalsy();
 
       await test.runSequence('updateModalValueSequence', {
@@ -207,13 +214,15 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Remove high priority from case #2 for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #2 should show as last case eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail').highPriority).toBeTruthy();
 
       await test.runSequence('unprioritizeCaseSequence');
@@ -237,7 +246,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
       createdCaseIds[0],
       createdCaseIds[1],
@@ -247,12 +256,12 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
     petitionsClerkSetsATrialSessionsSchedule(test);
   });
 
   describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
-    loginAs(test, 'petitionsclerk');
+    loginAs(test, 'petitionsclerk@example.com');
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
@@ -278,7 +287,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
       expect(test.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
@@ -291,7 +302,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
       expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
@@ -300,19 +313,25 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[2],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       //Case #4 - assigned
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[3],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       //Case #5 - assigned
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[4],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
@@ -336,7 +355,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,
@@ -351,7 +372,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).not.toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000);
@@ -368,7 +391,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.status')).toEqual(
+        STATUS_TYPES.calendared,
+      );
 
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,

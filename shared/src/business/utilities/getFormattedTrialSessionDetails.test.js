@@ -1,5 +1,8 @@
+import {
+  DOCKET_NUMBER_SUFFIXES,
+  SESSION_STATUS_GROUPS,
+} from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { SESSION_STATUS_GROUPS } from '../entities/EntityConstants';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   formattedTrialSessionDetails,
@@ -164,9 +167,8 @@ describe('formattedTrialSessionDetails', () => {
           MOCK_CASE,
           {
             ...MOCK_CASE,
-            caseCaption:
-              'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else, Petitioners',
-            docketNumberSuffix: 'W',
+            caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           },
           {
             ...MOCK_CASE,
@@ -187,7 +189,7 @@ describe('formattedTrialSessionDetails', () => {
       '101-18W',
     );
     expect(result.formattedEligibleCases[1].caseTitle).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
+      'Daenerys Stormborn & Someone Else',
     );
     expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
       '103-19',
@@ -204,17 +206,16 @@ describe('formattedTrialSessionDetails', () => {
           MOCK_CASE,
           {
             ...MOCK_CASE,
-            caseCaption:
-              'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else, Petitioners',
+            caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumber: '102-17',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           },
           {
             ...MOCK_CASE,
             caseCaption: 'Someone Else, Petitioner',
             disposition: 'omg',
             docketNumber: '101-16',
-            docketNumberSuffix: 'S',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
           },
@@ -226,7 +227,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.allCases[0].caseTitle).toEqual('Someone Else');
     expect(result.allCases[1].docketNumberWithSuffix).toEqual('102-17W');
     expect(result.allCases[1].caseTitle).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons & Someone Else',
+      'Daenerys Stormborn & Someone Else',
     );
     expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
     expect(result.allCases[2].caseTitle).toEqual('Test Petitioner');

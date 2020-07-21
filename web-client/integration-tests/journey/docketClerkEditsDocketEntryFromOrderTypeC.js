@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'OAR - Order that the letter "R" is added to the Docket number',
+      value: 'Order that the letter "R" is added to the Docket number',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -79,8 +79,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       docketNumbers: '123-45',
       documentTitle:
         'Order that the letter "R" is added to the Docket number 123-45',
-      documentType:
-        'OAR - Order that the letter "R" is added to the Docket number',
+      documentType: 'Order that the letter "R" is added to the Docket number',
       eventCode: 'OAR',
     });
 
@@ -93,8 +92,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       docketNumbers: '123-45',
       documentTitle:
         'Order that the letter "R" is added to the Docket number 123-45',
-      documentType:
-        'OAR - Order that the letter "R" is added to the Docket number',
+      documentType: 'Order that the letter "R" is added to the Docket number',
       eventCode: 'OAR',
       generatedDocumentTitle:
         'Order that the letter "R" is added to the Docket number 123-45',

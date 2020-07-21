@@ -29,7 +29,6 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     const document = new Document(documentData, {
       applicationContext,
     });
-    document.generateFiledBy(caseEntity);
     return {
       attachments: document.attachments,
       certificateOfService: document.certificateOfService,
@@ -46,7 +45,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
-      supportingDocument => getDocumentInfo(supportingDocument),
+      getDocumentInfo,
     );
   }
 
@@ -58,8 +57,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
     filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      secondarySupportingDocument =>
-        getDocumentInfo(secondarySupportingDocument),
+      getDocumentInfo,
     );
   }
 

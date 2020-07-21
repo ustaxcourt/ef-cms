@@ -1,6 +1,7 @@
 const React = require('react');
 const { CoverSheet } = require('./CoverSheet.jsx');
 const { shallow } = require('enzyme');
+import { PARTY_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 
 describe('CoverSheet', () => {
   it('renders a document header with case information', () => {
@@ -13,18 +14,27 @@ describe('CoverSheet', () => {
     );
 
     expect(wrapper.find('#caption-title').text()).toEqual('Captain Fantastic');
-    expect(wrapper.find('#caption-extension').text()).toEqual('Petitioner');
+    expect(wrapper.find('#caption-extension').text()).toEqual(
+      PARTY_TYPES.petitioner,
+    );
     expect(wrapper.find('#docket-number').text()).toContain(
       'Docket No. 123-45S',
     );
   });
 
-  it('renders the received date', () => {
+  it('renders the received date when received date is available', () => {
     const wrapper = shallow(<CoverSheet dateReceived="01/01/2020" />);
     const text = wrapper.find('#date-received').text();
 
     expect(text).toContain('Received');
     expect(text).toContain('01/01/2020');
+  });
+
+  it('does not render the received date when it is not available', () => {
+    const wrapper = shallow(<CoverSheet />);
+    const dateReceivedDiv = wrapper.find('#date-received');
+
+    expect(dateReceivedDiv).toEqual({});
   });
 
   it('renders a filed or lodged label along with the associated date', () => {

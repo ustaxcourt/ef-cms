@@ -1,8 +1,13 @@
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  MAX_FILE_SIZE_BYTES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
+const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { MAX_FILE_SIZE_BYTES, PARTY_TYPES } = require('../EntityConstants');
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
@@ -130,7 +135,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('should be valid if all step 1 and step 2 params are present', () => {
       const caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         hasIrsNotice: true,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
@@ -143,7 +148,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('should be valid if all step 1 and step 2 params are present, but a partyType and invalid contactPrimary are present', () => {
       const caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           name: 'Something',
         },
@@ -240,7 +245,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('requires filingType and partyType if wizard step 1 and 2 required fields are present', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         hasIrsNotice: true,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
@@ -256,7 +261,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('requires ownershipDisclosureFile if filingType is A business', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         filingType: 'A business',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.corporation,
@@ -273,7 +278,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('does not require ownershipDisclosureFile if filingType is not A business', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         filingType: 'something else',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.corporation,
@@ -290,7 +295,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('requires only contactPrimary if partyType is Petitioner', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.petitioner,
@@ -315,7 +320,7 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('requires contactPrimary and contactSecondary if partyType is Petitioner & Spouse', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.petitionerSpouse,
@@ -435,11 +440,11 @@ describe('CaseExternalInformationFactory entity', () => {
 
     it('returns no validation errors if all required fields from all steps are present', () => {
       let caseExternal = new CaseExternalInformationFactory({
-        caseType: 'Deficiency',
+        caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Primary',
           phone: '1234567890',
           postalCode: '12345',
@@ -448,7 +453,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactSecondary: {
           address1: '123 Main St',
           city: 'Somewhere',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary',
           phone: '1234567890',
           postalCode: '12345',

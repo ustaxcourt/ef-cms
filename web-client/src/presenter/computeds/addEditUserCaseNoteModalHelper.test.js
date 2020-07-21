@@ -1,8 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import { addEditUserCaseNoteModalHelper as addEditUserCaseNoteModalHelperComputed } from './addEditUserCaseNoteModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-import { addEditUserCaseNoteModalHelper as addEditUserCaseNoteModalHelperComputed } from './addEditUserCaseNoteModalHelper';
 
 let currentUser;
 
@@ -24,7 +23,7 @@ describe('addEditUserCaseNoteModalHelper', () => {
 
     const result = runCompute(addEditUserCaseNoteModalHelper, {});
 
-    expect(result.notesLabel).toEqual("Judge's notes");
+    expect(result.notesLabel).toEqual('Judge’s notes');
   });
 
   it('should return Notes as notesLabel if current user is a trial clerk', () => {

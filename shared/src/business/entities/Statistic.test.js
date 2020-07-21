@@ -2,6 +2,11 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { Statistic } = require('./Statistic');
 
 describe('Statistic', () => {
+  it('throws an error if applicationContext is not provided on construction', () => {
+    expect(() => new Statistic({}, {})).toThrow(
+      'applicationContext must be defined',
+    );
+  });
   describe('validation', () => {
     it('fails validation if a yearOrPeriod is an invalid value', () => {
       const statistic = new Statistic(

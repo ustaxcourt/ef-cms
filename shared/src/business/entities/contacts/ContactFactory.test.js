@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -18,7 +19,7 @@ describe('ContactFactory', () => {
   describe('for Corporation Contacts', () => {
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -37,14 +38,14 @@ describe('ContactFactory', () => {
 
     it('can validate primary contact', () => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           address2: 'Suite 123',
           address3: 'Room 13',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           inCareOf: 'USTC',
           name: 'Jimmy Dean',
@@ -71,12 +72,12 @@ describe('ContactFactory', () => {
 
   it('can validate Petitioner contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         inCareOf: 'USTC',
         name: 'Jimmy Dean',
@@ -102,12 +103,12 @@ describe('ContactFactory', () => {
 
   it('returns true when contactPrimary is defined and everything else is valid', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         inCareOf: 'USTC',
         name: 'Jimmy Dean',
@@ -133,7 +134,7 @@ describe('ContactFactory', () => {
 
   it('returns false for isValid if primary contact is missing', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -152,12 +153,12 @@ describe('ContactFactory', () => {
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimmy Dean',
         phone: '4444444444',
         postalCode: '05198',
@@ -184,12 +185,12 @@ describe('ContactFactory', () => {
 
   it('a valid petition returns true for isValid', () => {
     const caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimmy Dean',
         phone: '4444444444',
         postalCode: '05198',
@@ -215,7 +216,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
 
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -235,13 +236,12 @@ describe('ContactFactory', () => {
 
   it('can validate valid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         inCareOf: 'USTC',
         name: 'Jimmy Dean',
@@ -268,8 +268,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Trust contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -288,13 +287,12 @@ describe('ContactFactory', () => {
 
   it('can validate valid Trust contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         name: 'Jimmy Dean',
         phone: '1234567890',
@@ -320,8 +318,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Conservator contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -340,12 +337,11 @@ describe('ContactFactory', () => {
 
   it('can validate valid Conservator contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimmy Dean',
         phone: '1234567890',
         postalCode: '05198',
@@ -370,8 +366,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Guardian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -390,12 +385,11 @@ describe('ContactFactory', () => {
 
   it('can validate valid Guardian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimmy Dean',
         phone: '1234567890',
         postalCode: '05198',
@@ -420,8 +414,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Custodian contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -440,11 +433,11 @@ describe('ContactFactory', () => {
 
   it('can validate valid Custodian contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Jimmy Dean',
         phone: '1234567890',
         postalCode: '05198',
@@ -469,8 +462,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Donor contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -489,13 +481,12 @@ describe('ContactFactory', () => {
 
   it('can validate valid Donor contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         name: 'Jimmy Dean',
         phone: '1234567890',
@@ -520,8 +511,7 @@ describe('ContactFactory', () => {
 
   it('can validate invalid Transferee contact', () => {
     let caseExternal = new CaseExternal({
-      caseType: 'Other',
-
+      caseType: CASE_TYPES_MAP.other,
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13T08:06:07.539Z',
@@ -539,12 +529,12 @@ describe('ContactFactory', () => {
   });
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
-      caseType: 'Other',
+      caseType: CASE_TYPES_MAP.other,
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
         country: 'USA',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'someone@example.com',
         name: 'Jimmy Dean',
         phone: '1234567890',
@@ -570,12 +560,12 @@ describe('ContactFactory', () => {
   it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
     expect(() => {
       caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',
@@ -602,12 +592,12 @@ describe('ContactFactory', () => {
     const caseInternal = new CaseInternal(
       {
         caseCaption: 'Sisqo',
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           postalCode: '05198',
@@ -662,7 +652,7 @@ describe('ContactFactory', () => {
                 address1: '876 12th Ave',
                 city: 'Nashville',
                 country: 'USA',
-                countryType: 'domestic',
+                countryType: COUNTRY_TYPES.DOMESTIC,
                 email: 'someone@example.com',
                 name: 'Jimmy Dean',
                 phone: '1234567890',
@@ -674,7 +664,7 @@ describe('ContactFactory', () => {
                 address1: '876 12th Ave',
                 city: 'Nashville',
                 country: 'USA',
-                countryType: 'domestic',
+                countryType: COUNTRY_TYPES.DOMESTIC,
                 email: 'someone@example.com',
                 name: 'Jimmy Dean',
                 phone: '1234567890',
@@ -751,6 +741,53 @@ describe('ContactFactory', () => {
       });
 
       expect(contactConstructor).toEqual({});
+    });
+  });
+
+  describe('hasEAccess validation', () => {
+    let contactConstructor;
+
+    beforeEach(() => {
+      contactConstructor = ContactFactory.createContactFactory({
+        additionalErrorMappings: {},
+        additionalValidation: {},
+      })({ partyType: PARTY_TYPES.petitioner });
+    });
+
+    it('fails when an email is not provided and the contact has eAccess', () => {
+      const contact = new contactConstructor({
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        hasEAccess: true,
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      });
+
+      expect(contact.getFormattedValidationErrors()).toMatchObject({
+        email: '"email" is required',
+      });
+    });
+
+    it('passes when email is not provided and the contact does not have eAccess', () => {
+      const contact = new contactConstructor({
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        hasEAccess: false,
+        inCareOf: 'USTC',
+        name: 'Jimmy Dean',
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+      });
+
+      expect(contact.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

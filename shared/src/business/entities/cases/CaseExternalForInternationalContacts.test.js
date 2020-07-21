@@ -1,6 +1,10 @@
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = require('../EntityConstants');
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { PARTY_TYPES } = require('../EntityConstants');
 
 const contactErrorMessages =
   ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
@@ -9,11 +13,11 @@ describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
     it('should not validate without country', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
-          countryType: 'international',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',
@@ -39,12 +43,12 @@ describe('CaseExternal', () => {
 
     it('can validate primary contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'Other',
+        caseType: CASE_TYPES_MAP.other,
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'international',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
           email: 'someone@example.com',
           name: 'Jimmy Dean',
           phone: '1234567890',

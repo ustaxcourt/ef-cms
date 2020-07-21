@@ -1,5 +1,4 @@
 const React = require('react');
-
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
@@ -11,6 +10,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   return (
     <>
       {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
+      {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
       {contact.title && <div>{contact.title}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
@@ -26,17 +26,10 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({
-  caseTitle,
-  contact,
-  countryTypes,
-  showCaseTitleForPrimary,
-}) => {
-  const name = showCaseTitleForPrimary ? caseTitle : contact.name;
-
+const RenderContact = ({ contact, countryTypes }) => {
   return (
     <div className="party-details">
-      <p>{name}</p>
+      <p className="margin-bottom-0">{contact.name}</p>
       <RenderAddress contact={contact} countryTypes={countryTypes} />
     </div>
   );
@@ -55,7 +48,9 @@ const RenderPractitioner = ({
 
   return (
     <div className="party-details">
-      <p>{practitioner.formattedName || practitioner.name}</p>
+      <p className="margin-bottom-0">
+        {practitioner.formattedName || practitioner.name}
+      </p>
       <RenderAddress
         contact={{
           ...practitioner.contact,
@@ -106,7 +101,7 @@ const ServedDate = ({ document }) => {
         <span className="no-wrap">{arrDateServed.slice(1).join(' ')}</span>
       </>
     );
-  } else if (document && document.isNotServedCourtIssuedDocument) {
+  } else if (document && document.isNotServedDocument) {
     return 'Not served';
   } else {
     return '';
@@ -136,7 +131,6 @@ export const DocketRecord = ({
             caseTitle={options.caseTitle}
             contact={caseDetail.contactPrimary}
             countryTypes={countryTypes}
-            showCaseTitleForPrimary={caseDetail.showCaseTitleForPrimary}
           />
           {caseDetail.contactSecondary && (
             <RenderContact

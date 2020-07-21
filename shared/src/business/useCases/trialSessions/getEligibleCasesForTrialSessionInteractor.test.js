@@ -4,10 +4,9 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('./getEligibleCasesForTrialSessionInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
-
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 const MOCK_TRIAL = {
   maxCases: 100,

@@ -6,12 +6,18 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   Case,
   getPetitionDocumentFromDocuments,
 } = require('../entities/cases/Case');
+const {
+  compareCasesByDocketNumber,
+} = require('../utilities/getFormattedTrialSessionDetails');
 const {
   compareISODateStrings,
   compareStrings,
@@ -38,7 +44,12 @@ const {
   deleteWorkItemFromInbox,
 } = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
+  formatCase,
+  formatCaseDeadlines,
+  formatDocketRecordWithDocument,
   formatDocument,
+  getServedPartiesCode,
+  sortDocketRecords,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   formatJudgeName,
@@ -50,6 +61,9 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
+  getCaseByDocketNumber,
+} = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
+const {
   getCaseDeadlinesByCaseId,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
 const {
@@ -58,6 +72,9 @@ const {
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+const {
+  getDocumentTypeForAddressChange,
+} = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
@@ -108,6 +125,7 @@ const {
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { fakeData, getFakeFile } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -117,23 +135,6 @@ const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
-
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
-// TODO: Abstract for use elsewhere
-const getFakeFile = returnArray => {
-  const fakeFile = Buffer.from(fakeData, 'base64');
-  fakeFile.name = 'fakeFile.pdf';
-
-  if (returnArray) {
-    return new Uint8Array(fakeFile);
-  }
-
-  return fakeFile;
-};
-
-const getFakeFileUint8Array = () => getFakeFile(true);
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -165,6 +166,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         numPages: 5,
       }),
     }),
+    version: '1',
   };
 
   const mockGetScannerReturnValue = {
@@ -179,6 +181,15 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    aggregatePartiesForService: jest
+      .fn()
+      .mockImplementation(aggregatePartiesForService),
+    calculateISODate: jest
+      .fn()
+      .mockImplementation(DateHandler.calculateISODate),
+    compareCasesByDocketNumber: jest
+      .fn()
+      .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     createISODateString: jest
@@ -192,9 +203,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
+    formatCase: jest.fn().mockImplementation(formatCase),
+    formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
+    formatDocketRecordWithDocument: jest
+      .fn()
+      .mockImplementation(formatDocketRecordWithDocument),
     formatDocument: jest.fn().mockImplementation(formatDocument),
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
@@ -204,7 +220,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(formattedTrialSessionDetails),
     getAddressPhoneDiff: jest.fn().mockImplementation(getAddressPhoneDiff),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
-    getDocumentTypeForAddressChange: jest.fn(),
+    getDocumentTypeForAddressChange: jest
+      .fn()
+      .mockImplementation(getDocumentTypeForAddressChange),
     getFilingsAndProceedings: jest.fn().mockReturnValue(''),
     getFormattedCaseDetail: jest
       .fn()
@@ -212,6 +230,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPetitionDocumentFromDocuments: jest
       .fn()
       .mockImplementation(getPetitionDocumentFromDocuments),
+    getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
     isStringISOFormatted: jest
@@ -226,6 +245,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
+    sortDocketRecords: jest.fn().mockImplementation(sortDocketRecords),
   });
 
   const mockGetHttpClientReturnValue = {
@@ -245,13 +265,14 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const getDocumentGeneratorsReturnMock = {
-    addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFileUint8Array),
+    addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFile),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
+    noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
@@ -304,6 +325,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAllCatalogCases: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
+    getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByCaseId: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByCaseId),
@@ -476,5 +498,6 @@ module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
+  fakeData,
   getFakeFile,
 };

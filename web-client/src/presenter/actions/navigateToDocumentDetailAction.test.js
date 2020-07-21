@@ -13,13 +13,13 @@ describe('navigateToDocumentDetailAction', () => {
     };
   });
 
-  it('navigates to document detail url when given caseId and documentId', async () => {
+  it('navigates to document detail url when given docketNumber and documentId', async () => {
     await runAction(navigateToDocumentDetailAction, {
       modules: {
         presenter,
       },
       props: {
-        caseId: '123',
+        docketNumber: '123-19',
         documentId: '123',
       },
     });
@@ -27,7 +27,7 @@ describe('navigateToDocumentDetailAction', () => {
     expect(routeStub.mock.calls.length).toEqual(1);
   });
 
-  it('does not navigate to document detail url when there is no caseId and documentId', async () => {
+  it('does not navigate to document detail url when there is no docketNumber and documentId', async () => {
     await runAction(navigateToDocumentDetailAction, {
       modules: {
         presenter,

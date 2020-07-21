@@ -5,7 +5,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { formatDateString } = require('../../../business/utilities/DateHandler');
+const { formatDateString } = require('../../utilities/DateHandler');
 const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -53,7 +53,7 @@ const batchDownloadTrialSessionInteractor = async ({
   const { trialLocation } = trialSessionDetails;
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
-    .replace(/,/g, ''); // TODO - create a sanitize utility for s3 ids // TODO - should we make these unique somehow?
+    .replace(/,/g, '');
 
   sessionCases = sessionCases
     .filter(caseToFilter => caseToFilter.status !== CASE_STATUS_TYPES.closed)
@@ -244,5 +244,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
       },
       userId,
     });
+    await applicationContext.notifyHoneybadger(error);
   }
 };

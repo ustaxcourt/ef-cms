@@ -4,6 +4,7 @@ import { state } from 'cerebral';
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
   const caseDetail = applicationContext
@@ -16,12 +17,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
 
   const user = applicationContext.getCurrentUser();
 
-  let eventCodes = COURT_ISSUED_EVENT_CODES;
-  if (user.role === USER_ROLES.petitionsClerk) {
-    eventCodes = eventCodes.filter(entry =>
-      ['O', 'NOT', 'MISC'].includes(entry.eventCode),
-    );
-  }
+  const eventCodes = COURT_ISSUED_EVENT_CODES;
 
   const documentTypes = eventCodes.map(type => ({
     ...type,
@@ -57,11 +53,14 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const formattedDocumentTitle = `${form.generatedDocumentTitle}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
-
+  const showSaveAndServeButton = !UNSERVABLE_EVENT_CODES.includes(
+    form.eventCode,
+  );
   return {
     documentTypes,
     formattedDocumentTitle,
     serviceParties,
+    showSaveAndServeButton,
     showServiceStamp,
   };
 };

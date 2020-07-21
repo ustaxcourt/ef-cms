@@ -1,6 +1,6 @@
 const React = require('react');
 const { mount, shallow } = require('enzyme');
-import { StandingPretrialNotice } from './StandingPretrialNotice.jsx';
+const { StandingPretrialNotice } = require('./StandingPretrialNotice.jsx');
 
 describe('StandingPretrialNotice', () => {
   let options;

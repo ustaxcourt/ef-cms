@@ -249,7 +249,6 @@
         - "M136"
         - "M218"
         - "MEMO"
-        - "MGRTED"
         - "MINC"
         - "MIND"
         - "MISC"
@@ -265,7 +264,6 @@
         - "NCP"
         - "NCTP"
         - "NDC"
-        - "NDT"
         - "NFAR"
         - "NIFL"
         - "NINF"
@@ -490,9 +488,9 @@
         presence: "optional"
         description: "Served parties code to override system-computed code."
       allow: 
-        - "R"
         - "B"
         - "P"
+        - "R"
         - null
 
  ```

@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -10,16 +11,17 @@ const OtherPetitionerDisplay = connect(
   function OtherPetitionerDisplay({ constants, petitioner }) {
     return (
       <>
-        <p className="margin-top-0 address-name">
-          {petitioner.additionalName || petitioner.name}, {petitioner.title}
-          {petitioner.inCareOf && (
-            <span>
+        <p className="no-margin address-name">
+          {petitioner.name}
+          {petitioner.secondaryName && (
+            <>
               <br />
-              c/o {petitioner.inCareOf}
-            </span>
+              {petitioner.secondaryName}
+              {petitioner.title && <span>, {petitioner.title}</span>}
+            </>
           )}
         </p>
-        <p>
+        <p className="margin-top-0">
           <span className="address-line">{petitioner.address1}</span>
           {petitioner.address2 && (
             <span className="address-line">{petitioner.address2}</span>
@@ -40,7 +42,16 @@ const OtherPetitionerDisplay = connect(
             </span>
           )}
           {petitioner.email && (
-            <span className="address-line">{petitioner.email}</span>
+            <span className="address-line">
+              {petitioner.email}
+              {petitioner.showEAccessFlag && (
+                <FontAwesomeIcon
+                  className="margin-left-05 fa-icon-blue"
+                  icon="flag"
+                  size="1x"
+                />
+              )}
+            </span>
           )}
         </p>
       </>

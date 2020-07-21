@@ -33,6 +33,7 @@ const {
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
+  noticeOfTrialIssued,
   order,
   pendingReport,
   receiptOfFiling,
@@ -307,16 +308,14 @@ const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
-  generateChangeOfAddressTemplate,
-  generateNoticeOfTrialIssuedTemplate,
-  generatePrintableDocketRecordTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
-const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+const {
+  generateNoticeOfTrialIssuedTemplate,
+} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -781,8 +780,8 @@ const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
-  saveWorkItemForDocketEntryWithoutFile,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
+  saveWorkItemForDocketEntryInProgress,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -813,6 +812,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveExternallyFiledDocumentInteractor,
+} = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1118,6 +1120,7 @@ module.exports = appContextUser => {
       docketRecord,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
+      noticeOfTrialIssued,
       order,
       pendingReport,
       receiptOfFiling,
@@ -1193,9 +1196,10 @@ module.exports = appContextUser => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: () => {
+    getPdfJs: async () => {
       const pdfjsLib = require('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+
       return pdfjsLib;
     },
     getPdfLib: () => {
@@ -1306,7 +1310,7 @@ module.exports = appContextUser => {
         saveDocumentFromLambda,
         saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
-        saveWorkItemForDocketEntryWithoutFile,
+        saveWorkItemForDocketEntryInProgress,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
@@ -1380,12 +1384,9 @@ module.exports = appContextUser => {
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
     },
-    // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
-        generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
-        generatePrintableDocketRecordTemplate,
       };
     },
     getUniqueId,
@@ -1531,6 +1532,7 @@ module.exports = appContextUser => {
         sealCaseInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
+        serveExternallyFiledDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

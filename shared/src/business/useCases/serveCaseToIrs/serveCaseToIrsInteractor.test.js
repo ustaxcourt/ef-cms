@@ -7,7 +7,9 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
+  PARTY_TYPES,
   PAYMENT_STATUS,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
@@ -23,11 +25,11 @@ describe('serveCaseToIrsInteractor', () => {
       caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2018-12-27T18:06:02.968Z',
-      completedBy: 'Petitioner',
+      completedBy: PARTY_TYPES.petitioner,
       completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       createdAt: '2018-12-27T18:06:02.971Z',
       docketNumber: '101-18',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       document: {
         createdAt: '2018-12-27T18:06:02.968Z',
         documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
@@ -38,7 +40,7 @@ describe('serveCaseToIrsInteractor', () => {
       messages: [
         {
           createdAt: '2018-12-27T18:06:02.968Z',
-          from: 'Petitioner',
+          from: PARTY_TYPES.petitioner,
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'Petition ready for review',
           messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',

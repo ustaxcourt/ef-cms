@@ -1,12 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-
 const fs = require('fs');
 const path = require('path');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('./getChromiumBrowser');
-
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -15,6 +8,7 @@ const {
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
+  noticeOfTrialIssued,
   order,
   pendingReport,
   receiptOfFiling,
@@ -23,6 +17,18 @@ const {
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
+const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+  SERVED_PARTIES_CODES,
+} = require('../entities/EntityConstants');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../useCases/generatePdfFromHtmlInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { getChromiumBrowser } = require('./getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -37,6 +43,10 @@ describe('documentGenerators', () => {
 
   beforeAll(() => {
     if (process.env.PDF_OUTPUT) {
+      fs.mkdirSync(testOutputPath, { recursive: true }, err => {
+        if (err) throw err;
+      });
+
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );
@@ -98,8 +108,8 @@ describe('documentGenerators', () => {
               associatedJudge: 'Judge Armen',
               caseTitle: 'rick james b',
               docketNumber: '101-20',
-              docketNumberSuffix: 'L',
-              status: 'Closed',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+              status: CASE_STATUS_TYPES.closed,
             },
           ],
           reportTitle: 'General Docket - Not at Issue',
@@ -171,7 +181,7 @@ describe('documentGenerators', () => {
       const pdf = await coverSheet({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner',
+          caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
           certificateOfService: true,
           dateFiledLodged: '01/01/20',
@@ -187,6 +197,32 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('CoverSheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+
+    it('Generates a CoverSheet document for court issued documents that require a coversheet', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: PARTY_TYPES.petitioner,
+          caseTitle: 'Test Person',
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CourtIssuedDocumentCoverSheet', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
@@ -232,7 +268,7 @@ describe('documentGenerators', () => {
                 name: 'Test IRS Practitioner',
               },
             ],
-            partyType: 'Petitioner',
+            partyType: PARTY_TYPES.petitioner,
             privatePractitioners: [
               {
                 barNumber: 'PT20001',
@@ -258,10 +294,10 @@ describe('documentGenerators', () => {
             {
               document: {
                 filedBy: 'Test Filer',
-                isNotServedCourtIssuedDocument: false,
+                isNotServedDocument: false,
                 isStatusServed: true,
                 servedAtFormatted: '02/02/20',
-                servedPartiesCode: 'B',
+                servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
               },
               index: 1,
               record: {
@@ -345,6 +381,42 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Receipt_Petition', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('noticeOfTrialIssued', () => {
+    it('generates a Notice of Trial Issued document', async () => {
+      const pdf = await noticeOfTrialIssued({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          trialInfo: {
+            address1: '123 Some St.',
+            address2: 'Suite B',
+            city: 'Somecity',
+            courthouseName: 'Test Courthouse Name',
+            judge: 'Judge Dredd',
+            postalCode: '80008',
+            startDate: '02/02/2020',
+            startTime: '9:00 AM',
+            state: 'ZZ',
+          },
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Notice_Trial_Issued', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
@@ -539,7 +611,7 @@ describe('documentGenerators', () => {
         data: {
           pendingItems: [
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/02/20',
@@ -547,7 +619,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/22/20',
@@ -555,7 +627,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/03/20',
@@ -563,7 +635,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/23/20',

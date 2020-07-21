@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -15,6 +14,36 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
+export const getShowDocumentViewerLink = ({
+  hasDocument,
+  isCourtIssuedDocument,
+  isExternalUser,
+  isInitialDocument,
+  isServed,
+  isStricken,
+  isUnservable,
+  userHasAccessToCase,
+  userHasNoAccessToDocument,
+}) => {
+  if (!hasDocument) return false;
+
+  if (isExternalUser) {
+    if (isStricken) return false;
+    if (userHasNoAccessToDocument) return false;
+
+    if (isCourtIssuedDocument) {
+      if (isUnservable) return true;
+      if (!isServed) return false;
+    } else {
+      if (!userHasAccessToCase) return false;
+      if (isInitialDocument) return true;
+      if (!isServed) return false;
+    }
+  }
+
+  return true;
+};
+
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
@@ -22,7 +51,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const { SYSTEM_GENERATED_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    INITIAL_DOCUMENT_TYPES,
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const systemGeneratedEventCodes = Object.keys(
     SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
@@ -32,6 +66,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const {
     formatCase,
     formatCaseDeadlines,
+    setServiceIndicatorsForCase,
     sortDocketRecords,
   } = applicationContext.getUtilities();
 
@@ -45,174 +80,169 @@ export const formattedCaseDetail = (get, applicationContext) => {
   }
 
   const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
+
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,
   );
+
+  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
+    ...otherFiler,
+    showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
+  }));
+
+  result.otherPetitioners = (result.otherPetitioners || []).map(
+    otherPetitioner => ({
+      ...otherPetitioner,
+      showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
+    }),
+  );
+
+  result.contactPrimary = {
+    ...result.contactPrimary,
+    showEAccessFlag: !isExternalUser && result.contactPrimary.hasEAccess,
+  };
+
+  if (result.contactSecondary) {
+    result.contactSecondary = {
+      ...result.contactSecondary,
+      showEAccessFlag: !isExternalUser && result.contactSecondary.hasEAccess,
+    };
+  }
+
+  const getShowEditDocketRecordEntry = ({ document, userPermissions }) => {
+    const hasSystemGeneratedDocument =
+      document && systemGeneratedEventCodes.includes(document.eventCode);
+    const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
+    const hasServedCourtIssuedDocument =
+      hasCourtIssuedDocument && !!document.servedAt;
+    const hasUnservableCourtIssuedDocument =
+      document && UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+
+    return (
+      userPermissions.EDIT_DOCKET_ENTRY &&
+      (!document || document.qcWorkItemsCompleted) &&
+      !hasSystemGeneratedDocument &&
+      (!hasCourtIssuedDocument ||
+        hasServedCourtIssuedDocument ||
+        hasUnservableCourtIssuedDocument)
+    );
+  };
 
   result.formattedDocketEntries = result.docketRecordWithDocument.map(
     ({ document, index, record }) => {
       const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
       const userHasAccessToDocument = record.isAvailableToUser;
 
-      const isInProgress = !isExternalUser && document && document.isInProgress;
+      const formattedResult = {
+        numberOfPages: 0,
+        ...record,
+        ...document,
+        createdAtFormatted: record.createdAtFormatted,
+        descriptionDisplay: record.description,
+        index,
+      };
 
-      const qcWorkItemsUntouched =
-        !isInProgress &&
-        !isExternalUser &&
-        document &&
-        document.qcWorkItemsUntouched &&
-        !document.isCourtIssuedDocument;
+      let showDocumentLinks = false;
 
-      const hasCourtIssuedDocument = document && document.isCourtIssuedDocument;
-      const hasServedCourtIssuedDocument =
-        hasCourtIssuedDocument && !!document.servedAt;
+      if (document) {
+        if (isExternalUser) {
+          formattedResult.isInProgress = false;
+          formattedResult.hideIcons = true;
+          formattedResult.qcWorkItemsUntouched = false;
+        } else {
+          formattedResult.isInProgress =
+            document.isInProgress || !document.servedAt;
 
-      const hasSystemGeneratedDocument =
-        document && systemGeneratedEventCodes.includes(document.eventCode);
+          formattedResult.qcWorkItemsUntouched =
+            !formattedResult.isInProgress &&
+            document.qcWorkItemsUntouched &&
+            !document.isCourtIssuedDocument;
 
-      const showEditDocketRecordEntry =
-        permissions.EDIT_DOCKET_ENTRY &&
-        (!document || document.qcWorkItemsCompleted) &&
-        !hasSystemGeneratedDocument &&
-        (!hasCourtIssuedDocument || hasServedCourtIssuedDocument);
+          formattedResult.showLoadingIcon =
+            !permissions.UPDATE_CASE &&
+            document.processingStatus !==
+              DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+        }
 
-      const isPaper =
-        !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
+        formattedResult.isPaper =
+          !formattedResult.isInProgress &&
+          !formattedResult.qcWorkItemsUntouched &&
+          document.isPaper;
 
-      let filingsAndProceedingsWithAdditionalInfo = '';
+        if (document.documentTitle) {
+          formattedResult.descriptionDisplay = document.documentTitle;
+          if (document.additionalInfo) {
+            formattedResult.descriptionDisplay += ` ${document.additionalInfo}`;
+          }
+        }
+
+        formattedResult.showDocumentProcessing =
+          !permissions.UPDATE_CASE &&
+          document.processingStatus !==
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+
+        formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
+          document.eventCode,
+        );
+        formattedResult.showNotServed =
+          !formattedResult.isUnservable && document.isNotServedDocument;
+        formattedResult.showServed = document.isStatusServed;
+
+        const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
+          .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
+          .includes(document.documentType);
+        showDocumentLinks = getShowDocumentViewerLink({
+          hasDocument: document.isFileAttached,
+          isCourtIssuedDocument: document.isCourtIssuedDocument,
+          isExternalUser,
+          isInitialDocument,
+          isServed: !!document.servedAt,
+          isStricken: record.isStricken,
+          isUnservable: formattedResult.isUnservable,
+          userHasAccessToCase,
+          userHasNoAccessToDocument: !userHasAccessToDocument,
+        });
+
+        formattedResult.showDocumentViewerLink =
+          !isExternalUser && showDocumentLinks;
+
+        formattedResult.showLinkToDocument =
+          isExternalUser && showDocumentLinks;
+      }
+
+      formattedResult.filingsAndProceedingsWithAdditionalInfo = '';
       if (record.filingsAndProceedings) {
-        filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
+        formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
       }
       if (document && document.additionalInfo2) {
-        filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
+        formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
-      const showDocumentEditLink =
-        document &&
-        permissions.UPDATE_CASE &&
-        (!document.isInProgress ||
-          ((permissions.DOCKET_ENTRY ||
-            permissions.CREATE_ORDER_DOCKET_ENTRY) &&
-            document.isInProgress));
+      formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
+        document,
+        userPermissions: permissions,
+      });
 
-      let editLink = ''; //defaults to doc detail
+      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
 
-      if (
-        showDocumentEditLink &&
-        (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
-        document
-      ) {
-        if (document.isCourtIssuedDocument && !document.servedAt) {
-          editLink = '/edit-court-issued';
-        } else if (isInProgress) {
-          editLink = '/complete';
-        } else if (
-          !document.isCourtIssuedDocument &&
-          !document.isPetition &&
-          qcWorkItemsUntouched &&
-          permissions.DOCKET_ENTRY
-        ) {
-          editLink = '/edit';
-        }
-      }
-
-      let descriptionDisplay = record.description;
-
-      if (document && document.documentTitle) {
-        descriptionDisplay = document.documentTitle;
-        if (document.additionalInfo) {
-          descriptionDisplay += ` ${document.additionalInfo}`;
-        }
-      }
-
-      const showLinkToDocument =
-        (isExternalUser ? !record.isStricken : userHasAccessToCase) &&
-        userHasAccessToCase &&
-        userHasAccessToDocument &&
-        document &&
-        !permissions.UPDATE_CASE &&
-        document.processingStatus === 'complete' &&
-        !document.isInProgress &&
-        !document.isNotServedCourtIssuedDocument;
-
-      return {
-        action: record.action,
-        createdAtFormatted: record.createdAtFormatted,
-        description: record.description,
-        descriptionDisplay,
-        documentId: document && document.documentId,
-        editLink,
-        eventCode: record.eventCode || (document && document.eventCode),
-        filedBy: (document && document.filedBy) || record.filedBy,
-        filingsAndProceedingsWithAdditionalInfo,
-        hasDocument: !!document,
-        index,
-        isCourtIssuedDocument: document && document.isCourtIssuedDocument,
-        isFileAttached: document && document.isFileAttached,
-        isPaper,
-        isPending: document && document.pending,
-        isServed: document && !!document.servedAt,
-        isStricken: record.isStricken,
-        numberOfPages:
-          (document && (record.numberOfPages || document.numberOfPages)) || 0,
-        servedAtFormatted: document && document.servedAtFormatted,
-        servedPartiesCode:
-          record.servedPartiesCode || (document && document.servedPartiesCode),
-        showDocumentDescriptionWithoutLink:
-          !showDocumentEditLink &&
-          (!userHasAccessToCase ||
-            !userHasAccessToDocument ||
-            !document ||
-            (userHasAccessToCase &&
-              userHasAccessToDocument &&
-              record.isStricken) ||
-            (document &&
-              (document.isNotServedCourtIssuedDocument ||
-                document.isInProgress) &&
-              !(
-                permissions.DOCKET_ENTRY ||
-                permissions.CREATE_ORDER_DOCKET_ENTRY
-              ))),
-        showDocumentEditLink,
-        showDocumentProcessing:
-          document &&
-          !permissions.UPDATE_CASE &&
-          document.processingStatus !== 'complete',
-        showEditDocketRecordEntry,
-        showInProgress: document && document.isInProgress && !isExternalUser,
-        showLinkToDocument,
-        showLoadingIcon:
-          document &&
-          !permissions.UPDATE_CASE &&
-          !isExternalUser &&
-          document.processingStatus !== 'complete', //TODO - this could never be true?
-        showNotServed: document && document.isNotServedCourtIssuedDocument,
-        showQcUntouched: qcWorkItemsUntouched,
-        showServed: document && document.isStatusServed,
-        signatory: record.signatory,
-      };
+      return formattedResult;
     },
   );
 
-  result.formattedDraftDocuments = (result.draftDocuments || []).map(
-    draftDocument => {
-      return {
-        ...draftDocument,
-        descriptionDisplay: draftDocument.documentTitle,
-        editLink: '',
-        showDocumentEditLink: permissions.UPDATE_CASE,
-      };
-    },
-  );
+  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+    return {
+      ...draftDocument,
+      descriptionDisplay: draftDocument.documentTitle,
+      showDocumentViewerLink: permissions.UPDATE_CASE,
+    };
+  });
 
   result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-    entry => entry.hasDocument && entry.isPending,
+    entry => entry.pending,
   );
 
   result.consolidatedCases = result.consolidatedCases || [];

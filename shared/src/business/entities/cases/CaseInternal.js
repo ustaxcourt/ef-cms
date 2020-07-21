@@ -13,10 +13,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { getTimestampSchema } = require('../../../utilities/dateSchema');
 const { Statistic } = require('../Statistic');
-
-const joiStrictTimestamp = getTimestampSchema();
 
 /**
  * CaseInternal Entity
@@ -129,7 +126,7 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    caseCaption: joi.string().max(500).required(),
+    caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: joi
       .string()
       .valid(...CASE_TYPES)
@@ -175,7 +172,7 @@ const paperRequirements = joi
       .string()
       .valid(...Object.values(PARTY_TYPES))
       .required(),
-    petitionFile: joi.object().required(), // TODO: object definition
+    petitionFile: joi.object().required(), // object of type File
     petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'petitionFile',
       {
@@ -184,13 +181,14 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    petitionPaymentDate: joiStrictTimestamp
-      .max('now')
-      .when('petitionPaymentStatus', {
+    petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now').when(
+      'petitionPaymentStatus',
+      {
         is: PAYMENT_STATUS.PAID,
         otherwise: joi.optional().allow(null),
         then: joi.required(),
-      }),
+      },
+    ),
     petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
     petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
     petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
@@ -205,13 +203,13 @@ const paperRequirements = joi
       .string()
       .valid(...PROCEDURE_TYPES)
       .required(),
-    receivedAt: joiStrictTimestamp.max('now').required(),
+    receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     requestForPlaceOfTrialFile: joi
       .alternatives()
       .conditional('preferredTrialCity', {
         is: joi.exist().not(null),
         otherwise: joi.object().optional(),
-        then: joi.object().required(), // TODO: object definition
+        then: joi.object().required(), // object of type File
       }),
     requestForPlaceOfTrialFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
       'requestForPlaceOfTrialFile',
@@ -222,7 +220,7 @@ const paperRequirements = joi
       },
     ),
     statistics: Case.VALIDATION_RULES.statistics,
-    stinFile: joi.object().optional(), // TODO: object definition
+    stinFile: joi.object().optional(), // object of type File
     stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when('stinFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),

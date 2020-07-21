@@ -7,11 +7,11 @@ import React from 'react';
 
 export const PrintPaperPetitionReceipt = connect(
   {
-    navigateToDocumentQcFromPrintPaperPetitionReceiptSequence:
-      sequences.navigateToDocumentQcFromPrintPaperPetitionReceiptSequence,
+    completePrintPaperPetitionReceiptSequence:
+      sequences.completePrintPaperPetitionReceiptSequence,
   },
   function PrintPaperPetitionReceipt({
-    navigateToDocumentQcFromPrintPaperPetitionReceiptSequence,
+    completePrintPaperPetitionReceiptSequence,
   }) {
     return (
       <>
@@ -25,7 +25,7 @@ export const PrintPaperPetitionReceipt = connect(
               <Button
                 className="push-right margin-right-0 margin-bottom-4"
                 onClick={() => {
-                  navigateToDocumentQcFromPrintPaperPetitionReceiptSequence();
+                  completePrintPaperPetitionReceiptSequence();
                 }}
               >
                 Done

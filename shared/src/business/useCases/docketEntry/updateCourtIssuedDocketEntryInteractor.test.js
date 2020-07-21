@@ -2,8 +2,14 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
+const {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -13,11 +19,11 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
@@ -41,6 +47,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '30413c1e-9a71-4c22-8c11-41f8689313ae',
           documentType: 'Answer',
+          eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
@@ -48,6 +55,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: 'e27d2d4e-f768-4167-b2c9-989dccbbb738',
           documentType: 'Answer',
+          eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
@@ -55,6 +63,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
+          eventCode: 'A',
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
@@ -62,6 +71,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
+          eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -74,7 +84,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
               caseStatus: CASE_STATUS_TYPES.new,
               caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
-              docketNumberSuffix: 'S',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
               document: {},
               isQC: true,
               messages: [],
@@ -87,7 +97,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
           documentTitle: 'Transcript of [anything] on [date]',
-          documentType: 'TRAN - Transcript',
+          documentType: 'Transcript',
           eventCode: 'TRAN',
           userId: mockUserId,
           workItems: [
@@ -97,7 +107,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-18',
-              docketNumberSuffix: 'S',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
               document: {},
               isQC: true,
               messages: [],
@@ -135,6 +145,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -154,6 +165,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           caseId: caseRecord.caseId,
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
+          eventCode: 'O',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -175,6 +187,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         caseId: caseRecord.caseId,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
+        eventCode: 'O',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
         signedJudgeName: 'Dredd',
@@ -207,7 +220,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         date: '2019-03-01T21:40:46.415Z',
         documentId: '7f61161c-ede8-43ba-8fab-69e15d057012',
         documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'TRAN - Transcript',
+        documentType: 'Transcript',
         eventCode: 'TRAN',
         freeText: 'Dogs',
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
@@ -238,6 +251,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         caseId: caseRecord.caseId,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
+        eventCode: 'O',
         objections: 'No',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,

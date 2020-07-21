@@ -1,8 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { hasCaseInventoryReportFilterSelectedAction } from './hasCaseInventoryReportFilterSelectedAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('hasCaseInventoryReportFilterSelectedAction', () => {
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+
   const proceedMock = jest.fn();
   const noMock = jest.fn();
 
@@ -20,7 +23,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
         },
       },
     });
@@ -36,7 +39,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
       state: {
         screenMetadata: {
-          status: 'New',
+          status: STATUS_TYPES.new,
         },
       },
     });

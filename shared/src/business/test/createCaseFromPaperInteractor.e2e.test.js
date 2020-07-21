@@ -1,5 +1,7 @@
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
 const {
@@ -35,14 +37,14 @@ describe('createCaseFromPaperInteractor integration test', () => {
     MOCK_CASE.contactPrimary = {
       address1: '123 Abc Ln',
       city: 'something',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Bob Jones',
       phone: '1234567890',
       postalCode: '12345',
       state: 'CA',
     };
 
-    const { caseId } = await createCaseFromPaperInteractor({
+    const { docketNumber } = await createCaseFromPaperInteractor({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
@@ -67,7 +69,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     const createdCase = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     expect(createdCase).toMatchObject({
@@ -120,8 +122,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
         },
         {
           createdAt: RECEIVED_DATE,
-          documentType: 'Statement of Taxpayer Identification',
-          eventCode: 'STIN',
+          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
         },

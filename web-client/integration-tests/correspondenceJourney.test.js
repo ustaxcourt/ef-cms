@@ -3,6 +3,7 @@ import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCo
 import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorrespondence';
 import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
 import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
+import { docketClerkStartsNewCaseMessageWithCorrespondence } from './journey/docketClerkStartsNewCaseMessageWithCorrespondence';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -14,17 +15,18 @@ describe('Adds correspondence to a case', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
   it('create case', async () => {
     caseDetail = await uploadPetition(test);
     expect(caseDetail).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk');
+  loginAs(test, 'docketclerk@example.com');
   docketClerkNavigatesToAddCorrespondence(test);
   docketClerkAddsCorrespondence(test, correspondenceTitle);
   docketClerkNavigatesToEditCorrespondence(test, correspondenceTitle);
+  docketClerkStartsNewCaseMessageWithCorrespondence(test);
   docketClerkEditsCorrespondence(test);
   docketClerkDeletesCorrespondence(test);
 });

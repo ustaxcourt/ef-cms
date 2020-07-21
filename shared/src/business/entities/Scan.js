@@ -1,12 +1,13 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
 const { remove } = require('lodash');
 
-const joiStrictTimestamp = getTimestampSchema();
 /**
  * constructor
  *
@@ -77,13 +78,8 @@ Scan.VALIDATION_ERROR_MESSAGES = {
 
 Scan.schema = joi.object().keys({
   batches: joi.array().min(1).required(),
-  createdAt: joiStrictTimestamp.required(),
-  scanId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .required(),
+  createdAt: JoiValidationConstants.ISO_DATE.required(),
+  scanId: JoiValidationConstants.UUID.required(),
 });
 
 joiValidationDecorator(Scan, Scan.schema, Scan.VALIDATION_ERROR_MESSAGES);

@@ -19,10 +19,14 @@ export const CoverSheet = ({
           <div className="width-half float-left">
             <div className="us-tax-court-seal"></div>
           </div>
-          <div className="width-half float-right" id="date-received">
-            <b>Received</b>
-            <br />
-            {dateReceived}
+          <div className="width-half float-right">
+            {dateReceived && (
+              <div id="date-received">
+                <b>Received</b>
+                <br />
+                {dateReceived}
+              </div>
+            )}
           </div>
           <div className="clear"></div>
         </div>

@@ -2,9 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   getCaseInventoryReportInteractor,
 } = require('./getCaseInventoryReportInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getCaseInventoryReportInteractor', () => {
   beforeEach(() => {
@@ -23,7 +28,7 @@ describe('getCaseInventoryReportInteractor', () => {
     await expect(
       getCaseInventoryReportInteractor({
         applicationContext,
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
       }),
     ).rejects.toThrow('Unauthorized for case inventory report');
   });
@@ -41,34 +46,34 @@ describe('getCaseInventoryReportInteractor', () => {
       .getPersistenceGateway()
       .getCaseInventoryReport.mockReturnValue([
         {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           caseCaption: 'A Test Caption',
           docketNumber: '123-20',
-          docketNumberSuffix: 'L',
-          status: 'New',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+          status: CASE_STATUS_TYPES.NEW,
         },
       ]);
 
     const result = await getCaseInventoryReportInteractor({
       applicationContext,
-      associatedJudge: 'Chief Judge',
-      status: 'New',
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.NEW,
     });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseInventoryReport,
     ).toBeCalledWith({
       applicationContext: expect.anything(),
-      associatedJudge: 'Chief Judge',
-      status: 'New',
+      associatedJudge: CHIEF_JUDGE,
+      status: CASE_STATUS_TYPES.NEW,
     });
     expect(result).toEqual([
       {
-        associatedJudge: 'Chief Judge',
+        associatedJudge: CHIEF_JUDGE,
         caseCaption: 'A Test Caption',
         docketNumber: '123-20',
-        docketNumberSuffix: 'L',
-        status: 'New',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+        status: CASE_STATUS_TYPES.NEW,
       },
     ]);
   });

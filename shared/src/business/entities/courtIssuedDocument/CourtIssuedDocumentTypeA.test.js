@@ -20,6 +20,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
+        serviceStamp: 'Served',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
@@ -28,7 +29,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
-        documentType: 'O - Order',
+        documentType: 'Order',
         scenario: 'Type A',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
@@ -41,7 +42,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
-        documentType: 'O - Order',
+        documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
         serviceStamp: 'Something invalid',
@@ -55,7 +56,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
-        documentType: 'O - Order',
+        documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
         serviceStamp: 'Served',
@@ -80,7 +81,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: 'Order that caption of case is amended [Anything]',
-        documentType: 'OCA - Order that caption of case is amended',
+        documentType: 'Order that caption of case is amended',
         scenario: 'Type A',
       });
       expect(extDoc.getDocumentTitle()).toEqual(

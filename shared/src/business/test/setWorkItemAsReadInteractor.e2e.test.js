@@ -2,6 +2,12 @@ const {
   assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
 const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
@@ -10,7 +16,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -22,17 +27,17 @@ describe('setWorkItemAsReadInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
@@ -59,7 +64,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
 
     const createdCase = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     const workItem = createdCase.documents.find(

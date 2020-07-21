@@ -4,19 +4,24 @@ const {
 const {
   associateIrsPractitionerWithCaseInteractor,
 } = require('./associateIrsPractitionerWithCaseInteractor');
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Deficiency',
+    caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -27,7 +32,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     docketRecord: MOCK_CASE.docketRecord,
     documents: MOCK_CASE.documents,
     filingType: 'Myself',
-    partyType: 'Petitioner',
+    partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

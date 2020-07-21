@@ -37,7 +37,7 @@
       "name": "Brett Osborne",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -55,7 +55,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "custom:role": "petitioner",
         "iat": 1551476326,
-        "email": "petitioner",
+        "email": "petitioner@example.com",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
@@ -169,6 +169,7 @@
   },
   {
     "documentType": "Petition",
+    "eventCode": "P",
     "entityName": "Document",
     "filingDate": "2019-03-01T21:40:46.415Z",
     "numberOfPages": 1,
@@ -217,6 +218,7 @@
     "filedBy": "Test Petitioner",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "isFileAttached": true,
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02"
   },
@@ -244,6 +246,7 @@
     "filedBy": "Test Docketclerk",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "isFileAttached": true,
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "entityName": "Document",
     "numberOfPages": 1,
@@ -254,6 +257,7 @@
   },
   {
     "documentType": "Statement of Taxpayer Identification",
+    "eventCode": "STIN",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "workItems": [],
     "numberOfPages": 1,
@@ -265,6 +269,7 @@
     "filedBy": "Test Petitioner",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "entityName": "Document",
+    "isFileAttached": true,
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02"

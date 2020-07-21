@@ -160,8 +160,36 @@
       "name": "Tatum Craig",
       "state": "NM",
       "countryType": "domestic",
-      "email": "petitioner"
+      "email": "petitioner@example.com"
     },
+    "otherFilers": [
+      {
+        "address1": "42 Lamb Sauce Blvd",
+        "city": "Nashville",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Gordon Ramsay",
+        "otherFilerType": "Intervenor",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Tax Matters Partner"
+      },
+      {
+        "address1": "1337 12th Ave",
+        "city": "Flavortown",
+        "country": "USA",
+        "countryType": "domestic",
+        "email": "testUser@example.com",
+        "name": "Guy Fieri",
+        "otherFilerType": "Tax Matters Partner",
+        "phone": "1234567890",
+        "postalCode": "05198",
+        "state": "AK",
+        "title": "Intervenor"
+      }
+    ],
     "createdAt": "2019-08-16T17:29:10.132Z",
     "receivedAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -318,7 +346,7 @@
     "section": "irsPractitioner",
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irsPractitioner"
+    "email": "irsPractitioner@example.com"
   },
   {
     "role": "privatePractitioner",
@@ -340,7 +368,7 @@
     "representingPrimary": true,
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner"
+    "email": "privatePractitioner@example.com"
   },
   {
     "documentType": "Ownership Disclosure Statement",
@@ -350,11 +378,12 @@
     "pending": false,
     "receivedAt": "2019-08-16T17:29:10.133Z",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "ODS",
+    "eventCode": "DISC",
     "createdAt": "2019-08-16T17:29:10.133Z",
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "isFileAttached": true,
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
@@ -419,6 +448,7 @@
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "isFileAttached": true,
     "sk": "document|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "numberOfPages": 1,
@@ -426,7 +456,7 @@
     "servedParties": [
       {
         "name": "Tatum Craig",
-        "email": "petitioner"
+        "email": "petitioner@example.com"
       }
     ],
     "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
@@ -445,6 +475,7 @@
     "processingStatus": "complete",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "isFileAttached": true,
     "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "numberOfPages": 1,

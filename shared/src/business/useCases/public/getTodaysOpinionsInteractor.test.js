@@ -2,6 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  OPINION_EVENT_CODES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
@@ -10,7 +16,6 @@ const {
 const {
   getTodaysOpinionsInteractor,
 } = require('./getTodaysOpinionsInteractor');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('getTodaysOpinionsInteractor', () => {
   const mockOpinionSearchResult = [
@@ -22,17 +27,17 @@ describe('getTodaysOpinionsInteractor', () => {
         address2: 'Ut culpa cum sint ',
         address3: 'In laboris hic volup',
         city: 'Omnis dignissimos at',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner',
         name: 'Reuben Blair',
         phone: '+1 (338) 996-7072',
         postalCode: '92017',
-        serviceIndicator: 'Electronic',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'DC',
       },
       contactSecondary: {},
       docketNumber: '103-20',
-      docketNumberSuffix: 'L',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
       documentId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
       documentTitle: 'Memorandum Opinion Judge Armen',
       filingDate: '2020-05-12T18:42:10.471Z',

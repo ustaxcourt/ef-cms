@@ -1,5 +1,10 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
+
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  STATUS_TYPES,
+} = applicationContext.getConstants();
 
 export const petitionsClerkBlocksCase = (test, trialLocation) => {
   return it('Petitions clerk blocks the case', async () => {
@@ -42,10 +47,10 @@ export const petitionsClerkBlocksCase = (test, trialLocation) => {
           blocked: true,
           blockedReason: 'just because',
           caseCaption:
-            'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Surviving Spouse, Petitioner',
+            'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
           docketNumber: test.docketNumber,
-          docketNumberSuffix: 'S',
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          status: STATUS_TYPES.generalDocketReadyForTrial,
         }),
       ]),
     );

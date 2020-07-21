@@ -1,9 +1,14 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
+const {
+  AUTOMATIC_BLOCKED_REASONS,
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 
 describe('fileDocketEntryInteractor', () => {
   const user = {
@@ -18,11 +23,11 @@ describe('fileDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
         name: 'Guy Fieri',
         phone: '1234567890',
@@ -117,9 +122,12 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
   });
 
-  it('sets lodged to true on any secondaryDocument', async () => {
+  it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
@@ -129,41 +137,24 @@ describe('fileDocketEntryInteractor', () => {
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
         isFileAttached: true,
-        lodged: true,
-        secondaryDocument: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-        },
-        secondarySupportingDocumentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-        },
+        isPaper: true,
       },
+      isSavingForLater: true,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      secondaryDocumentFileId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
-      secondarySupportingDocumentFileId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[4],
-    ).toMatchObject({
-      eventCode: 'MISP',
-      lodged: true,
-    });
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.documents[5],
-    ).toMatchObject({
-      eventCode: 'MISP',
-      lodged: true,
-    });
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {

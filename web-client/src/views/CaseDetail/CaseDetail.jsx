@@ -4,6 +4,7 @@ import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { OtherFilerInformation } from './OtherFilerInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -63,6 +64,7 @@ export const CaseDetail = connect(
                             'overview',
                             'petitioner',
                             'respondent',
+                            'otherFiler',
                           ].includes(e.target.value),
                           tab: e.target.value,
                         });
@@ -73,6 +75,7 @@ export const CaseDetail = connect(
                         <option value="overview">Overview</option>
                         <option value="petitioner">Petitioner</option>
                         <option value="respondent">Respondent</option>
+                        <option value="otherFiler">Other</option>
                       </optgroup>
                     </select>
                   </div>
@@ -115,6 +118,13 @@ export const CaseDetail = connect(
                         >
                           <RespondentInformation />
                         </Tab>
+                        <Tab
+                          id="tab-other-filer"
+                          tabName="otherFiler"
+                          title="Other"
+                        >
+                          <OtherFilerInformation />
+                        </Tab>
                       </Tabs>
                     </NonMobile>
                     <Mobile>
@@ -147,6 +157,15 @@ export const CaseDetail = connect(
                             title="Respondent"
                           >
                             <RespondentInformation />
+                          </Tab>
+                        )}
+                        {caseInformationTab === 'otherFiler' && (
+                          <Tab
+                            id="tab-other-filer"
+                            tabName="otherFiler"
+                            title="Other"
+                          >
+                            <OtherFilerInformation />
                           </Tab>
                         )}
                       </Tabs>

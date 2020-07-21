@@ -36,7 +36,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'TRAN - Transcript',
+      value: 'Transcript',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -70,7 +70,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added to Docket Record.',
+      'Your entry has been added to docket record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {

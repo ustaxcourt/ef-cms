@@ -22,12 +22,12 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
 
     await test.runSequence('openCreateCaseMessageModalSequence');
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateSectionInCreateCaseMessageModalSequence', {
       key: 'toSection',
       value: 'petitions',
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
@@ -56,7 +56,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
     expect(helper.showAddMoreDocumentsButton).toEqual(false);
     expect(helper.showMessageAttachments).toEqual(true);
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'subject',
       value: 'what kind of bear is best?',
     });
@@ -67,7 +67,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
       message: NewCaseMessage.VALIDATION_ERROR_MESSAGES.message,
     });
 
-    await test.runSequence('updateCreateCaseMessageValueInModalSequence', {
+    await test.runSequence('updateModalFormValueSequence', {
       key: 'message',
       value: 'bears, beets, battlestar galactica',
     });

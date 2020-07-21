@@ -67,7 +67,7 @@ module.exports = {
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 80 }], // todo: plugin default is 20, try to lower this
+    complexity: ['error', { max: 40 }], // todo: plugin default is 20, try to lower this
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -189,6 +189,7 @@ module.exports = {
         skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
         skipWords: [
           'anthony',
+          'apigateway',
           'args',
           'armen',
           'armens',
@@ -318,6 +319,7 @@ module.exports = {
           'scss',
           'semibold',
           'seriatim',
+          'serverless',
           'servoss',
           'sisqo',
           'skipnav',
@@ -379,7 +381,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.json'],
       },
     },
     react: {

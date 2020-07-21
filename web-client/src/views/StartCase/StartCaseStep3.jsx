@@ -12,6 +12,7 @@ import classNames from 'classnames';
 
 export const StartCaseStep3 = connect(
   {
+    PARTY_TYPES: state.constants.PARTY_TYPES,
     completeStartCaseWizardStepSequence:
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
@@ -31,6 +32,7 @@ export const StartCaseStep3 = connect(
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
+    PARTY_TYPES,
     showModal,
     startCaseHelper,
     updateStartCaseFormValueSequence,
@@ -208,8 +210,8 @@ export const StartCaseStep3 = connect(
                 {[
                   'An estate or trust',
                   'A minor or legally incompetent person',
-                  'Donor',
-                  'Transferee',
+                  PARTY_TYPES.donor,
+                  PARTY_TYPES.transferee,
                   'Deceased Spouse',
                 ].map((otherType, idx) => (
                   <div className="usa-radio" key={otherType}>
@@ -397,7 +399,7 @@ export const StartCaseStep3 = connect(
                 >
                   Download Ownership Disclosure Statement (T.C. Form 6)
                 </Button>
-                <p className="margin-top-0">if you haven‘t already done so</p>
+                <p className="margin-top-0">if you haven’t already done so</p>
               </p>
               <StateDrivenFileInput
                 aria-describedby="ownership-disclosure-file-label"

@@ -1,11 +1,13 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditCaseNoteModalStateFromDetailAction } from './setAddEditCaseNoteModalStateFromDetailAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
-
 describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
   it('should set the modal state from caseDetail', async () => {
     const result = await runAction(
       setAddEditCaseNoteModalStateFromDetailAction,
@@ -19,11 +21,12 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             caseNote: 'i got some notes',
             docketNumber: '101-19',
-            docketNumberSuffix: 'L',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
           },
         },
       },
     );
+
     expect(result.state.modal.caseTitle).toEqual('Sisqo');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -48,6 +51,7 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
         },
       },
     );
+
     expect(result.state.modal.caseTitle).toEqual('');
     expect(result.state.modal.caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',

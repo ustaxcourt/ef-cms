@@ -1,14 +1,5 @@
 const joi = require('@hapi/joi');
 const {
-  joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
-const { createISODateString } = require('../utilities/DateHandler');
-const { getTimestampSchema } = require('../../utilities/dateSchema');
-const { Message } = require('./Message');
-const { omit, orderBy } = require('lodash');
-const joiStrictTimestamp = getTimestampSchema();
-const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
@@ -18,6 +9,16 @@ const {
   IRS_SYSTEM_SECTION,
   SECTIONS,
 } = require('./EntityConstants');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
+  joiValidationDecorator,
+} = require('../../utilities/JoiValidationDecorator');
+const { CHIEF_JUDGE, ROLES } = require('./EntityConstants');
+const { createISODateString } = require('../utilities/DateHandler');
+const { Message } = require('./Message');
+const { omit, orderBy } = require('lodash');
 
 /**
  * constructor
@@ -69,38 +70,21 @@ WorkItem.validationName = 'WorkItem';
 joiValidationDecorator(
   WorkItem,
   joi.object().keys({
-    assigneeId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .allow(null)
-      .optional(),
+    assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
     assigneeName: joi.string().max(100).allow(null).optional(), // should be a Message entity at some point
     associatedJudge: joi.string().max(100).required(),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    caseId: JoiValidationConstants.UUID.required(),
     caseIsInProgress: joi.boolean().optional(),
     caseStatus: joi
       .string()
       .valid(...Object.values(CASE_STATUS_TYPES))
       .optional(),
     caseTitle: joi.string().max(500).optional(),
-    completedAt: joiStrictTimestamp.optional(),
+    completedAt: JoiValidationConstants.ISO_DATE.optional(),
     completedBy: joi.string().max(100).optional().allow(null),
-    completedByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional()
-      .allow(null),
+    completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
-    createdAt: joiStrictTimestamp.optional(),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
     docketNumber: joi
       .string()
       .regex(DOCKET_NUMBER_MATCHER)
@@ -119,7 +103,7 @@ joiValidationDecorator(
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
-    messages: joi.array().items(joi.object()).required(),
+    messages: joi.array().items(joi.object().instance(Message)).required(),
     section: joi
       .string()
       .valid(
@@ -129,25 +113,19 @@ joiValidationDecorator(
         IRS_SYSTEM_SECTION,
       )
       .required(),
-    sentBy: joi.string().max(100).required(),
+    sentBy: joi
+      .string()
+      .max(100)
+      .required()
+      .description('The name of the user that sent the WorkItem'),
     sentBySection: joi
       .string()
       .valid(...SECTIONS, ...CHAMBERS_SECTIONS, ...Object.values(ROLES))
       .optional(),
-    sentByUserId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
-    trialDate: joiStrictTimestamp.optional().allow(null),
-    updatedAt: joiStrictTimestamp.required(),
-    workItemId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    sentByUserId: JoiValidationConstants.UUID.optional(),
+    trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+    updatedAt: JoiValidationConstants.ISO_DATE.required(),
+    workItemId: JoiValidationConstants.UUID.required(),
   }),
 );
 

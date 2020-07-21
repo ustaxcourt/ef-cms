@@ -2,9 +2,8 @@ const client = require('../../../../../shared/src/persistence/dynamodbClientServ
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { ROLES } = require('../../../business/entities/EntityConstants');
-
 const { getPractitionerByBarNumber } = require('./getPractitionerByBarNumber');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('getPractitionerByBarNumber', () => {
   const privatePractitioner = {

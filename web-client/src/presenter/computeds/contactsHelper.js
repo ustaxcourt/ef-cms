@@ -31,6 +31,7 @@ export const contactsHelper = (get, applicationContext) => {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In care of',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Business name',
         };
         break;
@@ -132,7 +133,7 @@ export const contactsHelper = (get, applicationContext) => {
         contactSecondary = {
           displayPhone: true,
           header: 'Tell Us About Your Spouse',
-          nameLabel: "Spouse's name",
+          nameLabel: 'Spouse’s name',
         };
         break;
       case PARTY_TYPES.petitionerDeceasedSpouse:
@@ -188,6 +189,7 @@ export const contactsHelper = (get, applicationContext) => {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In care of',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Business name',
         };
         break;

@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'NTD - Notice of Trial',
+      value: 'Notice of Trial',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
@@ -93,7 +93,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     expect(updatedOrderDocument).toMatchObject({
       date: '2002-01-01',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
-      documentType: 'NTD - Notice of Trial',
+      documentType: 'Notice of Trial',
       eventCode: 'NTD',
       trialLocation: 'Boise, Idaho',
     });
@@ -107,7 +107,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
       date: '2002-01-01',
       day: '1',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
-      documentType: 'NTD - Notice of Trial',
+      documentType: 'Notice of Trial',
       eventCode: 'NTD',
       generatedDocumentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       month: '1',

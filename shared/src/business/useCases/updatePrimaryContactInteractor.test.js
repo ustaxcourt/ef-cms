@@ -1,13 +1,13 @@
 const {
+  applicationContext,
+  fakeData,
+} = require('../test/createTestApplicationContext');
+const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
-
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
 describe('update primary contact on a case', () => {
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe('update primary contact on a case', () => {
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner',
         name: 'Bill Burr',
         phone: '1234567890',
@@ -77,7 +77,7 @@ describe('update primary contact on a case', () => {
     expect(updatedCase.contactPrimary).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: MOCK_CASE.contactPrimary.email,
       name: MOCK_CASE.contactPrimary.name,
       phone: '1234567890',
@@ -143,7 +143,7 @@ describe('update primary contact on a case', () => {
         // Matches current contact info
         address1: '123 Main St',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
         phone: '1234567',
@@ -157,8 +157,7 @@ describe('update primary contact on a case', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getTemplateGenerators()
-        .generateChangeOfAddressTemplate,
+      applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
@@ -178,7 +177,7 @@ describe('update primary contact on a case', () => {
       contactInfo: {
         address1: 'nothing',
         city: 'Somewhere',
-        countryType: 'domestic',
+        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'hello123@example.com',
         name: 'Secondary Party Name Changed',
         phone: '9876543210',

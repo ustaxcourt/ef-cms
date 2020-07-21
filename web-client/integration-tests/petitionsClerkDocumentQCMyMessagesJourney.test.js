@@ -22,11 +22,11 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   const caseCreationCount = 3;
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(test, true);
   petitionsClerkViewsMyDocumentQC(test, true);
 
-  loginAs(test, 'petitioner');
+  loginAs(test, 'petitioner@example.com');
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
@@ -37,7 +37,7 @@ describe('Petitions Clerk Document QC Journey', () => {
     });
   }
 
-  loginAs(test, 'petitionsclerk');
+  loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
   petitionsClerkBulkAssignsCases(test, createdCases);
@@ -51,7 +51,7 @@ describe('Petitions Clerk Document QC Journey', () => {
     createdCases,
   );
 
-  loginAs(test, 'petitionsclerk1');
+  loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerkViewsMyMessagesInbox(test, true);
   petitionsClerkGetsMyMessagesInboxCount(test);
   petitionsClerkViewsUnreadMessage(test, 'Here comes the hotstepper!');

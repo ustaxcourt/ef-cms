@@ -1,23 +1,26 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  ROLES,
 } = require('../entities/EntityConstants');
 const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { omit } = require('lodash');
-const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateCase', () => {
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Other',
+    caseType: CASE_TYPES_MAP.other,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
-      countryType: 'domestic',
+      countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'fieri@example.com',
       name: 'Guy Fieri',
       phone: '1234567890',
@@ -30,6 +33,7 @@ describe('updateCase', () => {
       {
         documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Petition',
+        eventCode: 'P',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
         workItems: [
@@ -48,12 +52,14 @@ describe('updateCase', () => {
       {
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         documentType: 'Answer',
+        eventCode: 'A',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
       {
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        documentType: 'Motion',
+        documentType: 'Motion for Continuance',
+        eventCode: 'M006',
         filedBy: 'Test Petitioner',
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
       },
@@ -113,13 +119,13 @@ describe('updateCase', () => {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '193 South Hague Freeway',
           address2: 'Sunt maiores vitae ',
           address3: 'Culpa ex aliquip ven',
           city: 'Aperiam minim sunt r',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Iola Snow',
           phone: '+1 (772) 246-3448',
@@ -131,7 +137,7 @@ describe('updateCase', () => {
           address2: 'Aperiam aliquip volu',
           address3: 'Eos consequuntur max',
           city: 'Deleniti lorem sit ',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Linda Singleton',
           phone: '+1 (153) 683-1448',
           postalCode: '89985',
@@ -139,7 +145,7 @@ describe('updateCase', () => {
         },
         createdAt: '2019-07-24T16:30:01.940Z',
         docketNumber: '168-19',
-        docketNumberSuffix: 'S',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         filingType: 'Myself and my spouse',
         hasVerifiedIrsNotice: false,
         isPaper: false,

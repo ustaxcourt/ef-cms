@@ -1,5 +1,3 @@
-// TODO: refactor here
-
 /**
  * @param {PDFPage} page the page to get dimensions for
  * @returns {Array} [width, height]
