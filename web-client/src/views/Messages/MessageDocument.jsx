@@ -64,7 +64,7 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showEditButtonNotSigned && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
+                  href={`${messageDocumentHelper.editUrl}/${parentMessageId}`}
                   icon="edit"
                 >
                   Edit
