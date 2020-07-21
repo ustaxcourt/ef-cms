@@ -22,8 +22,9 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: false,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
+      isSavingForLater: true,
     });
 
     expect(test.getState('validationErrors')).toMatchObject({
@@ -112,9 +113,9 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: true,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: false,
+      isSavingForLater: true,
     });
 
     test.documentId = test
