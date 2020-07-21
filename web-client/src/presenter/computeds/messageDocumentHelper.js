@@ -35,6 +35,15 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .formatCase(applicationContext, caseDetail);
 
+  let editUrl = '';
+  const formattedDocument = draftDocuments.find(
+    doc => doc.documentId === viewerDocumentToDisplay.documentId,
+  );
+
+  if (formattedDocument) {
+    ({ editUrl } = formattedDocument);
+  }
+
   const isNotice =
     viewerDocumentToDisplay &&
     NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
@@ -92,6 +101,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
   return {
+    editUrl,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
