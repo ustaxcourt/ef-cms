@@ -139,14 +139,30 @@ exports.joiValidationDecorator = function (
         'docketNumber',
         ...Object.keys(this.getFormattedValidationErrors()),
       );
+
+      const stringifyTransform = obj => {
+        if (!obj) return obj;
+        const transformed = {};
+        Object.keys(obj).forEach(key => {
+          if (typeof obj[key] === 'string') {
+            transformed[key] = obj[key].replace(/"/g, "'");
+          } else {
+            transformed[key] = obj[key];
+          }
+        });
+        return transformed;
+      };
+
       throw new InvalidEntityError(
         entityConstructor.validationName,
-        JSON.stringify(pick(this, helpfulKeys), (key, value) =>
-          this.hasOwnProperty(key) && typeof value === 'undefined'
-            ? '<undefined>'
-            : value,
+        JSON.stringify(
+          stringifyTransform(pick(this, helpfulKeys)),
+          (key, value) =>
+            this.hasOwnProperty(key) && typeof value === 'undefined'
+              ? '<undefined>'
+              : value,
         ),
-        JSON.stringify(this.getFormattedValidationErrors()),
+        JSON.stringify(stringifyTransform(this.getValidationErrors())),
       );
     }
     return this;
