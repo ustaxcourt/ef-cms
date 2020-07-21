@@ -10,11 +10,13 @@ const { isEmpty } = require('lodash');
  * @returns {object} errors (null if no errors)
  */
 exports.validatePetitionerInformationFormInteractor = ({
+  applicationContext,
   contactPrimary,
   contactSecondary,
   partyType,
 }) => {
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,
   });
