@@ -2077,6 +2077,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+      expect(result.formattedDocketEntries[0].isInProgress).toEqual(false);
     });
 
     it('should be false if the document type is servable and has servedAt', () => {
@@ -2093,6 +2094,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+      expect(result.formattedDocketEntries[0].isInProgress).toEqual(false);
     });
   });
 });
