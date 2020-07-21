@@ -281,10 +281,38 @@ const formatCase = (applicationContext, caseDetail) => {
 
   const formatCounsel = counsel => {
     let formattedName = counsel.name;
+
     if (counsel.barNumber) {
       formattedName += ` (${counsel.barNumber})`;
     }
     counsel.formattedName = formattedName;
+
+    if (counsel.representing) {
+      counsel.representingNames = [];
+
+      if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
+        counsel.representingNames.push(caseDetail.contactPrimary.name);
+      }
+
+      if (
+        caseDetail.contactSecondary &&
+        counsel.representing.includes(caseDetail.contactSecondary.contactId)
+      ) {
+        counsel.representingNames.push(caseDetail.contactSecondary.name);
+      }
+
+      caseDetail.otherPetitioners.forEach(otherPetitioner => {
+        if (counsel.representing.includes(otherPetitioner.contactId)) {
+          counsel.representingNames.push(otherPetitioner.name);
+        }
+      });
+
+      caseDetail.otherFilers.forEach(otherFiler => {
+        if (counsel.representing.includes(otherFiler.contactId)) {
+          counsel.representingNames.push(otherFiler.name);
+        }
+      });
+    }
     return counsel;
   };
 

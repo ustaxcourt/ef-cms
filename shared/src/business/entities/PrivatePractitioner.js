@@ -20,7 +20,7 @@ function PrivatePractitioner(rawUser) {
   this.entityName = 'PrivatePractitioner';
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
-  this.representing = rawUser.representing;
+  this.representing = rawUser.representing || [];
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
