@@ -2275,11 +2275,20 @@
               type: "string"
               flags: 
                 presence: "required"
+                description: "The name of a party from a contact, or \"IRS\""
               rules: 
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 100
+            role: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Currently only required for the IRS"
+              allow: 
+                - "irsSuperuser"
     serviceDate: 
       type: "date"
       flags: 

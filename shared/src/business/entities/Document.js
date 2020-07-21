@@ -16,6 +16,7 @@ const {
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  ROLES,
   SCENARIOS,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
@@ -109,7 +110,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
-  this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
@@ -128,6 +128,17 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
         partyPrivatePractitioner: item.partyPrivatePractitioner,
       };
     });
+  }
+
+  if (Array.isArray(rawDocument.servedParties)) {
+    this.servedParties = rawDocument.servedParties.map(item => {
+      return {
+        name: item.name,
+        role: item.role,
+      };
+    });
+  } else {
+    this.servedParties = rawDocument.servedParties;
   }
 
   if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocument.eventCode)) {
@@ -381,7 +392,18 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().max(500).required() })
+      .items({
+        name: joi
+          .string()
+          .max(100)
+          .required()
+          .description('The name of a party from a contact, or "IRS"'),
+        role: joi
+          .string()
+          .valid(ROLES.irsSuperuser)
+          .optional()
+          .description('Currently only required for the IRS'),
+      })
       .when('servedAt', {
         is: joi.exist().not(null),
         otherwise: joi.optional(),
