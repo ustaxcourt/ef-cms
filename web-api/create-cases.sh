@@ -77,7 +77,7 @@ do
   "postalCode": "23117",
   "phone": "+1 (513) 248-2715",
   "state": "TX",
-  "email": "petitioner"
+  "email": "petitioner1@example.com"
 }
 EOF
 )
@@ -98,7 +98,7 @@ EOF
       "postalCode": "23117",
       "phone": "+1 (513) 248-2715",
       "state": "TX",
-      "email": "petitioner"
+      "email": "petitioner1@example.com"
     },
     "hasIrsNotice": false,
     "caseType": "${caseType}",
@@ -114,7 +114,7 @@ EOF
 
   echo "${caseJson}"
 
-  case=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases" \
+  case=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionerToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
@@ -136,7 +136,7 @@ EOF
       barNumber="PT5432"
     fi
 
-    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
@@ -153,7 +153,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -169,7 +169,7 @@ EOF
       barNumber="RT0987"
     fi
 
-    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
@@ -185,7 +185,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -193,21 +193,21 @@ EOF
       --compressed
   fi
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/send-to-irs-holding-queue" \
+  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/send-to-irs-holding-queue" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --data-binary '{}' \
     --compressed
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/api/run-batch-process" \
+  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/api/run-batch-process" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --data-binary '{}' \
     --compressed
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/set-to-ready-for-trial" \
+  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/set-to-ready-for-trial" \
     -X PUT \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
