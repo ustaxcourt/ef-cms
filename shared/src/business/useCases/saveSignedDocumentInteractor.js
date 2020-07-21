@@ -78,12 +78,12 @@ exports.saveSignedDocumentInteractor = async ({
     document => document.documentId === originalDocumentId,
   );
 
-  const documentIdBeforeSignature = saveOriginalDocumentWithNewId({
+  const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
     applicationContext,
     originalDocumentId,
   });
 
-  replaceOriginalWithSignedDocument({
+  await replaceOriginalWithSignedDocument({
     applicationContext,
     originalDocumentId,
     signedDocumentId,

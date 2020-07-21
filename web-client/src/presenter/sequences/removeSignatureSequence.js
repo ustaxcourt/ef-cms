@@ -11,6 +11,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 // import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 
 export const removeSignatureSequence = showProgressSequenceDecorator([
   clearAlertsAction,
@@ -22,6 +23,7 @@ export const removeSignatureSequence = showProgressSequenceDecorator([
   clearModalAction,
   clearModalStateAction,
   setCaseAction,
+  setViewerDraftDocumentToDisplayAction,
   // overwriteOrderFileAction,
   // {
   //   error: [],
