@@ -2288,6 +2288,20 @@
         - 
           type: "object"
           keys: 
+            email: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "email"
+                  args: 
+                    options: 
+                      tlds: false
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             name: 
               type: "string"
               flags: 
@@ -2305,7 +2319,21 @@
                 presence: "optional"
                 description: "Currently only required for the IRS"
               allow: 
+                - "adc"
+                - "admin"
+                - "admissionsclerk"
+                - "chambers"
+                - "clerkofcourt"
+                - "docketclerk"
+                - "floater"
+                - "inactivePractitioner"
+                - "irsPractitioner"
                 - "irsSuperuser"
+                - "judge"
+                - "petitioner"
+                - "petitionsclerk"
+                - "privatePractitioner"
+                - "trialclerk"
     serviceDate: 
       type: "date"
       flags: 
