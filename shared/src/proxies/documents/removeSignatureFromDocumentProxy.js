@@ -1,14 +1,12 @@
 const { post } = require('../requests');
 
 /**
- * fixme
+ * removeSignatureFromDocumentInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case on which to save the document
- * @param {string} providers.originalDocumentId the id of the original (unsigned) document
- * @param {string} providers.signedDocumentId the id of the signed document
- * @param {string} providers.nameForSigning name
+ * @param {string} providers.caseId the id of the case containing the document to remove signature from
+ * @param {string} providers.documentId the id of the signed document
  * @returns {Promise<*>} the promise of the api call
  */
 exports.removeSignatureFromDocumentInteractor = ({
