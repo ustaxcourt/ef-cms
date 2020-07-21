@@ -41,6 +41,7 @@ const replaceOriginalWithSignedDocument = async ({
       protocol: 'S3',
       useTempBucket: false,
     });
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: signedDocument,
