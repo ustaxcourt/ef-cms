@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
 import React from 'react';
 
-export const ConfirmEditSignatureModal = connect(
+export const ConfirmRemoveSignatureModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],
@@ -14,10 +14,10 @@ export const ConfirmEditSignatureModal = connect(
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className=""
-        confirmLabel="Yes, Continue"
+        confirmLabel="Yes, Remove Signature"
         confirmSequence={confirmSequence}
-        message="Continuing will remove the current signature from this document."
-        title="Are You Sure You Want to Edit this Signature?"
+        message="This cannot be undone. You will need to reapply a signature to this document."
+        title="Are You Sure You Want to Remove this Signature?"
       ></ModalDialog>
     );
   },

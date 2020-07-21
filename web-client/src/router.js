@@ -529,6 +529,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-upload-court-issued/*/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+          documentId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-correspondence',
       ifHasAccess(docketNumber => {
         setPageTitle(

@@ -148,6 +148,10 @@
     "*.{css,scss}": [
       "stylelint"
     ],
+    "**/entities/**/*.js": [
+      "npm run build:entity:docs",
+      "git add **/*md"
+    ],
     "swagger.json": [
       "swagger-cli validate"
     ]

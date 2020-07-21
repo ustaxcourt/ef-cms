@@ -35,6 +35,15 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .formatCase(applicationContext, caseDetail);
 
+  let editUrl = '';
+  const formattedDocument = draftDocuments.find(
+    doc => doc.documentId === viewerDocumentToDisplay.documentId,
+  );
+
+  if (formattedDocument) {
+    ({ editUrl } = formattedDocument);
+  }
+
   const isDocumentOnDocketRecord =
     viewerDocumentToDisplay &&
     caseDetail.docketRecord.find(
@@ -58,7 +67,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
-  const showApplyEditSignatureButtonForRole = isInternalUser;
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
     !isCorrespondence &&
@@ -66,7 +75,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
-  const showEditSignatureButtonForDocument =
+  const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
   const showEditButtonForDocument =
     !isDocumentOnDocketRecord && !isCorrespondence;
@@ -99,10 +108,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
   return {
+    editUrl,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
-      showApplyEditSignatureButtonForRole &&
+      showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
@@ -111,9 +121,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showEditSignatureButton:
-      showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
     showNotServed,
+    showRemoveSignatureButton:
+      showApplyRemoveSignatureButtonForRole &&
+      showRemoveSignatureButtonForDocument,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
