@@ -141,7 +141,7 @@ describe('PublicCase', () => {
             documentId: '123',
             documentType: 'Order that case is assigned',
           },
-          { documentId: '234', documentType: 'Order' },
+          { documentId: '234', documentType: 'Order', isDraft: true },
           { documentId: '345', documentType: 'Petition' },
           { documentId: '987', eventCode: 'TRAN' },
         ],
