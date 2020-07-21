@@ -15,7 +15,6 @@
 ## Case Inventory Report
 * Results table is sorted by docket number (oldest to newest)
 * Can filter by judge, case status, or both
-* Can filter by more than 1 case status at a time
 * Only shows cases in any case status
 
 ## Pending Report
