@@ -397,16 +397,19 @@ joiValidationDecorator(
       .allow(null)
       .description('Certificate of service date.'),
     serviceStamp: joi.string().optional(),
+    // isDraft => true when document is created
+    // isDraft => false when docket entry is added for the document
+    // NOTE: isDraft would be always false for non-court issued documents
     signedAt: joi
       .string()
-      .when('draftState', {
+      .when('isDraft', {
         is: joi.exist().not(null),
-        otherwise: joi.when('eventCode', {
+        otherwise: joi.optional().allow(null),
+        then: joi.when('eventCode', {
           is: joi.valid(...EVENT_CODES_REQUIRING_SIGNATURE),
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         }),
-        then: joi.optional().allow(null),
       })
       .description('The time at which the document was signed.'),
     signedByUserId: joi
@@ -416,15 +419,18 @@ joiValidationDecorator(
         then: JoiValidationConstants.UUID.required(),
       })
       .description('The id of the user who applied the signature.'),
+    // isDraft => true when document is created
+    // isDraft => false when docket entry is added for the document
+    // NOTE: isDraft would be always false for non-court issued documents
     signedJudgeName: joi
-      .when('draftState', {
+      .when('servedAt', {
         is: joi.exist().not(null),
-        otherwise: joi.when('eventCode', {
+        otherwise: joi.string().optional().allow(null),
+        then: joi.when('eventCode', {
           is: joi.string().valid(...EVENT_CODES_REQUIRING_JUDGE_SIGNATURE),
           otherwise: joi.string().optional().allow(null),
           then: joi.string().required(),
         }),
-        then: joi.string().optional().allow(null),
       })
       .description('The judge who signed the document.'),
     supportingDocument: joi.string().optional().allow(null),
