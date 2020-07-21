@@ -154,8 +154,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           formattedResult.hideIcons = true;
           formattedResult.qcWorkItemsUntouched = false;
         } else {
-          formattedResult.isInProgress =
-            document.isInProgress || !document.servedAt;
+          formattedResult.isInProgress = document.isInProgress;
 
           formattedResult.qcWorkItemsUntouched =
             !formattedResult.isInProgress &&
@@ -185,9 +184,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document.processingStatus !==
             DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-        formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
-          document.eventCode,
-        );
         formattedResult.showNotServed =
           !formattedResult.isUnservable && document.isNotServedDocument;
         formattedResult.showServed = document.isStatusServed;
@@ -195,6 +191,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
           .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
           .includes(document.documentType);
+
         showDocumentLinks = getShowDocumentViewerLink({
           hasDocument: document.isFileAttached,
           isCourtIssuedDocument: document.isCourtIssuedDocument,

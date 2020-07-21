@@ -207,7 +207,6 @@ joiValidationDecorator(
       .valid(...ALL_DOCUMENT_TYPES)
       .required()
       .description('The type of this document.'),
-    // TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
     eventCode: joi
@@ -537,7 +536,6 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
-  this.draftState = null;
 };
 
 /**

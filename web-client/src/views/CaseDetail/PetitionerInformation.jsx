@@ -228,22 +228,30 @@ const PetitionerInformation = connect(
                       />
                     )}
                   </address>
+
                   {practitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <span className="semi-bold">Service: </span>
                       {practitioner.serviceIndicator}
                     </div>
                   )}
+
                   <p className="label representing-label margin-top-2">
                     Representing
                   </p>
-                  {practitioner.representingPrimary &&
-                    formattedCaseDetail.contactPrimary.name}
-                  {practitioner.representingPrimary &&
-                    practitioner.representingSecondary && <br />}
+                  {practitioner.representingPrimary && (
+                    <p>{formattedCaseDetail.contactPrimary.name}</p>
+                  )}
+
                   {practitioner.representingSecondary &&
                     formattedCaseDetail.contactSecondary &&
-                    formattedCaseDetail.contactSecondary.name}
+                    formattedCaseDetail.contactSecondary.name && (
+                      <p>{formattedCaseDetail.contactSecondary.name}</p>
+                    )}
+
+                  {practitioner.representingNames.map(name => (
+                    <p key={name}>{name}</p>
+                  ))}
                 </div>
               ),
             )}
