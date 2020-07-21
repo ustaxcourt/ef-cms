@@ -1,8 +1,8 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-API_URL="https://efcms-api-${ENV}.${EFCMS_DOMAIN}"
-WS_URL="wss://efcms-websockets-${ENV}.${EFCMS_DOMAIN}"
+API_URL="https://api.${EFCMS_DOMAIN}"
+WS_URL="wss://ws.${EFCMS_DOMAIN}"
 COGNITO_REDIRECT_URL="https%3A//app.${EFCMS_DOMAIN}/log-in"
 COGNITO_REDIRECT_URI="https://app.${EFCMS_DOMAIN}/log-in"
 

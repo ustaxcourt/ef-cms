@@ -5,13 +5,13 @@ data "archive_file" "zip_api" {
 }
 
 resource "aws_lambda_function" "api_lambda" {
-  filename      = data.archive_file.zip_api.output_path
-  function_name = "api_${var.environment}"
-  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api.handler"
+  filename         = data.archive_file.zip_api.output_path
+  function_name    = "api_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api.handler"
   source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
@@ -25,13 +25,13 @@ resource "aws_lambda_function" "api_lambda" {
 }
 
 resource "aws_lambda_function" "api_clamav_lambda" {
-  filename      = data.archive_file.zip_api.output_path
-  function_name = "api_clamav_${var.environment}"
-  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api.handler"
+  filename         = data.archive_file.zip_api.output_path
+  function_name    = "api_clamav_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api.handler"
   source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.clamav_layer.arn
@@ -55,26 +55,26 @@ resource "aws_api_gateway_rest_api" "gateway_for_api" {
 
 resource "aws_api_gateway_resource" "api_clamav_base_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  parent_id = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
-  path_part = "clamav"
+  parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
+  path_part   = "clamav"
 }
 
 resource "aws_api_gateway_resource" "api_clamav_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  parent_id = aws_api_gateway_resource.api_clamav_base_resource.id
-  path_part = "{proxy+}"
+  parent_id   = aws_api_gateway_resource.api_clamav_base_resource.id
+  path_part   = "{proxy+}"
 }
 
 resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  parent_id = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
-  path_part = "{proxy+}"
+  parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
+  path_part   = "{proxy+}"
 }
 
 resource "aws_api_gateway_method" "api_clamav_method_post" {
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_clamav_resource.id
-  http_method = "POST"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_clamav_resource.id
+  http_method   = "POST"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
@@ -83,9 +83,9 @@ resource "aws_api_gateway_method" "api_clamav_method_options" {
   depends_on = [
     aws_api_gateway_method.api_clamav_method_post
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_clamav_resource.id
-  http_method = "OPTIONS"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_clamav_resource.id
+  http_method   = "OPTIONS"
   authorization = "NONE"
 }
 
@@ -93,9 +93,9 @@ resource "aws_api_gateway_method" "api_method_get" {
   depends_on = [
     aws_api_gateway_method.api_clamav_method_options
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_resource.id
-  http_method = "GET"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "GET"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
@@ -104,9 +104,9 @@ resource "aws_api_gateway_method" "api_method_post" {
   depends_on = [
     aws_api_gateway_method.api_method_get
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_resource.id
-  http_method = "POST"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "POST"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
@@ -115,9 +115,9 @@ resource "aws_api_gateway_method" "api_method_put" {
   depends_on = [
     aws_api_gateway_method.api_method_post
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_resource.id
-  http_method = "PUT"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "PUT"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
@@ -126,9 +126,9 @@ resource "aws_api_gateway_method" "api_method_delete" {
   depends_on = [
     aws_api_gateway_method.api_method_put
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_resource.id
-  http_method = "DELETE"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "DELETE"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
@@ -137,9 +137,9 @@ resource "aws_api_gateway_method" "api_method_options" {
   depends_on = [
     aws_api_gateway_method.api_method_delete
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_resource.id
-  http_method = "OPTIONS"
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "OPTIONS"
   authorization = "NONE"
 }
 
@@ -160,8 +160,8 @@ resource "aws_api_gateway_integration" "api_clamav_integration_post" {
   }
 
   integration_http_method = "POST"
-  type = "AWS"
-  uri = aws_lambda_function.api_clamav_lambda.invoke_arn
+  type                    = "AWS"
+  uri                     = aws_lambda_function.api_clamav_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_method_response" "clamav_method_response_post" {
@@ -170,7 +170,7 @@ resource "aws_api_gateway_method_response" "clamav_method_response_post" {
   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
   status_code = "200"
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
     "method.response.header.Access-Control-Allow-Headers" = true
     "method.response.header.Access-Control-Allow-Methods" = true
   }
@@ -185,7 +185,7 @@ resource "aws_api_gateway_integration_response" "clamav_response_post" {
   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
   status_code = aws_api_gateway_method_response.clamav_method_response_post.status_code
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
     "method.response.header.Access-Control-Allow-Methods" = "'POST'"
   }
@@ -200,8 +200,8 @@ resource "aws_api_gateway_integration" "api_clamav_integration_options" {
   http_method = aws_api_gateway_method.api_clamav_method_options.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 
@@ -214,8 +214,8 @@ resource "aws_api_gateway_integration" "api_integration_get" {
   http_method = aws_api_gateway_method.api_method_get.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_post" {
@@ -227,8 +227,8 @@ resource "aws_api_gateway_integration" "api_integration_post" {
   http_method = aws_api_gateway_method.api_method_post.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_put" {
@@ -240,8 +240,8 @@ resource "aws_api_gateway_integration" "api_integration_put" {
   http_method = aws_api_gateway_method.api_method_put.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_delete" {
@@ -253,8 +253,8 @@ resource "aws_api_gateway_integration" "api_integration_delete" {
   http_method = aws_api_gateway_method.api_method_delete.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "api_integration_options" {
@@ -266,8 +266,8 @@ resource "aws_api_gateway_integration" "api_integration_options" {
   http_method = aws_api_gateway_method.api_method_options.http_method
 
   integration_http_method = "POST"
-  type = "AWS_PROXY"
-  uri = aws_lambda_function.api_lambda.invoke_arn
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
@@ -275,7 +275,7 @@ resource "aws_lambda_permission" "apigw_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.api_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }
 
 
@@ -284,7 +284,7 @@ resource "aws_lambda_permission" "apigw_clamav_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.api_clamav_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
 }
 
 
@@ -306,8 +306,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.api_integration_options,
     aws_api_gateway_authorizer.custom_authorizer
   ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  stage_name = var.environment
+  rest_api_id       = aws_api_gateway_rest_api.gateway_for_api.id
+  stage_name        = var.environment
   stage_description = "Deployed at ${timestamp()}"
 
   lifecycle {
@@ -316,14 +316,14 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 }
 
 resource "aws_acm_certificate" "api_gateway_east_cert" {
-  domain_name       = "efcms-api-${var.environment}.${var.dns_domain}"
+  domain_name       = "api.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
     Name          = "efcms-api-${var.environment}.${var.dns_domain}"
     ProductDomain = "EFCMS API"
     Environment   = var.environment
-    Description   = "Certificate for efcms-api-${var.environment}.${var.dns_domain}"
+    Description   = "Certificate for api.${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 }
@@ -340,13 +340,13 @@ resource "aws_route53_record" "api_route53_east_record" {
   records = [
     aws_acm_certificate.api_gateway_east_cert.domain_validation_options.0.resource_record_value,
   ]
-  ttl     = 60
+  ttl = 60
 }
 
 resource "aws_api_gateway_domain_name" "api_custom" {
   regional_certificate_arn = aws_acm_certificate_validation.validate_api_gateway_east_cert.certificate_arn
-  domain_name     = "efcms-api-${var.environment}.${var.dns_domain}"
-  security_policy = "TLS_1_2"
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
