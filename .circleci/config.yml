@@ -570,5 +570,6 @@ workflows:
                 - test
                 - migration
                 - master
+                - prod
                 - experimental1
                 - experimental2
