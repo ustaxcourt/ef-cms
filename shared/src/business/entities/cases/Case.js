@@ -287,6 +287,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
     this.docketNumber + (this.docketNumberSuffix || '');
 
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,

@@ -49,6 +49,9 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
+  contactId: JoiValidationConstants.UUID.required().description(
+    'Unique contact ID only used by the system.',
+  ),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),
@@ -321,7 +324,12 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @returns {object} contains the primary, secondary, and other contact instances
  */
-ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
+ContactFactory.createContacts = ({
+  applicationContext,
+  contactInfo,
+  isPaper,
+  partyType,
+}) => {
   const constructorMap = ContactFactory.getContactConstructors({ partyType });
 
   const constructors = {
@@ -349,7 +357,9 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
           })
         : undefined;
       return otherPetitionerConstructor
-        ? new otherPetitionerConstructor(otherPetitioner)
+        ? new otherPetitionerConstructor(otherPetitioner, {
+            applicationContext,
+          })
         : {};
     });
   }
@@ -363,7 +373,9 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
             isPaper,
           })
         : undefined;
-      return otherFilerConstructor ? new otherFilerConstructor(otherFiler) : {};
+      return otherFilerConstructor
+        ? new otherFilerConstructor(otherFiler, { applicationContext })
+        : {};
     });
   }
 
@@ -371,10 +383,14 @@ ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
     otherFilers,
     otherPetitioners,
     primary: constructors.primary
-      ? new constructors.primary(contactInfo.primary || {})
+      ? new constructors.primary(contactInfo.primary || {}, {
+          applicationContext,
+        })
       : {},
     secondary: constructors.secondary
-      ? new constructors.secondary(contactInfo.secondary || {})
+      ? new constructors.secondary(contactInfo.secondary || {}, {
+          applicationContext,
+        })
       : undefined,
   };
 };
@@ -398,11 +414,15 @@ ContactFactory.createContactFactory = ({
      *
      * @param {object} rawContact the options object
      */
-    function GenericContactConstructor(rawContact) {
+    function GenericContactConstructor(rawContact, { applicationContext }) {
+      if (!applicationContext) {
+        throw new TypeError('applicationContext must be defined');
+      }
+
+      this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
-      //TODO make this look like additionalName
-      this.address2 = rawContact.address2 ? rawContact.address2 : undefined;
-      this.address3 = rawContact.address3 ? rawContact.address3 : undefined;
+      this.address2 = rawContact.address2 || undefined;
+      this.address3 = rawContact.address3 || undefined;
       this.city = rawContact.city;
       this.country = rawContact.country;
       this.countryType = rawContact.countryType;

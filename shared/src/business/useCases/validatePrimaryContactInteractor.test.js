@@ -1,6 +1,7 @@
 const {
   validatePrimaryContactInteractor,
 } = require('./validatePrimaryContactInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
 
@@ -22,6 +23,7 @@ describe('validatePrimaryContactInteractor', () => {
     const partyType = PARTY_TYPES.petitioner;
 
     const errors = validatePrimaryContactInteractor({
+      applicationContext,
       contactInfo: contactPrimary,
       partyType,
     });
@@ -46,6 +48,7 @@ describe('validatePrimaryContactInteractor', () => {
     const partyType = PARTY_TYPES.petitioner;
 
     const errors = validatePrimaryContactInteractor({
+      applicationContext,
       contactInfo: contactPrimary,
       partyType,
     });
