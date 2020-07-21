@@ -234,7 +234,7 @@ export const MessageDetail = connect(
                           <div className="grid-col-8">
                             {attachment.documentTitle}
                           </div>
-                          <div className="grid-col-4">
+                          <div className="grid-col-4 padding-left-105">
                             {attachment.showNotServed && (
                               <span className="text-semibold not-served">
                                 Not served
