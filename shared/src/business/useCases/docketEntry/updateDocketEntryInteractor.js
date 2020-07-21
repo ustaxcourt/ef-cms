@@ -183,6 +183,39 @@ exports.updateDocketEntryInteractor = async ({
           applicationContext,
           documentId: primaryDocumentFileId,
         });
+
+      Object.assign(workItem, {
+        assigneeId: null,
+        assigneeName: null,
+        caseId: caseId,
+        caseIsInProgress: caseEntity.inProgress,
+        caseStatus: caseToUpdate.status,
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+        document: {
+          ...documentEntity.toRawObject(),
+          createdAt: documentEntity.createdAt,
+        },
+        inProgress: isSavingForLater,
+        section: DOCKET_SECTION,
+        sentBy: user.userId,
+      });
+
+      workItem.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
+
+      await applicationContext
+        .getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
     }
     caseEntity.updateDocument(documentEntity);
 
