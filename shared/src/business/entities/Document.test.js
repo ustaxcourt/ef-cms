@@ -128,6 +128,21 @@ describe('Document entity', () => {
     });
   });
 
+  describe('isDraft', () => {
+    it('should default to false when no isDraft value is provided', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'NOT',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.isDraft).toBe(false);
+    });
+  });
+
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new Document({}, {})).toThrow();
@@ -529,20 +544,212 @@ describe('Document entity', () => {
       });
     });
 
-    it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeFalsy();
-      expect(document.signedJudgeName).toBeUndefined();
+    describe('signed property scenarios', () => {
+      it('should fail validation when isDraft is false and signedAt is undefined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            draftState: null,
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeFalsy();
+      });
+
+      it('should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Answer',
+            draftState: null,
+            eventCode: 'A',
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when isDraft is false and signedJudgeName is undefined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            draftState: null,
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeFalsy();
+      });
+
+      it('should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Answer',
+            draftState: null,
+            eventCode: 'A',
+            isDraft: false,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            draftState: null,
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when isDraft is true and signedJudgeName and signedAt are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            draftState: null,
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.signedJudgeName).toBeUndefined();
+      });
+
+      it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            draftState: null,
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.signedJudgeName).toBeUndefined();
+      });
+
+      it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
     });
 
     it('should fail validation when the document type is opinion and judge is not provided', () => {
@@ -558,78 +765,6 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeFalsy();
       expect(document.judge).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          draftState: null,
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-
-      expect(document.isValid()).toBeTruthy();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeTruthy();
-    });
-
-    it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeFalsy();
-      expect(document.signedJudgeName).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeTruthy();
     });
 
     it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
