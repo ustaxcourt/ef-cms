@@ -61,8 +61,6 @@ data "aws_iam_policy_document" "public_policy_bucket" {
   }
 }
 
-
-
 data "aws_iam_policy_document" "public_policy_bucket_failover" {
   statement {
     sid    = "PublicReadGetObject"
@@ -80,7 +78,6 @@ data "aws_iam_policy_document" "public_policy_bucket_failover" {
     ]
   }
 }
-
 
 module "ui-public-certificate" {
   source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.2.1"
