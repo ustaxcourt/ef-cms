@@ -2455,7 +2455,6 @@
                     - "OAD"
                     - "ODJ"
                     - "SDEC"
-                    - "NOT"
                 then: 
                   type: "string"
                   flags: 
