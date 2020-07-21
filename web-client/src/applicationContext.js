@@ -168,6 +168,7 @@ import { removeCasePendingItemInteractor } from '../../shared/src/proxies/remove
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replyToCaseMessageInteractor } from '../../shared/src/proxies/messages/replyToCaseMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
@@ -379,6 +380,7 @@ const allUseCases = {
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
+  removeSignatureFromDocumentInteractor,
   replyToCaseMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,

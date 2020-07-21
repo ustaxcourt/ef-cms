@@ -28,7 +28,7 @@ export const docketClerkEditsSignatureFromMessage = test => {
       documentIdToEdit: orderDocument.documentId,
     });
 
-    await test.runSequence('removeSignatureAndGotoEditSignatureSequence');
+    await test.runSequence('removeSignatureSequence');
 
     expect(test.getState('currentPage')).toEqual('SignOrder');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();

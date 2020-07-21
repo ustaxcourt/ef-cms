@@ -234,8 +234,8 @@ import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetai
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
-import { removeSignatureAndGotoEditSignatureSequence } from './sequences/removeSignatureAndGotoEditSignatureSequence';
 import { removeSignatureFromOrderSequence } from './sequences/removeSignatureFromOrderSequence';
+import { removeSignatureSequence } from './sequences/removeSignatureSequence';
 import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { replyToCaseMessageSequence } from './sequences/replyToCaseMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
@@ -674,8 +674,8 @@ export const presenter = {
     removeCaseFromTrialSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
-    removeSignatureAndGotoEditSignatureSequence,
     removeSignatureFromOrderSequence,
+    removeSignatureSequence,
     removeSupportingDocumentSequence,
     replyToCaseMessageSequence,
     rescanBatchSequence,
