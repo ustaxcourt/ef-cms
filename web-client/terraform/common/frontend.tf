@@ -124,7 +124,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   origin {
     domain_name = aws_s3_bucket.failover.website_endpoint
-    origin_id   = "app-failover.${var.dns_domain}"
+    origin_id   = "failover-app.${var.dns_domain}"
 
     custom_origin_config {
       http_port              = "80"
