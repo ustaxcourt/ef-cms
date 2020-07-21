@@ -308,7 +308,7 @@ describe('Case entity', () => {
         },
       );
 
-      expect(myCase.otherPetitioners).toEqual(mockOtherPetitioners);
+      expect(myCase.otherPetitioners).toMatchObject(mockOtherPetitioners);
     });
   });
 
@@ -351,7 +351,7 @@ describe('Case entity', () => {
         },
       );
 
-      expect(myCase.toRawObject().otherFilers).toEqual(mockOtherFilers);
+      expect(myCase.toRawObject().otherFilers).toMatchObject(mockOtherFilers);
     });
 
     it('fails validation with more than one unique filer type', () => {

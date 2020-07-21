@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   COUNTRY_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
@@ -10,19 +13,22 @@ describe('OtherFilerContact', () => {
       countryType: COUNTRY_TYPES.DOMESTIC,
     });
 
-    const contact = new entityConstructor({
-      address1: '123 Deming Way',
-      city: 'Los Angeles',
-      country: 'USA',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'petitioner@example.com',
-      name: 'Eric',
-      otherFilerType: UNIQUE_OTHER_FILER_TYPE,
-      phone: '555-555-1212',
-      postalCode: '90210',
-      state: 'TN',
-      title: UNIQUE_OTHER_FILER_TYPE,
-    });
+    const contact = new entityConstructor(
+      {
+        address1: '123 Deming Way',
+        city: 'Los Angeles',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner@example.com',
+        name: 'Eric',
+        otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+        phone: '555-555-1212',
+        postalCode: '90210',
+        state: 'TN',
+        title: UNIQUE_OTHER_FILER_TYPE,
+      },
+      { applicationContext },
+    );
 
     expect(contact.getFormattedValidationErrors()).toEqual(null);
   });
@@ -32,17 +38,20 @@ describe('OtherFilerContact', () => {
       countryType: COUNTRY_TYPES.DOMESTIC,
     });
 
-    const contact = new entityConstructor({
-      address1: '123 Deming Way',
-      city: 'Los Angeles',
-      country: 'USA',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'petitioner@example.com',
-      name: 'Eric',
-      phone: '555-555-1212',
-      postalCode: '90210',
-      state: 'TN',
-    });
+    const contact = new entityConstructor(
+      {
+        address1: '123 Deming Way',
+        city: 'Los Angeles',
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner@example.com',
+        name: 'Eric',
+        phone: '555-555-1212',
+        postalCode: '90210',
+        state: 'TN',
+      },
+      { applicationContext },
+    );
 
     expect(contact.getFormattedValidationErrors()).toEqual({
       otherFilerType: 'Select a filer type',
