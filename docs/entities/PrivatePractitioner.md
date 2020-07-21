@@ -394,6 +394,21 @@
               presence: "optional"
             allow: 
               - null
+    representing: 
+      type: "array"
+      flags: 
+        presence: "optional"
+        description: "List of contact IDs of contacts"
+      items: 
+        - 
+          type: "string"
+          rules: 
+            - 
+              name: "guid"
+              args: 
+                options: 
+                  version: 
+                    - "uuidv4"
     representingPrimary: 
       type: "boolean"
       flags: 
