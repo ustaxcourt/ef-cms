@@ -260,6 +260,36 @@ describe('updateDocketEntryInteractor', () => {
     });
   });
 
+  it('updates document and workitem metadata with a file attached, but saving for later', async () => {
+    await expect(
+      updateDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          isFileAttached: true,
+          partyPrimary: true,
+        },
+        isSavingForLater: true,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).resolves.not.toThrow();
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByCaseId,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toBeCalled();
+  });
+
   it('updates document and workitem metadata with no file attached', async () => {
     await expect(
       updateDocketEntryInteractor({
