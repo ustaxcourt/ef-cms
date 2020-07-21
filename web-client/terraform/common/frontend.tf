@@ -74,11 +74,8 @@ module "ui-certificate" {
 
   domain_name      = "app.${var.dns_domain}"
   hosted_zone_name = "${var.zone_name}."
-
-  # is_hosted_zone_private = "false"
-  # validation_method      = "DNS"
   certificate_name = "app.${var.dns_domain}"
-  environment      = "app.${var.dns_domain}"
+  environment      = var.environment
   description      = "Certificate for app.${var.dns_domain}"
   product_domain   = "EFCMS"
 }
@@ -201,7 +198,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  aliases = [var.dns_domain]
+  aliases = ["app.${var.dns_domain}"]
 
   restrictions {
     geo_restriction {
@@ -221,7 +218,7 @@ data "aws_route53_zone" "zone" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.zone.zone_id
-  name    = var.dns_domain
+  name    = "app.${var.dns_domain}"
   type    = "A"
 
   alias {
