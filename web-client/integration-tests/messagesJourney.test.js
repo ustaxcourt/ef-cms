@@ -3,7 +3,7 @@ import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAdds
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
 import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
 import { docketClerkEditsOrderFromMessage } from './journey/docketClerkEditsOrderFromMessage';
-import { docketClerkEditsSignatureFromMessage } from './journey/docketClerkEditsSignatureFromMessage';
+import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRemovesSignatureFromMessage';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
@@ -61,7 +61,8 @@ describe('messages journey', () => {
   docketClerkViewsForwardedMessageInInbox(test);
   docketClerkEditsOrderFromMessage(test);
   docketClerkAppliesSignatureFromMessage(test);
-  docketClerkEditsSignatureFromMessage(test);
+  docketClerkRemovesSignatureFromMessage(test);
+  docketClerkAppliesSignatureFromMessage(test);
   docketClerkAddsDocketEntryFromMessage(test);
   docketClerkCompletesMessageThread(test);
   docketClerkViewsCompletedMessagesOnCaseDetail(test);

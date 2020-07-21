@@ -9,6 +9,7 @@ const {
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
@@ -72,9 +73,15 @@ const formatDocument = (applicationContext, document) => {
     return acc && !!wi.completedAt;
   }, true);
 
+  result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+
   result.isInProgress =
-    (!result.isCourtIssuedDocument && result.isFileAttached === false) ||
-    (result.isFileAttached === true && !result.servedAt);
+    (!result.isCourtIssuedDocument &&
+      result.isFileAttached === false &&
+      !result.isUnservable) ||
+    (result.isFileAttached === true &&
+      !result.servedAt &&
+      !result.isUnservable);
 
   result.isNotServedDocument = !result.servedAt;
 
@@ -97,7 +104,6 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
-
   return result;
 };
 
@@ -159,7 +165,8 @@ const formatDocketRecordWithDocument = (
 
       if (
         formattedDocument.isCourtIssuedDocument &&
-        !formattedDocument.servedAt
+        !formattedDocument.servedAt &&
+        !formattedDocument.isUnservable
       ) {
         record.createdAtFormatted = undefined;
       }
