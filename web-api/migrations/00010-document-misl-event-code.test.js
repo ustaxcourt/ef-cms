@@ -102,20 +102,4 @@ describe('document MISL event code migration', () => {
       eventCode: 'BND',
     });
   });
-
-  it('sets document event code to default MGRTD if not found in external or internal document list', async () => {
-    mockItems = [
-      {
-        ...baseDocument,
-        documentType: 'OAP - Order for Amended Petition',
-        eventCode: 'MISL',
-      },
-    ];
-
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
-      eventCode: 'MGRTED',
-    });
-  });
 });

@@ -1,10 +1,12 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} = require('../EntityConstants');
 const { CaseInternal } = require('./CaseInternal');
-const { PARTY_TYPES } = require('../EntityConstants');
-const { PAYMENT_STATUS } = require('../EntityConstants');
-
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 describe('CaseInternal entity', () => {
@@ -33,7 +35,7 @@ describe('CaseInternal entity', () => {
             address1: '876 12th Ave',
             city: 'Nashville',
             country: 'USA',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
             name: 'Jimmy Dean',
             phone: '1234567890',
@@ -74,7 +76,7 @@ describe('CaseInternal entity', () => {
             address1: '876 12th Ave',
             city: 'Nashville',
             country: 'USA',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
             inCareOf: 'Someone',
             name: 'Jimmy Dean',
@@ -108,7 +110,7 @@ describe('CaseInternal entity', () => {
             address1: '876 12th Ave',
             city: 'Nashville',
             country: 'USA',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
             inCareOf: 'Someone',
             name: 'Jimmy Dean',
@@ -306,7 +308,7 @@ describe('CaseInternal entity', () => {
             address1: '876 12th Ave',
             city: 'Nashville',
             country: 'USA',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
             inCareOf: 'Someone',
             name: 'Jimmy Dean',
@@ -343,7 +345,7 @@ describe('CaseInternal entity', () => {
             address1: '876 12th Ave',
             city: 'Nashville',
             country: 'USA',
-            countryType: 'domestic',
+            countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
             inCareOf: 'Someone',
             name: 'Jimmy Dean',

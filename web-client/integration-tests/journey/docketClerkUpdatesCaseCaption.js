@@ -7,7 +7,7 @@ export const docketClerkUpdatesCaseCaption = test => {
     });
 
     expect(test.getState('caseDetail.caseCaption')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
+      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
     await test.runSequence('openUpdateCaseModalSequence');
@@ -15,7 +15,7 @@ export const docketClerkUpdatesCaseCaption = test => {
     expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
 
     expect(test.getState('modal.caseCaption')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
+      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
     await test.runSequence('updateModalValueSequence', {
@@ -26,7 +26,7 @@ export const docketClerkUpdatesCaseCaption = test => {
     await test.runSequence('clearModalSequence');
 
     expect(test.getState('caseDetail.caseCaption')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
+      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
     expect(test.getState('modal')).toEqual({});
 
@@ -34,7 +34,7 @@ export const docketClerkUpdatesCaseCaption = test => {
 
     expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
     expect(test.getState('modal.caseCaption')).toEqual(
-      'Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons, Deceased, Daenerys Stormborn of the House Targaryen, First of Her Name, the Unburnt, Queen of the Andals and the First Men, Khaleesi of the Great Grass Sea, Breaker of Chains, and Mother of Dragons 2, Surviving Spouse, Petitioner',
+      'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
     await test.runSequence('updateModalValueSequence', {

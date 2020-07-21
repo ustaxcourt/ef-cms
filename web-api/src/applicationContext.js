@@ -33,6 +33,7 @@ const {
   docketRecord,
   noticeOfDocketChange,
   noticeOfReceiptOfPetition,
+  noticeOfTrialIssued,
   order,
   pendingReport,
   receiptOfFiling,
@@ -307,16 +308,14 @@ const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
-  generateChangeOfAddressTemplate,
-  generateNoticeOfTrialIssuedTemplate,
-  generatePrintableDocketRecordTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
-const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+const {
+  generateNoticeOfTrialIssuedTemplate,
+} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -368,9 +367,6 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCaseByDocketNumberInteractor,
-} = require('../../shared/src/business/useCases/getCaseByDocketNumberInteractor');
 const {
   getCaseDeadlinesByCaseId,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
@@ -1121,6 +1117,7 @@ module.exports = appContextUser => {
       docketRecord,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
+      noticeOfTrialIssued,
       order,
       pendingReport,
       receiptOfFiling,
@@ -1386,9 +1383,7 @@ module.exports = appContextUser => {
     // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
-        generateChangeOfAddressTemplate,
         generateNoticeOfTrialIssuedTemplate,
-        generatePrintableDocketRecordTemplate,
       };
     },
     getUniqueId,
@@ -1467,7 +1462,6 @@ module.exports = appContextUser => {
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
-        getCaseByDocketNumberInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,

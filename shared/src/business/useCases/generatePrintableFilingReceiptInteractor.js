@@ -46,7 +46,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
-      supportingDocument => getDocumentInfo(supportingDocument),
+      getDocumentInfo,
     );
   }
 
@@ -58,8 +58,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
     filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      secondarySupportingDocument =>
-        getDocumentInfo(secondarySupportingDocument),
+      getDocumentInfo,
     );
   }
 

@@ -5,11 +5,14 @@ const { getIndexMappingFields } = require('./getIndexMappingFields');
 
 describe('getIndexMappingFields', () => {
   beforeAll(() => {
-    const mockIndexes = { baz: { quux: 'quux!' }, foo: { bar: 'bar!' } };
+    const mockIndexes = {
+      'efcms-documents': { quux: 'quux!' },
+      foo: { bar: 'bar!' },
+    };
     applicationContext.getSearchClient.mockReturnValue({
       indices: {
         getMapping: ({ index }) => ({
-          efcms: { mappings: { properties: mockIndexes[index] } },
+          'efcms-documents': { mappings: { properties: mockIndexes[index] } },
         }),
       },
     });
@@ -18,8 +21,16 @@ describe('getIndexMappingFields', () => {
   it('returns index mapping properties', async () => {
     const results = await getIndexMappingFields({
       applicationContext,
-      index: 'foo',
+      index: 'efcms-documents',
     });
-    expect(results).toMatchObject({ bar: 'bar!' });
+    expect(results).toMatchObject({ quux: 'quux!' });
+  });
+
+  it('returns undefined index mapping properties', async () => {
+    const results = await getIndexMappingFields({
+      applicationContext,
+      index: 'this-index-does-not-exist',
+    });
+    expect(results).toBeUndefined();
   });
 });

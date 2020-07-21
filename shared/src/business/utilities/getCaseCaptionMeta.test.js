@@ -1,4 +1,7 @@
-const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
+const {
+  CASE_CAPTION_POSTFIX,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('./getCaseCaptionMeta');
 
 describe('getCaseCaptionMeta', () => {
@@ -27,7 +30,7 @@ describe('getCaseCaptionMeta', () => {
       caseCaption: 'Brett Osborne, Petitioner',
     };
     expect(getCaseCaptionMeta(caseDetail).caseCaptionExtension).toEqual(
-      'Petitioner',
+      PARTY_TYPES.petitioner,
     );
   });
 

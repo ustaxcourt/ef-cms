@@ -1,5 +1,8 @@
 const joi = require('@hapi/joi');
 const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { CHAMBERS_SECTIONS, SECTIONS } = require('./EntityConstants');
@@ -24,12 +27,7 @@ function ForwardMessage(rawMessage) {
 joiValidationDecorator(
   ForwardMessage,
   joi.object().keys({
-    assigneeId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .required(),
+    assigneeId: JoiValidationConstants.UUID.required(),
     forwardMessage: joi.string().max(500).required(),
     section: joi
       .string()

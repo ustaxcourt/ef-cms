@@ -43,14 +43,6 @@ describe('generateTitleAction', () => {
             category: 'Motion',
             documentType: 'Motion for Entry of Decision',
           },
-          secondarySupportingDocumentMetadata: {
-            category: 'Application',
-            documentType: 'Application for Waiver of Filing Fee',
-          },
-          supportingDocumentMetadata: {
-            category: 'Motion',
-            documentType: 'Motion for a New Trial',
-          },
         },
       },
     });
@@ -63,13 +55,5 @@ describe('generateTitleAction', () => {
       generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
         .documentType,
     ).toEqual('Motion for Entry of Decision');
-    expect(
-      generateDocumentTitleInteractor.mock.calls[2][0].documentMetadata
-        .documentType,
-    ).toEqual('Motion for a New Trial');
-    expect(
-      generateDocumentTitleInteractor.mock.calls[3][0].documentMetadata
-        .documentType,
-    ).toEqual('Application for Waiver of Filing Fee');
   });
 });

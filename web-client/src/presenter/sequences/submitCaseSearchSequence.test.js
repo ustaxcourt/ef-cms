@@ -8,7 +8,7 @@ describe('submitCaseSearchSequence', () => {
   let test;
   let routeStub;
   beforeAll(() => {
-    presenter.providers.props = { caseId: () => '111-19' };
+    presenter.providers.props = { docketNumber: () => '111-19' };
 
     presenter.providers.router = {
       route: async route => routeStub(route),

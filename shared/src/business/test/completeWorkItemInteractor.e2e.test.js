@@ -2,6 +2,11 @@ const {
   completeWorkItemInteractor,
 } = require('../useCases/workitems/completeWorkItemInteractor');
 const {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../entities/EntityConstants');
+const {
   createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
@@ -13,7 +18,6 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 describe('completeWorkItemInteractor integration test', () => {
@@ -24,7 +28,7 @@ describe('completeWorkItemInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCaseInteractor({
+    const { caseId, docketNumber } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -34,7 +38,7 @@ describe('completeWorkItemInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          countryType: 'domestic',
+          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
@@ -61,7 +65,7 @@ describe('completeWorkItemInteractor integration test', () => {
 
     const createdCase = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     const document = createdCase.documents.find(
@@ -103,7 +107,7 @@ describe('completeWorkItemInteractor integration test', () => {
 
     const caseAfterAssign = await getCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
     expect(
       caseAfterAssign.documents

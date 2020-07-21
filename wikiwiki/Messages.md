@@ -91,3 +91,24 @@
 * If there is more than one message in a thread, messages are displayed in accordion
 * Current ("active") message is displayed as accordion header
 * Expanded accordion displays all messages sorted newest to oldest
+
+## Taking Action on a Draft Document from Message
+
+#### Draft Document attached to Message
+Users can take any of the  following actions on a Draft Document directly from the Message Detail
+**Edit**
+* For documents created in the system, this will take users to edit the actual content
+* for PDF uploads, this will take users to replace the PDF
+
+**Apply Signature (if no signature has been added)**
+* Allows users to add a signature to a document and return to the Message
+
+**Edit Signature  (if the document has been signed)**
+* Allows users to add a signature to a document and return to the Message
+
+**View Full PDF**
+* opens PDF in new tab
+
+**Add Docket Entry**
+* Visible only for docket / petitions / clerk of the court
+* Allows user to add docket entry for the draft, save or serve the entry and return to the Message  

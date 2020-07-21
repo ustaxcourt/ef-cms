@@ -30,7 +30,7 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'TCOP - T.C. Opinion',
+        opinionType: 'T.C. Opinion',
       },
     });
 

@@ -36,7 +36,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
-      value: 'TRAN - Transcript',
+      value: 'Transcript',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',

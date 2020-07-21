@@ -76,6 +76,7 @@ export const CourtIssuedDocketEntry = connect(
                   <span className="text-bold">Docket entry preview: </span>
                   {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
+
                 <Button
                   className="margin-right-0"
                   id="serve-to-parties-btn"

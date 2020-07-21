@@ -5,6 +5,7 @@ import React from 'react';
 
 export const ServiceIndicatorRadios = connect(
   {
+    SERVICE_INDICATOR_TYPES: state.constants.SERVICE_INDICATOR_TYPES,
     bindKey: props.bind,
     bindObject: state[props.bind],
     getValidationError: props.getValidationError,
@@ -15,6 +16,7 @@ export const ServiceIndicatorRadios = connect(
     bindKey,
     bindObject,
     getValidationError,
+    SERVICE_INDICATOR_TYPES,
     updateStateSequence,
     validateSequence,
     validationErrors,
@@ -38,7 +40,10 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={bindObject.serviceIndicator === 'Electronic'}
+              checked={
+                bindObject.serviceIndicator ===
+                SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+              }
               className="usa-radio__input"
               id={`service-type-electronic-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}
@@ -63,7 +68,9 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={bindObject.serviceIndicator === 'Paper'}
+              checked={
+                bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
+              }
               className="usa-radio__input"
               id={`service-type-paper-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}
@@ -88,7 +95,9 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={bindObject.serviceIndicator === 'None'}
+              checked={
+                bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_NONE
+              }
               className="usa-radio__input"
               id={`service-type-none-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}

@@ -1,15 +1,18 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToCaseDetailWithDocketNumberAction } from '../actions/navigateToCaseDetailWithDocketNumberAction';
 import { navigateToCaseSearchNoMatchesAction } from '../actions/navigateToCaseSearchNoMatchesAction';
-import { setCaseIdFromSearchAction } from '../actions/setCaseIdFromSearchAction';
+import { setDocketNumberFromSearchAction } from '../actions/setDocketNumberFromSearchAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const submitCaseSearchSequence = showProgressSequenceDecorator([
-  setCaseIdFromSearchAction,
+  setDocketNumberFromSearchAction,
   caseExistsAction,
   {
     error: [navigateToCaseSearchNoMatchesAction],
-    success: [navigateToCaseDetailAction, clearSearchTermAction],
+    success: [
+      navigateToCaseDetailWithDocketNumberAction,
+      clearSearchTermAction,
+    ],
   },
 ]);
