@@ -246,7 +246,7 @@ const formatCase = (applicationContext, caseDetail) => {
   );
 
   result.draftDocuments = (result.documents || [])
-    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .filter(document => document.isDraft)
     .map(document => ({
       ...document,
       editUrl:

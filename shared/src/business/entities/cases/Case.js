@@ -1596,32 +1596,6 @@ Case.findLeadCaseForCases = function (cases) {
 };
 
 /**
- * @param {string} documentId the id of the document to check
- * @returns {boolean} true if the document is draft, false otherwise
- */
-Case.prototype.isDocumentDraft = function (documentId) {
-  const document = this.getDocumentById({ documentId });
-
-  const isNotArchived = !document.archived;
-  const isNotServed = !document.servedAt;
-  const isDocumentOnDocketRecord = this.docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
-  );
-  const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isDraftOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
-  );
-  return (
-    isNotArchived &&
-    isNotServed &&
-    (isStipDecision ||
-      (isDraftOrder && !isDocumentOnDocketRecord) ||
-      (isCourtIssuedDocument && !isDocumentOnDocketRecord))
-  );
-};
-
-/**
  * sets the notice of trial date for a case
  *
  * @returns {Case} this case entity
