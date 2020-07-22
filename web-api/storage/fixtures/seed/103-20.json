@@ -68,6 +68,7 @@
       "documentTitle": "First draft",
       "docketNumber": "103-20"
     },
+    "isDraft": true,
     "documentType": "Miscellaneous",
     "filingDate": "2020-07-06T14:37:36.755Z",
     "workItems": [],

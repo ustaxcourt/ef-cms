@@ -12,7 +12,9 @@ describe('updatePetitionDetailsInteractor', () => {
   let mockCase;
 
   beforeAll(() => {
-    applicationContext.getUniqueId.mockReturnValue('unique-id-1');
+    applicationContext.getUniqueId.mockReturnValue(
+      '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
+    );
   });
 
   beforeEach(() => {
@@ -131,7 +133,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Waived',
-      docketRecordId: 'unique-id-1',
+      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
       documentId: undefined,
       editState: undefined,
       entityName: 'DocketRecord',
@@ -163,7 +165,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Paid',
-      docketRecordId: 'unique-id-1',
+      docketRecordId: '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
       documentId: undefined,
       editState: undefined,
       entityName: 'DocketRecord',

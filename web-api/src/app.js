@@ -251,6 +251,9 @@ const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
+  removeSignatureFromDocumentLambda,
+} = require('./documents/removeSignatureFromDocumentLambda');
+const {
   replyToCaseMessageLambda,
 } = require('./messages/replyToCaseMessageLambda');
 const {
@@ -462,7 +465,7 @@ app.post(
   lambdaWrapper(fileDocketEntryToCaseLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry',
+  '/case-documents/:docketNumber/docket-entry',
   lambdaWrapper(updateDocketEntryOnCaseLambda),
 );
 app.put(
@@ -576,8 +579,8 @@ app.delete(
   '/case-notes/:caseId/user-notes',
   lambdaWrapper(deleteUserCaseNoteLambda),
 );
-app.delete('/case-notes/:caseId', lambdaWrapper(deleteCaseNoteLambda));
-app.put('/case-notes/:caseId', lambdaWrapper(saveCaseNoteLambda));
+app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
+app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
 
 /**
  * case-parties
@@ -630,7 +633,10 @@ app.get(
   '/cases/:caseId/consolidated-cases',
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
-app.post('/cases/:caseId/serve-to-irs', lambdaWrapper(serveCaseToIrsLambda));
+app.post(
+  '/cases/:docketNumber/serve-to-irs',
+  lambdaWrapper(serveCaseToIrsLambda),
+);
 app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
 app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
@@ -650,6 +656,10 @@ app.post(
 app.post(
   '/clamav/documents/:documentId/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
+);
+app.post(
+  '/case-documents/:docketNumber/:documentId/remove-signature',
+  lambdaWrapper(removeSignatureFromDocumentLambda),
 );
 
 /**

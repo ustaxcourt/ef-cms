@@ -5,6 +5,50 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 
+const saveOriginalDocumentWithNewId = async ({
+  applicationContext,
+  originalDocumentId,
+}) => {
+  const originalDocument = await applicationContext
+    .getPersistenceGateway()
+    .getDocument({
+      applicationContext,
+      documentId: originalDocumentId,
+      protocol: 'S3',
+      useTempBucket: false,
+    });
+
+  const documentIdBeforeSignature = applicationContext.getUniqueId();
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: originalDocument,
+    documentId: documentIdBeforeSignature,
+  });
+
+  return documentIdBeforeSignature;
+};
+
+const replaceOriginalWithSignedDocument = async ({
+  applicationContext,
+  originalDocumentId,
+  signedDocumentId,
+}) => {
+  const signedDocument = await applicationContext
+    .getPersistenceGateway()
+    .getDocument({
+      applicationContext,
+      documentId: signedDocumentId,
+      protocol: 'S3',
+      useTempBucket: false,
+    });
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: signedDocument,
+    documentId: originalDocumentId,
+  });
+};
+
 /**
  * saveSignedDocumentInteractor
  *
@@ -24,19 +68,27 @@ exports.saveSignedDocumentInteractor = async ({
   signedDocumentId,
 }) => {
   const user = applicationContext.getCurrentUser();
-
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
       caseId,
     });
-
   const caseEntity = new Case(caseRecord, { applicationContext });
-
   const originalDocumentEntity = caseEntity.documents.find(
     document => document.documentId === originalDocumentId,
   );
+
+  const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
+    applicationContext,
+    originalDocumentId,
+  });
+
+  await replaceOriginalWithSignedDocument({
+    applicationContext,
+    originalDocumentId,
+    signedDocumentId,
+  });
 
   let signedDocumentEntity;
   if (originalDocumentEntity.documentType === 'Proposed Stipulated Decision') {
@@ -65,7 +117,7 @@ exports.saveSignedDocumentInteractor = async ({
       {
         ...originalDocumentEntity,
         createdAt: applicationContext.getUtilities().createISODateString(),
-        documentId: signedDocumentId,
+        documentIdBeforeSignature,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },

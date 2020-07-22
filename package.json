@@ -38,7 +38,7 @@
     "csv-parse": "^4.10.1",
     "cypress": "^4.9.0",
     "deep-freeze": "0.0.1",
-    "diff-arrays-of-objects": "^1.1.5",
+    "diff-arrays-of-objects": "^1.1.7",
     "dynamodb-admin": "^4.0.0",
     "dynamodb-streams-readable": "^1.0.7",
     "elasticsearch": "^16.6.0",
@@ -148,6 +148,10 @@
     "*.{css,scss}": [
       "stylelint"
     ],
+    "**/entities/**/*.js": [
+      "npm run build:entity:docs",
+      "git add **/*md"
+    ],
     "swagger.json": [
       "swagger-cli validate"
     ]
@@ -194,6 +198,7 @@
     "loadtest:medium": "./web-api/load-test-trial-session.sh dev us-east-1 125",
     "loadtest:practitioners": "./web-api/load-test-practitioners.sh dev us-east-1 200",
     "loadtest:small": "./web-api/load-test-trial-session.sh dev us-east-1 100",
+    "postinstall": "npx npm-force-resolutions",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reset-cases": "./clear-env.sh",
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",

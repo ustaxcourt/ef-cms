@@ -34,7 +34,7 @@ describe('serveCaseToIrsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'abc-123',
+          docketNumber: '101-19',
         },
       },
     });
