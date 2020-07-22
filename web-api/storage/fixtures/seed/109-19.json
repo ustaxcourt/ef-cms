@@ -161,6 +161,7 @@
     "entityName": "Document",
     "filingDate": "2019-10-07T14:29:30.288Z",
     "workItems": [],
+    "isDraft": true,
     "pending": false,
     "receivedAt": "2019-10-07T14:29:30.288Z",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",

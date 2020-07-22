@@ -41,7 +41,7 @@ describe('caseMessageModalHelper', () => {
           documentTitle: 'Some Document',
           isFileAttached: true,
         },
-        { documentId: '345', documentType: 'Order' },
+        { documentId: '345', documentType: 'Order', isDraft: true },
       ],
     };
   });
@@ -144,7 +144,9 @@ describe('caseMessageModalHelper', () => {
         caseDetail: {
           correspondence: [],
           docketRecord: [{ documentId: '123', index: 1 }],
-          documents: [{ documentId: '123', isFileAttached: true }],
+          documents: [
+            { documentId: '123', isDraft: true, isFileAttached: true },
+          ],
         },
         modal: {
           form: {},
@@ -184,7 +186,9 @@ describe('caseMessageModalHelper', () => {
         caseDetail: {
           correspondence: [],
           docketRecord: [],
-          documents: [{ documentId: '123', documentType: 'Order' }],
+          documents: [
+            { documentId: '123', documentType: 'Order', isDraft: true },
+          ],
         },
         modal: {
           form: {},
