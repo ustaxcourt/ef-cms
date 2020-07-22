@@ -173,6 +173,7 @@ joiValidationDecorator(
       .description(
         'A document that was archived instead of added to the Docket Record.',
       ),
+    attachments: joi.boolean().optional(),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.when(
       'certificateOfService',
@@ -317,6 +318,7 @@ joiValidationDecorator(
       .description(
         'A lodged document is awaiting action by the judge to enact or refuse.',
       ),
+    mailingDate: joi.string().max(100).optional(),
     numberOfPages: joi.number().optional().allow(null),
     objections: joi
       .string()
