@@ -1132,6 +1132,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-messages/*/message-detail/*?..',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentId } = route.query();
+        console.log('documentId', documentId);
+        setPageTitle('Message detail');
+        return app.getSequence('gotoMessageDetailSequence')({
+          docketNumber,
+          documentId,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/pdf-preview',
       ifHasAccess(() => {
         setPageTitle('PDF Preview');
