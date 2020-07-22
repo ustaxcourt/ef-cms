@@ -35,16 +35,16 @@ exports.updateDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -135,7 +135,7 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseId,
+        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -187,7 +187,7 @@ exports.updateDocketEntryInteractor = async ({
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
-        caseId: caseId,
+        caseId: caseEntity.caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketNumber: caseToUpdate.docketNumber,
@@ -231,7 +231,7 @@ exports.updateDocketEntryInteractor = async ({
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,
-      caseId: caseId,
+      caseId: caseEntity.caseId,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
