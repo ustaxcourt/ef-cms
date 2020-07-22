@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseMessagesRowAttachments } from './CaseMessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,7 +20,6 @@ export const CaseMessagesIndividualInbox = connect(
               <th>Case Status</th>
               <th>From</th>
               <th className="small">Section</th>
-              <th>Attachments</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -57,17 +55,6 @@ export const CaseMessagesIndividualInbox = connect(
                   <td className="message-queue-row from">{message.from}</td>
                   <td className="message-queue-row small">
                     {message.fromSection}
-                  </td>
-                  <td>
-                    {message.attachments.length === 0 && (
-                      <span>No attachments</span>
-                    )}
-                    {message.attachments.length > 0 && (
-                      <CaseMessagesRowAttachments
-                        attachments={message.attachments}
-                        caseId={message.caseId}
-                      />
-                    )}
                   </td>
                 </tr>
               </tbody>
