@@ -14,7 +14,7 @@ export const userSendsCaseMessageToJudge = (test, subject) => {
     });
   };
 
-  return it('Petitions clerk sends case message to judgeArmen', async () => {
+  return it('internal user sends case message to judgeArmen', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
