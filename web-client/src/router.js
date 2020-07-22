@@ -1149,7 +1149,6 @@ const router = {
       '/case-messages/*/message-detail/*?..',
       ifHasAccess((docketNumber, parentMessageId) => {
         const { documentId } = route.query();
-        console.log('documentId', documentId);
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
