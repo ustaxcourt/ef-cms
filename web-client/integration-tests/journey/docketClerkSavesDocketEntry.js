@@ -2,30 +2,13 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkSavesDocketEntry = (test, isAddAnother = true) => {
+export const docketClerkSavesDocketEntry = test => {
   return it('Docketclerk saves docket entry', async () => {
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveForLaterDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother,
     });
 
-    expect(test.getState('wizardStep')).toEqual('PrimaryDocumentForm');
-
-    if (isAddAnother) {
-      expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
-        'scan',
-      );
-      expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-      expect(test.getState('form')).toMatchObject({
-        lodged: false,
-        privatePractitioners: [],
-      });
-      expect(
-        test.getState('currentViewMetadata.documentSelectedForScan'),
-      ).toEqual('primaryDocumentFile');
-    } else {
-      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    }
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetailFormatted = await runCompute(
       withAppContextDecorator(formattedCaseDetail),

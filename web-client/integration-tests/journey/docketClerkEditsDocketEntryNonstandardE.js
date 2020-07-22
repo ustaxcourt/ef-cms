@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'M057',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
@@ -49,7 +49,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -78,7 +78,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       documentTitle:
         'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho',
       documentType: 'Motion to Change Place of Hearing of Disclosure Case',
-      eventCode: 'M057',
+      eventCode: 'MISCL',
     });
   });
 };

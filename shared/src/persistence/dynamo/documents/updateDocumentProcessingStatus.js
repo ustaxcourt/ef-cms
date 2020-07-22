@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../../../business/entities/EntityConstants');
 
 exports.updateDocumentProcessingStatus = async ({
   applicationContext,
@@ -10,7 +13,7 @@ exports.updateDocumentProcessingStatus = async ({
       '#processingStatus': 'processingStatus',
     },
     ExpressionAttributeValues: {
-      ':status': 'complete',
+      ':status': DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     },
     Key: {
       pk: `case|${caseId}`,

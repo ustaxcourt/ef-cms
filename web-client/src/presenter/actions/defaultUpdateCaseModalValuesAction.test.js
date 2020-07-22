@@ -1,24 +1,26 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultUpdateCaseModalValuesAction } from './defaultUpdateCaseModalValuesAction';
 import { runAction } from 'cerebral/test';
 
 describe('defaultUpdateCaseModalValuesAction', () => {
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+
   it('should default the state.modal values for the update case modal to the state.caseDetail values', async () => {
     const result = await runAction(defaultUpdateCaseModalValuesAction, {
       state: {
         caseDetail: {
-          associatedJudge: 'Chief Judge',
+          associatedJudge: CHIEF_JUDGE,
           caseCaption: 'A case caption',
-          status: CASE_STATUS_TYPES.new,
+          status: STATUS_TYPES.new,
         },
         modal: {},
       },
     });
 
     expect(result.state.modal).toMatchObject({
-      associatedJudge: 'Chief Judge',
+      associatedJudge: CHIEF_JUDGE,
       caseCaption: 'A case caption',
-      caseStatus: CASE_STATUS_TYPES.new,
+      caseStatus: STATUS_TYPES.new,
     });
   });
 });

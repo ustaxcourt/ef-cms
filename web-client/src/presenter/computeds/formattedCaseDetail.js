@@ -22,6 +22,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -34,6 +35,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const {
     formatCase,
     formatCaseDeadlines,
+    setServiceIndicatorsForCase,
     sortDocketRecords,
   } = applicationContext.getUtilities();
 
@@ -47,11 +49,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
   }
 
   const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
+
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,
@@ -103,9 +104,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userHasAccessToCase &&
       userHasAccessToDocument &&
       !userPermissions.UPDATE_CASE &&
-      document.processingStatus === 'complete' &&
+      document.processingStatus ===
+        DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
       !document.isInProgress &&
-      !document.isNotServedCourtIssuedDocument
+      !document.isNotServedDocument
     );
   };
 
@@ -143,7 +145,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         !document ||
         (userHasAccessToCase && userHasAccessToDocument && record.isStricken) ||
         (document &&
-          (document.isNotServedCourtIssuedDocument || document.isInProgress) &&
+          (document.isNotServedDocument || document.isInProgress) &&
           !(
             userPermissions.DOCKET_ENTRY ||
             userPermissions.CREATE_ORDER_DOCKET_ENTRY
@@ -166,7 +168,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       if (document) {
         if (!isExternalUser) {
-          formattedResult.isInProgress = document.isInProgress;
+          formattedResult.isInProgress =
+            document.isInProgress || !document.servedAt;
 
           formattedResult.qcWorkItemsUntouched =
             !formattedResult.isInProgress &&
@@ -175,7 +178,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
           formattedResult.showLoadingIcon =
             !permissions.UPDATE_CASE &&
-            document.processingStatus !== 'complete';
+            document.processingStatus !==
+              DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
         }
 
         formattedResult.isPaper =
@@ -191,14 +195,15 @@ export const formattedCaseDetail = (get, applicationContext) => {
         }
 
         formattedResult.showDocumentProcessing =
-          !permissions.UPDATE_CASE && document.processingStatus !== 'complete';
+          !permissions.UPDATE_CASE &&
+          document.processingStatus !==
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
         formattedResult.isUnservable = UNSERVABLE_EVENT_CODES.includes(
           document.eventCode,
         );
         formattedResult.showNotServed =
-          !formattedResult.isUnservable &&
-          document.isNotServedCourtIssuedDocument;
+          !formattedResult.isUnservable && document.isNotServedDocument;
         formattedResult.showServed = document.isStatusServed;
 
         formattedResult.showDocumentViewerLink = getShowDocumentViewerLink({

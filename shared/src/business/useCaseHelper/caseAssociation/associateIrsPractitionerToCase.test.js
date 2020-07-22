@@ -6,6 +6,8 @@ const {
 } = require('./associateIrsPractitionerToCase');
 
 const {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -18,7 +20,7 @@ describe('associateIrsPractitionerToCase', () => {
   let caseRecord = {
     caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    caseType: 'Deficiency',
+    caseType: CASE_TYPES_MAP.deficiency,
     contactPrimary: {
       address1: '123 Main St',
       city: 'Somewhere',
@@ -44,7 +46,7 @@ describe('associateIrsPractitionerToCase', () => {
     partyType: PARTY_TYPES.petitioner,
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    status: 'New',
+    status: CASE_STATUS_TYPES.NEW,
   };
 
   beforeEach(() => {

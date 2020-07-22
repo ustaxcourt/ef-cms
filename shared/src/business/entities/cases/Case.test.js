@@ -3,8 +3,11 @@ const {
   ANSWER_CUTOFF_UNIT,
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   CHIEF_JUDGE,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
   PARTY_TYPES,
@@ -211,7 +214,7 @@ describe('Case entity', () => {
       ); //petitioner user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: true,
@@ -226,7 +229,7 @@ describe('Case entity', () => {
       ); //docketclerk user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: true,
@@ -241,7 +244,7 @@ describe('Case entity', () => {
       ); //petitioner user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: false,
@@ -256,7 +259,7 @@ describe('Case entity', () => {
       ); //docketclerk user
 
       const myCase = new Case(
-        { ...MOCK_CASE, associatedJudge: 'Chief Judge' },
+        { ...MOCK_CASE, associatedJudge: CHIEF_JUDGE },
         {
           applicationContext,
           filtered: false,
@@ -1335,6 +1338,7 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
+          initialDocketNumberSuffix: 'S',
           isPaper: false,
           status: CASE_STATUS_TYPES.generalDocket,
         },
@@ -1342,8 +1346,8 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
-      caseToVerify.docketNumberSuffix = 'W';
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('S');
+      caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -1361,6 +1365,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -1402,7 +1407,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      caseToVerify.docketNumberSuffix = 'W';
+      caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -1793,7 +1798,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'passport',
+          caseType: CASE_TYPES_MAP.passport,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -1812,7 +1817,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'cdp (lien/levy)',
+          caseType: CASE_TYPES_MAP.cdp,
           receivedAt: '2018-12-12T05:00:00Z',
         },
         {
@@ -2077,14 +2082,27 @@ describe('Case entity', () => {
 
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,
-        processingStatus: 'complete',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       });
 
       expect(
         myCase.documents.find(
           d => d.documentId === MOCK_DOCUMENTS[0].documentId,
         ).processingStatus,
-      ).toEqual('complete');
+      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+    });
+
+    it('should not change any documents if no match is found', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+
+      myCase.updateDocument({
+        documentId: '11001001',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
+
+      expect(myCase.documents).toMatchObject(MOCK_DOCUMENTS);
     });
 
     it('should update a correspondence document', () => {
@@ -2145,6 +2163,27 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
+    it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {
+      const caseToVerify = new Case(
+        {
+          privatePractitioners: [
+            new PrivatePractitioner({ userId: 'privatePractitioner1' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner2' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+
+      caseToVerify.removePrivatePractitioner({
+        userId: 'privatePractitioner99',
+      });
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+    });
     it('removes the user from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
@@ -2206,6 +2245,26 @@ describe('Case entity', () => {
   });
 
   describe('removeIrsPractitioner', () => {
+    it('does not remove a practitioner if not found in irsPractitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          irsPractitioners: [
+            new IrsPractitioner({ userId: 'irsPractitioner1' }),
+            new IrsPractitioner({ userId: 'irsPractitioner2' }),
+            new IrsPractitioner({ userId: 'irsPractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+
+      caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner99' });
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    });
+
     it('removes the user from associated case irsPractitioners array', () => {
       const caseToVerify = new Case(
         {
@@ -2732,7 +2791,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when the pending case status is ineligible', () => {
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         const result = caseEntity.canConsolidate();
 
         expect(result).toEqual(false);
@@ -2748,7 +2807,7 @@ describe('Case entity', () => {
         let result;
 
         // verify a failure on the current (this) case
-        caseEntity.status = 'New';
+        caseEntity.status = CASE_STATUS_TYPES.new;
         result = caseEntity.canConsolidate();
         expect(result).toEqual(false);
 
@@ -2789,7 +2848,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = CASE_STATUS_TYPES.Calendared;
+        pendingCaseEntity.status = CASE_STATUS_TYPES.calendared;
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -3313,7 +3372,7 @@ describe('Case entity', () => {
             {
               description: 'second record',
               documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: 'STIN',
+              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
               filingDate: '2018-03-01T00:02:00.000Z',
               index: 1,
             },
@@ -3354,7 +3413,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: true,
           statistics: [],
         },
@@ -3375,7 +3434,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Deficiency',
+          caseType: CASE_TYPES_MAP.deficiency,
           hasVerifiedIrsNotice: false,
         },
         {
@@ -3393,7 +3452,7 @@ describe('Case entity', () => {
       const caseEntity = new Case(
         {
           ...MOCK_CASE,
-          caseType: 'Other',
+          caseType: CASE_TYPES_MAP.other,
           hasVerifiedIrsNotice: true,
         },
         {

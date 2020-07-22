@@ -1,5 +1,8 @@
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  ROLES,
+} = require('../entities/EntityConstants');
 const { caseSealedFormatter, caseSearchFilter } = require('./caseFilter');
-const { ROLES } = require('../entities/EntityConstants');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -7,17 +10,19 @@ describe('caseFilter', () => {
       baz: 'quux',
       caseId: '123',
       docketNumber: '102-20',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       foo: 'bar',
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
+
     expect(result).toEqual({
       caseId: '123',
       docketNumber: '102-20',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
   });
+
   describe('caseSearchFilter', () => {
     const caseSearchResults = [
       {
@@ -57,6 +62,7 @@ describe('caseFilter', () => {
         role: ROLES.irsPractitioner,
         userId: 'some other respondent',
       });
+
       expect(result.length).toEqual(1);
       expect(result[0]).toMatchObject({
         docketNumber: '101-20',
@@ -69,6 +75,7 @@ describe('caseFilter', () => {
         role: ROLES.petitionsClerk,
         userId: 'petitionsClerk',
       });
+
       expect(result.length).toEqual(3);
     });
 
@@ -77,6 +84,7 @@ describe('caseFilter', () => {
         role: ROLES.irsSuperuser,
         userId: 'irsSuperuser',
       });
+
       expect(result.length).toEqual(3);
     });
 
@@ -84,10 +92,13 @@ describe('caseFilter', () => {
       let result = caseSearchFilter(caseSearchResults, {
         userId: 'authPractitioner',
       });
+
       expect(result.length).toEqual(3);
+
       result = caseSearchFilter(caseSearchResults, {
         userId: 'authRespondent',
       });
+
       expect(result.length).toEqual(3);
     });
   });

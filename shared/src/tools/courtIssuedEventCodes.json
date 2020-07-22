@@ -89,7 +89,7 @@
   },
   {
     "eventCode": "OD",
-    "documentType": "Order of Dismissal Entered",
+    "documentType": "Order of Dismissal",
     "documentTitle": "Order of Dismissal Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
@@ -97,7 +97,7 @@
   },
   {
     "eventCode": "ODD",
-    "documentType": "Order of Dismissal and Decision Entered",
+    "documentType": "Order of Dismissal and Decision",
     "documentTitle": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
@@ -287,14 +287,14 @@
   },
   {
     "eventCode": "DEC",
-    "documentType": "Decision Entered",
+    "documentType": "Decision",
     "documentTitle": "Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "requiresSignature": true
   },
   {
     "eventCode": "OAD",
-    "documentType": "Order and Decision Entered",
+    "documentType": "Order and Decision",
     "documentTitle": "Order and Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
@@ -302,7 +302,7 @@
   },
   {
     "eventCode": "ODJ",
-    "documentType": "Order of Dismissal for Lack of Jurisdiction Entered",
+    "documentType": "Order of Dismissal for Lack of Jurisdiction",
     "documentTitle": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "isOrder": true,
@@ -310,7 +310,7 @@
   },
   {
     "eventCode": "SDEC",
-    "documentType": "Stipulated Decision Entered",
+    "documentType": "Stipulated Decision",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B",
     "requiresSignature": true
@@ -368,7 +368,8 @@
     "eventCode": "NTD",
     "documentType": "Notice of Trial",
     "documentTitle": "Notice of Trial on [Date] at [Place]",
-    "scenario": "Type G"
+    "scenario": "Type G",
+    "requiresSignature": true
   },
   {
     "eventCode": "PTRL",
@@ -423,34 +424,39 @@
     "documentType": "Hearing Exhibits",
     "documentTitle": "Hearing Exhibits for [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "TE",
     "documentType": "Trial Exhibits",
     "documentTitle": "Trial Exhibits for [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "USCA",
     "documentType": "U.S.C.A",
     "documentTitle": "U.S.C.A [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "ES",
     "documentType": "Bounced Electronic Service",
     "documentTitle": "Bounced Electronic Service [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   },
   {
     "eventCode": "RM",
     "documentType": "Returned Mail",
     "documentTitle": "Returned Mail [anything]",
     "scenario": "Type A",
-    "isUnservable": true
+    "isUnservable": true,
+    "requiresCoversheet": true
   }
 ]

@@ -7,6 +7,7 @@ const {
 const {
   sendIrsSuperuserPetitionEmail,
 } = require('./sendIrsSuperuserPetitionEmail');
+const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
   () => ({
@@ -66,7 +67,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
           name: 'Carol Baskin',
         },
         docketNumber: '123-20',
-        docketNumberSuffix: 'S',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketRecord: [],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [

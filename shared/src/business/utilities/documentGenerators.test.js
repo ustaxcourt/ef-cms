@@ -19,7 +19,10 @@ const {
 } = require('./documentGenerators');
 const {
   CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const {
   generatePdfFromHtmlInteractor,
@@ -105,7 +108,7 @@ describe('documentGenerators', () => {
               associatedJudge: 'Judge Armen',
               caseTitle: 'rick james b',
               docketNumber: '101-20',
-              docketNumberSuffix: 'L',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
               status: CASE_STATUS_TYPES.closed,
             },
           ],
@@ -203,6 +206,32 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
+
+    it('Generates a CoverSheet document for court issued documents that require a coversheet', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: PARTY_TYPES.petitioner,
+          caseTitle: 'Test Person',
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('CourtIssuedDocumentCoverSheet', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 
   describe('docketRecord', () => {
@@ -265,10 +294,10 @@ describe('documentGenerators', () => {
             {
               document: {
                 filedBy: 'Test Filer',
-                isNotServedCourtIssuedDocument: false,
+                isNotServedDocument: false,
                 isStatusServed: true,
                 servedAtFormatted: '02/02/20',
-                servedPartiesCode: 'B',
+                servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
               },
               index: 1,
               record: {
@@ -582,7 +611,7 @@ describe('documentGenerators', () => {
         data: {
           pendingItems: [
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/02/20',
@@ -590,7 +619,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Test Petitioner',
               docketNumberWithSuffix: '123-45S',
               formattedFiledDate: '02/22/20',
@@ -598,7 +627,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/03/20',
@@ -606,7 +635,7 @@ describe('documentGenerators', () => {
               status: 'closed',
             },
             {
-              associatedJudgeFormatted: 'Chief Judge',
+              associatedJudgeFormatted: CHIEF_JUDGE,
               caseTitle: 'Other Petitioner',
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/23/20',

@@ -2,12 +2,15 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  CASE_STATUS_TYPES,
+  DOCUMENT_RELATIONSHIPS,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -79,7 +82,7 @@ exports.fileExternalDocumentInteractor = async ({
     [
       documentIds.shift(),
       { ...primaryDocumentMetadata, secondaryDocument },
-      'primaryDocument',
+      DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
   ];
 
@@ -88,7 +91,7 @@ exports.fileExternalDocumentInteractor = async ({
       documentsToAdd.push([
         documentIds.shift(),
         supportingDocuments[i],
-        'primarySupportingDocument',
+        DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
       ]);
     }
   }
@@ -96,7 +99,7 @@ exports.fileExternalDocumentInteractor = async ({
   documentsToAdd.push([
     documentIds.shift(),
     secondaryDocument,
-    'secondaryDocument',
+    DOCUMENT_RELATIONSHIPS.SECONDARY,
   ]);
 
   if (secondarySupportingDocuments) {
@@ -104,7 +107,7 @@ exports.fileExternalDocumentInteractor = async ({
       documentsToAdd.push([
         documentIds.shift(),
         secondarySupportingDocuments[i],
-        'supportingDocument',
+        DOCUMENT_RELATIONSHIPS.SUPPORTING,
       ]);
     }
   }

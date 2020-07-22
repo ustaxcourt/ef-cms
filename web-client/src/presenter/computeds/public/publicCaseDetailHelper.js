@@ -1,6 +1,9 @@
 import { state } from 'cerebral';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
+  const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
 
   const formatCaseDetail = caseToFormat => ({
@@ -62,15 +65,16 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           !document ||
           (document &&
             (!document.isCourtIssuedDocument ||
-              document.isNotServedCourtIssuedDocument ||
+              document.isNotServedDocument ||
               document.isTranscript)),
         showLinkToDocument:
           document &&
-          document.processingStatus === 'complete' &&
+          document.processingStatus ===
+            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
           document.isCourtIssuedDocument &&
-          !document.isNotServedCourtIssuedDocument &&
+          !document.isNotServedDocument &&
           !document.isTranscript,
-        showNotServed: document && document.isNotServedCourtIssuedDocument,
+        showNotServed: document && document.isNotServedDocument,
         showServed: document && document.isStatusServed,
         signatory: record.signatory,
       };
