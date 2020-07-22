@@ -8,7 +8,6 @@ const {
 } = require('../../entities/EntityConstants');
 const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -81,6 +80,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
       freeText: documentMeta.freeText,
+      isDraft: false,
       isFileAttached: true,
       judge: documentMeta.judge,
       numberOfPages,
@@ -152,7 +152,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
         documentId: documentEntity.documentId,
         editState: JSON.stringify(documentMeta),
         eventCode: documentEntity.eventCode,
-        filingDate: documentEntity.filingDate || createISODateString(),
+        filingDate: documentEntity.filingDate,
         numberOfPages,
       },
       { applicationContext },

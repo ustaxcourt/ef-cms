@@ -251,6 +251,9 @@ const {
   removeConsolidatedCasesLambda,
 } = require('./cases/removeConsolidatedCasesLambda');
 const {
+  removeSignatureFromDocumentLambda,
+} = require('./documents/removeSignatureFromDocumentLambda');
+const {
   replyToCaseMessageLambda,
 } = require('./messages/replyToCaseMessageLambda');
 const {
@@ -265,6 +268,9 @@ const {
 const {
   serveCourtIssuedDocumentLambda,
 } = require('./cases/serveCourtIssuedDocumentLambda');
+const {
+  serveExternallyFiledDocumentLambda,
+} = require('./documents/serveExternallyFiledDocumentLambda');
 const {
   setNoticesForCalendaredTrialSessionLambda,
 } = require('./trialSessions/setNoticesForCalendaredTrialSessionLambda');
@@ -425,6 +431,10 @@ app.post(
 app.post(
   '/case-documents/:caseId/:documentId/sign',
   lambdaWrapper(saveSignedDocumentLambda),
+);
+app.post(
+  '/case-documents/:caseId/:documentId/serve',
+  lambdaWrapper(serveExternallyFiledDocumentLambda),
 );
 app.get(
   '/case-documents/:caseId/:documentId/download-policy-url',
@@ -643,6 +653,10 @@ app.post(
 app.post(
   '/clamav/documents/:documentId/virus-scan',
   lambdaWrapper(virusScanPdfLambda),
+);
+app.post(
+  '/case-documents/:caseId/:documentId/remove-signature',
+  lambdaWrapper(removeSignatureFromDocumentLambda),
 );
 
 /**

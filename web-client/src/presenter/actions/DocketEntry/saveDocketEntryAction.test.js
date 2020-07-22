@@ -12,6 +12,7 @@ describe('saveDocketEntryAction', () => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',
+      documents: [],
     };
   });
 
@@ -67,8 +68,8 @@ describe('saveDocketEntryAction', () => {
         presenter,
       },
       props: {
+        isSavingForLater: true,
         primaryDocumentFileId: 'document-id-123',
-        shouldGenerateCoversheet: false,
       },
       state: {
         caseDetail,
@@ -109,6 +110,9 @@ describe('saveDocketEntryAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        isSavingForLater: true,
+      },
       state: {
         caseDetail,
         document: '123-456-789-abc',
@@ -147,12 +151,13 @@ describe('saveDocketEntryAction', () => {
         presenter,
       },
       props: {
-        primaryDocumentFileId: 'document-id-123',
+        isSavingForLater: true,
       },
       state: {
         caseDetail,
-        document: '123-456-789-abc',
+        documentId: 'document-id-123',
         form: {
+          isFileAttached: true,
           primaryDocumentFile: {},
         },
         isEditingDocketEntry: true,
@@ -161,7 +166,7 @@ describe('saveDocketEntryAction', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateDocketEntryInteractor,
     ).toHaveBeenCalled();
@@ -189,6 +194,9 @@ describe('saveDocketEntryAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        isSavingForLater: true,
+      },
       state: {
         caseDetail,
         document: '123-456-789-abc',
@@ -201,6 +209,55 @@ describe('saveDocketEntryAction', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().updateDocketEntryInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().virusScanPdfInteractor,
+    ).not.toHaveBeenCalled();
+    expect(result.output).toEqual({
+      caseDetail,
+      caseId: caseDetail.caseId,
+      docketNumber: caseDetail.docketNumber,
+      documentId: 'document-id-123',
+      overridePaperServiceAddress: true,
+    });
+  });
+
+  it('saves and serves an existing docket entry without uploading a file, but adds a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+
+    caseDetail.documents.push({
+      documentId: 'document-id-123',
+      isFileAttached: true,
+    });
+
+    const result = await runAction(saveDocketEntryAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isSavingForLater: false,
+      },
+      state: {
+        caseDetail,
+        document: '123-456-789-abc',
+        documentId: 'document-id-123',
+        form: {
+          isFileAttached: true,
+        },
+        isEditingDocketEntry: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateDocketEntryInteractor,
     ).toHaveBeenCalled();

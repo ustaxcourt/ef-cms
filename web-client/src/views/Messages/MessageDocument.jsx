@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,9 +13,17 @@ export const MessageDocument = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence:
-      sequences.openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence:
+      sequences.openConfirmRemoveSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence:
+      sequences.openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence:
+      sequences.openConfirmServePaperFiledDocumentSequence,
     parentMessageId: state.parentMessageId,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
+    showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
@@ -23,8 +32,13 @@ export const MessageDocument = connect(
     messageDocumentHelper,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence,
+    openConfirmServeCourtIssuedDocumentSequence,
+    openConfirmServePaperFiledDocumentSequence,
     parentMessageId,
+    serveCourtIssuedDocumentSequence,
+    servePaperFiledDocumentSequence,
+    showModal,
     viewerDocumentToDisplay,
   }) {
     return (
@@ -50,7 +64,7 @@ export const MessageDocument = connect(
               {messageDocumentHelper.showEditButtonNotSigned && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
+                  href={`${messageDocumentHelper.editUrl}/${parentMessageId}`}
                   icon="edit"
                 >
                   Edit
@@ -74,6 +88,16 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
+              {messageDocumentHelper.showEditCorrespondenceButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              )}
+
               {messageDocumentHelper.showApplySignatureButton && (
                 <Button
                   link
@@ -84,17 +108,17 @@ export const MessageDocument = connect(
                 </Button>
               )}
 
-              {messageDocumentHelper.showEditSignatureButton && (
+              {messageDocumentHelper.showRemoveSignatureButton && (
                 <Button
                   link
                   icon="pencil-alt"
                   onClick={() =>
-                    openConfirmEditSignatureModalSequence({
+                    openConfirmRemoveSignatureModalSequence({
                       documentIdToEdit: viewerDocumentToDisplay.documentId,
                     })
                   }
                 >
-                  Edit Signature
+                  Remove Signature
                 </Button>
               )}
 
@@ -105,6 +129,49 @@ export const MessageDocument = connect(
                   icon="plus-circle"
                 >
                   Add Docket Entry
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServeCourtIssuedDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServeCourtIssuedDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      documentId: viewerDocumentToDisplay.documentId,
+                      redirectUrl: `/case-messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
+
+              {messageDocumentHelper.showServePetitionButton && (
+                <Button
+                  link
+                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`}
+                  icon="paper-plane"
+                  iconColor="white"
+                >
+                  Review and Serve Petition
                 </Button>
               )}
 
@@ -126,6 +193,18 @@ export const MessageDocument = connect(
               <iframe
                 src={iframeSrc}
                 title={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={serveCourtIssuedDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
+              />
+            )}
+            {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
+              <ConfirmInitiateServiceModal
+                confirmSequence={servePaperFiledDocumentSequence}
+                documentTitle={viewerDocumentToDisplay.documentTitle}
               />
             )}
           </>

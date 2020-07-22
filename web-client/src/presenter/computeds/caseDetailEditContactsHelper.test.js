@@ -249,7 +249,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactSecondary: {
         displayPhone: true,
         header: 'Spouse Information',
-        nameLabel: 'Spouse‘s name',
+        nameLabel: 'Spouse’s name',
         phoneNumberLabelHint: 'optional',
       },
     });

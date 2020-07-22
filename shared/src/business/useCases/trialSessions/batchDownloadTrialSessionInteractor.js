@@ -244,5 +244,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
       },
       userId,
     });
+    await applicationContext.notifyHoneybadger(error);
   }
 };

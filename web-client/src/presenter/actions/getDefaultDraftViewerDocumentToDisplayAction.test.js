@@ -31,6 +31,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
               {
                 documentId: '234',
                 documentType: 'Order',
+                isDraft: true,
               },
               {
                 documentId: '345',
@@ -104,6 +105,7 @@ describe('getDefaultDraftViewerDocumentToDisplayAction', () => {
               {
                 documentId: '345',
                 documentType: 'Notice',
+                isDraft: true,
               },
             ],
           },

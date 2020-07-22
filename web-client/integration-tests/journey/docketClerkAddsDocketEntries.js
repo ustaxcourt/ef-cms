@@ -1,6 +1,8 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
 export const docketClerkAddsDocketEntries = (test, fakeFile) => {
   return it('Docketclerk adds docket entries', async () => {
@@ -13,11 +15,11 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -69,11 +71,11 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     );
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -114,17 +116,16 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: true,
     });
 
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      isAddAnother: true,
     });
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added. Continue adding docket entries below.',
+      'Your entry has been added to docket record.',
     );
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');

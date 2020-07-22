@@ -750,6 +750,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeSignatureFromDocumentInteractor,
+} = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
+const {
   replyToCaseMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToCaseMessageInteractor');
 const {
@@ -780,8 +783,8 @@ const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
-  saveWorkItemForDocketEntryWithoutFile,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
+  saveWorkItemForDocketEntryInProgress,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -812,6 +815,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveExternallyFiledDocumentInteractor,
+} = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1194,8 +1200,8 @@ module.exports = appContextUser => {
       sendNotificationToUser,
     }),
     getPdfJs: async () => {
-      const pdfjsLib = require('pdfjs-dist/es5/build/pdf.js');
-      pdfjsLib.disableWorker = true;
+      const pdfjsLib = require('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
       return pdfjsLib;
     },
@@ -1307,7 +1313,7 @@ module.exports = appContextUser => {
         saveDocumentFromLambda,
         saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
-        saveWorkItemForDocketEntryWithoutFile,
+        saveWorkItemForDocketEntryInProgress,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
@@ -1520,6 +1526,7 @@ module.exports = appContextUser => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removeSignatureFromDocumentInteractor,
         replyToCaseMessageInteractor,
         reprocessFailedRecordsInteractor,
         runTrialSessionPlanningReportInteractor,
@@ -1529,6 +1536,7 @@ module.exports = appContextUser => {
         sealCaseInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
+        serveExternallyFiledDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

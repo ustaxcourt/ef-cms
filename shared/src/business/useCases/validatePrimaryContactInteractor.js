@@ -8,8 +8,13 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
  * @param {string} providers.partyType the party type for the case
  * @returns {object} errors (null if no errors)
  */
-exports.validatePrimaryContactInteractor = ({ contactInfo, partyType }) => {
+exports.validatePrimaryContactInteractor = ({
+  applicationContext,
+  contactInfo,
+  partyType,
+}) => {
   return ContactFactory.createContacts({
+    applicationContext,
     contactInfo: { primary: contactInfo },
     partyType,
   }).primary.getFormattedValidationErrors();

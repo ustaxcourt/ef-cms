@@ -4,11 +4,7 @@ import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDeta
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('chambers user skips signing an order', () => {

@@ -44,6 +44,27 @@ describe('draftDocumentViewerHelper', () => {
       .mockReturnValue(docketClerkUser);
   });
 
+  it('should return an object with empty strings if viewerDraftDocumentToDisplay.eventCode is not defined', () => {
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual({
+      createdByLabel: '',
+      documentTitle: '',
+    });
+  });
   it('should return the document title', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
@@ -55,6 +76,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -78,6 +100,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               filedBy: 'Test Petitionsclerk',
+              isDraft: true,
             },
           ],
         },
@@ -100,6 +123,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -146,6 +170,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -171,6 +196,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -196,6 +222,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -221,6 +248,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -247,6 +275,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
+              isDraft: true,
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
@@ -274,6 +303,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
+              isDraft: true,
             },
           ],
         },
@@ -286,7 +316,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showAddDocketEntryButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton true and showEditSignatureButton false for an internal user and an unsigned document', () => {
+  it('return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -299,6 +329,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -309,10 +340,10 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(true);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton true and showApplySignatureButton false for an internal user and a signed document', () => {
+  it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -325,6 +356,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -335,11 +367,11 @@ describe('draftDocumentViewerHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(true);
+    expect(result.showRemoveSignatureButton).toEqual(true);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showEditSignatureButton false for an external user', () => {
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -352,6 +384,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -362,7 +395,65 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
+  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
+  it('returns showRemoveSignatureButton false for NTD document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NTD',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NTD',
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
   it('return showEditButtonSigned true for an internal user and a document that is signed', () => {
@@ -378,6 +469,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -404,6 +496,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -429,6 +522,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -452,6 +546,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -476,6 +571,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },

@@ -136,7 +136,7 @@ describe('Case entity', () => {
   });
 
   describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if current user matches rawCase', () => {
+    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
       const myCase = new Case(
         { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
         { applicationContext },
@@ -221,16 +221,6 @@ describe('Case entity', () => {
         },
       );
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
-    });
-
-    it('does not create a secondary contact when one is not needed by the party type', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, contactSecondary: undefined },
-        { applicationContext },
-      );
-      expect(myCase).toMatchObject({
-        contactSecondary: undefined,
-      });
     });
 
     it('returns private data if filtered is true and the user is internal', () => {
@@ -318,7 +308,7 @@ describe('Case entity', () => {
         },
       );
 
-      expect(myCase.otherPetitioners).toEqual(mockOtherPetitioners);
+      expect(myCase.otherPetitioners).toMatchObject(mockOtherPetitioners);
     });
   });
 
@@ -361,7 +351,7 @@ describe('Case entity', () => {
         },
       );
 
-      expect(myCase.toRawObject().otherFilers).toEqual(mockOtherFilers);
+      expect(myCase.toRawObject().otherFilers).toMatchObject(mockOtherFilers);
     });
 
     it('fails validation with more than one unique filer type', () => {
@@ -1348,6 +1338,7 @@ describe('Case entity', () => {
       const caseToVerify = new Case(
         {
           docketNumber: '123-19',
+          initialDocketNumberSuffix: 'S',
           isPaper: false,
           status: CASE_STATUS_TYPES.generalDocket,
         },
@@ -1355,7 +1346,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
-      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('S');
       caseToVerify.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
@@ -1374,6 +1365,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.updateDocketNumberRecord({
         applicationContext,
       });
@@ -2100,6 +2092,19 @@ describe('Case entity', () => {
       ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
     });
 
+    it('should not change any documents if no match is found', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+
+      myCase.updateDocument({
+        documentId: '11001001',
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
+
+      expect(myCase.documents).toMatchObject(MOCK_DOCUMENTS);
+    });
+
     it('should update a correspondence document', () => {
       const mockCorrespondence = new Correspondence({
         documentId: '123-abc',
@@ -2158,6 +2163,27 @@ describe('Case entity', () => {
   });
 
   describe('removePrivatePractitioner', () => {
+    it('does not remove a practitioner from associated case privatePractitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          privatePractitioners: [
+            new PrivatePractitioner({ userId: 'privatePractitioner1' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner2' }),
+            new PrivatePractitioner({ userId: 'privatePractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+
+      caseToVerify.removePrivatePractitioner({
+        userId: 'privatePractitioner99',
+      });
+      expect(caseToVerify.privatePractitioners.length).toEqual(3);
+    });
     it('removes the user from associated case privatePractitioners array', () => {
       const caseToVerify = new Case(
         {
@@ -2219,6 +2245,26 @@ describe('Case entity', () => {
   });
 
   describe('removeIrsPractitioner', () => {
+    it('does not remove a practitioner if not found in irsPractitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          irsPractitioners: [
+            new IrsPractitioner({ userId: 'irsPractitioner1' }),
+            new IrsPractitioner({ userId: 'irsPractitioner2' }),
+            new IrsPractitioner({ userId: 'irsPractitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+
+      caseToVerify.removeIrsPractitioner({ userId: 'irsPractitioner99' });
+      expect(caseToVerify.irsPractitioners.length).toEqual(3);
+    });
+
     it('removes the user from associated case irsPractitioners array', () => {
       const caseToVerify = new Case(
         {
@@ -3063,64 +3109,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isDocumentDraft', () => {
-    it('should return false for non-draft documents', () => {
-      const myCase = new Case(
-        {
-          documents: [
-            {
-              documentId: '1',
-              documentType: 'Answer',
-            },
-            {
-              archived: false,
-              documentId: '2',
-              documentType: 'Order',
-            },
-            {
-              archived: false,
-              documentId: '3',
-              documentType: 'Stipulated Decision',
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isDocumentDraft('1')).toEqual(false);
-    });
-
-    it('should return true for draft documents', () => {
-      const myCase = new Case(
-        {
-          docketRecord: [
-            {
-              documentId: '1',
-            },
-          ],
-          documents: [
-            {
-              archived: false,
-              documentId: '2',
-              documentType: 'Order',
-            },
-            {
-              archived: false,
-              documentId: '3',
-              documentType: 'Stipulated Decision',
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isDocumentDraft('2')).toEqual(true);
-      expect(myCase.isDocumentDraft('3')).toEqual(true);
-    });
-  });
-
   describe('setNoticeOfTrialDate', () => {
     it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
@@ -3326,7 +3314,7 @@ describe('Case entity', () => {
             {
               description: 'second record',
               documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-              eventCode: 'STIN',
+              eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
               filingDate: '2018-03-01T00:02:00.000Z',
               index: 1,
             },
@@ -3680,6 +3668,18 @@ describe('Case entity', () => {
       );
 
       expect(caseEntity.isSealed).toBeTruthy();
+    });
+  });
+
+  describe('secondary contact', () => {
+    it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, contactSecondary: undefined },
+        { applicationContext },
+      );
+      expect(myCase).toMatchObject({
+        contactSecondary: undefined,
+      });
     });
   });
 });

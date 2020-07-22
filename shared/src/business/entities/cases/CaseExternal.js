@@ -22,13 +22,19 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternal(rawCase) {
-  CaseExternal.prototype.init.call(this, rawCase);
-  CaseExternal.prototype.initContacts.call(this, rawCase);
+function CaseExternal(rawCase, { applicationContext }) {
+  CaseExternal.prototype.init.call(this, rawCase, { applicationContext });
+  CaseExternal.prototype.initContacts.call(this, rawCase, {
+    applicationContext,
+  });
 }
 
-CaseExternal.prototype.initContacts = function (rawCase) {
+CaseExternal.prototype.initContacts = function (
+  rawCase,
+  { applicationContext },
+) {
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
@@ -61,7 +67,11 @@ CaseExternal.prototype.init = function (rawCase) {
 CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
-  businessType: joi.string().valid(BUSINESS_TYPES).optional().allow(null),
+  businessType: joi
+    .string()
+    .valid(...Object.values(BUSINESS_TYPES))
+    .optional()
+    .allow(null),
   caseType: joi.string().when('hasIrsNotice', {
     is: joi.exist(),
     otherwise: joi.optional().allow(null),

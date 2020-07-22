@@ -180,7 +180,7 @@ export const serveDocument = async ({ docketNumber, documentId, test }) => {
   });
 
   await test.runSequence('openConfirmInitiateServiceModalSequence');
-  await test.runSequence('serveCourtIssuedDocumentSequence');
+  await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
 };
 
 export const createCourtIssuedDocketEntry = async ({
@@ -510,6 +510,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
       setItem: () => null,
     },
     location: {},
+    pdfjsObj: {
+      getData: () => Promise.resolve(getFakeFile(true)),
+    },
   };
 
   const originalUseCases = applicationContext.getUseCases();
@@ -517,6 +520,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return {
       ...originalUseCases,
       ...useCases,
+      loadPDFForSigningInteractor: () => Promise.resolve(null),
     };
   };
 

@@ -77,15 +77,21 @@ export const CaseMessageModalAttachments = connect(
               }}
             >
               <option value="">- Select -</option>
-              {caseMessageModalHelper.draftDocuments.length > 0 && (
+              {caseMessageModalHelper.hasDraftDocuments && (
                 <optgroup label="Draft documents">
                   {caseMessageModalHelper.draftDocuments.map(getDocumentOption)}
                 </optgroup>
               )}
 
-              {caseMessageModalHelper.documents.length > 0 && (
+              {caseMessageModalHelper.hasDocuments && (
                 <optgroup label="Docket record">
                   {caseMessageModalHelper.documents.map(getDocumentOption)}
+                </optgroup>
+              )}
+
+              {caseMessageModalHelper.hasCorrespondence && (
+                <optgroup label="Correspondence">
+                  {caseMessageModalHelper.correspondence.map(getDocumentOption)}
                 </optgroup>
               )}
             </select>
