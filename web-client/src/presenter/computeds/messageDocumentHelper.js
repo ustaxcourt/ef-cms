@@ -109,9 +109,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
-      showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
+      showEditButtonForRole &&
+      showEditButtonForDocument &&
+      (!documentIsSigned || isNotice),
     showEditButtonSigned:
-      showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
+      showEditButtonForRole &&
+      showEditButtonForDocument &&
+      documentIsSigned &&
+      !isNotice,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showNotServed,
