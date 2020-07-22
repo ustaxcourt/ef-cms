@@ -320,7 +320,7 @@ resource "aws_acm_certificate" "api_gateway_east_cert" {
   validation_method = "DNS"
 
   tags = {
-    Name          = "efcms-api-${var.environment}.${var.dns_domain}"
+    Name          = "api.${var.dns_domain}"
     ProductDomain = "EFCMS API"
     Environment   = var.environment
     Description   = "Certificate for api.${var.dns_domain}"

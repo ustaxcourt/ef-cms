@@ -12,7 +12,7 @@ resource "aws_acm_certificate" "us-east-1" {
     Name          = var.dns_domain
     ProductDomain = "EFCMS"
     Environment   = var.environment
-    Description   = "Certificate for ${var.dns_domain}"
+    Description   = "Certificate for [us-east-1] ${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 }
@@ -30,7 +30,7 @@ resource "aws_acm_certificate" "us-west-1" {
     Name          = var.dns_domain
     ProductDomain = "EFCMS"
     Environment   = var.environment
-    Description   = "Certificate for ${var.dns_domain}"
+    Description   = "Certificate for [acm/api us-west-1] ${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 
