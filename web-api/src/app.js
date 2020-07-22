@@ -465,7 +465,7 @@ app.post(
   lambdaWrapper(fileDocketEntryToCaseLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry',
+  '/case-documents/:docketNumber/docket-entry',
   lambdaWrapper(updateDocketEntryOnCaseLambda),
 );
 app.put(
