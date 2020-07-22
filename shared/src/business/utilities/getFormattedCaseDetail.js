@@ -226,7 +226,6 @@ const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const formatCaseEntity = new Case(caseDetail, { applicationContext });
   const result = cloneDeep(caseDetail);
 
   result.docketRecordWithDocument = [];
@@ -253,7 +252,7 @@ const formatCase = (applicationContext, caseDetail) => {
   );
 
   result.draftDocuments = (result.documents || [])
-    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .filter(document => document.isDraft && !document.archived)
     .map(document => ({
       ...document,
       editUrl:
