@@ -77,13 +77,13 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 
 - You can access the UI at http://localhost:1234
 - You can access the public UI at http://localhost:5678
-- You can access the API at http://localhost:3000
+- You can access the API at http://localhost:4000
 - You can access the DynamoDB shell at http://localhost:8000/shell
 - You can access the DynamoDB admin UI at http://localhost:8001
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
 
-Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
+Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 ### ECR
 ECR is Amazon’s Docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.

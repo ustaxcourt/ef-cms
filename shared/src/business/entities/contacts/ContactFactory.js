@@ -3,6 +3,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
@@ -48,7 +49,7 @@ const commonValidationRequirements = {
   address2: joi.string().max(500).optional(),
   address3: joi.string().max(500).optional(),
   city: joi.string().max(500).required(),
-  email: joi.string().email({ tlds: false }).max(100).when('hasEAccess', {
+  email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),
     otherwise: joi.optional(),
@@ -75,7 +76,7 @@ const domesticValidationObject = {
   ...commonValidationRequirements,
   state: joi
     .string()
-    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER)
+    .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
     .required(),
   postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };

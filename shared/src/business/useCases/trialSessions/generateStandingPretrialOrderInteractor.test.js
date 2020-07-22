@@ -4,6 +4,7 @@ const {
 const {
   generateStandingPretrialOrderInteractor,
 } = require('./generateStandingPretrialOrderInteractor');
+const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateStandingPretrialOrderInteractor', () => {
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
           return {
             caseCaption: 'Test Case Caption',
             docketNumber: '234-56',
-            docketNumberSuffix: 'S',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           };
         }
       });

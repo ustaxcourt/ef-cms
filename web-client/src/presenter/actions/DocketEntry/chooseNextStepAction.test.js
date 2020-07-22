@@ -1,41 +1,60 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { chooseNextStepAction } from './chooseNextStepAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
+presenter.providers.applicationContext = applicationContext;
+
 describe('chooseNextStepAction', () => {
-  let addAnotherEntryStub;
-  let caseDetailStub;
+  let isPaperStub;
+  let isElectronicStub;
 
   beforeAll(() => {
-    addAnotherEntryStub = jest.fn();
-    caseDetailStub = jest.fn();
+    isPaperStub = jest.fn();
+    isElectronicStub = jest.fn();
 
     presenter.providers.path = {
-      addAnotherEntry: addAnotherEntryStub,
-      caseDetail: caseDetailStub,
+      isElectronic: isElectronicStub,
+      isPaper: isPaperStub,
     };
   });
 
-  it('chooses the next step as supporting document if it exists', async () => {
+  it('chooses the next step as paper if the case is paper', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
       },
-      props: {
-        isAddAnother: true,
+      state: {
+        caseDetail: {
+          contactPrimary: {
+            serviceIndicator: 'Paper',
+          },
+          irsPractitioners: [],
+          isPaper: true,
+          privatePractitioners: [],
+        },
       },
     });
 
-    expect(addAnotherEntryStub).toHaveBeenCalled();
+    expect(isPaperStub).toHaveBeenCalled();
   });
 
-  it('does not choose the next step as supporting document if it does not exist', async () => {
+  it('chooses the next step as electronic if the case is electronic (not paper)', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
       },
+      state: {
+        caseDetail: {
+          contactPrimary: {
+            serviceIndicator: 'Electronic',
+          },
+          irsPractitioners: [],
+          privatePractitioners: [],
+        },
+      },
     });
 
-    expect(caseDetailStub).toHaveBeenCalled();
+    expect(isElectronicStub).toHaveBeenCalled();
   });
 });

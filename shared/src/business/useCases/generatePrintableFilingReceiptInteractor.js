@@ -29,7 +29,6 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     const document = new Document(documentData, {
       applicationContext,
     });
-    document.generateFiledBy(caseEntity);
     return {
       attachments: document.attachments,
       certificateOfService: document.certificateOfService,

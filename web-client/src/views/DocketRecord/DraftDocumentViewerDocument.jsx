@@ -62,6 +62,7 @@ export const DraftDocumentViewerDocument = connect(
                   link
                   href={viewerDraftDocumentToDisplay.editUrl}
                   icon="edit"
+                  id="draft-edit-button-not-signed"
                 >
                   Edit
                 </Button>
@@ -127,6 +128,7 @@ export const DraftDocumentViewerDocument = connect(
                   link
                   href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplay.documentId}/add-court-issued-docket-entry`}
                   icon="plus-circle"
+                  id="add-court-issued-docket-entry-button"
                 >
                   Add Docket Entry
                 </Button>

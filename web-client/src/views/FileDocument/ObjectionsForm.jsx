@@ -5,6 +5,7 @@ import React from 'react';
 
 export const ObjectionsForm = connect(
   {
+    DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
     data: state[props.bind],
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
@@ -15,6 +16,7 @@ export const ObjectionsForm = connect(
   },
   function ObjectionsForm({
     data,
+    DOCUMENT_RELATIONSHIPS,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -35,7 +37,7 @@ export const ObjectionsForm = connect(
                   className="usa-radio__input"
                   id={`${type}-objections-${option}`}
                   name={`${
-                    type === 'primaryDocument'
+                    type === DOCUMENT_RELATIONSHIPS.PRIMARY
                       ? 'objections'
                       : `${type}.objections`
                   }`}

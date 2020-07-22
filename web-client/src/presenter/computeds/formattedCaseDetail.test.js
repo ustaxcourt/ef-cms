@@ -1,46 +1,47 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let globalUser;
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
-);
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
-const petitionsClerkUser = {
-  role: ROLES.petitionsClerk,
-  userId: '123',
-};
-const docketClerkUser = {
-  role: ROLES.docketClerk,
-  userId: '234',
-};
-const petitionerUser = {
-  role: ROLES.petitioner,
-  userId: '456',
-};
-
 describe('formattedCaseDetail', () => {
+  let globalUser;
+  const {
+    DOCUMENT_RELATIONSHIPS,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
+      },
+    },
+  );
+
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      permissions: getUserPermissions(user),
+    };
+  };
+
+  const petitionsClerkUser = {
+    role: USER_ROLES.petitionsClerk,
+    userId: '123',
+  };
+  const docketClerkUser = {
+    role: USER_ROLES.docketClerk,
+    userId: '234',
+  };
+  const petitionerUser = {
+    role: USER_ROLES.petitioner,
+    userId: '456',
+  };
+
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -172,8 +173,9 @@ describe('formattedCaseDetail', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           supportingDocumentFreeText: 'Test',
@@ -195,8 +197,9 @@ describe('formattedCaseDetail', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
@@ -220,10 +223,11 @@ describe('formattedCaseDetail', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
+          servedAt: '2019-06-19T17:29:13.120Z',
           supportingDocument: 'Declaration in Support',
           supportingDocumentFreeText: 'Rachael',
         },
@@ -243,8 +247,9 @@ describe('formattedCaseDetail', () => {
           partyIrsPractitioner: true,
           partyPrivatePractitioner: true,
           previousDocument: 'Amended Petition',
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
+          servedAt: '2019-06-19T17:29:13.120Z',
         },
         {
           createdAt: '2019-04-19T17:29:13.122Z',
@@ -254,8 +259,9 @@ describe('formattedCaseDetail', () => {
           eventCode: 'HE',
           freeText: 'adsf',
           lodged: false,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Type A',
+          servedAt: '2019-06-19T17:29:13.120Z',
         },
       ],
       hasVerifiedIrsNotice: false,
@@ -357,6 +363,64 @@ describe('formattedCaseDetail', () => {
         showLinkToDocument: false,
       },
     ]);
+  });
+
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      correspondence: [],
+      docketRecord: [
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+        {
+          description: 'Motion for Leave to File Administrative Record',
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          eventCode: 'M115',
+          filingDate: '2020-07-08T16:33:41.180Z',
+        },
+      ],
+      documents: [
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: true,
+        },
+        {
+          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+          documentType: 'Motion for Leave to File Administrative Record',
+          eventCode: 'M115',
+          lodged: false,
+        },
+      ],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner' }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    const lodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+    );
+    const unlodgedDocument = result.documents.find(
+      d => d.documentId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+    );
+
+    expect(lodgedDocument.eventCode).toEqual('MISCL');
+    expect(unlodgedDocument.eventCode).not.toEqual('MISCL');
   });
 
   describe('sorts docket records', () => {
@@ -673,7 +737,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -697,7 +761,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -863,7 +927,7 @@ describe('formattedCaseDetail', () => {
           documentType: 'Order',
           isCourtIssuedDocument: true,
           isInProgress: false,
-          isNotServedCourtIssuedDocument: true,
+          isNotServedDocument: true,
           isPetition: false,
           isStatusServed: false,
           showDocumentViewerLink: true,
@@ -877,7 +941,7 @@ describe('formattedCaseDetail', () => {
           documentType: 'Stipulated Decision',
           isCourtIssuedDocument: true,
           isInProgress: false,
-          isNotServedCourtIssuedDocument: true,
+          isNotServedDocument: true,
           isPetition: false,
           isStatusServed: false,
           showDocumentViewerLink: true,
@@ -920,7 +984,7 @@ describe('formattedCaseDetail', () => {
             associatedJudge: 'Guy Fieri',
             correspondence: [],
             petitioners: [{ name: 'Bobby Flay' }],
-            status: CASE_STATUS_TYPES.calendared,
+            status: STATUS_TYPES.calendared,
             trialDate: '2018-12-11T05:00:00Z',
             trialLocation: 'Flavortown',
             trialSessionId: '123',
@@ -929,7 +993,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -953,7 +1017,7 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         petitioners: [{ name: 'bob' }],
-        status: CASE_STATUS_TYPES.calendared,
+        status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
         trialSessionId: '123',
@@ -1608,6 +1672,104 @@ describe('formattedCaseDetail', () => {
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+    });
+  });
+
+  describe('showNotServed', () => {
+    let baseContact;
+    let contactPrimary;
+    let contactSecondary;
+    let otherPetitioners;
+    let otherFilers;
+    let caseDetail;
+
+    beforeEach(() => {
+      baseContact = {
+        hasEAccess: true,
+      };
+      contactPrimary = baseContact;
+      contactSecondary = baseContact;
+      otherPetitioners = [baseContact];
+      otherFilers = [baseContact];
+
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary,
+        contactSecondary,
+        correspondence: [],
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+            isLegacy: true,
+            isStricken: true,
+            numberOfPages: 24,
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+        otherFilers,
+        otherPetitioners,
+      };
+    });
+
+    it('should be true if the document type is servable and does not have a servedAt', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(true);
+    });
+
+    it('should be false if the document type is unservable', () => {
+      //CTRA is a document type that cannot be served
+      caseDetail.docketRecord[0].eventCode = 'CTRA';
+      caseDetail.documents[0].eventCode = 'CTRA';
+      caseDetail.docketRecord[0].documentType = 'Corrected Transcript';
+      caseDetail.documents[0].documentType = 'Corrected Transcript';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
+    });
+
+    it('should be false if the document type is servable and has servedAt', () => {
+      caseDetail.docketRecord[0].servedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].servedAt = '2019-06-19T17:29:13.120Z';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail,
+          permissions: {},
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showNotServed).toEqual(false);
     });
   });
 });

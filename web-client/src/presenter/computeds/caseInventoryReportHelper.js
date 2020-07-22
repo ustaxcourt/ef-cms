@@ -3,13 +3,14 @@ import { state } from 'cerebral';
 export const caseInventoryReportHelper = (get, applicationContext) => {
   const {
     CASE_INVENTORY_PAGE_SIZE,
+    CHIEF_JUDGE,
     STATUS_TYPES,
   } = applicationContext.getConstants();
   const { formatCase } = applicationContext.getUtilities();
 
   const judges = (get(state.judges) || [])
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
-    .concat('Chief Judge')
+    .concat(CHIEF_JUDGE)
     .sort();
 
   const { associatedJudge, page, status } = get(state.screenMetadata);

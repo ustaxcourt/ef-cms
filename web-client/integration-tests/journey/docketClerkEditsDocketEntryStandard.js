@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2050',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
@@ -62,7 +62,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2018',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -90,7 +90,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       documentTitle: 'Entry of Appearance',
       documentType: 'Entry of Appearance',
       eventCode: 'EA',
-      filedBy: 'Petr. Mona Schultz',
+      filedBy: 'Petr. Mona Schultz, Brianna Noble',
       partyPrimary: true,
       receivedAt: '2018-01-01',
     });

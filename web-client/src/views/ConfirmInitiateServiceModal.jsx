@@ -1,20 +1,24 @@
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: sequences.serveCourtIssuedDocumentSequence,
+    confirmSequence: props.confirmSequence,
+    documentTitle: props.documentTitle,
+    serveCourtIssuedDocumentSequence:
+      sequences.serveCourtIssuedDocumentSequence,
   },
   function ConfirmInitiateServiceModal({
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
+    serveCourtIssuedDocumentSequence,
   }) {
     return (
       <ModalDialog
@@ -22,7 +26,7 @@ export const ConfirmInitiateServiceModal = connect(
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={confirmSequence}
+        confirmSequence={confirmSequence || serveCourtIssuedDocumentSequence}
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">

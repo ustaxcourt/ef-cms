@@ -356,13 +356,9 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
-  caseCaption: joi
-    .string()
-    .max(500)
-    .required()
-    .description(
-      'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
-    ),
+  caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
+    'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
+  ),
   caseId: JoiValidationConstants.UUID.required().description(
     'Unique case ID only used by the system.',
   ),
@@ -623,7 +619,7 @@ Case.VALIDATION_RULES = {
       otherwise: joi.optional(),
       then: joi.when('caseType', {
         is: CASE_TYPES_MAP.deficiency,
-        otherwise: joi.optional(), // TODO: only allow null?
+        otherwise: joi.optional(),
         then: joi.array().min(1).required(),
       }),
     })
@@ -1018,7 +1014,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (
         {
           description: `Request for Place of Trial at ${this.preferredTrialCity}`,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          filingDate: this.receivedAt || this.createdAt,
+          filingDate: this.receivedAt,
         },
         { applicationContext },
       ),

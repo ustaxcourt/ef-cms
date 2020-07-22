@@ -178,6 +178,7 @@ export const SignOrder = connect(
 
                   <Button
                     className="margin-right-0"
+                    id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
                     Save Signature
@@ -187,6 +188,7 @@ export const SignOrder = connect(
               {!pdfSignerHelper.isPlaced && (
                 <Button
                   className="margin-right-0"
+                  id="skip-signature-button"
                   onClick={() => skipSigningOrderSequence()}
                 >
                   Skip Signature

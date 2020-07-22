@@ -4,6 +4,7 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 const {
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -138,7 +139,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Deficiency',
+      value: CASE_TYPES_MAP.deficiency,
     });
 
     await test.runSequence('updateFormValueSequence', {

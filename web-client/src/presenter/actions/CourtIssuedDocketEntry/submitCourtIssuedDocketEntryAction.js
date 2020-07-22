@@ -16,17 +16,31 @@ export const submitCourtIssuedDocketEntryAction = async ({
   const caseId = get(state.caseDetail.caseId);
   const form = get(state.form);
 
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  } = applicationContext.getConstants();
+
   const documentMeta = {
     ...form,
     caseId,
     documentId,
   };
 
-  return await applicationContext
-    .getUseCases()
-    .fileCourtIssuedDocketEntryInteractor({
+  await applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor({
+    applicationContext,
+    documentId,
+    documentMeta,
+  });
+
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentMeta.eventCode,
+    )
+  ) {
+    await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
+      caseId,
       documentId,
-      documentMeta,
     });
+  }
 };

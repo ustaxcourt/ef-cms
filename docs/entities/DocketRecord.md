@@ -488,9 +488,9 @@
         presence: "optional"
         description: "Served parties code to override system-computed code."
       allow: 
-        - "R"
         - "B"
         - "P"
+        - "R"
         - null
 
  ```

@@ -2,6 +2,7 @@ const React = require('react');
 const {
   COUNTRY_TYPES,
   PARTY_TYPES,
+  SERVED_PARTIES_CODES,
 } = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
@@ -31,6 +32,7 @@ describe('DocketRecord', () => {
       name: 'Test Petitioner',
       phone: '123-124-1234',
       postalCode: '12345',
+      secondaryName: 'Secondary Name',
       state: 'AL',
     };
 
@@ -89,10 +91,10 @@ describe('DocketRecord', () => {
         document: {
           additionalInfo2: 'Addl Info',
           filedBy: 'Test Filer',
-          isNotServedCourtIssuedDocument: false,
+          isNotServedDocument: false,
           isStatusServed: true,
           servedAtFormatted: '02/02/20',
-          servedPartiesCode: 'B',
+          servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         },
         index: 1,
         record: {
@@ -125,6 +127,9 @@ describe('DocketRecord', () => {
     const contactPrimaryEl = contacts.find('.party-details');
 
     expect(contactPrimaryEl.text()).toContain(contactPrimary.name);
+    expect(contactPrimaryEl.text()).toContain(
+      `c/o ${contactPrimary.secondaryName}`,
+    );
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address1);
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address2);
     expect(contactPrimaryEl.text()).toContain(contactPrimary.address3);
@@ -134,7 +139,6 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(contactPrimary.phone);
 
     expect(contactPrimaryEl.text()).not.toContain(contactPrimary.country);
-    expect(contactPrimaryEl.text()).not.toContain('c/o');
   });
 
   it("displays a party's country if international", () => {
@@ -398,7 +402,7 @@ describe('DocketRecord', () => {
 
   it('displays `Not Served` in the served column if the document is an unserved court-issued document', () => {
     entries[0].document.isStatusServed = false;
-    entries[0].document.isNotServedCourtIssuedDocument = true;
+    entries[0].document.isNotServedDocument = true;
 
     const wrapper = mount(
       <DocketRecord

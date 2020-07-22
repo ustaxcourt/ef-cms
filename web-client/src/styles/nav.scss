@@ -96,10 +96,8 @@
         width: 46px;
         max-width: 46px;
         margin-top: 2px;
-        margin-left:0px;
+        margin-left: 0px;
       }
-
-
 
       nav.ustc-nav {
         justify-content: space-between;
@@ -138,6 +136,20 @@
         padding: 0.5em;
         color: color($theme-color-primary);
         font-size: 15px;
+      }
+    }
+  }
+
+  /* small and medium screens: */
+  @media only screen and (max-width: $large-screen) {
+    .usa-nav__submenu--open {
+      .usa-nav__submenu {
+        .usa-nav__submenu-item button {
+          width: 100%;
+          padding-left: 2rem !important;
+          font-size: 0.93rem;
+          text-align: left;
+        }
       }
     }
   }
@@ -251,7 +263,6 @@
     }
   }
 }
-
 
 /* small screens: */
 @media only screen and (max-width: $medium-screen - 1px) {

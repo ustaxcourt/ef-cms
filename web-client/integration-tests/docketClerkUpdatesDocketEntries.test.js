@@ -41,7 +41,7 @@ describe('docket clerk updates docket entries', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test);
   docketClerkEditsDocketEntryStandard(test);
   docketClerkEditsDocketEntryNonstandardA(test);
   docketClerkEditsDocketEntryNonstandardB(test);

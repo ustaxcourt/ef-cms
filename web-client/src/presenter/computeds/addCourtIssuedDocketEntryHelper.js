@@ -4,6 +4,7 @@ import { state } from 'cerebral';
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
   const caseDetail = applicationContext
@@ -52,11 +53,14 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const formattedDocumentTitle = `${form.generatedDocumentTitle}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
-
+  const showSaveAndServeButton = !UNSERVABLE_EVENT_CODES.includes(
+    form.eventCode,
+  );
   return {
     documentTypes,
     formattedDocumentTitle,
     serviceParties,
+    showSaveAndServeButton,
     showServiceStamp,
   };
 };

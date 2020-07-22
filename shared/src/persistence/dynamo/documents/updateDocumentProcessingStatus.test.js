@@ -3,6 +3,9 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
+const {
   updateDocumentProcessingStatus,
 } = require('./updateDocumentProcessingStatus');
 
@@ -11,11 +14,12 @@ describe('updateDocumentProcessingStatus', () => {
     applicationContext.filterCaseMetadata.mockImplementation(
       ({ cases }) => cases,
     );
+
     client.update = jest.fn().mockReturnValue({
       caseId: '123',
       pk: '123',
       sk: '123',
-      status: 'New',
+      status: CASE_STATUS_TYPES.new,
     });
   });
 

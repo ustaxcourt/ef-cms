@@ -55,11 +55,14 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     processingStatus: joi
       .string()
-      .valid(...DOCUMENT_PROCESSING_STATUS_OPTIONS)
+      .valid(...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS))
       .optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.optional(),
     servedAt: JoiValidationConstants.ISO_DATE.optional(),
-    servedParties: joi.array().optional(), // TODO: object definition
+    servedParties: joi
+      .array()
+      .items({ name: joi.string().max(500).required() })
+      .optional(),
   }),
   {},
 );
