@@ -579,8 +579,8 @@ app.delete(
   '/case-notes/:caseId/user-notes',
   lambdaWrapper(deleteUserCaseNoteLambda),
 );
-app.delete('/case-notes/:caseId', lambdaWrapper(deleteCaseNoteLambda));
-app.put('/case-notes/:caseId', lambdaWrapper(saveCaseNoteLambda));
+app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
+app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
 
 /**
  * case-parties
