@@ -1,7 +1,7 @@
-import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
+import { getInboxCaseMessagesForUserAction } from '../actions/getInboxCaseMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getOpenAndClosedCasesByUserAction } from '../actions/caseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -11,6 +11,7 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
+import { setCaseMessagesAction } from '../actions/setCaseMessagesAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -23,6 +24,11 @@ import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
 const proceedToMessages = [navigateToMessagesAction];
+
+const getCaseMessages = [
+  getInboxCaseMessagesForUserAction,
+  setCaseMessagesAction,
+];
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
@@ -48,7 +54,7 @@ const goToDashboard = [
     ),
     chambers: [
       setMessageInboxPropsAction,
-      ...chooseWorkQueueSequence,
+      getCaseMessages,
       getJudgeForCurrentUserAction,
       setJudgeUserAction,
       getTrialSessionsAction,
@@ -65,7 +71,7 @@ const goToDashboard = [
     irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
     judge: [
       setMessageInboxPropsAction,
-      ...chooseWorkQueueSequence,
+      getCaseMessages,
       getTrialSessionsAction,
       setTrialSessionsAction,
       setCurrentPageAction('DashboardJudge'),

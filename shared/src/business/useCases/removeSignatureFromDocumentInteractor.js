@@ -5,20 +5,20 @@ const { Case } = require('../entities/cases/Case');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case on which to remove the signature from the document
+ * @param {string} providers.docketNumber the docket number of the case on which to remove the signature from the document
  * @param {string} providers.documentId the id of the signed document
  * @returns {object} the updated case
  */
 exports.removeSignatureFromDocumentInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
   const documentToUnsign = caseEntity.getDocumentById({ documentId });

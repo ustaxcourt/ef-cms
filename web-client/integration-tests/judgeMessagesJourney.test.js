@@ -1,16 +1,7 @@
-import { docketClerkCreatesMessageToJudge } from './journey/docketClerkCreatesMessageToJudge';
-import { fakeFile, loginAs, setupTest } from './helpers';
 import { judgeViewsCaseDetail } from './journey/judgeViewsCaseDetail';
 import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessages';
-import { petitionerAddNewCaseToTestObj } from './journey/petitionerAddNewCaseToTestObj';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
-import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
-import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
-import { petitionsClerkCreatesMessageToJudge } from './journey/petitionsClerkCreatesMessageToJudge';
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { userSendsCaseMessageToJudge } from './journey/userSendsCaseMessageToJudge';
 
 const test = setupTest();
 
@@ -19,34 +10,23 @@ describe('Judge messages journey', () => {
     jest.setTimeout(30000);
   });
 
-  const createdCases = [];
-
   loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
-  petitionerFilesDocumentForCase(test, fakeFile);
-  petitionerAddNewCaseToTestObj(test, createdCases);
-  petitionerViewsCaseDetailAfterFilingDocument(test);
-  petitionerViewsDashboard(test);
+  it('Create case', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
+
+  const message1Subject = `message 1 ${Date.now()}`;
+  const message2Subject = `message 2 ${Date.now()}`;
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesMessageToJudge(
-    test,
-    "don't forget to be awesome",
-    createdCases,
-  );
+  userSendsCaseMessageToJudge(test, message1Subject);
 
   loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesMessageToJudge(
-    test,
-    'karma karma karma karma karma chameleon',
-    createdCases,
-  );
+  userSendsCaseMessageToJudge(test, message2Subject);
 
   loginAs(test, 'judgeArmen@example.com');
-  judgeViewsDashboardMessages(test);
+  judgeViewsDashboardMessages(test, [message1Subject, message2Subject]);
   judgeViewsCaseDetail(test);
 });
