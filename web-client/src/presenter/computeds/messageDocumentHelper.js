@@ -69,7 +69,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showApplySignatureButtonForDocument =
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
   const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
-  !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && caseDocument.isDraft && !isNotice;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
