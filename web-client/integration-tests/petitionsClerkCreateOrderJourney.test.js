@@ -11,11 +11,7 @@ import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViews
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
