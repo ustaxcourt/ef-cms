@@ -59,7 +59,7 @@
         - 
           name: "max"
           args: 
-            limit: 3000
+            limit: 4000
       allow: 
         - null
       metas: 
