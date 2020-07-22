@@ -76,7 +76,7 @@ Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParamete
 Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
 ```
 
-If this error is seen during environment destruction, run `terraform state rm aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
+If this error is seen during environment destruction, run `terraform state rm module.ef-cms_apis.aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource. 
 
 
 ### Terraform Deploy: Provided certificate does not exist

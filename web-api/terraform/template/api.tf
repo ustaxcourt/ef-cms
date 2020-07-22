@@ -1,3 +1,20 @@
+resource "aws_s3_bucket" "api_lambdas_bucket" {
+  bucket   = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
+  acl      = "private"
+  provider = aws.us-east-1
+  region   = "us-east-1"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_object" "api_object" {
+  bucket = aws_s3_bucket.api_lambdas_bucket.id
+  key    = "${var.environment}_api.js.zip"
+  source = "${path.module}/lambdas/api.js.zip"
+}
+
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/lambdas/api.js.zip"
@@ -5,13 +22,13 @@ data "archive_file" "zip_api" {
 }
 
 resource "aws_lambda_function" "api_lambda" {
-  filename         = data.archive_file.zip_api.output_path
-  function_name    = "api_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout          = "29"
-  memory_size      = "3008"
+  function_name = "api_${var.environment}"
+  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  handler       = "api.handler"
+  s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
+  s3_key        = aws_s3_bucket_object.api_object.key
+  timeout       = "29"
+  memory_size   = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
@@ -24,26 +41,28 @@ resource "aws_lambda_function" "api_lambda" {
   }
 }
 
-resource "aws_lambda_function" "api_clamav_lambda" {
-  filename         = data.archive_file.zip_api.output_path
-  function_name    = "api_clamav_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler          = "api.handler"
-  source_code_hash = data.archive_file.zip_api.output_base64sha256
-  timeout          = "29"
-  memory_size      = "3008"
+# TODO: The virus definitions have gotten too large to live on Lambda... find alternative solution to get 
+# clamav working.
 
-  layers = [
-    aws_lambda_layer_version.clamav_layer.arn
-  ]
+# resource "aws_lambda_function" "api_clamav_lambda" {
+#   function_name = "api_clamav_${var.environment}"
+#   role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+#   handler       = "api.handler"
+#   s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
+#   s3_key        = aws_s3_bucket_object.api_object.key
+#   timeout       = "29"
+#   memory_size   = "3008"
 
-  runtime = "nodejs12.x"
+#   layers = [
+#     aws_lambda_layer_version.clamav_layer.arn
+#   ]
 
+#   runtime = "nodejs12.x"
 
-  environment {
-    variables = data.null_data_source.locals.outputs
-  }
-}
+#   environment {
+#     variables = data.null_data_source.locals.outputs
+#   }
+# }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
   name = "gateway_api_${var.environment}"
@@ -53,17 +72,17 @@ resource "aws_api_gateway_rest_api" "gateway_for_api" {
   }
 }
 
-resource "aws_api_gateway_resource" "api_clamav_base_resource" {
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
-  path_part   = "clamav"
-}
+# resource "aws_api_gateway_resource" "api_clamav_base_resource" {
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
+#   path_part   = "clamav"
+# }
 
-resource "aws_api_gateway_resource" "api_clamav_resource" {
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  parent_id   = aws_api_gateway_resource.api_clamav_base_resource.id
-  path_part   = "{proxy+}"
-}
+# resource "aws_api_gateway_resource" "api_clamav_resource" {
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   parent_id   = aws_api_gateway_resource.api_clamav_base_resource.id
+#   path_part   = "{proxy+}"
+# }
 
 resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
@@ -71,28 +90,28 @@ resource "aws_api_gateway_resource" "api_resource" {
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "api_clamav_method_post" {
-  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id   = aws_api_gateway_resource.api_clamav_resource.id
-  http_method   = "POST"
-  authorization = "CUSTOM"
-  authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
-}
+# resource "aws_api_gateway_method" "api_clamav_method_post" {
+#   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id   = aws_api_gateway_resource.api_clamav_resource.id
+#   http_method   = "POST"
+#   authorization = "CUSTOM"
+#   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
+# }
 
-resource "aws_api_gateway_method" "api_clamav_method_options" {
-  depends_on = [
-    aws_api_gateway_method.api_clamav_method_post
-  ]
-  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id   = aws_api_gateway_resource.api_clamav_resource.id
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+# resource "aws_api_gateway_method" "api_clamav_method_options" {
+#   depends_on = [
+#     aws_api_gateway_method.api_clamav_method_post
+#   ]
+#   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id   = aws_api_gateway_resource.api_clamav_resource.id
+#   http_method   = "OPTIONS"
+#   authorization = "NONE"
+# }
 
 resource "aws_api_gateway_method" "api_method_get" {
-  depends_on = [
-    aws_api_gateway_method.api_clamav_method_options
-  ]
+  # depends_on = [
+  #   aws_api_gateway_method.api_clamav_method_options
+  # ]
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id   = aws_api_gateway_resource.api_resource.id
   http_method   = "GET"
@@ -150,65 +169,65 @@ resource "aws_api_gateway_authorizer" "custom_authorizer" {
   authorizer_credentials = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
 
-resource "aws_api_gateway_integration" "api_clamav_integration_post" {
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_method.api_clamav_method_post.resource_id
-  http_method = aws_api_gateway_method.api_clamav_method_post.http_method
+# resource "aws_api_gateway_integration" "api_clamav_integration_post" {
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id = aws_api_gateway_method.api_clamav_method_post.resource_id
+#   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
 
-  request_parameters = {
-    "integration.request.header.X-Amz-Invocation-Type" = "'Event'"
-  }
+#   request_parameters = {
+#     "integration.request.header.X-Amz-Invocation-Type" = "'Event'"
+#   }
 
-  integration_http_method = "POST"
-  type                    = "AWS"
-  uri                     = aws_lambda_function.api_clamav_lambda.invoke_arn
-}
+#   integration_http_method = "POST"
+#   type                    = "AWS"
+#   uri                     = aws_lambda_function.api_clamav_lambda.invoke_arn
+# }
 
-resource "aws_api_gateway_method_response" "clamav_method_response_post" {
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_clamav_resource.id
-  http_method = aws_api_gateway_method.api_clamav_method_post.http_method
-  status_code = "200"
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-}
+# resource "aws_api_gateway_method_response" "clamav_method_response_post" {
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id = aws_api_gateway_resource.api_clamav_resource.id
+#   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
+#   status_code = "200"
+#   response_parameters = {
+#     "method.response.header.Access-Control-Allow-Origin"  = true
+#     "method.response.header.Access-Control-Allow-Headers" = true
+#     "method.response.header.Access-Control-Allow-Methods" = true
+#   }
+# }
 
-resource "aws_api_gateway_integration_response" "clamav_response_post" {
-  depends_on = [
-    aws_api_gateway_integration.api_clamav_integration_post
-  ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_resource.api_clamav_resource.id
-  http_method = aws_api_gateway_method.api_clamav_method_post.http_method
-  status_code = aws_api_gateway_method_response.clamav_method_response_post.status_code
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
-    "method.response.header.Access-Control-Allow-Methods" = "'POST'"
-  }
-}
+# resource "aws_api_gateway_integration_response" "clamav_response_post" {
+#   depends_on = [
+#     aws_api_gateway_integration.api_clamav_integration_post
+#   ]
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id = aws_api_gateway_resource.api_clamav_resource.id
+#   http_method = aws_api_gateway_method.api_clamav_method_post.http_method
+#   status_code = aws_api_gateway_method_response.clamav_method_response_post.status_code
+#   response_parameters = {
+#     "method.response.header.Access-Control-Allow-Origin"  = "'*'",
+#     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With'",
+#     "method.response.header.Access-Control-Allow-Methods" = "'POST'"
+#   }
+# }
 
-resource "aws_api_gateway_integration" "api_clamav_integration_options" {
-  depends_on = [
-    aws_api_gateway_integration.api_clamav_integration_post
-  ]
-  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id = aws_api_gateway_method.api_clamav_method_options.resource_id
-  http_method = aws_api_gateway_method.api_clamav_method_options.http_method
+# resource "aws_api_gateway_integration" "api_clamav_integration_options" {
+#   depends_on = [
+#     aws_api_gateway_integration.api_clamav_integration_post
+#   ]
+#   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+#   resource_id = aws_api_gateway_method.api_clamav_method_options.resource_id
+#   http_method = aws_api_gateway_method.api_clamav_method_options.http_method
 
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.api_lambda.invoke_arn
-}
+#   integration_http_method = "POST"
+#   type                    = "AWS_PROXY"
+#   uri                     = aws_lambda_function.api_lambda.invoke_arn
+# }
 
 
 resource "aws_api_gateway_integration" "api_integration_get" {
-  depends_on = [
-    aws_api_gateway_integration.api_clamav_integration_options
-  ]
+  # depends_on = [
+  #   aws_api_gateway_integration.api_clamav_integration_options
+  # ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_method_get.resource_id
   http_method = aws_api_gateway_method.api_method_get.http_method
@@ -279,26 +298,26 @@ resource "aws_lambda_permission" "apigw_lambda" {
 }
 
 
-resource "aws_lambda_permission" "apigw_clamav_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.api_clamav_lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
-}
+# resource "aws_lambda_permission" "apigw_clamav_lambda" {
+#   statement_id  = "AllowExecutionFromAPIGateway"
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.api_clamav_lambda.function_name
+#   principal     = "apigateway.amazonaws.com"
+#   source_arn    = "${aws_api_gateway_rest_api.gateway_for_api.execution_arn}/*/*/*"
+# }
 
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_method.api_clamav_method_post,
-    aws_api_gateway_method.api_clamav_method_options,
+    # aws_api_gateway_method.api_clamav_method_post,
+    # aws_api_gateway_method.api_clamav_method_options,
     aws_api_gateway_method.api_method_get,
     aws_api_gateway_method.api_method_post,
     aws_api_gateway_method.api_method_put,
     aws_api_gateway_method.api_method_delete,
     aws_api_gateway_method.api_method_options,
-    aws_api_gateway_integration.api_clamav_integration_post,
-    aws_api_gateway_integration.api_clamav_integration_options,
+    # aws_api_gateway_integration.api_clamav_integration_post,
+    # aws_api_gateway_integration.api_clamav_integration_options,
     aws_api_gateway_integration.api_integration_get,
     aws_api_gateway_integration.api_integration_post,
     aws_api_gateway_integration.api_integration_put,
