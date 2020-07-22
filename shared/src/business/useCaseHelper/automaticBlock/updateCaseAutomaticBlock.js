@@ -15,9 +15,9 @@ exports.updateCaseAutomaticBlock = async ({
   if (!caseEntity.trialDate) {
     const caseDeadlines = await applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId({
+      .getCaseDeadlinesByDocketNumber({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
       });
 
     caseEntity.updateAutomaticBlocked({ caseDeadlines });

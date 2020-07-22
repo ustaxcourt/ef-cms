@@ -368,8 +368,8 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
-  getCaseDeadlinesByCaseId,
-} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
+  getCaseDeadlinesByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
@@ -401,8 +401,8 @@ const {
   getCaseMessageThreadInteractor,
 } = require('../../shared/src/business/useCases/messages/getCaseMessageThreadInteractor');
 const {
-  getCasesByCaseIds,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByCaseIds');
+  getCasesByDocketNumbers,
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
 const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
@@ -1252,12 +1252,12 @@ module.exports = appContextUser => {
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
-        getCaseDeadlinesByCaseId,
+        getCaseDeadlinesByDocketNumber,
         getCaseInventoryReport,
         getCaseMessage,
         getCaseMessageThreadByParentId,
         getCaseMessagesByCaseId,
-        getCasesByCaseIds,
+        getCasesByDocketNumbers,
         getCasesByLeadCaseId,
         getCasesByUser,
         getClosedCasesByUser,

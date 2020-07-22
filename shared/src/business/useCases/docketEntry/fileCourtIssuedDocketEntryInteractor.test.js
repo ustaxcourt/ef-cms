@@ -226,7 +226,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   it('should call updateCase and set the case as automatic blocked with deadlines if the document is a tracked document and the case has deadlines', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
         {
           deadlineDate: 'sometime',
         },

@@ -399,16 +399,19 @@ app.post(
  * case-deadlines
  */
 app.put(
-  '/case-deadlines/:caseId/:caseDeadlineId',
+  '/case-deadlines/:docketNumber/:caseDeadlineId',
   lambdaWrapper(updateCaseDeadlineLambda),
 );
 app.delete(
-  '/case-deadlines/:caseId/:caseDeadlineId',
+  '/case-deadlines/:docketNumber/:caseDeadlineId',
   lambdaWrapper(deleteCaseDeadlineLambda),
 );
-app.post('/case-deadlines/:caseId', lambdaWrapper(createCaseDeadlineLambda));
+app.post(
+  '/case-deadlines/:docketNumber',
+  lambdaWrapper(createCaseDeadlineLambda),
+);
 app.get(
-  '/case-deadlines/:caseId',
+  '/case-deadlines/:docketNumber',
   lambdaWrapper(getCaseDeadlinesForCaseLambda),
 );
 app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));

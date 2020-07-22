@@ -64,8 +64,8 @@ const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
 const {
-  getCaseDeadlinesByCaseId,
-} = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
+  getCaseDeadlinesByDocketNumber,
+} = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
 } = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
@@ -326,9 +326,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByCaseId: jest.fn().mockImplementation(getCaseByCaseId),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
-    getCaseDeadlinesByCaseId: jest
+    getCaseDeadlinesByDocketNumber: jest
       .fn()
-      .mockImplementation(getCaseDeadlinesByCaseId),
+      .mockImplementation(getCaseDeadlinesByDocketNumber),
     getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
     getDocumentQCInboxForUser: jest
       .fn()

@@ -15,10 +15,10 @@ describe('getAllCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
     {
       caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
-      caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
       createdAt: '2019-01-01T21:40:46.415Z',
       deadlineDate: '2019-03-01T21:40:46.415Z',
       description: 'A deadline!',
+      docketNumber: '101-19',
     },
   ];
   const mockCases = [
@@ -50,7 +50,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       .getAllCaseDeadlines.mockReturnValue(mockDeadlines);
     applicationContext
       .getPersistenceGateway()
-      .getCasesByCaseIds.mockReturnValue(mockCases);
+      .getCasesByDocketNumbers.mockReturnValue(mockCases);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -80,7 +80,6 @@ describe('getAllCaseDeadlinesInteractor', () => {
         associatedJudge: 'Judge Buch',
         caseCaption: 'A caption, Petitioner',
         caseDeadlineId: '22c0736f-c4c5-4ab5-97c3-e41fb06bbc2f',
-        caseId: '01eebcc4-08aa-4550-b41b-982ffbd75192',
         createdAt: '2019-01-01T21:40:46.415Z',
         deadlineDate: '2019-03-01T21:40:46.415Z',
         description: 'A deadline!',
