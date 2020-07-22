@@ -86,7 +86,7 @@ module "ui-public-certificate" {
   hosted_zone_name = "${var.zone_name}."
   certificate_name = var.dns_domain
   environment      = var.environment
-  description      = "Certificate for [public] ${var.dns_domain}"
+  description      = "Certificate for public facing ${var.dns_domain}"
   product_domain   = "EFCMS"
 }
 

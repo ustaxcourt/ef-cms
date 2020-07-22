@@ -5,14 +5,14 @@ data "aws_route53_zone" "zone" {
 }
 
 resource "aws_acm_certificate" "us-east-1" {
-  domain_name       = var.dns_domain
+  domain_name       = "app.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
-    Name          = var.dns_domain
+    Name          = "app.${var.dns_domain}"
     ProductDomain = "EFCMS"
     Environment   = var.environment
-    Description   = "Certificate for [us-east-1] ${var.dns_domain}"
+    Description   = "Certificate for app.${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 }
@@ -23,14 +23,14 @@ resource "aws_acm_certificate_validation" "dns_validation-us-east-1" {
 }
 
 resource "aws_acm_certificate" "us-west-1" {
-  domain_name       = var.dns_domain
+  domain_name       = "app.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
-    Name          = var.dns_domain
+    Name          = "app.${var.dns_domain}"
     ProductDomain = "EFCMS"
     Environment   = var.environment
-    Description   = "Certificate for [acm/api us-west-1] ${var.dns_domain}"
+    Description   = "Certificate for app.${var.dns_domain} on us-west-1"
     ManagedBy     = "terraform"
   }
 
