@@ -14,8 +14,8 @@ export const DraftDocumentViewerDocument = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence:
-      sequences.openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence:
+      sequences.openConfirmRemoveSignatureModalSequence,
     viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
   function DraftDocumentViewerDocument({
@@ -25,7 +25,7 @@ export const DraftDocumentViewerDocument = connect(
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
-    openConfirmEditSignatureModalSequence,
+    openConfirmRemoveSignatureModalSequence,
     viewerDraftDocumentToDisplay,
   }) {
     return (
@@ -109,17 +109,17 @@ export const DraftDocumentViewerDocument = connect(
                 </Button>
               )}
 
-              {draftDocumentViewerHelper.showEditSignatureButton && (
+              {draftDocumentViewerHelper.showRemoveSignatureButton && (
                 <Button
                   link
                   icon="pencil-alt"
                   onClick={() =>
-                    openConfirmEditSignatureModalSequence({
+                    openConfirmRemoveSignatureModalSequence({
                       documentIdToEdit: viewerDraftDocumentToDisplay.documentId,
                     })
                   }
                 >
-                  Edit Signature
+                  Remove Signature
                 </Button>
               )}
 

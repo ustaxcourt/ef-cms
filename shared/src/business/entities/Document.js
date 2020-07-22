@@ -16,6 +16,7 @@ const {
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  ROLES,
   SCENARIOS,
   TRACKED_DOCUMENT_TYPES,
 } = require('./EntityConstants');
@@ -111,7 +112,6 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
   this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.numberOfPages = rawDocument.numberOfPages;
-  this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
   this.serviceStamp = rawDocument.serviceStamp;
   this.supportingDocument = rawDocument.supportingDocument;
@@ -130,6 +130,18 @@ function Document(rawDocument, { applicationContext, filtered = false }) {
         partyPrivatePractitioner: item.partyPrivatePractitioner,
       };
     });
+  }
+
+  if (Array.isArray(rawDocument.servedParties)) {
+    this.servedParties = rawDocument.servedParties.map(item => {
+      return {
+        email: item.email,
+        name: item.name,
+        role: item.role,
+      };
+    });
+  } else {
+    this.servedParties = rawDocument.servedParties;
   }
 
   if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocument.eventCode)) {
@@ -207,7 +219,6 @@ joiValidationDecorator(
       .valid(...ALL_DOCUMENT_TYPES)
       .required()
       .description('The type of this document.'),
-    // TODO - figure out if draft state being null/ not null relies on signature being present
     draftState: joi.object().allow(null).optional(),
     entityName: joi.string().valid('Document').required(),
     eventCode: joi
@@ -290,6 +301,7 @@ joiValidationDecorator(
       .description('Indicates whether or not the document is sealed.'),
     judge: joi
       .string()
+      .max(100)
       .allow(null)
       .description('The judge associated with the document.')
       .when('documentType', {
@@ -313,6 +325,7 @@ joiValidationDecorator(
     ordinalValue: joi.string().optional(),
     otherFilingParty: joi
       .string()
+      .max(100)
       .when('hasOtherFilingParty', {
         is: true,
         otherwise: joi.optional(),
@@ -332,9 +345,9 @@ joiValidationDecorator(
       .description('Use the secondary contact to compose the filedBy text.'),
     pending: joi.boolean().optional(),
     previousDocument: joi.object().optional(),
-    privatePractitioners: joi
+    privatePractitioners: joi // TODO: limit keys
       .array()
-      .items({ name: joi.string().max(500).required() })
+      .items({ name: joi.string().max(100).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
@@ -357,7 +370,7 @@ joiValidationDecorator(
     secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
       'A secondary date associated with the document, typically related to time-restricted availability.',
     ),
-    secondaryDocument: joi
+    secondaryDocument: joi // TODO: limit keys
       .object()
       .keys({
         documentTitle: joi
@@ -392,7 +405,19 @@ joiValidationDecorator(
       .description('When the document is served on the parties.'),
     servedParties: joi
       .array()
-      .items({ name: joi.string().max(500).required() })
+      .items({
+        email: JoiValidationConstants.EMAIL.optional(),
+        name: joi
+          .string()
+          .max(100)
+          .required()
+          .description('The name of a party from a contact, or "IRS"'),
+        role: joi
+          .string()
+          .valid(...Object.values(ROLES))
+          .optional()
+          .description('Currently only required for the IRS'),
+      })
       .when('servedAt', {
         is: joi.exist().not(null),
         otherwise: joi.optional(),
@@ -406,6 +431,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi
       .string()
+      .max(100)
       .when('isDraft', {
         is: false,
         otherwise: joi.optional().allow(null),
@@ -423,7 +449,7 @@ joiValidationDecorator(
         then: JoiValidationConstants.UUID.required(),
       })
       .description('The id of the user who applied the signature.'),
-    signedJudgeName: joi
+    signedJudgeName: joi // TODO: limit string size
       .when('isDraft', {
         is: false,
         otherwise: joi.string().optional().allow(null),
@@ -434,8 +460,8 @@ joiValidationDecorator(
         }),
       })
       .description('The judge who signed the document.'),
-    supportingDocument: joi.string().optional().allow(null),
-    trialLocation: joi
+    supportingDocument: joi.string().optional().allow(null), // TODO: limit string size
+    trialLocation: joi // TODO: limit string size
       .string()
       .optional()
       .allow(null)
@@ -537,7 +563,6 @@ Document.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
-  this.draftState = null;
 };
 
 /**

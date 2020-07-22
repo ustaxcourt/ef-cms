@@ -10,17 +10,10 @@ import { petitionsClerkViewsCaseDetailAfterAddingNotice } from './journey/petiti
 import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViewsDocumentDetail';
 import { petitionsClerkViewsDraftDocumentsForNotice } from './journey/petitionsClerkViewsDraftDocumentsForNotice';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 describe('Petitions Clerk Create Notice Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');
