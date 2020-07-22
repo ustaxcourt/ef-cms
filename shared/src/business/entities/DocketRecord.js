@@ -66,7 +66,7 @@ joiValidationDecorator(
       .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
-      .max(3000)
+      .max(4000)
       .allow(null)
       .optional()
       .meta({ tags: ['Restricted'] })
