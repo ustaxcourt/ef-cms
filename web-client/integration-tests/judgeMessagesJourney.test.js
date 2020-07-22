@@ -12,7 +12,7 @@ describe('Judge messages journey', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
-    let caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
