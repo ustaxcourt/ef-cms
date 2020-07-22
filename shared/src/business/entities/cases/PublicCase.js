@@ -48,11 +48,10 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketRecord = (rawCase.docketRecord || []).map(
     entry => new PublicDocketRecordEntry(entry, { applicationContext }),
   );
-
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
+    .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
-    .filter(document => !isDraftDocument(document, this.docketRecord))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
@@ -99,24 +98,6 @@ joiValidationDecorator(
   {},
 );
 
-const isDraftDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
-
-  const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
-  );
-  const isDocumentOnDocketRecord = docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
-  );
-
-  const isPublicDocumentType =
-    isStipDecision || isOrder || isCourtIssuedDocument;
-
-  return isPublicDocumentType && !isDocumentOnDocketRecord;
-};
-
 const isPrivateDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
@@ -138,4 +119,4 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 };
 
-module.exports = { PublicCase, isDraftDocument, isPrivateDocument };
+module.exports = { PublicCase, isPrivateDocument };

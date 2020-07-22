@@ -14,7 +14,6 @@ import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import {
-  fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -22,11 +21,7 @@ import {
   wait,
 } from './helpers';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 const {
   COUNTRY_TYPES,
@@ -64,9 +59,6 @@ describe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   describe('performing data entry', () => {
