@@ -8,13 +8,11 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
-  COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   MAX_FILE_SIZE_MB,
-  ORDER_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
@@ -676,8 +674,6 @@ joiValidationDecorator(
   joi.object().keys(Case.VALIDATION_RULES),
   Case.VALIDATION_ERROR_MESSAGES,
 );
-
-const orderDocumentTypes = ORDER_TYPES.map(orderType => orderType.documentType);
 
 /**
  * builds the case caption from case contact name(s) based on party type
@@ -1593,32 +1589,6 @@ Case.sortByDocketNumber = function (cases) {
 Case.findLeadCaseForCases = function (cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
-};
-
-/**
- * @param {string} documentId the id of the document to check
- * @returns {boolean} true if the document is draft, false otherwise
- */
-Case.prototype.isDocumentDraft = function (documentId) {
-  const document = this.getDocumentById({ documentId });
-
-  const isNotArchived = !document.archived;
-  const isNotServed = !document.servedAt;
-  const isDocumentOnDocketRecord = this.docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
-  );
-  const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isDraftOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
-  );
-  return (
-    isNotArchived &&
-    isNotServed &&
-    (isStipDecision ||
-      (isDraftOrder && !isDocumentOnDocketRecord) ||
-      (isCourtIssuedDocument && !isDocumentOnDocketRecord))
-  );
 };
 
 /**

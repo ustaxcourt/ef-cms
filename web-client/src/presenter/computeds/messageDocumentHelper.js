@@ -35,12 +35,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .formatCase(applicationContext, caseDetail);
 
-  const isDocumentOnDocketRecord =
-    viewerDocumentToDisplay &&
-    caseDetail.docketRecord.find(
-      docketEntry =>
-        docketEntry.documentId === viewerDocumentToDisplay.documentId,
-    );
+  let editUrl = '';
+  const formattedDocument = draftDocuments.find(
+    doc => doc.documentId === viewerDocumentToDisplay.documentId,
+  );
+
+  if (formattedDocument) {
+    ({ editUrl } = formattedDocument);
+  }
 
   const isNotice =
     viewerDocumentToDisplay &&
@@ -58,18 +60,18 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
-  const showApplyEditSignatureButtonForRole = isInternalUser;
+  const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const showAddDocketEntryButtonForDocument =
     !isCorrespondence &&
-    !isDocumentOnDocketRecord &&
+    caseDocument.isDraft &&
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
-    !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
-  const showEditSignatureButtonForDocument =
-    documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
-  const showEditButtonForDocument =
-    !isDocumentOnDocketRecord && !isCorrespondence;
+    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+  const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
+  !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+  const showRemoveSignatureButtonForDocument =
+    documentIsSigned && caseDocument.isDraft && !isNotice;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
@@ -99,10 +101,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
   return {
+    editUrl,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
-      showApplyEditSignatureButtonForRole &&
+      showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
@@ -111,9 +114,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showEditSignatureButton:
-      showApplyEditSignatureButtonForRole && showEditSignatureButtonForDocument,
     showNotServed,
+    showRemoveSignatureButton:
+      showApplyRemoveSignatureButtonForRole &&
+      showRemoveSignatureButtonForDocument,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,

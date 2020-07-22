@@ -1,5 +1,6 @@
 import { chooseByTruthyStateActionFactory } from '../actions/editUploadCourtIssuedDocument/chooseByTruthyStateActionFactory';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/uploadCourtIssuedDocument/getUploadCourtIssuedDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -35,7 +36,11 @@ const onSuccess = [
   setCaseDetailPageTabActionGenerator(),
   setIsPrimaryTabAction,
   setCaseDetailPageTabFrozenAction,
-  navigateToCaseDetailAction,
+  followRedirectAction,
+  {
+    default: [navigateToCaseDetailAction],
+    success: [],
+  },
 ];
 
 export const editUploadCourtIssuedDocumentSequence = [
