@@ -11,6 +11,6 @@ exports.deleteCaseDeadlineLambda = event =>
     return await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
       applicationContext,
       caseDeadlineId: event.pathParameters.caseDeadlineId,
-      caseId: event.pathParameters.caseId,
+      docketNumber: event.pathParameters.docketNumber,
     });
   });
