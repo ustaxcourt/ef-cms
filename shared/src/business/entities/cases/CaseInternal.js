@@ -76,6 +76,7 @@ function CaseInternal(rawCase, { applicationContext }) {
     : [];
 
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,

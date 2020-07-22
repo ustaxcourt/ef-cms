@@ -12,6 +12,7 @@ if [ -z "$EFCMS_DOMAIN" ]; then
   exit 1
 fi
 
+# Each $ENV will have its own terraform deploy bucket (i.e. "exp1.ustc-case-mgmt.flexion.us")
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
@@ -35,4 +36,4 @@ fi
 set -eo pipefail
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-TF_VAR_my_s3_state_bucket="${BUCKET}" TF_VAR_my_s3_state_key="${KEY}" terraform apply -auto-approve -var "environment=${ENVIRONMENT}"
+terraform apply -auto-approve -var "environment=${ENVIRONMENT}"
