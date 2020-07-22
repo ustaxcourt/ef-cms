@@ -252,7 +252,7 @@ const formatCase = (applicationContext, caseDetail) => {
   );
 
   result.draftDocuments = (result.documents || [])
-    .filter(document => document.isDraft)
+    .filter(document => document.isDraft && !document.archived)
     .map(document => ({
       ...document,
       editUrl:
