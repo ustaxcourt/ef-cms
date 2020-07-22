@@ -1,5 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
+import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -14,17 +16,21 @@ import React from 'react';
 
 export const AddDocketEntry = connect(
   {
+    fileDocketEntrySequence: sequences.fileDocketEntrySequence,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isEditingDocketEntry: state.isEditingDocketEntry,
-    saveAndServeDocketEntrySequence: sequences.saveAndServeDocketEntrySequence,
-    saveForLaterDocketEntrySequence: sequences.saveForLaterDocketEntrySequence,
+    openConfirmPaperServiceModalSequence:
+      sequences.openConfirmPaperServiceModalSequence,
+    paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
   },
   function AddDocketEntry({
+    fileDocketEntrySequence,
+    form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
-    saveAndServeDocketEntrySequence,
-    saveForLaterDocketEntrySequence,
+    openConfirmPaperServiceModalSequence,
+    paperDocketEntryHelper,
     showModal,
   }) {
     return (
@@ -42,7 +48,7 @@ export const AddDocketEntry = connect(
             </div>
 
             <div className="grid-col-7">
-              {isEditingDocketEntry && (
+              {paperDocketEntryHelper.showAddDocumentWarning && (
                 <Hint exclamation fullWidth>
                   This docket entry is incomplete. Add a document and save to
                   complete this entry.
@@ -55,21 +61,21 @@ export const AddDocketEntry = connect(
                 <PrimaryDocumentForm />
                 <div className="margin-top-5">
                   <Button
-                    id="save-and-finish"
+                    id="save-and-serve"
                     type="submit"
                     onClick={() => {
-                      saveAndServeDocketEntrySequence();
+                      openConfirmPaperServiceModalSequence();
                     }}
                   >
                     Save and Serve
                   </Button>
-
-                  {/* TODO: update button attr 'id' (and potential pa11y) */}
                   <Button
                     secondary
-                    id="save-and-add-supporting"
+                    id="save-for-later"
                     onClick={() => {
-                      saveForLaterDocketEntrySequence();
+                      fileDocketEntrySequence({
+                        isSavingForLater: true,
+                      });
                     }}
                   >
                     Save for Later
@@ -90,18 +96,27 @@ export const AddDocketEntry = connect(
               </section>
             </div>
             <div className="grid-col-7">
-              <ScanBatchPreviewer
-                documentType="primaryDocumentFile"
-                title="Add Document"
-              />
+              {paperDocketEntryHelper.docketEntryHasDocument && (
+                <DocumentDisplayIframe />
+              )}
+              {!paperDocketEntryHelper.docketEntryHasDocument && (
+                <ScanBatchPreviewer
+                  documentType="primaryDocumentFile"
+                  title="Add Document"
+                />
+              )}
             </div>
           </div>
         </section>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={saveAndServeDocketEntrySequence}
+          <FileUploadErrorModal confirmSequence={fileDocketEntrySequence} />
+        )}
+        {showModal === 'ConfirmInitiateServiceModal' && (
+          <ConfirmInitiateServiceModal
+            confirmSequence={fileDocketEntrySequence}
+            documentTitle={form.documentTitle}
           />
         )}
       </>

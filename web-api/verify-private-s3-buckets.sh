@@ -11,10 +11,10 @@
 ENV=$1
 
 BUCKETS=(
-  "ustc-case-mgmt.flexion.us-documents-$ENV-us-east-1"
-  "ustc-case-mgmt.flexion.us-documents-$ENV-us-west-1"
-  "ustc-case-mgmt.flexion.us-temp-documents-$ENV-us-east-1"
-  "ustc-case-mgmt.flexion.us-temp-documents-$ENV-us-west-1"
+  "${EFCMS_DOMAIN}-documents-${ENV}-us-east-1"
+  "${EFCMS_DOMAIN}-documents-${ENV}-us-west-1"
+  "${EFCMS_DOMAIN}-temp-documents-${ENV}-us-east-1"
+  "${EFCMS_DOMAIN}-temp-documents-${ENV}-us-west-1"
 )
 
 for bucket in "${BUCKETS[@]}"; do

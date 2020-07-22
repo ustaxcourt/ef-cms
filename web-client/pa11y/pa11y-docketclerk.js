@@ -59,7 +59,19 @@ module.exports = [
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7&info=forwarding-form',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/complete',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
+  {
+    actions: [
+      'wait for #tab-document-info to be visible',
+      'click element #tab-document-info',
+      'wait for #has-other-filing-party to be visible',
+      'click element label#has-other-filing-party-label',
+      'wait for input#other-filing-party to be visible',
+    ],
+    notes: 'checks a11y of edit docket entry add other filing party',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
+  },
+
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
@@ -176,4 +188,5 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/upload-court-issued',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?documentId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?documentId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
 ];

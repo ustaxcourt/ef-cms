@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CompleteCaseMessageModalDialog } from './CompleteCaseMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
-import { ConfirmEditSignatureModal } from './ConfirmEditSignatureModal';
+import { ConfirmRemoveSignatureModal } from './ConfirmRemoveSignatureModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { ForwardCaseMessageModalDialog } from './ForwardCaseMessageModalDialog';
 import { MessageDocument } from './MessageDocument';
@@ -222,6 +222,7 @@ export const MessageDetail = connect(
                           'usa-button--unstyled attachment-viewer-button',
                           viewerDocumentToDisplay === attachment && 'active',
                         )}
+                        isActive={viewerDocumentToDisplay === attachment}
                         key={idx}
                         onClick={() => {
                           setViewerDocumentToDisplaySequence({
@@ -229,7 +230,18 @@ export const MessageDetail = connect(
                           });
                         }}
                       >
-                        {attachment.documentTitle}
+                        <div className="grid-row margin-left-205">
+                          <div className="grid-col-8">
+                            {attachment.documentTitle}
+                          </div>
+                          <div className="grid-col-4 padding-left-105">
+                            {attachment.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </Button>
                     );
                   })}
@@ -253,8 +265,8 @@ export const MessageDetail = connect(
         {showModal === 'ConfirmEditModal' && (
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
-        {showModal === 'ConfirmEditSignatureModal' && (
-          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+        {showModal === 'ConfirmRemoveSignatureModal' && (
+          <ConfirmRemoveSignatureModal confirmSequence="removeSignatureSequence" />
         )}
       </>
     );

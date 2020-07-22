@@ -25,17 +25,9 @@ import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
-const testClient = setupTestClient({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const testClient = setupTestClient();
 testClient.draftOrders = [];
 
 describe('Petitioner creates cases to search for', () => {
@@ -57,11 +49,6 @@ describe('Docket clerk creates a draft order (should not be viewable to the publ
 });
 
 describe('Docket clerk creates and serves an order (should be viewable to the public)', () => {
-  beforeAll(() => {
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
-  });
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',

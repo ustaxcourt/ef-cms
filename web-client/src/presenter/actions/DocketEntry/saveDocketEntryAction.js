@@ -16,20 +16,23 @@ export const saveDocketEntryAction = async ({
   props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
-  const {
-    isSavingForLater,
-    primaryDocumentFileId,
-    shouldGenerateCoversheet,
-  } = props;
-  const isFileAttached = get(state.form.primaryDocumentFile);
+  const { isSavingForLater, primaryDocumentFileId } = props;
+  const isFileAttachedNow = get(state.form.primaryDocumentFile);
+  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
   const isUpdating = get(state.isEditingDocketEntry);
-  const documentId =
-    isFileAttached || primaryDocumentFileId
-      ? primaryDocumentFileId
-      : isUpdating
-      ? get(state.documentId)
-      : applicationContext.getUniqueId();
+  const generateCoversheet = isFileAttached && !isSavingForLater;
 
+  let documentId;
+
+  if (isUpdating) {
+    documentId = get(state.documentId);
+  } else if (isFileAttached) {
+    documentId = primaryDocumentFileId;
+  } else {
+    documentId = applicationContext.getUniqueId();
+  }
+
+  let caseDetail;
   let documentMetadata = omit(
     {
       ...get(state.form),
@@ -43,12 +46,12 @@ export const saveDocketEntryAction = async ({
     createdAt: documentMetadata.dateReceived,
     docketNumber,
     isFileAttached: !!isFileAttached,
-    isInProgress: isSavingForLater,
     isPaper: true,
+    isUpdating,
     receivedAt: documentMetadata.dateReceived,
   };
 
-  if (isFileAttached) {
+  if (isFileAttachedNow) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
@@ -59,8 +62,6 @@ export const saveDocketEntryAction = async ({
       documentId,
     });
   }
-
-  let caseDetail;
 
   if (isUpdating) {
     caseDetail = await applicationContext
@@ -82,7 +83,7 @@ export const saveDocketEntryAction = async ({
       });
   }
 
-  if (isFileAttached && shouldGenerateCoversheet !== false) {
+  if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,

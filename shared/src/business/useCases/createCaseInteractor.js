@@ -95,9 +95,9 @@ exports.createCaseInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseExternalIncomplete(
-    petitionMetadata,
-  ).validate();
+  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
+    applicationContext,
+  }).validate();
 
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {
@@ -156,6 +156,7 @@ exports.createCaseInteractor = async ({
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
       filingDate: caseToAdd.createdAt,
+      isFileAttached: true,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -192,6 +193,7 @@ exports.createCaseInteractor = async ({
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filingDate: caseToAdd.createdAt,
+      isFileAttached: true,
       partyPrimary: true,
       partySecondary,
       privatePractitioners,
@@ -213,6 +215,7 @@ exports.createCaseInteractor = async ({
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         filingDate: caseToAdd.createdAt,
+        isFileAttached: true,
         partyPrimary: true,
         partySecondary,
         privatePractitioners,

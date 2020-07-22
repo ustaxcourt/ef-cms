@@ -1,16 +1,16 @@
+import { createNewCaseMessageOnCase } from './journey/createNewCaseMessageOnCase';
 import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
 import { docketClerkCompletesMessageThread } from './journey/docketClerkCompletesMessageThread';
 import { docketClerkEditsOrderFromMessage } from './journey/docketClerkEditsOrderFromMessage';
-import { docketClerkEditsSignatureFromMessage } from './journey/docketClerkEditsSignatureFromMessage';
+import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRemovesSignatureFromMessage';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
-import { petitionsClerkCreatesNewMessageOnCase } from './journey/petitionsClerkCreatesNewMessageOnCase';
 import { petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments';
 import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
 import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
@@ -18,18 +18,11 @@ import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/pet
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('messages journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -43,7 +36,7 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  petitionsClerkCreatesNewMessageOnCase(test);
+  createNewCaseMessageOnCase(test);
   petitionsClerkViewsSentMessagesBox(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
@@ -61,14 +54,15 @@ describe('messages journey', () => {
   docketClerkViewsForwardedMessageInInbox(test);
   docketClerkEditsOrderFromMessage(test);
   docketClerkAppliesSignatureFromMessage(test);
-  docketClerkEditsSignatureFromMessage(test);
+  docketClerkRemovesSignatureFromMessage(test);
+  docketClerkAppliesSignatureFromMessage(test);
   docketClerkAddsDocketEntryFromMessage(test);
   docketClerkCompletesMessageThread(test);
   docketClerkViewsCompletedMessagesOnCaseDetail(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  petitionsClerkCreatesNewMessageOnCase(test);
+  createNewCaseMessageOnCase(test);
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1CreatesNoticeFromMessageDetail(test);

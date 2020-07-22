@@ -18,7 +18,7 @@ export const CorrespondenceHeader = connect(
         <div className="grid-container padding-0 docket-record-header">
           <div className="title grid-row">
             <div className="grid-col-10">
-              <h1>Correspondence Files</h1>
+              <h1>Correspondence</h1>
             </div>
             <div className="tablet:grid-col-2 text-right hide-on-mobile add-correspondence-file">
               {showAddCorrespondenceButton && (

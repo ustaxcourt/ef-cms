@@ -76,6 +76,7 @@ function CaseInternal(rawCase, { applicationContext }) {
     : [];
 
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
@@ -126,7 +127,7 @@ const paperRequirements = joi
         then: joi.required(),
       },
     ),
-    caseCaption: joi.string().max(500).required(),
+    caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: joi
       .string()
       .valid(...CASE_TYPES)

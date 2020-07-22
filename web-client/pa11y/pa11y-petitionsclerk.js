@@ -248,7 +248,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for #correspondence-documents-table to be visible',
+      'wait for .document-viewer to be visible',
     ],
     notes: 'checks a11y of correspondence tab',
     url:
@@ -264,7 +264,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for #correspondence-documents-table to be visible',
+      'wait for .document-viewer to be visible',
       'click element .edit-correspondence-button',
       'wait for element #edit-correspondence-header to be visible',
     ],
@@ -272,6 +272,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-correspondence',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-20/document-view?documentId=ac62f25a-49f9-46a5-aed7-d6b955a2dc34&info=document-view-review-and-serve-petition-button',
   {
     actions: [
       'wait for #tab-case-information to be visible',

@@ -1,3 +1,5 @@
+import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
+
 exports.MOCK_DOCUMENTS = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
@@ -7,6 +9,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Petition',
     eventCode: 'P',
     filedBy: 'Test Petitioner',
+    isFileAttached: true,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
@@ -16,8 +19,9 @@ exports.MOCK_DOCUMENTS = [
     docketNumber: '101-18',
     documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Statement of Taxpayer Identification',
-    documentType: 'Statement of Taxpayer Identification',
-    eventCode: 'STIN',
+    documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
+    eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    isFileAttached: true,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
@@ -30,6 +34,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Answer',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    isFileAttached: true,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],
@@ -42,6 +47,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Proposed Stipulated Decision',
     eventCode: 'PSDE',
     filedBy: 'Test Petitioner',
+    isFileAttached: true,
     processingStatus: 'pending',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     workItems: [],

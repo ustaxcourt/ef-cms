@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
@@ -13,24 +14,24 @@ const { Message } = require('./Message');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
-const A_VALID_DOCUMENT = {
-  documentType: 'Petition',
-  eventCode: 'A',
-  filedBy: 'Test Petitioner',
-  role: ROLES.petitioner,
-  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-};
-const caseDetail = {
-  contactPrimary: {
-    name: 'Bob',
-  },
-  contactSecondary: {
-    name: 'Bill',
-  },
-};
-const mockUserId = applicationContext.getUniqueId();
-
 describe('Document entity', () => {
+  const A_VALID_DOCUMENT = {
+    documentType: 'Petition',
+    eventCode: 'A',
+    filedBy: 'Test Petitioner',
+    role: ROLES.petitioner,
+    userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+  };
+  const caseDetail = {
+    contactPrimary: {
+      name: 'Bob',
+    },
+    contactSecondary: {
+      name: 'Bill',
+    },
+  };
+  const mockUserId = applicationContext.getUniqueId();
+
   describe('isPendingOnCreation', () => {
     beforeAll(() => {
       jest.spyOn(Document, 'isPendingOnCreation');
@@ -96,6 +97,49 @@ describe('Document entity', () => {
       };
       const doc4 = new Document(raw4, { applicationContext });
       expect(doc4.pending).toBeTruthy();
+    });
+  });
+
+  describe('signedAt', () => {
+    it('should implicitly set a signedAt for Notice event codes', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'NOT',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.signedAt).toBeTruthy();
+    });
+
+    it('should NOT implicitly set a signedAt for non Notice event codes', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'O',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.signedAt).toEqual(null);
+    });
+  });
+
+  describe('isDraft', () => {
+    it('should default to false when no isDraft value is provided', () => {
+      const myDoc = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          eventCode: 'NOT',
+          signedAt: null,
+        },
+        { applicationContext },
+      );
+
+      expect(myDoc.isDraft).toBe(false);
     });
   });
 
@@ -254,13 +298,14 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
-            draftState: {},
             eventCode: 'O',
             isLegacy: true,
             isLegacySealed: true,
-            isOrder: true,
             isSealed: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
+            signedJudgeName: 'A Judge',
           },
           { applicationContext },
         );
@@ -273,11 +318,12 @@ describe('Document entity', () => {
             ...A_VALID_DOCUMENT,
             documentId: '777afd4b-1408-4211-a80e-3e897999861a',
             documentType: ORDER_TYPES[0].documentType,
-            draftState: {},
             eventCode: 'O',
             isLegacySealed: false,
-            isOrder: true,
             secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
+            signedJudgeName: 'A Judge',
           },
           { applicationContext },
         );
@@ -289,7 +335,6 @@ describe('Document entity', () => {
       let mockDocumentData = {
         ...A_VALID_DOCUMENT,
         documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-        draftState: null,
         secondaryDate: '2019-03-01T21:40:46.415Z',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
@@ -498,20 +543,205 @@ describe('Document entity', () => {
       });
     });
 
-    it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeFalsy();
-      expect(document.signedJudgeName).toBeUndefined();
+    describe('signed property scenarios', () => {
+      it('should fail validation when isDraft is false and signedAt is undefined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeFalsy();
+      });
+
+      it('should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Answer',
+            eventCode: 'A',
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when isDraft is false and signedJudgeName is undefined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeFalsy();
+      });
+
+      it('should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Answer',
+            eventCode: 'A',
+            isDraft: false,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: false,
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when isDraft is true and signedJudgeName and signedAt are undefined', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isDraft: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: undefined,
+            signedJudgeName: undefined,
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.signedJudgeName).toBeUndefined();
+      });
+
+      it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
+
+      it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeFalsy();
+        expect(document.signedJudgeName).toBeUndefined();
+      });
+
+      it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
+        const document = new Document(
+          {
+            ...A_VALID_DOCUMENT,
+            documentId: '777afd4b-1408-4211-a80e-3e897999861a',
+            documentType: 'Order',
+            eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+            isOrder: true,
+            secondaryDate: '2019-03-01T21:40:46.415Z',
+            signedAt: '2019-03-01T21:40:46.415Z',
+            signedByUserId: mockUserId,
+            signedJudgeName: 'Dredd',
+          },
+          { applicationContext },
+        );
+        expect(document.isValid()).toBeTruthy();
+      });
     });
 
     it('should fail validation when the document type is opinion and judge is not provided', () => {
@@ -527,78 +757,6 @@ describe('Document entity', () => {
       );
       expect(document.isValid()).toBeFalsy();
       expect(document.judge).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          draftState: null,
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-
-      expect(document.isValid()).toBeTruthy();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeTruthy();
-    });
-
-    it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeFalsy();
-      expect(document.signedJudgeName).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
-      const document = new Document(
-        {
-          ...A_VALID_DOCUMENT,
-          documentId: '777afd4b-1408-4211-a80e-3e897999861a',
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext },
-      );
-      expect(document.isValid()).toBeTruthy();
     });
 
     it('should fail validation when the document has a servedAt date and servedParties is not defined', () => {
@@ -652,6 +810,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyPrimary', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -664,6 +823,34 @@ describe('Document entity', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+          scenario: 'Standard',
+          supportingDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          supportingDocumentFreeText: 'Test',
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Petr. Bob');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and otherFilingParty', () => {
+      const document = new Document(
+        {
+          ...caseDetail,
+          attachments: false,
+          category: 'Petition',
+          certificateOfService: false,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Amended Petition',
+          documentType: 'Amended Petition',
+          eventCode: 'PAP',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          objections: 'No',
+          otherFilingParty: 'Bob Barker',
+          partyPrimary: true,
           relationship: 'primaryDocument',
           scenario: 'Standard',
           supportingDocument:
@@ -672,13 +859,13 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
-      expect(document.filedBy).toEqual('Petr. Bob');
+      expect(document.filedBy).toEqual('Petr. Bob, Bob Barker');
     });
 
     it('should generate correct filedBy string for only partySecondary', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -692,7 +879,7 @@ describe('Document entity', () => {
           objections: 'No',
           partyPrimary: false,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -700,13 +887,13 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Petr. Bill');
     });
 
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -723,20 +910,20 @@ describe('Document entity', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail, true);
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner only once', () => {
+    it('should generate correct filedBy string for partyPrimary, partyIrsPractitioner, and otherFilingParty', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -749,8 +936,9 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
+          otherFilingParty: 'Bob Barker',
           partyIrsPractitioner: true,
-          partyPrimary: false,
+          partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -760,19 +948,13 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
-
-      expect(document.filedBy).toEqual('Resp.');
-
-      document.partyPrimary = true;
-      document.generateFiledBy(caseDetail);
-
-      expect(document.filedBy).toEqual('Resp.');
+      expect(document.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner more than once with force = true', () => {
+    it('should generate correct filedBy string for only otherFilingParty', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -785,7 +967,8 @@ describe('Document entity', () => {
           exhibits: true,
           hasSupportingDocuments: true,
           ordinalValue: 'First',
-          partyIrsPractitioner: true,
+          otherFilingParty: 'Bob Barker',
+          partyIrsPractitioner: false,
           partyPrimary: false,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -796,19 +979,13 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
-
-      expect(document.filedBy).toEqual('Resp.');
-
-      document.partyPrimary = true;
-      document.generateFiledBy(caseDetail, true);
-
-      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+      expect(document.filedBy).toEqual('Bob Barker');
     });
 
     it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: true,
           category: 'Motion',
           certificateOfService: true,
@@ -828,7 +1005,7 @@ describe('Document entity', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
@@ -837,13 +1014,13 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Petrs. Bob & Bill');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -860,18 +1037,18 @@ describe('Document entity', () => {
           privatePractitioners: {
             name: 'Test Practitioner',
           },
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp.');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -891,18 +1068,18 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -922,18 +1099,18 @@ describe('Document entity', () => {
               partyPrivatePractitioner: false,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp.');
     });
 
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -957,12 +1134,11 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual(
         'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
       );
@@ -971,6 +1147,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -994,18 +1171,18 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
 
     it('should generate correct filedBy string for partyPrimary in the constructor when called with a contactPrimary property', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -1019,7 +1196,7 @@ describe('Document entity', () => {
           hasSupportingDocuments: true,
           objections: 'No',
           partyPrimary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -1033,6 +1210,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partySecondary in the constructor when called with a contactSecondary property', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -1047,7 +1225,7 @@ describe('Document entity', () => {
           objections: 'No',
           partyPrimary: false,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
@@ -1061,6 +1239,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -1077,7 +1256,7 @@ describe('Document entity', () => {
           partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
@@ -1091,6 +1270,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyPrimary and partySecondary in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           attachments: true,
           category: 'Motion',
           certificateOfService: true,
@@ -1110,7 +1290,7 @@ describe('Document entity', () => {
           objections: 'Yes',
           partyPrimary: true,
           partySecondary: true,
-          relationship: 'primaryDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
@@ -1126,6 +1306,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1145,7 +1326,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1157,6 +1338,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1176,7 +1358,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: false,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1188,6 +1370,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1211,7 +1394,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1225,6 +1408,7 @@ describe('Document entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
       const document = new Document(
         {
+          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1248,7 +1432,7 @@ describe('Document entity', () => {
               partyPrivatePractitioner: true,
             },
           ],
-          relationship: 'primarySupportingDocument',
+          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
           ...caseDetail,
         },
@@ -1452,9 +1636,6 @@ describe('Document entity', () => {
       const document = new Document(
         {
           ...A_VALID_DOCUMENT,
-          draftState: {
-            documentContents: 'Yee to the haw',
-          },
         },
         { applicationContext },
       );
@@ -1465,7 +1646,6 @@ describe('Document entity', () => {
         },
       ]);
       expect(document.servedAt).toBeDefined();
-      expect(document.draftState).toEqual(null);
       expect(document.servedParties).toMatchObject([{ name: 'Served Party' }]);
     });
   });
@@ -1495,7 +1675,7 @@ describe('Document entity', () => {
       expect(createdDocument.isValid()).toEqual(false);
       expect(
         Object.keys(createdDocument.getFormattedValidationErrors()),
-      ).toEqual(['secondaryDocument']);
+      ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
@@ -1556,6 +1736,52 @@ describe('Document entity', () => {
       expect(
         Object.keys(createdDocument.getFormattedValidationErrors()),
       ).toEqual(['documentType', 'eventCode']);
+    });
+    it('should filter out unnecessary values from servedParties', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: applicationContext.getUniqueId(),
+          servedAt: Date.now(),
+          servedParties: [
+            {
+              email: 'me@example.com',
+              extra: 'extra',
+              name: 'me',
+              role: 'irsSuperuser',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(true);
+      expect(createdDocument.servedParties).toEqual([
+        {
+          email: 'me@example.com',
+          name: 'me',
+          role: 'irsSuperuser',
+        },
+      ]);
+    });
+    it('should return an error when servedParties is not an array', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: applicationContext.getUniqueId(),
+          servedAt: Date.now(),
+          servedParties: {
+            email: 'me@example.com',
+            extra: 'extra',
+            name: 'me',
+            role: 'irsSuperuser',
+          },
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(createdDocument.getFormattedValidationErrors()).toEqual({
+        servedParties: '"servedParties" must be an array',
+      });
     });
   });
 });

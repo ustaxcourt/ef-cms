@@ -1,6 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { ConfirmEditModal } from './ConfirmEditModal';
-import { ConfirmEditSignatureModal } from '../Messages/ConfirmEditSignatureModal';
+import { ConfirmRemoveSignatureModal } from '../Messages/ConfirmRemoveSignatureModal';
 import { DraftDocumentViewer } from '../DocketRecord/DraftDocumentViewer';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -26,8 +26,8 @@ export const DraftDocuments = connect(
         {showModal === 'ConfirmEditModal' && (
           <ConfirmEditModal confirmSequence="navigateToEditOrderSequence" />
         )}
-        {showModal === 'ConfirmEditSignatureModal' && (
-          <ConfirmEditSignatureModal confirmSequence="removeSignatureAndGotoEditSignatureSequence" />
+        {showModal === 'ConfirmRemoveSignatureModal' && (
+          <ConfirmRemoveSignatureModal confirmSequence="removeSignatureSequence" />
         )}
       </>
     );

@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  DOCUMENT_RELATIONSHIPS,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -11,7 +15,6 @@ const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -59,7 +62,7 @@ exports.fileDocketEntryInteractor = async ({
   ]);
 
   const documentsToFile = [
-    [primaryDocumentFileId, documentMetadata, 'primaryDocument'],
+    [primaryDocumentFileId, documentMetadata, DOCUMENT_RELATIONSHIPS.PRIMARY],
   ];
 
   for (let document of documentsToFile) {
@@ -98,6 +101,7 @@ exports.fileDocketEntryInteractor = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
+          inProgress: isSavingForLater,
           isQC: true,
           isRead: user.role !== ROLES.privatePractitioner,
           section: DOCKET_SECTION,
@@ -124,7 +128,7 @@ exports.fileDocketEntryInteractor = async ({
       if (metadata.isFileAttached && !isSavingForLater) {
         const servedParties = aggregatePartiesForService(caseEntity);
         documentEntity.setAsServed(servedParties.all);
-      } else if (isSavingForLater) {
+      } else if (metadata.isFileAttached && isSavingForLater) {
         documentEntity.numberOfPages = await applicationContext
           .getUseCaseHelpers()
           .countPagesInDocument({
@@ -134,10 +138,18 @@ exports.fileDocketEntryInteractor = async ({
       }
 
       if (metadata.isPaper) {
-        if (metadata.isFileAttached) {
+        if (metadata.isFileAttached && !isSavingForLater) {
           workItem.setAsCompleted({
             message: 'completed',
             user,
+          });
+
+          const servedParties = aggregatePartiesForService(caseEntity);
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
+            documentEntity,
+            servedParties,
           });
         }
 
@@ -188,7 +200,7 @@ exports.fileDocketEntryInteractor = async ({
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
       workItemsSaved.push(
-        workItem.document.isFileAttached
+        workItem.document.isFileAttached && !isSavingForLater
           ? applicationContext
               .getPersistenceGateway()
               .saveWorkItemForDocketClerkFilingExternalDocument({
@@ -197,7 +209,7 @@ exports.fileDocketEntryInteractor = async ({
               })
           : applicationContext
               .getPersistenceGateway()
-              .saveWorkItemForDocketEntryWithoutFile({
+              .saveWorkItemForDocketEntryInProgress({
                 applicationContext,
                 workItem: workItem.validate().toRawObject(),
               }),

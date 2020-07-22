@@ -1,5 +1,8 @@
 import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
 import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
+import { docketClerkEditsSignedUploadedCourtIssuedDocument } from './journey/docketClerkEditsSignedUploadedCourtIssuedDocument';
+import { docketClerkRemovesSignatureFromUploadedCourtIssuedDocument } from './journey/docketClerkRemovesSignatureFromUploadedCourtIssuedDocument';
+import { docketClerkSignsUploadedCourtIssuedDocument } from './journey/docketClerkSignsUploadedCourtIssuedDocument';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -33,6 +36,10 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(test, 0);
   docketClerkEditsAnUploadedCourtIssuedDocument(test, fakeFile, 0);
+  docketClerkSignsUploadedCourtIssuedDocument(test);
+  docketClerkEditsSignedUploadedCourtIssuedDocument(test, fakeFile);
+  docketClerkSignsUploadedCourtIssuedDocument(test);
+  docketClerkRemovesSignatureFromUploadedCourtIssuedDocument(test);
   docketClerkAddsDocketEntryFromDraft(test, 0);
 
   loginAs(test, 'petitioner@example.com');
