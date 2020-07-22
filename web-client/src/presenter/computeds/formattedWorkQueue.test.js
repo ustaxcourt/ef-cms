@@ -740,7 +740,7 @@ describe('formatted work queue computed', () => {
     expect(result[3].id).toEqual('d');
   });
 
-  describe.only('getWorkItemDocumentLink', () => {
+  describe('getWorkItemDocumentLink', () => {
     const baseWorkItem = {
       assigneeId: null,
       assigneeName: null,
