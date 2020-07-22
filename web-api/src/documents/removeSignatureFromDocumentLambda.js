@@ -14,8 +14,7 @@ exports.removeSignatureFromDocumentLambda = event =>
         .getUseCases()
         .removeSignatureFromDocumentInteractor({
           applicationContext,
-          caseId: event.pathParameters.caseId,
-          documentId: event.pathParameters.documentId,
+          ...event.pathParameters,
         });
     },
     {
