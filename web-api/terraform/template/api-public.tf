@@ -107,7 +107,7 @@ resource "aws_route53_record" "api_public_route53_east_record" {
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {
   regional_certificate_arn = aws_acm_certificate_validation.validate_api_gateway_east_cert_public.certificate_arn
-  domain_name              = "efcms-public-api-${var.environment}.${var.dns_domain}"
+  domain_name              = "public-api.${var.dns_domain}"
   security_policy          = "TLS_1_2"
   endpoint_configuration {
     types = ["REGIONAL"]
