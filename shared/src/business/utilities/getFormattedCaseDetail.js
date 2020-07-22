@@ -9,6 +9,7 @@ const {
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
@@ -72,9 +73,15 @@ const formatDocument = (applicationContext, document) => {
     return acc && !!wi.completedAt;
   }, true);
 
+  result.isUnservable = UNSERVABLE_EVENT_CODES.includes(document.eventCode);
+
   result.isInProgress =
-    (!result.isCourtIssuedDocument && result.isFileAttached === false) ||
-    (result.isFileAttached === true && !result.servedAt);
+    (!result.isCourtIssuedDocument &&
+      result.isFileAttached === false &&
+      !result.isUnservable) ||
+    (result.isFileAttached === true &&
+      !result.servedAt &&
+      !result.isUnservable);
 
   result.isNotServedDocument = !result.servedAt;
 
@@ -97,7 +104,6 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
-
   return result;
 };
 
@@ -159,7 +165,8 @@ const formatDocketRecordWithDocument = (
 
       if (
         formattedDocument.isCourtIssuedDocument &&
-        !formattedDocument.servedAt
+        !formattedDocument.servedAt &&
+        !formattedDocument.isUnservable
       ) {
         record.createdAtFormatted = undefined;
       }
@@ -219,7 +226,6 @@ const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const formatCaseEntity = new Case(caseDetail, { applicationContext });
   const result = cloneDeep(caseDetail);
 
   result.docketRecordWithDocument = [];
@@ -246,7 +252,7 @@ const formatCase = (applicationContext, caseDetail) => {
   );
 
   result.draftDocuments = (result.documents || [])
-    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .filter(document => document.isDraft && !document.archived)
     .map(document => ({
       ...document,
       editUrl:
@@ -281,10 +287,38 @@ const formatCase = (applicationContext, caseDetail) => {
 
   const formatCounsel = counsel => {
     let formattedName = counsel.name;
+
     if (counsel.barNumber) {
       formattedName += ` (${counsel.barNumber})`;
     }
     counsel.formattedName = formattedName;
+
+    if (counsel.representing) {
+      counsel.representingNames = [];
+
+      if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
+        counsel.representingNames.push(caseDetail.contactPrimary.name);
+      }
+
+      if (
+        caseDetail.contactSecondary &&
+        counsel.representing.includes(caseDetail.contactSecondary.contactId)
+      ) {
+        counsel.representingNames.push(caseDetail.contactSecondary.name);
+      }
+
+      caseDetail.otherPetitioners.forEach(otherPetitioner => {
+        if (counsel.representing.includes(otherPetitioner.contactId)) {
+          counsel.representingNames.push(otherPetitioner.name);
+        }
+      });
+
+      caseDetail.otherFilers.forEach(otherFiler => {
+        if (counsel.representing.includes(otherFiler.contactId)) {
+          counsel.representingNames.push(otherFiler.name);
+        }
+      });
+    }
     return counsel;
   };
 

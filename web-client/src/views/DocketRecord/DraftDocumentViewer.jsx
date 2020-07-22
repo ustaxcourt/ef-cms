@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
+    draftDocumentId: state.screenMetadata.draftDocumentId,
     formattedCaseDetail: state.formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence:
       sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
@@ -16,13 +17,16 @@ export const DraftDocumentViewer = connect(
       state.viewerDraftDocumentToDisplay.documentId,
   },
   function DraftDocumentViewer({
+    draftDocumentId,
     formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay,
   }) {
     useEffect(() => {
-      loadDefaultDraftViewerDocumentToDisplaySequence();
+      loadDefaultDraftViewerDocumentToDisplaySequence({
+        documentId: draftDocumentId,
+      });
       return;
     }, []);
 
@@ -31,6 +35,10 @@ export const DraftDocumentViewer = connect(
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
+              <div className="grid-row padding-left-205 grid-header">
+                <div className="grid-col-3">Created</div>
+                <div className="grid-col-9">Document</div>
+              </div>
               {formattedCaseDetail.formattedDraftDocuments.map(
                 (draftDocument, index) => {
                   return (
@@ -55,7 +63,7 @@ export const DraftDocumentViewer = connect(
                         <div className="grid-col-3">
                           {draftDocument.createdAtFormatted}
                         </div>
-                        <div className="grid-col-9 no-indent">
+                        <div className="grid-col-9">
                           {draftDocument.descriptionDisplay}
                         </div>
                       </div>

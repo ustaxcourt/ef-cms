@@ -11,8 +11,8 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkEditsSignatureFromMessage = test => {
-  return it('docket clerk edits signature on an order from a message', async () => {
+export const docketClerkRemovesSignatureFromMessage = test => {
+  return it('docket clerk removes signature on an order from a message', async () => {
     await test.runSequence('gotoMessageDetailSequence', {
       docketNumber: test.docketNumber,
       parentMessageId: test.parentMessageId,
@@ -24,24 +24,11 @@ export const docketClerkEditsSignatureFromMessage = test => {
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('openConfirmEditSignatureModalSequence', {
+    await test.runSequence('openConfirmRemoveSignatureModalSequence', {
       documentIdToEdit: orderDocument.documentId,
     });
 
-    await test.runSequence('removeSignatureAndGotoEditSignatureSequence');
-
-    expect(test.getState('currentPage')).toEqual('SignOrder');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
-
-    await test.runSequence('setPDFSignatureDataSequence', {
-      signatureData: {
-        scale: 1,
-        x: 100,
-        y: 100,
-      },
-    });
-
-    await test.runSequence('saveDocumentSigningSequence');
+    await test.runSequence('removeSignatureSequence');
 
     expect(test.getState('currentPage')).toEqual('MessageDetail');
 
@@ -51,6 +38,6 @@ export const docketClerkEditsSignatureFromMessage = test => {
     const caseOrderDocument = caseDetailFormatted.documents.find(
       d => d.documentId === orderDocument.documentId,
     );
-    expect(caseOrderDocument.signedAt).toBeDefined();
+    expect(caseOrderDocument.signedAt).toEqual(null);
   });
 };

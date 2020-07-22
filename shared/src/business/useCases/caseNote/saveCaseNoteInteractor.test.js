@@ -15,7 +15,7 @@ describe('saveCaseNoteInteractor', () => {
     try {
       await saveCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (err) {
       error = err;
@@ -35,7 +35,7 @@ describe('saveCaseNoteInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
@@ -46,8 +46,8 @@ describe('saveCaseNoteInteractor', () => {
     try {
       result = await saveCaseNoteInteractor({
         applicationContext,
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         caseNote: 'This is my case note',
+        docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (e) {
       error = e;
@@ -56,7 +56,7 @@ describe('saveCaseNoteInteractor', () => {
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,

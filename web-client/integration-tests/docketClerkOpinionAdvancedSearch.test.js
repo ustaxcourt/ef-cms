@@ -1,11 +1,7 @@
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('docket clerk opinion advanced search', () => {
   beforeAll(() => {

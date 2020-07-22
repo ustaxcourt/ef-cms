@@ -22,13 +22,19 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternal(rawCase) {
-  CaseExternal.prototype.init.call(this, rawCase);
-  CaseExternal.prototype.initContacts.call(this, rawCase);
+function CaseExternal(rawCase, { applicationContext }) {
+  CaseExternal.prototype.init.call(this, rawCase, { applicationContext });
+  CaseExternal.prototype.initContacts.call(this, rawCase, {
+    applicationContext,
+  });
 }
 
-CaseExternal.prototype.initContacts = function (rawCase) {
+CaseExternal.prototype.initContacts = function (
+  rawCase,
+  { applicationContext },
+) {
   const contacts = ContactFactory.createContacts({
+    applicationContext,
     contactInfo: {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,

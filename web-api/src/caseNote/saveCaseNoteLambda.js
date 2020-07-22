@@ -8,12 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.saveCaseNoteLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId } = event.pathParameters || {};
-    const { caseNote } = JSON.parse(event.body);
+    const lambdaArguments = {
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
+    };
 
     return await applicationContext.getUseCases().saveCaseNoteInteractor({
       applicationContext,
-      caseId,
-      caseNote,
+      ...lambdaArguments,
     });
   });
