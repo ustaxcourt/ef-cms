@@ -29,7 +29,7 @@ export const CaseMessagesSectionInbox = connect(
                 <tr key={idx}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
-                    {message.docketNumber}
+                    {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">
