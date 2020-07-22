@@ -35,6 +35,10 @@ export const DraftDocumentViewer = connect(
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
             <div className="border border-base-lighter document-viewer--documents">
+              <div className="grid-row padding-left-205 grid-header">
+                <div className="grid-col-3">Created</div>
+                <div className="grid-col-9">Document</div>
+              </div>
               {formattedCaseDetail.formattedDraftDocuments.map(
                 (draftDocument, index) => {
                   return (
