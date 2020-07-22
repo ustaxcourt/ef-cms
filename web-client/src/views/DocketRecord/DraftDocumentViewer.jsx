@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
+    draftDocumentId: state.screenMetadata.draftDocumentId,
     formattedCaseDetail: state.formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence:
       sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
@@ -16,13 +17,16 @@ export const DraftDocumentViewer = connect(
       state.viewerDraftDocumentToDisplay.documentId,
   },
   function DraftDocumentViewer({
+    draftDocumentId,
     formattedCaseDetail,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay,
   }) {
     useEffect(() => {
-      loadDefaultDraftViewerDocumentToDisplaySequence();
+      loadDefaultDraftViewerDocumentToDisplaySequence({
+        documentId: draftDocumentId,
+      });
       return;
     }, []);
 
