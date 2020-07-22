@@ -1,9 +1,7 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { DraftDocumentViewerDocument } from './DraftDocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
-import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
@@ -30,39 +28,41 @@ export const DraftDocumentViewer = connect(
       <>
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
-            <div className="border border-base-lighter document-viewer--documents">
-              {formattedCaseDetail.formattedDraftDocuments.map(
-                (draftDocument, index) => {
-                  return (
-                    <Button
-                      className={classNames(
-                        'usa-button--unstyled attachment-viewer-button',
-                        viewerDraftDocumentIdToDisplay ===
-                          draftDocument.documentId && 'active',
-                      )}
-                      isActive={
+            <div className="document-viewer--documents">
+              <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
+                <thead>
+                  <tr>
+                    <th>Created</th>
+                    <th>Document</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formattedCaseDetail.formattedDraftDocuments.map(
+                    (draftDocument, index) => {
+                      const active =
                         viewerDraftDocumentIdToDisplay ===
                         draftDocument.documentId
-                      }
-                      key={index}
-                      onClick={() => {
-                        setViewerDraftDocumentToDisplaySequence({
-                          viewerDraftDocumentToDisplay: draftDocument,
-                        });
-                      }}
-                    >
-                      <div className="grid-row margin-left-205">
-                        <div className="grid-col-3">
-                          {draftDocument.createdAtFormatted}
-                        </div>
-                        <div className="grid-col-9">
-                          {draftDocument.descriptionDisplay}
-                        </div>
-                      </div>
-                    </Button>
-                  );
-                },
-              )}
+                          ? 'active'
+                          : '';
+
+                      return (
+                        <tr
+                          className={active}
+                          key={index}
+                          onClick={() => {
+                            setViewerDraftDocumentToDisplaySequence({
+                              viewerDraftDocumentToDisplay: draftDocument,
+                            });
+                          }}
+                        >
+                          <td>{draftDocument.createdAtFormatted}</td>
+                          <td>{draftDocument.descriptionDisplay}</td>
+                        </tr>
+                      );
+                    },
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
 
