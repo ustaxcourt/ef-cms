@@ -655,7 +655,7 @@ app.post(
   lambdaWrapper(virusScanPdfLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/remove-signature',
+  '/case-documents/:docketNumber/:documentId/remove-signature',
   lambdaWrapper(removeSignatureFromDocumentLambda),
 );
 
