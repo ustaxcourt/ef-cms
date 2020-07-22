@@ -1318,6 +1318,11 @@
       type: "string"
       flags: 
         description: "The judge associated with the document."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
       whens: 
@@ -1369,6 +1374,11 @@
       type: "string"
       flags: 
         description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -1430,7 +1440,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 100
     processingStatus: 
       type: "string"
       flags: 
@@ -2357,6 +2367,11 @@
       type: "string"
       flags: 
         description: "The time at which the document was signed."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 

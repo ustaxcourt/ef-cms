@@ -301,6 +301,7 @@ joiValidationDecorator(
       .description('Indicates whether or not the document is sealed.'),
     judge: joi
       .string()
+      .max(100)
       .allow(null)
       .description('The judge associated with the document.')
       .when('documentType', {
@@ -324,6 +325,7 @@ joiValidationDecorator(
     ordinalValue: joi.string().optional(),
     otherFilingParty: joi
       .string()
+      .max(100)
       .when('hasOtherFilingParty', {
         is: true,
         otherwise: joi.optional(),
@@ -343,9 +345,9 @@ joiValidationDecorator(
       .description('Use the secondary contact to compose the filedBy text.'),
     pending: joi.boolean().optional(),
     previousDocument: joi.object().optional(),
-    privatePractitioners: joi
+    privatePractitioners: joi // TODO: limit keys
       .array()
-      .items({ name: joi.string().max(500).required() })
+      .items({ name: joi.string().max(100).required() })
       .optional()
       .description(
         'Practitioner names to be used to compose the filedBy text.',
@@ -368,7 +370,7 @@ joiValidationDecorator(
     secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
       'A secondary date associated with the document, typically related to time-restricted availability.',
     ),
-    secondaryDocument: joi
+    secondaryDocument: joi // TODO: limit keys
       .object()
       .keys({
         documentTitle: joi
@@ -429,6 +431,7 @@ joiValidationDecorator(
     serviceStamp: joi.string().optional(),
     signedAt: joi
       .string()
+      .max(100)
       .when('isDraft', {
         is: false,
         otherwise: joi.optional().allow(null),
@@ -446,7 +449,7 @@ joiValidationDecorator(
         then: JoiValidationConstants.UUID.required(),
       })
       .description('The id of the user who applied the signature.'),
-    signedJudgeName: joi
+    signedJudgeName: joi // TODO: limit string size
       .when('isDraft', {
         is: false,
         otherwise: joi.string().optional().allow(null),
@@ -457,8 +460,8 @@ joiValidationDecorator(
         }),
       })
       .description('The judge who signed the document.'),
-    supportingDocument: joi.string().optional().allow(null),
-    trialLocation: joi
+    supportingDocument: joi.string().optional().allow(null), // TODO: limit string size
+    trialLocation: joi // TODO: limit string size
       .string()
       .optional()
       .allow(null)
