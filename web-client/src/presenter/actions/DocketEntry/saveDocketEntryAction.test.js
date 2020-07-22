@@ -10,7 +10,6 @@ describe('saveDocketEntryAction', () => {
 
   beforeAll(() => {
     caseDetail = {
-      caseId: '123',
       docketNumber: '123-45',
       documents: [],
     };
