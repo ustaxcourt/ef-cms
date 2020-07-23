@@ -1,6 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { CaseMessagesRowAttachments } from './CaseMessagesRowAttachments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -22,7 +20,6 @@ export const CaseMessagesIndividualOutbox = connect(
               <th>Case Status</th>
               <th>To</th>
               <th className="small">Section</th>
-              <th>Attachments</th>
             </tr>
           </thead>
           {formattedMessages.map((message, idx) => {
@@ -31,7 +28,7 @@ export const CaseMessagesIndividualOutbox = connect(
                 <tr key={idx}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
-                    <CaseLink formattedCase={message} />
+                    {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">
@@ -58,17 +55,6 @@ export const CaseMessagesIndividualOutbox = connect(
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row small">
                     {message.toSection}
-                  </td>
-                  <td>
-                    {message.attachments.length === 0 && (
-                      <span>No attachments</span>
-                    )}
-                    {message.attachments.length > 0 && (
-                      <CaseMessagesRowAttachments
-                        attachments={message.attachments}
-                        caseId={message.caseId}
-                      />
-                    )}
                   </td>
                 </tr>
               </tbody>

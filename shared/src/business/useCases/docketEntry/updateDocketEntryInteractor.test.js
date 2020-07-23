@@ -94,7 +94,7 @@ describe('updateDocketEntryInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -104,7 +104,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
@@ -118,7 +118,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -130,7 +130,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -147,7 +147,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -159,7 +159,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -183,7 +183,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -195,7 +195,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -212,7 +212,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -224,7 +224,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
@@ -236,7 +236,7 @@ describe('updateDocketEntryInteractor', () => {
     await updateDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'My Edited Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -265,7 +265,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -278,7 +278,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -295,7 +295,7 @@ describe('updateDocketEntryInteractor', () => {
       updateDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -308,7 +308,7 @@ describe('updateDocketEntryInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()

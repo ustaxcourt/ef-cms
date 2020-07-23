@@ -30,6 +30,10 @@
       flags: 
         presence: "optional"
         description: "A document that was archived instead of added to the Docket Record."
+    attachments: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     certificateOfService: 
       type: "boolean"
       flags: 
@@ -1351,6 +1355,15 @@
       flags: 
         presence: "optional"
         description: "A lodged document is awaiting action by the judge to enact or refuse."
+    mailingDate: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     numberOfPages: 
       type: "number"
       flags: 

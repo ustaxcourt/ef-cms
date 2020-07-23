@@ -7,15 +7,18 @@ const { mount } = require('enzyme');
 describe('TrialSessionPlanningReport', () => {
   const previousTerms = [
     {
-      name: 'Fall',
+      name: 'fall',
+      termDisplay: 'Fall 2019',
       year: '2019',
     },
     {
-      name: 'Spring',
+      name: 'spring',
+      termDisplay: 'Spring 2019',
       year: '2019',
     },
     {
-      name: 'Winter',
+      name: 'winter',
+      termDisplay: 'Winter 2019',
       year: '2019',
     },
   ];

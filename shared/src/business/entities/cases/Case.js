@@ -422,6 +422,7 @@ Case.VALIDATION_RULES = {
       ...FILING_TYPES[ROLES.privatePractitioner],
     )
     .optional(),
+  hasPendingItems: joi.boolean().optional(),
   hasVerifiedIrsNotice: joi
     .boolean()
     .optional()

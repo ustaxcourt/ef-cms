@@ -604,3 +604,11 @@ table.case-list tbody tr:nth-child(even) td {
     }
   }
 }
+
+.grid-header {
+  min-height: 50px;
+  align-items: center;
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  background-color: color($theme-color-base-lightest);
+  font-weight: $font-semibold;
+}

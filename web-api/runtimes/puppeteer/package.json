@@ -20,6 +20,7 @@
     "puppeteer-core": "^4.0.1"
   },
   "resolutions": {
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "lodash": "^4.17.19"
   }
 }
