@@ -1,5 +1,5 @@
 export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
-  return it('Petitions Clerk reviews petiton and saves for later', async () => {
+  return it('Petitions Clerk reviews petition and saves for later', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
     await test.runSequence('chooseWorkQueueSequence', {
