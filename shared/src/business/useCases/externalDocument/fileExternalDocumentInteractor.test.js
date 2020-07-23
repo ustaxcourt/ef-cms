@@ -326,7 +326,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
         {
           deadlineDate: 'something',
         },
