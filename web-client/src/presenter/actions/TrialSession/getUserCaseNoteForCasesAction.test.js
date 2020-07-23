@@ -30,7 +30,7 @@ describe('getUserCaseNoteForCasesAction', () => {
       },
       props: {
         trialSession: {
-          caseOrder: [{ docketNumber: '123-45' }, { caseId: '678-90' }],
+          caseOrder: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
         },
       },
     });
