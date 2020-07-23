@@ -1,8 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitionsClerkReviewsPetitionAndSavesForLater';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
@@ -10,31 +7,29 @@ import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkVi
 const test = setupTest();
 
 describe('Petitions Clerk Saves Document QC for Later', () => {
-  let scannerSourceIndex = 0;
-  let scannerSourceName = 'scanner A';
-
-  const { CASE_TYPES_MAP } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeEach(() => {
     jest.setTimeout(30000);
-
-    global.window.localStorage.getItem = key => {
-      if (key === 'scannerSourceIndex') {
-        return `"${scannerSourceIndex}"`;
-      }
-
-      if (key === 'scannerSourceName') {
-        return `"${scannerSourceName}"`;
-      }
-
-      return null;
-    };
   });
 
   loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: CASE_TYPES_MAP.cdp });
+  it('Create test case', async () => {
+    const caseDetail = await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkReviewsPetitionAndSavesForLater(test);
