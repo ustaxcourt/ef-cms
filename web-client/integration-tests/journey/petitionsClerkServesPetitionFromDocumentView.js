@@ -1,6 +1,9 @@
 import { documentViewerHelper as documentViewerHelperComputed } from '../../src/presenter/computeds/documentViewerHelper';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
@@ -56,5 +59,19 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
 
     expect(helper.showServePetitionButton).toBeFalsy();
     expect(helper.showNotServed).toBeFalsy();
+
+    await test.runSequence('gotoMessagesSequence');
+    expect(test.getState('currentPage')).toEqual('Messages');
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'outbox',
+      queue: 'section',
+      workQueueIsInternal: false,
+    });
+
+    const formattedWorkItem = runCompute(formattedWorkQueue, {
+      state: test.getState(),
+    }).find(item => item.docketNumber === test.docketNumber);
+
+    expect(formattedWorkItem.editLink).toContain('/document-view?documentId=');
   });
 };
