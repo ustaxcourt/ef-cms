@@ -9,12 +9,12 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const deleteCaseNoteAction = async ({ applicationContext, get }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const caseDetail = await applicationContext
     .getUseCases()
     .deleteCaseNoteInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   return { caseDetail };

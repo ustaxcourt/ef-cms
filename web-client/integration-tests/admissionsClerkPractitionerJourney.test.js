@@ -1,4 +1,3 @@
-import { PARTY_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
@@ -11,7 +10,7 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 const test = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);

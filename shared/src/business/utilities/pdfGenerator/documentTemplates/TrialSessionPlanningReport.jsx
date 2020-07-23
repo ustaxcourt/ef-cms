@@ -3,11 +3,7 @@ const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
 
 const getTermHeaders = (termData, idx) => {
-  return (
-    <th key={`th-${idx}`}>
-      {termData.name} {termData.year}
-    </th>
-  );
+  return <th key={`th-${idx}`}>{termData.termDisplay}</th>;
 };
 
 const parseTermData = data =>

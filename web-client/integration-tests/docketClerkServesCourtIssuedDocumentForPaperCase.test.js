@@ -8,19 +8,12 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitionsclerk@example.com');

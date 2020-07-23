@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
@@ -25,6 +26,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setValidationAlertErrorsAction,
     ],
     success: [
+      clearModalAction,
       stopShowValidationAction,
       saveCaseDetailInternalEditAction,
       setCaseAction,

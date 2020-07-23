@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkSavesAndServesDocketEntry = test => {
   return it('Docketclerk saves and serves a docket entry', async () => {
-    await test.runSequence('saveAndServeDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -18,7 +18,7 @@ export const docketClerkSavesAndServesDocketEntry = test => {
     );
 
     test.docketRecordEntry = caseDetailFormatted.docketRecord.find(
-      entry => entry.description === 'Administrative Record',
+      entry => entry.eventCode === 'ADMR',
     );
   });
 };

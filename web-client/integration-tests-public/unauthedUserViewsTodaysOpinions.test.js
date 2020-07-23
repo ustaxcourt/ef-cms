@@ -5,20 +5,16 @@ import { docketClerkServesDocument } from '../integration-tests/journey/docketCl
 import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
 
-import { fakeFile, setupTest } from './helpers';
 import {
   loginAs,
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOpinions } from './journey/unauthedUserViewsTodaysOpinions';
 
 const test = setupTest();
-const testClient = setupTestClient({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const testClient = setupTestClient();
 
 testClient.draftOrders = [];
 
@@ -26,9 +22,6 @@ describe('Unauthed user views todays opinions', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     test.draftOrders = [];
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(testClient, 'petitioner@example.com');

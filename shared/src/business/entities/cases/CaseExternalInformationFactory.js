@@ -13,12 +13,14 @@ const { CaseExternal } = require('./CaseExternal');
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function CaseExternalInformationFactory(rawCase) {
-  CaseExternal.prototype.init.call(this, rawCase);
+function CaseExternalInformationFactory(rawCase, { applicationContext }) {
+  CaseExternal.prototype.init.call(this, rawCase, { applicationContext });
   this.wizardStep = rawCase.wizardStep;
 
   if (+this.wizardStep >= 3) {
-    CaseExternal.prototype.initContacts.call(this, rawCase);
+    CaseExternal.prototype.initContacts.call(this, rawCase, {
+      applicationContext,
+    });
   }
 }
 

@@ -108,18 +108,17 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: null,
+      viewerDocumentToDisplay: undefined,
     });
   });
 
-  it('returns the correct docket record entry if props.documentId is set', async () => {
+  it('returns the correct docket record entry if state.documentId is set', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,
       {
         modules: {
           presenter,
         },
-        props: { documentId: '234' },
         state: {
           caseDetail: {
             docketRecord: [
@@ -144,6 +143,7 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
               },
             ],
           },
+          documentId: '234',
         },
       },
     );

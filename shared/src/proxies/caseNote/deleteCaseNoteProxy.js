@@ -5,12 +5,12 @@ const { remove } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id to delete note from
+ * @param {string} providers.docketNumber the docket number to delete note from
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteCaseNoteInteractor = ({ applicationContext, caseId }) => {
+exports.deleteCaseNoteInteractor = ({ applicationContext, docketNumber }) => {
   return remove({
     applicationContext,
-    endpoint: `/case-notes/${caseId}`,
+    endpoint: `/case-notes/${docketNumber}`,
   });
 };

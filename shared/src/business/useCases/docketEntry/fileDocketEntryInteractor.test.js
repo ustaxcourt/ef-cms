@@ -83,7 +83,7 @@ describe('fileDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -93,7 +93,7 @@ describe('fileDocketEntryInteractor', () => {
       fileDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -107,7 +107,7 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -122,13 +122,16 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalled();
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -152,14 +155,50 @@ describe('fileDocketEntryInteractor', () => {
         .saveWorkItemForDocketEntryInProgress,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toBeCalled();
+  });
+
+  it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
+    await fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress,
+    ).not.toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).not.toBeCalled();
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
@@ -192,8 +231,8 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
