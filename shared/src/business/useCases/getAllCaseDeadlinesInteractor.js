@@ -37,7 +37,7 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   // get the needed cases info data for caseDeadlines
   const docketNumbers = Object.keys(
     validatedCaseDeadlines.reduce((acc, item) => {
-      acc[item.docketNumbers] = true;
+      acc[item.docketNumber] = true;
       return acc;
     }, {}),
   );
@@ -54,13 +54,13 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   });
 
   const caseMap = validatedCaseData.reduce((acc, item) => {
-    acc[item.docketNumbers] = item;
+    acc[item.docketNumber] = item;
     return acc;
   }, {});
 
   const afterCaseMapping = validatedCaseDeadlines.map(deadline => ({
     ...deadline,
-    ...pick(caseMap[deadline.docketNumbers], [
+    ...pick(caseMap[deadline.docketNumber], [
       'associatedJudge',
       'caseCaption',
       'docketNumber',
