@@ -15,4 +15,9 @@ describe('replaceBracketed', () => {
     const results = replaceBracketed('[]', false);
     expect(results).toEqual('');
   });
+
+  it('returns undefined if first argument is undefined', () => {
+    const results = replaceBracketed(undefined);
+    expect(results).not.toBeDefined();
+  });
 });

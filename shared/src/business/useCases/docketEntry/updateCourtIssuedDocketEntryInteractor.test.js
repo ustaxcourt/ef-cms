@@ -3,11 +3,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -17,7 +19,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseType: 'Deficiency',
+      caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
@@ -82,7 +84,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
               caseStatus: CASE_STATUS_TYPES.new,
               caseTitle: 'Johnny Joe Jacobson',
               docketNumber: '101-18',
-              docketNumberSuffix: 'S',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
               document: {},
               isQC: true,
               messages: [],
@@ -105,7 +107,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
               caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-18',
-              docketNumberSuffix: 'S',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
               document: {},
               isQC: true,
               messages: [],

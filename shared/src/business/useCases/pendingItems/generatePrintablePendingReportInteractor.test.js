@@ -2,10 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_NUMBER_SUFFIXES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   generatePrintablePendingReportInteractor,
 } = require('./generatePrintablePendingReportInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('generatePrintablePendingReportInteractor', () => {
   beforeAll(() => {
@@ -25,7 +28,7 @@ describe('generatePrintablePendingReportInteractor', () => {
         associatedJudge: 'Judge Buch',
         caseCaption: 'Test Caption Two, Petitioner(s)',
         docketNumber: '234-56',
-        docketNumberSuffix: 'S',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         documentType: 'Test Document Type',
         receivedAt: '2020-02-02T12:00:00.000Z',
       },
@@ -148,7 +151,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with the docket number suffix if present', async () => {
-    MOCK_CASE.docketNumberSuffix = 'W';
+    MOCK_CASE.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
     await generatePrintablePendingReportInteractor({
       applicationContext,

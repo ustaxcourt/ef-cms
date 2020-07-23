@@ -1,8 +1,11 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  ROLES,
+} = require('../../../business/entities/EntityConstants');
 const { getOpenCasesByUser } = require('./getOpenCasesByUser');
-const { ROLES } = require('../../../business/entities/EntityConstants');
 
 jest.mock('./getUserCases', () => ({
   // TODO - can't replace status with EntityConstants CASE_STATUS_TYPES due to jest.mock error
@@ -39,7 +42,7 @@ describe('getOpenCasesByUser', () => {
         caseId: '123',
         pk: 'case|123',
         sk: 'case|123',
-        status: 'New',
+        status: CASE_STATUS_TYPES.new,
       },
     ]);
   });

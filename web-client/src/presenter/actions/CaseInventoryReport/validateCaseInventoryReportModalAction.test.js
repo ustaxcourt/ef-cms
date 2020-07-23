@@ -1,8 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateCaseInventoryReportModalAction } from './validateCaseInventoryReportModalAction';
 
 describe('validateCaseInventoryReportModalAction', () => {
+  const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+
   let successStub;
   let errorStub;
 
@@ -23,8 +26,8 @@ describe('validateCaseInventoryReportModalAction', () => {
       },
       state: {
         screenMetadata: {
-          associatedJudge: 'Chief Judge',
-          status: 'New',
+          associatedJudge: CHIEF_JUDGE,
+          status: STATUS_TYPES.new,
         },
       },
     });

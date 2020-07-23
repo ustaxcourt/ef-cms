@@ -1,6 +1,9 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -34,7 +37,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',
@@ -129,7 +132,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     expect(caseAfterDocument).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
       caseId,
-      caseType: 'Innocent Spouse',
+      caseType: CASE_TYPES_MAP.innocentSpouse,
       contactPrimary: {
         address1: '19 First Freeway',
         address2: 'Ad cumque quidem lau',
@@ -144,7 +147,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
       contactSecondary: {},
       docketNumber: '101-19',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       docketRecord: [
         {
           description: 'Petition',
@@ -208,7 +211,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         {
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
-          documentType: 'Statement of Taxpayer Identification',
+          documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
@@ -397,7 +400,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       ],
       filingType: 'Myself',
       initialCaption: 'Test Petitioner, Petitioner',
-      initialDocketNumberSuffix: 'S',
+      initialDocketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       isPaper: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
@@ -558,7 +561,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
-        caseType: 'Innocent Spouse',
+        caseType: CASE_TYPES_MAP.innocentSpouse,
         contactPrimary: {
           address1: '19 First Freeway',
           address2: 'Ad cumque quidem lau',

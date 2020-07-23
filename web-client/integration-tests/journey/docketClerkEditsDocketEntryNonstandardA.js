@@ -62,7 +62,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: '2050',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
@@ -83,12 +83,29 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       key: 'partySecondary',
       value: true,
     });
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'partyIrsPractitioner',
       value: true,
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'hasOtherFilingParty',
+      value: true,
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      otherFilingParty: 'Enter other filing party name.',
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'otherFilingParty',
+      value: 'Brianna Noble',
+    });
+
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -116,7 +133,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       documentTitle: 'Notice of No Objection to Petition',
       documentType: 'Notice of No Objection',
       eventCode: 'NNOB',
-      filedBy: 'Resp. & Petrs. Mona Schultz & Jimothy Schultz',
+      filedBy: 'Resp. & Petrs. Mona Schultz & Jimothy Schultz, Brianna Noble',
       partyIrsPractitioner: true,
       partyPrimary: true,
       partySecondary: true,

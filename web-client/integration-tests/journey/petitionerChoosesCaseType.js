@@ -1,3 +1,7 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
+const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
 export const petitionerChoosesCaseType = test => {
   it('petitioner chooses the case type', async () => {
     await test.runSequence('updateFormValueSequence', {
@@ -8,9 +12,9 @@ export const petitionerChoosesCaseType = test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'CDP (Lien/Levy)',
+      value: CASE_TYPES_MAP.cdp,
     });
-    expect(test.getState('form.caseType')).toEqual('CDP (Lien/Levy)');
+    expect(test.getState('form.caseType')).toEqual(CASE_TYPES_MAP.cdp);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'filingType',

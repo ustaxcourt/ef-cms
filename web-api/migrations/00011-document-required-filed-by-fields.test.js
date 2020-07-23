@@ -147,7 +147,7 @@ describe('document required fields test', () => {
   it('does mutate internal document records when filedBy is undefined and it is required for that documentType', async () => {
     await up(documentClient, '', forAllRecords);
 
-    // mockInternalocumentWithoutFiledBy
+    // mockInternalDocumentWithoutFiledBy
     expect(putStub.mock.calls[1][0]['Item']).toMatchObject({
       pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',
       sk: 'document|3079c990-cc6c-4b99-8fca-8e31f2d9e7a2',

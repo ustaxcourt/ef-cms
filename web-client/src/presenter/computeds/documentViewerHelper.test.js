@@ -16,6 +16,33 @@ describe('documentViewerHelper', () => {
     });
   });
 
+  it('should return an empty object if the requested documentId is not found in the docket record', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketRecord: [
+            {
+              description: 'Petition',
+              documentId: 'abc',
+              index: 1,
+            },
+          ],
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Petition',
+            },
+          ],
+        },
+
+        viewerDocumentToDisplay: {
+          documentId: '999',
+        },
+      },
+    });
+    expect(result).toEqual({});
+  });
+
   it('should return the document description', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
@@ -205,5 +232,79 @@ describe('documentViewerHelper', () => {
       },
     });
     expect(result.servedLabel).toEqual('Served 11/21/18');
+  });
+
+  describe('showNotServed', () => {
+    const documentId = applicationContext.getUniqueId();
+
+    it('should be true if the document type is servable and does not have a servedAt', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(true);
+    });
+
+    it('should be false if the document type is unservable', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Corrected Transcript',
+                eventCode: 'CTRA',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(false);
+    });
+
+    it('should be false if the document type is servable and has servedAt', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketRecord: [{ documentId }],
+            documents: [
+              {
+                documentId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(false);
+    });
   });
 });

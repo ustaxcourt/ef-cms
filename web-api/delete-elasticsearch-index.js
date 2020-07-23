@@ -42,7 +42,6 @@
     log: 'warning',
   });
 
-  // TODO: DRY up index names array
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {

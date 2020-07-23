@@ -7,6 +7,7 @@ const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   PAYMENT_STATUS,
+  SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
@@ -16,6 +17,21 @@ const { ROLES } = require('../entities/EntityConstants');
 const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
+
+const getServedPartiesCode = servedParties => {
+  let servedPartiesCode = '';
+  if (servedParties && servedParties.length > 0) {
+    if (
+      servedParties.length === 1 &&
+      servedParties[0].role === ROLES.irsSuperuser
+    ) {
+      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+    } else {
+      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+    }
+  }
+  return servedPartiesCode;
+};
 
 const formatDocument = (applicationContext, document) => {
   const result = cloneDeep(document);
@@ -41,7 +57,9 @@ const formatDocument = (applicationContext, document) => {
       .getUtilities()
       .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
   }
-
+  if (result.lodged) {
+    result.eventCode = 'MISCL';
+  }
   result.showLegacySealed = !!result.isLegacySealed;
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = !!result.servedAt;
@@ -59,10 +77,10 @@ const formatDocument = (applicationContext, document) => {
   }, true);
 
   result.isInProgress =
-    !result.isCourtIssuedDocument && result.isFileAttached === false;
+    (!result.isCourtIssuedDocument && result.isFileAttached === false) ||
+    (result.isFileAttached === true && !result.servedAt);
 
-  result.isNotServedCourtIssuedDocument =
-    result.isCourtIssuedDocument && !result.servedAt;
+  result.isNotServedDocument = !result.servedAt;
 
   result.isTranscript = result.eventCode === TRANSCRIPT_EVENT_CODE;
 
@@ -73,19 +91,7 @@ const formatDocument = (applicationContext, document) => {
     }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
-  if (result.servedParties && result.servedParties.length > 0) {
-    if (
-      result.servedParties.length === 1 &&
-      result.servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      result.servedPartiesCode = 'R';
-    } else {
-      result.servedPartiesCode = 'B';
-    }
-  } else {
-    // TODO: Address Respondent and Petitioner codes
-    result.servedPartiesCode = '';
-  }
+  result.servedPartiesCode = getServedPartiesCode(result.servedParties);
 
   return result;
 };
@@ -172,10 +178,6 @@ const formatDocketRecordWithDocument = (
 
       if (formattedDocument.additionalInfo) {
         record.description += ` ${formattedDocument.additionalInfo}`;
-      }
-
-      if (formattedDocument.lodged) {
-        record.eventCode = 'MISCL';
       }
     }
 
@@ -474,5 +476,6 @@ module.exports = {
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  getServedPartiesCode,
   sortDocketRecords,
 };

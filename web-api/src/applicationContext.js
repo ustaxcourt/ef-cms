@@ -780,8 +780,8 @@ const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
-  saveWorkItemForDocketEntryWithoutFile,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
+  saveWorkItemForDocketEntryInProgress,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -1193,9 +1193,10 @@ module.exports = appContextUser => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: () => {
+    getPdfJs: async () => {
       const pdfjsLib = require('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+
       return pdfjsLib;
     },
     getPdfLib: () => {
@@ -1306,7 +1307,7 @@ module.exports = appContextUser => {
         saveDocumentFromLambda,
         saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
-        saveWorkItemForDocketEntryWithoutFile,
+        saveWorkItemForDocketEntryInProgress,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setPriorityOnAllWorkItems,
@@ -1380,7 +1381,6 @@ module.exports = appContextUser => {
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
     },
-    // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
         generateNoticeOfTrialIssuedTemplate,

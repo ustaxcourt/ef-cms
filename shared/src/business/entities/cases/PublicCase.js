@@ -57,7 +57,7 @@ function PublicCase(rawCase, { applicationContext }) {
 }
 
 const publicCaseSchema = {
-  caseCaption: joi.string().max(500).optional(),
+  caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   caseId: JoiValidationConstants.UUID.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: joi
