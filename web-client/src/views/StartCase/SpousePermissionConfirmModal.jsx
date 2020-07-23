@@ -10,7 +10,7 @@ export const SpousePermissionConfirmModal = connect(
         noCancel
         confirmLabel="OK"
         preventCancelOnBlur={true}
-        title="You Must Have Your Spouse's Consent to File on Their Behalf"
+        title="You Must Have Your Spouse‘s Consent to File on Their Behalf"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="clearModalSequence"
       >

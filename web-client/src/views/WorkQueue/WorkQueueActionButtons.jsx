@@ -10,14 +10,14 @@ export const WorkQueueActionButtons = connect(
   function WorkQueueActionButtons({ workQueueHelper }) {
     return (
       <React.Fragment>
-        {workQueueHelper.showStartCaseButton && (
+        {workQueueHelper.showStartPetitionButton && (
           <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
             <Button
               href="/file-a-petition/step-1"
               icon="plus-circle"
               id="file-a-petition"
             >
-              Create a Case
+              Start a Petition
             </Button>
           </div>
         )}

@@ -174,7 +174,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 4700
     caseId: 
       type: "string"
       flags: 
@@ -271,13 +271,13 @@
         presence: "optional"
       allow: 
         - null
-        - "W"
-        - "P"
         - "X"
         - "R"
-        - "SL"
         - "L"
+        - "P"
         - "S"
+        - "SL"
+        - "W"
     docketNumberWithSuffix: 
       type: "string"
       flags: 
@@ -398,13 +398,13 @@
         presence: "optional"
         description: "Case docket number suffix before modification."
       allow: 
-        - "W"
-        - "P"
         - "X"
         - "R"
-        - "SL"
         - "L"
+        - "P"
         - "S"
+        - "SL"
+        - "W"
         - "_"
         - null
     irsNoticeDate: 

@@ -3,6 +3,12 @@ import { updateCaseMessageModalAttachmentsAction } from './updateCaseMessageModa
 
 describe('updateCaseMessageModalAttachmentsAction', () => {
   const caseDetail = {
+    correspondence: [
+      {
+        documentId: '234',
+        documentTitle: 'Test Correspondence',
+      },
+    ],
     documents: [
       {
         documentId: '123',
@@ -46,6 +52,26 @@ describe('updateCaseMessageModalAttachmentsAction', () => {
 
     expect(result.state.modal.form.attachments).toEqual([
       { documentId: '123', documentTitle: 'Petition' },
+    ]);
+  });
+
+  it('can return case correspondence from the available documents', async () => {
+    const result = await runAction(updateCaseMessageModalAttachmentsAction, {
+      props: {
+        documentId: '234', // correspondence doc
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [],
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.attachments).toEqual([
+      { documentId: '234', documentTitle: 'Test Correspondence' },
     ]);
   });
 

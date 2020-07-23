@@ -6,8 +6,7 @@
 export const getPaperServiceSuccessMessageAction = () => {
   return {
     alertSuccess: {
-      message:
-        'This document has been served. Remember to print all documents for parties with paper service.',
+      message: 'Your entry has been added to the docket record.',
     },
   };
 };

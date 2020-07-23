@@ -1,5 +1,8 @@
+import {
+  DOCKET_NUMBER_SUFFIXES,
+  SESSION_STATUS_GROUPS,
+} from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { SESSION_STATUS_GROUPS } from '../entities/EntityConstants';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   formattedTrialSessionDetails,
@@ -165,7 +168,7 @@ describe('formattedTrialSessionDetails', () => {
           {
             ...MOCK_CASE,
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           },
           {
             ...MOCK_CASE,
@@ -205,14 +208,14 @@ describe('formattedTrialSessionDetails', () => {
             ...MOCK_CASE,
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumber: '102-17',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
           },
           {
             ...MOCK_CASE,
             caseCaption: 'Someone Else, Petitioner',
             disposition: 'omg',
             docketNumber: '101-16',
-            docketNumberSuffix: 'S',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
           },

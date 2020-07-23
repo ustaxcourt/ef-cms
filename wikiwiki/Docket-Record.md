@@ -13,3 +13,10 @@
 
 ## Document Title (Docket Record)
 * Order of docket entry information: [Concatenated Document Title] [Additional Line 1 (C/S 04/17/19)(Attachment(s)) (Objection) (Lodged) Additional Line 2
+
+## Filed by
+**Other Filing Party as the only filing party**
+Filed By should displays in format:  [Other Filing Party Name]
+
+**Other Filing Party with multiple filing parties**
+* Other filing party name should be appended to the other Filed By information : Resp. & Petr. [Primary Contact], [Other Filing Party Name]

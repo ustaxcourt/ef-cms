@@ -1,4 +1,8 @@
+const {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
+const { omit } = require('lodash');
 
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
@@ -76,7 +80,7 @@ exports.generateCoverSheetData = ({
   const docketNumberWithSuffix =
     caseEntity.docketNumber + (docketNumberSuffixToUse || '');
 
-  const coverSheetData = {
+  let coverSheetData = {
     caseCaptionExtension,
     caseTitle,
     certificateOfService,
@@ -89,6 +93,19 @@ exports.generateCoverSheetData = ({
     electronicallyFiled: !documentEntity.isPaper,
     mailingDate: documentEntity.mailingDate || '',
   };
+
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      documentEntity.eventCode,
+    )
+  ) {
+    coverSheetData = omit(coverSheetData, [
+      'dateReceived',
+      'electronicallyFiled',
+      'dateServed',
+    ]);
+  }
+
   return coverSheetData;
 };
 /**

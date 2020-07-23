@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'REQA',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
@@ -49,7 +49,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'First',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -76,7 +76,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'First Request for Admissions',
       documentType: 'Request for Admissions',
-      eventCode: 'REQA',
+      eventCode: 'MISCL',
     });
   });
 };

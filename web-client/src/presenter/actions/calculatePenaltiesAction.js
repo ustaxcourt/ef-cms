@@ -12,7 +12,6 @@ export const calculatePenaltiesAction = ({ get }) => {
 
   const parseCurrency = value => `$${Number(value).toFixed(2)}`;
 
-  // TODO: Should we hit an interactor for this? Or, perhaps, abstract this method for backend use?
   const penaltyAggregator = (sum, stepValue) => Number(sum) + Number(stepValue);
 
   const total = parseCurrency(penalties.reduce(penaltyAggregator, 0));

@@ -15,7 +15,7 @@ export const setViewerDocumentToDisplayAction = async ({
   store,
 }) => {
   const { viewerDocumentToDisplay } = props;
-  const { caseId } = get(state.caseDetail);
+  const caseId = get(state.caseDetail.caseId);
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 

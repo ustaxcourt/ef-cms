@@ -1,3 +1,8 @@
+const {
+  CASE_TYPES_MAP,
+  DOCKET_NUMBER_SUFFIXES,
+} = require('../entities/EntityConstants');
+
 /**
  * a function used for getting the suffix associated with a caseType and procedureType
  *
@@ -8,17 +13,21 @@
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
   switch (caseType) {
-    case 'Whistleblower':
-      return 'W';
-    case 'Passport':
-      return 'P';
-    case 'Declaratory Judgment (Exempt Organization)':
-      return 'X';
-    case 'Declaratory Judgment (Retirement Plan)':
-      return 'R';
-    case 'CDP (Lien/Levy)':
-      return procedureType.toLowerCase() === 'small' ? 'SL' : 'L';
+    case CASE_TYPES_MAP.whistleblower:
+      return DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
+    case CASE_TYPES_MAP.passport:
+      return DOCKET_NUMBER_SUFFIXES.PASSPORT;
+    case CASE_TYPES_MAP.djExemptOrg:
+      return DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_EXEMPT_ORGS;
+    case CASE_TYPES_MAP.djRetirementPlan:
+      return DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION;
+    case CASE_TYPES_MAP.cdp:
+      return procedureType.toLowerCase() === 'small'
+        ? DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY
+        : DOCKET_NUMBER_SUFFIXES.LIEN_LEVY;
     default:
-      return procedureType.toLowerCase() === 'small' ? 'S' : null;
+      return procedureType.toLowerCase() === 'small'
+        ? DOCKET_NUMBER_SUFFIXES.SMALL
+        : null;
   }
 };

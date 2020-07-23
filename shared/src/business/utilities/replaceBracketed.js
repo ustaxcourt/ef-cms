@@ -6,6 +6,7 @@
  * @returns {string} the template with the brackets replaced with replacement values
  */
 const replaceBracketed = (template, ...values) => {
+  if (!template) return;
   const bracketsMatcher = /\[.*?\]/;
   while (bracketsMatcher.test(template)) {
     template = template.replace(bracketsMatcher, values.shift() || '');

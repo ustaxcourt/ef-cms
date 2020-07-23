@@ -44,7 +44,7 @@ describe('workQueueHelper', () => {
       showOutbox: false,
       showSectionWorkQueue: true,
       showSendToBar: true,
-      showStartCaseButton: true,
+      showStartPetitionButton: true,
     });
   });
 
@@ -70,7 +70,7 @@ describe('workQueueHelper', () => {
       showOutbox: true,
       showSectionWorkQueue: false,
       showSendToBar: false,
-      showStartCaseButton: true,
+      showStartPetitionButton: true,
     });
   });
 
@@ -211,7 +211,7 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      showStartCaseButton: true,
+      showStartPetitionButton: true,
     });
   });
 
@@ -232,7 +232,7 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result).toMatchObject({
-      showStartCaseButton: false,
+      showStartPetitionButton: false,
     });
   });
 

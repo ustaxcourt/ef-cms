@@ -43,7 +43,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: 'CS',
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
@@ -68,7 +68,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: petitionDocument.documentId,
     });
 
-    await test.runSequence('submitDocketEntrySequence');
+    await test.runSequence('saveForLaterDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Certificate of Service Petition 05-05-2015',
       documentType: 'Certificate of Service',
-      eventCode: 'CS',
+      eventCode: 'MISCL',
       serviceDate: '2015-05-05',
     });
   });

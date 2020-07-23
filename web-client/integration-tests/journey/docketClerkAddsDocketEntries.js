@@ -1,6 +1,8 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
 export const docketClerkAddsDocketEntries = (test, fakeFile) => {
   return it('Docketclerk adds docket entries', async () => {
@@ -13,19 +15,21 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      primaryDocumentFile:
+        'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
 
     //primary document
@@ -67,11 +71,11 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     );
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: false,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -112,11 +116,11 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
     });
 
     await test.runSequence('updateScreenMetadataSequence', {
-      key: 'supportingDocument',
+      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
       value: true,
     });
 
-    await test.runSequence('submitDocketEntrySequence', {
+    await test.runSequence('saveAndServeDocketEntrySequence', {
       docketNumber: test.docketNumber,
       isAddAnother: true,
     });
@@ -125,10 +129,7 @@ export const docketClerkAddsDocketEntries = (test, fakeFile) => {
       'Entry added. Continue adding docket entries below.',
     );
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
-    expect(test.getState('form')).toEqual({
-      lodged: false,
-      privatePractitioners: [],
-    });
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('form')).toEqual({});
   });
 };

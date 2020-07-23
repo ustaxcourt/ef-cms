@@ -1,5 +1,8 @@
+const {
+  CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+} = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
@@ -18,7 +21,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [],
@@ -38,7 +41,7 @@ describe('WorkItem', () => {
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [],
@@ -60,7 +63,7 @@ describe('WorkItem', () => {
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [],
@@ -83,7 +86,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [],
@@ -105,7 +108,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           isRead: true,
@@ -128,7 +131,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           section: 'docket',
@@ -148,7 +151,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [
@@ -177,7 +180,7 @@ describe('WorkItem', () => {
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [
@@ -238,7 +241,7 @@ describe('WorkItem', () => {
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           document: {},
           isQC: true,
           messages: [],
@@ -262,7 +265,7 @@ describe('WorkItem', () => {
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
         docketNumber: '101-18',
-        docketNumberSuffix: 'S',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         document: {},
         isQC: true,
         messages: [],

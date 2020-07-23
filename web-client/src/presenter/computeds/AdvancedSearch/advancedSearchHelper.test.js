@@ -1,14 +1,16 @@
-import {
-  COUNTRY_TYPES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedSearchHelper', () => {
+  const {
+    COUNTRY_TYPES,
+    DOCKET_NUMBER_SUFFIXES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
   let pageSizeOverride = 5;
   let globalUser;
 
@@ -34,7 +36,7 @@ describe('advancedSearchHelper', () => {
 
   beforeEach(() => {
     globalUser = {
-      role: ROLES.docketClerk,
+      role: USER_ROLES.docketClerk,
       userId: 'docketClerk',
     };
   });
@@ -66,7 +68,7 @@ describe('advancedSearchHelper', () => {
 
   it('returns showPractitionerSearch false when user is an external user', () => {
     globalUser = {
-      role: ROLES.privatePractitioner,
+      role: USER_ROLES.privatePractitioner,
       userId: 'practitioner',
     };
 
@@ -179,7 +181,7 @@ describe('advancedSearchHelper', () => {
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             docketNumber: '102-18',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             docketNumberWithSuffix: '102-18W',
             receivedAt: '2019-05-01T05:00:00.000Z',
           },
@@ -232,7 +234,7 @@ describe('advancedSearchHelper', () => {
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             docketNumber: '102-18',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             receivedAt: '2018-05-01T05:00:00.000Z',
           },
         ],
@@ -273,7 +275,7 @@ describe('advancedSearchHelper', () => {
             },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             docketNumber: '102-18',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             docketNumberWithSuffix: '102-18W',
             receivedAt: '2018-05-01T05:00:00.000Z',
           },
@@ -282,14 +284,14 @@ describe('advancedSearchHelper', () => {
             contactPrimary: { name: 'Test Petitioner', state: 'CA' },
             contactSecondary: { name: 'Another Petitioner', state: 'TN' },
             docketNumber: '101-18',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             docketNumberWithSuffix: '101-18W',
             receivedAt: '2018-04-01T05:00:00.000Z',
           },
           {
             contactSecondary: { name: 'Another Person', state: 'AX' },
             docketNumber: '102-18',
-            docketNumberSuffix: 'W',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
             docketNumberWithSuffix: '102-18W',
             receivedAt: '2018-05-01T05:00:00.000Z',
           },
