@@ -58,7 +58,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
     await expect(
       associatePrivatePractitionerWithCaseInteractor({
         applicationContext,
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -81,14 +81,14 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerWithCaseInteractor({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

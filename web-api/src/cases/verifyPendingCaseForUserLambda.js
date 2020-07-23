@@ -8,13 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.verifyPendingCaseForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, userId } = event.pathParameters || {};
-
     return await applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor({
         applicationContext,
-        caseId,
-        userId,
+        ...event.pathParameters,
       });
   });

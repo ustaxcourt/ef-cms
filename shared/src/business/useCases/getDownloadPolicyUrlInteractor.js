@@ -72,7 +72,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
           .getPersistenceGateway()
           .verifyCaseForUser({
             applicationContext,
-            caseId,
+            docketNumber: caseEntity.docketNumber,
             userId: user.userId,
           });
 

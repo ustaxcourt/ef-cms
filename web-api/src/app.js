@@ -597,11 +597,11 @@ app.put(
   lambdaWrapper(updateSecondaryContactLambda),
 );
 app.post(
-  '/case-parties/:caseId/associate-private-practitioner',
+  '/case-parties/:docketNumber/associate-private-practitioner',
   lambdaWrapper(associatePrivatePractitionerWithCaseLambda),
 );
 app.post(
-  '/case-parties/:caseId/associate-irs-practitioner',
+  '/case-parties/:docketNumber/associate-irs-practitioner',
   lambdaWrapper(associateIrsPractitionerWithCaseLambda),
 );
 app.put(
@@ -841,15 +841,15 @@ app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
 app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
 app.get('/users/:userId/cases', lambdaWrapper(getCasesByUserLambda));
 app.put(
-  '/users/:userId/case/:caseId',
+  '/users/:userId/case/:docketNumber',
   lambdaWrapper(privatePractitionerCaseAssociationLambda),
 );
 app.get(
-  '/users/:userId/case/:caseId/pending',
+  '/users/:userId/case/:docketNumber/pending',
   lambdaWrapper(verifyPendingCaseForUserLambda),
 );
 app.put(
-  '/users/:userId/case/:caseId/pending',
+  '/users/:userId/case/:docketNumber/pending',
   lambdaWrapper(privatePractitionerPendingCaseAssociationLambda),
 );
 app.get(
