@@ -20,18 +20,16 @@ exports.getCaseMessagesByDocketNumber = async ({
     docketNumber,
   });
 
-  if (caseId) {
-    return await query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${caseId}`,
-        ':prefix': 'message|',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-  }
+  return await query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `case|${caseId}`,
+      ':prefix': 'message|',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
 };
