@@ -23,7 +23,6 @@ exports.getIndexedCasesForUser = async ({
           'docketNumberWithSuffix',
           'caseCaption',
           'leadCaseId',
-          'caseId',
           'createdAt',
           'status',
         ],

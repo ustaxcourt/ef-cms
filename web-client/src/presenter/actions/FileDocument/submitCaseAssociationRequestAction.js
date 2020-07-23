@@ -46,7 +46,7 @@ export const submitCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         representingPrimary: documentMetadata.representingPrimary,
         representingSecondary: documentMetadata.representingSecondary,
       });
@@ -55,7 +55,7 @@ export const submitCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
       });
   }
 

@@ -240,7 +240,7 @@ exports.createCaseInteractor = async ({
 
   await applicationContext.getPersistenceGateway().associateUserWithCase({
     applicationContext,
-    caseId: caseToAdd.caseId,
+    docketNumber: caseToAdd.docketNumber,
     userCase: userCaseEntity.validate().toRawObject(),
     userId: user.userId,
   });

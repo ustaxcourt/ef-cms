@@ -5,7 +5,7 @@ const { put } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.representingPrimary true if the user is representing
  * the primary contact on the case, false otherwise
  * @param {string} providers.representingSecondary true if the user is representing
@@ -14,7 +14,7 @@ const { put } = require('../requests');
  */
 exports.submitCaseAssociationRequestInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   representingPrimary,
   representingSecondary,
 }) => {
@@ -25,6 +25,6 @@ exports.submitCaseAssociationRequestInteractor = ({
       representingPrimary,
       representingSecondary,
     },
-    endpoint: `/users/${user.userId}/case/${caseId}`,
+    endpoint: `/users/${user.userId}/case/${docketNumber}`,
   });
 };
