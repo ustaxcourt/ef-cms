@@ -15,18 +15,6 @@
             options: 
               version: 
                 - "uuidv4"
-    caseId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "Unique Case ID only used by the system."
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     createdAt: 
       type: "date"
       flags: 
@@ -57,6 +45,16 @@
           name: "min"
           args: 
             limit: 1
+    docketNumber: 
+      type: "string"
+      flags: 
+        presence: "required"
+        description: "Docket number of the case containing the Case Deadline."
+      rules: 
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
     entityName: 
       type: "string"
       flags: 

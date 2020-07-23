@@ -12,6 +12,6 @@ exports.getCaseDeadlinesForCaseLambda = event =>
       .getUseCases()
       .getCaseDeadlinesForCaseInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        docketNumber: event.pathParameters.docketNumber,
       });
   });
