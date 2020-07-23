@@ -816,7 +816,7 @@ app.get(
   lambdaWrapper(batchDownloadTrialSessionLambda),
 );
 app.put(
-  '/trial-sessions/:trialSessionId/remove-case/:caseId',
+  '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
   lambdaWrapper(removeCaseFromTrialLambda),
 );
 app.post(
