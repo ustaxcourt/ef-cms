@@ -570,7 +570,7 @@ app.post(
  * case-notes
  */
 app.get(
-  '/case-notes/batch-cases/:caseIds/user-notes',
+  '/case-notes/batch-cases/:docketNumbers/user-notes',
   lambdaWrapper(getUserCaseNoteForCasesLambda),
 );
 app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));

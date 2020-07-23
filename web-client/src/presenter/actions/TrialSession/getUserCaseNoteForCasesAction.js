@@ -14,12 +14,11 @@ export const getUserCaseNoteForCasesAction = async ({
 
   let notes = [];
   if (trialSession.caseOrder.length) {
-    /// FIXME
     notes = await applicationContext
       .getUseCases()
       .getUserCaseNoteForCasesInteractor({
         applicationContext,
-        caseIds: trialSession.caseOrder.map(entry => entry.docketNumber),
+        docketNumbers: trialSession.caseOrder.map(entry => entry.docketNumber),
       });
   }
 
