@@ -10,7 +10,9 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEntryAction';
+import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unset } from 'cerebral/factories';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditDocketEntry = [
@@ -26,6 +28,7 @@ export const gotoEditDocketEntry = [
   updateDocketEntryWizardDataAction,
   setDocumentIdAction,
   setupCompleteDocketEntryAction,
+  unset(state.isPaperFiling),
   setCurrentPageAction('AddDocketEntry'),
 ];
 
