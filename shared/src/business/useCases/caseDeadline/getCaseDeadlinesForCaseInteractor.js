@@ -5,18 +5,18 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get case deadlines for
+ * @param {string} providers.docketNumber the docket number of the case to get case deadlines for
  * @returns {Promise} the promise of the getCaseDeadlines call
  */
 exports.getCaseDeadlinesForCaseInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const caseDeadlines = await applicationContext
     .getPersistenceGateway()
-    .getCaseDeadlinesByCaseId({
+    .getCaseDeadlinesByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   return CaseDeadline.validateRawCollection(caseDeadlines, {

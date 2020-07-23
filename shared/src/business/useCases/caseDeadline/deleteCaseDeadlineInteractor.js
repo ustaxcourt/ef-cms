@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.deleteCaseDeadlineInteractor = async ({
   applicationContext,
   caseDeadlineId,
-  caseId,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -27,14 +27,14 @@ exports.deleteCaseDeadlineInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   let updatedCase = new Case(caseToUpdate, { applicationContext });
 
   await applicationContext.getPersistenceGateway().deleteCaseDeadline({
     applicationContext,
     caseDeadlineId,
-    caseId,
+    docketNumber,
   });
 
   updatedCase = await applicationContext

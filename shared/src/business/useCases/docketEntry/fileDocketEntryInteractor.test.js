@@ -226,7 +226,9 @@ describe('fileDocketEntryInteractor', () => {
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
 
     await fileDocketEntryInteractor({
       applicationContext,
