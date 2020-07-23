@@ -263,7 +263,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getTrialSessionById.mockReturnValue({
         caseOrder: [
           {
-            caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
+            docketNumber: '123-45',
           },
         ],
         createdAt: '2019-10-27T05:00:00.000Z',
@@ -455,7 +455,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getTrialSessionById.mockReturnValue({
         caseOrder: [
           {
-            caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
+            docketNumber: '123-45',
           },
         ],
         createdAt: '2019-10-27T05:00:00.000Z',

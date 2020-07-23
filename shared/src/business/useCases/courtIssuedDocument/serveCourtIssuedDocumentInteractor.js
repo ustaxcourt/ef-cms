@@ -187,7 +187,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
           disposition: 'Status was changed to Closed',
         });
       } else {
-        trialSessionEntity.deleteCaseFromCalendar({ caseId });
+        trialSessionEntity.deleteCaseFromCalendar({
+          docketNumber: caseEntity.docketNumber,
+        });
       }
 
       await applicationContext.getPersistenceGateway().updateTrialSession({

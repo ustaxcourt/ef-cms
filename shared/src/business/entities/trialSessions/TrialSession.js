@@ -1,5 +1,10 @@
 const joi = require('@hapi/joi');
 const {
+  DOCKET_NUMBER_MATCHER,
+  SESSION_TERMS,
+  SESSION_TYPES,
+} = require('../EntityConstants');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -7,7 +12,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
-const { SESSION_TERMS, SESSION_TYPES } = require('../EntityConstants');
 
 TrialSession.validationName = 'TrialSession';
 
@@ -30,8 +34,9 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
-    caseId: caseOrder.caseId,
     disposition: caseOrder.disposition,
+    // caseId: caseOrder.caseId,
+    docketNumber: caseOrder.docketNumber,
     isManuallyAdded: caseOrder.isManuallyAdded,
     removedFromTrial: caseOrder.removedFromTrial,
     removedFromTrialDate: caseOrder.removedFromTrialDate,
@@ -138,12 +143,17 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        caseId: JoiValidationConstants.UUID,
         disposition: joi.string().when('removedFromTrial', {
           is: true,
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         }),
+        // caseId: JoiValidationConstants.UUID,
+        docketNumber: joi
+          .string()
+          .regex(DOCKET_NUMBER_MATCHER)
+          .required()
+          .description('FIXME'),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
@@ -209,8 +219,8 @@ TrialSession.prototype.setAsCalendared = function () {
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
-  const { caseId } = caseEntity;
-  this.caseOrder.push({ caseId });
+  const { docketNumber } = caseEntity;
+  this.caseOrder.push({ docketNumber });
   return this;
 };
 
@@ -221,8 +231,8 @@ TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.manuallyAddCaseToCalendar = function (caseEntity) {
-  const { caseId } = caseEntity;
-  this.caseOrder.push({ caseId, isManuallyAdded: true });
+  const { docketNumber } = caseEntity;
+  this.caseOrder.push({ docketNumber, isManuallyAdded: true });
   return this;
 };
 
@@ -234,7 +244,7 @@ TrialSession.prototype.manuallyAddCaseToCalendar = function (caseEntity) {
  */
 TrialSession.prototype.isCaseAlreadyCalendared = function (caseEntity) {
   return !!this.caseOrder
-    .filter(order => order.caseId === caseEntity.caseId)
+    .filter(order => order.docketNumber === caseEntity.docketNumber)
     .filter(order => order.removedFromTrial !== true).length;
 };
 
@@ -242,16 +252,16 @@ TrialSession.prototype.isCaseAlreadyCalendared = function (caseEntity) {
  * set case as removedFromTrial
  *
  * @param {object} arguments the arguments object
- * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
  * @param {string} arguments.disposition the reason the case is being removed from the calendar
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.removeCaseFromCalendar = function ({
-  caseId,
   disposition,
+  docketNumber,
 }) {
   const caseToUpdate = this.caseOrder.find(
-    trialCase => trialCase.caseId === caseId,
+    trialCase => trialCase.docketNumber === docketNumber,
   );
   if (caseToUpdate) {
     caseToUpdate.disposition = disposition;
@@ -265,12 +275,12 @@ TrialSession.prototype.removeCaseFromCalendar = function ({
  * removes the case totally from the trial session
  *
  * @param {object} arguments the arguments object
- * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.deleteCaseFromCalendar = function ({ caseId }) {
+TrialSession.prototype.deleteCaseFromCalendar = function ({ docketNumber }) {
   const index = this.caseOrder.findIndex(
-    trialCase => trialCase.caseId === caseId,
+    trialCase => trialCase.docketNumber === docketNumber,
   );
   if (index >= 0) {
     this.caseOrder.splice(index, 1);
