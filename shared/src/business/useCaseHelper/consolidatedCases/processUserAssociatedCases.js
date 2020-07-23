@@ -8,25 +8,33 @@
  *  associated with the current user. userAssociatedCaseIdsMap - a map of open cases associated
  *  with the current user
  */
-exports.processUserAssociatedCases = openUserCases => {
+exports.processUserAssociatedCases = async ({
+  applicationContext,
+  openUserCases,
+}) => {
   let casesAssociatedWithUserOrLeadCaseMap = {};
   let userAssociatedCaseIdsMap = {};
   let leadCaseIdsAssociatedWithUser = [];
 
-  openUserCases.forEach(caseRecord => {
-    const { caseId, leadCaseId } = caseRecord;
+  for (const userCaseRecord of openUserCases) {
+    const { docketNumber, leadCaseId } = userCaseRecord;
+    const {
+      caseId,
+    } = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({ applicationContext, docketNumber });
     const caseIsALeadCase = leadCaseId === caseId;
 
-    caseRecord.isRequestingUserAssociated = true;
+    userCaseRecord.isRequestingUserAssociated = true;
     userAssociatedCaseIdsMap[caseId] = true;
 
     if (!leadCaseId || caseIsALeadCase) {
-      casesAssociatedWithUserOrLeadCaseMap[caseId] = caseRecord;
+      casesAssociatedWithUserOrLeadCaseMap[caseId] = userCaseRecord;
     }
     if (leadCaseId && !leadCaseIdsAssociatedWithUser.includes(leadCaseId)) {
       leadCaseIdsAssociatedWithUser.push(leadCaseId);
     }
-  });
+  }
 
   return {
     casesAssociatedWithUserOrLeadCaseMap,

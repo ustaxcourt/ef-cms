@@ -30,9 +30,9 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     casesAssociatedWithUserOrLeadCaseMap,
     leadCaseIdsAssociatedWithUser,
     userAssociatedCaseIdsMap,
-  } = applicationContext
+  } = await applicationContext
     .getUseCaseHelpers()
-    .processUserAssociatedCases(openUserCases);
+    .processUserAssociatedCases({ applicationContext, openUserCases });
 
   for (const leadCaseId of leadCaseIdsAssociatedWithUser) {
     const consolidatedCases = await applicationContext

@@ -7,12 +7,21 @@ const { processUserAssociatedCases } = require('./processUserAssociatedCases');
 describe('processUserAssociatedCases', () => {
   let mockFoundCasesList;
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
+
   beforeEach(() => {
     mockFoundCasesList = [MOCK_CASE];
   });
 
   it('should set isRequestingUserAssociated to true for each case', async () => {
-    processUserAssociatedCases(mockFoundCasesList);
+    await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(MOCK_CASE.isRequestingUserAssociated).toBe(true);
   });
@@ -20,7 +29,10 @@ describe('processUserAssociatedCases', () => {
   it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', async () => {
     mockFoundCasesList = [{ ...MOCK_CASE, isLeadCase: true }];
 
-    const result = processUserAssociatedCases(mockFoundCasesList);
+    const result = await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(
       result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
@@ -28,7 +40,10 @@ describe('processUserAssociatedCases', () => {
   });
 
   it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadCaseId', async () => {
-    const result = processUserAssociatedCases(mockFoundCasesList);
+    const result = await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(
       result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
@@ -36,7 +51,10 @@ describe('processUserAssociatedCases', () => {
   });
 
   it("should add a case's caseId to userAssociatedCaseIdsMap", async () => {
-    const result = processUserAssociatedCases(mockFoundCasesList);
+    const result = await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(result.userAssociatedCaseIdsMap[MOCK_CASE.caseId]).toEqual(true);
   });
@@ -48,7 +66,10 @@ describe('processUserAssociatedCases', () => {
     };
     mockFoundCasesList = [mockCaseWithLeadCaseId];
 
-    const result = processUserAssociatedCases(mockFoundCasesList);
+    const result = await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(
       result.leadCaseIdsAssociatedWithUser.includes(
@@ -65,7 +86,10 @@ describe('processUserAssociatedCases', () => {
     };
     mockFoundCasesList = [mockCaseWithLeadCaseId, MOCK_CASE];
 
-    const result = processUserAssociatedCases(mockFoundCasesList);
+    const result = await processUserAssociatedCases({
+      applicationContext,
+      openUserCases: mockFoundCasesList,
+    });
 
     expect(result.casesAssociatedWithUserOrLeadCaseMap).not.toBe({});
     expect(result.leadCaseIdsAssociatedWithUser.length).toBe(1);
