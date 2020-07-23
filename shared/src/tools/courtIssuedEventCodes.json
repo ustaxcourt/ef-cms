@@ -2,7 +2,7 @@
   {
     "eventCode": "O",
     "documentType": "Order",
-    "documentTitle": "Order [Anything]",
+    "documentTitle": "[Anything]",
     "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
@@ -325,7 +325,7 @@
   {
     "eventCode": "NOT",
     "documentType": "Notice",
-    "documentTitle": "Notice [Anything]",
+    "documentTitle": "[Anything]",
     "scenario": "Type A",
     "isNotice": true,
     "requiresSignature": true
@@ -368,6 +368,7 @@
     "eventCode": "NTD",
     "documentType": "Notice of Trial",
     "documentTitle": "Notice of Trial on [Date] at [Place]",
+    "isNotice": true,
     "scenario": "Type G",
     "requiresSignature": true
   },

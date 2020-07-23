@@ -47,7 +47,7 @@ export const docketClerkServesOrderWithPaperService = (
         name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
-    await test.runSequence('serveCourtIssuedDocumentSequence');
+    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
 
     expect(test.getState('currentPage')).toEqual('PrintPaperService');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();

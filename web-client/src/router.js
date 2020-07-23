@@ -159,6 +159,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/draft-documents?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          draftDocumentId: documentId,
+          primaryTab: 'drafts',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/document-view?..',
       ifHasAccess(docketNumber => {
         const { documentId } = route.query();
@@ -190,6 +203,28 @@ const router = {
           docketNumber,
         });
       }),
+    );
+
+    registerRoute(
+      '/case-detail/*/petition-qc/document-view/*',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+          redirectUrl: `/case-detail/${docketNumber}/document-view?documentId=${documentId}`,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
+    );
+
+    registerRoute(
+      '/case-detail/*/petition-qc/*',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+        return app.getSequence('gotoPetitionQcSequence')({
+          docketNumber,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
     registerRoute(
@@ -507,6 +542,20 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-upload-court-issued/*/*',
+      ifHasAccess((docketNumber, documentId, parentMessageId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
+        );
+        return app.getSequence('gotoEditUploadCourtIssuedDocumentSequence')({
+          docketNumber,
+          documentId,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-correspondence',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -553,6 +602,7 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
+          redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`,
         });
       }),
     );
@@ -566,7 +616,7 @@ const router = {
           docketNumber,
           documentId,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
         });
       }),
     );
@@ -1090,6 +1140,19 @@ const router = {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-messages/*/message-detail/*?..',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentId } = route.query();
+        setPageTitle('Message detail');
+        return app.getSequence('gotoMessageDetailSequence')({
+          docketNumber,
+          documentId,
           parentMessageId,
         });
       }),

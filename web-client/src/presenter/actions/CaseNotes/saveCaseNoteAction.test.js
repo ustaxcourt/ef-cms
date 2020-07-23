@@ -3,24 +3,26 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { saveCaseNoteAction } from './saveCaseNoteAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('saveCaseNote', () => {
-  it('saves a procedural note on case with id from caseDetail.caseId', async () => {
-    const caseId = '123-abc';
+  presenter.providers.applicationContext = applicationContext;
+
+  it('saves a procedural note on case with id from caseDetail.docketNumber', async () => {
+    const docketNumber = '123-abc';
+
     const result = await runAction(saveCaseNoteAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          caseId,
+          docketNumber,
         },
         modal: {
           notes: 'This is a procedural note',
         },
       },
     });
+
     expect(result).toBeDefined();
     expect(
       applicationContext.getUseCases().saveCaseNoteInteractor,
@@ -28,8 +30,8 @@ describe('saveCaseNote', () => {
     expect(
       applicationContext.getUseCases().saveCaseNoteInteractor.mock.calls[0][0],
     ).toMatchObject({
-      caseId,
       caseNote: 'This is a procedural note',
+      docketNumber,
     });
   });
 });

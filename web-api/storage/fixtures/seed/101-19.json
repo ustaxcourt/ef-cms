@@ -218,6 +218,7 @@
     "filedBy": "Test Petitioner",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+    "isFileAttached": true,
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02"
   },
@@ -245,6 +246,7 @@
     "filedBy": "Test Docketclerk",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "sk": "document|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "isFileAttached": true,
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "entityName": "Document",
     "numberOfPages": 1,
@@ -267,6 +269,7 @@
     "filedBy": "Test Petitioner",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "entityName": "Document",
+    "isFileAttached": true,
     "sk": "document|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|2fa6da8d-4328-4a20-a5d7-b76637e1dc02"
