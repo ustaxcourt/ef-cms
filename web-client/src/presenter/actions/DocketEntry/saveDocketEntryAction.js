@@ -42,7 +42,6 @@ export const saveDocketEntryAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    caseId,
     createdAt: documentMetadata.dateReceived,
     docketNumber,
     isFileAttached: !!isFileAttached,

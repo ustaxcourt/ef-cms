@@ -667,6 +667,40 @@ describe('messageDocumentHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for Notice document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
   it('return showEditCorrespondenceButton true for a correspondence document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 

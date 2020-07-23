@@ -7,14 +7,14 @@
  * @returns {object} the props needed for removing signature
  */
 export const removeSignatureAction = async ({ applicationContext, props }) => {
-  const { caseId } = props.caseDetail;
+  const { docketNumber } = props.caseDetail;
   const documentId = props.documentIdToEdit;
 
   const updatedCase = await applicationContext
     .getUseCases()
     .removeSignatureFromDocumentInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
 

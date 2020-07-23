@@ -535,6 +535,35 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for a Notice document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
   it('should return showDocumentNotSignedAlert false if document is not signed and the event code does not require a signature', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {

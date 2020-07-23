@@ -8,10 +8,8 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.deleteCaseNoteLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId } = event.pathParameters || {};
-
     return await applicationContext.getUseCases().deleteCaseNoteInteractor({
       applicationContext,
-      caseId,
+      ...event.pathParameters,
     });
   });

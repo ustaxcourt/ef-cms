@@ -25,6 +25,17 @@
           name: "max"
           args: 
             limit: 500
+    docketRecordId: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
     documentId: 
       type: "string"
       flags: 
@@ -48,7 +59,7 @@
         - 
           name: "max"
           args: 
-            limit: 3000
+            limit: 4000
       allow: 
         - null
       metas: 
