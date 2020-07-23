@@ -4,8 +4,11 @@ const {
   addCoversheetInteractor,
   generateCoverSheetData,
 } = require('./addCoversheetInteractor.js');
+const {
+  DOCKET_NUMBER_SUFFIXES,
+  PARTY_TYPES,
+} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
 
 describe('addCoversheetInteractor', () => {
   const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -541,7 +544,7 @@ describe('addCoversheetInteractor', () => {
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         },
         documentEntity: {
           ...testingCaseData.documents[0],
@@ -736,7 +739,7 @@ describe('addCoversheetInteractor', () => {
         caseEntity: {
           ...caseData,
           caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: 'S',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           initialCaption: 'Janie and Jackie Petitioner, Petitioners',
           initialDocketNumberSuffix: 'Z',
         },
@@ -757,6 +760,37 @@ describe('addCoversheetInteractor', () => {
 
       expect(result.docketNumberWithSuffix).toEqual('102-19Z');
       expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
+    });
+
+    it('does NOT display dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: {
+          ...caseData,
+          caseCaption: 'Janie Petitioner, Petitioner',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          initialCaption: 'Janie and Jackie Petitioner, Petitioners',
+          initialDocketNumberSuffix: 'Z',
+        },
+        documentEntity: {
+          ...testingCaseData.documents[0],
+          addToCoversheet: true,
+          additionalInfo: 'Additional Info Something',
+          certificateOfService: true,
+          documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          documentType:
+            'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
+          eventCode: 'USCA',
+          isPaper: false,
+          lodged: true,
+          servedAt: '2019-04-20T14:45:15.595Z',
+        },
+        useInitialData: true,
+      });
+
+      expect(result.dateReceived).toBeUndefined();
+      expect(result.electronicallyFiled).toBeUndefined();
+      expect(result.dateServed).toBeUndefined();
     });
   });
 });

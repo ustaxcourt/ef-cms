@@ -30,6 +30,7 @@ const test = setupTest({
 
 const {
   COUNTRY_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   SERVICE_INDICATOR_TYPES,
 } = applicationContext.getConstants();
 
@@ -47,7 +48,8 @@ const seedData = {
   },
   contactSecondary: {},
   docketNumber: '104-20',
-  docketNumberSuffix: 'R',
+  docketNumberSuffix:
+    DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION,
   documentContents:
     'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
   documentId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',

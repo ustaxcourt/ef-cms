@@ -135,7 +135,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 3000
     documentType: 
       type: "string"
       flags: 
@@ -176,7 +176,6 @@
         - "Computation for Entry of Decision"
         - "Corrected Transcript"
         - "Decision"
-        - "Decision Entered"
         - "Declaration in Support"
         - "Designation of Counsel to Receive Service"
         - "Entry of Appearance"
@@ -367,7 +366,6 @@
         - "Opposition [anything]"
         - "Order"
         - "Order and Decision"
-        - "Order and Decision Entered"
         - "Order fixing amount of bond"
         - "Order for Amended Petition"
         - "Order for Amended Petition and Filing Fee"
@@ -377,11 +375,8 @@
         - "Order for Ownership Disclosure Statement"
         - "Order for Ratification of Petition"
         - "Order of Dismissal"
-        - "Order of Dismissal Entered"
         - "Order of Dismissal and Decision"
-        - "Order of Dismissal and Decision Entered"
         - "Order of Dismissal for Lack of Jurisdiction"
-        - "Order of Dismissal for Lack of Jurisdiction Entered"
         - "Order of Service of Transcript (Bench Opinion)"
         - "Order petr(s) to show cause why \"S\" should not be removed"
         - "Order that caption of case is amended"
@@ -460,7 +455,6 @@
         - "Statement under Rule 50(c)"
         - "Status Report"
         - "Stipulated Decision"
-        - "Stipulated Decision Entered"
         - "Stipulation"
         - "Stipulation as to the Administrative Record"
         - "Stipulation as to the Partial Administrative Record"
@@ -1146,9 +1140,9 @@
                     only: true
                   allow: 
                     - "Notice of Change of Address"
-                    - "Notice of Change of Telephone Number"
                     - "Notice of Change of Address and Telephone Number"
-                    - "Request for Place of Trial "
+                    - "Notice of Change of Telephone Number"
+                    - "Request for Place of Trial"
                     - "Miscellaneous"
                     - "Notice"
                 then: 
@@ -1218,6 +1212,11 @@
           name: "max"
           args: 
             limit: 500
+    hasOtherFilingParty: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Whether the document has other filing party."
     hasSupportingDocuments: 
       type: "boolean"
       flags: 
@@ -1349,6 +1348,32 @@
       type: "string"
       flags: 
         presence: "optional"
+    otherFilingParty: 
+      type: "string"
+      flags: 
+        description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "hasOtherFilingParty"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
     partyIrsPractitioner: 
       type: "boolean"
       flags: 
@@ -1395,8 +1420,8 @@
         only: true
         presence: "optional"
       allow: 
-        - "pending"
         - "complete"
+        - "pending"
     qcAt: 
       type: "date"
       flags: 
@@ -1543,7 +1568,6 @@
             - "Computation for Entry of Decision"
             - "Corrected Transcript"
             - "Decision"
-            - "Decision Entered"
             - "Declaration in Support"
             - "Designation of Counsel to Receive Service"
             - "Entry of Appearance"
@@ -1734,7 +1758,6 @@
             - "Opposition [anything]"
             - "Order"
             - "Order and Decision"
-            - "Order and Decision Entered"
             - "Order fixing amount of bond"
             - "Order for Amended Petition"
             - "Order for Amended Petition and Filing Fee"
@@ -1744,11 +1767,8 @@
             - "Order for Ownership Disclosure Statement"
             - "Order for Ratification of Petition"
             - "Order of Dismissal"
-            - "Order of Dismissal Entered"
             - "Order of Dismissal and Decision"
-            - "Order of Dismissal and Decision Entered"
             - "Order of Dismissal for Lack of Jurisdiction"
-            - "Order of Dismissal for Lack of Jurisdiction Entered"
             - "Order of Service of Transcript (Bench Opinion)"
             - "Order petr(s) to show cause why \"S\" should not be removed"
             - "Order that caption of case is amended"
@@ -1827,7 +1847,6 @@
             - "Statement under Rule 50(c)"
             - "Status Report"
             - "Stipulated Decision"
-            - "Stipulated Decision Entered"
             - "Stipulation"
             - "Stipulation as to the Administrative Record"
             - "Stipulation as to the Partial Administrative Record"
@@ -2353,6 +2372,7 @@
                     - "ODJ"
                     - "SDEC"
                     - "NOT"
+                    - "NTD"
                 then: 
                   type: "any"
                   flags: 

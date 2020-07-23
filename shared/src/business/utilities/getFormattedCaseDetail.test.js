@@ -12,8 +12,10 @@ import { applicationContext } from '../../../../web-client/src/applicationContex
 import { calculateISODate, createISODateString } from './DateHandler';
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   PAYMENT_STATUS,
   ROLES,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -25,7 +27,7 @@ const mockCaseDetailBase = {
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
-  docketNumberSuffix: 'S',
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
   receivedAt: new Date(),
 };
@@ -138,45 +140,6 @@ describe('formatCase', () => {
 
     expect(result.docketRecord[0]).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('docketRecordWithDocument');
-  });
-
-  it('should format only lodged docket entries with overridden eventCode MISCL', () => {
-    const result = formatCase(applicationContext, {
-      ...mockCaseDetail,
-      docketRecord: [
-        {
-          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-          eventCode: 'M115',
-          index: '1',
-        },
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          eventCode: 'ADMR',
-          index: '2',
-        },
-      ],
-      documents: [
-        {
-          documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-          documentType: 'Motion for Leave to File Administrative Record',
-          eventCode: 'M115',
-          lodged: false,
-        },
-        {
-          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentType: 'Administrative Record',
-          eventCode: 'ADMR',
-          lodged: true,
-        },
-      ],
-    });
-
-    expect(result.docketRecordWithDocument[0].record.eventCode).not.toEqual(
-      'MISCL',
-    );
-    expect(result.docketRecordWithDocument[1].record.eventCode).toEqual(
-      'MISCL',
-    );
   });
 
   it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
@@ -643,13 +606,28 @@ describe('formatDocument', () => {
     });
   });
 
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
+    const result = formatDocument(
+      applicationContext,
+
+      {
+        documentId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+        documentType: 'Motion for Leave to File Administrative Record',
+        eventCode: 'M115',
+        lodged: true,
+      },
+    );
+
+    expect(result.eventCode).toEqual('MISCL');
+  });
+
   it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
     const results = formatDocument(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'B',
+      servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
@@ -659,7 +637,7 @@ describe('formatDocument', () => {
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
-      servedPartiesCode: 'R',
+      servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
     });
   });
 });

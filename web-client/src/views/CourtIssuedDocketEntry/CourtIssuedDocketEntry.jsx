@@ -76,16 +76,6 @@ export const CourtIssuedDocketEntry = connect(
                   <span className="text-bold">Docket entry preview: </span>
                   {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
-
-                <Button
-                  className="margin-right-0"
-                  id="serve-to-parties-btn"
-                  onClick={() => {
-                    openConfirmInitiateServiceModalSequence();
-                  }}
-                >
-                  Save and Serve
-                </Button>
               </div>
             </div>
           </div>
@@ -215,9 +205,19 @@ export const CourtIssuedDocketEntry = connect(
 
               <section className="usa-section DocumentDetail">
                 <div className="margin-top-5">
+                  {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
+                    <Button
+                      id="serve-to-parties-btn"
+                      onClick={() => {
+                        openConfirmInitiateServiceModalSequence();
+                      }}
+                    >
+                      Save and Serve
+                    </Button>
+                  )}
                   <Button
                     secondary
-                    id="save-and-add-supporting"
+                    id="save-entry-button"
                     onClick={() => submitCourtIssuedDocketEntrySequence()}
                   >
                     Save Entry

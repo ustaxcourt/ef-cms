@@ -7,6 +7,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -28,7 +29,7 @@ describe('serveCaseToIrsInteractor', () => {
       completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       createdAt: '2018-12-27T18:06:02.971Z',
       docketNumber: '101-18',
-      docketNumberSuffix: 'S',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       document: {
         createdAt: '2018-12-27T18:06:02.968Z',
         documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',

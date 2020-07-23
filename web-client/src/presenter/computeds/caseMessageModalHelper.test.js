@@ -19,14 +19,28 @@ describe('caseMessageModalHelper', () => {
 
     caseDetail = {
       ...MOCK_CASE,
+      correspondence: [
+        {
+          documentId: '986',
+          documentTitle: 'Test Correspondence',
+        },
+      ],
       docketRecord: [
         { documentId: '123', index: 1 },
         { documentId: '234', index: 2 },
         { index: 3 }, // note: no document
       ],
       documents: [
-        { documentId: '123', documentType: 'Petition' },
-        { documentId: '234', documentTitle: 'Some Document' },
+        {
+          documentId: '123',
+          documentType: 'Petition',
+          isFileAttached: true,
+        },
+        {
+          documentId: '234',
+          documentTitle: 'Some Document',
+          isFileAttached: true,
+        },
         { documentId: '345', documentType: 'Order' },
       ],
     };
@@ -52,6 +66,24 @@ describe('caseMessageModalHelper', () => {
     expect(result.documents.length).toEqual(2);
   });
 
+  it('returns correspondence from formattedCaseDetail', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.correspondence).toMatchObject([
+      { documentId: '986', documentTitle: 'Test Correspondence' },
+    ]);
+  });
+
   it('returns draftDocuments from formattedCaseDetail', () => {
     const result = runCompute(caseMessageModalHelper, {
       state: {
@@ -66,6 +98,124 @@ describe('caseMessageModalHelper', () => {
     });
 
     expect(result.draftDocuments).toMatchObject([{ documentId: '345' }]);
+  });
+
+  it('returns hasCorrespondence true when there are correspondence documents on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [{ documentId: '123' }],
+          documents: [],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasCorrespondence).toEqual(true);
+  });
+
+  it('returns hasCorrespondence false when there are NO correspondence documents on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [],
+          documents: [],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasDocuments).toEqual(false);
+  });
+
+  it('returns hasDocuments true when there are documents with files attached on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [{ documentId: '123', index: 1 }],
+          documents: [{ documentId: '123', isFileAttached: true }],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasDocuments).toEqual(true);
+  });
+
+  it('returns hasDocuments false when there are NO documents on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasCorrespondence).toEqual(false);
+  });
+
+  it('returns hasDraftDocuments true when there are draft documents on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [{ documentId: '123', documentType: 'Order' }],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasDraftDocuments).toEqual(true);
+  });
+
+  it('returns hasDraftDocuments false when there are NO draft documents on the case', () => {
+    const result = runCompute(caseMessageModalHelper, {
+      state: {
+        caseDetail: {
+          correspondence: [{ documentId: '234' }],
+          docketRecord: [{ documentId: '123', index: 1 }],
+          documents: [{ documentId: '123', documentType: 'Order' }],
+        },
+        modal: {
+          form: {},
+        },
+        screenMetadata: {
+          showAddDocumentForm: true,
+        },
+      },
+    });
+
+    expect(result.hasDraftDocuments).toEqual(false);
   });
 
   it('returns showAddDocumentForm true when the current attachment count is zero', () => {

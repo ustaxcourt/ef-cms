@@ -1,3 +1,6 @@
+const {
+  CASE_STATUS_TYPES,
+} = require('../../shared/src/business/entities/EntityConstants');
 const { forAllRecords } = require('./utilities');
 const { up } = require('./00008-case-message-completed');
 
@@ -12,7 +15,7 @@ describe('case message isCompleted migration', () => {
   beforeEach(() => {
     mockCaseMessageItem = {
       caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-      caseStatus: 'New',
+      caseStatus: CASE_STATUS_TYPES.new,
       caseTitle: 'Test Petitioner',
       createdAt: '2019-01-01T17:29:13.122Z',
       docketNumber: '123-45',

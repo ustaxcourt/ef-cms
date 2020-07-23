@@ -20,16 +20,37 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
     );
 
     expect(draftOrderDocument).toBeTruthy();
+    expect(draftOrderDocument.numberOfPages).toEqual(1);
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketNumber: test.docketNumber,
       documentId: draftOrderDocument.documentId,
     });
 
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'eventCode',
+      value: 'USCA',
+    });
+
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'documentType',
+      value: 'U.S.C.A',
+    });
+
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'scenario',
+      value: 'Type A',
+    });
+
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'documentTitle',
+      value: 'U.S.C.A created by a test',
+    });
+
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('alertSuccess').message).toEqual(
-      'Entry added to Docket Record.',
+      'Your entry has been added to docket record.',
     );
 
     await test.runSequence('gotoCaseDetailSequence', {
@@ -46,7 +67,15 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
     const newDocketEntry = caseDetailFormatted.docketRecord.find(
       entry => entry.documentId === documentId,
     );
+    const numberOfPagesIncludingCoversheet =
+      draftOrderDocument.numberOfPages + 1;
+    const updatedDocument = caseDetailFormatted.documents.find(
+      doc => doc.documentId === documentId,
+    );
 
     expect(newDocketEntry).toBeTruthy();
+    expect(updatedDocument.numberOfPages).toEqual(
+      numberOfPagesIncludingCoversheet,
+    );
   });
 };

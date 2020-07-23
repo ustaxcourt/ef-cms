@@ -4,6 +4,7 @@ const {
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('./generateNoticeOfTrialIssuedInteractor');
+const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
           return {
             caseCaption: 'Test Case Caption',
             docketNumber: '234-56',
-            docketNumberSuffix: 'S',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
             docketNumberWithSuffix: '234-56S',
           };
         }

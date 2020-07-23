@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkAddsDocketEntryFromOrderWithDate } from './journey/docketClerkAddsDocketEntryFromOrderWithDate';
@@ -20,6 +21,7 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDocketEntry';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
+const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 const test = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => Promise.resolve(null),
@@ -89,7 +91,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, {
-    docketNumberSuffix: 'L',
+    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });
 });

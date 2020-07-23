@@ -37,7 +37,8 @@ export const workQueueHelper = (get, applicationContext) => {
   const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
-  const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
+  const showStartPetitionButton =
+    permissions.START_PAPER_CASE && isDisplayingQC;
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
@@ -94,7 +95,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showSendToBar: selectedWorkItems.length > 0,
     showSentColumn: !isDisplayingQC,
     showServedColumn: userIsPetitionsClerk && isDisplayingQC,
-    showStartCaseButton,
+    showStartPetitionButton,
     workQueueIsInternal,
     workQueueTitle,
     workQueueType,

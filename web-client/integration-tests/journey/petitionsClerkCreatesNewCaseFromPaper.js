@@ -1,3 +1,4 @@
+import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
@@ -90,7 +91,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'caseType',
-      value: 'Deficiency',
+      value: CASE_TYPES_MAP.deficiency,
     },
     {
       key: 'partyType',

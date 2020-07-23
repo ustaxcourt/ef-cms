@@ -8,6 +8,7 @@ import classNames from 'classnames';
 
 export const InclusionsForm = connect(
   {
+    DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -20,6 +21,7 @@ export const InclusionsForm = connect(
   },
   function InclusionsForm({
     data,
+    DOCUMENT_RELATIONSHIPS,
     fileDocumentHelper,
     openCleanModalSequence,
     type,
@@ -62,7 +64,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-attachments`}
                 name={`${
-                  type === 'primaryDocument'
+                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'attachments'
                     : `${type}.attachments`
                 }`}
@@ -89,7 +91,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-certificateOfService`}
                 name={`${
-                  type === 'primaryDocument'
+                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'certificateOfService'
                     : `${type}.certificateOfService`
                 }`}
@@ -120,17 +122,17 @@ export const InclusionsForm = connect(
             label="Service date"
             names={{
               day: `${
-                type === 'primaryDocument'
+                type === DOCUMENT_RELATIONSHIPS.PRIMARY
                   ? 'certificateOfServiceDay'
                   : `${type}.certificateOfServiceDay`
               }`,
               month: `${
-                type === 'primaryDocument'
+                type === DOCUMENT_RELATIONSHIPS.PRIMARY
                   ? 'certificateOfServiceMonth'
                   : `${type}.certificateOfServiceMonth`
               }`,
               year: `${
-                type === 'primaryDocument'
+                type === DOCUMENT_RELATIONSHIPS.PRIMARY
                   ? 'certificateOfServiceYear'
                   : `${type}.certificateOfServiceYear`
               }`,

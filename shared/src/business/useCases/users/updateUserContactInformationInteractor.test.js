@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  fakeData,
 } = require('../../test/createTestApplicationContext');
 const {
   calculateISODate,
@@ -14,33 +15,30 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
-let user;
-let mockCase;
-
-const contactInfo = {
-  address1: '234 Main St',
-  address2: 'Apartment 4',
-  address3: 'Under the stairs',
-  city: 'Chicago',
-  country: 'Brazil',
-  countryType: COUNTRY_TYPES.INTERNATIONAL,
-  phone: '+1 (555) 555-5555',
-  postalCode: '61234',
-  state: 'IL',
-};
-
-const mockChromiumBrowser = {
-  close: () => null,
-  newPage: () => ({
-    pdf: () => fakeData,
-    setContent: () => null,
-  }),
-};
-
 describe('updateUserContactInformationInteractor', () => {
+  let user;
+  let mockCase;
+
+  const contactInfo = {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: 'Brazil',
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  };
+
+  const mockChromiumBrowser = {
+    close: () => null,
+    newPage: () => ({
+      pdf: () => fakeData,
+      setContent: () => null,
+    }),
+  };
+
   beforeEach(() => {
     user = MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
 
