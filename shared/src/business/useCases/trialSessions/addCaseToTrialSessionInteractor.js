@@ -55,7 +55,7 @@ exports.addCaseToTrialSessionInteractor = async ({
   }
 
   trialSessionEntity
-    .deleteCaseFromCalendar({ caseId: caseEntity.caseId }) // we delete because it might have been manually removed
+    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar(caseEntity);
 
   caseEntity.setAsCalendared(trialSessionEntity);
