@@ -1,10 +1,5 @@
 const joi = require('@hapi/joi');
 const {
-  DOCKET_NUMBER_MATCHER,
-  SESSION_TERMS,
-  SESSION_TYPES,
-} = require('../EntityConstants');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -12,6 +7,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
+const { SESSION_TERMS, SESSION_TYPES } = require('../EntityConstants');
 
 TrialSession.validationName = 'TrialSession';
 
@@ -35,7 +31,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.address2 = rawSession.address2;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
     disposition: caseOrder.disposition,
-    // caseId: caseOrder.caseId,
     docketNumber: caseOrder.docketNumber,
     isManuallyAdded: caseOrder.isManuallyAdded,
     removedFromTrial: caseOrder.removedFromTrial,
@@ -148,12 +143,9 @@ joiValidationDecorator(
           otherwise: joi.optional().allow(null),
           then: joi.required(),
         }),
-        // caseId: JoiValidationConstants.UUID,
-        docketNumber: joi
-          .string()
-          .regex(DOCKET_NUMBER_MATCHER)
-          .required()
-          .description('FIXME'),
+        docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+          'Docket number of the case.',
+        ),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
