@@ -20,7 +20,7 @@ exports.getCalendaredCasesForTrialSession = async ({
       ...caseOrder[i],
       ...(await getCaseByCaseId({
         applicationContext,
-        caseId: caseOrder[i].caseId,
+        docketNumber: caseOrder[i].docketNumber,
       })),
     };
   }
