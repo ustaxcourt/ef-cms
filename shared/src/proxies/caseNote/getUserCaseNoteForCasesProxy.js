@@ -10,7 +10,7 @@ const { get } = require('../requests');
  */
 exports.getUserCaseNoteForCasesInteractor = ({
   applicationContext,
-  caseIds,
+  docketNumbers,
 }) => {
   return get({
     applicationContext,
