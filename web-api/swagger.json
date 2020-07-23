@@ -4832,10 +4832,10 @@
         }
       }
     },
-    "/case-deadlines/{caseId}": {
+    "/case-deadlines/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4903,10 +4903,10 @@
         }
       }
     },
-    "/case-deadlines/{caseId}/{caseDeadlineId}": {
+    "/case-deadlines/{docketNumber}/{caseDeadlineId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

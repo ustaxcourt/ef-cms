@@ -15,13 +15,13 @@ export const deleteCaseDeadlineAction = async ({
   get,
   path,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const caseDeadlineId = get(state.form.caseDeadlineId);
 
   await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
     applicationContext,
     caseDeadlineId,
-    caseId,
+    docketNumber,
   });
 
   return path.success({

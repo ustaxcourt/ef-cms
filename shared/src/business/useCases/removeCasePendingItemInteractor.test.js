@@ -58,7 +58,7 @@ describe('removeCasePendingItemInteractor', () => {
   it('should call updateCase with automaticBlocked=false if there are no deadlines or pending items remaining on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     await removeCasePendingItemInteractor({
       applicationContext,
@@ -79,7 +79,9 @@ describe('removeCasePendingItemInteractor', () => {
   it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
 
     await removeCasePendingItemInteractor({
       applicationContext,

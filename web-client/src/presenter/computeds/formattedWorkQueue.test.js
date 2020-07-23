@@ -860,7 +860,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual(documentViewLink);
     });
 
-    it('should return /complete if document is in progress and user is docketclerk', () => {
+    it('should return /complete if work item is in progress and user is docketclerk', () => {
       const { permissions } = getBaseState(docketClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -881,6 +881,7 @@ describe('formatted work queue computed', () => {
             relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Standard',
           },
+          inProgress: true,
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],

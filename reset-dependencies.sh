@@ -16,12 +16,7 @@ npx jest --clearCache
 # if *not* CLEAN_ONLY, do this
 if [ -z "$CLEAN_ONLY" ]; then
   # removes all modules, reinstalls
-  rm -rf \
-    node_modules \
-    package-lock.json
-
-  npm i
+  rm -rf node_modules
   npm update
-  npx npm-force-resolutions
   npm i
 fi
