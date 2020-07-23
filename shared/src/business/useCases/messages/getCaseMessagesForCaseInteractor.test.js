@@ -24,7 +24,6 @@ describe('getCaseMessagesForCaseInteractor', () => {
   it('retrieves the case messages from persistence and returns them', async () => {
     const mockCaseMessage = {
       attachments: [],
-      caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       createdAt: '2019-03-01T21:40:46.415Z',
@@ -49,15 +48,15 @@ describe('getCaseMessagesForCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseMessagesByCaseId.mockReturnValue([mockCaseMessage]);
+      .getCaseMessagesByDocketNumber.mockReturnValue([mockCaseMessage]);
 
     const returnedMessage = await getCaseMessagesForCaseInteractor({
       applicationContext,
-      messageId: mockCaseMessage.messageId,
+      docketNumber: mockCaseMessage.docketNumber,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseMessagesByCaseId,
+      applicationContext.getPersistenceGateway().getCaseMessagesByDocketNumber,
     ).toBeCalled();
     expect(returnedMessage).toMatchObject([mockCaseMessage]);
   });

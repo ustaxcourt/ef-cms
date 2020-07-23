@@ -6,7 +6,7 @@ const { post } = require('../requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {array} providers.attachments array attachments on the message
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @param {string} providers.subject the message subject
@@ -17,7 +17,7 @@ const { post } = require('../requests');
 exports.replyToCaseMessageInteractor = ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   parentMessageId,
   subject,
@@ -28,7 +28,7 @@ exports.replyToCaseMessageInteractor = ({
     applicationContext,
     body: {
       attachments,
-      caseId,
+      docketNumber,
       message,
       subject,
       toSection,
