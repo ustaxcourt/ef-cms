@@ -73,6 +73,7 @@ module.exports = [
   },
 
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing',
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [

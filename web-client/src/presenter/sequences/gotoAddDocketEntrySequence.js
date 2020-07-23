@@ -7,6 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setIsPaperFilingAction } from '../actions/setIsPaperFilingAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
@@ -20,6 +21,7 @@ export const gotoAddDocketEntry = [
   getCaseAction,
   setCaseAction,
   resetAddDocketEntryAction,
+  setIsPaperFilingAction,
   setCurrentPageAction('AddDocketEntry'),
 ];
 

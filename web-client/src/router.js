@@ -658,6 +658,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-paper-filing',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        return app.getSequence('gotoAddDocketEntrySequence')({
+          docketNumber,
+          isPaperFiling: true,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry',
       ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
