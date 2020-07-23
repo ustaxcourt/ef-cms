@@ -17,8 +17,11 @@ const getPreviousTerm = (currentTerm, currentYear) => {
   const termsReversed = terms.reverse();
   const termI = terms.findIndex(t => `${currentTerm} ${currentYear}` === t);
   const [term, year] = termsReversed[termI + 1].split(' ');
+
+  const termDisplay = `${capitalize(term)} ${year}`;
   return {
     term,
+    termDisplay,
     year,
   };
 };
