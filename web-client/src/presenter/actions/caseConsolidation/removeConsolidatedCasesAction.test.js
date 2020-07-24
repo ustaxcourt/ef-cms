@@ -8,13 +8,13 @@ describe('removeConsolidatedCasesAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should call remove consolidated cases interactor with the caseId and case IDs to remove', async () => {
+  it('should call remove consolidated cases interactor with the docketNumber and case IDs to remove', async () => {
     await runAction(removeConsolidatedCasesAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: { caseId: 'abc123-abc123abc123-abc123abc123-abc123abc123' },
+        caseDetail: { docketNumber: '101-20' },
         modal: { casesToRemove: { abc: true, def: false } },
       },
     });
@@ -23,8 +23,8 @@ describe('removeConsolidatedCasesAction', () => {
       applicationContext.getUseCases().removeConsolidatedCasesInteractor,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
-      caseId: 'abc123-abc123abc123-abc123abc123-abc123abc123',
       caseIdsToRemove: ['abc'],
+      docketNumber: '101-20',
     });
   });
 });

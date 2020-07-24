@@ -541,7 +541,7 @@ app.put(
   lambdaWrapper(addConsolidatedCaseLambda),
 );
 app.delete(
-  '/case-meta/:caseId/consolidate-case',
+  '/case-meta/:docketNumber/consolidate-case',
   lambdaWrapper(removeConsolidatedCasesLambda),
 );
 app.put(
