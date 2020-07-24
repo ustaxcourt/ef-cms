@@ -5964,10 +5964,10 @@
         }
       }
     },
-    "/messages/case/{caseId}": {
+    "/messages/case/{docketNumber}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

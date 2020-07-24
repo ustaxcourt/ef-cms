@@ -684,7 +684,10 @@ app.get(
   '/messages/:parentMessageId',
   lambdaWrapper(getCaseMessageThreadLambda),
 );
-app.get('/messages/case/:caseId', lambdaWrapper(getCaseMessagesForCaseLambda));
+app.get(
+  '/messages/case/:docketNumber',
+  lambdaWrapper(getCaseMessagesForCaseLambda),
+);
 app.get(
   '/messages/inbox/section/:section',
   lambdaWrapper(getInboxCaseMessagesForSectionLambda),

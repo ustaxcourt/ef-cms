@@ -13,13 +13,13 @@ export const getCaseMessagesForCaseAction = async ({
   get,
   store,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const messages = await applicationContext
     .getUseCases()
     .getCaseMessagesForCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   store.set(state.caseDetail.messages, messages);
