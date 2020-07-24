@@ -69,21 +69,29 @@ describe('replace caseId with docketNumber for each item in trialSession.caseOrd
     expect(putStub).not.toBeCalled();
   });
 
-  it('does not modify trialSession.caseOrder items when they already have a docketNumber', async () => {
+  it('does not modify trialSession.caseOrder items that already have a docketNumber', async () => {
+    const anotherDocketNumber = '123-45';
     mockItems = [
       {
         caseId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-        caseOrder: [{ docketNumber: '123-45' }],
+        caseOrder: [{ docketNumber: anotherDocketNumber }],
         maxCases: 5,
         pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+        sessionType: 'Regular',
         sk: 'message|5a79c990-cc6c-4b99-8fca-8e31f2d9e78a',
+        startDate: '3000-03-03',
+        term: 'Spring',
+        termYear: '3000',
+        trialLocation: 'Under the Sea',
         trialSessionId: '3079c990-cc6c-4b99-8fca-8e31f2d9e7a9',
       },
     ];
 
     await up(documentClient, '', forAllRecords);
 
-    expect(putStub).not.toBeCalled();
+    expect(putStub.mock.calls[0][0]['Item'].caseOrder[0].docketNumber).toEqual(
+      anotherDocketNumber,
+    );
   });
 
   it('adds docketNumber to trialSession.caseOrder items when they do not already have one', async () => {
