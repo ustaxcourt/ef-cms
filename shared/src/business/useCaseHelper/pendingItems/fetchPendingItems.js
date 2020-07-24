@@ -1,5 +1,6 @@
 const { Case } = require('../../entities/cases/Case');
-const { pick } = require('lodash');
+const { Document } = require('../../entities/Document');
+const { omit, pick } = require('lodash');
 
 /**
  * fetchPendingItems
@@ -44,31 +45,28 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
   const foundDocuments = [];
 
   foundCases.forEach(foundCase => {
-    const caseDocuments = foundCase.documents || [];
+    const foundCaseEntity = new Case(foundCase, {
+      applicationContext,
+    });
 
-    caseDocuments.forEach(document => {
+    foundCaseEntity.documents.forEach(document => {
       if (document.pending) {
-        const pendingDocumentInfo = {
-          associatedJudge: foundCase.associatedJudge,
-          caseCaption: foundCase.caseCaption,
-          caseId: foundCase.caseId,
-          caseTitle: Case.getCaseTitle(foundCase.caseCaption),
-          createdAt: document.createdAt,
-          docketNumber: foundCase.docketNumber,
-          docketNumberSuffix: foundCase.docketNumberSuffix,
-          documentId: document.documentId,
-          documentTitle: document.documentTitle,
-          documentType: document.documentType,
-          eventCode: document.eventCode,
-          pending: document.pending,
-          processingStatus: document.processingStatus,
-          receivedAt: document.receivedAt,
-          status: foundCase.status,
-          userId: document.userId,
-          workItems: document.workItems,
-        };
-
-        foundDocuments.push(pendingDocumentInfo);
+        foundDocuments.push({
+          ...omit(
+            new Document(
+              {
+                ...document,
+              },
+              { applicationContext },
+            ).toRawObject(),
+            'entityName',
+          ),
+          associatedJudge: foundCaseEntity.associatedJudge,
+          caseCaption: foundCaseEntity.caseCaption,
+          docketNumber: foundCaseEntity.docketNumber,
+          docketNumberSuffix: foundCaseEntity.docketNumberSuffix,
+          status: foundCaseEntity.status,
+        });
       }
     });
   });
