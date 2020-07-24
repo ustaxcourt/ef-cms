@@ -338,7 +338,7 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          caseOrder: [{ caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039' }],
+          caseOrder: [{ docketNumber: '123-45' }],
           isCalendared: true,
         },
       },
@@ -353,7 +353,7 @@ describe('formattedTrialSessionDetails', () => {
           ...TRIAL_SESSION,
           caseOrder: [
             {
-              caseId: 'eaff20df-d86e-48ab-adc2-831b6ad7e039',
+              docketNumber: '123-45',
               removedFromTrial: true,
             },
           ],

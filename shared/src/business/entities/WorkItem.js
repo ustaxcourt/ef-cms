@@ -1,7 +1,6 @@
 const joi = require('@hapi/joi');
 const {
   CASE_STATUS_TYPES,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
 } = require('./EntityConstants');
 const {
@@ -85,11 +84,9 @@ joiValidationDecorator(
     completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
     completedMessage: joi.string().max(100).optional().allow(null),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    docketNumber: joi
-      .string()
-      .regex(DOCKET_NUMBER_MATCHER)
-      .required()
-      .description('Unique case identifier in XXXXX-YY format.'),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+      'Unique case identifier in XXXXX-YY format.',
+    ),
     docketNumberSuffix: joi
       .string()
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))

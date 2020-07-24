@@ -128,9 +128,9 @@ exports.updateTrialSessionInteractor = async ({
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
-        .getCaseByCaseId({
+        .getCaseByDocketNumber({
           applicationContext,
-          caseId: calendaredCase.caseId,
+          docketNumber: calendaredCase.docketNumber,
         });
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });

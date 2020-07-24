@@ -64,7 +64,10 @@ exports.updateCaseContextInteractor = async ({
         applicationContext,
       });
 
-      trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+      trialSessionEntity.removeCaseFromCalendar({
+        disposition,
+        docketNumber: oldCase.docketNumber,
+      });
 
       await applicationContext.getPersistenceGateway().updateTrialSession({
         applicationContext,

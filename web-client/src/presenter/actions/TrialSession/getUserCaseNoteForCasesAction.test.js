@@ -30,7 +30,7 @@ describe('getUserCaseNoteForCasesAction', () => {
       },
       props: {
         trialSession: {
-          caseOrder: [{ caseId: 'case-id-123' }, { caseId: 'case-id-234' }],
+          caseOrder: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
         },
       },
     });
@@ -40,7 +40,7 @@ describe('getUserCaseNoteForCasesAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().getUserCaseNoteForCasesInteractor.mock
-        .calls[0][0].caseIds,
-    ).toEqual(['case-id-123', 'case-id-234']);
+        .calls[0][0].docketNumbers,
+    ).toEqual(['123-45', '678-90']);
   });
 });

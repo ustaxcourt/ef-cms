@@ -4389,7 +4389,7 @@
         }
       }
     },
-    "/trial-sessions/{trialSessionId}/remove-case/{caseId}": {
+    "/trial-sessions/{trialSessionId}/remove-case/{docketNumber}": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -4398,7 +4398,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
