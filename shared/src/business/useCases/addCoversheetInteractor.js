@@ -174,21 +174,21 @@ exports.addCoverToPdf = async ({
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.documentId the document id
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
   replaceCoversheet = false,
   useInitialData = false,
 }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseRecord, { applicationContext });
@@ -225,7 +225,7 @@ exports.addCoversheetInteractor = async ({
 
   await applicationContext.getPersistenceGateway().updateDocument({
     applicationContext,
-    caseId,
+    caseId: caseEntity.caseId,
     document: documentEntity.validate().toRawObject(),
     documentId,
   });
@@ -235,7 +235,7 @@ exports.addCoversheetInteractor = async ({
 
     await applicationContext.getPersistenceGateway().updateDocketRecord({
       applicationContext,
-      caseId,
+      caseId: caseEntity.caseId,
       docketRecord: docketRecordEntity.validate().toRawObject(),
       docketRecordId: docketRecordEntity.docketRecordId,
     });
