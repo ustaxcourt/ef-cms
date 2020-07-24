@@ -12,7 +12,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
 }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
@@ -21,7 +21,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
       .getUseCases()
       .submitCaseAssociationRequestInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
       });
   }
 };

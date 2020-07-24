@@ -55,7 +55,7 @@ describe('associateIrsPractitionerToCase', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(caseRecord);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
@@ -71,7 +71,7 @@ describe('associateIrsPractitionerToCase', () => {
 
     await associateIrsPractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user,
     });
@@ -97,7 +97,7 @@ describe('associateIrsPractitionerToCase', () => {
 
     await associateIrsPractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user,
     });
