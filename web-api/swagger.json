@@ -2869,10 +2869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve": {
+    "/case-documents/{docketNumber}/{documentId}/serve": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

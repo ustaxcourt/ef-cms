@@ -436,7 +436,7 @@ app.post(
   lambdaWrapper(saveSignedDocumentLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/serve',
+  '/case-documents/:docketNumber/:documentId/serve',
   lambdaWrapper(serveExternallyFiledDocumentLambda),
 );
 app.get(
