@@ -12,6 +12,6 @@ exports.unblockCaseFromTrialLambda = event =>
       .getUseCases()
       .unblockCaseFromTrialInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
       });
   });

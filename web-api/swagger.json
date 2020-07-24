@@ -6753,5 +6753,57 @@
       },
       "description": "a case deadline"
     }
+  },
+  "/case-meta/{docketNumber}/update-case-trial-sort-tags": {
+    "parameters": [
+      {
+        "name": "docketNumber",
+        "in": "path",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "put": {
+      "tags": ["cases"],
+      "summary": "Updates the trial sort tags on case",
+      "description": "Updates the trial sort tags on case.\n",
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "200 response",
+          "schema": {
+            "$ref": "#/definitions/case"
+          }
+        }
+      },
+      "security": [
+        {
+          "CognitoUserPool": []
+        }
+      ]
+    },
+    "options": {
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "200 response",
+          "headers": {
+            "Access-Control-Allow-Origin": {
+              "type": "string"
+            },
+            "Access-Control-Allow-Methods": {
+              "type": "string"
+            },
+            "Access-Control-Allow-Credentials": {
+              "type": "string"
+            },
+            "Access-Control-Allow-Headers": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
   }
 }
