@@ -905,7 +905,7 @@ header.usa-header {
     background-color: $color-white;
     color: color($theme-color-primary);
     &:hover {
-      color: color($theme-color-primary-dark);
+      color: color($theme-color-primary);
     }
   }
   .usa-tag {
@@ -926,6 +926,19 @@ header.usa-header {
   #case-title {
     span {
       margin-right: 15px;
+    }
+  }
+  #link-new-tab > * {
+    height: 40px;
+    margin-top: 5px;
+    color: color($theme-color-primary);
+
+    &.usa-button--unstyled {
+      padding-left: 20px;
+    }
+
+    &:hover {
+      color: color($theme-color-primary);
     }
   }
 }
