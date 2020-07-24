@@ -13,7 +13,7 @@ export const completeDocumentSigningAction = async ({
   get,
 }) => {
   const originalDocumentId = get(state.pdfForSigning.documentId);
-  const caseId = get(state.caseDetail.caseId);
+  const { caseId, docketNumber } = get(state.caseDetail);
   let documentIdToReturn = originalDocumentId;
 
   if (get(state.pdfForSigning.signatureData.x)) {
@@ -59,7 +59,7 @@ export const completeDocumentSigningAction = async ({
 
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       nameForSigning,
       originalDocumentId,
       signedDocumentId,

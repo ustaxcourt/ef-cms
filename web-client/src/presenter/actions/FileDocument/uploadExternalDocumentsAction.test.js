@@ -60,7 +60,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
     expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
@@ -117,7 +117,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
     expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
   });
