@@ -133,7 +133,7 @@ jobs:
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    resource_class: medium
+    resource_class: medium+
     parallelism: 5
     steps:
       - restore_cache:
@@ -270,7 +270,7 @@ jobs:
           discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: medium+
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -322,7 +322,7 @@ jobs:
           discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: medium+
     steps:
       - restore_cache:
           name: Source - Restoring Cache
