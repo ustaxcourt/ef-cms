@@ -63,6 +63,9 @@ const {
 const {
   PrivatePractitioner,
 } = require('../business/entities/PrivatePractitioner');
+const {
+  TrialSession,
+} = require('../business/entities/trialSessions/TrialSession');
 const { Batch } = require('../business/entities/Batch');
 const { Case } = require('../business/entities/cases/Case');
 const { CaseDeadline } = require('../business/entities/CaseDeadline');
@@ -402,3 +405,4 @@ generateMarkdownSchema(User, 'User');
 generateMarkdownSchema(UserCase, 'UserCase');
 generateMarkdownSchema(UserCaseNote, 'UserCaseNote');
 generateMarkdownSchema(WorkItem, 'WorkItem');
+generateMarkdownSchema(TrialSession, 'TrialSession');
