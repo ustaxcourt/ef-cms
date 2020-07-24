@@ -452,7 +452,7 @@ app.delete(
   lambdaWrapper(archiveDraftDocumentLambda),
 );
 app.put(
-  '/case-documents/:caseId/court-issued-orders/:documentId',
+  '/case-documents/:docketNumber/court-issued-orders/:documentId',
   lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
 );
 app.post(
