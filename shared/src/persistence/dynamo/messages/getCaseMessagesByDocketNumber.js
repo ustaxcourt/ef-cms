@@ -1,14 +1,25 @@
+const {
+  getCaseIdFromDocketNumber,
+} = require('../cases/getCaseIdFromDocketNumber');
 const { query } = require('../../dynamodbClientService');
 
 /**
- * getCaseMessagesByCaseId
+ * getCaseMessagesByDocketNumber
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the created case message
  */
-exports.getCaseMessagesByCaseId = async ({ applicationContext, caseId }) => {
+exports.getCaseMessagesByDocketNumber = async ({
+  applicationContext,
+  docketNumber,
+}) => {
+  const caseId = await getCaseIdFromDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
+
   return await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
