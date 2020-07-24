@@ -488,7 +488,7 @@ app.put(
   lambdaWrapper(updateCourtIssuedDocketEntryLambda),
 );
 app.post(
-  '/case-documents/:caseId/court-issued-order',
+  '/case-documents/:docketNumber/court-issued-order',
   lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
 );
 app.get(
