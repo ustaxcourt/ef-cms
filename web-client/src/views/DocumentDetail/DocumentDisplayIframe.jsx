@@ -18,7 +18,7 @@ export const DocumentDisplayIframe = connect(
   }) {
     useEffect(() => {
       openCaseDocumentDownloadUrlSequence({
-        caseId: caseDetail.caseId,
+        docketNumber: caseDetail.docketNumber,
         documentId: documentDetailHelper.formattedDocument.documentId,
         isForIFrame: true,
       });

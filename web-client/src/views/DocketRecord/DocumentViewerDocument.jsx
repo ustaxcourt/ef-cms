@@ -127,7 +127,7 @@ export const DocumentViewerDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: viewerDocumentToDisplay.documentId,
                   })
                 }

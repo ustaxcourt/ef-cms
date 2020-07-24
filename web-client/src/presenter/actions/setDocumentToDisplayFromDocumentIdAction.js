@@ -13,14 +13,14 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
   get,
   store,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.documentId);
 
   const {
     url,
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
-    caseId,
+    docketNumber,
     documentId,
     isPublic: false,
   });
