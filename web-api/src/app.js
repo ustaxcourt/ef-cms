@@ -472,7 +472,7 @@ app.put(
   lambdaWrapper(updateDocketEntryOnCaseLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry-meta',
+  '/case-documents/:docketNumber/docket-entry-meta',
   lambdaWrapper(updateDocketEntryMetaLambda),
 );
 app.put(

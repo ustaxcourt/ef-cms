@@ -1992,10 +1992,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-meta": {
+    "/case-documents/{docketNumber}/docket-entry-meta": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
