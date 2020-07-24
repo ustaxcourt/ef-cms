@@ -6,7 +6,7 @@ const { replyToMessage } = require('./replyToCaseMessageInteractor');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @param {string} providers.subject the message subject
@@ -17,7 +17,7 @@ const { replyToMessage } = require('./replyToCaseMessageInteractor');
 exports.forwardCaseMessageInteractor = async ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   parentMessageId,
   subject,
@@ -27,7 +27,7 @@ exports.forwardCaseMessageInteractor = async ({
   return await replyToMessage({
     applicationContext,
     attachments,
-    caseId,
+    docketNumber,
     message,
     parentMessageId,
     subject,
