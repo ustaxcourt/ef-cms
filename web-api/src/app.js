@@ -533,7 +533,7 @@ app.delete(
   lambdaWrapper(unprioritizeCaseLambda),
 );
 app.put(
-  '/case-meta/:caseId/case-context',
+  '/case-meta/:docketNumber/case-context',
   lambdaWrapper(updateCaseContextLambda),
 );
 app.put(
