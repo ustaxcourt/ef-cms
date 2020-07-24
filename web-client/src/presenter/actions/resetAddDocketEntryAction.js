@@ -8,7 +8,6 @@ import { state } from 'cerebral';
  */
 export const resetAddDocketEntryAction = ({ store }) => {
   store.set(state.isEditingDocketEntry, false);
-  //store.set(state.isPaperFiling, false);
   store.set(state.form.lodged, false);
   store.set(state.form.practitioner, []);
   store.set(state.wizardStep, 'PrimaryDocumentForm');

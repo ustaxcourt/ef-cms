@@ -19,7 +19,6 @@ export const AddDocketEntry = connect(
     fileDocketEntrySequence: sequences.fileDocketEntrySequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isPaperFiling: state.isPaperFiling,
     openConfirmPaperServiceModalSequence:
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
@@ -30,7 +29,6 @@ export const AddDocketEntry = connect(
     form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
-    isPaperFiling,
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     showModal,
@@ -45,12 +43,9 @@ export const AddDocketEntry = connect(
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
-                {isPaperFiling && <span>Add Paper Filing</span>}
-                {!isPaperFiling && (
-                  <span>
-                    {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
-                  </span>
-                )}
+                <span>
+                  {isEditingDocketEntry ? 'Edit' : 'Add'} Paper Filing
+                </span>
               </h1>
             </div>
 
