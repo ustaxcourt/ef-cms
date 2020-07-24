@@ -7,7 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context used for getting loadPDFForSigning
  * @param {Function} providers.props used for getting documentId
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.pdfjsObj
-
  */
 export const loadOriginalProposedStipulatedDecisionAction = async ({
   applicationContext,
@@ -28,7 +27,7 @@ export const loadOriginalProposedStipulatedDecisionAction = async ({
       .getUseCases()
       .loadPDFForSigningInteractor({
         applicationContext,
-        caseId: caseDetail.caseId,
+        docketNumber: caseDetail.docketNumber,
         documentId,
         removeCover: true,
       });

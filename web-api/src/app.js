@@ -420,7 +420,7 @@ app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
  * case-documents
  */
 app.post(
-  '/case-documents/:caseId/:documentId/serve-court-issued',
+  '/case-documents/:docketNumber/:documentId/serve-court-issued',
   lambdaWrapper(serveCourtIssuedDocumentLambda),
 );
 app.post(
@@ -432,27 +432,27 @@ app.post(
   lambdaWrapper(addCoversheetLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/sign',
+  '/case-documents/:docketNumber/:documentId/sign',
   lambdaWrapper(saveSignedDocumentLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/serve',
+  '/case-documents/:docketNumber/:documentId/serve',
   lambdaWrapper(serveExternallyFiledDocumentLambda),
 );
 app.get(
-  '/case-documents/:caseId/:documentId/download-policy-url',
+  '/case-documents/:docketNumber/:documentId/download-policy-url',
   lambdaWrapper(downloadPolicyUrlLambda),
 );
 app.get(
-  '/case-documents/:caseId/:documentId/document-download-url',
+  '/case-documents/:docketNumber/:documentId/document-download-url',
   lambdaWrapper(getDocumentDownloadUrlLambda),
 );
 app.delete(
-  '/case-documents/:caseId/:documentId',
+  '/case-documents/:docketNumber/:documentId',
   lambdaWrapper(archiveDraftDocumentLambda),
 );
 app.put(
-  '/case-documents/:caseId/court-issued-orders/:documentId',
+  '/case-documents/:docketNumber/court-issued-orders/:documentId',
   lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
 );
 app.post(

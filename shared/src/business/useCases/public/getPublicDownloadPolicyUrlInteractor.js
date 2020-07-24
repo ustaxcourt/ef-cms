@@ -7,20 +7,20 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case containing the document
+ * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.documentId the document id
  * @returns {string} the document download url
  */
 exports.getPublicDownloadPolicyUrlInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   const caseToCheck = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToCheck, { applicationContext });

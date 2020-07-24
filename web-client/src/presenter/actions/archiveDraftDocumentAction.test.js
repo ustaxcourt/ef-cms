@@ -20,7 +20,7 @@ describe('archiveDraftDocumentAction', () => {
           documentTitle: 'document-title-123',
         },
         caseDetail: {
-          caseId: 'abc-123ghadsf-zdasdf',
+          docketNumber: '101-20',
         },
       },
     });
@@ -33,7 +33,7 @@ describe('archiveDraftDocumentAction', () => {
     });
   });
 
-  it('archives a drafted document successfully, saves alerts for navigation, and returns caseId if state.archiveDraftDocument.redirectToCaseDetail is true', async () => {
+  it('archives a drafted document successfully, saves alerts for navigation, and returns docketNumber if state.archiveDraftDocument.redirectToCaseDetail is true', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
       modules: {
         presenter,
@@ -46,7 +46,7 @@ describe('archiveDraftDocumentAction', () => {
           redirectToCaseDetail: true,
         },
         caseDetail: {
-          caseId: 'abc-123ghadsf-zdasdf',
+          docketNumber: '101-20',
         },
       },
     });
@@ -58,6 +58,6 @@ describe('archiveDraftDocumentAction', () => {
       message: 'Document deleted.',
     });
     expect(result.state.saveAlertsForNavigation).toEqual(true);
-    expect(result.output.caseId).toEqual('abc-123ghadsf-zdasdf');
+    expect(result.output.docketNumber).toEqual('101-20');
   });
 });

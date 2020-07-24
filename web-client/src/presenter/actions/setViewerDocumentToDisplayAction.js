@@ -15,7 +15,7 @@ export const setViewerDocumentToDisplayAction = async ({
   store,
 }) => {
   const { viewerDocumentToDisplay } = props;
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
@@ -26,7 +26,7 @@ export const setViewerDocumentToDisplayAction = async ({
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         documentId: viewerDocumentToDisplay.documentId,
         isPublic: false,
       });
