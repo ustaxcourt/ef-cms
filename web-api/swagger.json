@@ -4608,10 +4608,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-order": {
+    "/case-documents/{docketNumber}/court-issued-order": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

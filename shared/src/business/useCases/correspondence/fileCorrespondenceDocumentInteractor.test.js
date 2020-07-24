@@ -80,7 +80,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     await expect(
       fileCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '2cb1e611-df1c-4c15-bfc2-491248551672' },
+        documentMetadata: { docketNumber: mockCase.docketNumber },
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -89,17 +89,15 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   it('should throw a Not Found error if the case can not be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
       fileCorrespondenceDocumentInteractor({
         applicationContext,
-        documentMetadata: { caseId: '2cb1e611-df1c-4c15-bfc2-491248551672' },
+        documentMetadata: { docketNumber: mockCase.docketNumber },
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
-    ).rejects.toThrow(
-      'Case 2cb1e611-df1c-4c15-bfc2-491248551672 was not found',
-    );
+    ).rejects.toThrow('Case 123-45 was not found');
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
@@ -109,12 +107,12 @@ describe('fileCorrespondenceDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await fileCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
+        docketNumber: mockCase.docketNumber,
         documentTitle: 'A title',
         filingDate: '2001-02-01',
       },
@@ -124,7 +122,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().fileCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
       correspondence: {
         documentId: '14bb669b-0962-4781-87a0-50718f556e2b',
         documentTitle: 'A title',
@@ -132,18 +129,19 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         filingDate: '2001-02-01',
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
+      docketNumber: mockCase.docketNumber,
     });
   });
 
   it('should return an updated raw case object', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await fileCorrespondenceDocumentInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: '2cb1e611-df1c-4c15-bfc2-491248551672',
+        docketNumber: mockCase.docketNumber,
         documentTitle: 'A title',
         filingDate: '2001-02-01',
       },
