@@ -108,7 +108,7 @@ export const DocketRecordOverlay = connect(
                 className="view-pdf-button tablet-full-width"
                 onClick={() => {
                   openCaseDocumentDownloadUrlSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: document.documentId,
                   });
                 }}

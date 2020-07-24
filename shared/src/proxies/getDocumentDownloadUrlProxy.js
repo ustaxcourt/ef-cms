@@ -5,21 +5,21 @@ const { get } = require('./requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id for the case containing the document
- * @param {string} providers.caseId the document id to retrieve
+ * @param {string} providers.docketNumber the docket number for the case containing the document
+ * @param {string} providers.documentId the document id to retrieve
  * @param {boolean} providers.isPublic whether the url is for the public site or not
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getDocumentDownloadUrlInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
   isPublic,
 }) => {
   return get({
     applicationContext,
     endpoint: isPublic
-      ? `/public-api/${caseId}/${documentId}/public-document-download-url`
-      : `/case-documents/${caseId}/${documentId}/document-download-url`,
+      ? `/public-api/${docketNumber}/${documentId}/public-document-download-url`
+      : `/case-documents/${docketNumber}/${documentId}/document-download-url`,
   });
 };

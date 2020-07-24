@@ -16,7 +16,7 @@ describe('todaysOpinionsHelper', () => {
       todaysOpinions: [
         {
           caseCaption: 'Sauceboss, Petitioner',
-          caseId: 'case-id-123',
+          docketNumber: '123-20',
           documentId: 'document-id-123',
           documentType: 'MOP - Memorandum Opinion',
           filingDate: '2020-06-11T20:17:10.646Z',
@@ -33,7 +33,7 @@ describe('todaysOpinionsHelper', () => {
       {
         caseCaption: 'Sauceboss, Petitioner',
         documentLink:
-          'https://www.example.com/public-api/case-id-123/document-id-123/public-document-download-url',
+          'https://www.example.com/public-api/123-20/document-id-123/public-document-download-url',
         formattedDocumentType: 'Memorandum Opinion',
         formattedFilingDate: '06/11/20',
         formattedJudgeName: 'Fieri',

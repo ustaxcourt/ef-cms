@@ -40,7 +40,7 @@ export const FilingsAndProceedings = connect(
               )}
               onClick={() =>
                 openCaseDocumentDownloadUrlSequence({
-                  caseId: caseDetail.caseId,
+                  docketNumber: caseDetail.docketNumber,
                   documentId: entry.documentId,
                 })
               }

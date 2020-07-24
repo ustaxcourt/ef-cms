@@ -140,7 +140,7 @@ export const DraftDocumentViewerDocument = connect(
                 iconColor="white"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
-                    caseId: caseDetail.caseId,
+                    docketNumber: caseDetail.docketNumber,
                     documentId: viewerDraftDocumentToDisplay.documentId,
                   })
                 }
