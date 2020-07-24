@@ -13,11 +13,11 @@ describe('unblockCaseFromTrialInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
     const result = await unblockCaseFromTrialInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
 
@@ -41,7 +41,7 @@ describe('unblockCaseFromTrialInteractor', () => {
     await expect(
       unblockCaseFromTrialInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-45',
       }),
     ).rejects.toThrow('Unauthorized');
   });

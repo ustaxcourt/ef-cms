@@ -516,12 +516,15 @@ app.post(
  * case-meta
  */
 app.put(
-  '/case-meta/:caseId/update-case-trial-sort-tags',
+  '/case-meta/:docketNumber/update-case-trial-sort-tags',
   lambdaWrapper(updateCaseTrialSortTagsLambda),
 );
-app.post('/case-meta/:caseId/block', lambdaWrapper(blockCaseFromTrialLambda));
+app.post(
+  '/case-meta/:docketNumber/block',
+  lambdaWrapper(blockCaseFromTrialLambda),
+);
 app.delete(
-  '/case-meta/:caseId/block',
+  '/case-meta/:docketNumber/block',
   lambdaWrapper(unblockCaseFromTrialLambda),
 );
 app.post(
