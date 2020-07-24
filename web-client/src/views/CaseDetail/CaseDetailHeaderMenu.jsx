@@ -148,11 +148,11 @@ export const CaseDetailHeaderMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       link
-                      href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
+                      href={`/case-detail/${caseDetail.docketNumber}/add-paper-filing`}
                       icon="plus-circle"
                       id="menu-button-add-docket-entry"
                     >
-                      Add Docket Entry
+                      Add Paper Filing
                     </Button>
                   </li>
                 )}
