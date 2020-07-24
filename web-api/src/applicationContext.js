@@ -386,11 +386,8 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
-  getCaseMessage,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessage');
-const {
-  getCaseMessagesByCaseId,
-} = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByCaseId');
+  getCaseMessagesByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/messages/getCaseMessagesByDocketNumber');
 const {
   getCaseMessagesForCaseInteractor,
 } = require('../../shared/src/business/useCases/messages/getCaseMessagesForCaseInteractor');
@@ -686,9 +683,6 @@ const {
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
-const {
-  markCaseMessageRepliedTo,
-} = require('../../shared/src/persistence/dynamo/messages/markCaseMessageRepliedTo');
 const {
   markCaseMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markCaseMessageThreadRepliedTo');
@@ -1254,9 +1248,8 @@ module.exports = appContextUser => {
         getCaseByDocketNumber,
         getCaseDeadlinesByDocketNumber,
         getCaseInventoryReport,
-        getCaseMessage,
         getCaseMessageThreadByParentId,
-        getCaseMessagesByCaseId,
+        getCaseMessagesByDocketNumber,
         getCasesByDocketNumbers,
         getCasesByLeadCaseId,
         getCasesByUser,
@@ -1305,7 +1298,6 @@ module.exports = appContextUser => {
         incrementCounter,
         indexRecord,
         isFileExists,
-        markCaseMessageRepliedTo,
         markCaseMessageThreadRepliedTo,
         persistUser,
         putWorkItemInOutbox,
