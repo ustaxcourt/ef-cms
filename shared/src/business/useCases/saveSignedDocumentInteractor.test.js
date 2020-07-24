@@ -24,7 +24,7 @@ describe('saveSignedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     applicationContext.getUniqueId.mockReturnValue(
       mockDocumentIdBeforeSignature,
@@ -34,7 +34,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should save the original, unsigned document to S3 with a new id', async () => {
     await saveSignedDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocumentId: mockOriginalDocumentId,
       signedDocumentId: mockSignedDocumentId,
@@ -52,7 +52,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should replace the original, unsigned document with the signed document', async () => {
     await saveSignedDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocumentId: mockOriginalDocumentId,
       signedDocumentId: mockSignedDocumentId,
@@ -69,8 +69,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should add the signed Stipulated Decision to the case given a Proposed Stipulated Decision', async () => {
     const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       nameForSigning: 'Guy Fieri',
       originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       signedDocumentId: mockSignedDocumentId,
@@ -92,7 +91,7 @@ describe('saveSignedDocumentInteractor', () => {
   it("should set the document's processing status to complete", async () => {
     const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocumentId: mockOriginalDocumentId,
       signedDocumentId: mockSignedDocumentId,
@@ -109,7 +108,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should set the documentIdBeforeSignature', async () => {
     const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocumentId: mockOriginalDocumentId,
       signedDocumentId: mockSignedDocumentId,

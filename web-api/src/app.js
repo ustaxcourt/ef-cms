@@ -432,7 +432,7 @@ app.post(
   lambdaWrapper(addCoversheetLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/sign',
+  '/case-documents/:docketNumber/:documentId/sign',
   lambdaWrapper(saveSignedDocumentLambda),
 );
 app.post(
