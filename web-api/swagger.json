@@ -1869,10 +1869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/external-document": {
+    "/case-documents/{docketNumber}/external-document": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

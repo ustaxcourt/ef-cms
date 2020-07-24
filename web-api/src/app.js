@@ -456,7 +456,7 @@ app.put(
   lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
 );
 app.post(
-  '/case-documents/:caseId/external-document',
+  '/case-documents/:docketNumber/external-document',
   lambdaWrapper(fileExternalDocumentToCaseLambda),
 );
 app.post(
