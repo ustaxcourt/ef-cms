@@ -424,7 +424,7 @@ app.post(
   lambdaWrapper(serveCourtIssuedDocumentLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/work-items',
+  '/case-documents/:docketNumber/:documentId/work-items',
   lambdaWrapper(createWorkItemLambda),
 );
 app.post(

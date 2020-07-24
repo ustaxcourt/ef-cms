@@ -64,9 +64,9 @@ exports.completeWorkItemInteractor = async ({
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: completedWorkItem.caseId,
+      docketNumber: completedWorkItem.docketNumber,
     });
 
   const caseToUpdate = new Case(caseObject, { applicationContext });

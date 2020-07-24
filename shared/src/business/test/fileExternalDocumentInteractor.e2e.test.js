@@ -184,7 +184,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
@@ -234,7 +233,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',
@@ -281,7 +279,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseId,
               caseStatus: CASE_STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19S',

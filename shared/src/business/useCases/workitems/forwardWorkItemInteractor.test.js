@@ -29,7 +29,6 @@ const mockCase = {
         {
           assigneeId: null,
           assigneeName: null,
-          caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
           caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
@@ -67,7 +66,6 @@ const mockCase = {
         {
           assigneeId: null,
           assigneeName: null,
-          caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
           caseStatus: CASE_STATUS_TYPES.new,
           createdAt: '2019-07-12T17:09:41.027Z',
           docketNumber: '106-19',
@@ -109,7 +107,6 @@ const mockCase = {
 
 describe('forwardWorkItemInteractor', () => {
   let mockWorkItem = {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
     docketNumber: '101-18',
     docketNumberWithSuffix: '101-18S',
@@ -138,7 +135,7 @@ describe('forwardWorkItemInteractor', () => {
       .deleteWorkItemFromInbox.mockReturnValue(null);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext.getPersistenceGateway().getUserById = ({ userId }) =>
       MOCK_USERS[userId];
 
@@ -155,7 +152,6 @@ describe('forwardWorkItemInteractor', () => {
     expect(workItem).toMatchObject({
       assigneeId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: undefined,
       caseTitle: undefined,
       completedAt: undefined,
