@@ -428,7 +428,7 @@ app.post(
   lambdaWrapper(createWorkItemLambda),
 );
 app.post(
-  '/case-documents/:caseId/:documentId/coversheet',
+  '/case-documents/:docketNumber/:documentId/coversheet',
   lambdaWrapper(addCoversheetLambda),
 );
 app.post(
