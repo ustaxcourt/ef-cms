@@ -26,7 +26,6 @@ const { PublicDocument } = require('./PublicDocument');
  */
 function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -56,7 +55,6 @@ function PublicCase(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  caseId: JoiValidationConstants.UUID.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
@@ -72,7 +70,6 @@ const publicCaseSchema = {
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: JoiValidationConstants.UUID,
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
