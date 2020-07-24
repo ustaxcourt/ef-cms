@@ -56,7 +56,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButton = hasDocketEntryPermission;
 
-  const showNewTabLink = hasDocketEntryPermission;
+  const showNewTabLink = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const showCaseDetailHeaderMenu = !isExternalUser;
 

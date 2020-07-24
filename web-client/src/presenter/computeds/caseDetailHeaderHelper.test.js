@@ -484,7 +484,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
   });
 
-  it('should set showNewTabLink to true if user role has DOCKET_ENTRY permissions (docketClerk, clerkOfCourt, petitionsClerk) ', () => {
+  it('should set showNewTabLink to true if user is an internal user ', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',
@@ -500,9 +500,9 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showNewTabLink).toBe(true);
   });
 
-  it('should set showNewTabLink to false if user role does not have DOCKET_ENTRY permissions', () => {
+  it('should set showNewTabLink to false if user is an external user', () => {
     const user = {
-      role: ROLES.adc,
+      role: ROLES.petitioner,
       userId: '789',
     };
     const result = runCompute(caseDetailHeaderHelper, {
