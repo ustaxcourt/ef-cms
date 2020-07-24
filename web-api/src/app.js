@@ -420,7 +420,7 @@ app.get('/case-deadlines', lambdaWrapper(getAllCaseDeadlinesLambda));
  * case-documents
  */
 app.post(
-  '/case-documents/:caseId/:documentId/serve-court-issued',
+  '/case-documents/:docketNumber/:documentId/serve-court-issued',
   lambdaWrapper(serveCourtIssuedDocumentLambda),
 );
 app.post(

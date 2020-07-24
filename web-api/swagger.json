@@ -2811,10 +2811,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve-court-issued": {
+    "/case-documents/{docketNumber}/{documentId}/serve-court-issued": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
