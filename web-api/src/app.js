@@ -500,15 +500,15 @@ app.get(
   lambdaWrapper(opinionAdvancedSearchLambda),
 );
 app.put(
-  '/case-documents/:caseId/correspondence/:documentId',
+  '/case-documents/:docketNumber/correspondence/:documentId',
   lambdaWrapper(updateCorrespondenceDocumentLambda),
 );
 app.delete(
-  '/case-documents/:caseId/correspondence/:documentId',
+  '/case-documents/:docketNumber/correspondence/:documentId',
   lambdaWrapper(deleteCorrespondenceDocumentLambda),
 );
 app.post(
-  '/case-documents/:caseId/correspondence',
+  '/case-documents/:docketNumber/correspondence',
   lambdaWrapper(fileCorrespondenceDocumentLambda),
 );
 
