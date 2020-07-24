@@ -38,7 +38,6 @@ describe('updateCase', () => {
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
         workItems: [
           {
-            caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             docketNumber: '56789-18',
             document: { documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859' },
             isInitializeCase: true,
