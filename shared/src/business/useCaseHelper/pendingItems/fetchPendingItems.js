@@ -52,7 +52,7 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
           associatedJudge: foundCase.associatedJudge,
           caseCaption: foundCase.caseCaption,
           caseId: foundCase.caseId,
-          caseTitle: foundCase.caseCaption,
+          caseTitle: Case.getCaseTitle(foundCase.caseCaption),
           createdAt: document.createdAt,
           docketNumber: foundCase.docketNumber,
           docketNumberSuffix: foundCase.docketNumberSuffix,
