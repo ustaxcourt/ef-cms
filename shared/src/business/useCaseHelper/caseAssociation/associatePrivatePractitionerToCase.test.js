@@ -81,7 +81,7 @@ describe('associatePrivatePractitionerToCase', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockResolvedValue(caseRecord);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
@@ -91,7 +91,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
       user: practitionerUser,
@@ -112,7 +112,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
       user: practitionerUser,
@@ -133,7 +133,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: true,
       user: practitionerUser,
@@ -161,7 +161,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      caseId: caseRecord.caseId,
+      docketNumber: caseRecord.docketNumber,
       representingPrimary: false,
       representingSecondary: true,
       user: practitionerUser,

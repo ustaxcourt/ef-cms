@@ -13,18 +13,6 @@
           name: "max"
           args: 
             limit: 4700
-    caseId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "Unique case ID only used by the system."
-      rules: 
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
     docketNumber: 
       type: "string"
       flags: 
