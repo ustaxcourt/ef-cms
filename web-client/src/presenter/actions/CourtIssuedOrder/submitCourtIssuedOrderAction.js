@@ -15,7 +15,7 @@ export const submitCourtIssuedOrderAction = async ({
   props,
 }) => {
   let caseDetail;
-  const { docketNumber } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId: documentId } = props;
   const formData = get(state.form);
   const { documentIdToEdit } = formData;
@@ -27,6 +27,7 @@ export const submitCourtIssuedOrderAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
+    caseId,
     docketNumber,
   };
 
