@@ -456,7 +456,7 @@ app.put(
   lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
 );
 app.post(
-  '/case-documents/:caseId/external-document',
+  '/case-documents/:docketNumber/external-document',
   lambdaWrapper(fileExternalDocumentToCaseLambda),
 );
 app.post(
@@ -472,19 +472,19 @@ app.put(
   lambdaWrapper(updateDocketEntryOnCaseLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry-meta',
+  '/case-documents/:docketNumber/docket-entry-meta',
   lambdaWrapper(updateDocketEntryMetaLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry-complete',
+  '/case-documents/:docketNumber/docket-entry-complete',
   lambdaWrapper(completeDocketEntryQCLambda),
 );
 app.post(
-  '/case-documents/:caseId/court-issued-docket-entry',
+  '/case-documents/:docketNumber/court-issued-docket-entry',
   lambdaWrapper(fileCourtIssuedDocketEntryLambda),
 );
 app.put(
-  '/case-documents/:caseId/court-issued-docket-entry',
+  '/case-documents/:docketNumber/court-issued-docket-entry',
   lambdaWrapper(updateCourtIssuedDocketEntryLambda),
 );
 app.post(
