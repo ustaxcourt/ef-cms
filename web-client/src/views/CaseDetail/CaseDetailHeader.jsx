@@ -159,6 +159,19 @@ export const CaseDetailHeader = connect(
                 caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
                   <CaseDetailHeaderMenu />
                 )}
+              {caseDetailHeaderHelper.showNewTabLink &&
+                caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
+                  <a
+                    aria-label="new-tab"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}`}
+                    icon="file"
+                    id="link-new-tab"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    New Tab
+                  </a>
+                )}
             </div>
           </div>
         </div>

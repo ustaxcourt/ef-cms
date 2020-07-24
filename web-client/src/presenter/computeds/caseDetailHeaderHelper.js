@@ -52,7 +52,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
 
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
+  const hasDocketEntryPermission = permissions.DOCKET_ENTRY;
+
+  const showAddDocketEntryButton = hasDocketEntryPermission;
+
+  const showNewTabLink = hasDocketEntryPermission;
 
   const showCaseDetailHeaderMenu = !isExternalUser;
 
@@ -77,6 +81,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showExternalButtons: isExternalUser && petitionIsServed,
     showFileDocumentButton,
     showFileFirstDocumentButton,
+    showNewTabLink,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,

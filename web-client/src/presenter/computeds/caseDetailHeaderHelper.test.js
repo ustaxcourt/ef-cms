@@ -483,4 +483,36 @@ describe('caseDetailHeaderHelper', () => {
 
     expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
   });
+
+  it('should set showNewTabLink to true if user role has DOCKET_ENTRY permissions (docketClerk, clerkOfCourt, petitionsClerk) ', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showNewTabLink).toBe(true);
+  });
+
+  it('should set showNewTabLink to false if user role does not have DOCKET_ENTRY permissions', () => {
+    const user = {
+      role: ROLES.adc,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { documents: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showNewTabLink).toBe(false);
+  });
 });
