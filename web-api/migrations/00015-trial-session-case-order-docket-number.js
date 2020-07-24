@@ -21,16 +21,16 @@ const mutateRecord = async (item, documentClient, tableName) => {
 
         if (!caseItem.docketNumber) {
           caseItem.docketNumber = caseRecord.Item.docketNumber;
-
-          const trialSessionToUpdate = new TrialSession(item, {
-            applicationContext,
-          })
-            .validate()
-            .toRawObject();
-
-          return { ...item, ...trialSessionToUpdate };
         }
       }
+
+      const trialSessionToUpdate = new TrialSession(item, {
+        applicationContext,
+      })
+        .validate()
+        .toRawObject();
+
+      return { ...item, ...trialSessionToUpdate };
     }
   }
 };
