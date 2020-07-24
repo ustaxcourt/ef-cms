@@ -59,7 +59,7 @@ app.post(
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
 );
 app.get(
-  '/public-api/:caseId/:documentId/public-document-download-url',
+  '/public-api/:docketNumber/:documentId/public-document-download-url',
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 

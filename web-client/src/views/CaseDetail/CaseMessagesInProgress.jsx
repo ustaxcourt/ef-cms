@@ -60,7 +60,7 @@ export const CaseMessagesInProgress = connect(
                     {message.attachments.length > 0 && (
                       <CaseMessagesRowAttachments
                         attachments={message.attachments}
-                        caseId={message.caseId}
+                        docketNumber={message.docketNumber}
                       />
                     )}
                   </td>

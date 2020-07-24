@@ -2283,10 +2283,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/document-download-url": {
+    "/case-documents/{docketNumber}/{documentId}/document-download-url": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2336,10 +2336,10 @@
         }
       }
     },
-    "/public-api/{caseId}/{documentId}/public-document-download-url": {
+    "/public-api/{docketNumber}/{documentId}/public-document-download-url": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2389,7 +2389,7 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/download-policy-url": {
+    "/case-documents/{docketNumber}/{documentId}/download-policy-url": {
       "parameters": [
         {
           "name": "documentId",
@@ -2398,7 +2398,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
