@@ -1532,3 +1532,12 @@ button.change-scanner-button {
 .sealed-in-blackstone {
   color: color($theme-color-secondary-dark);
 }
+
+.quick-view-link {
+  width: 0;
+  height: 0;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-left: 40px solid lightblue;
+  transform: rotate(315deg);
+}

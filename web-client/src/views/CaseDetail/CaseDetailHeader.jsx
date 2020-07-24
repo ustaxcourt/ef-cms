@@ -166,6 +166,7 @@ export const CaseDetailHeader = connect(
                     href={`/case-detail/${formattedCaseDetail.docketNumber}`}
                     icon="file"
                     id="link-new-tab"
+                    className="quick-view-link"
                     rel="noreferrer"
                     target="_blank"
                   >
