@@ -27,19 +27,11 @@ exports.getUserCaseNoteForCasesInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  let caseIds = [];
-  for (let docketNumber of docketNumbers) {
-    const caseId = await applicationContext
-      .getPersistenceGateway()
-      .getCaseIdFromDocketNumber({ applicationContext, docketNumber });
-    caseIds.push(caseId);
-  }
-
   const caseNotes = await applicationContext
     .getPersistenceGateway()
     .getUserCaseNoteForCases({
       applicationContext,
-      caseIds,
+      docketNumbers,
       userId: (judgeUser && judgeUser.userId) || user.userId,
     });
 
