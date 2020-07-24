@@ -448,7 +448,7 @@ app.get(
   lambdaWrapper(getDocumentDownloadUrlLambda),
 );
 app.delete(
-  '/case-documents/:caseId/:documentId',
+  '/case-documents/:docketNumber/:documentId',
   lambdaWrapper(archiveDraftDocumentLambda),
 );
 app.put(
