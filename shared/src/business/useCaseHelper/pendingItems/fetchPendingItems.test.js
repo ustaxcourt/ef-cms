@@ -61,8 +61,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 
@@ -96,8 +96,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 
