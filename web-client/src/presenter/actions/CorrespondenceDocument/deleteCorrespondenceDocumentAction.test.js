@@ -23,7 +23,7 @@ describe('deleteCorrespondenceDocumentAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         modal: {
           correspondenceToDelete: {
@@ -47,7 +47,7 @@ describe('deleteCorrespondenceDocumentAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         modal: {
           correspondenceToDelete: {

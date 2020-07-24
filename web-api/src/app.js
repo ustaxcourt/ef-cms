@@ -488,7 +488,7 @@ app.put(
   lambdaWrapper(updateCourtIssuedDocketEntryLambda),
 );
 app.post(
-  '/case-documents/:caseId/court-issued-order',
+  '/case-documents/:docketNumber/court-issued-order',
   lambdaWrapper(fileCourtIssuedOrderToCaseLambda),
 );
 app.get(
@@ -500,15 +500,15 @@ app.get(
   lambdaWrapper(opinionAdvancedSearchLambda),
 );
 app.put(
-  '/case-documents/:caseId/correspondence/:documentId',
+  '/case-documents/:docketNumber/correspondence/:documentId',
   lambdaWrapper(updateCorrespondenceDocumentLambda),
 );
 app.delete(
-  '/case-documents/:caseId/correspondence/:documentId',
+  '/case-documents/:docketNumber/correspondence/:documentId',
   lambdaWrapper(deleteCorrespondenceDocumentLambda),
 );
 app.post(
-  '/case-documents/:caseId/correspondence',
+  '/case-documents/:docketNumber/correspondence',
   lambdaWrapper(fileCorrespondenceDocumentLambda),
 );
 

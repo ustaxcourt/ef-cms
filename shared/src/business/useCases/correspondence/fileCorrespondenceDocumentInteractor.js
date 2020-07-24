@@ -21,7 +21,7 @@ exports.fileCorrespondenceDocumentInteractor = async ({
   primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
@@ -33,13 +33,13 @@ exports.fileCorrespondenceDocumentInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found`);
+    throw new NotFoundError(`Case ${docketNumber} was not found`);
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -59,8 +59,8 @@ exports.fileCorrespondenceDocumentInteractor = async ({
   if (caseEntity.validate()) {
     await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
       applicationContext,
-      caseId,
       correspondence: correspondenceEntity.validate().toRawObject(),
+      docketNumber,
     });
   }
 
