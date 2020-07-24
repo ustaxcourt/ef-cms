@@ -15,13 +15,13 @@ exports.fileExternalDocumentInteractor = ({
   documentIds,
   documentMetadata,
 }) => {
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentIds,
       documentMetadata,
     },
-    endpoint: `/case-documents/${caseId}/external-document`,
+    endpoint: `/case-documents/${docketNumber}/external-document`,
   });
 };
