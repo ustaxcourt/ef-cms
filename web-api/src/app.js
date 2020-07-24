@@ -440,11 +440,11 @@ app.post(
   lambdaWrapper(serveExternallyFiledDocumentLambda),
 );
 app.get(
-  '/case-documents/:caseId/:documentId/download-policy-url',
+  '/case-documents/:docketNumber/:documentId/download-policy-url',
   lambdaWrapper(downloadPolicyUrlLambda),
 );
 app.get(
-  '/case-documents/:caseId/:documentId/document-download-url',
+  '/case-documents/:docketNumber/:documentId/document-download-url',
   lambdaWrapper(getDocumentDownloadUrlLambda),
 );
 app.delete(
