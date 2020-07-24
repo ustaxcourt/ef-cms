@@ -72,7 +72,7 @@ beforeAll(() => {
   );
   applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId.mockReturnValue({ ...caseDetail });
+    .getCaseByDocketNumber.mockReturnValue({ ...caseDetail });
   applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
