@@ -11,12 +11,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.reason the reason the case is being set as high priority
- * @param {string} providers.caseId the caseId to set as high priority
+ * @param {string} providers.docketNumber the docket number of the case to set as high priority
  * @returns {object} the case data
  */
 exports.prioritizeCaseInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   reason,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -27,9 +27,9 @@ exports.prioritizeCaseInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });

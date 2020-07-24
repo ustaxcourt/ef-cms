@@ -1463,10 +1463,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/high-priority": {
+    "/case-meta/{docketNumber}/high-priority": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
