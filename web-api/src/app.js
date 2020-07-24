@@ -570,7 +570,7 @@ app.post(
  * case-notes
  */
 app.get(
-  '/case-notes/batch-cases/:caseIds/user-notes',
+  '/case-notes/batch-cases/:docketNumbers/user-notes',
   lambdaWrapper(getUserCaseNoteForCasesLambda),
 );
 app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));
@@ -819,7 +819,7 @@ app.get(
   lambdaWrapper(batchDownloadTrialSessionLambda),
 );
 app.put(
-  '/trial-sessions/:trialSessionId/remove-case/:caseId',
+  '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
   lambdaWrapper(removeCaseFromTrialLambda),
 );
 app.post(

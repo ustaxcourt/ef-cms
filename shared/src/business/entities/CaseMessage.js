@@ -2,7 +2,6 @@ const joi = require('@hapi/joi');
 const {
   CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
-  DOCKET_NUMBER_MATCHER,
   SECTIONS,
 } = require('./EntityConstants');
 const {
@@ -118,7 +117,7 @@ CaseMessage.VALIDATION_RULES = {
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the message was created.',
   ),
-  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
   docketNumberWithSuffix: joi
     .string()
     .max(20)

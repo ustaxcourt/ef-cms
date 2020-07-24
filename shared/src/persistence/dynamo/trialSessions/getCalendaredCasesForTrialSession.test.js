@@ -8,14 +8,15 @@ const {
 const {
   getCalendaredCasesForTrialSession,
 } = require('./getCalendaredCasesForTrialSession');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getCalendaredCasesForTrialSession', () => {
   beforeEach(() => {
     client.get = jest.fn().mockReturnValue({
       caseOrder: [
         {
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           disposition: 'something',
+          docketNumber: MOCK_CASE.docketNumber,
           removedFromTrial: true,
         },
       ],
@@ -60,6 +61,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         caseId: '123',
         correspondence: [],
         disposition: 'something',
+        docketNumber: MOCK_CASE.docketNumber,
         docketRecord: [
           {
             docketRecordId: 'abc-123',

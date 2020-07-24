@@ -18,8 +18,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.removeCaseFromTrialInteractor = async ({
   applicationContext,
-  caseId,
   disposition,
+  docketNumber,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -39,9 +39,9 @@ exports.removeCaseFromTrialInteractor = async ({
   });
 
   if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
   } else {
-    trialSessionEntity.deleteCaseFromCalendar({ caseId });
+    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -51,9 +51,9 @@ exports.removeCaseFromTrialInteractor = async ({
 
   const myCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(myCase, { applicationContext });
@@ -62,7 +62,7 @@ exports.removeCaseFromTrialInteractor = async ({
 
   await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
     applicationContext,
-    caseId,
+    caseId: caseEntity.caseId,
     highPriority: false,
   });
 

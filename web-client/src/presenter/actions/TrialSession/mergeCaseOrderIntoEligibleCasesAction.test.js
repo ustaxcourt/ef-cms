@@ -8,17 +8,17 @@ describe('mergeCaseOrderIntoeligibleCasesAction', () => {
         trialSession: {
           caseOrder: [
             {
-              caseId: 'case-id-123',
               caseOrderProperty: 'foobar',
+              docketNumber: '123-45',
             },
           ],
-          eligibleCases: [{ caseId: 'case-id-123' }],
+          eligibleCases: [{ docketNumber: '123-45' }],
         },
       },
     });
 
     expect(result.state.trialSession.eligibleCases).toEqual([
-      { caseId: 'case-id-123', caseOrderProperty: 'foobar' },
+      { caseOrderProperty: 'foobar', docketNumber: '123-45' },
     ]);
   });
 });

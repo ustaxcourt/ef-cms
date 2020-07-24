@@ -36,5 +36,6 @@ exports.getTrialSessionDetailsInteractor = async ({
   const trialSessionEntity = new TrialSession(trialSessionDetails, {
     applicationContext,
   }).validate();
+
   return trialSessionEntity.toRawObject();
 };
