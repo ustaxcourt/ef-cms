@@ -18,7 +18,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getPublicDownloadPolicyUrl.mockReturnValue(
@@ -28,7 +28,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     await expect(
       getPublicDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-20',
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -38,10 +38,12 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
-    applicationContext.getPersistenceGateway().getCaseByCaseId.mockReturnValue({
-      ...MOCK_CASE,
-      sealedDate: '2019-03-01T21:40:46.415Z',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        sealedDate: '2019-03-01T21:40:46.415Z',
+      });
     applicationContext
       .getPersistenceGateway()
       .getPublicDownloadPolicyUrl.mockReturnValue(
@@ -51,7 +53,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     await expect(
       getPublicDownloadPolicyUrlInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-20',
         documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized to access documents in a sealed case');
@@ -63,7 +65,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getPublicDownloadPolicyUrl.mockReturnValue(
@@ -93,7 +95,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
     const result = await getPublicDownloadPolicyUrlInteractor({
       applicationContext,
-      caseId: '123',
+      docketNumber: '123-20',
       documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
     });
     expect(result).toEqual(

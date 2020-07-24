@@ -1,12 +1,11 @@
 import { state } from 'cerebral';
+
 /**
  * get the url from the case details
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting
- * baseUrl, token, caseId, and docketNumber
- * @param {Function} providers.store the cerebral store function used for
- * storing pdfPreviewUrl
+ * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.store the cerebral store function
  * @returns {object} the pdfUrl
  */
 export const generateCaseConfirmationPdfUrlAction = async ({
@@ -14,13 +13,13 @@ export const generateCaseConfirmationPdfUrlAction = async ({
   get,
   store,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const {
     url,
   } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
     applicationContext,
-    caseId,
+    docketNumber,
     documentId: `case-${docketNumber}-confirmation.pdf`,
   });
 
