@@ -3,11 +3,11 @@ import { state } from 'cerebral';
 export const createCaseMessageAction = async ({ applicationContext, get }) => {
   const form = get(state.modal.form);
 
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   await applicationContext.getUseCases().createCaseMessageInteractor({
     applicationContext,
-    caseId,
+    docketNumber,
     ...form,
   });
 
