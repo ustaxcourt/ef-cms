@@ -52,18 +52,6 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should retrieve the caseId for each case from the docketNumbers provided', async () => {
-    await getUserCaseNoteForCasesInteractor({
-      applicationContext,
-      docketNumbers: [MOCK_NOTE.docketNumber],
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseIdFromDocketNumber.mock
-        .calls[0][0],
-    ).toMatchObject({ docketNumber: MOCK_NOTE.docketNumber });
-  });
-
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
