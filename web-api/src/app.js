@@ -525,11 +525,11 @@ app.delete(
   lambdaWrapper(unblockCaseFromTrialLambda),
 );
 app.post(
-  '/case-meta/:caseId/high-priority',
+  '/case-meta/:docketNumber/high-priority',
   lambdaWrapper(prioritizeCaseLambda),
 );
 app.delete(
-  '/case-meta/:caseId/high-priority',
+  '/case-meta/:docketNumber/high-priority',
   lambdaWrapper(unprioritizeCaseLambda),
 );
 app.put(
