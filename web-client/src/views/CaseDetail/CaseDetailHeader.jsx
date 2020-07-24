@@ -109,8 +109,7 @@ export const CaseDetailHeader = connect(
                       {caseDetailHeaderHelper.showFileDocumentButton && (
                         <Button
                           secondary
-                          className="margin-right-05"
-                          // className="tablet-full-width push-right margin-right-0"
+                          className="tablet-full-width push-right margin-right-0"
                           href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                           icon="file"
                           id="button-file-document"
