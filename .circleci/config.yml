@@ -133,7 +133,7 @@ jobs:
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    resource_class: large
+    resource_class: medium
     parallelism: 5
     steps:
       - restore_cache:
@@ -364,7 +364,6 @@ jobs:
   deploy:
     machine:
       docker_layer_caching: true
-    resource_class: small
     steps:
       - checkout
       - run:
