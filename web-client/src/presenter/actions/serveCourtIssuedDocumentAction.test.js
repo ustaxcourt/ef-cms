@@ -22,7 +22,7 @@ describe('serveCourtIssuedDocumentAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'case-id',
+          docketNumber: '101-20',
           documents: [
             {
               documentId: 'document-id',
@@ -49,7 +49,7 @@ describe('serveCourtIssuedDocumentAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'case-id',
+          docketNumber: '101-20',
           documents: [
             {
               documentId: 'document-id',

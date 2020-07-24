@@ -2811,10 +2811,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve-court-issued": {
+    "/case-documents/{docketNumber}/{documentId}/serve-court-issued": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2869,10 +2869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/serve": {
+    "/case-documents/{docketNumber}/{documentId}/serve": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4657,10 +4657,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-orders/{documentId}": {
+    "/case-documents/{docketNumber}/court-issued-orders/{documentId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4681,9 +4681,6 @@
               "documentMetadata": {
                 "type": "object",
                 "properties": {
-                  "caseId": {
-                    "type": "string"
-                  },
                   "docketNumber": {
                     "type": "string"
                   },
