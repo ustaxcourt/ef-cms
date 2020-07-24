@@ -1869,10 +1869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/external-document": {
+    "/case-documents/{docketNumber}/external-document": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1992,10 +1992,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-meta": {
+    "/case-documents/{docketNumber}/docket-entry-meta": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2096,10 +2096,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-complete": {
+    "/case-documents/{docketNumber}/docket-entry-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4545,10 +4545,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-docket-entry": {
+    "/case-documents/{docketNumber}/court-issued-docket-entry": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
