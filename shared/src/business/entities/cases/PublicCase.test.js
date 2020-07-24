@@ -7,7 +7,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -19,13 +18,14 @@ describe('PublicCase', () => {
         },
         {},
       );
+
       expect(entity.getFormattedValidationErrors()).toBe(null);
     });
+
     it('should not validate when case is sealed but sensitive information is provided to constructor', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -38,8 +38,8 @@ describe('PublicCase', () => {
         },
         {},
       );
+
       expect(entity.getFormattedValidationErrors()).toMatchObject({
-        // caseId is permitted
         // docketNumber is permitted
         // docketNumberSuffix is permitted
         // isSealed is permitted
@@ -57,7 +57,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: 'testing',
@@ -72,7 +71,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: {
         name: undefined,
         state: undefined,
@@ -96,7 +94,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -111,7 +108,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
@@ -129,7 +125,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -152,7 +147,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
@@ -294,7 +288,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',
@@ -314,7 +307,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',

@@ -11,14 +11,14 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  */
 exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   docketRecordSort,
 }) => {
   const caseSource = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseSource, { applicationContext });
