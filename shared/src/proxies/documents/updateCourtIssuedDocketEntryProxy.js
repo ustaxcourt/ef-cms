@@ -12,12 +12,12 @@ exports.updateCourtIssuedDocketEntryInteractor = ({
   applicationContext,
   documentMeta,
 }) => {
-  const { caseId } = documentMeta;
+  const { docketNumber } = documentMeta;
   return put({
     applicationContext,
     body: {
       documentMeta,
     },
-    endpoint: `/case-documents/${caseId}/court-issued-docket-entry`,
+    endpoint: `/case-documents/${docketNumber}/court-issued-docket-entry`,
   });
 };

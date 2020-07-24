@@ -4545,10 +4545,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-docket-entry": {
+    "/case-documents/{docketNumber}/court-issued-docket-entry": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
