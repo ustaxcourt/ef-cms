@@ -17,7 +17,7 @@ const { post } = require('../requests');
 exports.forwardCaseMessageInteractor = ({
   applicationContext,
   attachments,
-  caseId,
+  docketNumber,
   message,
   parentMessageId,
   subject,
@@ -28,7 +28,7 @@ exports.forwardCaseMessageInteractor = ({
     applicationContext,
     body: {
       attachments,
-      caseId,
+      docketNumber,
       message,
       subject,
       toSection,

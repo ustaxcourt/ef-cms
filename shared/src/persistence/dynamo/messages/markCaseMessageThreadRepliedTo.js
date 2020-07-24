@@ -1,4 +1,7 @@
 const {
+  getCaseIdFromDocketNumber,
+} = require('../cases/getCaseIdFromDocketNumber');
+const {
   getCaseMessageThreadByParentId,
 } = require('./getCaseMessageThreadByParentId');
 const { update } = require('../../dynamodbClientService');
@@ -20,22 +23,29 @@ exports.markCaseMessageThreadRepliedTo = async ({
     parentMessageId,
   });
 
-  const updateMessage = async message => {
-    return await update({
-      ExpressionAttributeNames: {
-        '#isRepliedTo': 'isRepliedTo',
-      },
-      ExpressionAttributeValues: {
-        ':isRepliedTo': true,
-      },
-      Key: {
-        pk: `case|${message.caseId}`,
-        sk: `message|${message.messageId}`,
-      },
-      UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
+  if (messages.length) {
+    const caseId = await getCaseIdFromDocketNumber({
       applicationContext,
+      docketNumber: messages[0].docketNumber,
     });
-  };
 
-  await Promise.all(messages.map(updateMessage));
+    const updateMessage = async message => {
+      return await update({
+        ExpressionAttributeNames: {
+          '#isRepliedTo': 'isRepliedTo',
+        },
+        ExpressionAttributeValues: {
+          ':isRepliedTo': true,
+        },
+        Key: {
+          pk: `case|${caseId}`,
+          sk: `message|${message.messageId}`,
+        },
+        UpdateExpression: 'SET #isRepliedTo = :isRepliedTo',
+        applicationContext,
+      });
+    };
+
+    await Promise.all(messages.map(updateMessage));
+  }
 };

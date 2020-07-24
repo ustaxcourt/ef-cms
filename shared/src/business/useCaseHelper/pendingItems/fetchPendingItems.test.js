@@ -16,6 +16,7 @@ describe('fetchPendingItems', () => {
 
   beforeEach(() => {
     const mockDataOne = {
+      caseCaption: 'Test Petitioner, Petitioner',
       caseId: '1',
       documents: [
         {
@@ -29,6 +30,7 @@ describe('fetchPendingItems', () => {
       ],
     };
     const mockDataTwo = {
+      caseCaption: 'Another Test Petitioner, Petitioner',
       caseId: '2',
       documents: [
         {
