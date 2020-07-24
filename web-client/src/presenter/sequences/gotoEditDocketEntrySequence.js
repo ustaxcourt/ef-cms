@@ -6,7 +6,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set, unset } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
@@ -31,7 +31,6 @@ export const gotoEditDocketEntry = [
   setDocumentIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
   set(state.currentViewMetadata.tab, 'Document Info'),
-  unset(state.isPaperFiling),
   setCurrentPageAction('EditDocketEntry'),
   getShouldMarkReadAction,
   {

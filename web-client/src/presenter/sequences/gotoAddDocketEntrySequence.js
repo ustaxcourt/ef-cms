@@ -5,10 +5,8 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
@@ -22,7 +20,6 @@ export const gotoAddDocketEntry = [
   getCaseAction,
   setCaseAction,
   resetAddDocketEntryAction,
-  set(state.isPaperFiling, true),
   setCurrentPageAction('AddDocketEntry'),
 ];
 
