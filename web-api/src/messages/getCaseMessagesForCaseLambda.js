@@ -12,6 +12,6 @@ exports.getCaseMessagesForCaseLambda = event =>
       .getUseCases()
       .getCaseMessagesForCaseInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
       });
   });
