@@ -6,32 +6,45 @@ const {
 } = require('./markCaseMessageThreadRepliedTo');
 
 describe('markCaseMessageThreadRepliedTo', () => {
+  const CASE_ID = '33f568de-b62d-4fd0-adfd-f9866b98016f';
+
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
     applicationContext.getDocumentClient().update.mockReturnValue({
       promise: () => Promise.resolve(null),
     });
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              caseId: '40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
-              gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-              messageId: '28de1ba1-8518-4a7d-8075-4291eea569c7',
-              pk: 'case|40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
-              sk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-            },
-            {
-              caseId: '40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
-              gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
-              messageId: 'badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
-              pk: 'case|40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
-              sk: 'message|badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
-            },
-          ],
-        }),
-    });
+    applicationContext
+      .getDocumentClient()
+      .query.mockReturnValueOnce({
+        promise: () =>
+          Promise.resolve({
+            Items: [
+              {
+                gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+                messageId: '28de1ba1-8518-4a7d-8075-4291eea569c7',
+                pk: `case|${CASE_ID}`,
+                sk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+              },
+              {
+                gsi1pk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
+                messageId: 'badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
+                pk: `case|${CASE_ID}`,
+                sk: 'message|badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
+              },
+            ],
+          }),
+      })
+      .mockReturnValueOnce({
+        promise: () =>
+          Promise.resolve({
+            Items: [
+              {
+                pk: `case|${CASE_ID}`,
+                sk: `case|${CASE_ID}`,
+              },
+            ],
+          }),
+      });
   });
 
   it('attempts to update the case message records', async () => {
@@ -48,7 +61,7 @@ describe('markCaseMessageThreadRepliedTo', () => {
       applicationContext.getDocumentClient().update.mock.calls[0][0],
     ).toMatchObject({
       Key: {
-        pk: 'case|40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
+        pk: `case|${CASE_ID}`,
         sk: 'message|28de1ba1-8518-4a7d-8075-4291eea569c7',
       },
     });
@@ -56,7 +69,7 @@ describe('markCaseMessageThreadRepliedTo', () => {
       applicationContext.getDocumentClient().update.mock.calls[1][0],
     ).toMatchObject({
       Key: {
-        pk: 'case|40eeec19-0e38-42e0-bb8b-a8ff9b2ce5d5',
+        pk: `case|${CASE_ID}`,
         sk: 'message|badc2bf0-cc82-4fd1-9a61-d1a8937a4f1b',
       },
     });

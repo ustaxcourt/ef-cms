@@ -22,7 +22,7 @@ describe('replyToCaseMessageAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'a7806fa0-ce6a-41ca-b66e-59438953f8bb',
+          docketNumber: '123-45',
         },
         modal: {
           form: {
@@ -53,7 +53,7 @@ describe('replyToCaseMessageAction', () => {
           documentTitle: 'Petition',
         },
       ],
-      caseId: 'a7806fa0-ce6a-41ca-b66e-59438953f8bb',
+      docketNumber: '123-45',
       message: 'You there!',
       parentMessageId: '499d51ae-f118-4eb6-bd0e-f2c351df8f06',
       subject: 'Hey!',

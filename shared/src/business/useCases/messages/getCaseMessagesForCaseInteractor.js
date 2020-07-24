@@ -10,12 +10,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case message
  */
 exports.getCaseMessagesForCaseInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,9 +25,9 @@ exports.getCaseMessagesForCaseInteractor = async ({
 
   const caseMessages = await applicationContext
     .getPersistenceGateway()
-    .getCaseMessagesByCaseId({
+    .getCaseMessagesByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   return CaseMessage.validateRawCollection(caseMessages, {
