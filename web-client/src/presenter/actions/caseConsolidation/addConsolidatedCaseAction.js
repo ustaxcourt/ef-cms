@@ -13,16 +13,16 @@ export const addConsolidatedCaseAction = async ({
   const { caseDetail, caseToConsolidate } = props;
 
   const caseIdToConsolidateWith = caseDetail.caseId;
-  const caseToConsolidateId = caseToConsolidate.caseId;
+  const caseToConsolidateDocketNumber = caseToConsolidate.docketNumber;
 
   await applicationContext.getUseCases().addConsolidatedCaseInteractor({
     applicationContext,
-    caseId: caseToConsolidateId,
     caseIdToConsolidateWith,
+    docketNumber: caseToConsolidateDocketNumber,
   });
 
   return {
     caseId: caseIdToConsolidateWith,
-    caseToConsolidateId,
+    caseToConsolidateDocketNumber,
   };
 };
