@@ -3338,7 +3338,7 @@
         }
       }
     },
-    "/users/{userId}/case/{caseId}/pending": {
+    "/users/{userId}/case/{docketNumber}/pending": {
       "parameters": [
         {
           "name": "userId",
@@ -3347,7 +3347,7 @@
           "type": "string"
         },
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5201,10 +5201,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/associate-private-practitioner": {
+    "/case-parties/{docketNumber}/associate-private-practitioner": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

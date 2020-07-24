@@ -18,8 +18,6 @@ exports.getCasesByUser = async ({ applicationContext, userId }) => {
     })
   ).map(mapping => mapping.sk.split('|')[1]);
 
-  console.log('caseIds here arererere', JSON.stringify(caseIds));
-
   const cases = await Promise.all(
     caseIds.map(caseId =>
       getCaseByCaseId({
