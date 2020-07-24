@@ -1691,10 +1691,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/consolidate-case": {
+    "/case-meta/{docketNumber}/consolidate-case": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
