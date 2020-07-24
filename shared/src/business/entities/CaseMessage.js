@@ -26,7 +26,6 @@ function CaseMessage(rawMessage, { applicationContext }) {
     documentId: attachment.documentId,
     documentTitle: attachment.documentTitle,
   }));
-  this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
   this.completedAt = rawMessage.completedAt;
@@ -72,9 +71,6 @@ CaseMessage.VALIDATION_RULES = {
     )
     .optional()
     .description('Array of document metadata objects attached to the message.'),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'ID of the case the message is attached to.',
-  ),
   caseStatus: joi
     .string()
     .valid(...Object.values(CASE_STATUS_TYPES))

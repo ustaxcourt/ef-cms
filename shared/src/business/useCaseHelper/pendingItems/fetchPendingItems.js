@@ -1,5 +1,4 @@
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
 const { pick } = require('lodash');
 
 /**
@@ -45,20 +44,31 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
   const foundDocuments = [];
 
   foundCases.forEach(foundCase => {
-    const { documents = [], ...mappedProps } = foundCase;
-    mappedProps.caseStatus = mappedProps.status;
+    const caseDocuments = foundCase.documents || [];
 
-    documents.forEach(document => {
+    caseDocuments.forEach(document => {
       if (document.pending) {
-        foundDocuments.push({
-          ...new Document(
-            {
-              ...document,
-            },
-            { applicationContext },
-          ).toRawObject(),
-          ...mappedProps,
-        });
+        const pendingDocumentInfo = {
+          associatedJudge: foundCase.associatedJudge,
+          caseCaption: foundCase.caseCaption,
+          caseId: foundCase.caseId,
+          caseTitle: Case.getCaseTitle(foundCase.caseCaption),
+          createdAt: document.createdAt,
+          docketNumber: foundCase.docketNumber,
+          docketNumberSuffix: foundCase.docketNumberSuffix,
+          documentId: document.documentId,
+          documentTitle: document.documentTitle,
+          documentType: document.documentType,
+          eventCode: document.eventCode,
+          pending: document.pending,
+          processingStatus: document.processingStatus,
+          receivedAt: document.receivedAt,
+          status: foundCase.status,
+          userId: document.userId,
+          workItems: document.workItems,
+        };
+
+        foundDocuments.push(pendingDocumentInfo);
       }
     });
   });

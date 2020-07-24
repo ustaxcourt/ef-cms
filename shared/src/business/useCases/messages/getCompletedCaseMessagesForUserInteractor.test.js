@@ -27,7 +27,6 @@ describe('getCompletedCaseMessagesForUserInteractor', () => {
   it('retrieves the case messages from persistence and returns them', async () => {
     const caseMessageData = {
       attachments: [],
-      caseId: '7a130321-0a76-43bc-b3eb-64a18f07987d',
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
       completedAt: '2019-05-01T21:40:46.415Z',
