@@ -3891,10 +3891,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/sign": {
+    "/case-documents/{docketNumber}/{documentId}/sign": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
