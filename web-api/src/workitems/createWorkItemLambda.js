@@ -10,8 +10,7 @@ exports.createWorkItemLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().createWorkItemInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
-      documentId: event.pathParameters.documentId,
+      ...event.pathParameters,
       ...JSON.parse(event.body),
     });
   });

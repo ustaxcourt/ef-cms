@@ -256,8 +256,8 @@ export const getInboxCount = test => {
   }).inboxCount;
 };
 
-export const findWorkItemByCaseId = (queue, caseId) => {
-  return queue.find(workItem => workItem.caseId === caseId);
+export const findWorkItemByDocketNumber = (queue, docketNumber) => {
+  return queue.find(workItem => workItem.docketNumber === docketNumber);
 };
 
 export const getNotifications = test => {

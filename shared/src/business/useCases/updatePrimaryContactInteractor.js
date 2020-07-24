@@ -133,7 +133,6 @@ exports.updatePrimaryContactInteractor = async ({
         assigneeId: null,
         assigneeName: null,
         associatedJudge: caseEntity.associatedJudge,
-        caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),

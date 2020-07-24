@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   assignWorkItems,
-  findWorkItemByCaseId,
+  findWorkItemByDocketNumber,
   getFormattedDocumentQCMyInbox,
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionInbox,
@@ -75,7 +75,7 @@ describe('Create a work item', () => {
     );
 
     const decisionWorkItem = documentQCSectionInbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({
       document: {
@@ -93,16 +93,16 @@ describe('Create a work item', () => {
       test,
     );
     const decisionWorkItems = documentQCSectionInbox.filter(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     await assignWorkItems(test, 'docketclerk', decisionWorkItems);
   });
 
   it('verify the docketclerk has 3 messages in document qc my inbox', async () => {
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
-    decisionWorkItem = findWorkItemByCaseId(
+    decisionWorkItem = findWorkItemByDocketNumber(
       documentQCMyInbox,
-      caseDetail.caseId,
+      caseDetail.docketNumber,
     );
     expect(decisionWorkItem).toMatchObject({
       document: {
