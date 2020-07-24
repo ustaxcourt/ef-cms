@@ -893,12 +893,6 @@ header.usa-header {
     margin: 0 15px 0 0;
     color: $color-white;
   }
-  #ink-new-tab > * {
-    color: $theme-color-primary;
-  }
-  #ink-new-tab > * a:not(.usa-button):hover {
-    color: $theme-color-primary;
-  }
   a,
   button {
     color: $color-white;
@@ -911,7 +905,7 @@ header.usa-header {
     background-color: $color-white;
     color: color($theme-color-primary);
     &:hover {
-      color: color($theme-color-primary);
+      color: color($theme-color-primary-dark);
     }
   }
   .usa-tag {
