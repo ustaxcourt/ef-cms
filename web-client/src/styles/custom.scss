@@ -893,6 +893,12 @@ header.usa-header {
     margin: 0 15px 0 0;
     color: $color-white;
   }
+  #ink-new-tab > * {
+    color: $theme-color-primary;
+  }
+  #ink-new-tab > * a:not(.usa-button):hover {
+    color: $theme-color-primary;
+  }
   a,
   button {
     color: $color-white;
@@ -928,17 +934,14 @@ header.usa-header {
       margin-right: 15px;
     }
   }
-  #link-new-tab > * {
-    height: 40px;
-    margin-top: 5px;
-    color: color($theme-color-primary);
-
-    &.usa-button--unstyled {
-      padding-left: 20px;
-    }
-
+  #link-new-tab {
+    margin-right: 10px;
+    color: color($theme-color-base-ink);
     &:hover {
-      color: color($theme-color-primary);
+      color: color($theme-color-base-ink);
+    }
+    &:visited {
+      color: color($theme-color-base-ink);
     }
   }
 }
@@ -1533,11 +1536,29 @@ button.change-scanner-button {
   color: color($theme-color-secondary-dark);
 }
 
-.quick-view-link {
-  width: 0;
-  height: 0;
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
-  border-left: 40px solid lightblue;
-  transform: rotate(315deg);
+.diag {
+  position: relative;
+  overflow: hidden;
+  width: 100px;
+  height: 80px;
+  padding-top: 5px;
+  background: linear-gradient(
+    to bottom left,
+    color(accent-cool-light) 50%,
+    rgba(255, 0, 0, 0) 50%
+  );
+  text-align: right;
+  vertical-align: top;
 }
+
+// .diag::before {
+//   position: absolute;
+//   right: 0;
+//   bottom: 100%;
+//   display: block;
+//   width: 150%;
+//   height: 100%;
+//   background: lightblue;
+//   transform: rotate(-90deg);
+//   transform-origin: 66% 100%;
+// }

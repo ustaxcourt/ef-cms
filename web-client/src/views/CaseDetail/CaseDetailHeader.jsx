@@ -109,7 +109,8 @@ export const CaseDetailHeader = connect(
                       {caseDetailHeaderHelper.showFileDocumentButton && (
                         <Button
                           secondary
-                          className="tablet-full-width push-right margin-right-0"
+                          className="margin-right-05"
+                          // className="tablet-full-width push-right margin-right-0"
                           href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                           icon="file"
                           id="button-file-document"
@@ -161,17 +162,18 @@ export const CaseDetailHeader = connect(
                 )}
               {caseDetailHeaderHelper.showNewTabLink &&
                 caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
-                  <a
-                    aria-label="new-tab"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}`}
-                    icon="file"
-                    id="link-new-tab"
-                    className="quick-view-link"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    New Tab
-                  </a>
+                  <div className="diag tablet:grid-col-1">
+                    <a
+                      aria-label="new-tab"
+                      href={`/case-detail/${formattedCaseDetail.docketNumber}`}
+                      icon="file"
+                      id="link-new-tab"
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      New Tab
+                    </a>
+                  </div>
                 )}
             </div>
           </div>
