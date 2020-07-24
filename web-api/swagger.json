@@ -3836,10 +3836,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/coversheet": {
+    "/case-documents/{docketNumber}/{documentId}/coversheet": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -3891,10 +3891,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/{documentId}/sign": {
+    "/case-documents/{docketNumber}/{documentId}/sign": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

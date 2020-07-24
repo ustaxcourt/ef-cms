@@ -59,7 +59,7 @@ module.exports.createCase1 = async () => {
     const addCoversheet = document => {
       return applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        caseId: caseDetail.caseId,
+        docketNumber: caseDetail.docketNumber,
         documentId: document.documentId,
       });
     };
@@ -98,7 +98,7 @@ module.exports.createCase1 = async () => {
 
     await applicationContext.getUseCases().saveSignedDocumentInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       //todo - do not hard code a judge
       nameForSigning: 'Maurice B. Foley',
       originalDocumentId: documentId,
