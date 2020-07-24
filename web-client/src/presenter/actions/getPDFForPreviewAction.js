@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
+
 /**
- * given a caseId and documentId, fetch a PDF from S3 and put into props stream.
+ * given a docketNumber and documentId, fetch a PDF from S3 and put into props stream.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {Function} providers.props used for getting caseId and documentId
+ * @param {Function} providers.props used for getting docketNumber and documentId
  * @returns {Promise<object>} pdf file object for preview
  */
 export const getPDFForPreviewAction = async ({
@@ -16,13 +17,13 @@ export const getPDFForPreviewAction = async ({
   if (props.file.name) {
     return props;
   }
-  const { caseId, documentId } = props.file;
+  const { docketNumber, documentId } = props.file;
 
   const pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForPreviewInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
   return { file: pdfObj };
