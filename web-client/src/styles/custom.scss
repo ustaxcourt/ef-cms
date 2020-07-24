@@ -944,6 +944,12 @@ header.usa-header {
       color: color($theme-color-base-ink);
     }
   }
+  #new-tab-icon {
+    margin-top: 10px;
+    margin-right: 10px;
+    color: color($theme-color-base-ink);
+    transform: rotate(315deg);
+  }
 }
 
 .title {
@@ -1536,7 +1542,7 @@ button.change-scanner-button {
   color: color($theme-color-secondary-dark);
 }
 
-.diag {
+.diagonal-div {
   position: relative;
   overflow: hidden;
   width: 100px;
@@ -1551,14 +1557,7 @@ button.change-scanner-button {
   vertical-align: top;
 }
 
-// .diag::before {
-//   position: absolute;
-//   right: 0;
-//   bottom: 100%;
-//   display: block;
-//   width: 150%;
-//   height: 100%;
-//   background: lightblue;
-//   transform: rotate(-90deg);
-//   transform-origin: 66% 100%;
-// }
+.new-tab-parent {
+  margin-top: -20px;
+  margin-left: -260px;
+}

@@ -162,17 +162,24 @@ export const CaseDetailHeader = connect(
                 )}
               {caseDetailHeaderHelper.showNewTabLink &&
                 caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
-                  <div className="diag tablet:grid-col-1">
-                    <a
-                      aria-label="new-tab"
-                      href={`/case-detail/${formattedCaseDetail.docketNumber}`}
-                      icon="file"
-                      id="link-new-tab"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      New Tab
-                    </a>
+                  <div className="new-tab-parent">
+                    <div className="diagonal-div tablet:grid-col-1">
+                      <a
+                        aria-label="new-tab"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}`}
+                        id="link-new-tab"
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        New Tab
+                      </a>
+                      <div>
+                        <FontAwesomeIcon
+                          icon={['fa', 'arrow-right']}
+                          id="new-tab-icon"
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
             </div>
