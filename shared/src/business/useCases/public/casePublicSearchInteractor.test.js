@@ -25,21 +25,18 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
-          caseId: '8675309b-28d0-43ec-bafb-654e83405412',
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
         },
         {
           caseCaption: 'Test Case Caption Two',
-          caseId: '8675309b-28d0-43ec-bafb-654e83405413',
           docketNumber: '456-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
         },
         {
           caseCaption: 'Sealed Case Caption Three',
-          caseId: '8675309b-28d0-43ec-bafb-654e83405416',
           docketNumber: '222-20',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2020-03-01T21:40:46.415Z',
@@ -55,7 +52,6 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        caseId: '8675309b-28d0-43ec-bafb-654e83405412',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -69,7 +65,6 @@ describe('casePublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Test Case Caption Two',
-        caseId: '8675309b-28d0-43ec-bafb-654e83405413',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -90,7 +85,6 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
-          caseId: '8675309b-28d0-43ec-bafb-654e83405412',
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           receivedAt: '2019-03-01T21:40:46.415Z',
@@ -108,7 +102,6 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        caseId: '8675309b-28d0-43ec-bafb-654e83405412',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
@@ -129,7 +122,6 @@ describe('casePublicSearchInteractor', () => {
       .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
-          caseId: '8675309b-28d0-43ec-bafb-654e83405412',
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           internalFieldA: 'should be filtered out',
@@ -147,7 +139,6 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        caseId: '8675309b-28d0-43ec-bafb-654e83405412',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: undefined,
