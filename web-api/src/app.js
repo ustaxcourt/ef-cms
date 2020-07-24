@@ -480,11 +480,11 @@ app.put(
   lambdaWrapper(completeDocketEntryQCLambda),
 );
 app.post(
-  '/case-documents/:caseId/court-issued-docket-entry',
+  '/case-documents/:docketNumber/court-issued-docket-entry',
   lambdaWrapper(fileCourtIssuedDocketEntryLambda),
 );
 app.put(
-  '/case-documents/:caseId/court-issued-docket-entry',
+  '/case-documents/:docketNumber/court-issued-docket-entry',
   lambdaWrapper(updateCourtIssuedDocketEntryLambda),
 );
 app.post(
