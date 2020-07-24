@@ -2096,10 +2096,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-complete": {
+    "/case-documents/{docketNumber}/docket-entry-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

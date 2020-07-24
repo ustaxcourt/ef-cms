@@ -476,7 +476,7 @@ app.put(
   lambdaWrapper(updateDocketEntryMetaLambda),
 );
 app.put(
-  '/case-documents/:caseId/docket-entry-complete',
+  '/case-documents/:docketNumber/docket-entry-complete',
   lambdaWrapper(completeDocketEntryQCLambda),
 );
 app.post(
