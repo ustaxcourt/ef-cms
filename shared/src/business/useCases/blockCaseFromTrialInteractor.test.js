@@ -13,7 +13,7 @@ describe('blockCaseFromTrialInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
@@ -22,7 +22,7 @@ describe('blockCaseFromTrialInteractor', () => {
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
     const result = await blockCaseFromTrialInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
 
@@ -49,7 +49,7 @@ describe('blockCaseFromTrialInteractor', () => {
     await expect(
       blockCaseFromTrialInteractor({
         applicationContext,
-        caseId: '123',
+        docketNumber: '123-45',
       }),
     ).rejects.toThrow('Unauthorized');
   });
