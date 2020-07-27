@@ -103,8 +103,21 @@ export const CaseDetailHeaderMenu = connect(
                 size="1x"
               />
             </button>
+
             {isCaseDetailMenuOpen && (
               <ul className="usa-nav__submenu position-right-0">
+                <li className="usa-nav__submenu-item">
+                  <Button
+                    href={`/case-detail/${caseDetail.docketNumber}`}
+                    icon="arrow-right"
+                    id="menu-button-new-tab"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    New Tab
+                  </Button>
+                </li>
+
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="envelope"
