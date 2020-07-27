@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
 
@@ -10,13 +11,13 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update notes
+ * @param {string} providers.docketNumber the docket number of the case to update notes
  * @param {string} providers.notes the notes to update
  * @returns {object} the updated case note returned from persistence
  */
 exports.updateUserCaseNoteInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   notes,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -28,8 +29,16 @@ exports.updateUserCaseNoteInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
   const caseNoteEntity = new UserCaseNote({
-    caseId,
+    caseId: caseEntity.caseId,
     notes,
     userId: (judgeUser && judgeUser.userId) || user.userId,
   });
