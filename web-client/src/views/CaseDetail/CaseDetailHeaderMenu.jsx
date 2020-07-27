@@ -127,7 +127,7 @@ export const CaseDetailHeaderMenu = connect(
                       openCreateCaseMessageModalSequence();
                     }}
                   >
-                    New Message
+                    Message
                   </Button>
                 </li>
                 <hr></hr>
@@ -194,7 +194,7 @@ export const CaseDetailHeaderMenu = connect(
                       link
                       className="fa-icon-blue"
                       href={`/case-detail/${caseDetail.docketNumber}/upload-correspondence`}
-                      icon="envelope-open"
+                      icon="mail-bulk"
                       iconColor="blue"
                       id="menu-button-upload-pdf"
                     >
