@@ -8,9 +8,9 @@ import { state } from 'cerebral';
  * @returns {object} the new props from modal state
  */
 export const updateNotePropsFromModalStateAction = ({ get }) => {
-  const caseId = get(state.modal.caseId);
+  const docketNumber = get(state.modal.docketNumber);
   const notes = get(state.modal.notes);
   const trialSessionId = get(state.trialSession.trialSessionId);
 
-  return { caseId, notes, trialSessionId };
+  return { docketNumber, notes, trialSessionId };
 };

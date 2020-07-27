@@ -581,11 +581,11 @@ app.get(
   lambdaWrapper(getUserCaseNoteLambda),
 );
 app.put(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(updateUserCaseNoteLambda),
 );
 app.delete(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(deleteUserCaseNoteLambda),
 );
 app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
