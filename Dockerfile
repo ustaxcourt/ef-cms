@@ -50,6 +50,13 @@ RUN npm set progress=false && \
 
 COPY . /home/app
 
+COPY web-client/pa11y/package.json /home/app/web-client/pa11y/package.json
+COPY web-client/pa11y/package-lock.json /home/app/web-client/pa11y/package-lock.json
+RUN npm set progress=false && \
+  npm ci --prefix=web-client/pa11y/
+
+COPY . /home/app
+
 RUN mkdir -p /home/app/web-client/cypress/screenshots && \
   mkdir -p /home/app/web-client/cypress/videos && \
   mkdir -p /home/app/web-client/cypress-smoketests/videos
