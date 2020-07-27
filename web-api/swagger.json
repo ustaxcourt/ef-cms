@@ -5146,10 +5146,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/seal": {
+    "/case-meta/{docketNumber}/seal": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
