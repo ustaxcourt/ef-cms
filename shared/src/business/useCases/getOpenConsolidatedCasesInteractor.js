@@ -32,7 +32,7 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
     userAssociatedDocketNumbersMap,
   } = await applicationContext
     .getUseCaseHelpers()
-    .processUserAssociatedCases({ applicationContext, openUserCases });
+    .processUserAssociatedCases(openUserCases);
 
   for (const leadDocketNumber of leadDocketNumbersAssociatedWithUser) {
     const consolidatedCases = await applicationContext
