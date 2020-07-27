@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "api_lambdas_bucket" {
 resource "aws_s3_bucket_object" "api_object" {
   bucket = aws_s3_bucket.api_lambdas_bucket.id
   key    = "${var.environment}_api.js.zip"
-  source = archive_file.zip_api.output_path
+  source = data.archive_file.zip_api.output_path
   etag   = "${filemd5("${path.module}/lambdas/api.js.zip")}"
 }
 
