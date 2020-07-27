@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
 # This runs the same build steps that run in Circle, except sonar
-rm -rf node_modules dist .elasticsearch .dynamodb
+rm -rf node_modules dist .elasticsearch .dynamodb web-client/pa11y/node_modules
 npm ci
+npm ci --prefix=web-client/pa11y/
 
 docker build -t efcms -f Dockerfile .
 
