@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { PNG } = require('pngjs');
 const pixelmatch = require('pixelmatch');
+const { PNG } = require('pngjs');
 
 const screenshotsPath = './web-client/pa11y/pa11y-screenshots';
 
