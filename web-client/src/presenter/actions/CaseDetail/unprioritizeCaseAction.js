@@ -9,13 +9,13 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess and updated caseDetail object
  */
 export const unprioritizeCaseAction = async ({ applicationContext, get }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const caseDetail = await applicationContext
     .getUseCases()
     .unprioritizeCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   return {

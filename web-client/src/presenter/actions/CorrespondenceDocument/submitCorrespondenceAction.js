@@ -16,7 +16,7 @@ export const submitCorrespondenceAction = async ({
   props,
 }) => {
   let caseDetail;
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const { primaryDocumentFileId: documentId } = props;
   const formData = get(state.form);
 
@@ -29,7 +29,6 @@ export const submitCorrespondenceAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    caseId,
     docketNumber,
   };
 
@@ -63,7 +62,6 @@ export const submitCorrespondenceAction = async ({
 
   return {
     caseDetail,
-    caseId,
     docketNumber,
     documentId,
   };

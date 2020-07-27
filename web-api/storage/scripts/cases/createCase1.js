@@ -74,10 +74,9 @@ module.exports.createCase1 = async () => {
   });
 
   await asUserFromEmail('docketclerk@example.com', async applicationContext => {
-    const { caseId, docketNumber } = caseDetail;
+    const { docketNumber } = caseDetail;
 
     const documentMetadata = {
-      caseId,
       docketNumber,
       documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
       documentType: 'Order of Dismissal for Lack of Jurisdiction',
@@ -107,10 +106,9 @@ module.exports.createCase1 = async () => {
   });
 
   await asUserFromEmail('docketclerk@example.com', async applicationContext => {
-    const { caseId, docketNumber } = caseDetail;
+    const { docketNumber } = caseDetail;
 
     const documentMetadata = {
-      caseId,
       docketNumber,
       documentTitle: 'Something',
       documentType: 'Miscellaneous',

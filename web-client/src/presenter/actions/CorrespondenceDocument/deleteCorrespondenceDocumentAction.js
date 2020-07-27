@@ -14,7 +14,7 @@ export const deleteCorrespondenceDocumentAction = async ({
   get,
   path,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const documentId = get(state.modal.correspondenceToDelete.documentId);
 
   try {
@@ -22,7 +22,7 @@ export const deleteCorrespondenceDocumentAction = async ({
       .getUseCases()
       .deleteCorrespondenceDocumentInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         documentId,
       });
 
