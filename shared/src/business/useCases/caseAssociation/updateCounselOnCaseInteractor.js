@@ -11,16 +11,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case the user is attached to
+ * @param {string} providers.docketNumber the docket number of the case the user is attached to
  * @param {object} providers.userData the data being updated on the user
- * @param {string} providers.userIdToUpdate the id of the user to be updated on the case
+ * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
 exports.updateCounselOnCaseInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   userData,
-  userIdToUpdate,
+  userId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -36,28 +36,28 @@ exports.updateCounselOnCaseInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const userToUpdate = await applicationContext
     .getPersistenceGateway()
     .getUserById({
       applicationContext,
-      userId: userIdToUpdate,
+      userId,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
-      userId: userToUpdate.userId,
+      userId,
       ...editableFields,
     });
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
-      userId: userToUpdate.userId,
+      userId,
       ...editableFields,
     });
   } else {
