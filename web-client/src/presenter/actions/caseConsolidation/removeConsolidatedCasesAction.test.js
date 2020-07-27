@@ -15,7 +15,7 @@ describe('removeConsolidatedCasesAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        modal: { casesToRemove: { abc: true, def: false } },
+        modal: { casesToRemove: { '123-20': true, '234-20': false } },
       },
     });
 
@@ -23,8 +23,8 @@ describe('removeConsolidatedCasesAction', () => {
       applicationContext.getUseCases().removeConsolidatedCasesInteractor,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
-      caseIdsToRemove: ['abc'],
       docketNumber: '101-20',
+      docketNumbersToRemove: ['123-20'],
     });
   });
 });

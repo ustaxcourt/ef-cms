@@ -1,27 +1,15 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { processUserAssociatedCases } = require('./processUserAssociatedCases');
 
 describe('processUserAssociatedCases', () => {
   let mockFoundCasesList;
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-  });
-
   beforeEach(() => {
     mockFoundCasesList = [MOCK_CASE];
   });
 
   it('should set isRequestingUserAssociated to true for each case', async () => {
-    await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
+    processUserAssociatedCases(mockFoundCasesList);
 
     expect(MOCK_CASE.isRequestingUserAssociated).toBe(true);
   });
@@ -29,70 +17,57 @@ describe('processUserAssociatedCases', () => {
   it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', async () => {
     mockFoundCasesList = [{ ...MOCK_CASE, isLeadCase: true }];
 
-    const result = await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
+    const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
+      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.docketNumber],
     ).toEqual({ ...MOCK_CASE, isLeadCase: true });
   });
 
-  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadCaseId', async () => {
-    const result = await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
+  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadDocketNumber', async () => {
+    const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.caseId],
+      result.casesAssociatedWithUserOrLeadCaseMap[MOCK_CASE.docketNumber],
     ).toEqual(MOCK_CASE);
   });
 
-  it("should add a case's caseId to userAssociatedCaseIdsMap", async () => {
-    const result = await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
-
-    expect(result.userAssociatedCaseIdsMap[MOCK_CASE.caseId]).toEqual(true);
-  });
-
-  it('should add a case to leadCaseIdsAssociatedWithUser if it has a leadCaseId and is not associated with the user', async () => {
-    let mockCaseWithLeadCaseId = {
-      ...MOCK_CASE,
-      leadCaseId: applicationContext.getUniqueId(),
-    };
-    mockFoundCasesList = [mockCaseWithLeadCaseId];
-
-    const result = await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
+  it("should add a case's docketNumber to userAssociatedDocketNumbersMap", async () => {
+    const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
-      result.leadCaseIdsAssociatedWithUser.includes(
-        mockCaseWithLeadCaseId.leadCaseId.toString(),
+      result.userAssociatedDocketNumbersMap[MOCK_CASE.docketNumber],
+    ).toEqual(true);
+  });
+
+  it('should add a case to leadDocketNumbersAssociatedWithUser if it has a leadDocketNumber and is not associated with the user', async () => {
+    let mockCaseWithLeadDocketNumber = {
+      ...MOCK_CASE,
+      leadDocketNumber: '101-20',
+    };
+    mockFoundCasesList = [mockCaseWithLeadDocketNumber];
+
+    const result = processUserAssociatedCases(mockFoundCasesList);
+
+    expect(
+      result.leadDocketNumbersAssociatedWithUser.includes(
+        mockCaseWithLeadDocketNumber.leadDocketNumber.toString(),
       ),
     ).toBe(true);
   });
 
-  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadCaseIdsAssociatedWithUser and userAssociatedCaseIdsMap', async () => {
-    let mockCaseWithLeadCaseId = {
+  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadDocketNumbersAssociatedWithUser and userAssociatedDocketNumbersMap', async () => {
+    let mockCaseWithLeadDocketNumber = {
       ...MOCK_CASE,
       isLeadCase: true,
-      leadCaseId: applicationContext.getUniqueId(),
+      leadDocketNumber: '101-20',
     };
-    mockFoundCasesList = [mockCaseWithLeadCaseId, MOCK_CASE];
+    mockFoundCasesList = [mockCaseWithLeadDocketNumber, MOCK_CASE];
 
-    const result = await processUserAssociatedCases({
-      applicationContext,
-      openUserCases: mockFoundCasesList,
-    });
+    const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(result.casesAssociatedWithUserOrLeadCaseMap).not.toBe({});
-    expect(result.leadCaseIdsAssociatedWithUser.length).toBe(1);
-    expect(result.userAssociatedCaseIdsMap).not.toBe({});
+    expect(result.leadDocketNumbersAssociatedWithUser.length).toBe(1);
+    expect(result.userAssociatedDocketNumbersMap).not.toBe({});
   });
 });

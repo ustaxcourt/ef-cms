@@ -26,7 +26,7 @@ describe('updateCase', () => {
     secondQueryStub = [
       {
         gsi1pk: 'user-case|123',
-        leadCaseId: '123',
+        leadDocketNumber: '123-20',
         pk: 'user|123',
         sk: 'case|123',
         status: CASE_STATUS_TYPES.generalDocket,
@@ -550,7 +550,7 @@ describe('updateCase', () => {
       });
     });
 
-    it('updates user case mapping if the lead case id (consolidation) has changed', async () => {
+    it('updates user case mapping if the lead docket number (consolidation) has changed', async () => {
       await updateCase({
         applicationContext,
         caseToUpdate: {
@@ -559,7 +559,7 @@ describe('updateCase', () => {
           docketNumber: '101-18',
           docketNumberSuffix: null,
           inProgress: true,
-          leadCaseId: 'case|321',
+          leadDocketNumber: '123-20',
           status: CASE_STATUS_TYPES.generalDocket,
           trialDate: '2019-03-01T21:40:46.415Z',
           userId: 'petitioner',
@@ -570,7 +570,7 @@ describe('updateCase', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
       ).toMatchObject({
         gsi1pk: 'user-case|123',
-        leadCaseId: 'case|321',
+        leadDocketNumber: '123-20',
         pk: 'user|123',
         sk: 'case|123',
       });
