@@ -48,7 +48,6 @@ describe('getPublicCaseInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(result).toMatchObject({
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       contactPrimary: {
         name: MOCK_CASE.contactPrimary.name,
         state: MOCK_CASE.contactPrimary.state,

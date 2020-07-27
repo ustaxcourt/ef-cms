@@ -56,7 +56,10 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '123-19',
@@ -69,7 +72,10 @@ describe('casePublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Test Case Caption Two',
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '456-19',
@@ -107,7 +113,10 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: {
+          name: MOCK_CASE.contactPrimary.name,
+          state: MOCK_CASE.contactPrimary.state,
+        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketNumber: '123-19',
