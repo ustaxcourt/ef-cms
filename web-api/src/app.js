@@ -528,23 +528,23 @@ app.delete(
   lambdaWrapper(unblockCaseFromTrialLambda),
 );
 app.post(
-  '/case-meta/:caseId/high-priority',
+  '/case-meta/:docketNumber/high-priority',
   lambdaWrapper(prioritizeCaseLambda),
 );
 app.delete(
-  '/case-meta/:caseId/high-priority',
+  '/case-meta/:docketNumber/high-priority',
   lambdaWrapper(unprioritizeCaseLambda),
 );
 app.put(
-  '/case-meta/:caseId/case-context',
+  '/case-meta/:docketNumber/case-context',
   lambdaWrapper(updateCaseContextLambda),
 );
 app.put(
-  '/case-meta/:caseId/consolidate-case',
+  '/case-meta/:docketNumber/consolidate-case',
   lambdaWrapper(addConsolidatedCaseLambda),
 );
 app.delete(
-  '/case-meta/:caseId/consolidate-case',
+  '/case-meta/:docketNumber/consolidate-case',
   lambdaWrapper(removeConsolidatedCasesLambda),
 );
 app.put(
