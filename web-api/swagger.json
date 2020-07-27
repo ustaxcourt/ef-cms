@@ -1702,8 +1702,8 @@
       ],
       "put": {
         "tags": ["cases"],
-        "summary": "Consolidates two or more cases associated with the given case ids.",
-        "description": "Consolidates two or more cases associated with the given case ids.\n",
+        "summary": "Consolidates two or more cases associated with the given docket number.",
+        "description": "Consolidates two or more cases associated with the given docket number.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "responses": {
@@ -1723,7 +1723,7 @@
       "delete": {
         "parameters": [
           {
-            "name": "caseIdsToRemove",
+            "name": "docketNumbersToRemove",
             "in": "query",
             "required": true,
             "type": "string"
@@ -1772,10 +1772,10 @@
         }
       }
     },
-    "/cases/{caseId}/consolidated-cases": {
+    "/cases/{docketNumber}/consolidated-cases": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1783,8 +1783,8 @@
       ],
       "get": {
         "tags": ["cases"],
-        "summary": "Returns all consolidated cases associated with the given case id.",
-        "description": "Returns all consolidated cases associated with the given case id.\n",
+        "summary": "Returns all consolidated cases associated with the given docket number.",
+        "description": "Returns all consolidated cases associated with the given docket number.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
         "responses": {
