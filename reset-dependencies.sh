@@ -18,7 +18,6 @@ if [ -z "$CLEAN_ONLY" ]; then
   # removes all modules, reinstalls
   rm -rf node_modules web-client/pa11y/node_modules
   npm update
-  npm i
   npm update --prefix=web-client/pa11y/
-  npm i --prefix=web-client/pa11y/
+  npm i
 fi
