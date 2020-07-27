@@ -401,8 +401,8 @@ const {
   getCasesByDocketNumbers,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
 const {
-  getCasesByLeadCaseId,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
+  getCasesByLeadDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
 const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
@@ -1251,7 +1251,7 @@ module.exports = appContextUser => {
         getCaseMessageThreadByParentId,
         getCaseMessagesByDocketNumber,
         getCasesByDocketNumbers,
-        getCasesByLeadCaseId,
+        getCasesByLeadDocketNumber,
         getCasesByUser,
         getClosedCasesByUser,
         getCompletedSectionInboxMessages,

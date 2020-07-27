@@ -2957,8 +2957,8 @@ describe('Case entity', () => {
     });
 
     describe('setLeadCase', () => {
-      it('Should set the leadCaseId on the given case', async () => {
-        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+      it('Should set the leadDocketNumber on the given case', async () => {
+        const leadDocketNumber = '101-20';
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
@@ -2968,18 +2968,18 @@ describe('Case entity', () => {
           },
           { applicationContext },
         );
-        const result = caseEntity.setLeadCase(leadCaseId);
+        const result = caseEntity.setLeadCase(leadDocketNumber);
 
-        expect(result.leadCaseId).toEqual(leadCaseId);
+        expect(result.leadDocketNumber).toEqual(leadDocketNumber);
       });
     });
 
     describe('removeConsolidation', () => {
-      it('Should unset the leadCaseId on the given case', async () => {
+      it('Should unset the leadDocketNumber on the given case', async () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            leadDocketNumber: '101-20',
             preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'Regular',
             status: CASE_STATUS_TYPES.submitted,
@@ -2988,7 +2988,7 @@ describe('Case entity', () => {
         );
         const result = caseEntity.removeConsolidation();
 
-        expect(result.leadCaseId).toBeUndefined();
+        expect(result.leadDocketNumber).toBeUndefined();
       });
     });
 

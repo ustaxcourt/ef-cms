@@ -439,18 +439,16 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    leadCaseId: 
+    leadDocketNumber: 
       type: "string"
       flags: 
         presence: "optional"
-        description: "If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group."
+        description: "If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group."
       rules: 
         - 
-          name: "guid"
+          name: "pattern"
           args: 
-            options: 
-              version: 
-                - "uuidv4"
+            regex: "/^([1-9]\\d{2,4}-\\d{2})$/"
     litigationCosts: 
       type: "number"
       flags: 
