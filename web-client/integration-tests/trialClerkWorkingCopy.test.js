@@ -63,7 +63,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   docketClerkSetsCaseReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => createdCaseIds);
+  markAllCasesAsQCed(test, () => createdDocketNumbers);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'trialclerk@example.com');

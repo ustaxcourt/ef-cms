@@ -59,7 +59,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
 
   loginAs(test, 'petitionsclerk@example.com');
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[0], createdCaseIds[1]];
+    return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
   petitionsClerkCompletesAndSetsTrialSession(test);
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
