@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
@@ -271,7 +271,10 @@ joiValidationDecorator(
       .description(
         'Whether the document is a draft (not on the docket record).',
       ),
-    isFileAttached: joi.boolean().optional(),
+    isFileAttached: joi
+      .boolean()
+      .optional()
+      .description('Has an associated PDF in S3.'),
     isLegacy: joi
       .boolean()
       .when('isLegacySealed', {
@@ -367,7 +370,7 @@ joiValidationDecorator(
       .valid(...SCENARIOS)
       .optional(),
     secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
-      'A secondary date associated with the document, typically related to time-restricted availability.',
+      'A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents.',
     ),
     secondaryDocument: joi // TODO: limit keys
       .object()
@@ -426,7 +429,9 @@ joiValidationDecorator(
     serviceDate: JoiValidationConstants.ISO_DATE.max('now')
       .optional()
       .allow(null)
-      .description('Certificate of service date.'),
+      .description(
+        'Used by certificate of service documents to construct the document title.',
+      ),
     serviceStamp: joi.string().optional(),
     signedAt: joi
       .string()
