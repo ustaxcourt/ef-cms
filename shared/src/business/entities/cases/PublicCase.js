@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
