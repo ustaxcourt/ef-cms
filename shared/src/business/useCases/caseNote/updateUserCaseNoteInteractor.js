@@ -29,16 +29,7 @@ exports.updateUserCaseNoteInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-  const caseEntity = new Case(caseRecord, { applicationContext });
-
   const caseNoteEntity = new UserCaseNote({
-    caseId: caseEntity.caseId,
     docketNumber: caseEntity.docketNumber,
     notes,
     userId: (judgeUser && judgeUser.userId) || user.userId,
