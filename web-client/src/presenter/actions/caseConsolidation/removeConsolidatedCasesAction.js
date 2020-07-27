@@ -12,7 +12,7 @@ export const removeConsolidatedCasesAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const casesToRemove = get(state.modal.casesToRemove);
   const caseIdsToRemove = Object.entries(casesToRemove)
     .filter(([, shouldRemove]) => shouldRemove)
@@ -20,8 +20,8 @@ export const removeConsolidatedCasesAction = async ({
 
   await applicationContext.getUseCases().removeConsolidatedCasesInteractor({
     applicationContext,
-    caseId,
     caseIdsToRemove,
+    docketNumber,
   });
 
   return {

@@ -1386,10 +1386,10 @@
         }
       }
     },
-    "/cases/{caseId}/statistics/{statisticId}": {
+    "/cases/{docketNumber}/statistics/{statisticId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1463,10 +1463,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/high-priority": {
+    "/case-meta/{docketNumber}/high-priority": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1534,10 +1534,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/other-statistics": {
+    "/case-meta/{docketNumber}/other-statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1586,10 +1586,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/statistics": {
+    "/case-meta/{docketNumber}/statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1638,10 +1638,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/case-context": {
+    "/case-meta/{docketNumber}/case-context": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1691,10 +1691,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/consolidate-case": {
+    "/case-meta/{docketNumber}/consolidate-case": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1869,10 +1869,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/external-document": {
+    "/case-documents/{docketNumber}/external-document": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1992,10 +1992,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-meta": {
+    "/case-documents/{docketNumber}/docket-entry-meta": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -2096,10 +2096,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/docket-entry-complete": {
+    "/case-documents/{docketNumber}/docket-entry-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4545,10 +4545,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-docket-entry": {
+    "/case-documents/{docketNumber}/court-issued-docket-entry": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4608,10 +4608,10 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-order": {
+    "/case-documents/{docketNumber}/court-issued-order": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5078,10 +5078,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/qc-complete": {
+    "/case-meta/{docketNumber}/qc-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5146,10 +5146,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/seal": {
+    "/case-meta/{docketNumber}/seal": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

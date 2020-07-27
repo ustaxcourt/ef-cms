@@ -95,7 +95,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -105,7 +105,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
           eventCode: 'OSC',
         },
@@ -118,8 +118,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -130,7 +129,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -142,8 +141,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
         documentType: 'Order',
         eventCode: 'O',
@@ -155,7 +153,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -171,8 +169,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Notice to be nice',
         documentType: 'Notice',
         eventCode: 'NOT',
@@ -200,8 +197,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentContents: 'I am some document contents',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
@@ -241,8 +237,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'TC Opinion',
         documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
@@ -271,7 +266,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
       .getPersistenceGateway()
       .getCaseMessageThreadByParentId.mockReturnValue([
         {
-          caseId: caseRecord.caseId,
           caseStatus: caseRecord.status,
           caseTitle: PARTY_TYPES.petitioner,
           createdAt: '2019-03-01T21:40:46.415Z',
@@ -293,8 +287,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
         documentType: 'Order',
         eventCode: 'O',
@@ -325,7 +318,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
       .getPersistenceGateway()
       .getCaseMessageThreadByParentId.mockReturnValue([
         {
-          caseId: caseRecord.caseId,
           caseStatus: caseRecord.status,
           caseTitle: PARTY_TYPES.petitioner,
           createdAt: '2019-03-01T21:40:46.415Z',
@@ -347,8 +339,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
         documentType: 'Order',
         eventCode: 'O',
@@ -383,8 +374,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
-          docketNumber: '45678-18',
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'TC Opinion',
           documentType: 'T.C. Opinion',
           eventCode: 'TCOP',

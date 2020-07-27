@@ -27,14 +27,14 @@ export const submitAddDeficiencyStatisticsAction = async ({
     form: get(state.form),
   });
 
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
     await applicationContext.getUseCases().addDeficiencyStatisticInteractor({
       applicationContext,
-      caseId,
       determinationDeficiencyAmount,
       determinationTotalPenalties,
+      docketNumber,
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,

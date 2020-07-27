@@ -10,7 +10,7 @@ exports.addConsolidatedCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     await applicationContext.getUseCases().addConsolidatedCaseInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
-      caseIdToConsolidateWith: JSON.parse(event.body).caseIdToConsolidateWith,
+      ...event.pathParameters,
+      ...JSON.parse(event.body),
     });
   });
