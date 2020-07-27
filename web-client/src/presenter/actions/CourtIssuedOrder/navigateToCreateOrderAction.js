@@ -15,14 +15,15 @@ export const navigateToCreateOrderAction = async ({ get, props, router }) => {
   const documentType = get(state.modal.documentType);
   const documentId = get(state.modal.documentId);
   const eventCode = get(state.modal.eventCode);
+  const documentTitle = get(state.modal.documentTitle);
 
   if (parentMessageId) {
     router.openInNewTab(
-      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
     );
   } else {
     router.openInNewTab(
-      `/case-detail/${props.docketNumber}/create-order?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${props.docketNumber}/create-order?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
     );
   }
 };
