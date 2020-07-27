@@ -15,7 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.1",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "@hapi/joi": "^17.1.0",
+    "joi": "^17.1.1",
     "@hapi/joi-date": "^2.0.1",
     "archiver": "3.1.1",
     "autoprefixer": "^9.8.4",

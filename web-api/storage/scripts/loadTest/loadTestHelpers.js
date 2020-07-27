@@ -156,14 +156,14 @@ const createCase = async ({
 
 const addCaseToTrialSession = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   trialSessionId,
 }) => {
   return await applicationContext
     .getUseCases()
     .addCaseToTrialSessionInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       trialSessionId,
     });
 };

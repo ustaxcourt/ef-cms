@@ -12,7 +12,7 @@ exports.saveCaseDetailInternalEditLambda = event =>
       .getUseCases()
       .saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         ...JSON.parse(event.body),
         caseToUpdate: JSON.parse(event.body),
       });

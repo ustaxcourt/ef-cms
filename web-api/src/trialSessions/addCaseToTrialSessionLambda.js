@@ -8,13 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.addCaseToTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { caseId, trialSessionId } = event.pathParameters || event.path;
+    const { docketNumber, trialSessionId } = event.pathParameters || event.path;
 
     return await applicationContext
       .getUseCases()
       .addCaseToTrialSessionInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         trialSessionId,
       });
   });

@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi').extend(require('@hapi/joi-date'));
+const joi = require('joi').extend(require('@hapi/joi-date'));
 const {
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
