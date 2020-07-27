@@ -644,7 +644,7 @@ app.post(
   lambdaWrapper(serveCaseToIrsLambda),
 );
 app.put(
-  '/cases/:docketNumber/',
+  '/cases/:docketNumber',
   lambdaWrapper(saveCaseDetailInternalEditLambda),
 );
 app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
