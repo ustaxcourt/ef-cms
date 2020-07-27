@@ -403,10 +403,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/counsel/{userId}": {
+    "/case-parties/{docketNumber}/counsel/{userId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -480,10 +480,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/contact-primary": {
+    "/case-parties/{docketNumber}/contact-primary": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -4974,10 +4974,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petition-details": {
+    "/case-parties/{docketNumber}/petition-details": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -5026,10 +5026,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petitioner-info": {
+    "/case-parties/{docketNumber}/petitioner-info": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
