@@ -11,7 +11,7 @@ export const removeCaseDetailPendingItemAction = async ({
   props,
 }) => {
   const {
-    caseDetail: { caseId },
+    caseDetail: { docketNumber },
     documentId,
   } = props;
 
@@ -19,7 +19,7 @@ export const removeCaseDetailPendingItemAction = async ({
     .getUseCases()
     .removeCasePendingItemInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
   return { caseDetail };
