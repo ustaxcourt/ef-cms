@@ -2,7 +2,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCreateOrderAction } from '../actions/CourtIssuedOrder/navigateToCreateOrderAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setModalFormValuesAsPropsAction } from '../actions/setModalFormValuesAsPropsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -17,7 +16,6 @@ export const submitCreateOrderModalSequence = [
     success: [
       setModalFormValuesAsPropsAction,
       clearModalAction,
-      setCasePropFromStateAction,
       navigateToCreateOrderAction,
     ],
   },

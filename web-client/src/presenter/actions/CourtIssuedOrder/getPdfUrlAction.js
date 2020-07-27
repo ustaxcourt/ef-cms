@@ -10,6 +10,7 @@ import { state } from 'cerebral';
  */
 export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
   const { contentHtml, documentTitle, signatureText } = props;
+
   const caseDetail = get(state.caseDetail);
 
   const {
