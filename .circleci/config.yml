@@ -22,7 +22,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Lint
           command: npm run lint
@@ -71,7 +71,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
@@ -113,7 +113,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit:ci
@@ -150,7 +150,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -236,7 +236,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -286,7 +286,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -338,7 +338,7 @@ jobs:
             - '.git'
       - run:
           name: NPM - Install
-          command: npm set progress=false && npm ci && npm rebuild node-sass
+          command: npm set progress=false && npm ci && npm rebuild node-sass && npm ci --prefix=web-client/pa11y/
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
