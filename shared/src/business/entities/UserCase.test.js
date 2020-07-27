@@ -13,7 +13,7 @@ describe('UserCase', () => {
         createdAt: prepareDateFromString().toISOString(),
         docketNumber: '104-21',
         docketNumberWithSuffix: '104-20W',
-        leadCaseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        leadDocketNumber: '101-21',
       }).isValid(),
     ).toBeTruthy();
   });

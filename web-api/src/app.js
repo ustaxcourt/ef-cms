@@ -460,7 +460,7 @@ app.post(
   lambdaWrapper(fileExternalDocumentToCaseLambda),
 );
 app.post(
-  '/case-documents/consolidated/:leadCaseId/external-document',
+  '/case-documents/consolidated/:leadDocketNumber/external-document',
   lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
 );
 app.post(
@@ -636,7 +636,7 @@ app.delete(
   lambdaWrapper(removeCasePendingItemLambda),
 );
 app.get(
-  '/cases/:caseId/consolidated-cases',
+  '/cases/:docketNumber/consolidated-cases',
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
 app.post(

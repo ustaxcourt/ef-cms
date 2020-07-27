@@ -11,8 +11,8 @@ exports.fileExternalDocumentToConsolidatedCasesLambda = event =>
     return await applicationContext
       .getUseCases()
       .fileExternalDocumentForConsolidatedInteractor({
-        ...JSON.parse(event.body),
         applicationContext,
-        leadCaseId: event.pathParameters.leadCaseId,
+        ...JSON.parse(event.body),
+        ...event.pathParameters,
       });
   });
