@@ -10,7 +10,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "frontend_public" {
-  bucket = "${var.dns_domain}"
+  bucket = var.dns_domain
 
   policy = data.aws_iam_policy_document.public_policy_bucket.json
 
