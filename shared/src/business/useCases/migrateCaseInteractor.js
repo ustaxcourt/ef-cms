@@ -79,7 +79,7 @@ exports.migrateCaseInteractor = async ({
 
   // when part of a consolidated case, run the update use case
   // which will link the cases together in DynamoDB
-  if (caseToAdd.leadCaseId) {
+  if (caseToAdd.leadDocketNumber) {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseValidatedRaw,
