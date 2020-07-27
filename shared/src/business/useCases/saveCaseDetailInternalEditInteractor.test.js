@@ -87,15 +87,15 @@ describe('updateCase', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     await expect(
       saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
-        caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
+        caseToUpdate: omit(MOCK_CASE, 'caseCaption'),
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });
@@ -104,7 +104,7 @@ describe('updateCase', () => {
     await expect(
       saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('cannot process');
   });
@@ -114,7 +114,6 @@ describe('updateCase', () => {
 
     const updatedCase = await saveCaseDetailInternalEditInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
@@ -143,7 +142,6 @@ describe('updateCase', () => {
           state: 'FL',
         },
         createdAt: '2019-07-24T16:30:01.940Z',
-        docketNumber: '168-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         filingType: 'Myself and my spouse',
         hasVerifiedIrsNotice: false,
@@ -153,6 +151,7 @@ describe('updateCase', () => {
         privatePractitioners: [],
         procedureType: 'Small',
       },
+      docketNumber: caseToUpdate.docketNumber,
     });
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
@@ -165,11 +164,11 @@ describe('updateCase', () => {
 
     await saveCaseDetailInternalEditInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
       },
+      docketNumber: caseToUpdate.docketNumber,
     });
 
     expect(
@@ -192,11 +191,11 @@ describe('updateCase', () => {
 
     await saveCaseDetailInternalEditInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
       },
+      docketNumber: caseToUpdate.docketNumber,
     });
 
     expect(
@@ -210,12 +209,12 @@ describe('updateCase', () => {
     await expect(
       saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: caseToUpdate.caseId,
         caseToUpdate: {
           ...caseToUpdate,
           contactPrimary: null,
           contactSecondary: {},
         },
+        docketNumber: caseToUpdate.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });
@@ -229,8 +228,8 @@ describe('updateCase', () => {
     await expect(
       saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case');
   });
@@ -244,8 +243,8 @@ describe('updateCase', () => {
     await expect(
       saveCaseDetailInternalEditInteractor({
         applicationContext,
-        caseId: '123',
         caseToUpdate: MOCK_CASE,
+        docketNumber: '123',
       }),
     ).rejects.toThrow('Unauthorized for update case');
   });

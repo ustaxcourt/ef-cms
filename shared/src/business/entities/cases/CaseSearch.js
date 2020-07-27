@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   CASE_SEARCH_MIN_YEAR,
   COUNTRY_TYPES,

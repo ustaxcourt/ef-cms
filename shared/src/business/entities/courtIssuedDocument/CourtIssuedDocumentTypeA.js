@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
