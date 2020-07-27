@@ -12,7 +12,7 @@ export const updatePetitionerInformationAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseToUpdate = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
   const {
@@ -23,9 +23,9 @@ export const updatePetitionerInformationAction = async ({
     .getUseCases()
     .updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: caseToUpdate.caseId,
       contactPrimary,
       contactSecondary,
+      docketNumber,
       partyType,
     });
 
@@ -34,7 +34,7 @@ export const updatePetitionerInformationAction = async ({
       message: 'Changes saved.',
     },
     caseDetail: updatedCase,
-    caseId: updatedCase.docketNumber,
+    docketNumber,
     paperServiceParties,
     pdfUrl: paperServicePdfUrl,
     tab: 'caseInfo',
