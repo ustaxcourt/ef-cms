@@ -25,14 +25,12 @@ describe('navigateToCreateOrderAction', () => {
       modules: {
         presenter,
       },
-      props: { docketNumber },
-      state: {
-        modal: {
-          documentId,
-          documentTitle,
-          documentType,
-          eventCode,
-        },
+      props: {
+        docketNumber,
+        documentId,
+        documentTitle,
+        documentType,
+        eventCode,
       },
     });
 
@@ -49,13 +47,13 @@ describe('navigateToCreateOrderAction', () => {
       },
       props: {
         docketNumber: '123-20',
+        documentId,
+        documentTitle,
+        documentType,
+        eventCode,
       },
       state: {
         modal: {
-          documentId,
-          documentTitle,
-          documentType,
-          eventCode,
           parentMessageId,
         },
       },

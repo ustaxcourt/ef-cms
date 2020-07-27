@@ -548,7 +548,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     back,
     createObjectURL,
     externalRoute,
-    openInNewTab,
+    openInNewTab: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
     revokeObjectURL,
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
