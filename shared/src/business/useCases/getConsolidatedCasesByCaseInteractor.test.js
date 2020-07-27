@@ -6,19 +6,19 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('getConsolidatedCasesByCaseInteractor', () => {
-  let getCasesByLeadCaseIdStub;
+  let getCasesByLeadDocketNumberStub;
 
   beforeEach(() => {
-    getCasesByLeadCaseIdStub = jest.fn().mockResolvedValue([
+    getCasesByLeadDocketNumberStub = jest.fn().mockResolvedValue([
       {
         ...MOCK_CASE,
         caseCaption: 'Guy Fieri vs. Bobby Flay',
-        caseId: 'a0af9894-0390-463c-bf17-aae52c34c026',
+        docketNumber: '101-20',
       },
       {
         ...MOCK_CASE,
         caseCaption: 'Guy Fieri vs. Gordon Ramsay',
-        caseId: '976e0e9d-ffa7-4d56-ac6f-aea848a5dba1',
+        docketNumber: '102-20',
       },
     ]);
 
@@ -27,24 +27,26 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId.mockImplementation(getCasesByLeadCaseIdStub);
+      .getCasesByLeadDocketNumber.mockImplementation(
+        getCasesByLeadDocketNumberStub,
+      );
   });
 
-  it('returns cases by the leadCaseId', async () => {
+  it('returns cases by the leadDocketNumber', async () => {
     const cases = await getConsolidatedCasesByCaseInteractor({
       applicationContext,
-      leadCaseId: 'leadCaseId-123',
+      leadDocketNumber: '101-20',
     });
 
-    expect(getCasesByLeadCaseIdStub).toHaveBeenCalled();
+    expect(getCasesByLeadDocketNumberStub).toHaveBeenCalled();
     expect(cases).toMatchObject([
       {
         caseCaption: 'Guy Fieri vs. Bobby Flay',
-        caseId: 'a0af9894-0390-463c-bf17-aae52c34c026',
+        docketNumber: '101-20',
       },
       {
         caseCaption: 'Guy Fieri vs. Gordon Ramsay',
-        caseId: '976e0e9d-ffa7-4d56-ac6f-aea848a5dba1',
+        docketNumber: '102-20',
       },
     ]);
   });

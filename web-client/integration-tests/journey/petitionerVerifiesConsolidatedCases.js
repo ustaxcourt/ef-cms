@@ -3,13 +3,14 @@ export const petitionerVerifiesConsolidatedCases = test => {
     const cases = test.getState('openCases');
 
     const casesWithConsolidation = cases.filter(
-      caseDetail => !!caseDetail.leadCaseId,
+      caseDetail => !!caseDetail.leadDocketNumber,
     );
     expect(casesWithConsolidation.length).toBeGreaterThan(0);
 
     const aLeadCase = casesWithConsolidation.find(
       caseDetail =>
-        caseDetail.leadCaseId === casesWithConsolidation[0].leadCaseId,
+        caseDetail.leadDocketNumber ===
+        casesWithConsolidation[0].leadDocketNumber,
     );
     expect(aLeadCase.consolidatedCases.length).toBeGreaterThan(0);
   });

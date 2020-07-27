@@ -48,7 +48,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     }
   }
 
-  const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
+  const showConsolidatedCaseIcon = !!caseDetail.leadDocketNumber;
 
   const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
 
