@@ -176,7 +176,7 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([]);
   });
 
-  markAllCasesAsQCed(test, () => [test.caseId]);
+  markAllCasesAsQCed(test, () => [test.docketNumber]);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   petitionsClerkCreatesACaseDeadline(test);

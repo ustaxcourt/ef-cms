@@ -8,8 +8,22 @@ const {
 describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
   let putStub;
   let getStub;
+  let queryStub;
+
+  const CASE_ID = '63d2e8f7-0e63-4b7c-b6a2-85f97e8a2021';
 
   beforeEach(() => {
+    queryStub = jest.fn().mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Items: [
+            {
+              pk: `case|${CASE_ID}`,
+              sk: `case|${CASE_ID}`,
+            },
+          ],
+        }),
+    });
     putStub = jest.fn().mockReturnValue({
       promise: async () => ({
         section: 'docket',
@@ -34,12 +48,13 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
     applicationContext.getDocumentClient.mockReturnValue({
       get: getStub,
       put: putStub,
+      query: queryStub,
     });
     await saveWorkItemForDocketClerkFilingExternalDocument({
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        caseId: '456',
+        docketNumber: '456-20',
         section: 'docket',
         workItemId: '123',
       },
@@ -65,7 +80,7 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
     });
     expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
-        pk: 'case|456',
+        pk: `case|${CASE_ID}`,
         sk: 'work-item|123',
       },
     });

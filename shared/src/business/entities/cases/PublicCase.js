@@ -1,7 +1,6 @@
 const joi = require('@hapi/joi');
 const {
   COURT_ISSUED_DOCUMENT_TYPES,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
@@ -27,7 +26,6 @@ const { PublicDocument } = require('./PublicDocument');
  */
 function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -57,13 +55,10 @@ function PublicCase(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  caseId: JoiValidationConstants.UUID.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Unique case identifier in XXXXX-YY format.'),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
   docketNumberSuffix: joi
     .string()
     .allow(null)
@@ -75,11 +70,10 @@ const publicCaseSchema = {
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: JoiValidationConstants.UUID,
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
-  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
   docketNumberSuffix: joi
     .string()
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))

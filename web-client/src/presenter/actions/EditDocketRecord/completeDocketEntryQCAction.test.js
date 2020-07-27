@@ -45,7 +45,6 @@ describe('completeDocketEntryQCAction', () => {
         title: 'QC Completed',
       },
       caseDetail,
-      caseId: caseDetail.caseId,
       docketNumber: caseDetail.docketNumber,
       updatedDocument: {
         documentId: '123-456-789-abc',

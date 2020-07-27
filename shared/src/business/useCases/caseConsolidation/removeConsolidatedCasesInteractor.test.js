@@ -57,6 +57,12 @@ describe('removeConsolidatedCasesInteractor', () => {
       .getCaseByCaseId.mockImplementation(({ caseId }) => {
         return mockCases[caseId];
       });
+    const mockCasesArray = Object.values(mockCases);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        return mockCasesArray.find(c => c.docketNumber === docketNumber);
+      });
     applicationContext
       .getPersistenceGateway()
       .getCasesByLeadCaseId.mockImplementation(({ leadCaseId }) => {
@@ -70,30 +76,24 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
-    let error;
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
     });
 
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
         caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain('Unauthorized for case consolidation');
+        docketNumber: '102-19',
+      }),
+    ).rejects.toThrow('Unauthorized for case consolidation');
   });
 
   it('Should try to get the case by its caseId', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
       caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
+      docketNumber: '102-19',
     });
 
     expect(
@@ -102,37 +102,23 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
-    let error;
-
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
         caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain(
-      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
-    );
+        docketNumber: '111-11',
+      }),
+    ).rejects.toThrow('Case 111-11 was not found.');
   });
 
   it('Should return a Not Found error if the case to remove cannot be found', async () => {
-    let error;
-
-    try {
-      await removeConsolidatedCasesInteractor({
+    await expect(
+      removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
         caseIdsToRemove: ['xxxba5a9-b37b-479d-9201-067ec6e33xxx'],
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.message).toContain(
+        docketNumber: '102-19',
+      }),
+    ).rejects.toThrow(
       'Case to consolidate with (xxxba5a9-b37b-479d-9201-067ec6e33xxx) was not found.',
     );
   });
@@ -140,8 +126,8 @@ describe('removeConsolidatedCasesInteractor', () => {
   it('Should only update the removed case if the case to remove is not the lead case', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa', // docketNumber: '101-19'
       caseIdsToRemove: ['cccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '102-19'
+      docketNumber: '101-19',
     });
 
     expect(
@@ -159,8 +145,8 @@ describe('removeConsolidatedCasesInteractor', () => {
   it('Should update the removed case and all other currently consolidated cases if the case to remove is the lead case', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '102-19'
       caseIdsToRemove: ['aaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '101-19'
+      docketNumber: '102-19',
     });
 
     expect(
@@ -194,8 +180,8 @@ describe('removeConsolidatedCasesInteractor', () => {
   it('Should update the removed case and remove consolidation from the original lead case if there is only one case remaining after removal', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'eaaba5a9-b37b-479d-9201-067ec6e33aaa', // docketNumber: '104-19'
       caseIdsToRemove: ['fccca5a9-b37b-479d-9201-067ec6e33ccc'], // docketNumber: '105-19'
+      docketNumber: '104-19',
     });
 
     expect(
@@ -222,8 +208,8 @@ describe('removeConsolidatedCasesInteractor', () => {
   it('Should update the removed case and remove consolidation from the original non-lead case if there is only one case remaining after removal', async () => {
     await removeConsolidatedCasesInteractor({
       applicationContext,
-      caseId: 'fccca5a9-b37b-479d-9201-067ec6e33ccc', // docketNumber: '105-19'
       caseIdsToRemove: ['eaaba5a9-b37b-479d-9201-067ec6e33aaa'], // docketNumber: '104-19'
+      docketNumber: '105-19',
     });
 
     expect(

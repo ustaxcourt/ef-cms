@@ -67,7 +67,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   petitionsClerkManuallyAddsCaseToTrial(test);
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[1]];
+    return [createdDocketNumbers[1]];
   });
   petitionsClerkSetsATrialSessionsSchedule(test);
 

@@ -57,7 +57,9 @@ exports.setTrialSessionCalendarInteractor = async ({
     ) {
       manuallyAddedQcCompleteCases.push(manualCase);
     } else {
-      trialSessionEntity.deleteCaseFromCalendar({ caseId: manualCase.caseId });
+      trialSessionEntity.deleteCaseFromCalendar({
+        docketNumber: manualCase.docketNumber,
+      });
     }
   });
 
