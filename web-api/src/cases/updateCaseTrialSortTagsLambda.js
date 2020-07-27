@@ -12,6 +12,6 @@ exports.updateCaseTrialSortTagsLambda = event =>
       .getUseCases()
       .updateCaseTrialSortTagsInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
       });
   });

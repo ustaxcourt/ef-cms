@@ -3,6 +3,10 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const { getUserCaseNoteForCases } = require('./getUserCaseNoteForCases');
+jest.mock('../cases/getCaseIdFromDocketNumber');
+const {
+  getCaseIdFromDocketNumber,
+} = require('../cases/getCaseIdFromDocketNumber');
 
 describe('getUserCaseNoteForCases', () => {
   beforeEach(() => {
@@ -17,11 +21,21 @@ describe('getUserCaseNoteForCases', () => {
     ]);
   });
 
+  it('should retrieve the caseId for each case from the docketNumbers provided', async () => {
+    await getUserCaseNoteForCases({
+      applicationContext,
+      docketNumbers: ['123-45'],
+    });
+
+    expect(getCaseIdFromDocketNumber).toHaveBeenCalled();
+  });
+
   it('should get the case notes by case id and user id', async () => {
     const result = await getUserCaseNoteForCases({
       applicationContext,
-      caseIds: ['123'],
+      docketNumbers: ['123-45'],
     });
+
     expect(result).toEqual([
       {
         caseId: '123',

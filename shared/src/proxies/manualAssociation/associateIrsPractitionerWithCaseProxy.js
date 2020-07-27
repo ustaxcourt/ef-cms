@@ -5,20 +5,20 @@ const { post } = require('../requests');
  *
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
- * @param {string} params.caseId the case id
+ * @param {string} params.docketNumber the docket number of the case
  * @param {string} params.serviceIndicator the type of service the irsPractitioner should receive
  * @param {string} params.userId the user id
  * @returns {Promise<*>} the promise of the api call
  */
 exports.associateIrsPractitionerWithCaseInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   serviceIndicator,
   userId,
 }) => {
   return post({
     applicationContext,
-    body: { caseId, serviceIndicator, userId },
-    endpoint: `/case-parties/${caseId}/associate-irs-practitioner`,
+    body: { docketNumber, serviceIndicator, userId },
+    endpoint: `/case-parties/${docketNumber}/associate-irs-practitioner`,
   });
 };

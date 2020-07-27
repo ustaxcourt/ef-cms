@@ -3,16 +3,16 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { TrialSession } = require('./TrialSession');
 
-const VALID_TRIAL_SESSION = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2025-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2025',
-  trialLocation: 'Birmingham, Alabama',
-};
-
 describe('TrialSession entity', () => {
+  const VALID_TRIAL_SESSION = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2025-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '2025',
+    trialLocation: 'Birmingham, Alabama',
+  };
+
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new TrialSession({}, {})).toThrow();
@@ -48,6 +48,25 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
+      expect(trialSession.isValid()).toBeFalsy();
+    });
+
+    it('fails validation when caseOrder.docketNumber is not a valid docketNumber', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [
+            {
+              docketNumber: 'abc',
+            },
+          ],
+          sessionType: 'Something Else',
+        },
+        {
+          applicationContext,
+        },
+      );
+
       expect(trialSession.isValid()).toBeFalsy();
     });
   });
@@ -157,8 +176,10 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      trialSession.addCaseToCalendar({ caseId: '123' });
-      expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
+
+      trialSession.addCaseToCalendar({ docketNumber: '123-45' });
+
+      expect(trialSession.caseOrder[0]).toEqual({ docketNumber: '123-45' });
     });
   });
 
@@ -173,9 +194,10 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      trialSession.manuallyAddCaseToCalendar({ caseId: '123' });
+      trialSession.manuallyAddCaseToCalendar({ docketNumber: '123-45' });
+
       expect(trialSession.caseOrder[0]).toEqual({
-        caseId: '123',
+        docketNumber: '123-45',
         isManuallyAdded: true,
       });
     });
@@ -192,20 +214,20 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      trialSession.addCaseToCalendar({ caseId: '123' });
-      trialSession.addCaseToCalendar({ caseId: '234' });
-      trialSession.addCaseToCalendar({ caseId: '456' });
+      trialSession.addCaseToCalendar({ docketNumber: '123-45' });
+      trialSession.addCaseToCalendar({ docketNumber: '234-45' });
+      trialSession.addCaseToCalendar({ docketNumber: '456-45' });
       expect(trialSession.caseOrder.length).toEqual(3);
 
       trialSession.removeCaseFromCalendar({
-        caseId: '123',
         disposition: 'because',
+        docketNumber: '123-45',
       });
 
       expect(trialSession.caseOrder.length).toEqual(3);
       expect(trialSession.caseOrder[0]).toMatchObject({
-        caseId: '123',
         disposition: 'because',
+        docketNumber: '123-45',
         removedFromTrial: true,
       });
       expect(trialSession.caseOrder[0].removedFromTrialDate).toBeDefined();
@@ -223,14 +245,14 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      trialSession.addCaseToCalendar({ caseId: '123' });
-      trialSession.addCaseToCalendar({ caseId: '234' });
-      trialSession.addCaseToCalendar({ caseId: '456' });
+      trialSession.addCaseToCalendar({ docketNumber: '123-45' });
+      trialSession.addCaseToCalendar({ docketNumber: '234-45' });
+      trialSession.addCaseToCalendar({ docketNumber: '456-45' });
       expect(trialSession.caseOrder.length).toEqual(3);
 
       trialSession.removeCaseFromCalendar({
-        caseId: 'abc',
         disposition: 'because',
+        docketNumber: 'abc-de',
       });
 
       expect(trialSession.caseOrder.length).toEqual(3);
@@ -245,14 +267,14 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [{ caseId: '123' }],
+          caseOrder: [{ docketNumber: '123-45' }],
         },
         {
           applicationContext,
         },
       );
       expect(
-        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+        trialSession.isCaseAlreadyCalendared({ docketNumber: '123-45' }),
       ).toBeTruthy();
     });
 
@@ -260,14 +282,14 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [{ caseId: 'abc' }],
+          caseOrder: [{ docketNumber: 'abc-de' }],
         },
         {
           applicationContext,
         },
       );
       expect(
-        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+        trialSession.isCaseAlreadyCalendared({ docketNumber: '123-45' }),
       ).toBeFalsy();
     });
 
@@ -275,14 +297,14 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [{ caseId: 'abc', removedFromTrial: true }],
+          caseOrder: [{ docketNumber: 'abc-de', removedFromTrial: true }],
         },
         {
           applicationContext,
         },
       );
       expect(
-        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+        trialSession.isCaseAlreadyCalendared({ docketNumber: '123-45' }),
       ).toBeFalsy();
     });
   });
@@ -292,35 +314,35 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [
-            { caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' },
-            { caseId: '58c1f7a3-8062-42f0-a73e-8bd69b419878' },
-          ],
+          caseOrder: [{ docketNumber: '678-90' }, { docketNumber: '123-45' }],
         },
         {
           applicationContext,
         },
       );
+
       trialSession.deleteCaseFromCalendar({
-        caseId: '58c1f7a3-8062-42f0-a73e-8bd69b419878',
+        docketNumber: '123-45',
       });
-      expect(trialSession.caseOrder).toEqual([
-        { caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' },
-      ]);
+
+      expect(trialSession.caseOrder).toEqual([{ docketNumber: '678-90' }]);
     });
+
     it('should remove the expected case from the order when there is only one entry', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
-          caseOrder: [{ caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' }],
+          caseOrder: [{ docketNumber: '123-45' }],
         },
         {
           applicationContext,
         },
       );
+
       trialSession.deleteCaseFromCalendar({
-        caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
+        docketNumber: '123-45',
       });
+
       expect(trialSession.caseOrder).toEqual([]);
     });
   });

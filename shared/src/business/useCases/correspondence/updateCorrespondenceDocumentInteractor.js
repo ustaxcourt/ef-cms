@@ -18,7 +18,7 @@ exports.updateCorrespondenceDocumentInteractor = async ({
   documentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
@@ -26,9 +26,9 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -51,8 +51,8 @@ exports.updateCorrespondenceDocumentInteractor = async ({
 
   await applicationContext.getPersistenceGateway().fileCaseCorrespondence({
     applicationContext,
-    caseId,
     correspondence: updatedCorrespondenceEntity.validate().toRawObject(),
+    docketNumber,
   });
 
   return caseEntityRaw;

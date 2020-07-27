@@ -1,22 +1,21 @@
 /**
  * loadPDFForPreviewInteractor
  *
- * @param obj
+ * @param {object} obj the params object
  * @param {string} obj.applicationContext the application context
- * @param {string} obj.caseId the caseId
+ * @param {string} obj.docketNumber the docket number of the case
  * @param {string} obj.documentId the document id
- * @returns {Promise<object>}
+ * @returns {Promise<object>} the document data
  */
-
 exports.loadPDFForPreviewInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   try {
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
-      caseId,
+      docketNumber,
       documentId,
     });
   } catch (err) {

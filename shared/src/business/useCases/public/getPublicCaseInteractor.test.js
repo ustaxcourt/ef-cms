@@ -4,13 +4,11 @@ const {
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 
 const mockCase = {
-  caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   docketNumber: '123-45',
 };
 
 const mockCases = {
   '102-20': {
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '102-20',
     sealedDate: '2020-01-02T03:04:05.007Z',
   },

@@ -63,7 +63,7 @@ describe('a user signs and serves a stipulated decision', () => {
       test,
     );
     const proposedStipulatedDecision = documentQCSectionInbox.find(
-      workItem => workItem.caseId === caseDetail.caseId,
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
     await viewDocumentDetailMessage({
       docketNumber: proposedStipulatedDecision.docketNumber,

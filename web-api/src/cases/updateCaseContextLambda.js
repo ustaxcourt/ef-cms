@@ -10,7 +10,7 @@ exports.updateCaseContextLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().updateCaseContextInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
+      ...event.pathParameters,
       ...JSON.parse(event.body),
     });
   });

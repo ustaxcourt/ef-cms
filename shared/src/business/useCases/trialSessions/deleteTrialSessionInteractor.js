@@ -68,9 +68,9 @@ exports.deleteTrialSessionInteractor = async ({
   for (const order of trialSessionEntity.caseOrder) {
     const myCase = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId: order.caseId,
+        docketNumber: order.docketNumber,
       });
 
     const caseEntity = new Case(myCase, { applicationContext });

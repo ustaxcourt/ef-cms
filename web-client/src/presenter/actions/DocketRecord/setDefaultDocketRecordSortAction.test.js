@@ -5,12 +5,12 @@ describe('setDefaultDocketRecordSortAction', () => {
   it('should not default docketRecordSort if current caseId matches sessionMetadata caseId', async () => {
     const result = await runAction(setDefaultDocketRecordSortAction, {
       state: {
-        caseDetail: { caseId: '123' },
-        sessionMetadata: { docketRecordSort: { '123': 'something' } },
+        caseDetail: { docketNumber: '123-45' },
+        sessionMetadata: { docketRecordSort: { '123-45': 'something' } },
       },
     });
 
-    expect(result.state.sessionMetadata.docketRecordSort['123']).toEqual(
+    expect(result.state.sessionMetadata.docketRecordSort['123-45']).toEqual(
       'something',
     );
   });
@@ -18,7 +18,7 @@ describe('setDefaultDocketRecordSortAction', () => {
   it('should default docketRecordSort if current caseId does not match sessionMetadata caseId', async () => {
     const result = await runAction(setDefaultDocketRecordSortAction, {
       state: {
-        caseDetail: { caseId: '987' },
+        caseDetail: { docketNumber: '987' },
         sessionMetadata: {},
       },
     });

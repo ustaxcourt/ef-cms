@@ -6,7 +6,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { DOCKET_NUMBER_MATCHER } = require('./EntityConstants');
 
 /**
  * Case Deadline entity
@@ -58,11 +57,9 @@ CaseDeadline.schema = joi.object().keys({
     .min(1)
     .required()
     .description('User provided description of the Case Deadline.'),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Docket number of the case containing the Case Deadline.'),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Docket number of the case containing the Case Deadline.',
+  ),
   entityName: joi.string().valid('CaseDeadline').required(),
 });
 
