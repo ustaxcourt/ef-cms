@@ -12,7 +12,7 @@ exports.updatePetitionerInformationLambda = event =>
       .getUseCases()
       .updatePetitionerInformationInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         ...JSON.parse(event.body),
       });
   });
