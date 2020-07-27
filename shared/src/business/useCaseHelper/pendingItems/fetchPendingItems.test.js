@@ -17,7 +17,6 @@ describe('fetchPendingItems', () => {
   beforeEach(() => {
     const mockDataOne = {
       caseCaption: 'Test Petitioner, Petitioner',
-      caseId: '1',
       documents: [
         {
           documentId: 'def',
@@ -31,7 +30,6 @@ describe('fetchPendingItems', () => {
     };
     const mockDataTwo = {
       caseCaption: 'Another Test Petitioner, Petitioner',
-      caseId: '2',
       documents: [
         {
           documentId: 'abc',
@@ -49,7 +47,7 @@ describe('fetchPendingItems', () => {
       .fetchPendingItems.mockReturnValue([mockDataOne, mockDataTwo]);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue([mockDataOne, mockDataTwo]);
+      .getCaseByDocketNumber.mockReturnValue([mockDataOne, mockDataTwo]);
   });
 
   it('calls search function with correct params when provided a judge and returns records', async () => {
@@ -73,7 +71,6 @@ describe('fetchPendingItems', () => {
       .getPersistenceGateway()
       .fetchPendingItems.mockReturnValue([
         {
-          caseId: '1',
           documents: undefined,
         },
       ]);
