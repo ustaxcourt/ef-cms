@@ -561,7 +561,7 @@ app.put(
   lambdaWrapper(updateDeficiencyStatisticLambda),
 );
 app.delete(
-  '/case-meta/:caseId/statistics/:statisticId',
+  '/case-meta/:docketNumber/statistics/:statisticId',
   lambdaWrapper(deleteDeficiencyStatisticLambda),
 );
 app.post(
