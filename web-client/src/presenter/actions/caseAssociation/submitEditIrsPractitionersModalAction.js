@@ -24,7 +24,7 @@ export const submitEditIrsPractitionersModalAction = async ({
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,
         docketNumber,
-        userIdToDelete: respondent.userId,
+        userId: respondent.userId,
       });
     } else {
       await applicationContext.getUseCases().updateCounselOnCaseInteractor({

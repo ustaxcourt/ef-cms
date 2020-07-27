@@ -612,7 +612,7 @@ app.put(
   lambdaWrapper(updateCounselOnCaseLambda),
 );
 app.delete(
-  '/case-parties/:caseId/counsel/:userId',
+  '/case-parties/:docketNumber/counsel/:userId',
   lambdaWrapper(deleteCounselFromCaseLambda),
 );
 app.put(
