@@ -551,7 +551,7 @@ app.put(
   '/case-meta/:docketNumber/qc-complete',
   lambdaWrapper(updateQcCompleteForTrialLambda),
 );
-app.put('/case-meta/:caseId/seal', lambdaWrapper(sealCaseLambda));
+app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
 app.post(
   '/case-meta/:caseId/other-statistics',
   lambdaWrapper(updateOtherStatisticsLambda),
