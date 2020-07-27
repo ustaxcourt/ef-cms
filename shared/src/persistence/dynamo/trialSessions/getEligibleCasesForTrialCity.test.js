@@ -10,7 +10,7 @@ describe('getEligibleCasesForTrialCity', () => {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([
       {
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-20',
         pk: 'eligible-for-trial-case-catalog',
         sk:
           'WashingtonDistrictofColumbia-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -26,7 +26,7 @@ describe('getEligibleCasesForTrialCity', () => {
     });
     expect(result).toEqual([
       {
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-20',
         pk: 'eligible-for-trial-case-catalog',
         sk:
           'WashingtonDistrictofColumbia-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',

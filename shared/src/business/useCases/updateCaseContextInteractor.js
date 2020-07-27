@@ -82,7 +82,7 @@ exports.updateCaseContextInteractor = async ({
         .getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords({
           applicationContext,
-          caseId: newCase.caseId,
+          docketNumber: newCase.docketNumber,
         });
     }
 
@@ -91,8 +91,8 @@ exports.updateCaseContextInteractor = async ({
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
           applicationContext,
-          caseId: newCase.caseId,
           caseSortTags: newCase.generateTrialSortTags(),
+          docketNumber: newCase.docketNumber,
         });
     }
   }

@@ -286,7 +286,6 @@ describe('formattedTrialSessionDetails', () => {
             {
               ...MOCK_CASE,
               caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
-              caseId: 'ef88c665-4d1d-48a9-898a-eae698187b2b',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               removedFromTrial: true,
             },

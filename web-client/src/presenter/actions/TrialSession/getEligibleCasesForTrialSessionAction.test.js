@@ -9,7 +9,7 @@ describe('getEligibleCasesForTrialSessionAction', () => {
     applicationContext
       .getUseCases()
       .getEligibleCasesForTrialSessionInteractor.mockResolvedValue([
-        { caseId: '345' },
+        { docketNumber: '345-20' },
       ]);
   });
 
