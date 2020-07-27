@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * fixme
- * changes the route to view the create order page for the props.docketNumber and parentMessageId
+ *
+ * changes the route to view the create order page for the props.docketNumber, props.documentId, props.documentType, props.documentTitle and parentMessageId
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
