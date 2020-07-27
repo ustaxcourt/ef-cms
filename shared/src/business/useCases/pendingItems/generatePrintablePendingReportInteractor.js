@@ -10,12 +10,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
- * @param {string} providers.caseId the optional caseId filter
+ * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the url of the document
  */
 exports.generatePrintablePendingReportInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   judge,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -30,7 +30,7 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   const pendingItems = await applicationContext
     .getUseCaseHelpers()
-    .fetchPendingItems({ applicationContext, caseId, judge });
+    .fetchPendingItems({ applicationContext, docketNumber, judge });
 
   const formattedPendingItems = pendingItems.map(pendingItem => ({
     ...pendingItem,
@@ -51,12 +51,12 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   if (judge) {
     reportTitle = `Judge ${judge}`;
-  } else if (caseId) {
+  } else if (docketNumber) {
     const caseResult = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({
+      .getCaseByDocketNumber({
         applicationContext,
-        caseId,
+        docketNumber,
       });
     reportTitle = `Docket ${caseResult.docketNumber}${
       caseResult.docketNumberSuffix || ''
