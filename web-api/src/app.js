@@ -643,7 +643,10 @@ app.post(
   '/cases/:docketNumber/serve-to-irs',
   lambdaWrapper(serveCaseToIrsLambda),
 );
-app.put('/cases/:caseId/', lambdaWrapper(saveCaseDetailInternalEditLambda));
+app.put(
+  '/cases/:docketNumber/',
+  lambdaWrapper(saveCaseDetailInternalEditLambda),
+);
 app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
 app.post('/cases', lambdaWrapper(createCaseLambda));
 
@@ -826,7 +829,7 @@ app.put(
   lambdaWrapper(removeCaseFromTrialLambda),
 );
 app.post(
-  '/trial-sessions/:trialSessionId/cases/:caseId',
+  '/trial-sessions/:trialSessionId/cases/:docketNumber',
   lambdaWrapper(addCaseToTrialSessionLambda),
 );
 app.get(
