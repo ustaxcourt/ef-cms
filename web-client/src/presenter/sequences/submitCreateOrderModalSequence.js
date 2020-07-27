@@ -3,7 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCreateOrderAction } from '../actions/CourtIssuedOrder/navigateToCreateOrderAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setModalFormValuesAsPropsAction } from '../actions/setModalFormValuesAsPropsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateOrderWithoutBodyAction } from '../actions/CourtIssuedOrder/validateOrderWithoutBodyAction';
@@ -15,8 +15,8 @@ export const submitCreateOrderModalSequence = [
   {
     error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
+      setModalFormValuesAsPropsAction,
       clearModalAction,
-      setCurrentPageAction('Interstitial'),
       setCasePropFromStateAction,
       navigateToCreateOrderAction,
     ],
