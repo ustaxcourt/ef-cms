@@ -523,10 +523,10 @@ describe('formatCase', () => {
     });
   });
 
-  it('should set isLeadCase true on the case if it has a leadCaseId that matches its caseId', () => {
+  it('should set isLeadCase true on the case if it has a leadDocketNumber that matches its docketNumber', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      leadCaseId: mockCaseDetail.caseId,
+      leadDocketNumber: mockCaseDetail.docketNumber,
     });
 
     expect(result).toMatchObject({
@@ -534,10 +534,10 @@ describe('formatCase', () => {
     });
   });
 
-  it('should set isLeadCase false on the case if it has a leadCaseId that matches its caseId', () => {
+  it('should set isLeadCase false on the case if it has a leadDocketNumber that matches its docketNumber', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      leadCaseId: 'notthecaseid',
+      leadDocketNumber: 'notthedocketNumber',
     });
 
     expect(result).toMatchObject({

@@ -7,44 +7,36 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('getConsolidatedCasesForLeadCase', () => {
-  it('should retrieve all cases associated with the leadCaseId', async () => {
+  it('should retrieve all cases associated with the leadDocketNumber', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId.mockReturnValue([MOCK_CASE]);
+      .getCasesByLeadDocketNumber.mockReturnValue([MOCK_CASE]);
 
     await getConsolidatedCasesForLeadCase({
       applicationContext,
-      casesAssociatedWithUserOrLeadCaseMap: {
-        '123': MOCK_CASE,
-      },
-      leadCaseId: '123',
-      userAssociatedCaseIdsMap: {},
+      leadDocketNumber: '123-20',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesByLeadCaseId.mock
+      applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber.mock
         .calls[0][0],
-    ).toMatchObject({ leadCaseId: '123' });
+    ).toMatchObject({ leadDocketNumber: '123-20' });
   });
 
   it('should validate the retrieved cases', async () => {
-    const mockCaseId = '123';
+    const mockDocketNumber = '234-20';
     const invalidMockCase = {
       ...MOCK_CASE,
       docketNumber: undefined,
     };
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadCaseId.mockResolvedValue([invalidMockCase]);
+      .getCasesByLeadDocketNumber.mockResolvedValue([invalidMockCase]);
 
     await expect(
       getConsolidatedCasesForLeadCase({
         applicationContext,
-        casesAssociatedWithUserOrLeadCaseMap: {
-          '123': invalidMockCase,
-        },
-        leadCaseId: mockCaseId,
-        userAssociatedCaseIdsMap: {},
+        leadDocketNumber: mockDocketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });

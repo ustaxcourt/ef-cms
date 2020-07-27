@@ -180,7 +180,7 @@ function Case(rawCase, { applicationContext, filtered = false }) {
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.isSealed = !!rawCase.sealedDate;
-  this.leadCaseId = rawCase.leadCaseId;
+  this.leadDocketNumber = rawCase.leadDocketNumber;
   this.mailingDate = rawCase.mailingDate;
   this.partyType = rawCase.partyType;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
@@ -464,8 +464,8 @@ Case.VALIDATION_RULES = {
     ),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean().optional(),
-  leadCaseId: JoiValidationConstants.UUID.optional().description(
-    'If this case is consolidated, this is the ID of the lead case. It is the lowest docket number in the consolidated group.',
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+    'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
   ),
   litigationCosts: joi
     .number()
@@ -1534,23 +1534,23 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
 };
 
 /**
- * sets lead case id on the current case
+ * sets lead docket number on the current case
  *
- * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @param {string} leadDocketNumber the docketNumber of the lead case for consolidation
  * @returns {Case} the updated Case entity
  */
-Case.prototype.setLeadCase = function (leadCaseId) {
-  this.leadCaseId = leadCaseId;
+Case.prototype.setLeadCase = function (leadDocketNumber) {
+  this.leadDocketNumber = leadDocketNumber;
   return this;
 };
 
 /**
- * removes the consolidation from the case by setting leadCaseId to undefined
+ * removes the consolidation from the case by setting leadDocketNumber to undefined
  *
  * @returns {Case} the updated Case entity
  */
 Case.prototype.removeConsolidation = function () {
-  this.leadCaseId = undefined;
+  this.leadDocketNumber = undefined;
   return this;
 };
 
@@ -1579,7 +1579,7 @@ Case.sortByDocketNumber = function (cases) {
 
 /**
  * return the lead case for the given set of cases based on createdAt
- * (does NOT evaluate leadCaseId)
+ * (does NOT evaluate leadDocketNumber)
  *
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
