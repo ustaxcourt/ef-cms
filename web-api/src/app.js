@@ -576,7 +576,10 @@ app.get(
   '/case-notes/batch-cases/:docketNumbers/user-notes',
   lambdaWrapper(getUserCaseNoteForCasesLambda),
 );
-app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));
+app.get(
+  '/case-notes/:docketNumber/user-notes',
+  lambdaWrapper(getUserCaseNoteLambda),
+);
 app.put(
   '/case-notes/:caseId/user-notes',
   lambdaWrapper(updateUserCaseNoteLambda),
