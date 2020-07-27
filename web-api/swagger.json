@@ -480,10 +480,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/contact-primary": {
+    "/case-parties/{docketNumber}/contact-primary": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

@@ -592,7 +592,7 @@ app.put('/case-notes/:docketNumber', lambdaWrapper(saveCaseNoteLambda));
  * case-parties
  */
 app.put(
-  '/case-parties/:caseId/contact-primary',
+  '/case-parties/:docketNumber/contact-primary',
   lambdaWrapper(updatePrimaryContactLambda),
 );
 app.put(
