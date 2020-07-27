@@ -1386,10 +1386,10 @@
         }
       }
     },
-    "/cases/{caseId}/statistics/{statisticId}": {
+    "/cases/{docketNumber}/statistics/{statisticId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1586,10 +1586,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/statistics": {
+    "/case-meta/{docketNumber}/statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
