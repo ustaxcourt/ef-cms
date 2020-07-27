@@ -16,7 +16,7 @@ export const updateQcCompleteForTrialAction = async ({
   path,
   props,
 }) => {
-  const { caseId, qcCompleteForTrial } = props;
+  const { docketNumber, qcCompleteForTrial } = props;
   const trialSessionId = get(state.trialSession.trialSessionId);
 
   let result;
@@ -25,7 +25,7 @@ export const updateQcCompleteForTrialAction = async ({
       .getUseCases()
       .updateQcCompleteForTrialInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         qcCompleteForTrial,
         trialSessionId,
       });

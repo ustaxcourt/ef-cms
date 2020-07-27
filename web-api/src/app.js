@@ -548,7 +548,7 @@ app.delete(
   lambdaWrapper(removeConsolidatedCasesLambda),
 );
 app.put(
-  '/case-meta/:caseId/qc-complete',
+  '/case-meta/:docketNumber/qc-complete',
   lambdaWrapper(updateQcCompleteForTrialLambda),
 );
 app.put('/case-meta/:caseId/seal', lambdaWrapper(sealCaseLambda));
