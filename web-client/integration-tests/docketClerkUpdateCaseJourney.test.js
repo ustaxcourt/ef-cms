@@ -42,7 +42,7 @@ describe('docket clerk update case journey', () => {
   docketClerkViewsEligibleCasesForTrialSession(test);
 
   loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => [test.caseId]);
+  markAllCasesAsQCed(test, () => [test.docketNumber]);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'docketclerk@example.com');

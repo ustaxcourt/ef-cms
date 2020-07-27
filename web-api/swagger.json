@@ -5078,10 +5078,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/qc-complete": {
+    "/case-meta/{docketNumber}/qc-complete": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
