@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * invokes the path in the sequences depending on if the user has selected an order type
  *
