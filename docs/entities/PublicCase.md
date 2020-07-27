@@ -149,7 +149,7 @@
           type: "object"
           metas: 
             - 
-              entityName: "DocketRecord"
+              entityName: "PublicDocketRecord"
     documents: 
       type: "array"
       flags: 
@@ -160,7 +160,7 @@
           type: "object"
           metas: 
             - 
-              entityName: "Document"
+              entityName: "PublicDocument"
     isSealed: 
       type: "boolean"
     receivedAt: 
