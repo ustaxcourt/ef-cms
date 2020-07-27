@@ -11,14 +11,13 @@ applicationContext
   .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
 
 describe('addCaseToTrialSessionAction', () => {
-  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.caseId and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
+  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
     const result = await runAction(addCaseToTrialSessionAction, {
       modules: {
         presenter,
       },
       state: {
         caseDetail: {
-          caseId: '123',
           docketNumber: '123-45',
         },
         modal: {
@@ -34,12 +33,11 @@ describe('addCaseToTrialSessionAction', () => {
       applicationContext.getUseCases().addCaseToTrialSessionInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '123',
+      docketNumber: '123-45',
       trialSessionId: '234',
     });
     expect(result.output).toHaveProperty('alertSuccess');
     expect(result.output.caseDetail).toEqual(MOCK_CASE);
-    expect(result.output.caseId).toEqual('123');
     expect(result.output.docketNumber).toEqual('123-45');
     expect(result.output.trialSessionId).toEqual('234');
   });
