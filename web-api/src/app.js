@@ -548,24 +548,24 @@ app.delete(
   lambdaWrapper(removeConsolidatedCasesLambda),
 );
 app.put(
-  '/case-meta/:caseId/qc-complete',
+  '/case-meta/:docketNumber/qc-complete',
   lambdaWrapper(updateQcCompleteForTrialLambda),
 );
-app.put('/case-meta/:caseId/seal', lambdaWrapper(sealCaseLambda));
+app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
 app.post(
-  '/case-meta/:caseId/other-statistics',
+  '/case-meta/:docketNumber/other-statistics',
   lambdaWrapper(updateOtherStatisticsLambda),
 );
 app.put(
-  '/case-meta/:caseId/statistics/:statisticId',
+  '/case-meta/:docketNumber/statistics/:statisticId',
   lambdaWrapper(updateDeficiencyStatisticLambda),
 );
 app.delete(
-  '/case-meta/:caseId/statistics/:statisticId',
+  '/case-meta/:docketNumber/statistics/:statisticId',
   lambdaWrapper(deleteDeficiencyStatisticLambda),
 );
 app.post(
-  '/case-meta/:caseId/statistics',
+  '/case-meta/:docketNumber/statistics',
   lambdaWrapper(addDeficiencyStatisticLambda),
 );
 

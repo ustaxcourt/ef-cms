@@ -17,7 +17,7 @@ describe('submitOtherStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-19',
         },
         form: {
           damages: '1',
@@ -41,7 +41,7 @@ describe('submitOtherStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-19',
         },
         form: {
           damages: '1',
@@ -72,7 +72,7 @@ describe('submitOtherStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-19',
         },
         form: {
           damages: '1',

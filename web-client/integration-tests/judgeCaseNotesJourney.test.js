@@ -61,7 +61,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   docketClerkSetsCaseReadyForTrial(test);
 
   loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => createdCaseIds);
+  markAllCasesAsQCed(test, () => createdDocketNumbers);
   petitionsClerkSetsATrialSessionsSchedule(test);
 
   loginAs(test, 'judgeCohen@example.com');
