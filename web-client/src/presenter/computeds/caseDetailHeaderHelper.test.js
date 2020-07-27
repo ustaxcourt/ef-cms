@@ -331,7 +331,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          leadCaseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          leadDocketNumber: '101-20',
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -354,7 +354,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          leadCaseId: '',
+          leadDocketNumber: '',
         },
         currentPage: 'CaseDetail',
         form: {},
