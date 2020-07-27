@@ -494,23 +494,33 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/create-order',
+      '/case-detail/*/create-order?..',
       ifHasAccess(docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
-        );
-        return app.getSequence('gotoCreateOrderSequence')({ docketNumber });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/create-order/*',
-      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
+          documentTitle,
+          documentType,
+          eventCode,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/create-order/*/?..',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentTitle, documentType, eventCode } = route.query();
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
+        return app.getSequence('gotoCreateOrderSequence')({
+          docketNumber,
+          documentTitle,
+          documentType,
+          eventCode,
           parentMessageId,
           redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
         });

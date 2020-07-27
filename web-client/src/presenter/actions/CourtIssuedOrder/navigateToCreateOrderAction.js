@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 /**
+ * fixme
  * changes the route to view the create order page for the props.docketNumber and parentMessageId
  *
  * @param {object} providers the providers object
@@ -11,11 +12,17 @@ import { state } from 'cerebral';
  */
 export const navigateToCreateOrderAction = async ({ get, props, router }) => {
   const parentMessageId = get(state.modal.parentMessageId);
+  const documentType = get(state.modal.documentType);
+  const documentId = get(state.modal.documentId);
+  const eventCode = get(state.modal.eventCode);
+
   if (parentMessageId) {
-    await router.route(
-      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}`,
+    router.openInNewTab(
+      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
     );
   } else {
-    await router.route(`/case-detail/${props.docketNumber}/create-order`);
+    router.openInNewTab(
+      `/case-detail/${props.docketNumber}/create-order?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
+    );
   }
 };
