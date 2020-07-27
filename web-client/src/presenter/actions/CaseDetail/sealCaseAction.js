@@ -10,13 +10,13 @@ import { state } from 'cerebral';
  * @returns {Promise<object>} the next path based on if update was successful or error
  */
 export const sealCaseAction = async ({ applicationContext, get, path }) => {
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   let result;
   try {
     result = await applicationContext.getUseCases().sealCaseInteractor({
       applicationContext,
-      caseId,
+      docketNumber,
     });
   } catch (err) {
     return path.error();

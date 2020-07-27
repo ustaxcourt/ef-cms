@@ -27,6 +27,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     trialLocation,
   };
   const createdCaseIds = [];
+  const createdDocketNumbers = [];
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
     loginAs(test, 'docketclerk@example.com');
@@ -50,6 +51,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -74,6 +76,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -98,6 +101,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         const caseDetail = await uploadPetition(test, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdCaseIds.push(caseDetail.caseId);
+        createdDocketNumbers.push(caseDetail.docketNumber);
         test.docketNumber = caseDetail.docketNumber;
       });
 
@@ -134,9 +138,9 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   describe('Calendar clerk marks all eligible cases as QCed', () => {
     loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
-      createdCaseIds[0],
-      createdCaseIds[1],
-      createdCaseIds[2],
+      createdDocketNumbers[0],
+      createdDocketNumbers[1],
+      createdDocketNumbers[2],
     ]);
   });
 
