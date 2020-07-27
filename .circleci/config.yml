@@ -248,10 +248,12 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 15
-            npm run test:pa11y:1 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
-            npm run test:pa11y:public --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            pushd web-client/pa11y/
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --node-flags --max-old-space-size=1024
+            popd
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:

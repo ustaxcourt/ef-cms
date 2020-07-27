@@ -3,7 +3,9 @@
 # This runs the same build steps that run in Circle, except sonar
 rm -rf node_modules dist .elasticsearch .dynamodb web-client/pa11y/node_modules
 npm ci
-npm ci --prefix=web-client/pa11y/
+pushd web-client/pa11y/
+npm ci --prefix=./
+popd
 
 docker build -t efcms -f Dockerfile .
 
@@ -19,7 +21,7 @@ docker run -v "$(pwd)/web-client/coverage:/home/app/web-client/coverage" --rm ef
   '(npm run start:api &) && ./wait-until.sh http://localhost:4000/api/swagger && npm run test:client'
 
 docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c \
-  '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y --prefix=web-client/pa11y/'
+  '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && (npm run test:pa11y --prefix=web-client/pa11y/)'
 
 docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c \
   '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
