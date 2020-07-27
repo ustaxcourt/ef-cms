@@ -596,7 +596,7 @@ app.put(
   lambdaWrapper(updatePrimaryContactLambda),
 );
 app.put(
-  '/case-parties/:caseId/contact-secondary',
+  '/case-parties/:docketNumber/contact-secondary',
   lambdaWrapper(updateSecondaryContactLambda),
 );
 app.post(
