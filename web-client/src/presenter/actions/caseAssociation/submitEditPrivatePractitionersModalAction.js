@@ -24,7 +24,7 @@ export const submitEditPrivatePractitionersModalAction = async ({
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,
         docketNumber,
-        userIdToDelete: practitioner.userId,
+        userId: practitioner.userId,
       });
     } else {
       await applicationContext.getUseCases().updateCounselOnCaseInteractor({

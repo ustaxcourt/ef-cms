@@ -76,7 +76,7 @@ describe('submitEditIrsPractitionersModalAction', () => {
         .mock.calls[0][0],
     ).toMatchObject({
       docketNumber: '123-20',
-      userIdToDelete: '2',
+      userId: '2',
     });
     expect(successStub).toHaveBeenCalled();
   });
