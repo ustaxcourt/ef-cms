@@ -12,7 +12,7 @@ exports.updateOtherStatisticsLambda = event =>
       .getUseCases()
       .updateOtherStatisticsInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         ...JSON.parse(event.body),
       });
   });

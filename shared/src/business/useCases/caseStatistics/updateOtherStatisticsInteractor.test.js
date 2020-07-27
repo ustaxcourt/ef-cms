@@ -16,7 +16,7 @@ describe('updateOtherStatisticsInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {
@@ -25,7 +25,7 @@ describe('updateOtherStatisticsInteractor', () => {
     await expect(
       updateOtherStatisticsInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
@@ -33,8 +33,8 @@ describe('updateOtherStatisticsInteractor', () => {
   it('should call updateCase with the updated case statistics and return the updated case', async () => {
     const result = await updateOtherStatisticsInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
       damages: 1234,
+      docketNumber: MOCK_CASE.docketNumber,
       litigationCosts: 5678,
     });
     expect(result).toMatchObject({
