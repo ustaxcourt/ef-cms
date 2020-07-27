@@ -248,10 +248,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe('Calendar clerk marks all eligible cases as QCed', () => {
     loginAs(test, 'petitionsclerk@example.com');
     markAllCasesAsQCed(test, () => [
-      createdCaseIds[0],
-      createdCaseIds[1],
-      createdCaseIds[3],
-      createdCaseIds[4],
+      createdDocketNumbers[0],
+      createdDocketNumbers[1],
+      createdDocketNumbers[3],
+      createdDocketNumbers[4],
     ]);
   });
 
