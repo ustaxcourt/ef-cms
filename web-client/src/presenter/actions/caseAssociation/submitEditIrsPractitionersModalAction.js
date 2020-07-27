@@ -15,7 +15,7 @@ export const submitEditIrsPractitionersModalAction = async ({
   path,
 }) => {
   const form = get(state.modal);
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const { irsPractitioners } = form;
 
@@ -23,15 +23,15 @@ export const submitEditIrsPractitionersModalAction = async ({
     if (respondent.removeFromCase) {
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,
-        caseId,
-        userIdToDelete: respondent.userId,
+        docketNumber,
+        userId: respondent.userId,
       });
     } else {
       await applicationContext.getUseCases().updateCounselOnCaseInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         userData: respondent,
-        userIdToUpdate: respondent.userId,
+        userId: respondent.userId,
       });
     }
   }
