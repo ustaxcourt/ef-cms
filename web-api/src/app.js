@@ -608,7 +608,7 @@ app.post(
   lambdaWrapper(associateIrsPractitionerWithCaseLambda),
 );
 app.put(
-  '/case-parties/:caseId/counsel/:userId',
+  '/case-parties/:docketNumber/counsel/:userId',
   lambdaWrapper(updateCounselOnCaseLambda),
 );
 app.delete(

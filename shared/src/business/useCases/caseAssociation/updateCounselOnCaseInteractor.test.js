@@ -68,9 +68,9 @@ describe('updateCounselOnCaseInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(({ caseId }) => ({
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
         caseCaption: 'Caption',
-        caseId,
+        caseId: '583c3f7d-f754-40ac-9f81-c4ce372876b3',
         caseType: CASE_TYPES_MAP.deficiency,
         contactPrimary: {
           address1: '123 Main St',
@@ -82,7 +82,7 @@ describe('updateCounselOnCaseInteractor', () => {
           postalCode: '12345',
           state: 'CA',
         },
-        docketNumber: '123-19',
+        docketNumber,
         docketRecord: [
           {
             description: 'first record',
@@ -108,11 +108,11 @@ describe('updateCounselOnCaseInteractor', () => {
     await expect(
       updateCounselOnCaseInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '123-19',
         userData: {
           representingPrimary: true,
         },
-        userIdToUpdate: '9d914ca2-7876-43a7-acfa-ccb645717e11',
+        userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -120,13 +120,13 @@ describe('updateCounselOnCaseInteractor', () => {
   it('updates a practitioner with the given userId on the associated case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '123-19',
       userData: {
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
-      userIdToUpdate: '9d914ca2-7876-43a7-acfa-ccb645717e11',
+      userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     });
 
     expect(
@@ -137,13 +137,13 @@ describe('updateCounselOnCaseInteractor', () => {
   it('updates an irsPractitioner with the given userId on the associated case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '123-19',
       userData: {
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
-      userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
+      userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
 
     expect(
@@ -154,14 +154,14 @@ describe('updateCounselOnCaseInteractor', () => {
   it('updates only editable practitioner fields on the case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '123-19',
       userData: {
         email: 'not.editable@example.com',
         representingPrimary: true,
         representingSecondary: false,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
-      userIdToUpdate: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
+      userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
     });
 
     const updatedPractitioner = applicationContext
@@ -177,15 +177,15 @@ describe('updateCounselOnCaseInteractor', () => {
     );
   });
 
-  it('throws an error if the userIdToUpdate is not a privatePractitioner or irsPractitioner role', async () => {
+  it('throws an error if the userId is not a privatePractitioner or irsPractitioner role', async () => {
     await expect(
       updateCounselOnCaseInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '123-19',
         userData: {
           email: 'petitioner@example.com',
         },
-        userIdToUpdate: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
+        userId: 'aa335271-9a0f-4ad5-bcf1-3b89bd8b5dd6',
       }),
     ).rejects.toThrow('User is not a practitioner');
   });
