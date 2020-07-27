@@ -1,25 +1,16 @@
 import { state } from 'cerebral';
 
 /**
- * FIXME
- * sets the props.caseId and props.docketNumber from the case in the state,
+ * sets props.docketNumber, props.documentTitle and props.documentType from the modal form values in state
  * to be passed to subsequent actions
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
- * @returns {object} caseId
+ * @returns {object} docketNumber, documentTitle, documentType
  */
-export const setModalFormValuesAsPropsAction = ({
-  applicationContext,
-  get,
-}) => {
-  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
+export const setModalFormValuesAsPropsAction = ({ get }) => {
   const documentType = get(state.modal.documentType);
-  const documentTitle =
-    get(state.modal.documentTitle) ||
-    COURT_ISSUED_EVENT_CODES.find(ec => ec.eventCode === state.modal.eventCode)
-      .documentTitle;
-
+  const documentTitle = get(state.modal.documentTitle);
   const docketNumber = get(state.caseDetail.docketNumber);
 
   return { docketNumber, documentTitle, documentType };
