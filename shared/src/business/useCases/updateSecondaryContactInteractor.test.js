@@ -39,7 +39,7 @@ describe('updateSecondaryContactInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(() => mockCase);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
       .getChromiumBrowser()
@@ -71,7 +71,6 @@ describe('updateSecondaryContactInteractor', () => {
   it('should update contactSecondary editable fields', async () => {
     const caseDetail = await updateSecondaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
@@ -82,6 +81,7 @@ describe('updateSecondaryContactInteractor', () => {
         postalCode: '99999',
         state: 'PA',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
@@ -114,12 +114,10 @@ describe('updateSecondaryContactInteractor', () => {
     await expect(
       updateSecondaryContactInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
       }),
-    ).rejects.toThrow(
-      'Case a805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
-    );
+    ).rejects.toThrow('Case 101-18 was not found.');
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
@@ -132,8 +130,8 @@ describe('updateSecondaryContactInteractor', () => {
     await expect(
       updateSecondaryContactInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
   });
@@ -145,7 +143,6 @@ describe('updateSecondaryContactInteractor', () => {
 
     await updateSecondaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         // Matches current contact info
         address1: 'nothing',
@@ -157,6 +154,7 @@ describe('updateSecondaryContactInteractor', () => {
         postalCode: '12345',
         state: 'TN',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
@@ -179,7 +177,6 @@ describe('updateSecondaryContactInteractor', () => {
 
     const caseDetail = await updateSecondaryContactInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {
         address1: 'nothing',
         city: 'Somewhere',
@@ -190,6 +187,7 @@ describe('updateSecondaryContactInteractor', () => {
         postalCode: '12345',
         state: 'TN',
       },
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(caseDetail.contactSecondary.name).not.toBe(

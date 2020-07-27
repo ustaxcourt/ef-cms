@@ -14,7 +14,7 @@ const updateCaseStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
 
 let persistenceGateway = {
-  getCaseByCaseId: () => MOCK_CASE,
+  getCaseByDocketNumber: () => MOCK_CASE,
   getDownloadPolicyUrl: () => ({
     url: 'https://www.example.com',
   }),
@@ -41,8 +41,8 @@ describe('update petitioner contact information on a case', () => {
   it('updates case even if no change of address or phone is detected', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
     expect(
@@ -55,9 +55,9 @@ describe('update petitioner contact information on a case', () => {
     await expect(
       updatePetitionerInformationInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactPrimary: MOCK_CASE.contactPrimary,
         contactSecondary: { countryType: COUNTRY_TYPES.DOMESTIC },
+        docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitionerSpouse,
       }),
     ).rejects.toThrow();
@@ -70,7 +70,6 @@ describe('update petitioner contact information on a case', () => {
   it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: {
         address1: '456 Center St', // the address changes ONLY
         city: 'Somewhere',
@@ -82,6 +81,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
 
@@ -104,7 +104,6 @@ describe('update petitioner contact information on a case', () => {
   it('updates petitioner contact when secondary contact info changes and does not generate or serve a notice if the secondary contact was not previously present', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
       contactSecondary: {
         address1: '789 Division St',
@@ -116,6 +115,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('update petitioner contact information on a case', () => {
   });
 
   it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
-    persistenceGateway.getCaseByCaseId = () => ({
+    persistenceGateway.getCaseByDocketNumber = () => ({
       ...MOCK_CASE,
       contactSecondary: {
         address1: '789 Division St',
@@ -145,7 +145,6 @@ describe('update petitioner contact information on a case', () => {
 
     const result = await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
       contactSecondary: {
         address1: '789 Division St APT 123', //changed address1
@@ -157,6 +156,7 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
@@ -172,11 +172,11 @@ describe('update petitioner contact information on a case', () => {
   it('does not serve a document or return a paperServicePdfUrl if only the serviceIndicator changes but not the address', async () => {
     const result = await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
@@ -192,11 +192,11 @@ describe('update petitioner contact information on a case', () => {
   it('does not update contactPrimary email if it is passed in', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
-      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,
         email: 'test@example.com',
       },
+      docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
@@ -209,12 +209,12 @@ describe('update petitioner contact information on a case', () => {
     await expect(
       updatePetitionerInformationInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
           countryType: 'alien',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
+        docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitioner,
       }),
     ).rejects.toThrow('The Case entity was invalid');
@@ -222,14 +222,14 @@ describe('update petitioner contact information on a case', () => {
   });
 
   it('throws an error if the user making the request does not have permission to edit petition details', async () => {
-    persistenceGateway.getCaseByCaseId = async () => ({
+    persistenceGateway.getCaseByDocketNumber = async () => ({
       ...MOCK_CASE,
     });
     userObj.role = ROLES.petitioner;
     await expect(
       updatePetitionerInformationInteractor({
         applicationContext,
-        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
