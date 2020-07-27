@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
