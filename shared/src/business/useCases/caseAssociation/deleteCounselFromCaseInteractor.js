@@ -11,14 +11,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case the user is attached to
- * @param {string} providers.userIdToDelete the id of the user to be removed from the case
+ * @param {string} providers.docketNumber the docket number of the case the user is attached to
+ * @param {string} providers.userId the id of the user to be removed from the case
  * @returns {Promise} the promise of the update case call
  */
 exports.deleteCounselFromCaseInteractor = async ({
   applicationContext,
-  caseId,
-  userIdToDelete,
+  docketNumber,
+  userId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -28,16 +28,16 @@ exports.deleteCounselFromCaseInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const userToDelete = await applicationContext
     .getPersistenceGateway()
     .getUserById({
       applicationContext,
-      userId: userIdToDelete,
+      userId,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -52,8 +52,8 @@ exports.deleteCounselFromCaseInteractor = async ({
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({
     applicationContext,
-    caseId,
-    userId: userIdToDelete,
+    docketNumber,
+    userId,
   });
 
   const updatedCase = await applicationContext

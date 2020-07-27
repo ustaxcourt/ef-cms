@@ -928,22 +928,12 @@ header.usa-header {
       margin-right: 15px;
     }
   }
-  #link-new-tab {
-    margin-right: 10px;
-    color: color($theme-color-base-ink);
-    &:hover {
-      color: color($theme-color-base-ink);
-    }
-    &:visited {
-      color: color($theme-color-base-ink);
-    }
-  }
-  #new-tab-icon {
-    margin-top: 10px;
-    margin-right: 10px;
-    color: color($theme-color-base-ink);
-    transform: rotate(315deg);
-  }
+}
+
+#menu-button-new-tab > * {
+  margin-left: -45px;
+  font-size: 18px;
+  transform: rotate(315deg);
 }
 
 .title {
@@ -1534,24 +1524,4 @@ button.change-scanner-button {
 
 .sealed-in-blackstone {
   color: color($theme-color-secondary-dark);
-}
-
-.diagonal-div {
-  position: relative;
-  overflow: hidden;
-  width: 100px;
-  height: 80px;
-  padding-top: 5px;
-  background: linear-gradient(
-    to bottom left,
-    color(accent-cool-light) 50%,
-    rgba(255, 0, 0, 0) 50%
-  );
-  text-align: right;
-  vertical-align: top;
-}
-
-.new-tab-parent {
-  margin-top: -20px;
-  margin-left: -260px;
 }
