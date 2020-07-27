@@ -39,6 +39,7 @@ exports.updateUserCaseNoteInteractor = async ({
 
   const caseNoteEntity = new UserCaseNote({
     caseId: caseEntity.caseId,
+    docketNumber: caseEntity.docketNumber,
     notes,
     userId: (judgeUser && judgeUser.userId) || user.userId,
   });
