@@ -4974,10 +4974,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petition-details": {
+    "/case-parties/{docketNumber}/petition-details": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

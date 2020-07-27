@@ -616,7 +616,7 @@ app.delete(
   lambdaWrapper(deleteCounselFromCaseLambda),
 );
 app.put(
-  '/case-parties/:caseId/petition-details',
+  '/case-parties/:docketNumber/petition-details',
   lambdaWrapper(updatePetitionDetailsLambda),
 );
 app.put(
