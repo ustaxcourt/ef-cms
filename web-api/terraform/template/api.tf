@@ -13,6 +13,7 @@ resource "aws_s3_bucket_object" "api_object" {
   bucket = aws_s3_bucket.api_lambdas_bucket.id
   key    = "${var.environment}_api.js.zip"
   source = "${path.module}/lambdas/api.js.zip"
+  etag   = "${filemd5("${path.module}/lambdas/api.js.zip")}"
 }
 
 data "archive_file" "zip_api" {
@@ -27,6 +28,7 @@ resource "aws_lambda_function" "api_lambda" {
   handler       = "api.handler"
   s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
   s3_key        = aws_s3_bucket_object.api_object.key
+  source_code_hash = "${filebase64sha256("${path.module}/lambdas/api.js.zip")}"
   timeout       = "29"
   memory_size   = "3008"
 
