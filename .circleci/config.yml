@@ -248,10 +248,10 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 15
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --prefix=web-client/pa11y/ --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -463,7 +463,7 @@ jobs:
           name: 'Deploy - Pa11y Smoke Tests'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests"
+              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "ENV=${ENV} npm run test:pa11y:smoketests --prefix=web-client/pa11y/"
             else
               echo "skipping…"
             fi
