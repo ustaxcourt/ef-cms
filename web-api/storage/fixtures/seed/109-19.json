@@ -73,7 +73,7 @@
   {
     "createdAt": "2019-08-22T12:47:16.905Z",
     "deadlineDate": "2019-08-25T04:00:00.000Z",
-    "caseId": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "docketNumber": "109-19",
     "sk": "case-deadline|95b46eae-70f0-45df-91de-febdc610fed9",
     "caseDeadlineId": "95b46eae-70f0-45df-91de-febdc610fed9",
     "description": "Final status report due to Judge Ashford",
@@ -161,6 +161,7 @@
     "entityName": "Document",
     "filingDate": "2019-10-07T14:29:30.288Z",
     "workItems": [],
+    "isDraft": true,
     "pending": false,
     "receivedAt": "2019-10-07T14:29:30.288Z",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",

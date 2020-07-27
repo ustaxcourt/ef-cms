@@ -10,14 +10,11 @@ exports.serveCourtIssuedDocumentLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { caseId, documentId } = event.pathParameters;
-
       return await applicationContext
         .getUseCases()
         .serveCourtIssuedDocumentInteractor({
           applicationContext,
-          caseId,
-          documentId,
+          ...event.pathParameters,
         });
     },
     { logResults: false },

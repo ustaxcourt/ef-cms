@@ -329,6 +329,10 @@
         - "Other"
         - "Individual petitioner"
         - "Petitioner and spouse"
+    hasPendingItems: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     hasVerifiedIrsNotice: 
       type: "boolean"
       flags: 

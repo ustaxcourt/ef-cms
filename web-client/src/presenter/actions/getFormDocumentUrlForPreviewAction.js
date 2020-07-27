@@ -31,7 +31,7 @@ export const getFormDocumentUrlForPreviewAction = async ({
   const documentTypeSelectedForPreview =
     documentTypeMap[documentSelectedForPreview];
 
-  const { caseId, documents } = get(state.form);
+  const { docketNumber, documents } = get(state.form);
 
   const selectedDocument = get(documents).find(
     document => document.documentType === documentTypeSelectedForPreview,
@@ -45,7 +45,7 @@ export const getFormDocumentUrlForPreviewAction = async ({
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
         documentId: selectedDocument.documentId,
       });
 

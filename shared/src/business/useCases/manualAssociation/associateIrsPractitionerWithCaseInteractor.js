@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.associateIrsPractitionerWithCaseInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   serviceIndicator,
   userId,
 }) => {
@@ -37,7 +37,7 @@ exports.associateIrsPractitionerWithCaseInteractor = async ({
 
   return await associateIrsPractitionerToCase({
     applicationContext,
-    caseId,
+    docketNumber,
     serviceIndicator,
     user,
   });

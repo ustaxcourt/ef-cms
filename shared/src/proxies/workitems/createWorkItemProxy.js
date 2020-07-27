@@ -6,7 +6,7 @@ const { post } = require('../requests');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.assigneeId the id to assign the work item to
- * @param {string} providers.caseId the id of the case to attach the work item to
+ * @param {string} providers.docketNumber the docket number of the case to attach the work item to
  * @param {string} providers.documentId the id of the document to attach the work item to
  * @param {string} providers.message the message for creating the work item
  * @returns {Promise<*>} the promise of the api call
@@ -14,7 +14,7 @@ const { post } = require('../requests');
 exports.createWorkItemInteractor = ({
   applicationContext,
   assigneeId,
-  caseId,
+  docketNumber,
   documentId,
   message,
 }) => {
@@ -24,6 +24,6 @@ exports.createWorkItemInteractor = ({
       assigneeId,
       message,
     },
-    endpoint: `/case-documents/${caseId}/${documentId}/work-items`,
+    endpoint: `/case-documents/${docketNumber}/${documentId}/work-items`,
   });
 };

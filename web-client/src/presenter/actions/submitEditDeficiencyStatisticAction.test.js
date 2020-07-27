@@ -27,7 +27,7 @@ describe('submitEditDeficiencyStatisticAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic, statisticIndex: 0, year: 2012 },
@@ -61,7 +61,7 @@ describe('submitEditDeficiencyStatisticAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic, irsTotalPenalties: 5, statisticIndex: 0 },
@@ -99,7 +99,7 @@ describe('submitEditDeficiencyStatisticAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '101-20',
           statistics: [statistic],
         },
         form: { ...statistic, statisticIndex: 0 },

@@ -19,14 +19,14 @@ const { WorkItem } = require('../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update the secondary contact
+ * @param {string} providers.docketNumber the docket number of the case to update the secondary contact
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
 exports.updateSecondaryContactInteractor = async ({
   applicationContext,
-  caseId,
   contactInfo,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -44,13 +44,13 @@ exports.updateSecondaryContactInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseEntity = new Case(
@@ -101,7 +101,7 @@ exports.updateSecondaryContactInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
-        caseId,
+        caseId: caseEntity.caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,
@@ -133,7 +133,6 @@ exports.updateSecondaryContactInteractor = async ({
         assigneeId: null,
         assigneeName: null,
         associatedJudge: caseEntity.associatedJudge,
-        caseId,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),

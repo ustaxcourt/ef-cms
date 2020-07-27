@@ -10,6 +10,6 @@ exports.unprioritizeCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext.getUseCases().unprioritizeCaseInteractor({
       applicationContext,
-      caseId: event.pathParameters.caseId,
+      ...event.pathParameters,
     });
   });

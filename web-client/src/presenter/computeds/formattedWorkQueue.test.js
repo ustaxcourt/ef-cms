@@ -773,6 +773,8 @@ describe('formatted work queue computed', () => {
     };
     const baseWorkItemEditLink =
       '/case-detail/114-19/documents/6db35185-2445-4952-9449-5479a5cadab0';
+    const documentViewLink =
+      '/case-detail/114-19/document-view?documentId=6db35185-2445-4952-9449-5479a5cadab0';
 
     it('should return editLink as petition qc page if document is petition, case is not in progress, and user is petitionsclerk viewing a QC box (workQueueIsInternal=false)', () => {
       const { permissions } = getBaseState(petitionsClerkUser);
@@ -855,10 +857,10 @@ describe('formatted work queue computed', () => {
           workQueueIsInternal: false,
         },
       });
-      expect(result).toEqual(baseWorkItemEditLink);
+      expect(result).toEqual(documentViewLink);
     });
 
-    it('should return /complete if document is in progress and user is docketclerk', () => {
+    it('should return /complete if work item is in progress and user is docketclerk', () => {
       const { permissions } = getBaseState(docketClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -879,6 +881,7 @@ describe('formatted work queue computed', () => {
             relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
             scenario: 'Standard',
           },
+          inProgress: true,
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
@@ -1156,7 +1159,10 @@ describe('formatted work queue computed', () => {
             ...baseDocument,
             documentType: 'Petition',
             eventCode: 'P',
+            isFileAttached: true,
+            isInProgress: true,
             pending: false,
+            servedAt: null,
           },
           isInitializeCase: false,
           isQC: true, // in QC state - should show in QC boxes

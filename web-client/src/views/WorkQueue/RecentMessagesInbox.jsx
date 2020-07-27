@@ -1,14 +1,13 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const RecentMessagesInbox = connect(
   {
-    formattedWorkQueue: state.formattedWorkQueue,
-    workQueueHelper: state.workQueueHelper,
+    formattedMessages: state.formattedMessages,
   },
-  function RecentMessagesInbox({ formattedWorkQueue, workQueueHelper }) {
+  function RecentMessagesInbox({ formattedMessages }) {
     return (
       <React.Fragment>
         <table
@@ -18,67 +17,53 @@ export const RecentMessagesInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="small" colSpan="2">
-                <span className="padding-left-2px">Docket number</span>
-              </th>
               <th className="small">Received</th>
-              <th>Case title</th>
-              <th>Document</th>
-              {workQueueHelper.showCaseStatusColumn && (
-                <th className="no-wrap">Case status</th>
-              )}
-              {workQueueHelper.showFromColumn && <th>From</th>}
+              <th aria-label="Docket Number" className="small">
+                <span className="padding-left-2px">Docket Number</span>
+              </th>
+              <th>Message</th>
+              <th>Case Title</th>
+              <th className="no-wrap">Case Status</th>
+              <th>From</th>
+              <th>Section</th>
             </tr>
           </thead>
-          {formattedWorkQueue.slice(0, 5).map((item, idx) => {
+          {formattedMessages.messages.slice(0, 5).map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
+                  <td>{item.createdAtFormatted}</td>
                   <td className="message-queue-row small">
-                    <CaseLink formattedCase={item} />
+                    {item.docketNumberWithSuffix}
                   </td>
-                  <td className="message-queue-row small">
-                    <span className="no-wrap">{item.received}</span>
+                  <td>
+                    <div className="message-document-title">
+                      <Button
+                        link
+                        className="padding-0"
+                        href={`/case-messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
+                      >
+                        {item.subject}
+                      </Button>
+                    </div>
+                    <div className="message-document-detail">
+                      {item.message}
+                    </div>
                   </td>
                   <td className="message-queue-row">
                     <span>{item.caseTitle}</span>
                   </td>
-
-                  <td className="message-queue-row message-queue-document">
-                    <div className="message-document-title">
-                      <a
-                        className={
-                          item.isRead ? 'case-link' : 'link case-link-bold'
-                        }
-                        href={item.editLink}
-                        onClick={e => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        {item.document.documentTitle ||
-                          item.document.documentType}
-                      </a>
-                    </div>
-                    {workQueueHelper.showMessageContent && (
-                      <div
-                        className="message-document-detail"
-                        id={`detail-${item.workItemId}`}
-                      >
-                        {item.currentMessage.message}
-                      </div>
-                    )}
-                  </td>
-                  {workQueueHelper.showCaseStatusColumn && (
-                    <td>{item.caseStatus}</td>
-                  )}
-                  {workQueueHelper.showFromColumn && <td>{item.sentBy}</td>}
+                  <td>{item.caseStatus}</td>
+                  <td>{item.from}</td>
+                  <td>{item.fromSection}</td>
                 </tr>
               </tbody>
             );
           })}
         </table>
-        {formattedWorkQueue.length === 0 && <p>There are no messages.</p>}
+        {formattedMessages.messages.length === 0 && (
+          <p>There are no messages.</p>
+        )}
       </React.Fragment>
     );
   },

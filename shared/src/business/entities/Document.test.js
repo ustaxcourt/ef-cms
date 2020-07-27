@@ -191,7 +191,6 @@ describe('Document entity', () => {
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: CASE_STATUS_TYPES.NEW,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
@@ -1736,6 +1735,52 @@ describe('Document entity', () => {
       expect(
         Object.keys(createdDocument.getFormattedValidationErrors()),
       ).toEqual(['documentType', 'eventCode']);
+    });
+    it('should filter out unnecessary values from servedParties', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: applicationContext.getUniqueId(),
+          servedAt: Date.now(),
+          servedParties: [
+            {
+              email: 'me@example.com',
+              extra: 'extra',
+              name: 'me',
+              role: 'irsSuperuser',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(true);
+      expect(createdDocument.servedParties).toEqual([
+        {
+          email: 'me@example.com',
+          name: 'me',
+          role: 'irsSuperuser',
+        },
+      ]);
+    });
+    it('should return an error when servedParties is not an array', () => {
+      const createdDocument = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentId: applicationContext.getUniqueId(),
+          servedAt: Date.now(),
+          servedParties: {
+            email: 'me@example.com',
+            extra: 'extra',
+            name: 'me',
+            role: 'irsSuperuser',
+          },
+        },
+        { applicationContext },
+      );
+      expect(createdDocument.isValid()).toEqual(false);
+      expect(createdDocument.getFormattedValidationErrors()).toEqual({
+        servedParties: '"servedParties" must be an array',
+      });
     });
   });
 });

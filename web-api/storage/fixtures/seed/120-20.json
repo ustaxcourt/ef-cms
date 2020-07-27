@@ -250,7 +250,6 @@
   {
     "createdAt": "2020-06-25T20:58:55.411Z",
     "entityName": "UserCase",
-    "caseId": "ee049fa1-7cb0-4971-81c4-9944f1226898",
     "caseCaption": "Sean Connery, Petitioner",
     "gsi1pk": "user-case|ee049fa1-7cb0-4971-81c4-9944f1226898",
     "sk": "case|ee049fa1-7cb0-4971-81c4-9944f1226898",

@@ -52,7 +52,6 @@ describe('submitCourtIssuedOrderAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '5678',
           docketNumber: '111-20',
         },
         form: {
@@ -67,7 +66,6 @@ describe('submitCourtIssuedOrderAction', () => {
       applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
         .calls[0][0].documentMetadata.draftState,
     ).toEqual({
-      caseId: '5678',
       docketNumber: '111-20',
       documentType: 'Notice of Intervention',
     });

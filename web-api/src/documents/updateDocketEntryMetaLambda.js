@@ -11,8 +11,8 @@ exports.updateDocketEntryMetaLambda = event =>
     return await applicationContext
       .getUseCases()
       .updateDocketEntryMetaInteractor({
-        ...JSON.parse(event.body),
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...JSON.parse(event.body),
+        ...event.pathParameters,
       });
   });

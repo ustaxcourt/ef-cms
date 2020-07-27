@@ -10,10 +10,13 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the caseId to unprioritize
+ * @param {string} providers.docketNumber the docket number of the case to unprioritize
  * @returns {object} the case data
  */
-exports.unprioritizeCaseInteractor = async ({ applicationContext, caseId }) => {
+exports.unprioritizeCaseInteractor = async ({
+  applicationContext,
+  docketNumber,
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PRIORITIZE_CASE)) {
@@ -22,9 +25,9 @@ exports.unprioritizeCaseInteractor = async ({ applicationContext, caseId }) => {
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });

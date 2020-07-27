@@ -159,6 +159,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/draft-documents?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          draftDocumentId: documentId,
+          primaryTab: 'drafts',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/document-view?..',
       ifHasAccess(docketNumber => {
         const { documentId } = route.query();
@@ -589,6 +602,7 @@ const router = {
         return sequence({
           docketNumber,
           documentId,
+          redirectUrl: `/case-detail/${docketNumber}/draft-documents?documentId=${documentId}`,
         });
       }),
     );
@@ -602,7 +616,7 @@ const router = {
           docketNumber,
           documentId,
           parentMessageId,
-          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${documentId}`,
         });
       }),
     );
@@ -634,12 +648,14 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/add-docket-entry',
+      '/case-detail/*/add-paper-filing',
       ifHasAccess(docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+          `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
         );
-        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+        return app.getSequence('gotoAddDocketEntrySequence')({
+          docketNumber,
+        });
       }),
     );
 
@@ -1126,6 +1142,19 @@ const router = {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-messages/*/message-detail/*?..',
+      ifHasAccess((docketNumber, parentMessageId) => {
+        const { documentId } = route.query();
+        setPageTitle('Message detail');
+        return app.getSequence('gotoMessageDetailSequence')({
+          docketNumber,
+          documentId,
           parentMessageId,
         });
       }),

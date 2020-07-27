@@ -30,6 +30,10 @@
       flags: 
         presence: "optional"
         description: "A document that was archived instead of added to the Docket Record."
+    attachments: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     certificateOfService: 
       type: "boolean"
       flags: 
@@ -1247,6 +1251,7 @@
       type: "boolean"
       flags: 
         presence: "optional"
+        description: "Has an associated PDF in S3."
     isLegacySealed: 
       type: "boolean"
       flags: 
@@ -1318,6 +1323,11 @@
       type: "string"
       flags: 
         description: "The judge associated with the document."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       allow: 
         - null
       whens: 
@@ -1346,6 +1356,15 @@
       flags: 
         presence: "optional"
         description: "A lodged document is awaiting action by the judge to enact or refuse."
+    mailingDate: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
     numberOfPages: 
       type: "number"
       flags: 
@@ -1369,6 +1388,11 @@
       type: "string"
       flags: 
         description: "When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document"
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 
@@ -1430,7 +1454,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 100
     processingStatus: 
       type: "string"
       flags: 
@@ -1507,7 +1531,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-        description: "A secondary date associated with the document, typically related to time-restricted availability."
+        description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
     secondaryDocument: 
       type: "object"
       flags: 
@@ -2288,15 +2312,52 @@
         - 
           type: "object"
           keys: 
+            email: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "email"
+                  args: 
+                    options: 
+                      tlds: false
+                - 
+                  name: "max"
+                  args: 
+                    limit: 100
             name: 
               type: "string"
               flags: 
                 presence: "required"
+                description: "The name of a party from a contact, or \"IRS\""
               rules: 
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 100
+            role: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Currently only required for the IRS"
+              allow: 
+                - "adc"
+                - "admin"
+                - "admissionsclerk"
+                - "chambers"
+                - "clerkofcourt"
+                - "docketclerk"
+                - "floater"
+                - "inactivePractitioner"
+                - "irsPractitioner"
+                - "irsSuperuser"
+                - "judge"
+                - "petitioner"
+                - "petitionsclerk"
+                - "privatePractitioner"
+                - "trialclerk"
     serviceDate: 
       type: "date"
       flags: 
@@ -2304,7 +2365,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-        description: "Certificate of service date."
+        description: "Used by certificate of service documents to construct the document title."
       rules: 
         - 
           name: "max"
@@ -2320,6 +2381,11 @@
       type: "string"
       flags: 
         description: "The time at which the document was signed."
+      rules: 
+        - 
+          name: "max"
+          args: 
+            limit: 100
       whens: 
         - 
           ref: 

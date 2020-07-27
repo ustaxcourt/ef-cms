@@ -287,6 +287,7 @@ describe('formattedMessageDetail', () => {
                 documentTitle: 'Some Stuff',
                 documentType: 'Order',
                 eventCode: 'O',
+                isDraft: true,
               },
             ],
           },

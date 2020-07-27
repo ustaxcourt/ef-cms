@@ -16,6 +16,7 @@ describe('fetchPendingItems', () => {
 
   beforeEach(() => {
     const mockDataOne = {
+      caseCaption: 'Test Petitioner, Petitioner',
       caseId: '1',
       documents: [
         {
@@ -29,6 +30,7 @@ describe('fetchPendingItems', () => {
       ],
     };
     const mockDataTwo = {
+      caseCaption: 'Another Test Petitioner, Petitioner',
       caseId: '2',
       documents: [
         {
@@ -61,8 +63,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 
@@ -96,8 +98,8 @@ describe('fetchPendingItems', () => {
     ).toHaveBeenCalled();
 
     expect(results).toMatchObject([
-      { caseId: '1', documentId: 'def', pending: true },
-      { caseId: '2', documentId: 'abc', pending: true },
+      { documentId: 'def', pending: true },
+      { documentId: 'abc', pending: true },
     ]);
   });
 

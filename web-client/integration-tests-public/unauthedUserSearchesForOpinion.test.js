@@ -5,11 +5,7 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 import { unauthedUserSearchesForOpinionByKeyword } from './journey/unauthedUserSearchesForOpinionByKeyword';
 
 const test = setupTest();
-const testClient = setupTestClient({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const testClient = setupTestClient();
 
 describe('Unauthed user searches for an opinion by keyword', () => {
   unauthedUserNavigatesToPublicSite(test);

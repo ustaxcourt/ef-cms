@@ -5,7 +5,7 @@ const {
 const { verifyCaseForUser } = require('./verifyCaseForUser');
 
 const userId = '123';
-const caseId = 'abc';
+const docketNumber = '123-20';
 
 describe('verifyCaseForUser', () => {
   it('should return true if mapping record for user to case exists', async () => {
@@ -17,7 +17,7 @@ describe('verifyCaseForUser', () => {
     ]);
     const result = await verifyCaseForUser({
       applicationContext,
-      caseId,
+      docketNumber,
       userId,
     });
     expect(result).toEqual(true);
@@ -26,7 +26,7 @@ describe('verifyCaseForUser', () => {
     client.query = jest.fn().mockReturnValue([]);
     const result = await verifyCaseForUser({
       applicationContext,
-      caseId,
+      docketNumber,
       userId,
     });
     expect(result).toEqual(false);

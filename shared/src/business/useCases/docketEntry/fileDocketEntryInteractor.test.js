@@ -83,7 +83,7 @@ describe('fileDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -93,7 +93,7 @@ describe('fileDocketEntryInteractor', () => {
       fileDocketEntryInteractor({
         applicationContext,
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
@@ -107,7 +107,7 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -131,7 +131,7 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -164,7 +164,7 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
@@ -197,8 +197,8 @@ describe('fileDocketEntryInteractor', () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',
@@ -226,13 +226,15 @@ describe('fileDocketEntryInteractor', () => {
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
 
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
         eventCode: 'AFE',

@@ -15,7 +15,7 @@ describe('createCaseMessageAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: 'a7806fa0-ce6a-41ca-b66e-59438953f8bb',
+          docketNumber: '101-20',
         },
         modal: {
           form: {
@@ -45,7 +45,7 @@ describe('createCaseMessageAction', () => {
           documentTitle: 'Petition',
         },
       ],
-      caseId: 'a7806fa0-ce6a-41ca-b66e-59438953f8bb',
+      docketNumber: '101-20',
       message: 'You there!',
       subject: 'Hey!',
     });

@@ -1,9 +1,5 @@
-const {
-  isDraftDocument,
-  isPrivateDocument,
-  PublicCase,
-} = require('./PublicCase');
 const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
+const { isPrivateDocument, PublicCase } = require('./PublicCase');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -11,7 +7,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -23,13 +18,14 @@ describe('PublicCase', () => {
         },
         {},
       );
+
       expect(entity.getFormattedValidationErrors()).toBe(null);
     });
+
     it('should not validate when case is sealed but sensitive information is provided to constructor', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
@@ -42,8 +38,8 @@ describe('PublicCase', () => {
         },
         {},
       );
+
       expect(entity.getFormattedValidationErrors()).toMatchObject({
-        // caseId is permitted
         // docketNumber is permitted
         // docketNumberSuffix is permitted
         // isSealed is permitted
@@ -61,7 +57,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: 'testing',
@@ -76,7 +71,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: {
         name: undefined,
         state: undefined,
@@ -100,7 +94,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -115,7 +108,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
@@ -133,7 +125,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'testing',
         contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
@@ -145,7 +136,7 @@ describe('PublicCase', () => {
             documentId: '123',
             documentType: 'Order that case is assigned',
           },
-          { documentId: '234', documentType: 'Order' },
+          { documentId: '234', documentType: 'Order', isDraft: true },
           { documentId: '345', documentType: 'Petition' },
           { documentId: '987', eventCode: 'TRAN' },
         ],
@@ -156,7 +147,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      caseId: 'testing',
       contactPrimary: undefined,
       contactSecondary: undefined,
       createdAt: 'testing',
@@ -230,49 +220,6 @@ describe('PublicCase', () => {
     });
   });
 
-  describe('isDraftDocument', () => {
-    it('should return true for a stipulated decision document that is not on the docket record', () => {
-      const isPrivate = isDraftDocument(
-        {
-          documentType: 'Stipulated Decision',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for an order document that is not on the docket record', () => {
-      const isPrivate = isDraftDocument(
-        {
-          documentType: 'Order',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for a court-issued order document that is not on the docket record', () => {
-      const isPrivate = isDraftDocument(
-        {
-          documentType: 'Order',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return false for a court-issued order document that is on the docket record', () => {
-      const isPrivate = isDraftDocument(
-        {
-          documentId: '123',
-          documentType: 'Order',
-        },
-        [{ documentId: '123' }],
-      );
-      expect(isPrivate).toEqual(false);
-    });
-  });
-
   describe('isPrivateDocument', () => {
     it('should return true for a stipulated decision document that is not on the docket record', () => {
       const isPrivate = isPrivateDocument(
@@ -341,7 +288,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',
@@ -361,7 +307,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         contactPrimary: {},
         contactSecondary: {},
         createdAt: '2020-01-02T03:30:45.007Z',

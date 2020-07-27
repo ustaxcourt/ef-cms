@@ -6,19 +6,12 @@ import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1Views
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitionsclerk@example.com');

@@ -14,12 +14,12 @@ exports.updateCourtIssuedOrderInteractor = ({
   documentIdToEdit,
   documentMetadata,
 }) => {
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   return put({
     applicationContext,
     body: {
       documentMetadata,
     },
-    endpoint: `/case-documents/${caseId}/court-issued-orders/${documentIdToEdit}`,
+    endpoint: `/case-documents/${docketNumber}/court-issued-orders/${documentIdToEdit}`,
   });
 };

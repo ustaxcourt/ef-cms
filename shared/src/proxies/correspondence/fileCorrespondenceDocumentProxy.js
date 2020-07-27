@@ -14,13 +14,13 @@ exports.fileCorrespondenceDocumentInteractor = ({
   documentMetadata,
   primaryDocumentFileId,
 }) => {
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentMetadata,
       primaryDocumentFileId,
     },
-    endpoint: `/case-documents/${caseId}/correspondence`,
+    endpoint: `/case-documents/${docketNumber}/correspondence`,
   });
 };

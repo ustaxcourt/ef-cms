@@ -586,7 +586,6 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-07-12T17:09:41.026Z",
     "caseCaption": "Denise Gould, Petitioner",
-    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "status": "New",
     "docketNumber": "106-19",
     "docketNumberWithSuffix": "106-19",
@@ -759,7 +758,7 @@
   {
     "createdAt": "2019-08-22T12:49:10.949Z",
     "deadlineDate": "2019-08-23T04:00:00.000Z",
-    "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "docketNumber": "106-19",
     "sk": "case-deadline|0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "caseDeadlineId": "0f5a666d-63c5-4378-9cd6-0b2ae141280f",
     "description": "This is a test deadline",

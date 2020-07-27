@@ -20,7 +20,7 @@ describe('removeCasePendingItemInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(v => v);
@@ -36,7 +36,7 @@ describe('removeCasePendingItemInteractor', () => {
     await expect(
       removeCasePendingItemInteractor({
         applicationContext,
-        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: MOCK_CASE.docketNumber,
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // documents[3] from MOCK_CASE
       }),
     ).rejects.toThrow('Unauthorized for update case');
@@ -45,7 +45,7 @@ describe('removeCasePendingItemInteractor', () => {
   it('should call updateCase with the pending document set to pending=false', async () => {
     await removeCasePendingItemInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // documents[3] from MOCK_CASE
     });
 
@@ -58,11 +58,11 @@ describe('removeCasePendingItemInteractor', () => {
   it('should call updateCase with automaticBlocked=false if there are no deadlines or pending items remaining on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
 
     await removeCasePendingItemInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // documents[3] from MOCK_CASE
     });
 
@@ -79,11 +79,13 @@ describe('removeCasePendingItemInteractor', () => {
   it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([{ deadline: 'something' }]);
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
 
     await removeCasePendingItemInteractor({
       applicationContext,
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: MOCK_CASE.docketNumber,
       documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // documents[3] from MOCK_CASE
     });
 

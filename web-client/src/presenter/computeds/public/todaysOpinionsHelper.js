@@ -12,7 +12,7 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
 
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,
-    documentLink: `${baseUrl}/public-api/${opinion.caseId}/${opinion.documentId}/public-document-download-url`,
+    documentLink: `${baseUrl}/public-api/${opinion.docketNumber}/${opinion.documentId}/public-document-download-url`,
     formattedDocumentType: Document.getFormattedType(opinion.documentType),
     formattedFilingDate: applicationContext
       .getUtilities()

@@ -25,6 +25,7 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons/faCalendarAlt';
 import { faCalendarCheck } from '@fortawesome/free-solid-svg-icons/faCalendarCheck';
@@ -175,6 +176,7 @@ const app = {
       faEdit,
       faEditSolid,
       faEnvelopeOpen,
+      faArrowRight,
       faEnvelopeSolid,
       faExclamation,
       faExclamationCircle,

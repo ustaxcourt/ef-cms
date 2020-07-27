@@ -24,7 +24,7 @@ describe('updateDocketEntryMetaAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          caseId: '123-45',
+          docketNumber: '123-45',
         },
         docketRecordEntry: {
           servedParties: [],
@@ -50,7 +50,7 @@ describe('updateDocketEntryMetaAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          caseId: '123-45',
+          docketNumber: '123-45',
         },
         docketRecordEntry: {
           description: 'Test Description',

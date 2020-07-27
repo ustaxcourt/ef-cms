@@ -44,13 +44,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     ({ editUrl } = formattedDocument);
   }
 
-  const isDocumentOnDocketRecord =
-    viewerDocumentToDisplay &&
-    caseDetail.docketRecord.find(
-      docketEntry =>
-        docketEntry.documentId === viewerDocumentToDisplay.documentId,
-    );
-
   const isNotice =
     viewerDocumentToDisplay &&
     NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
@@ -71,14 +64,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showAddDocketEntryButtonForDocument =
     !isCorrespondence &&
-    !isDocumentOnDocketRecord &&
+    caseDocument.isDraft &&
     (documentIsSigned || !documentRequiresSignature);
   const showApplySignatureButtonForDocument =
-    !isCorrespondence && !documentIsSigned && !isDocumentOnDocketRecord;
+    !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
+  const showEditButtonForDocument = caseDocument.isDraft && !isCorrespondence;
   const showRemoveSignatureButtonForDocument =
-    documentIsSigned && !isDocumentOnDocketRecord && !isNotice;
-  const showEditButtonForDocument =
-    !isDocumentOnDocketRecord && !isCorrespondence;
+    documentIsSigned && caseDocument.isDraft && !isNotice;
   const showEditButtonForCorrespondenceDocument = isCorrespondence;
 
   const showDocumentNotSignedAlert =
@@ -116,9 +108,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
-      showEditButtonForRole && showEditButtonForDocument && !documentIsSigned,
+      showEditButtonForRole &&
+      showEditButtonForDocument &&
+      (!documentIsSigned || isNotice),
     showEditButtonSigned:
-      showEditButtonForRole && showEditButtonForDocument && documentIsSigned,
+      showEditButtonForRole &&
+      showEditButtonForDocument &&
+      documentIsSigned &&
+      !isNotice,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showNotServed,

@@ -1,11 +1,17 @@
 const client = require('../../dynamodbClientService');
+const { getCaseIdFromDocketNumber } = require('./getCaseIdFromDocketNumber');
 
 exports.associateUserWithCase = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   userCase,
   userId,
 }) => {
+  const caseId = await getCaseIdFromDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
+
   return client.put({
     Item: {
       ...userCase,
