@@ -16,14 +16,9 @@ export const DashboardJudge = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-8">
-              <RecentMessages />
-            </div>
-            <div className="tablet:grid-col-4">
-              <TrialSessionsSummary />
-            </div>
-          </div>
+
+          <TrialSessionsSummary />
+          <RecentMessages />
         </section>
       </>
     );

@@ -12,12 +12,12 @@ exports.completeDocketEntryQCInteractor = ({
   applicationContext,
   entryMetadata,
 }) => {
-  const { caseId } = entryMetadata;
+  const { docketNumber } = entryMetadata;
   return put({
     applicationContext,
     body: {
       entryMetadata,
     },
-    endpoint: `/case-documents/${caseId}/docket-entry-complete`,
+    endpoint: `/case-documents/${docketNumber}/docket-entry-complete`,
   });
 };

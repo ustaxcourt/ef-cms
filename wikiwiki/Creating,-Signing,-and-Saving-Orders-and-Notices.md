@@ -23,4 +23,5 @@
 * Judge's and chambers users have access to apply their associated judge's signature
 
 **Notices**
-* The Clerk of the Court's signature is automatically applied to all Notices (except the Standing Pre-Trial Notice , which receives the judge assigned to the trial session)
+* The Clerk of the Court's signature is automatically applied to all Notices (except the Standing Pre-Trial Notice, which receives the judge assigned to the trial session)
+* Users cannot manually apply a signature to a Notice 

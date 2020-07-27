@@ -103,8 +103,21 @@ export const CaseDetailHeaderMenu = connect(
                 size="1x"
               />
             </button>
+
             {isCaseDetailMenuOpen && (
               <ul className="usa-nav__submenu position-right-0">
+                <li className="usa-nav__submenu-item">
+                  <Button
+                    href={`/case-detail/${caseDetail.docketNumber}`}
+                    icon="arrow-right"
+                    id="menu-button-new-tab"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    New Tab
+                  </Button>
+                </li>
+
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="envelope"
@@ -148,11 +161,11 @@ export const CaseDetailHeaderMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       link
-                      href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
+                      href={`/case-detail/${caseDetail.docketNumber}/add-paper-filing`}
                       icon="plus-circle"
                       id="menu-button-add-docket-entry"
                     >
-                      Add Docket Entry
+                      Add Paper Filing
                     </Button>
                   </li>
                 )}

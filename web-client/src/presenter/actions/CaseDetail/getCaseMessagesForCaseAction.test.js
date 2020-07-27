@@ -5,8 +5,8 @@ import { runAction } from 'cerebral/test';
 
 describe('getCaseMessagesForCaseAction', () => {
   const mockCaseMessage = {
-    caseId: 'b3f09a45-b27c-4383-acc1-2ab1f99e6725',
     createdAt: '2019-03-01T21:40:46.415Z',
+    docketNumber: '101-20',
     from: 'Test Petitionsclerk',
     fromSection: 'petitions',
     fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
@@ -32,7 +32,7 @@ describe('getCaseMessagesForCaseAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '0fbd6b64-6e13-4984-b46b-fd74906fd2c7',
+          docketNumber: '101-20',
         },
       },
     });
@@ -45,7 +45,7 @@ describe('getCaseMessagesForCaseAction', () => {
       applicationContextForClient.getUseCases().getCaseMessagesForCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
-      caseId: '0fbd6b64-6e13-4984-b46b-fd74906fd2c7',
+      docketNumber: '101-20',
     });
     expect(result.state.caseDetail.messages).toEqual([mockCaseMessage]);
   });

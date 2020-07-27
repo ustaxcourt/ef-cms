@@ -71,8 +71,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   },
-
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing',
   'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
@@ -98,7 +97,7 @@ module.exports = [
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
   },
   {
     actions: [

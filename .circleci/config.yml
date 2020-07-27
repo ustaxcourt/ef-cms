@@ -6,6 +6,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -54,7 +55,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -96,7 +97,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: small
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -132,7 +133,7 @@ jobs:
       - image: elastic/elasticsearch:7.5.2
         environment:
           discovery.type: single-node
-    resource_class: large
+    resource_class: medium+
     parallelism: 5
     steps:
       - restore_cache:
@@ -174,6 +175,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
     steps:
       - attach_workspace:
           at: ~/
@@ -217,7 +219,7 @@ jobs:
         environment:
           discovery.type: single-node
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx4096m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
     steps:
       - restore_cache:
@@ -320,7 +322,7 @@ jobs:
           discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: medium+
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -362,7 +364,6 @@ jobs:
   deploy:
     machine:
       docker_layer_caching: true
-    resource_class: medium
     steps:
       - checkout
       - run:

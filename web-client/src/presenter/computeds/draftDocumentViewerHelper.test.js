@@ -76,6 +76,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -99,6 +100,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               filedBy: 'Test Petitionsclerk',
+              isDraft: true,
             },
           ],
         },
@@ -121,6 +123,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -167,6 +170,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -192,6 +196,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -217,6 +222,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -242,6 +248,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -268,6 +275,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
+              isDraft: true,
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
@@ -295,6 +303,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Order to do something',
               documentType: 'Order',
               eventCode: 'O',
+              isDraft: true,
             },
           ],
         },
@@ -320,6 +329,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -346,6 +356,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -373,6 +384,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -400,6 +412,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NOT',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -428,6 +441,7 @@ describe('draftDocumentViewerHelper', () => {
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NTD',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -455,6 +469,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -481,6 +496,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -506,6 +522,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -515,6 +532,35 @@ describe('draftDocumentViewerHelper', () => {
       },
     });
 
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for a Notice document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDraftDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
@@ -529,6 +575,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },
@@ -553,6 +600,7 @@ describe('draftDocumentViewerHelper', () => {
               documentId: 'abc',
               documentTitle: 'Order to do something',
               documentType: 'Order',
+              isDraft: true,
             },
           ],
         },

@@ -93,7 +93,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -104,7 +104,7 @@ describe('fileExternalDocumentInteractor', () => {
         applicationContext,
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
-          caseId: caseRecord.caseId,
+          docketNumber: caseRecord.docketNumber,
           documentType: 'Memorandum in Support',
           filedBy: 'Test Petitioner',
         },
@@ -117,8 +117,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'A',
@@ -127,7 +126,7 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
@@ -149,8 +148,7 @@ describe('fileExternalDocumentInteractor', () => {
         'c54ba5a9-b37b-479d-9201-067ec6e335be',
       ],
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
         eventCode: 'M115',
@@ -213,8 +211,7 @@ describe('fileExternalDocumentInteractor', () => {
         applicationContext,
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
-          caseId: caseRecord.caseId,
-          docketNumber: '45678-18',
+          docketNumber: caseRecord.docketNumber,
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
           eventCode: 'A',
@@ -226,7 +223,7 @@ describe('fileExternalDocumentInteractor', () => {
     }
     expect(error).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
@@ -247,8 +244,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
@@ -274,8 +270,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
-        caseId: caseRecord.caseId,
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
         documentType: 'Simultaneous Memoranda of Law',
         eventCode: 'A',
@@ -299,9 +294,8 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',
@@ -326,7 +320,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockReturnValue([
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
         {
           deadlineDate: 'something',
         },
@@ -336,9 +330,8 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext,
       documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
       documentMetadata: {
-        caseId: caseRecord.caseId,
         category: 'Application',
-        docketNumber: '45678-18',
+        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
         eventCode: 'APPW',

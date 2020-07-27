@@ -10,14 +10,14 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseId the id of the case to consolidate
+ * @param {object} providers.docketNumber the docket number of the case to consolidate
  * @param {object} providers.caseIdToConsolidateWith the id of the case with which to consolidate
  * @returns {object} the updated case data
  */
 exports.addConsolidatedCaseInteractor = async ({
   applicationContext,
-  caseId,
   caseIdToConsolidateWith,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -27,10 +27,10 @@ exports.addConsolidatedCaseInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseToConsolidateWith = await applicationContext

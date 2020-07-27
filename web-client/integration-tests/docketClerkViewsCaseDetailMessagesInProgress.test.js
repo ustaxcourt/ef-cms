@@ -7,11 +7,7 @@ import {
 } from './helpers';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('a docket clerk views case detail messages in progress with a message on a draft order', () => {
   beforeAll(() => {

@@ -10,12 +10,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the caseId to unblock
+ * @param {string} providers.docketNumber the docket number to unblock
  * @returns {object} the case data
  */
 exports.unblockCaseFromTrialInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,9 +25,9 @@ exports.unblockCaseFromTrialInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });

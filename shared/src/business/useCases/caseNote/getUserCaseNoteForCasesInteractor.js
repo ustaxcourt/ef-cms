@@ -10,12 +10,12 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseIds the ids of the cases to get notes for
+ * @param {string} providers.docketNumbers the docket numbers of the cases to get notes for
  * @returns {object} the case note object if one is found
  */
 exports.getUserCaseNoteForCasesInteractor = async ({
   applicationContext,
-  caseIds,
+  docketNumbers,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -31,7 +31,7 @@ exports.getUserCaseNoteForCasesInteractor = async ({
     .getPersistenceGateway()
     .getUserCaseNoteForCases({
       applicationContext,
-      caseIds,
+      docketNumbers,
       userId: (judgeUser && judgeUser.userId) || user.userId,
     });
 

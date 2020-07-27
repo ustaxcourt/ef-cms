@@ -8,13 +8,12 @@ const {
 describe('verifyPendingCaseForUser', () => {
   it('should return results retrieved from persistence', async () => {
     const mockCaseRecord = {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '123-19',
     };
 
     await verifyPendingCaseForUserInteractor({
       applicationContext,
-      caseId: mockCaseRecord.caseId,
+      docketNumber: mockCaseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

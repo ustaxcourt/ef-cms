@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -60,12 +60,13 @@ joiValidationDecorator(
       .description(
         'Text that describes this Docket Record item, which may be part of the Filings and Proceedings value.',
       ),
+    docketRecordId: JoiValidationConstants.UUID.required(),
     documentId: JoiValidationConstants.UUID.allow(null)
       .optional()
       .description('ID of the associated PDF document in the S3 bucket.'),
     editState: joi
       .string()
-      .max(3000)
+      .max(4000)
       .allow(null)
       .optional()
       .meta({ tags: ['Restricted'] })

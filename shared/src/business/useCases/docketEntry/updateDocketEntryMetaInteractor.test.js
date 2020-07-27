@@ -68,10 +68,10 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
     ];
 
-    const caseByCaseId = {
-      'cccba5a9-b37b-479d-9201-067ec6e33ccc': {
+    const caseByDocketNumber = {
+      '101-20': {
         ...MOCK_CASE,
-        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+        docketNumber: '101-20',
         docketRecord,
         documents,
       },
@@ -84,8 +84,8 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockImplementation(({ caseId }) => {
-        return caseByCaseId[caseId];
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        return caseByDocketNumber[docketNumber];
       });
   });
 
@@ -95,7 +95,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     await expect(
       updateDocketEntryMetaInteractor({
         applicationContext,
-        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+        docketNumber: '101-20',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -112,28 +112,28 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should call the persistence method to load the case by its docket number', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByCaseId,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 
   it('should update the docket record action', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         action: 'Updated Action',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -146,12 +146,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the docket record description', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         description: 'Updated Description',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -164,12 +164,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the docket record and document filedBy', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         partyPrimary: true,
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -186,12 +186,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the docket record filingDate', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         filingDate: '2020-01-01T00:01:00.000Z',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -204,12 +204,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the document servedAt', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         servedAt: '2020-01-01T00:01:00.000Z',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -225,13 +225,13 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the document hasOtherFilingParty and otherFilingParty values', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         hasOtherFilingParty: true,
         otherFilingParty: 'Brianna Noble',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -248,12 +248,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         freeText: undefined,
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -269,12 +269,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         servedAt: '2020-01-01T00:01:00.000Z',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -286,12 +286,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should generate a new coversheet for the document if the filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         filingDate: '2020-01-01T00:01:00.000Z',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -303,13 +303,13 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
         servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -321,12 +321,12 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should call the updateCase persistence method', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         ...docketRecord[0],
         ...documents[0],
         description: 'Updated Description',
       },
+      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -339,7 +339,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     await expect(
       updateDocketEntryMetaInteractor({
         applicationContext,
-        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
         docketEntryMeta: {
           ...docketRecord[0],
           ...documents[0],
@@ -349,6 +348,7 @@ describe('updateDocketEntryMetaInteractor', () => {
           eventCode: 'RQT',
           filingDate: '2020-02-03T08:06:07.539Z',
         },
+        docketNumber: '101-20',
         docketRecordIndex: 2,
       }),
     ).resolves.not.toThrow();

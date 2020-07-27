@@ -131,7 +131,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        caseId: sessionCase.caseId,
+        docketNumber: sessionCase.docketNumber,
         documentId: result.fileId,
         protocol: 'S3',
         useTempBucket: true,

@@ -79,8 +79,10 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
     showDocumentNotSignedAlert,
-    showEditButtonNotSigned: showEditButtonForRole && !documentIsSigned,
-    showEditButtonSigned: showEditButtonForRole && documentIsSigned,
+    showEditButtonNotSigned:
+      showEditButtonForRole && (!documentIsSigned || isNotice),
+    showEditButtonSigned:
+      showEditButtonForRole && documentIsSigned && !isNotice,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument,

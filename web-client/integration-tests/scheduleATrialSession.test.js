@@ -79,7 +79,7 @@ describe('Schedule A Trial Session', () => {
 
   // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
-    return [createdCaseIds[0], createdCaseIds[1]];
+    return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
 
   petitionsClerkSetsATrialSessionsSchedule(test);

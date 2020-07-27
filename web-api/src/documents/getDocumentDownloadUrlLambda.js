@@ -17,8 +17,7 @@ exports.getDocumentDownloadUrlLambda = event =>
         .getUseCases()
         .getDownloadPolicyUrlInteractor({
           applicationContext,
-          caseId: event.pathParameters.caseId,
-          documentId: event.pathParameters.documentId,
+          ...event.pathParameters,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

@@ -73,9 +73,9 @@ exports.forwardWorkItemInteractor = async ({
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: workItemToForward.caseId,
+      docketNumber: workItemToForward.docketNumber,
     });
 
   const caseToUpdate = new Case(caseObject, { applicationContext });

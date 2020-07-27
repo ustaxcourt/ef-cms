@@ -54,7 +54,7 @@ const replaceOriginalWithSignedDocument = async ({
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case on which to save the document
+ * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.originalDocumentId the id of the original (unsigned) document
  * @param {string} providers.signedDocumentId the id of the signed document
  * @param {string} providers.nameForSigning the name on the signature of the signed document
@@ -62,7 +62,7 @@ const replaceOriginalWithSignedDocument = async ({
  */
 exports.saveSignedDocumentInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   nameForSigning,
   originalDocumentId,
   signedDocumentId,
@@ -70,9 +70,9 @@ exports.saveSignedDocumentInteractor = async ({
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
   const originalDocumentEntity = caseEntity.documents.find(

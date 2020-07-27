@@ -15,7 +15,7 @@ describe('addConsolidatedCaseAction', () => {
       },
       props: {
         caseDetail: { caseId: '123' },
-        caseToConsolidate: { caseId: '456' },
+        caseToConsolidate: { docketNumber: '456-20' },
       },
     });
 
@@ -25,7 +25,7 @@ describe('addConsolidatedCaseAction', () => {
     ).toEqual(1);
     expect(result.output).toEqual({
       caseId: '123',
-      caseToConsolidateId: '456',
+      caseToConsolidateDocketNumber: '456-20',
     });
   });
 });

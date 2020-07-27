@@ -51,6 +51,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -76,6 +77,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -101,6 +103,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -130,6 +133,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -159,6 +163,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -188,6 +193,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -213,6 +219,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -243,6 +250,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -268,6 +276,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -294,6 +303,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -321,6 +331,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -347,6 +358,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -378,6 +390,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -408,6 +421,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -437,6 +451,7 @@ describe('messageDocumentHelper', () => {
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NOT',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -466,6 +481,7 @@ describe('messageDocumentHelper', () => {
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NTD',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -497,7 +513,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
-              entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -523,6 +539,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '123',
             },
           ],
@@ -549,6 +566,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -572,6 +590,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '567',
               documentTitle: 'Test Correspondence',
+              isDraft: true,
             },
           ],
           docketRecord: [],
@@ -579,6 +598,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -604,6 +624,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -633,6 +654,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -642,6 +664,40 @@ describe('messageDocumentHelper', () => {
       },
     });
 
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for Notice document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
@@ -663,6 +719,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -692,6 +749,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -720,6 +778,7 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
               entityName: 'Document',
               eventCode: 'MISC', // Does not require a signature
+              isDraft: true,
             },
           ],
         },
@@ -748,6 +807,7 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
               entityName: 'Document',
               eventCode: 'O', // Requires a signature
+              isDraft: false,
             },
           ],
         },
@@ -780,7 +840,8 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 entityName: 'Document',
-                eventCode: 'O', // Requires a signature
+                eventCode: 'O',
+                isDraft: false,
               },
             ],
           },
@@ -808,8 +869,9 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Order',
-                entityName: 'Document', //court issued document type
-                eventCode: 'O',
+                entityName: 'Document',
+                eventCode: 'O', //court issued document type
+                isDraft: false,
               },
             ],
           },
@@ -837,8 +899,9 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Order',
-                entityName: 'Document', //court issued document type
+                entityName: 'Document',
                 eventCode: 'O',
+                isDraft: false,
               },
             ],
           },
@@ -866,8 +929,9 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Answer',
-                entityName: 'Document', //paper filed document type
+                entityName: 'Document',
                 eventCode: 'A',
+                isDraft: false,
               },
             ],
           },
@@ -895,8 +959,9 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Answer',
-                entityName: 'Document', //paper filed document type
-                eventCode: 'A',
+                entityName: 'Document',
+                eventCode: 'A', // paper filed document
+                isDraft: false,
               },
             ],
           },
@@ -927,14 +992,16 @@ describe('messageDocumentHelper', () => {
               {
                 documentId: '123',
                 documentType: 'Answer',
-                entityName: 'Document', //paper filed document type
-                eventCode: 'A',
+                entityName: 'Document',
+                eventCode: 'A', // paper filed document type
+                isDraft: false,
               },
               {
                 documentId: '456',
                 documentType: 'Order',
-                entityName: 'Document', //court issued document type
-                eventCode: 'O',
+                entityName: 'Document',
+                eventCode: 'O', //court issued document type
+                isDraft: false,
               },
             ],
           },
@@ -968,6 +1035,7 @@ describe('messageDocumentHelper', () => {
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isDraft: false,
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
@@ -998,6 +1066,7 @@ describe('messageDocumentHelper', () => {
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isDraft: false,
               },
             ],
           },
@@ -1027,6 +1096,7 @@ describe('messageDocumentHelper', () => {
                 documentType: 'Petition',
                 entityName: 'Document',
                 eventCode: 'P',
+                isDraft: false,
               },
             ],
           },
@@ -1054,6 +1124,7 @@ describe('messageDocumentHelper', () => {
                 documentType: 'Miscellaneous',
                 entityName: 'Document',
                 eventCode: 'MISC',
+                isDraft: true,
               },
             ],
           },

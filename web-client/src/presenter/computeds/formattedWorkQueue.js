@@ -172,7 +172,7 @@ export const getWorkItemDocumentLink = ({
     .getUtilities()
     .formatDocument(applicationContext, result.document);
 
-  const isInProgress = formattedDocument && formattedDocument.isInProgress;
+  const isInProgress = workItem.inProgress;
 
   const qcWorkItemsUntouched =
     !isInProgress &&
@@ -185,9 +185,14 @@ export const getWorkItemDocumentLink = ({
     formattedDocument &&
     permissions.UPDATE_CASE &&
     (!formattedDocument.isInProgress ||
-      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
+      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress) ||
+      (permissions.QC_PETITION &&
+        formattedDocument.isPetition &&
+        formattedDocument.isInProgress));
 
   const documentDetailLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`;
+  const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+
   let editLink = documentDetailLink;
   if (showDocumentEditLink && !workQueueIsInternal) {
     if (permissions.DOCKET_ENTRY) {
@@ -200,7 +205,7 @@ export const getWorkItemDocumentLink = ({
       if (editLinkExtension) {
         editLink += editLinkExtension;
       } else {
-        editLink = `/case-detail/${workItem.docketNumber}/document-view?documentId=${workItem.document.documentId}`;
+        editLink = documentViewLink;
       }
     } else if (formattedDocument.isPetition && !formattedDocument.servedAt) {
       if (result.caseIsInProgress) {
@@ -208,8 +213,11 @@ export const getWorkItemDocumentLink = ({
       } else {
         editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;
       }
+    } else {
+      editLink = documentViewLink;
     }
   }
+
   if (editLink === documentDetailLink) {
     const messageId = result.messages[0] && result.messages[0].messageId;
 

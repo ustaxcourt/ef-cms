@@ -6,7 +6,7 @@ import { docketClerkEditsOrderFromMessage } from './journey/docketClerkEditsOrde
 import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRemovesSignatureFromMessage';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
@@ -18,18 +18,11 @@ import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/pet
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('messages journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');

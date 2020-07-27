@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -27,7 +26,7 @@ export const CaseMessagesIndividualCompleted = connect(
                 <tr key={idx}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
-                    <CaseLink formattedCase={message} />
+                    {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
                     <span className="no-wrap">

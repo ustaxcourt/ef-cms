@@ -14,13 +14,13 @@ exports.fileCourtIssuedOrderInteractor = ({
   documentMetadata,
   primaryDocumentFileId,
 }) => {
-  const { caseId } = documentMetadata;
+  const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentMetadata,
       primaryDocumentFileId,
     },
-    endpoint: `/case-documents/${caseId}/court-issued-order`,
+    endpoint: `/case-documents/${docketNumber}/court-issued-order`,
   });
 };

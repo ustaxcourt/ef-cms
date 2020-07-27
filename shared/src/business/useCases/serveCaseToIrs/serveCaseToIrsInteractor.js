@@ -66,10 +66,13 @@ exports.deleteStinIfAvailable = async ({ applicationContext, caseEntity }) => {
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
+exports.serveCaseToIrsInteractor = async ({
+  applicationContext,
+  docketNumber,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -78,9 +81,9 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
 
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId: caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseToBatch, { applicationContext });
@@ -188,7 +191,7 @@ exports.serveCaseToIrsInteractor = async ({ applicationContext, caseId }) => {
   for (const doc of caseEntity.documents) {
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       documentId: doc.documentId,
       replaceCoversheet: !caseEntity.isPaper,
       useInitialData: !caseEntity.isPaper,
