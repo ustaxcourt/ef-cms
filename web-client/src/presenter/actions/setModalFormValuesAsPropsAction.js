@@ -20,5 +20,7 @@ export const setModalFormValuesAsPropsAction = ({
     COURT_ISSUED_EVENT_CODES.find(ec => ec.eventCode === state.modal.eventCode)
       .documentTitle;
 
-  return { documentTitle, documentType };
+  const docketNumber = get(state.caseDetail.docketNumber);
+
+  return { docketNumber, documentTitle, documentType };
 };
