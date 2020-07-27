@@ -9,9 +9,16 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setCreateOrderModalDataOnFormAction = ({ get, props, store }) => {
-  const documentTitle = props.documentTitle || get(state.modal.documentTitle);
-  const documentType = props.documentType || get(state.modal.documentType);
+  const documentTitle = props.documentTitle
+    ? decodeURIComponent(props.documentTitle)
+    : get(state.modal.documentTitle);
+
+  const documentType = props.documentType
+    ? decodeURIComponent(props.documentType)
+    : get(state.modal.documentType);
+
   const eventCode = props.eventCode || get(state.modal.eventCode);
+
   const parentMessageId =
     props.parentMessageId || get(state.modal.parentMessageId);
 

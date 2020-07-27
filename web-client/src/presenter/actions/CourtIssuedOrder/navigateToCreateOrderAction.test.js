@@ -38,7 +38,7 @@ describe('navigateToCreateOrderAction', () => {
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
     );
   });
 
@@ -63,7 +63,7 @@ describe('navigateToCreateOrderAction', () => {
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
     );
   });
 });
