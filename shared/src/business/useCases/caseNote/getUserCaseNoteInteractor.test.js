@@ -9,7 +9,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('Get case note', () => {
   const MOCK_NOTE = {
-    caseId: MOCK_CASE.caseId,
     docketNumber: MOCK_CASE.docketNumber,
     notes: 'something',
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
