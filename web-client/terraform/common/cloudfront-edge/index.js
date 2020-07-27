@@ -19,7 +19,7 @@ exports.handler = (event, context, callback) => {
   ) {
     allowedDomain = requestHeaders['x-allowed-domain'][0].value;
   }
-  const allowedDomainString = allowedDomain ? `*.${allowedDomain}` : '';
+  const allowedDomainString = allowedDomain || '';
 
   //Set new headers
   headers['strict-transport-security'] = [
@@ -29,6 +29,7 @@ exports.handler = (event, context, callback) => {
     },
   ];
   const applicationUrl = `https://${allowedDomainString}`;
+  const subdomainsUrl = `https://*.${allowedDomainString}`;
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrl = 'https://dynamsoft-lib-stg.ef-cms.ustaxcourt.gov';
   const websocketUrl = `wss://${allowedDomainString}`;
@@ -38,7 +39,7 @@ exports.handler = (event, context, callback) => {
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
+    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl}`,
