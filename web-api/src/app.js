@@ -553,7 +553,7 @@ app.put(
 );
 app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
 app.post(
-  '/case-meta/:caseId/other-statistics',
+  '/case-meta/:docketNumber/other-statistics',
   lambdaWrapper(updateOtherStatisticsLambda),
 );
 app.put(

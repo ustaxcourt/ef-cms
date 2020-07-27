@@ -1534,10 +1534,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/other-statistics": {
+    "/case-meta/{docketNumber}/other-statistics": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
