@@ -16,7 +16,7 @@ exports.removeConsolidatedCasesLambda = event =>
       .getUseCases()
       .removeConsolidatedCasesInteractor({
         applicationContext,
-        caseId: event.pathParameters.caseId,
+        ...event.pathParameters,
         caseIdsToRemove,
       });
   });

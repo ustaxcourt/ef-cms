@@ -215,7 +215,7 @@ EOF
 EOF
 )
 
-  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${caseId}/case-context" \
+  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${docketNumber}/case-context" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${docketclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \

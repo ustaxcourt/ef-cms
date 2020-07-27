@@ -1463,10 +1463,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/high-priority": {
+    "/case-meta/{docketNumber}/high-priority": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1638,10 +1638,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/case-context": {
+    "/case-meta/{docketNumber}/case-context": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
@@ -1691,10 +1691,10 @@
         }
       }
     },
-    "/case-meta/{caseId}/consolidate-case": {
+    "/case-meta/{docketNumber}/consolidate-case": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
