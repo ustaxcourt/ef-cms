@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,

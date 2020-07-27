@@ -15,7 +15,7 @@ describe('removeCaseDetailPendingItemAction', () => {
       },
       props: {
         caseDetail: {
-          caseId: '23456',
+          docketNumber: '101-20',
           documents: [{ documentId: '123abc', pending: true }],
         },
         documentId: '123abc',
@@ -26,7 +26,7 @@ describe('removeCaseDetailPendingItemAction', () => {
       applicationContext.getUseCases().removeCasePendingItemInteractor.mock
         .calls[0][0],
     ).toMatchObject({
-      caseId: '23456',
+      docketNumber: '101-20',
       documentId: '123abc',
     });
   });
