@@ -72,13 +72,13 @@ const publicCaseSchema = {
     .description('Auto-generated from docket number and the suffix.'),
   docketRecord: joi
     .array()
-    .items(joi.object().meta({ entityName: 'DocketRecord' }))
+    .items(joi.object().meta({ entityName: 'PublicDocketRecord' }))
     .required()
     .unique((a, b) => a.index === b.index)
     .description('List of DocketRecord Entities for the case.'),
   documents: joi
     .array()
-    .items(joi.object().meta({ entityName: 'Document' }))
+    .items(joi.object().meta({ entityName: 'PublicDocument' }))
     .required()
     .description('List of Document Entities for the case.'),
   isSealed: joi.boolean(),
