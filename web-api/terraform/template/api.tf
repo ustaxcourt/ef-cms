@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "api_lambdas_bucket" {
 resource "aws_s3_bucket_object" "api_object" {
   bucket = aws_s3_bucket.api_lambdas_bucket.id
   key    = "${var.environment}_api.js.zip"
-  source = "${path.module}/lambdas/api.js.zip"
+  source = data.archive_file.zip_api.output_path
   etag   = "${filemd5("${path.module}/lambdas/api.js.zip")}"
 }
 
@@ -23,14 +23,14 @@ data "archive_file" "zip_api" {
 }
 
 resource "aws_lambda_function" "api_lambda" {
-  function_name = "api_${var.environment}"
-  role          = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api.handler"
-  s3_bucket     = aws_s3_bucket.api_lambdas_bucket.id
-  s3_key        = aws_s3_bucket_object.api_object.key
+  function_name    = "api_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api.handler"
+  s3_bucket        = aws_s3_bucket.api_lambdas_bucket.id
+  s3_key           = aws_s3_bucket_object.api_object.key
   source_code_hash = "${filebase64sha256("${path.module}/lambdas/api.js.zip")}"
-  timeout       = "29"
-  memory_size   = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
