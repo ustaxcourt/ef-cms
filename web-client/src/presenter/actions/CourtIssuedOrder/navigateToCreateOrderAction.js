@@ -12,18 +12,19 @@ import { state } from 'cerebral';
  */
 export const navigateToCreateOrderAction = async ({ get, props, router }) => {
   const parentMessageId = get(state.modal.parentMessageId);
-  const documentType = get(state.modal.documentType);
-  const documentId = get(state.modal.documentId);
-  const eventCode = get(state.modal.eventCode);
-  const documentTitle = get(state.modal.documentTitle);
+  const { documentId, documentTitle, documentType, eventCode } = props;
+
+  const queryParams = `?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`;
+
+  let route;
 
   if (parentMessageId) {
-    router.openInNewTab(
-      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
-    );
+    route =
+      `/case-detail/${props.docketNumber}/create-order/${parentMessageId}` +
+      queryParams;
   } else {
-    router.openInNewTab(
-      `/case-detail/${props.docketNumber}/create-order?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
-    );
+    route = `/case-detail/${props.docketNumber}/create-order` + queryParams;
   }
+
+  await router.openInNewTab(route);
 };

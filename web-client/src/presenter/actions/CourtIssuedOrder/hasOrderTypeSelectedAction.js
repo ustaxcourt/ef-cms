@@ -6,8 +6,8 @@
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} the path to execute
  */
-export const hasOrderTypeSelectedAction = ({ get, path, props }) => {
-  const eventCode = get(props.eventCode);
+export const hasOrderTypeSelectedAction = ({ path, props }) => {
+  const { eventCode } = props;
   const caseId = props.docketNumber;
   if (eventCode) {
     return path['proceed']();
