@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   COURT_ISSUED_DOCUMENT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -55,6 +55,8 @@ function PublicCase(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
+  contactPrimary: joi.object().required(),
+  contactSecondary: joi.object().optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
@@ -64,6 +66,21 @@ const publicCaseSchema = {
     .allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  docketNumberWithSuffix: joi
+    .string()
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
+  docketRecord: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'PublicDocketRecord' }))
+    .required()
+    .unique((a, b) => a.index === b.index)
+    .description('List of DocketRecord Entities for the case.'),
+  documents: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'PublicDocument' }))
+    .required()
+    .description('List of Document Entities for the case.'),
   isSealed: joi.boolean(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };

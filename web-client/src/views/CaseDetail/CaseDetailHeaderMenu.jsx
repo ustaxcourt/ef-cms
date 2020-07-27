@@ -96,15 +96,28 @@ export const CaseDetailHeaderMenu = connect(
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
               }}
             >
-              Actions
+              Create
               <FontAwesomeIcon
                 className="margin-left-05"
                 icon={isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'}
                 size="1x"
               />
             </button>
+
             {isCaseDetailMenuOpen && (
               <ul className="usa-nav__submenu position-right-0">
+                <li className="usa-nav__submenu-item">
+                  <Button
+                    href={`/case-detail/${caseDetail.docketNumber}`}
+                    icon="arrow-right"
+                    id="menu-button-new-tab"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    New Tab
+                  </Button>
+                </li>
+                <hr></hr>
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="envelope"
@@ -114,10 +127,10 @@ export const CaseDetailHeaderMenu = connect(
                       openCreateCaseMessageModalSequence();
                     }}
                   >
-                    Create New Message
+                    Message
                   </Button>
                 </li>
-
+                <hr></hr>
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="calendar-alt"
@@ -127,9 +140,10 @@ export const CaseDetailHeaderMenu = connect(
                       openCreateCaseDeadlineModalSequence();
                     }}
                   >
-                    Add Deadline
+                    Deadline
                   </Button>
                 </li>
+                <hr></hr>
                 {caseDetailHeaderHelper.showCreateOrderButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -140,10 +154,11 @@ export const CaseDetailHeaderMenu = connect(
                         openCreateOrderChooseTypeModalSequence();
                       }}
                     >
-                      Create Order or Notice
+                      Order or Notice
                     </Button>
                   </li>
                 )}
+                <hr></hr>
                 {caseDetailHeaderHelper.showAddDocketEntryButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -152,10 +167,11 @@ export const CaseDetailHeaderMenu = connect(
                       icon="plus-circle"
                       id="menu-button-add-docket-entry"
                     >
-                      Add Paper Filing
+                      Paper Filing
                     </Button>
                   </li>
                 )}
+                <hr></hr>
                 {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -166,24 +182,27 @@ export const CaseDetailHeaderMenu = connect(
                       iconColor="blue"
                       id="menu-button-upload-pdf"
                     >
-                      Upload PDF
+                      PDF Upload
                     </Button>
                   </li>
                 )}
+                <hr></hr>
+
                 {caseDetailHeaderHelper.showAddCorrespondenceButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
                       link
                       className="fa-icon-blue"
                       href={`/case-detail/${caseDetail.docketNumber}/upload-correspondence`}
-                      icon="envelope-open"
+                      icon="mail-bulk"
                       iconColor="blue"
                       id="menu-button-upload-pdf"
                     >
-                      Add Correspondence
+                      Correspondence
                     </Button>
                   </li>
                 )}
+                <hr></hr>
                 {caseDetailHeaderHelper.showEditCaseButton && (
                   <li className="usa-nav__submenu-item">
                     <Button
@@ -198,6 +217,8 @@ export const CaseDetailHeaderMenu = connect(
                     </Button>
                   </li>
                 )}
+                <hr></hr>
+
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="sticky-note"

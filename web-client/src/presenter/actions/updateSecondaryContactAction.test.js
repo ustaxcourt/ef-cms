@@ -10,7 +10,7 @@ describe('updateSecondaryContactAction', () => {
     applicationContext
       .getUseCases()
       .updateSecondaryContactInteractor.mockReturnValue({
-        docketNumber: 'ayy',
+        docketNumber: '101-20',
       });
   });
 
@@ -21,8 +21,8 @@ describe('updateSecondaryContactAction', () => {
       },
       state: {
         form: {
-          caseId: '851a973a-7569-43f5-93ec-613833929b82',
           contactSecondary: { name: 'Rachael Ray' },
+          docketNumber: '101-20',
         },
       },
     });
@@ -34,7 +34,7 @@ describe('updateSecondaryContactAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseId: 'ayy',
+      docketNumber: '101-20',
     });
   });
 });
