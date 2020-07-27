@@ -8,13 +8,13 @@ describe('processUserAssociatedCases', () => {
     mockFoundCasesList = [MOCK_CASE];
   });
 
-  it('should set isRequestingUserAssociated to true for each case', async () => {
+  it('should set isRequestingUserAssociated to true for each case', () => {
     processUserAssociatedCases(mockFoundCasesList);
 
     expect(MOCK_CASE.isRequestingUserAssociated).toBe(true);
   });
 
-  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', async () => {
+  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it is a lead case', () => {
     mockFoundCasesList = [{ ...MOCK_CASE, isLeadCase: true }];
 
     const result = processUserAssociatedCases(mockFoundCasesList);
@@ -24,7 +24,7 @@ describe('processUserAssociatedCases', () => {
     ).toEqual({ ...MOCK_CASE, isLeadCase: true });
   });
 
-  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadDocketNumber', async () => {
+  it('should add a case to casesAssociatedWithUserOrLeadCaseMap when it does not have a leadDocketNumber', () => {
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
@@ -32,7 +32,7 @@ describe('processUserAssociatedCases', () => {
     ).toEqual(MOCK_CASE);
   });
 
-  it("should add a case's docketNumber to userAssociatedDocketNumbersMap", async () => {
+  it("should add a case's docketNumber to userAssociatedDocketNumbersMap", () => {
     const result = processUserAssociatedCases(mockFoundCasesList);
 
     expect(
@@ -40,7 +40,7 @@ describe('processUserAssociatedCases', () => {
     ).toEqual(true);
   });
 
-  it('should add a case to leadDocketNumbersAssociatedWithUser if it has a leadDocketNumber and is not associated with the user', async () => {
+  it('should add a case to leadDocketNumbersAssociatedWithUser if it has a leadDocketNumber and is not associated with the user', () => {
     let mockCaseWithLeadDocketNumber = {
       ...MOCK_CASE,
       leadDocketNumber: '101-20',
@@ -56,7 +56,7 @@ describe('processUserAssociatedCases', () => {
     ).toBe(true);
   });
 
-  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadDocketNumbersAssociatedWithUser and userAssociatedDocketNumbersMap', async () => {
+  it('should populate casesAssociatedWithUserOrLeadCaseMap, leadDocketNumbersAssociatedWithUser and userAssociatedDocketNumbersMap', () => {
     let mockCaseWithLeadDocketNumber = {
       ...MOCK_CASE,
       isLeadCase: true,
