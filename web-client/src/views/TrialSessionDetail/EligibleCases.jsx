@@ -82,7 +82,7 @@ export const EligibleCases = connect(
                         type="checkbox"
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
-                            caseId: item.caseId,
+                            docketNumber: item.docketNumber,
                             qcCompleteForTrial: !item.qcCompleteForTrial[
                               trialSessionId
                             ],
