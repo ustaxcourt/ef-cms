@@ -632,7 +632,7 @@ app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
 app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
 app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
 app.delete(
-  '/cases/:caseId/remove-pending/:documentId',
+  '/cases/:docketNumber/remove-pending/:documentId',
   lambdaWrapper(removeCasePendingItemLambda),
 );
 app.get(

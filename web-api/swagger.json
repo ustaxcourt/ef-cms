@@ -1328,10 +1328,10 @@
         }
       }
     },
-    "/cases/{caseId}/remove-pending/{documentId}": {
+    "/cases/{docketNumber}/remove-pending/{documentId}": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"
