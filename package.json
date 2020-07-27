@@ -231,7 +231,7 @@
     "test:shared:ci": "npm run build:assets && jest --runInBand --detectOpenHandles --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:shared": "npm run build:assets && jest --maxWorkers=50% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
-    "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
+    "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint --prefix=web-client/pa11y/",
     "verify-authorizers": "./web-api/verify-authorizers.sh",
     "verify-private-elasticsearch": "./web-api/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./web-api/verify-private-s3-buckets.sh",

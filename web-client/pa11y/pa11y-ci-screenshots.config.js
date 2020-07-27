@@ -1,12 +1,14 @@
 const sanitize = require('sanitize-filename');
 
-const adc = require('./pa11y/pa11y-adc');
-const docketclerk = require('./pa11y/pa11y-docketclerk');
-const irsPractitioner = require('./pa11y/pa11y-irs-practitioner');
-const judge = require('./pa11y/pa11y-judge');
-const petitioner = require('./pa11y/pa11y-petitioner');
-const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
-const privatePractitioner = require('./pa11y/pa11y-private-practitioner');
+const adc = require('./pa11y-adc');
+const docketclerk = require('./pa11y-docketclerk');
+const irsPractitioner = require('./pa11y-irs-practitioner');
+const judge = require('./pa11y-judge');
+const petitioner = require('./pa11y-petitioner');
+const petitionsclerk = require('./pa11y-petitionsclerk');
+const privatePractitioner = require('./pa11y-private-practitioner');
+
+const screenCapturePath = './pa11y-screenshots/new';
 
 const userUrls = [
   ...docketclerk,
@@ -29,7 +31,6 @@ const urls = [...initialUrls, ...userUrls];
 
 const screenshotUrls = urls.map(item => {
   const urlRegex = /^.*&path=/;
-  const screenCapturePath = './web-client/pa11y/pa11y-screenshots/new';
   if (typeof item === 'object') {
     const urlPath = item.url.replace(urlRegex, '');
     item.screenCapture = `${screenCapturePath}/${sanitize(urlPath)}.png`;

@@ -1,4 +1,4 @@
-const publicUser = require('./pa11y/pa11y-public-user');
+const publicUser = require('./pa11y-public-user');
 const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
 const initialUrls = [
