@@ -64,7 +64,7 @@ exports.addCaseToTrialSessionInteractor = async ({
     .getPersistenceGateway()
     .deleteCaseTrialSortMappingRecords({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
     });
 
   if (trialSessionEntity.isCalendared) {

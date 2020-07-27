@@ -36,8 +36,8 @@ describe('blockCaseFromTrialInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].caseId,
-    ).toEqual(MOCK_CASE.caseId);
+        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw an unauthorized error if the user has no access to block cases', async () => {
