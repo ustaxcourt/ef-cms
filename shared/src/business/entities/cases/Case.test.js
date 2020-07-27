@@ -1547,7 +1547,6 @@ describe('Case entity', () => {
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
@@ -1564,7 +1563,6 @@ describe('Case entity', () => {
         {
           assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
           assigneeName: 'bob',
-          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
           caseStatus: CASE_STATUS_TYPES.new,
           caseTitle: 'Johnny Joe Jacobson',
           docketNumber: '101-18',
@@ -3106,64 +3104,6 @@ describe('Case entity', () => {
 
         expect(result.caseId).toEqual('234');
       });
-    });
-  });
-
-  describe('isDocumentDraft', () => {
-    it('should return false for non-draft documents', () => {
-      const myCase = new Case(
-        {
-          documents: [
-            {
-              documentId: '1',
-              documentType: 'Answer',
-            },
-            {
-              archived: false,
-              documentId: '2',
-              documentType: 'Order',
-            },
-            {
-              archived: false,
-              documentId: '3',
-              documentType: 'Stipulated Decision',
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isDocumentDraft('1')).toEqual(false);
-    });
-
-    it('should return true for draft documents', () => {
-      const myCase = new Case(
-        {
-          docketRecord: [
-            {
-              documentId: '1',
-            },
-          ],
-          documents: [
-            {
-              archived: false,
-              documentId: '2',
-              documentType: 'Order',
-            },
-            {
-              archived: false,
-              documentId: '3',
-              documentType: 'Stipulated Decision',
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isDocumentDraft('2')).toEqual(true);
-      expect(myCase.isDocumentDraft('3')).toEqual(true);
     });
   });
 

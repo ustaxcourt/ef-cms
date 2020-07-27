@@ -17,7 +17,7 @@ describe('submitAddDeficiencyStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         form: {
           determinationDeficiencyAmount: '1',
@@ -52,7 +52,7 @@ describe('submitAddDeficiencyStatisticsAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
         form: {
           determinationDeficiencyAmount: '1',

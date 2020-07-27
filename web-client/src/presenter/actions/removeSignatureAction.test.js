@@ -20,7 +20,7 @@ describe('removeSignatureAction', () => {
         presenter,
       },
       props: {
-        caseDetail: { caseId: 'c93196cf-0219-4eb0-a285-cdd0c57b3afb' },
+        caseDetail: { docketNumber: '123-45' },
         documentIdToEdit: '476cadf8-63c3-472b-a477-c8f9ea8b7d1f',
       },
     });

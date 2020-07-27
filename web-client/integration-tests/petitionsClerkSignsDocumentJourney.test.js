@@ -15,18 +15,11 @@ import { petitionsClerkViewsDocumentDetail } from './journey/petitionsClerkViews
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsClerkViewsSignDraftDocument } from './journey/petitionsClerkViewsSignDraftDocument';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');

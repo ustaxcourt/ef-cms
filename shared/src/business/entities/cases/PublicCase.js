@@ -1,7 +1,6 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   COURT_ISSUED_DOCUMENT_TYPES,
-  DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
@@ -27,7 +26,6 @@ const { PublicDocument } = require('./PublicDocument');
  */
 function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -48,39 +46,51 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketRecord = (rawCase.docketRecord || []).map(
     entry => new PublicDocketRecordEntry(entry, { applicationContext }),
   );
-
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || [])
+    .filter(document => !document.isDraft)
     .map(document => new PublicDocument(document, { applicationContext }))
-    .filter(document => !isDraftDocument(document, this.docketRecord))
     .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 }
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  caseId: JoiValidationConstants.UUID.optional(),
+  contactPrimary: joi.object().required(),
+  contactSecondary: joi.object().optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
-  docketNumber: joi
-    .string()
-    .regex(DOCKET_NUMBER_MATCHER)
-    .required()
-    .description('Unique case identifier in XXXXX-YY format.'),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
   docketNumberSuffix: joi
     .string()
     .allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  docketNumberWithSuffix: joi
+    .string()
+    .optional()
+    .description('Auto-generated from docket number and the suffix.'),
+  docketRecord: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'PublicDocketRecord' }))
+    .required()
+    .unique((a, b) => a.index === b.index)
+    .description('List of DocketRecord Entities for the case.'),
+  documents: joi
+    .array()
+    .items(joi.object().meta({ entityName: 'PublicDocument' }))
+    .required()
+    .description('List of Document Entities for the case.'),
   isSealed: joi.boolean(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: JoiValidationConstants.UUID,
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
-  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
   docketNumberSuffix: joi
     .string()
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
@@ -98,24 +108,6 @@ joiValidationDecorator(
   }),
   {},
 );
-
-const isDraftDocument = function (document, docketRecord) {
-  const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
-
-  const isStipDecision = document.documentType === 'Stipulated Decision';
-  const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
-  );
-  const isDocumentOnDocketRecord = docketRecord.find(
-    docketEntry => docketEntry.documentId === document.documentId,
-  );
-
-  const isPublicDocumentType =
-    isStipDecision || isOrder || isCourtIssuedDocument;
-
-  return isPublicDocumentType && !isDocumentOnDocketRecord;
-};
 
 const isPrivateDocument = function (document, docketRecord) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
@@ -138,4 +130,4 @@ const isPrivateDocument = function (document, docketRecord) {
   );
 };
 
-module.exports = { PublicCase, isDraftDocument, isPrivateDocument };
+module.exports = { PublicCase, isPrivateDocument };

@@ -1,8 +1,7 @@
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {
   CASE_STATUS_TYPES,
   CHAMBERS_SECTIONS,
-  DOCKET_NUMBER_MATCHER,
   SECTIONS,
 } = require('./EntityConstants');
 const {
@@ -27,7 +26,6 @@ function CaseMessage(rawMessage, { applicationContext }) {
     documentId: attachment.documentId,
     documentTitle: attachment.documentTitle,
   }));
-  this.caseId = rawMessage.caseId;
   this.caseStatus = rawMessage.caseStatus;
   this.caseTitle = rawMessage.caseTitle;
   this.completedAt = rawMessage.completedAt;
@@ -73,9 +71,6 @@ CaseMessage.VALIDATION_RULES = {
     )
     .optional()
     .description('Array of document metadata objects attached to the message.'),
-  caseId: JoiValidationConstants.UUID.required().description(
-    'ID of the case the message is attached to.',
-  ),
   caseStatus: joi
     .string()
     .valid(...Object.values(CASE_STATUS_TYPES))
@@ -122,7 +117,7 @@ CaseMessage.VALIDATION_RULES = {
   createdAt: JoiValidationConstants.ISO_DATE.required().description(
     'When the message was created.',
   ),
-  docketNumber: joi.string().regex(DOCKET_NUMBER_MATCHER).required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
   docketNumberWithSuffix: joi
     .string()
     .max(20)

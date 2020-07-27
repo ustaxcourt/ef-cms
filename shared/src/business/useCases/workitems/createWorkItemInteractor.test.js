@@ -22,7 +22,7 @@ describe('createWorkItem', () => {
     }),
     getPersistenceGateway: () => ({
       createWorkItem: createWorkItemStub,
-      getCaseByCaseId: () => MOCK_CASE,
+      getCaseByDocketNumber: () => MOCK_CASE,
       getUserById: ({ userId }) => MOCK_USERS[userId],
       updateCase: updateCaseStub,
     }),
@@ -37,7 +37,7 @@ describe('createWorkItem', () => {
       await createWorkItemInteractor({
         applicationContext,
         assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-        caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         message: 'testing',
       });
@@ -59,7 +59,7 @@ describe('createWorkItem', () => {
     await createWorkItemInteractor({
       applicationContext,
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
-      caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '101-18',
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
     });
@@ -67,7 +67,6 @@ describe('createWorkItem', () => {
     expect(createWorkItemStub.mock.calls[0][0].workItem).toMatchObject({
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
-      caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: CASE_STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',
@@ -104,7 +103,7 @@ describe('createWorkItem', () => {
     await createWorkItemInteractor({
       applicationContext,
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
-      caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketNumber: '101-18',
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
     });
@@ -114,7 +113,6 @@ describe('createWorkItem', () => {
     ).toMatchObject({
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
-      caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: CASE_STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',

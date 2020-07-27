@@ -21,11 +21,11 @@ describe('deleteCaseDeadlineInteractor', () => {
     applicationContext.environment.stage = 'local';
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByCaseId.mockImplementation(() => mockDeadlines);
+      .getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       deleteCaseDeadlineInteractor({
         applicationContext,
         caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '123-20',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -55,7 +55,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     await deleteCaseDeadlineInteractor({
       applicationContext,
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      docketNumber: '123-20',
     });
 
     expect(
@@ -63,7 +63,7 @@ describe('deleteCaseDeadlineInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      docketNumber: '123-20',
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -85,7 +85,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     await deleteCaseDeadlineInteractor({
       applicationContext,
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      docketNumber: '123-20',
     });
 
     expect(
@@ -93,7 +93,7 @@ describe('deleteCaseDeadlineInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      docketNumber: '123-20',
     });
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]

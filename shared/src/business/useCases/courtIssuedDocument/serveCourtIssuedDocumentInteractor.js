@@ -52,14 +52,13 @@ const completeWorkItem = async ({
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id of the case containing the document to serve
+ * @param {string} providers.docketNumber the docket number of the case containing the document to serve
  * @param {string} providers.documentId the document id of the signed stipulated decision document
  * @returns {object} the updated case after the document was served
  */
-
 exports.serveCourtIssuedDocumentInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -72,13 +71,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   if (!caseToUpdate) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
@@ -166,7 +165,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       .getPersistenceGateway()
       .deleteCaseTrialSortMappingRecords({
         applicationContext,
-        caseId,
+        caseId: caseEntity.caseId,
       });
 
     if (caseEntity.trialSessionId) {
@@ -183,11 +182,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
       if (trialSessionEntity.isCalendared) {
         trialSessionEntity.removeCaseFromCalendar({
-          caseId,
           disposition: 'Status was changed to Closed',
+          docketNumber,
         });
       } else {
-        trialSessionEntity.deleteCaseFromCalendar({ caseId });
+        trialSessionEntity.deleteCaseFromCalendar({
+          docketNumber: caseEntity.docketNumber,
+        });
       }
 
       await applicationContext.getPersistenceGateway().updateTrialSession({

@@ -8,25 +8,25 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
-const MOCK_TRIAL = {
-  caseOrder: [{ caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb' }],
-  isCalendared: false,
-  judge: {
-    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  },
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2001-12-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2025',
-  trialLocation: 'Birmingham, Alabama',
-  trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-};
-
-let user;
-let mockTrialSession;
-
 describe('deleteTrialSessionInteractor', () => {
+  const MOCK_TRIAL = {
+    caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
+    isCalendared: false,
+    judge: {
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    },
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2001-12-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '2025',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
+
+  let user;
+  let mockTrialSession;
+
   beforeEach(() => {
     mockTrialSession = MOCK_TRIAL;
 
@@ -123,7 +123,7 @@ describe('deleteTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await deleteTrialSessionInteractor({
       applicationContext,

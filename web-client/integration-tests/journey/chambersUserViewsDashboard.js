@@ -2,11 +2,7 @@ import { runCompute } from 'cerebral/test';
 import { trialSessionsSummaryHelper } from '../../src/presenter/computeds/trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const chambersUserViewsDashboard = (
-  test,
-  message = 'Test message',
-  judgeUserId = 'dabbad00-18d0-43ec-bafb-654e83405416',
-) => {
+export const chambersUserViewsDashboard = test => {
   return it('Chambers user views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
 
@@ -16,11 +12,13 @@ export const chambersUserViewsDashboard = (
         state: test.getState(),
       },
     );
-    const workQueue = test.getState('workQueue');
+    const messages = test.getState('messages');
 
     expect(test.getState('currentPage')).toEqual('DashboardChambers');
-    expect(workQueue.length).toBeGreaterThan(0);
-    expect(workQueue[0].messages[1].message).toEqual(message);
-    expect(trialSessionsSummaryHelperComputed.judgeUserId).toEqual(judgeUserId);
+    expect(messages.length).toBeGreaterThan(0);
+    expect(messages[0].subject).toEqual(test.testMessageSubject);
+    expect(trialSessionsSummaryHelperComputed.judgeUserId).toEqual(
+      'dabbad00-18d0-43ec-bafb-654e83405416', //judgeArmen
+    );
   });
 };

@@ -177,7 +177,6 @@
   {
     "createdAt": "2020-06-25T20:40:13.682Z",
     "entityName": "UserCase",
-    "caseId": "6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "caseCaption": "Bart Simpson, Petitioner",
     "gsi1pk": "user-case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",
     "sk": "case|6eb3b574-dff6-4731-8de0-3b7cbbd0bc0e",

@@ -12,12 +12,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
 exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -35,9 +35,9 @@ exports.addCaseToTrialSessionInteractor = async ({
 
   const caseDetails = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   const caseEntity = new Case(caseDetails, { applicationContext });
@@ -55,7 +55,7 @@ exports.addCaseToTrialSessionInteractor = async ({
   }
 
   trialSessionEntity
-    .deleteCaseFromCalendar({ caseId: caseEntity.caseId }) // we delete because it might have been manually removed
+    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar(caseEntity);
 
   caseEntity.setAsCalendared(trialSessionEntity);
@@ -64,13 +64,13 @@ exports.addCaseToTrialSessionInteractor = async ({
     .getPersistenceGateway()
     .deleteCaseTrialSortMappingRecords({
       applicationContext,
-      caseId,
+      caseId: caseEntity.caseId,
     });
 
   if (trialSessionEntity.isCalendared) {
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,
-      caseId,
+      caseId: caseEntity.caseId,
       highPriority: true,
       trialDate: caseEntity.trialDate,
     });

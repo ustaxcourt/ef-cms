@@ -6,11 +6,11 @@ describe('mergeCaseOrderIntoCalendaredCasesAction', () => {
     const result = await runAction(mergeCaseOrderIntoCalendaredCasesAction, {
       state: {
         trialSession: {
-          calendaredCases: [{ caseId: 'case-id-123' }],
+          calendaredCases: [{ docketNumber: '123-45' }],
           caseOrder: [
             {
-              caseId: 'case-id-123',
               caseOrderProperty: 'foobar',
+              docketNumber: '123-45',
             },
           ],
         },
@@ -18,7 +18,7 @@ describe('mergeCaseOrderIntoCalendaredCasesAction', () => {
     });
 
     expect(result.state.trialSession.calendaredCases).toEqual([
-      { caseId: 'case-id-123', caseOrderProperty: 'foobar' },
+      { caseOrderProperty: 'foobar', docketNumber: '123-45' },
     ]);
   });
 });

@@ -11,13 +11,13 @@ import { state } from 'cerebral';
 export const forwardCaseMessageAction = async ({ applicationContext, get }) => {
   const form = get(state.modal.form);
 
-  const { caseId } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const {
     parentMessageId,
   } = await applicationContext.getUseCases().forwardCaseMessageInteractor({
     applicationContext,
-    caseId,
+    docketNumber,
     ...form,
   });
 

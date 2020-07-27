@@ -10,10 +10,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case the procedural note is attached to
+ * @param {string} providers.docketNumber the docket number of the case the procedural note is attached to
  * @returns {Promise} the promise of the delete call
  */
-exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
+exports.deleteCaseNoteInteractor = async ({
+  applicationContext,
+  docketNumber,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
@@ -21,9 +24,9 @@ exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   }
   const caseRecord = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({
+    .getCaseByDocketNumber({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
   delete caseRecord.caseNote;

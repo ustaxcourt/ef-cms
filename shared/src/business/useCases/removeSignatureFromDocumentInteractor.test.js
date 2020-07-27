@@ -33,13 +33,13 @@ describe('removeSignatureFromDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(mockCase);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should retrieve the original, unsigned document from S3', async () => {
     await removeSignatureFromDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       documentId: mockDocumentId,
     });
 
@@ -55,7 +55,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   it('should overwrite the current, signed document in S3 with the original, unsigned document', async () => {
     await removeSignatureFromDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       documentId: mockDocumentId,
     });
 
@@ -70,7 +70,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   it('should unsign the document and save the updated document to the case', async () => {
     const updatedCase = await removeSignatureFromDocumentInteractor({
       applicationContext,
-      caseId: mockCase.caseId,
+      docketNumber: mockCase.docketNumber,
       documentId: mockDocumentId,
     });
 

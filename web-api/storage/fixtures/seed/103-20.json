@@ -68,6 +68,7 @@
       "documentTitle": "First draft",
       "docketNumber": "103-20"
     },
+    "isDraft": true,
     "documentType": "Miscellaneous",
     "filingDate": "2020-07-06T14:37:36.755Z",
     "workItems": [],
@@ -263,7 +264,6 @@
     "sk": "case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "gsi1pk": "user-case|24fcb050-9c95-4d69-a149-96acba0196b8",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8",
     "caseCaption": "Reuben Blair, Petitioner",
     "createdAt": "2020-01-23T21:45:34.520Z",
     "docketNumber": "103-20",

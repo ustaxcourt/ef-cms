@@ -2,14 +2,14 @@
   {
     "caseOrder": [
       {
-        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5"
+        "docketNumber": "108-29"
       },
       {
-        "caseId": "0bc59d5b-c2b9-41f7-92a7-03b8cadffcc0"
+        "docketNumber": "101-20"
       },
       {
         "isManuallyAdded": true,
-        "caseId": "24fcb050-9c95-4d69-a149-96acba0196b8"
+        "docketNumber": "103-20"
       }
     ],
     "gsi1pk": "trial-session-catalog",
