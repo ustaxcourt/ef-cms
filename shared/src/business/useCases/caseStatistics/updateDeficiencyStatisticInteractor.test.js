@@ -26,7 +26,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(
+      .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve({ ...MOCK_CASE, statistics: [statistic] }),
       );
   });
@@ -37,7 +37,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     await expect(
       updateDeficiencyStatisticInteractor({
         applicationContext,
-        caseId: MOCK_CASE.caseId,
+        docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
@@ -50,7 +50,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
     const result = await updateDeficiencyStatisticInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
       ...statisticToUpdate,
     });
@@ -68,7 +68,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
     const result = await updateDeficiencyStatisticInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
       ...statisticToUpdate,
     });
