@@ -5026,10 +5026,10 @@
         }
       }
     },
-    "/case-parties/{caseId}/petitioner-info": {
+    "/case-parties/{docketNumber}/petitioner-info": {
       "parameters": [
         {
-          "name": "caseId",
+          "name": "docketNumber",
           "in": "path",
           "required": true,
           "type": "string"

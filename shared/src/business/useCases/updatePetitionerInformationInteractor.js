@@ -23,7 +23,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.contactPrimary the primary contact information to update on the case
  * @param {object} providers.contactSecondary the secondary contact information to update on the case
  * @param {object} providers.partyType the party type to update on the case
@@ -31,9 +31,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.updatePetitionerInformationInteractor = async ({
   applicationContext,
-  caseId,
   contactPrimary,
   contactSecondary,
+  docketNumber,
   partyType,
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -80,7 +80,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const oldCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId });
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const primaryChange = applicationContext
     .getUtilities()
@@ -150,7 +150,7 @@ exports.updatePetitionerInformationInteractor = async ({
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactName}`,
-        caseId,
+        caseId: caseEntity.caseId,
         documentId: newDocumentId,
         documentTitle: documentType.title,
         documentType: documentType.title,

@@ -12,7 +12,7 @@ describe('updatePetitionerInformationAction', () => {
       .updatePetitionerInformationInteractor.mockReturnValue({
         paperServiceParties: { paper: [{ name: 'abc' }] },
         paperServicePdfUrl: 'www.example.com',
-        updatedCase: { caseId: '123', docketNumber: 'ayy' },
+        updatedCase: { docketNumber: '123-20' },
       });
   });
 
@@ -22,7 +22,7 @@ describe('updatePetitionerInformationAction', () => {
         presenter,
       },
       state: {
-        caseDetail: { caseId: '123', docketNumber: 'ayy' },
+        caseDetail: { docketNumber: '123-20' },
         form: {
           contactPrimary: { name: 'abc' },
         },
@@ -37,8 +37,8 @@ describe('updatePetitionerInformationAction', () => {
       alertSuccess: {
         message: 'Changes saved.',
       },
-      caseDetail: { caseId: '123', docketNumber: 'ayy' },
-      caseId: 'ayy',
+      caseDetail: { docketNumber: '123-20' },
+      docketNumber: '123-20',
       paperServiceParties: { paper: [{ name: 'abc' }] },
       pdfUrl: 'www.example.com',
       tab: 'caseInfo',

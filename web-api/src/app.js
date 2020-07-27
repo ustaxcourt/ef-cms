@@ -620,7 +620,7 @@ app.put(
   lambdaWrapper(updatePetitionDetailsLambda),
 );
 app.put(
-  '/case-parties/:caseId/petitioner-info',
+  '/case-parties/:docketNumber/petitioner-info',
   lambdaWrapper(updatePetitionerInformationLambda),
 );
 
