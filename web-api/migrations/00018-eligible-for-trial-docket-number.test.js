@@ -60,6 +60,30 @@ describe('add docketNumber to eligible for trial catalog records', () => {
     expect(putStub).not.toBeCalled();
   });
 
+  it('should not modify records if caseId cannot be obtained from the gsi1pk', async () => {
+    mockItems = [
+      {
+        ...mockEligibleForTrialCatalogRecord,
+        gsi1pk: 'eligible-for-trial-case-catalog',
+      },
+    ];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
+
+  it('should not modify records if caseRecord is empty', async () => {
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({}),
+    });
+    documentClient.get = getStub;
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
+
   it('should update gsi1pk and sk and add docketNumber to eligible for trial records', async () => {
     await up(documentClient, '', forAllRecords);
 
