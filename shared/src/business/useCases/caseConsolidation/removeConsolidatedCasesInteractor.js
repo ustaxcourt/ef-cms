@@ -11,13 +11,13 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.caseIdsToRemove the case ids of the cases to remove from consolidation
+ * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
 exports.removeConsolidatedCasesInteractor = async ({
   applicationContext,
-  caseIdsToRemove,
   docketNumber,
+  docketNumbersToRemove,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -35,25 +35,29 @@ exports.removeConsolidatedCasesInteractor = async ({
 
   const updateCasePromises = [];
 
-  const { leadCaseId } = caseToUpdate;
+  const { leadDocketNumber } = caseToUpdate;
 
   const allConsolidatedCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByLeadCaseId({
+    .getCasesByLeadDocketNumber({
       applicationContext,
-      leadCaseId,
+      leadDocketNumber,
     });
 
   const newConsolidatedCases = allConsolidatedCases.filter(
-    consolidatedCase => !caseIdsToRemove.includes(consolidatedCase.caseId),
+    consolidatedCase =>
+      !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
   );
 
-  if (caseIdsToRemove.includes(leadCaseId) && newConsolidatedCases.length > 1) {
+  if (
+    docketNumbersToRemove.includes(leadDocketNumber) &&
+    newConsolidatedCases.length > 1
+  ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
 
     for (let caseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(caseToUpdate, { applicationContext });
-      caseEntity.setLeadCase(newLeadCase.caseId);
+      caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
         applicationContext.getPersistenceGateway().updateCase({
@@ -76,14 +80,17 @@ exports.removeConsolidatedCasesInteractor = async ({
     );
   }
 
-  for (let caseIdToRemove of caseIdsToRemove) {
+  for (let docketNumberToRemove of docketNumbersToRemove) {
     const caseToRemove = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({ applicationContext, caseId: caseIdToRemove });
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: docketNumberToRemove,
+      });
 
     if (!caseToRemove) {
       throw new NotFoundError(
-        `Case to consolidate with (${caseIdToRemove}) was not found.`,
+        `Case to consolidate with (${docketNumberToRemove}) was not found.`,
       );
     }
 

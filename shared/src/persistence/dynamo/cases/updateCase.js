@@ -21,6 +21,7 @@ const {
 const { Case } = require('../../../business/entities/cases/Case');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByCaseId } = require('../cases/getCaseByCaseId');
+const { getCaseIdFromDocketNumber } = require('./getCaseIdFromDocketNumber');
 const { omit } = require('lodash');
 
 /**
@@ -239,7 +240,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.leadCaseId !== caseToUpdate.leadCaseId
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber
   ) {
     const userCaseMappings = await client.query({
       ExpressionAttributeNames: {
@@ -262,7 +263,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
             docketNumberSuffix: caseToUpdate.docketNumberSuffix,
             docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
             gsi1pk: `user-case|${caseToUpdate.caseId}`,
-            leadCaseId: caseToUpdate.leadCaseId,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             status: caseToUpdate.status,
           },
           applicationContext,
@@ -271,9 +272,16 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     }
   }
 
-  let setLeadCase = caseToUpdate.leadCaseId
-    ? { gsi1pk: `case|${caseToUpdate.leadCaseId}` }
-    : {};
+  let setLeadCase = {};
+
+  if (caseToUpdate.leadDocketNumber) {
+    const leadCaseId = await getCaseIdFromDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.leadDocketNumber,
+    });
+
+    setLeadCase = leadCaseId ? { gsi1pk: `case|${leadCaseId}` } : {};
+  }
 
   await Promise.all([
     client.put({

@@ -11,6 +11,8 @@ const isDocumentRecord = item =>
   item.pk.startsWith('case|') && item.sk.startsWith('document|');
 const isCaseDeadlineRecord = item =>
   item.pk.startsWith('case-deadline|') && item.sk.startsWith('case-deadline|');
+const isUserCaseNoteRecord = item =>
+  item.pk.startsWith('user-case-note|') && item.sk.startsWith('user|');
 
 const forAllRecords = async (documentClient, tableName, cb) => {
   let hasMoreResults = true;
@@ -64,5 +66,6 @@ module.exports = {
   isNewUserCaseMappingRecord,
   isTrialSessionRecord,
   isUserCaseMappingRecord,
+  isUserCaseNoteRecord,
   upGenerator,
 };

@@ -12,9 +12,9 @@ import { state } from 'cerebral';
 export const canFileInConsolidatedCasesAction = async ({ get, path }) => {
   const permissions = get(state.permissions);
   const hasPermission = permissions.FILE_IN_CONSOLIDATED;
-  const leadCaseId = get(state.caseDetail.leadCaseId);
+  const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
 
-  if (leadCaseId && hasPermission) {
+  if (leadDocketNumber && hasPermission) {
     return path.yes();
   } else {
     return path.no();

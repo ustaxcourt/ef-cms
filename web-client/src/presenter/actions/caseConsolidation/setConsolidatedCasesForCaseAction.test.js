@@ -6,15 +6,15 @@ describe('setConsolidatedCasesForCaseAction', () => {
     const result = await runAction(setConsolidatedCasesForCaseAction, {
       props: {
         consolidatedCases: [
-          { caseId: 'abc-123', leadCaseId: 'abc-123' },
-          { caseId: 'def-321', leadCaseId: 'abc-123' },
+          { docketNumber: '101-20', leadDocketNumber: '101-20' },
+          { docketNumber: '102-20', leadDocketNumber: '101-20' },
         ],
       },
     });
 
     expect(result.state.caseDetail.consolidatedCases).toMatchObject([
-      { caseId: 'abc-123', leadCaseId: 'abc-123' },
-      { caseId: 'def-321', leadCaseId: 'abc-123' },
+      { docketNumber: '101-20', leadDocketNumber: '101-20' },
+      { docketNumber: '102-20', leadDocketNumber: '101-20' },
     ]);
   });
 });

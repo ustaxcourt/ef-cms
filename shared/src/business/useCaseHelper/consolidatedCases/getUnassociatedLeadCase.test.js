@@ -5,7 +5,7 @@ describe('getUnassociatedLeadCase', () => {
   it('should set the found case isRequestingUserAssociated to false', () => {
     const result = getUnassociatedLeadCase({
       consolidatedCases: [MOCK_CASE],
-      leadCaseId: MOCK_CASE.caseId,
+      leadDocketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result.isRequestingUserAssociated).toBe(false);
@@ -17,7 +17,7 @@ describe('getUnassociatedLeadCase', () => {
     const result = getUnassociatedLeadCase({
       casesAssociatedWithUserOrLeadCaseMap,
       consolidatedCases: [MOCK_CASE],
-      leadCaseId: MOCK_CASE.caseId,
+      leadDocketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(result).toMatchObject(MOCK_CASE);

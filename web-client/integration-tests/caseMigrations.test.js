@@ -28,7 +28,7 @@ const firstConsolidatedCase = {
   caseCaption: 'The First Migrated Case',
   caseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
   docketNumber: '101-21',
-  leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
+  leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
 };
@@ -38,7 +38,7 @@ const secondConsolidatedCase = {
   caseCaption: 'The Second Migrated Case',
   caseId: '116ff947-48cc-4ee5-9d9a-0bc4e0a64ba3',
   docketNumber: '102-21',
-  leadCaseId: '384674aa-48b0-4e91-bcb4-915322d4e76b',
+  leadDocketNumber: '101-21',
   preferredTrialCity: 'Washington, District of Columbia',
   status: STATUS_TYPES.calendared,
 };
