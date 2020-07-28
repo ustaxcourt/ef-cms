@@ -166,7 +166,7 @@ describe('TrialSession entity', () => {
   });
 
   describe('addCaseToCalendar', () => {
-    it('should add case to calendar of valid trial session when provided a raw case entity with a caseId', () => {
+    it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -184,7 +184,7 @@ describe('TrialSession entity', () => {
   });
 
   describe('manuallyAddCaseToCalendar', () => {
-    it('should add case to calendar of valid trial session when provided a raw case entity with a caseId', () => {
+    it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -235,7 +235,7 @@ describe('TrialSession entity', () => {
       expect(trialSession.caseOrder[2]).not.toHaveProperty('removedFromTrial');
     });
 
-    it('should not modify case calendar if caseId is not in caseOrder', () => {
+    it('should not modify case calendar if docketNumber is not in caseOrder', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,

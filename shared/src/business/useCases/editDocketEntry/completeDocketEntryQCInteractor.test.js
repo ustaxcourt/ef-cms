@@ -28,7 +28,6 @@ describe('completeDocketEntryQCInteractor', () => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '45678-18',
       document: {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -47,7 +46,6 @@ describe('completeDocketEntryQCInteractor', () => {
 
     caseRecord = {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
