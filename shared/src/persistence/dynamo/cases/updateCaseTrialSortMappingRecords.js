@@ -8,13 +8,13 @@ const {
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update the mapping records
+ * @param {string} providers.docketNumber the docket number of the case to update the mapping records
  * @param {object} providers.caseSortTags the hybrid and nonHybrid sort tags
  */
 exports.updateCaseTrialSortMappingRecords = async ({
   applicationContext,
-  caseId,
   caseSortTags,
+  docketNumber,
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 
@@ -24,7 +24,7 @@ exports.updateCaseTrialSortMappingRecords = async ({
       '#pk': 'pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog|${caseId}`,
+      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
       ':pk': 'eligible-for-trial-case-catalog',
     },
     IndexName: 'gsi1',
@@ -39,13 +39,13 @@ exports.updateCaseTrialSortMappingRecords = async ({
   ) {
     await deleteCaseTrialSortMappingRecords({
       applicationContext,
-      caseId,
+      docketNumber,
     });
 
     await client.put({
       Item: {
-        caseId,
-        gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
+        docketNumber,
+        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
         pk: 'eligible-for-trial-case-catalog',
         sk: nonHybrid,
       },
@@ -54,8 +54,8 @@ exports.updateCaseTrialSortMappingRecords = async ({
 
     await client.put({
       Item: {
-        caseId,
-        gsi1pk: `eligible-for-trial-case-catalog|${caseId}`,
+        docketNumber,
+        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
         pk: 'eligible-for-trial-case-catalog',
         sk: hybrid,
       },

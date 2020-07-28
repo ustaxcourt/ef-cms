@@ -27,7 +27,7 @@ exports.updateCaseAutomaticBlock = async ({
         .getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords({
           applicationContext,
-          caseId: caseEntity.caseId,
+          docketNumber: caseEntity.docketNumber,
         });
     } else if (
       caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
@@ -37,8 +37,8 @@ exports.updateCaseAutomaticBlock = async ({
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
           applicationContext,
-          caseId: caseEntity.caseId,
           caseSortTags: caseEntity.generateTrialSortTags(),
+          docketNumber: caseEntity.docketNumber,
         });
     }
   }

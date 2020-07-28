@@ -1,15 +1,15 @@
 [
   {
-    "sk": "LasVegasNevada-H-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "LasVegasNevada-H-B-20190816132910-107-19",
     "pk": "eligible-for-trial-case-catalog",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "docketNumber": "107-19",
+    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
   },
   {
-    "sk": "LasVegasNevada-R-B-20190816132910-58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "LasVegasNevada-R-B-20190816132910-107-19",
     "pk": "eligible-for-trial-case-catalog",
-    "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "eligible-for-trial-case-catalog|58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "docketNumber": "107-19",
+    "gsi1pk": "eligible-for-trial-case-catalog|107-19"
   },
   {
     "sk": "63d7c79e-1313-4969-9bf5-9170af46997c",
