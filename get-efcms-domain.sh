@@ -13,21 +13,21 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then
-  echo 'dev.ustc-case-mgmt.flexion.us'
+  echo "${EFCMS_DOMAIN_DEV}"
 elif [[ $BRANCH == 'experimental1' ]] ; then
-  echo 'exp1.ustc-case-mgmt.flexion.us'
-# elif [[ $BRANCH == 'experimental2' ]] ; then
-#   echo 'exp2'
-# elif [[ $BRANCH == 'irs' ]] ; then
-#   echo 'irs'
-# elif [[ $BRANCH == 'test' ]] ; then
-#   echo 'test'
-# elif [[ $BRANCH == 'migration' ]] ; then
-#   echo 'mig'
-# elif [[ $BRANCH == 'staging' ]] ; then
-#   echo 'stg'
-# elif [[ $BRANCH == 'master' ]] ; then
-#   echo 'prod'
+  echo "${EFCMS_DOMAIN_EXP1}"
+elif [[ $BRANCH == 'experimental2' ]] ; then
+  echo "${EFCMS_DOMAIN_EXP2}"
+elif [[ $BRANCH == 'irs' ]] ; then
+  echo "${EFCMS_DOMAIN_IRS}"
+elif [[ $BRANCH == 'test' ]] ; then
+  echo "${EFCMS_DOMAIN_TEST}"
+elif [[ $BRANCH == 'migration' ]] ; then
+  echo "${EFCMS_DOMAIN_MIG}"
+elif [[ $BRANCH == 'staging' ]] ; then
+  echo "${EFCMS_DOMAIN_STG}"
+elif [[ $BRANCH == 'master' ]] ; then
+  echo "${EFCMS_DOMAIN_PROD}"
 else
   exit 1;
 fi
