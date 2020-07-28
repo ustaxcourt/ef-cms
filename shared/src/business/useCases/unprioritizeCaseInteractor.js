@@ -39,15 +39,15 @@ exports.unprioritizeCaseInteractor = async ({
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
         caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
       });
   } else {
     await applicationContext
       .getPersistenceGateway()
       .deleteCaseTrialSortMappingRecords({
         applicationContext,
-        caseId: caseEntity.caseId,
+        docketNumber: caseEntity.docketNumber,
       });
   }
 

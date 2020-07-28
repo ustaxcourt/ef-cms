@@ -1171,8 +1171,8 @@ Case.prototype.generateSortableDocketNumber = function () {
  */
 Case.prototype.generateTrialSortTags = function () {
   const {
-    caseId,
     caseType,
+    docketNumber,
     highPriority,
     preferredTrialCity,
     procedureType,
@@ -1200,7 +1200,7 @@ Case.prototype.generateTrialSortTags = function () {
     caseProcedureSymbol,
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   const hybridSortKey = [
@@ -1208,7 +1208,7 @@ Case.prototype.generateTrialSortTags = function () {
     'H', // Hybrid Tag
     casePrioritySymbol,
     formattedFiledTime,
-    caseId,
+    docketNumber,
   ].join('-');
 
   return {

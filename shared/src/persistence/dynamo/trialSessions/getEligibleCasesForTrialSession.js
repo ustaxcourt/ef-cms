@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  getCaseIdFromDocketNumber,
+} = require('../cases/getCaseIdFromDocketNumber');
 
 exports.getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -19,7 +22,13 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const caseIds = mappings.map(metadata => metadata.caseId);
+  const docketNumbers = mappings.map(metadata => metadata.docketNumber);
+
+  const caseIds = await Promise.all(
+    docketNumbers.map(docketNumber =>
+      getCaseIdFromDocketNumber({ applicationContext, docketNumber }),
+    ),
+  );
 
   const results = await client.batchGet({
     applicationContext,
@@ -34,7 +43,10 @@ exports.getEligibleCasesForTrialSession = async ({
   for (let result of results) {
     const caseItems = await applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId({ applicationContext, caseId: result.caseId });
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: result.docketNumber,
+      });
 
     aggregatedResults.push({
       ...result,
@@ -42,8 +54,8 @@ exports.getEligibleCasesForTrialSession = async ({
     });
   }
 
-  const afterMapping = caseIds.map(caseId => ({
-    ...aggregatedResults.find(r => caseId === r.caseId),
+  const afterMapping = docketNumbers.map(docketNumber => ({
+    ...aggregatedResults.find(r => docketNumber === r.docketNumber),
   }));
 
   return afterMapping;
