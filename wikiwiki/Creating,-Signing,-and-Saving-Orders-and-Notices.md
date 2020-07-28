@@ -6,6 +6,9 @@
 * a subset of all order document types, including the generic "Order", is available to select when creating the order
 * Users can enter or paste text into the text editor and preview a copy of the generated PDF
 
+**Create order/notice in new tab**
+* On click  of Continue to the Create Order screen, the Create Order screen opens in a new browser tab
+
 **On Save**
 * For orders, user is navigated to the Add Signature screen
 * For notices, user is navigated to the Case Detail > Docket Record
@@ -24,4 +27,4 @@
 
 **Notices**
 * The Clerk of the Court's signature is automatically applied to all Notices (except the Standing Pre-Trial Notice, which receives the judge assigned to the trial session)
-* Users cannot manually apply a signature to a Notice 
+* Users cannot manually apply a signature to a Notice
