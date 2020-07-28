@@ -235,8 +235,8 @@ jobs:
         environment:
           discovery.type: single-node
     environment:
-      _JAVA_OPTIONS: '-Xms3072m -Xmx4096m'
-    resource_class: large
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
