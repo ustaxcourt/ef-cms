@@ -47,7 +47,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
   afterEach(() => {
@@ -137,10 +137,10 @@ describe('generatePrintablePendingReportInteractor', () => {
     expect(subtitle).toEqual('Judge Armen');
   });
 
-  it('should get case information from persistence and generate a subtitle with the docket number if a caseId is present', async () => {
+  it('should get case information from persistence and generate a subtitle with the docket number if a docketNumber is present', async () => {
     await generatePrintablePendingReportInteractor({
       applicationContext,
-      caseId: '123',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     const {
@@ -155,7 +155,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     await generatePrintablePendingReportInteractor({
       applicationContext,
-      caseId: '123',
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
     const {

@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @returns {object} the new props from modal state
  */
 export const updateDeleteUserCaseNotePropsFromModalStateAction = ({ get }) => {
-  const caseId = get(state.modal.caseId);
+  const docketNumber = get(state.modal.docketNumber);
   const trialSessionId = get(state.trialSession.trialSessionId);
 
-  return { caseId, trialSessionId };
+  return { docketNumber, trialSessionId };
 };
