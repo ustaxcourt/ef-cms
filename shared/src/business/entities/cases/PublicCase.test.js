@@ -166,7 +166,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '123',
           documentTitle: undefined,
@@ -183,7 +182,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '345',
           documentTitle: undefined,
@@ -200,7 +198,6 @@ describe('PublicCase', () => {
         {
           additionalInfo: undefined,
           additionalInfo2: undefined,
-          caseId: undefined,
           createdAt: undefined,
           documentId: '987',
           documentTitle: undefined,

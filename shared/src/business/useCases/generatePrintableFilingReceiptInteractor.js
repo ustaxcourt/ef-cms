@@ -8,7 +8,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
- * @param {object} providers.documentsFiled object containing the caseId and documents for the filing receipt to be generated
+ * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
  * @returns {string} url for the generated document on the storage client
  */
 exports.generatePrintableFilingReceiptInteractor = async ({

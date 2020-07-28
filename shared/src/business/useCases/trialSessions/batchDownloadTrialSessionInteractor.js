@@ -99,15 +99,15 @@ const batchDownloadTrialSessionInteractor = async ({
   const numberOfDocketRecordsToGenerate = sessionCases.length;
   const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
 
-  const onDocketRecordCreation = async caseId => {
-    if (caseId) {
+  const onDocketRecordCreation = async docketNumber => {
+    if (docketNumber) {
       numberOfDocketRecordsGenerated += 1;
     }
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_docket_generated',
-        caseId,
+        docketNumber,
         numberOfDocketRecordsGenerated,
         numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
@@ -123,7 +123,7 @@ const batchDownloadTrialSessionInteractor = async ({
       .getUseCases()
       .generateDocketRecordPdfInteractor({
         applicationContext,
-        caseId: sessionCase.caseId,
+        docketNumber: sessionCase.docketNumber,
         includePartyDetail: true,
       });
 
@@ -137,7 +137,7 @@ const batchDownloadTrialSessionInteractor = async ({
         useTempBucket: true,
       });
 
-    await onDocketRecordCreation({ caseId: sessionCase.caseId });
+    await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 
     extraFiles.push(document);
 
