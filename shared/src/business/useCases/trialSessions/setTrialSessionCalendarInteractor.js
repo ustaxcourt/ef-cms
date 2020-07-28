@@ -115,7 +115,6 @@ exports.setTrialSessionCalendarInteractor = async ({
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
-    const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord, { applicationContext });
 
     caseEntity.setAsCalendared(trialSessionEntity);
@@ -136,7 +135,7 @@ exports.setTrialSessionCalendarInteractor = async ({
         .getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords({
           applicationContext,
-          caseId,
+          docketNumber: caseEntity.docketNumber,
         }),
     ]);
   };
