@@ -1766,10 +1766,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-D-20181212000000-101-18',
       });
     });
 
@@ -1785,10 +1783,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-D-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-D-20181212000000-101-18',
       });
     });
 
@@ -1804,10 +1800,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-C-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-C-20181212000000-101-18',
       });
     });
 
@@ -1823,10 +1817,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-B-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-R-B-20181212000000-101-18',
       });
     });
 
@@ -1843,10 +1835,8 @@ describe('Case entity', () => {
         },
       );
       expect(myCase.generateTrialSortTags()).toEqual({
-        hybrid:
-          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        hybrid: 'WashingtonDistrictofColumbia-H-A-20181212000000-101-18',
+        nonHybrid: 'WashingtonDistrictofColumbia-S-A-20181212000000-101-18',
       });
     });
   });

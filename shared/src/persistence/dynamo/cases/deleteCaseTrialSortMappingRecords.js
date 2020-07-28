@@ -5,19 +5,19 @@ const client = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to delete the mapping records for
+ * @param {string} providers.docketNumber the docket number of the case to delete the mapping records for
  * @returns {Promise} the return from the persistence delete calls
  */
 exports.deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const records = await client.query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `eligible-for-trial-case-catalog|${caseId}`,
+      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
