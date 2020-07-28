@@ -556,6 +556,34 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/correspondence',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
+        );
+        return app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'correspondence',
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/correspondence?..',
+      ifHasAccess(docketNumber => {
+        const { documentId } = route.query();
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
+        );
+        return app.getSequence('gotoCaseDetailSequence')({
+          correspondenceDocumentId: documentId,
+          docketNumber,
+          primaryTab: 'correspondence',
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/upload-correspondence',
       ifHasAccess(docketNumber => {
         setPageTitle(
@@ -576,6 +604,7 @@ const router = {
         return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
           docketNumber,
           documentId,
+          redirectUrl: `/case-detail/${docketNumber}/correspondence?documentId=${documentId}`,
         });
       }),
     );
@@ -648,14 +677,22 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-docket-entry',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/add-paper-filing',
       ifHasAccess(docketNumber => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
-        return app.getSequence('gotoAddDocketEntrySequence')({
-          docketNumber,
-        });
+        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
       }),
     );
 
