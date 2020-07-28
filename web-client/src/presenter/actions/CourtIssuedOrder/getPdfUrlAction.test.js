@@ -33,7 +33,7 @@ describe('getPdfUrlAction', () => {
       },
       state: {
         caseDetail: {
-          caseId: '123',
+          docketNumber: '123-20',
         },
       },
     });
@@ -49,8 +49,8 @@ describe('getPdfUrlAction', () => {
 
     expect(args).toEqual(
       expect.objectContaining({
-        caseId: '123',
         contentHtml: '<p>hi</p>',
+        docketNumber: '123-20',
         documentTitle: 'Test Title',
         signatureText: 'Test Signature',
       }),

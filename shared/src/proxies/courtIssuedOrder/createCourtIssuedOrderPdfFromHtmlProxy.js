@@ -13,16 +13,16 @@ const { post } = require('../requests');
  */
 exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
   applicationContext,
-  caseId,
   contentHtml,
+  docketNumber,
   documentTitle,
   signatureText,
 }) => {
   return post({
     applicationContext,
     body: {
-      caseId,
       contentHtml,
+      docketNumber,
       documentTitle,
       signatureText,
     },
