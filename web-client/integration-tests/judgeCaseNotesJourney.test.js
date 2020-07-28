@@ -29,7 +29,6 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     sessionType: 'Small',
     trialLocation,
   };
-  const createdCaseIds = [];
   const createdDocketNumbers = [];
 
   loginAs(test, 'docketclerk@example.com');
@@ -49,7 +48,6 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
-    createdCaseIds.push(caseDetail.caseId);
     createdDocketNumbers.push(caseDetail.docketNumber);
     test.docketNumber = caseDetail.docketNumber;
   });

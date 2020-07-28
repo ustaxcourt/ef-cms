@@ -20,8 +20,8 @@ const {
 function PublicDocument(rawDocument) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
-  this.caseId = rawDocument.caseId;
   this.createdAt = rawDocument.createdAt;
+  this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
@@ -39,8 +39,8 @@ joiValidationDecorator(
   joi.object().keys({
     additionalInfo: joi.string().max(500).optional(),
     additionalInfo2: joi.string().max(500).optional(),
-    caseId: JoiValidationConstants.UUID.optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
     documentId: JoiValidationConstants.UUID.optional(),
     documentTitle: joi.string().max(500).optional(),
     documentType: joi

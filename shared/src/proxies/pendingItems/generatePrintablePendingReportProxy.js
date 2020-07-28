@@ -5,19 +5,19 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the optional caseId filter
+ * @param {string} providers.docketNumber the optional docketNumber filter
  * @param {string} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
 exports.generatePrintablePendingReportInteractor = ({
   applicationContext,
-  caseId,
+  docketNumber,
   judge,
 }) => {
   let queryString = '';
 
-  if (caseId) {
-    queryString = '?caseId=' + encodeURIComponent(caseId);
+  if (docketNumber) {
+    queryString = '?docketNumber=' + encodeURIComponent(docketNumber);
   } else if (judge) {
     queryString = '?judge=' + encodeURIComponent(judge);
   }

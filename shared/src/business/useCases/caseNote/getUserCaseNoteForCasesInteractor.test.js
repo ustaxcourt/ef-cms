@@ -14,7 +14,6 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   let mockNote;
 
   const MOCK_NOTE = {
-    caseId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     docketNumber: MOCK_CASE.docketNumber,
     notes: 'something',
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
@@ -71,6 +70,6 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       docketNumbers: [MOCK_NOTE.docketNumber],
     });
 
-    expect(result).toMatchObject([omit(MOCK_NOTE, 'docketNumber')]);
+    expect(result).toMatchObject([MOCK_NOTE]);
   });
 });

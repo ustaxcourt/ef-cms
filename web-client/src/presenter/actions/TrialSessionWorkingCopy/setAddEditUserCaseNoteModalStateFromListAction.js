@@ -16,16 +16,16 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
   props,
   store,
 }) => {
-  const { caseId } = props;
+  const { docketNumber } = props;
 
   const notes = _get(get(state.trialSessionWorkingCopy.userNotes), [
-    caseId,
+    docketNumber,
     'notes',
   ]);
 
   const caseDetail =
     find(get(state.trialSession.calendaredCases), {
-      caseId,
+      docketNumber,
     }) || {};
 
   const caseTitle = applicationContext.getCaseTitle(
@@ -33,6 +33,6 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
   );
 
   store.set(state.modal.caseTitle, caseTitle);
-  store.set(state.modal.caseId, caseId);
+  store.set(state.modal.docketNumber, docketNumber);
   store.set(state.modal.notes, notes);
 };
