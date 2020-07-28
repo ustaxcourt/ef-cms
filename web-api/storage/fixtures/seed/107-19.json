@@ -16,13 +16,13 @@
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|workItem"
   },
   {
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "pk": "catalog"
   },
   {
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
+    "gsi1pk": "user-case|107-19",
     "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
@@ -32,8 +32,8 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
+    "gsi1pk": "user-case|107-19",
     "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
@@ -193,7 +193,7 @@
     "noticeOfAttachments": false,
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
     "filingType": "A business",
     "orderForOds": false,
     "orderForRatification": false,
@@ -204,7 +204,7 @@
     "orderToShowCause": false,
     "preferredTrialCity": "Las Vegas, Nevada",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "docketNumber": "107-19",
     "docketNumberWithSuffix": "107-19L",
     "status": "General Docket - At Issue (Ready for Trial)",
@@ -220,7 +220,7 @@
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "status": "R served on 08/16/2019 12:30 PM",
     "docketRecordId": "e43fd71d-ed47-4ffd-b07a-0394fc02965c",
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "sk": "docket-record|e43fd71d-ed47-4ffd-b07a-0394fc02965c"
   },
   {
@@ -229,7 +229,7 @@
     "index": 2,
     "filingDate": "2019-08-16T17:29:10.132Z",
     "docketRecordId": "b3352d0e-8686-4206-955c-d1659570f26b",
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "sk": "docket-record|b3352d0e-8686-4206-955c-d1659570f26b"
   },
   {
@@ -242,7 +242,7 @@
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "status": "R served on 08/16/2019 12:30 PM",
     "docketRecordId": "eb5f5c4c-2873-4a25-98ff-e34cbcfeecd8",
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "sk": "docket-record|eb5f5c4c-2873-4a25-98ff-e34cbcfeecd8"
   },
   {
@@ -292,8 +292,8 @@
     "updatedAt": "2019-08-16T17:29:10.133Z"
   },
   {
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "gsi1pk": "user-case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
+    "gsi1pk": "user-case|107-19",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "caseCaption": "Tatum Craig, Petitioner",
@@ -303,7 +303,7 @@
     "entityName": "UserCase"
   },
   {
-    "sk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "sk": "case|107-19",
     "pk": "case-by-docket-number|107-19"
   },
   {
@@ -322,7 +322,7 @@
   },
   {
     "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878"
+    "pk": "case|107-19"
   },
   {
     "role": "irsPractitioner",
@@ -341,7 +341,7 @@
     "name": "Test IRS Practitioner",
     "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
     "section": "irsPractitioner",
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irsPractitioner@example.com"
   },
@@ -363,7 +363,7 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "section": "privatePractitioner",
     "representingPrimary": true,
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
@@ -384,7 +384,7 @@
     "sk": "document|35306555-83f2-4f61-9be6-438bd107e5eb",
     "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "numberOfPages": 1,
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "status": "served"
   },
   {
@@ -456,7 +456,7 @@
         "email": "petitioner@example.com"
       }
     ],
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "status": "served"
   },
   {
@@ -476,7 +476,7 @@
     "sk": "document|7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "numberOfPages": 1,
-    "pk": "case|58c1f7a3-8062-42f0-a73e-8bd69b419878",
+    "pk": "case|107-19",
     "status": "served"
   }
 ]

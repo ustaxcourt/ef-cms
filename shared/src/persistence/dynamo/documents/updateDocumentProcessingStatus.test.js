@@ -16,7 +16,7 @@ describe('updateDocumentProcessingStatus', () => {
     );
 
     client.update = jest.fn().mockReturnValue({
-      caseId: '123',
+      docketNumber: '123-20',
       pk: '123',
       sk: '123',
       status: CASE_STATUS_TYPES.new,
@@ -26,11 +26,11 @@ describe('updateDocumentProcessingStatus', () => {
   it('should attempt to do a batch get in the same ids that were returned in the mapping records', async () => {
     await updateDocumentProcessingStatus({
       applicationContext,
-      caseId: 'abc',
+      docketNumber: '123-20',
       documentId: 3,
     });
     expect(client.update.mock.calls[0][0]).toMatchObject({
-      Key: { pk: 'case|abc', sk: 'document|3' },
+      Key: { pk: 'case|123-20', sk: 'document|3' },
       UpdateExpression: 'SET #processingStatus = :status',
     });
   });

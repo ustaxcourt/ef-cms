@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 
 /**
  * deleteCaseDeadline
@@ -17,44 +14,37 @@ exports.deleteCaseDeadline = async ({
   caseDeadlineId,
   docketNumber,
 }) => {
-  const caseId = await getCaseIdFromDocketNumber({
-    applicationContext,
-    docketNumber,
-  });
+  const results = [];
 
-  if (caseId) {
-    const results = [];
+  results.push(
+    await client.delete({
+      applicationContext,
+      key: {
+        pk: `case-deadline|${caseDeadlineId}`,
+        sk: `case-deadline|${caseDeadlineId}`,
+      },
+    }),
+  );
 
-    results.push(
-      await client.delete({
-        applicationContext,
-        key: {
-          pk: `case-deadline|${caseDeadlineId}`,
-          sk: `case-deadline|${caseDeadlineId}`,
-        },
-      }),
-    );
+  results.push(
+    await client.delete({
+      applicationContext,
+      key: {
+        pk: `case|${docketNumber}`,
+        sk: `case-deadline|${caseDeadlineId}`,
+      },
+    }),
+  );
 
-    results.push(
-      await client.delete({
-        applicationContext,
-        key: {
-          pk: `case|${caseId}`,
-          sk: `case-deadline|${caseDeadlineId}`,
-        },
-      }),
-    );
+  results.push(
+    await client.delete({
+      applicationContext,
+      key: {
+        pk: 'case-deadline-catalog',
+        sk: `case-deadline|${caseDeadlineId}`,
+      },
+    }),
+  );
 
-    results.push(
-      await client.delete({
-        applicationContext,
-        key: {
-          pk: 'case-deadline-catalog',
-          sk: `case-deadline|${caseDeadlineId}`,
-        },
-      }),
-    );
-
-    return results;
-  }
+  return results;
 };
