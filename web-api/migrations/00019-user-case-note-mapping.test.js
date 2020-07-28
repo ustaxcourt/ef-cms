@@ -76,4 +76,28 @@ describe('add docketNumber to user case note record mappings', () => {
       sk: `user|${mockUserCaseNoteWithDocketNumber.userId}`,
     });
   });
+
+  it('should not modify records if caseId cannot be obtained from the gsi1pk', async () => {
+    mockItems = [
+      {
+        ...mockUserCaseNoteWithDocketNumber,
+        pk: 'user-case-note',
+      },
+    ];
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
+
+  it('should not modify records if caseRecord is empty', async () => {
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({}),
+    });
+    documentClient.get = getStub;
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
 });
