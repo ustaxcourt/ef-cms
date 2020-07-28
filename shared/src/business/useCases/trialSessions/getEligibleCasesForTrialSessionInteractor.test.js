@@ -23,7 +23,6 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   const MOCK_ASSOCIATED_CASE = {
     ...MOCK_CASE,
-    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
   };
 
   beforeEach(() => {

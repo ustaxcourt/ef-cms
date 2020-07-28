@@ -13,7 +13,6 @@ describe('orderPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '1',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents:
@@ -24,7 +23,6 @@ describe('orderPublicSearchInteractor', () => {
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
-          caseId: '2',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'KitKats are inferior candies',
@@ -34,7 +32,6 @@ describe('orderPublicSearchInteractor', () => {
         },
         {
           caseCaption: 'Gal Fieri, Petitioner',
-          caseId: '3',
           docketNumber: '104-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'Baby Ruth is gross',
@@ -69,7 +66,6 @@ describe('orderPublicSearchInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '1',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents:
@@ -80,7 +76,6 @@ describe('orderPublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
-        caseId: '2',
         docketNumber: '103-19',
         docketNumberSuffix: 'AAA',
         documentContents: 'KitKats are inferior candies',

@@ -3,7 +3,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { getRecord } = require('./getRecord');
 
-const mockCase = { caseId: '123', pk: 'case-123', sk: 'abc' };
+const mockCase = { docketNumber: '123-20', pk: 'case|123-20', sk: 'abc' };
 
 describe('getRecord', () => {
   beforeAll(() => {
@@ -17,7 +17,7 @@ describe('getRecord', () => {
   it('returns the record retrieved from persistence', async () => {
     const result = await getRecord({
       applicationContext,
-      recordPk: 'case-123',
+      recordPk: 'case|123-20',
       recordSk: 'abc',
     });
 
@@ -25,7 +25,7 @@ describe('getRecord', () => {
       applicationContext.getDocumentClient().get.mock.calls[0][0],
     ).toMatchObject({
       ExpressionAttributeValues: {
-        ':pk': 'case-123',
+        ':pk': 'case|123-20',
         ':sk': 'abc',
       },
     });
