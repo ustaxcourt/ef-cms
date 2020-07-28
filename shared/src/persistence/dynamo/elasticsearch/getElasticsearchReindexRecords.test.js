@@ -9,7 +9,7 @@ describe('getElasticsearchReindexRecords', () => {
   beforeAll(() => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => ({
-        Items: [{ caseId: '123', pk: 'case-123', sk: 'abc' }],
+        Items: [{ docketNumber: '123-20', pk: 'case|123-20', sk: 'abc' }],
       }),
     });
   });
@@ -30,6 +30,8 @@ describe('getElasticsearchReindexRecords', () => {
       },
       KeyConditionExpression: '#pk = :pk',
     });
-    expect(results).toEqual([{ caseId: '123', pk: 'case-123', sk: 'abc' }]);
+    expect(results).toEqual([
+      { docketNumber: '123-20', pk: 'case|123-20', sk: 'abc' },
+    ]);
   });
 });

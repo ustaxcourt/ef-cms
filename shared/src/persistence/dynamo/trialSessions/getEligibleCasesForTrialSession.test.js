@@ -27,7 +27,7 @@ describe('getEligibleCasesForTrialSession', () => {
 
     client.batchGet = jest
       .fn()
-      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
+      .mockReturnValue([{ ...MOCK_CASE, pk: MOCK_CASE.docketNumber }]);
   });
 
   it('should get the cases for a trial session', async () => {
@@ -42,7 +42,7 @@ describe('getEligibleCasesForTrialSession', () => {
       {
         ...MOCK_CASE,
         irsPractitioners: [{ userId: 'abc-123' }],
-        pk: MOCK_CASE.caseId,
+        pk: MOCK_CASE.docketNumber,
         privatePractitioners: [{ userId: 'abc-123' }],
       },
     ]);
