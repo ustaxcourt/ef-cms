@@ -1,6 +1,7 @@
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
+import queryString from 'query-string';
 import route from 'riot-route';
 
 route.base('/');
@@ -14,9 +15,9 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
-const openInNewTab = (path, noopener = true) => {
+const openInNewTab = (path, noopener = true, target = '_blank') => {
   const windowFeatures = (noopener && 'noopener, noreferrer') || '';
-  window.open(path, '_blank', windowFeatures);
+  window.open(path, target, windowFeatures);
 };
 
 const createObjectURL = object => {
@@ -502,8 +503,8 @@ const router = {
         );
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
-          documentTitle,
-          documentType,
+          documentTitle: decodeURIComponent(documentTitle),
+          documentType: decodeURIComponent(documentType),
           eventCode,
         });
       }),
@@ -518,8 +519,8 @@ const router = {
         );
         return app.getSequence('gotoCreateOrderSequence')({
           docketNumber,
-          documentTitle,
-          documentType,
+          documentTitle: decodeURIComponent(documentTitle),
+          documentType: decodeURIComponent(documentType),
           eventCode,
           parentMessageId,
           redirectUrl: `/case-messages/${docketNumber}/message-detail/${parentMessageId}`,
