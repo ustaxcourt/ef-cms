@@ -7,7 +7,6 @@ import {
   back,
   createObjectURL,
   externalRoute,
-  openInNewTab,
   revokeObjectURL,
   router,
 } from '../src/router';
@@ -32,6 +31,8 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormData from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import queryString from 'query-string';
+import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -573,6 +574,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
   return test;
 };
 
+const mockRouteQuery = routeToGoTo => {
+  const params = routeToGoTo.split('?')[1];
+  return queryString.parse(params);
+};
+
 export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -584,6 +590,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
       const match = regex.exec(routeToGoTo);
       if (match != null) {
         const args = match.splice(1);
+        riotRoute.query = mockRouteQuery(routeToGoTo);
         return route.cb.call(this, ...args);
       }
       return null;
