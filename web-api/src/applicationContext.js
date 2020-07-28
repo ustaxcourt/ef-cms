@@ -362,9 +362,6 @@ const {
   getCalendaredCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor');
 const {
-  getCaseByCaseId,
-} = require('../../shared/src/persistence/dynamo/cases/getCaseByCaseId');
-const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
@@ -1244,7 +1241,6 @@ module.exports = appContextUser => {
         getAllCatalogCases,
         getBlockedCases,
         getCalendaredCasesForTrialSession,
-        getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByDocketNumber,
         getCaseInventoryReport,

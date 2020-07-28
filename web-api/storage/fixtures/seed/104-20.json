@@ -1,11 +1,11 @@
 [
   {
-    "sk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "sk": "case|104-20",
     "caseId": "1a92894e-83a5-48ba-9994-3ada44235deb",
     "pk": "catalog"
   },
   {
-    "sk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "sk": "case|104-20",
     "pk": "case-by-docket-number|104-20"
   },
   {
@@ -166,7 +166,7 @@
     "entityName": "Case",
     "caseCaption": "Hanan Al Hroub, Petitioner",
     "caseId": "1a92894e-83a5-48ba-9994-3ada44235deb",
-    "sk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "sk": "case|104-20",
     "orderForOds": false,
     "orderForRatification": false,
     "initialDocketNumberSuffix": "_",
@@ -182,7 +182,7 @@
     "hasPendingItems": false,
     "closedDate": "2020-04-14T03:01:50.746Z",
     "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case|104-20",
     "docketNumber": "104-20",
     "docketNumberWithSuffix": "104-20R",
     "status": "Closed"
@@ -197,7 +197,7 @@
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "numberOfPages": 1,
     "editState": "{\"eventCode\":\"ODD\",\"documentType\":\"ODD - Order of Dismissal and Decision Entered,\",\"documentTitle\":\"Order of Dismissal and Decision Entered, [Judge Name] [Anything]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"numberOfPages\":\"1\",\"generatedDocumentTitle\":\"Order of Dismissal and Decision Entered, Judge Buch\",\"judge\":\"Judge Buch\",\"caseId\":\"1a92894e-83a5-48ba-9994-3ada44235deb\",\"documentId\":\"1f1aa3f7-e2e3-43e6-885d-4ce341588c76\"}",
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb"
+    "pk": "case|104-20"
   },
   {
     "eventCode": "RQT",
@@ -208,7 +208,7 @@
     "description": "Request for Place of Trial",
     "index": 2,
     "documentId": "af6f67db-3160-4562-ac36-5481ab091952",
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb"
+    "pk": "case|104-20"
   },
   {
     "eventCode": "P",
@@ -220,7 +220,7 @@
     "index": 1,
     "documentId": "596223c1-527b-46b4-98b0-1b10455e9495",
     "numberOfPages": 1,
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb"
+    "pk": "case|104-20"
   },
   {
     "draftState": null,
@@ -390,7 +390,7 @@
     "signedAt": "2020-04-14T03:01:15.215Z",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "numberOfPages": 1,
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case|104-20",
     "signedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-04-14T03:01:50.399Z",
     "docketNumber": "104-20",
@@ -429,7 +429,7 @@
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "numberOfPages": 1,
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case|104-20",
     "servedAt": "2020-04-14T19:59:46.673Z",
     "status": "served"
   },
@@ -517,7 +517,7 @@
     "partySecondary": false,
     "documentId": "596223c1-527b-46b4-98b0-1b10455e9495",
     "numberOfPages": 1,
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case|104-20",
     "servedAt": "2020-04-14T19:59:46.671Z",
     "status": "served"
   },
@@ -553,14 +553,14 @@
     "sk": "document|af6f67db-3160-4562-ac36-5481ab091952",
     "partySecondary": false,
     "documentId": "af6f67db-3160-4562-ac36-5481ab091952",
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb",
+    "pk": "case|104-20",
     "servedAt": "2020-04-14T19:59:46.672Z",
     "documentTitle": "Request for Place of Trial at San Francisco, California",
     "status": "served"
   },
   {
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
-    "pk": "case|1a92894e-83a5-48ba-9994-3ada44235deb"
+    "pk": "case|104-20"
   },
   {
     "associatedJudge": "Chief Judge",

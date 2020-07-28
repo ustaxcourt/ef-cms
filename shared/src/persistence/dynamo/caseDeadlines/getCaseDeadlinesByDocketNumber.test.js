@@ -6,7 +6,6 @@ const {
   getCaseDeadlinesByDocketNumber,
 } = require('./getCaseDeadlinesByDocketNumber');
 
-const CASE_ID = 'df5a7b54-e2e7-4fe1-8f3e-86c838a16534';
 const mockCaseDeadline = {
   caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   deadlineDate: '2019-03-01T21:42:29.073Z',
@@ -23,20 +22,12 @@ describe('getCaseDeadlinesByDocketNumber', () => {
         sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
       },
     ]);
-    client.query = jest
-      .fn()
-      .mockReturnValueOnce([
-        {
-          pk: `case|${CASE_ID}`,
-          sk: `case|${CASE_ID}`,
-        },
-      ])
-      .mockReturnValueOnce([
-        {
-          pk: `case|${mockCaseDeadline.caseId}`,
-          sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
-        },
-      ]);
+    client.query = jest.fn().mockReturnValue([
+      {
+        pk: `case|${mockCaseDeadline.docketNumber}`,
+        sk: `case-deadline|${mockCaseDeadline.caseDeadlineId}`,
+      },
+    ]);
   });
 
   it('should return data as received from persistence', async () => {
