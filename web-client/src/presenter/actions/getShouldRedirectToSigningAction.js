@@ -23,6 +23,7 @@ export const getShouldRedirectToSigningAction = ({
 
   const isNotice = NOTICE_EVENT_CODES.includes(eventCode);
 
+
   if (documentId && !isNotice) {
     return path.yes();
   }
