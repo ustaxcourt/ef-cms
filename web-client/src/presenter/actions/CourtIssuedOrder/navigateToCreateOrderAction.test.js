@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 
 describe('navigateToCreateOrderAction', () => {
   const docketNumber = '123-20';
-  const documentTitle = 'Order for something';
+  const documentTitle = 'Order';
   const documentType = 'Order';
   const eventCode = 'O';
   const parentMessageId = '02bb9dd7-391b-4aa7-9647-489184084e8b';
@@ -25,18 +25,22 @@ describe('navigateToCreateOrderAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        docketNumber,
-        documentId,
-        documentTitle,
-        documentType,
-        eventCode,
+      state: {
+        caseDetail: {
+          docketNumber,
+        },
+        modal: {
+          documentId,
+          documentTitle,
+          documentType,
+          eventCode,
+        },
       },
     });
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order?documentId=${documentId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
     );
   });
 
@@ -45,15 +49,15 @@ describe('navigateToCreateOrderAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        docketNumber: '123-20',
-        documentId,
-        documentTitle,
-        documentType,
-        eventCode,
-      },
       state: {
+        caseDetail: {
+          docketNumber,
+        },
         modal: {
+          documentId,
+          documentTitle,
+          documentType,
+          eventCode,
           parentMessageId,
         },
       },
@@ -61,7 +65,7 @@ describe('navigateToCreateOrderAction', () => {
 
     expect(routeStub).toHaveBeenCalled();
     expect(routeStub.mock.calls[0][0]).toEqual(
-      `/case-detail/${docketNumber}/create-order/${parentMessageId}?documentType=${documentType}&documentTitle=${documentTitle}&documentId=${documentId}&eventCode=${eventCode}`,
+      `/case-detail/${docketNumber}/create-order/${parentMessageId}?documentId=${documentId}&documentTitle=${documentTitle}&documentType=${documentType}&eventCode=${eventCode}`,
     );
   });
 });
