@@ -31,7 +31,6 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormData from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import queryString from 'query-string';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
