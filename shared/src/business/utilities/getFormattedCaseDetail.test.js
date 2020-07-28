@@ -23,7 +23,6 @@ applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
 const mockCaseDetailBase = {
-  caseId: '123-456-abc-def',
   correspondence: [],
   createdAt: new Date(),
   docketNumber: '123-45',
