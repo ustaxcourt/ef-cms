@@ -99,7 +99,7 @@ describe('Get case', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    const caseRecord = await getCaseInteractor({
+    await getCaseInteractor({
       applicationContext,
       docketNumber: '101-00',
     });
