@@ -28,7 +28,7 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     });
 
     await test.runSequence('submitCreateOrderModalSequence');
-    
+
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('gotoCreateOrderSequence', {
