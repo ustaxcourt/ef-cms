@@ -11,7 +11,7 @@ export const MultiDocumentPartiesFilingReview = connect(
     return selectedCases.map(selectedCase => (
       <div
         className="tablet:grid-col-3 margin-bottom-5"
-        key={selectedCase.caseId}
+        key={selectedCase.docketNumber}
       >
         <label className="usa-label" htmlFor="filing-parties">
           {selectedCase.docketNumber} {selectedCase.caseTitle}
