@@ -4,7 +4,7 @@ const {
 const { updateDocument } = require('./updateDocument');
 
 const mockDocumentId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-const mockCaseId = '9b52c506-edba-41d7-b045-d5f992a499d3';
+const mockDocketNumber = '101-20';
 
 const mockDocument = {
   documentId: mockDocumentId,
@@ -17,7 +17,7 @@ describe('updateDocument', () => {
   it('makes put request with the given document data for the matching document id', async () => {
     await updateDocument({
       applicationContext,
-      caseId: mockCaseId,
+      docketNumber: mockDocketNumber,
       document: mockDocument,
       documentId: mockDocumentId,
     });
@@ -26,7 +26,7 @@ describe('updateDocument', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        pk: `case|${mockCaseId}`,
+        pk: `case|${mockDocketNumber}`,
         sk: `document|${mockDocumentId}`,
         ...mockDocument,
       },

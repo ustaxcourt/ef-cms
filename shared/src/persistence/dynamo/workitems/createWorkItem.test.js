@@ -6,15 +6,13 @@ const { createWorkItem } = require('./createWorkItem');
 const mockWorkItem = {
   assigneeId: '123',
   createdAt: '100',
-  docketNumber: '123',
+  docketNumber: '123-20',
   section: 'docket',
   sentByUserId: 'a_user',
   workItemId: 'a_id',
 };
 
 describe('createWorkItem', () => {
-  const CASE_ID = '6697e4bf-655f-4413-b3e8-4b498b0bc695';
-
   beforeAll(() => {
     applicationContext.environment.stage = 'dev';
     applicationContext.getDocumentClient().put.mockReturnValue({
@@ -27,17 +25,6 @@ describe('createWorkItem', () => {
             section: 'docket',
             userId: '123',
           },
-        }),
-    });
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              pk: `case|${CASE_ID}`,
-              sk: `case|${CASE_ID}`,
-            },
-          ],
         }),
     });
   });
@@ -70,7 +57,7 @@ describe('createWorkItem', () => {
       applicationContext.getDocumentClient().put.mock.calls[1][0],
     ).toMatchObject({
       Item: {
-        pk: `case|${CASE_ID}`,
+        pk: 'case|123-20',
         sk: 'work-item|a_id',
       },
       TableName: 'efcms-dev',

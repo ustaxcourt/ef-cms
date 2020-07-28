@@ -2,13 +2,13 @@ const client = require('../../dynamodbClientService');
 
 exports.updateDocument = async ({
   applicationContext,
-  caseId,
+  docketNumber,
   document,
   documentId,
 }) => {
   await client.put({
     Item: {
-      pk: `case|${caseId}`,
+      pk: `case|${docketNumber}`,
       sk: `document|${documentId}`,
       ...document,
     },
