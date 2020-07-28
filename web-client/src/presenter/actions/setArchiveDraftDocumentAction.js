@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets archive draft document state properties (documentId, caseId, and documentTitle)
+ * sets archive draft document state properties (documentId, docketNumber, and documentTitle)
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
