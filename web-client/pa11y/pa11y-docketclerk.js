@@ -101,9 +101,9 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #case-detail-menu-button to be visible',
+      'wait for #tab-case-information to be visible',
       'wait for .progress-indicator to be hidden',
-      'click element #case-detail-menu-button',
+      'click element #tab-case-information',
       'wait for #menu-edit-case-context-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #menu-edit-case-context-button',

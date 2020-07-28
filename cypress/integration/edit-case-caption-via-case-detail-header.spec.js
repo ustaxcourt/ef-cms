@@ -1,6 +1,6 @@
 const {
-  getActionMenuButton,
   getCaptionTextArea,
+  getCaseDetailTab,
   getCaseTitleContaining,
   getEditCaseCaptionButton,
   getSaveButton,
@@ -10,7 +10,7 @@ const {
 describe('Edit a case caption from case detail header', function () {
   before(() => {
     navigateToCaseDetail('docketclerk', '101-19');
-    getActionMenuButton().click();
+    getCaseDetailTab('case-information').click();
     getEditCaseCaptionButton().click();
     getCaptionTextArea().clear().type('there is no cow level');
     getSaveButton().click();
