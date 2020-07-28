@@ -17,7 +17,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
@@ -28,7 +28,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   it('Calls the Receipt of Filing document generator', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         primaryDocumentFile: {},
       },
@@ -48,7 +48,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   it('acquires document information', async () => {
     await generatePrintableFilingReceiptInteractor({
       applicationContext,
-      caseId: MOCK_CASE.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,

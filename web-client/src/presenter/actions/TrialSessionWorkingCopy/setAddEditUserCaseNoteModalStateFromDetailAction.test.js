@@ -15,7 +15,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         modules: {
           presenter,
         },
-        props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+        props: { docketNumber: '101-19' },
         state: {
           caseDetail: {
             caseCaption: 'Sisqo, Petitioner',
@@ -28,9 +28,6 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
     );
 
     expect(result.state.modal.caseTitle).toEqual('Sisqo');
-    expect(result.state.modal.caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
     expect(result.state.modal.docketNumber).toEqual('101-19L');
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
@@ -42,7 +39,7 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
         modules: {
           presenter,
         },
-        props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
+        props: { docketNumber: '101-19' },
         state: {
           caseDetail: {
             docketNumber: '101-19',
@@ -53,9 +50,6 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
     );
 
     expect(result.state.modal.caseTitle).toEqual('');
-    expect(result.state.modal.caseId).toEqual(
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
     expect(result.state.modal.docketNumber).toEqual('101-19');
     expect(result.state.modal.notes).toEqual('i got some notes');
   });

@@ -13,7 +13,6 @@ describe('generatePrintableFilingReceiptAction', () => {
       },
       props: {
         documentsFiled: {
-          caseId: '123',
           docketNumber: '123-19',
           primaryDocumentFile: {},
         },
