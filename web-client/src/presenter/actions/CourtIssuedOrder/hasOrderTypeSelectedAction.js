@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  */
 export const hasOrderTypeSelectedAction = ({ get, path, props }) => {
   const eventCode = get(state.modal.eventCode);
-  const caseId = props.docketNumber;
+  const { docketNumber } = props;
   if (eventCode) {
     return path['proceed']();
   } else {
-    return path['no']({ caseId });
+    return path['no']({ docketNumber });
   }
 };

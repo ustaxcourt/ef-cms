@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.router the riot.router object that is used for changing the route
- * @param {object} providers.props the cerebral props that contain the props.caseId
+ * @param {object} providers.store the cerebral store that contain the caseDetail.docketNumber
  */
 export const navigateToFileADocumentAction = async ({ get, router, store }) => {
   store.set(state.wizardStep, 'FileDocument');
