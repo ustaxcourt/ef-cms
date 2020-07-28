@@ -369,6 +369,7 @@ export const CaseInformationInternal = connect(
                   link
                   className="margin-0"
                   icon="edit"
+                  id="menu-edit-case-context-button"
                   onClick={() => {
                     resetCaseMenuSequence();
                     openUpdateCaseModalSequence();
