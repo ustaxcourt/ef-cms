@@ -15,8 +15,7 @@ UserCaseNote.validationName = 'UserCaseNote';
  */
 function UserCaseNote(rawProps) {
   this.entityName = 'UserCaseNote';
-
-  this.caseId = rawProps.caseId;
+  this.docketNumber = rawProps.docketNumber;
   this.userId = rawProps.userId;
   this.notes = rawProps.notes;
 }
@@ -26,7 +25,7 @@ UserCaseNote.VALIDATION_ERROR_MESSAGES = {
 };
 
 UserCaseNote.schema = joi.object().keys({
-  caseId: JoiValidationConstants.UUID.required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
   entityName: joi.string().valid('UserCaseNote').required(),
   notes: joi.string().required(),
   userId: JoiValidationConstants.UUID.required(),

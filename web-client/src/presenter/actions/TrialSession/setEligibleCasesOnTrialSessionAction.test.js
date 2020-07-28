@@ -7,18 +7,18 @@ describe('setEligibleCasesOnTrialSessionAction', () => {
       props: {
         eligibleCases: [
           {
-            docketNumber: '101-20',
+            docketNumber: '123-45',
           },
-          { docketNumber: '102-20' },
+          { docketNumber: '234-56' },
         ],
       },
     });
 
     expect(result.state.trialSession.eligibleCases).toMatchObject([
       {
-        docketNumber: '101-20',
+        docketNumber: '123-45',
       },
-      { docketNumber: '102-20' },
+      { docketNumber: '234-56' },
     ]);
   });
 });

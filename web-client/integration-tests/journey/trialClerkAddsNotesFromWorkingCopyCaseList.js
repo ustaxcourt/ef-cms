@@ -17,15 +17,15 @@ export const trialClerkAddsNotesFromWorkingCopyCaseList = test => {
       state: test.getState(),
     });
 
-    const { caseId } = workingCopyHelper.formattedCases[0];
+    const { docketNumber } = workingCopyHelper.formattedCases[0];
 
     await test.runSequence('openAddEditUserCaseNoteModalFromListSequence', {
-      caseId,
+      docketNumber,
     });
 
     expect(test.getState('modal')).toEqual({
-      caseId,
       caseTitle: 'Mona Schultz',
+      docketNumber,
       notes: undefined,
       showModal: 'AddEditUserCaseNoteModal',
     });
@@ -36,8 +36,8 @@ export const trialClerkAddsNotesFromWorkingCopyCaseList = test => {
     });
 
     expect(test.getState('modal')).toEqual({
-      caseId,
       caseTitle: 'Mona Schultz',
+      docketNumber,
       notes: 'this is a note added from the modal',
       showModal: 'AddEditUserCaseNoteModal',
     });
@@ -47,7 +47,7 @@ export const trialClerkAddsNotesFromWorkingCopyCaseList = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState(`trialSessionWorkingCopy.userNotes.${caseId}.notes`),
+      test.getState(`trialSessionWorkingCopy.userNotes.${docketNumber}.notes`),
     ).toEqual('this is a note added from the modal');
   });
 };

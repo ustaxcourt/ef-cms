@@ -10,7 +10,7 @@ describe('setQcCompleteOnCaseOnTrialSessionAction', () => {
       },
       props: {
         updatedCase: {
-          docketNumber: '101-20',
+          docketNumber: '123-45',
           qcCompleteForTrial: { 'c2f09db1-24a1-4cff-a0cd-8c7b331f60d8': true },
         },
       },
@@ -18,7 +18,7 @@ describe('setQcCompleteOnCaseOnTrialSessionAction', () => {
         trialSession: {
           eligibleCases: [
             {
-              docketNumber: '101-20',
+              docketNumber: '123-45',
               qcCompleteForTrial: {
                 'c2f09db1-24a1-4cff-a0cd-8c7b331f60d8': false,
               },
@@ -29,7 +29,7 @@ describe('setQcCompleteOnCaseOnTrialSessionAction', () => {
     });
 
     expect(result.state.trialSession.eligibleCases[0]).toEqual({
-      docketNumber: '101-20',
+      docketNumber: '123-45',
       qcCompleteForTrial: {
         'c2f09db1-24a1-4cff-a0cd-8c7b331f60d8': true,
       },
