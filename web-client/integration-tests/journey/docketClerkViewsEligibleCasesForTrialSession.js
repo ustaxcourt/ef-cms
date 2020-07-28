@@ -5,8 +5,8 @@ export const docketClerkViewsEligibleCasesForTrialSession = test => {
     });
 
     expect(test.getState('trialSession.eligibleCases').length).toEqual(1);
-    expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-      test.caseId,
+    expect(test.getState('trialSession.eligibleCases.0.docketNumber')).toEqual(
+      test.docketNumber,
     );
   });
 };

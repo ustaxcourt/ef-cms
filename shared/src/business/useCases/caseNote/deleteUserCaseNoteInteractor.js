@@ -9,12 +9,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case the case note is attached to
+ * @param {string} providers.docketNumber the docket number of the case the case note is attached to
  * @returns {Promise} the promise of the delete call
  */
 exports.deleteUserCaseNoteInteractor = async ({
   applicationContext,
-  caseId,
+  docketNumber,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -28,7 +28,7 @@ exports.deleteUserCaseNoteInteractor = async ({
 
   return await applicationContext.getPersistenceGateway().deleteUserCaseNote({
     applicationContext,
-    caseId,
+    docketNumber,
     userId: (judgeUser && judgeUser.userId) || user.userId,
   });
 };
