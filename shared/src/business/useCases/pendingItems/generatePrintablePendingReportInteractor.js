@@ -24,6 +24,7 @@ exports.generatePrintablePendingReportInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  //TODO: prefereably decodeURIComponent in the router/utility method for easy mocking
   if (judge) {
     judge = decodeURIComponent(judge);
   }
