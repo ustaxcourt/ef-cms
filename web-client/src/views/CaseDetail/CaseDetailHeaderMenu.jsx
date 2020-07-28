@@ -215,7 +215,7 @@ export const CaseDetailHeaderMenu = connect(
                       openAddEditCaseNoteModalSequence();
                     }}
                   >
-                    Add Case Note
+                    Case Note
                   </Button>
                 </li>
               </ul>
