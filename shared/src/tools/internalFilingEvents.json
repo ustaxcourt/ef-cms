@@ -146,6 +146,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion to Withdraw as Counsel",
+      "documentType": "Motion to Withdraw as Counsel",
+      "category": "Appearance and Representation",
+      "eventCode": "M112",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw Counsel",
       "documentType": "Motion to Withdraw Counsel (filed by petitioner)",
       "category": "Appearance and Representation",

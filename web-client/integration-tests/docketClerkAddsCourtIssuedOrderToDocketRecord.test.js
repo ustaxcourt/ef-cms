@@ -15,26 +15,19 @@ import { docketClerkEditsDocketEntryFromOrderTypeH } from './journey/docketClerk
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDocketEntry';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');

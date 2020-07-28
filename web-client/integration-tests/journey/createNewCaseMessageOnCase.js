@@ -8,14 +8,14 @@ const caseMessageModalHelper = withAppContextDecorator(
   caseMessageModalHelperComputed,
 );
 
-export const petitionsClerkCreatesNewMessageOnCase = test => {
+export const createNewCaseMessageOnCase = test => {
   const getHelper = () => {
     return runCompute(caseMessageModalHelper, {
       state: test.getState(),
     });
   };
 
-  return it('petitions clerk creates new message on a case', async () => {
+  return it('user creates new message on a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -40,7 +40,7 @@ export const petitionsClerkCreatesNewMessageOnCase = test => {
     });
 
     expect(test.getState('modal.form.subject')).toEqual(
-      messageDocument.documentType,
+      messageDocument.documentTitle || messageDocument.documentType,
     );
 
     test.testMessageSubject = `what kind of bear is best? ${Date.now()}`;

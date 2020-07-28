@@ -6,24 +6,17 @@ import { docketClerkEditsServiceIndicatorForPractitioner } from './journey/docke
 import { docketClerkEditsServiceIndicatorForRespondent } from './journey/docketClerkEditsServiceIndicatorForRespondent';
 import { docketClerkServesOrderOnPaperParties } from './journey/docketClerkServesOrderOnPaperParties';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 test.draftOrders = [];
 
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');

@@ -43,7 +43,9 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
       value: 'SUPM',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({
       ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
@@ -59,7 +61,9 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
       value: petitionDocument.documentId,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence');
+    await test.runSequence('fileDocketEntrySequence', {
+      isSavingForLater: true,
+    });
 
     expect(test.getState('validationErrors')).toEqual({});
 

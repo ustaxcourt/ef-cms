@@ -303,7 +303,7 @@ Valid Case object example:
             "name": "Guy Fieri",
             "email": "someone@example.com",
             "hasEAccess": true,
-            "otherFilerType": "Participant",
+            "otherFilerType": "Tax Matters Partner",
             "phone": "1234567890",
             "postalCode": "05198",
             "state": "AK"

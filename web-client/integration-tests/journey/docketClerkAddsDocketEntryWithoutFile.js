@@ -12,8 +12,9 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
+      isSavingForLater: true,
     });
 
     expect(test.getState('validationErrors')).toEqual({
@@ -62,8 +63,9 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       value: true,
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
+      isSavingForLater: true,
     });
 
     expect(test.getState('validationErrors')).toEqual({
@@ -75,8 +77,9 @@ export const docketClerkAddsDocketEntryWithoutFile = test => {
       value: 'Brianna Noble',
     });
 
-    await test.runSequence('saveForLaterDocketEntrySequence', {
+    await test.runSequence('fileDocketEntrySequence', {
       docketNumber: test.docketNumber,
+      isSavingForLater: true,
     });
 
     expect(test.getState('validationErrors')).toEqual({});
