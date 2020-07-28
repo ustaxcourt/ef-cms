@@ -30,9 +30,15 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       value: data.documentTitle,
     });
 
-    await test.runSequence('submitCreateOrderModalSequence');
-    expect(test.getState('currentPage')).toBe('CreateOrder');
+    await test.runSequence('gotoCreateOrderSequence', {
+      docketNumber: test.docketNumber,
+      documentTitle: data.documentTitle,
+      documentType: test.getState('modal.documentType'),
+      eventCode: data.eventCode,
+      parentMessageId: test.parentMessageId,
+    });
 
+    expect(test.getState('currentPage')).toBe('CreateOrder');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
