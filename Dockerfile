@@ -46,12 +46,12 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
 RUN npm set progress=false && npm ci
+COPY . /home/app
 
 COPY web-client/pa11y/package.json /home/app/web-client/pa11y/package.json
 COPY web-client/pa11y/package-lock.json /home/app/web-client/pa11y/package-lock.json
-RUN npm set progress=false && cd web-client/pa11y/ && npm ci --prefix=./
-
-COPY . /home/app
+RUN npm set progress=false && npm ci --prefix=web-client/pa11y/
+COPY ./web-client/pa11y /home/app/web-client/pa11y
 
 RUN mkdir -p /home/app/web-client/cypress/screenshots && \
   mkdir -p /home/app/web-client/cypress/videos && \
