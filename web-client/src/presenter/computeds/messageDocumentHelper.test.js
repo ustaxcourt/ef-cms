@@ -51,6 +51,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -76,6 +77,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -101,6 +103,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -130,6 +133,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -159,6 +163,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -188,6 +193,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -213,6 +219,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -243,6 +250,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -255,7 +263,7 @@ describe('messageDocumentHelper', () => {
     expect(result.showAddDocketEntryButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton true and showEditSignatureButton false for an internal user and an unsigned document that is not on the docket record', () => {
+  it('return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -268,6 +276,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -278,10 +287,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(true);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
+  it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -294,6 +303,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -304,11 +314,11 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(true);
+    expect(result.showRemoveSignatureButton).toEqual(true);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showEditSignatureButton false for an external user and an unsigned document that is not on the docket record', () => {
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user and an unsigned document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -321,6 +331,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -331,10 +342,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton false and showApplySignatureButton false for an external user and a signed document that is not on the docket record', () => {
+  it('return showRemoveSignatureButton false and showApplySignatureButton false for an external user and a signed document that is not on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -347,6 +358,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -357,11 +369,11 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
     expect(result.showApplySignatureButton).toEqual(false);
   });
 
-  it('return showApplySignatureButton false and showEditSignatureButton false for an unsigned document that is already on the docket record', () => {
+  it('return showApplySignatureButton false and showRemoveSignatureButton false for an unsigned document that is already on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -378,6 +390,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -388,10 +401,10 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showApplySignatureButton).toEqual(false);
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
+  it('return showRemoveSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -408,6 +421,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
@@ -418,8 +432,68 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result.showEditSignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
     expect(result.showApplySignatureButton).toEqual(false);
+  });
+
+  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
+  it('returns showRemoveSignatureButton false for NTD document type and internal users', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [],
+          documents: [
+            {
+              documentId: 'abc',
+              documentTitle: 'Notice',
+              documentType: 'Notice',
+              eventCode: 'NTD',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: 'abc',
+          eventCode: 'NTD',
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
   it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {
@@ -439,7 +513,7 @@ describe('messageDocumentHelper', () => {
           documents: [
             {
               documentId: '123',
-              entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -465,6 +539,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
               signedAt: '123',
             },
           ],
@@ -491,6 +566,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -514,6 +590,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '567',
               documentTitle: 'Test Correspondence',
+              isDraft: true,
             },
           ],
           docketRecord: [],
@@ -521,6 +598,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -546,6 +624,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -575,6 +654,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: false,
             },
           ],
         },
@@ -584,6 +664,40 @@ describe('messageDocumentHelper', () => {
       },
     });
 
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
+  it('return showEditButtonNotSigned true and showEditButtonSigned false for Notice document', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          correspondence: [],
+          docketRecord: [
+            {
+              documentId: '123',
+            },
+          ],
+          documents: [
+            {
+              documentId: '123',
+              entityName: 'Document',
+              eventCode: 'NOT',
+              isDraft: true,
+              signedAt: '2020-06-25T20:49:28.192Z',
+            },
+          ],
+        },
+        viewerDocumentToDisplay: {
+          documentId: '123',
+          eventCode: 'NOT',
+        },
+      },
+    });
+
+    expect(result.showEditButtonNotSigned).toEqual(true);
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
@@ -605,6 +719,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -634,6 +749,7 @@ describe('messageDocumentHelper', () => {
             {
               documentId: '123',
               entityName: 'Document',
+              isDraft: true,
             },
           ],
         },
@@ -662,6 +778,7 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
               entityName: 'Document',
               eventCode: 'MISC', // Does not require a signature
+              isDraft: true,
             },
           ],
         },
@@ -690,6 +807,7 @@ describe('messageDocumentHelper', () => {
               documentId: '123',
               entityName: 'Document',
               eventCode: 'O', // Requires a signature
+              isDraft: false,
             },
           ],
         },
@@ -700,5 +818,348 @@ describe('messageDocumentHelper', () => {
     });
 
     expect(result.showDocumentNotSignedAlert).toEqual(true);
+  });
+
+  describe('serving documents', () => {
+    beforeEach(() => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+    });
+
+    it('should set showNotServed to true when the document is servable, unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                entityName: 'Document',
+                eventCode: 'O',
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showNotServed).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to true when the document is a servable court issued document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document',
+                eventCode: 'O', //court issued document type
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(true);
+    });
+
+    it('should set showServePaperFiledDocumentButton to false when the document is a servable court issued document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Order',
+                entityName: 'Document',
+                eventCode: 'O',
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+
+    it('should set showServePaperFiledDocumentButton to true when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A',
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to false when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A', // paper filed document
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton and showServePaperFiledDocumentButton to false when permissions.SERVE_DOCUMENTS is false', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+              {
+                documentId: '456',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Answer',
+                entityName: 'Document',
+                eventCode: 'A', // paper filed document type
+                isDraft: false,
+              },
+              {
+                documentId: '456',
+                documentType: 'Order',
+                entityName: 'Document',
+                eventCode: 'O', //court issued document type
+                isDraft: false,
+              },
+            ],
+          },
+          permissions: { SERVE_DOCUMENT: false },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+  });
+
+  describe('showServePetitionButton', () => {
+    it('should be false if the document is a served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+                isDraft: false,
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be false if the document is a not-served Petition document and the user does not have SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(judgeUser), // does not have SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(false);
+    });
+
+    it('should be true if the document is a not-served Petition document and the user has SERVE_PETITION permission', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser), // has SERVE_PETITION permission
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [
+              {
+                documentId: '123',
+              },
+            ],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Petition',
+                entityName: 'Document',
+                eventCode: 'P',
+                isDraft: false,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.showServePetitionButton).toEqual(true);
+    });
+  });
+
+  describe('editUrl', () => {
+    it('should return an editUrl for draft documents', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Miscellaneous',
+                entityName: 'Document',
+                eventCode: 'MISC',
+                isDraft: true,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '123',
+          },
+        },
+      });
+
+      expect(result.editUrl).toBeTruthy();
+    });
+
+    it('should return an editUrl as an empty string if the document is not found', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            correspondence: [],
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123',
+                documentType: 'Miscellaneous',
+                entityName: 'Document',
+                eventCode: 'MISC',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '234',
+          },
+        },
+      });
+
+      expect(result.editUrl).toEqual('');
+    });
   });
 });

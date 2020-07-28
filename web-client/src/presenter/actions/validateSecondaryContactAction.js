@@ -21,6 +21,7 @@ export const validateSecondaryContactAction = ({
   const errors = applicationContext
     .getUseCases()
     .validateSecondaryContactInteractor({
+      applicationContext,
       contactInfo: contactSecondary,
       partyType,
     });

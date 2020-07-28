@@ -55,9 +55,14 @@ export const petitionsClerkAddsNoticeToCase = test => {
       caseDetail: test.getState('caseDetail'),
     });
 
-    test.documentId = first(draftDocuments)
-      ? first(draftDocuments).documentId
+    const firstDraftDocument = first(draftDocuments);
+    test.documentId = firstDraftDocument
+      ? firstDraftDocument.documentId
       : undefined;
+
+    if (firstDraftDocument) {
+      expect(firstDraftDocument.signedAt).toBeTruthy(); // Notice should be implicitly signed.
+    }
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });

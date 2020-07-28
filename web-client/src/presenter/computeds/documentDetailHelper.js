@@ -34,14 +34,11 @@ export const formatDocumentWorkItems = ({ applicationContext, workItems }) => {
 export const documentDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_DOCUMENT_TYPES,
     ORDER_TYPES_MAP,
   } = applicationContext.getConstants();
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderType => orderType.documentType,
-  );
-  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
   );
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const MISCELLANEOUS_DOCUMENT_TYPE = 'Miscellaneous';
@@ -132,7 +129,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     docketEntry => docketEntry.documentId === document.documentId,
   );
   const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     document.documentType,
   );
   const isDraftDocument =

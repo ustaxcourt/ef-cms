@@ -14,18 +14,11 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { practitionerFilesDocumentForStipulatedDecision } from './journey/practitionerFilesDocumentForStipulatedDecision';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => Promise.resolve(null),
-  },
-});
+const test = setupTest();
 
 describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
-    };
   });
 
   loginAs(test, 'petitioner@example.com');

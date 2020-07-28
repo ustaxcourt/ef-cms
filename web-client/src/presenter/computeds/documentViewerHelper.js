@@ -2,7 +2,10 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
-  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const formattedCaseDetail = applicationContext
@@ -11,6 +14,8 @@ export const documentViewerHelper = (get, applicationContext) => {
       applicationContext,
       caseDetail,
     });
+
+  const permissions = get(state.permissions);
 
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
 
@@ -39,11 +44,31 @@ export const documentViewerHelper = (get, applicationContext) => {
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
+  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
+    formattedDocumentToDisplay.document.documentType,
+  );
+  const showServeCourtIssuedDocumentButton =
+    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+
+  const showServePaperFiledDocumentButton =
+    showNotServed &&
+    !isCourtIssuedDocument &&
+    !formattedDocumentToDisplay.document.isPetition &&
+    permissions.SERVE_DOCUMENT;
+
+  const showServePetitionButton =
+    showNotServed &&
+    formattedDocumentToDisplay.document.isPetition &&
+    permissions.SERVE_PETITION;
+
   return {
     description: formattedDocumentToDisplay.record.description,
     filedLabel,
     servedLabel,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.document.isLegacySealed,
+    showServeCourtIssuedDocumentButton,
+    showServePaperFiledDocumentButton,
+    showServePetitionButton,
   };
 };

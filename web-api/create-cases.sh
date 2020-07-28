@@ -47,6 +47,14 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
 petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
+response=$(aws cognito-idp admin-initiate-auth \
+  --user-pool-id "${USER_POOL_ID}" \
+  --client-id "${CLIENT_ID}" \
+  --region "${REGION}" \
+  --auth-flow ADMIN_NO_SRP_AUTH \
+  --auth-parameters USERNAME="docketclerk1@example.com"',PASSWORD'="Testing1234$")
+docketclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
+
 while read -r line
 do
   IFS=';' read -ra ADDR <<< "$line"
@@ -77,7 +85,7 @@ do
   "postalCode": "23117",
   "phone": "+1 (513) 248-2715",
   "state": "TX",
-  "email": "petitioner"
+  "email": "petitioner1@example.com"
 }
 EOF
 )
@@ -98,7 +106,7 @@ EOF
       "postalCode": "23117",
       "phone": "+1 (513) 248-2715",
       "state": "TX",
-      "email": "petitioner"
+      "email": "petitioner1@example.com"
     },
     "hasIrsNotice": false,
     "caseType": "${caseType}",
@@ -114,7 +122,7 @@ EOF
 
   echo "${caseJson}"
 
-  case=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases" \
+  case=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionerToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
@@ -129,14 +137,14 @@ EOF
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
 
   if [ -n "$petitionerCounsel" ] ; then
-    if [ "$petitionerCounsel" == 'practitioner1' ] ; then
+    if [ "$petitionerCounsel" == 'privatePractitioner1' ] ; then
       barNumber="PT1234"
     fi
-    if [ "$petitionerCounsel" == 'practitioner2' ] ; then
+    if [ "$petitionerCounsel" == 'privatePractitioner2' ] ; then
       barNumber="PT5432"
     fi
 
-    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/privatePractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
@@ -153,7 +161,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-private-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -162,14 +170,14 @@ EOF
   fi
 
   if [ -n "$respondentCounsel" ] ; then
-    if [ "$respondentCounsel" == 'respondent1' ] ; then
+    if [ "$respondentCounsel" == 'irsPractitioner1' ] ; then
       barNumber="RT6789"
     fi
-    if [ "$respondentCounsel" == 'respondent2' ] ; then
+    if [ "$respondentCounsel" == 'irsPractitioner2' ] ; then
       barNumber="RT0987"
     fi
 
-    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
+    searchResults=$(curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/users/irsPractitioners/search?searchKey=${barNumber}" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8'
@@ -185,7 +193,7 @@ EOF
 EOF
 )
 
-    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
+    curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-parties/${caseId}/associate-irs-practitioner" \
       -H 'Accept: application/json, text/plain, */*' \
       -H "Authorization: Bearer ${petitionsclerkToken}" \
       -H 'Content-Type: application/json;charset=UTF-8' \
@@ -193,26 +201,25 @@ EOF
       --compressed
   fi
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/send-to-irs-holding-queue" \
+  curl "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/serve-to-irs" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --data-binary '{}' \
     --compressed
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/api/run-batch-process" \
-    -H 'Accept: application/json, text/plain, */*' \
-    -H "Authorization: Bearer ${petitionsclerkToken}" \
-    -H 'Content-Type: application/json;charset=UTF-8' \
-    --data-binary '{}' \
-    --compressed
+    caseContextBodyJson=$(cat <<EOF
+{
+  "caseStatus": "General Docket - At Issue (Ready for Trial)"
+}
+EOF
+)
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/set-to-ready-for-trial" \
-    -X PUT \
+  curl -X PUT "https://efcms-api-${ENV}.${EFCMS_DOMAIN}/case-meta/${caseId}/case-context" \
     -H 'Accept: application/json, text/plain, */*' \
-    -H "Authorization: Bearer ${petitionsclerkToken}" \
+    -H "Authorization: Bearer ${docketclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    --data-binary '{}' \
+    --data-binary "${caseContextBodyJson}" \
     --compressed
 
 done < ux_testing_data.csv

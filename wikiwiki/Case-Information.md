@@ -35,5 +35,5 @@
 **Other**
 * The Court has two specific instances where it allows a 3rd parties to join a case -- intervenors and participants. They are treated as parties, but are NOT a petitioner or respondent.
 * When there is no Other filers in the case default message displays “There are no other filers in this case”
-* Other Filer Info mapping: MAPPING: [otherFilername], [title] title displayed (Intervenor or Participant) [address1] [address2] [address3] [city], [state] [postalCode] [phone number]  [Service email] [Service Preference]
+* Other Filer Info mapping: MAPPING: [otherFilername], [title] title displayed (Intervenor or Tax Matters Partner) [address1] [address2] [address3] [city], [state] [postalCode] [phone number]  [Service email] [Service Preference]
 * Cannot be more than one intervenor, but there could be more than one participant.

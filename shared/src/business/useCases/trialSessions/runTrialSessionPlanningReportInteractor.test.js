@@ -168,15 +168,27 @@ describe('run trial session planning report', () => {
   describe('get previous term', () => {
     it('returns previous term and previous year if the previous term is winter', () => {
       const result = getPreviousTerm('winter', '2020');
-      expect(result).toEqual({ term: 'fall', year: '2019' });
+      expect(result).toEqual({
+        term: 'fall',
+        termDisplay: 'Fall 2019',
+        year: '2019',
+      });
     });
     it('returns previous term and same year if the previous term is fall', () => {
       const result = getPreviousTerm('fall', '2020');
-      expect(result).toEqual({ term: 'spring', year: '2020' });
+      expect(result).toEqual({
+        term: 'spring',
+        termDisplay: 'Spring 2020',
+        year: '2020',
+      });
     });
     it('returns previous term and same year if the previous term is spring', () => {
       const result = getPreviousTerm('spring', '2020');
-      expect(result).toEqual({ term: 'winter', year: '2020' });
+      expect(result).toEqual({
+        term: 'winter',
+        termDisplay: 'Winter 2020',
+        year: '2020',
+      });
     });
   });
 });

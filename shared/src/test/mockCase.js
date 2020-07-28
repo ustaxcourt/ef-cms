@@ -13,6 +13,7 @@ exports.MOCK_CASE = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
+    contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
@@ -68,6 +69,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
+    contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
