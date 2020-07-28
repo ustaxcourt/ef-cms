@@ -13,7 +13,7 @@ if [ -z "$EFCMS_DOMAIN" ]; then
 fi
 
 # Each $ENV will have its own terraform deploy bucket (i.e. "exp1.ustc-case-mgmt.flexion.us")
-BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
