@@ -11,7 +11,6 @@ const mockId = '12345';
 const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
 const caseDetail = {
   caseCaption: 'Test Case Caption',
-  caseId: 'ca-123',
   contactPrimary: {
     address1: 'address 1',
     city: 'City',

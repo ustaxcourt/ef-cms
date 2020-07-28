@@ -88,7 +88,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCases = [
     {
       caseCaption: 'Caption',
-      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -151,7 +150,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     },
     {
       caseCaption: 'Caption',
-      caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
       caseType: CASE_TYPES_MAP.deficiency,
       contactPrimary: {
         address1: '123 Main St',
@@ -309,7 +307,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should throw a Not Found error if the case can not be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByCaseId.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
       serveCourtIssuedDocumentInteractor({
