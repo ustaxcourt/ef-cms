@@ -7,18 +7,39 @@ describe('use docketNumber instead of caseId for case records', () => {
   let scanStub;
   let putStub;
   let getStub;
+  let queryStub;
   let mockItems = [];
 
-  const mockUserCaseNoteWithDocketNumber = {
-    docketNumber: MOCK_CASE.docketNumber,
-    notes: 'Test note',
-    pk: `user-case-note|${MOCK_CASE.caseId}`,
-    sk: `user|${MOCK_CASE.userId}`,
-    userId: MOCK_CASE.userId,
+  const mockCaseRecord = {
+    ...MOCK_CASE,
+    pk: `case|${MOCK_CASE.caseId}`,
+    sk: `case|${MOCK_CASE.caseId}`,
+  };
+
+  const mockDocumentRecord = {
+    documentId: '2ffd0350-65a3-4aea-a395-4a9665a05d91',
+    pk: `case|${MOCK_CASE.caseId}`,
+    sk: 'document|2ffd0350-65a3-4aea-a395-4a9665a05d91',
+  };
+
+  const mockUserCaseRecord = {
+    gsi1pk: `user-case|${MOCK_CASE.caseId}`,
+    pk: 'user|b0baec36-8954-403e-8ff0-929e082b5e61',
+    sk: `case|${MOCK_CASE.caseId}`,
+  };
+
+  const mockCatalogRecord = {
+    pk: 'catalog',
+    sk: `case|${MOCK_CASE.caseId}`,
   };
 
   beforeEach(() => {
-    mockItems = [mockUserCaseNoteWithDocketNumber];
+    mockItems = [
+      mockCaseRecord,
+      mockDocumentRecord,
+      mockUserCaseRecord,
+      mockCatalogRecord,
+    ];
 
     scanStub = jest.fn().mockReturnValue({
       promise: async () => ({
@@ -30,27 +51,45 @@ describe('use docketNumber instead of caseId for case records', () => {
       promise: async () => ({}),
     });
 
-    getStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Item: {
-          caseId: MOCK_CASE.caseId,
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-      }),
-    });
+    getStub = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: mockCaseRecord,
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: mockCatalogRecord,
+        }),
+      });
+
+    queryStub = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [mockCaseRecord, mockDocumentRecord],
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [mockUserCaseRecord],
+        }),
+      });
 
     documentClient = {
       get: getStub,
       put: putStub,
+      query: queryStub,
       scan: scanStub,
     };
   });
 
-  it('should not modify records that are are NOT a UserCaseNote entity', async () => {
+  it('should not call putStub if the record is not a case record', async () => {
     mockItems = [
       {
-        pk: 'case|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
-        sk: 'message|5a79c990-cc6c-4b99-8fca-8e31f2d9e78a',
+        pk: 'user|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
+        sk: 'user|3079c990-cc6c-4b99-8fca-8e31f2d9e7a8',
       },
     ];
 
@@ -59,45 +98,50 @@ describe('use docketNumber instead of caseId for case records', () => {
     expect(putStub).not.toBeCalled();
   });
 
-  it('should get case by caseId when the item is a UserCaseNote entity', async () => {
-    await up(documentClient, '', forAllRecords);
-
-    expect(getStub.mock.calls[0][0]['Key']).toMatchObject({
-      pk: `case|${MOCK_CASE.caseId}`,
-      sk: `case|${MOCK_CASE.caseId}`,
-    });
-  });
-
-  it("should update the item's pk to use docketNumber instead of caseId", async () => {
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub.mock.calls[0][0]['Item']).toMatchObject({
-      pk: `user-case-note|${mockUserCaseNoteWithDocketNumber.docketNumber}`,
-      sk: `user|${mockUserCaseNoteWithDocketNumber.userId}`,
-    });
-  });
-
-  it('should not modify records if caseId cannot be obtained from the gsi1pk', async () => {
-    mockItems = [
-      {
-        ...mockUserCaseNoteWithDocketNumber,
-        pk: 'user-case-note',
-      },
-    ];
-
-    await up(documentClient, '', forAllRecords);
-
-    expect(putStub).not.toBeCalled();
-  });
-
-  it('should not modify records if caseRecord is empty', async () => {
+  it('should not call putStub if the caseRecord is not found', async () => {
     getStub = jest.fn().mockReturnValue({
       promise: async () => ({}),
     });
+
     documentClient.get = getStub;
 
     await up(documentClient, '', forAllRecords);
 
     expect(putStub).not.toBeCalled();
+  });
+
+  it('should not call putStub if the caseRecord.Item is empty', async () => {
+    getStub = jest.fn().mockReturnValue({
+      promise: async () => ({ Item: {} }),
+    });
+
+    documentClient.get = getStub;
+
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub).not.toBeCalled();
+  });
+
+  it('should call putStub to modify each case record', async () => {
+    await up(documentClient, '', forAllRecords);
+
+    expect(putStub.mock.calls.length).toEqual(4);
+    expect(putStub.mock.calls[0][0].Item).toMatchObject({
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `case|${MOCK_CASE.docketNumber}`,
+    });
+    expect(putStub.mock.calls[1][0].Item).toMatchObject({
+      gsi1pk: `user-case|${MOCK_CASE.docketNumber}`,
+      pk: 'user|b0baec36-8954-403e-8ff0-929e082b5e61',
+      sk: `case|${MOCK_CASE.docketNumber}`,
+    });
+    expect(putStub.mock.calls[2][0].Item).toMatchObject({
+      pk: 'catalog',
+      sk: `case|${MOCK_CASE.docketNumber}`,
+    });
+    expect(putStub.mock.calls[3][0].Item).toMatchObject({
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: 'document|2ffd0350-65a3-4aea-a395-4a9665a05d91',
+    });
   });
 });
