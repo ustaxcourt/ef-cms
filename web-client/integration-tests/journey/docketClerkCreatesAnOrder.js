@@ -31,7 +31,6 @@ export const docketClerkCreatesAnOrder = (test, data) => {
     });
 
     await test.runSequence('submitCreateOrderModalSequence');
-    await wait(5000);
 
     expect(test.getState('currentPage')).toBe('CreateOrder');
 

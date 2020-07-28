@@ -1,7 +1,6 @@
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
-import queryString from 'query-string';
 import route from 'riot-route';
 
 route.base('/');
