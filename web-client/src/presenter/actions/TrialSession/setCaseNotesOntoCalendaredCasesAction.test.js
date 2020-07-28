@@ -7,7 +7,7 @@ describe('setCaseNotesOntoCalendaredCasesAction', () => {
       props: {
         notes: [
           {
-            caseId: 'case-id-123',
+            docketNumber: '123-45',
             note: 'welcome to flavortown',
             userId: 'user-id-123',
           },
@@ -15,16 +15,16 @@ describe('setCaseNotesOntoCalendaredCasesAction', () => {
       },
       state: {
         trialSession: {
-          calendaredCases: [{ caseId: 'case-id-123' }],
+          calendaredCases: [{ docketNumber: '123-45' }],
         },
       },
     });
 
     expect(result.state.trialSession.calendaredCases).toMatchObject([
       {
-        caseId: 'case-id-123',
+        docketNumber: '123-45',
         notes: {
-          caseId: 'case-id-123',
+          docketNumber: '123-45',
           note: 'welcome to flavortown',
           userId: 'user-id-123',
         },

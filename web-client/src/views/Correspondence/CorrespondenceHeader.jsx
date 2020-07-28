@@ -27,7 +27,7 @@ export const CorrespondenceHeader = connect(
                   aria-label="add correspondence file"
                   className="margin-right-0"
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/upload-correspondence`}
-                  icon="envelope-open"
+                  icon="mail-bulk"
                   id="add-correspondence-file"
                 >
                   Add Correspondence File

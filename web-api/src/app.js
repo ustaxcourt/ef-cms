@@ -460,7 +460,7 @@ app.post(
   lambdaWrapper(fileExternalDocumentToCaseLambda),
 );
 app.post(
-  '/case-documents/consolidated/:leadCaseId/external-document',
+  '/case-documents/consolidated/:leadDocketNumber/external-document',
   lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
 );
 app.post(
@@ -576,13 +576,16 @@ app.get(
   '/case-notes/batch-cases/:docketNumbers/user-notes',
   lambdaWrapper(getUserCaseNoteForCasesLambda),
 );
-app.get('/case-notes/:caseId/user-notes', lambdaWrapper(getUserCaseNoteLambda));
+app.get(
+  '/case-notes/:docketNumber/user-notes',
+  lambdaWrapper(getUserCaseNoteLambda),
+);
 app.put(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(updateUserCaseNoteLambda),
 );
 app.delete(
-  '/case-notes/:caseId/user-notes',
+  '/case-notes/:docketNumber/user-notes',
   lambdaWrapper(deleteUserCaseNoteLambda),
 );
 app.delete('/case-notes/:docketNumber', lambdaWrapper(deleteCaseNoteLambda));
@@ -636,7 +639,7 @@ app.delete(
   lambdaWrapper(removeCasePendingItemLambda),
 );
 app.get(
-  '/cases/:caseId/consolidated-cases',
+  '/cases/:docketNumber/consolidated-cases',
   lambdaWrapper(getConsolidatedCasesByCaseLambda),
 );
 app.post(

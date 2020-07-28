@@ -12,7 +12,7 @@ export const getJudgesCaseNoteForCaseAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseId = get(state.caseDetail.caseId);
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   let userNote;
 
@@ -21,7 +21,7 @@ export const getJudgesCaseNoteForCaseAction = async ({
       .getUseCases()
       .getUserCaseNoteInteractor({
         applicationContext,
-        caseId,
+        docketNumber,
       });
   } catch (err) {
     userNote = {};
