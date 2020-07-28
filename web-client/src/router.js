@@ -718,8 +718,8 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Pending Report`,
         );
         return app.getSequence('gotoPrintablePendingReportForCaseSequence')({
-          caseIdFilter: true,
           docketNumber,
+          docketNumberFilter: true,
         });
       }),
     );
