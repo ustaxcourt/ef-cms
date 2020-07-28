@@ -31,6 +31,8 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormData from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import queryString from 'query-string';
+import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -572,6 +574,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
   return test;
 };
 
+const mockQuery = routeToGoTo => {
+  const paramsString = routeToGoTo.split('?')[1];
+  return queryString.parse(paramsString);
+}
+
 export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -583,6 +590,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
       const match = regex.exec(routeToGoTo);
       if (match != null) {
         const args = match.splice(1);
+        riotRoute.query = () => mockQuery(routeToGoTo);
         return route.cb.call(this, ...args);
       }
       return null;

@@ -29,13 +29,6 @@ export const petitionsClerkAddsOrderToCase = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('gotoCreateOrderSequence', {
-      docketNumber: test.docketNumber,
-      documentTitle: test.getState('modal.documentTitle'),
-      documentType: test.getState('modal.documentType'),
-      eventCode: test.getState('modal.eventCode'),
-    });
-
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
