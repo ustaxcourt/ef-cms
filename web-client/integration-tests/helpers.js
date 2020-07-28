@@ -577,7 +577,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 const mockQuery = routeToGoTo => {
   const paramsString = routeToGoTo.split('?')[1];
   return queryString.parse(paramsString);
-}
+};
 
 export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {

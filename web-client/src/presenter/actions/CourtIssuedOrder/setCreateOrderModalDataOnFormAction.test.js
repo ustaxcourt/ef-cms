@@ -4,14 +4,12 @@ import { setCreateOrderModalDataOnFormAction } from './setCreateOrderModalDataOn
 
 describe('setCreateOrderModalDataOnFormAction', () => {
   it('sets decoded URI props values values into state.form when values are present', async () => {
-    const encodedTitle = encodeURIComponent('Order to Do Something');
-
     const result = await runAction(setCreateOrderModalDataOnFormAction, {
       modules: {
         presenter,
       },
       props: {
-        documentTitle: encodedTitle,
+        documentTitle: 'Order to Do Something',
         documentType: 'Order',
         eventCode: 'O',
         parentMessageId: '9400ee05-40bd-41a0-afbe-4d18d3c85317',
