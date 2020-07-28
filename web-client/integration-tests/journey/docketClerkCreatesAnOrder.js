@@ -32,10 +32,9 @@ export const docketClerkCreatesAnOrder = (test, data) => {
 
     await test.runSequence('gotoCreateOrderSequence', {
       docketNumber: test.docketNumber,
-      documentTitle: data.documentTitle,
+      documentTitle: test.getState('modal.documentTitle'),
       documentType: test.getState('modal.documentType'),
-      eventCode: data.eventCode,
-      parentMessageId: test.parentMessageId,
+      eventCode: test.getState('modal.eventCode'),
     });
 
     expect(test.getState('currentPage')).toBe('CreateOrder');
