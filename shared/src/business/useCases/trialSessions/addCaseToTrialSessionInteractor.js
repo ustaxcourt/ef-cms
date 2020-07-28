@@ -70,7 +70,7 @@ exports.addCaseToTrialSessionInteractor = async ({
   if (trialSessionEntity.isCalendared) {
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,
-      caseId: caseEntity.caseId,
+      docketNumber: caseEntity.docketNumber,
       highPriority: true,
       trialDate: caseEntity.trialDate,
     });

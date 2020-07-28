@@ -12,7 +12,7 @@ describe('verifyCaseForUser', () => {
     client.query = jest.fn().mockReturnValue([
       {
         pk: 'user|123',
-        sk: 'case|098',
+        sk: 'case|123-20',
       },
     ]);
     const result = await verifyCaseForUser({

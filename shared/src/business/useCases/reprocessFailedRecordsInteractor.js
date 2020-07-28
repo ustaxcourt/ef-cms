@@ -98,12 +98,12 @@ exports.reprocessFailedRecordsInteractor = async ({ applicationContext }) => {
         if (record.recordPk.includes('case|')) {
           const fullCase = await applicationContext
             .getPersistenceGateway()
-            .getCaseByCaseId({
+            .getCaseByDocketNumber({
               applicationContext,
-              caseId: record.recordPk.split('|')[1],
+              docketNumber: record.recordPk.split('|')[1],
             });
 
-          if (fullCase.caseId) {
+          if (fullCase.docketNumber) {
             fullRecord = fullCase;
             record.recordSk = record.recordPk;
           } else {

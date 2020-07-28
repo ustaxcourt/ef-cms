@@ -1,7 +1,4 @@
 const client = require('../../dynamodbClientService');
-const {
-  getCaseIdFromDocketNumber,
-} = require('../cases/getCaseIdFromDocketNumber');
 
 exports.getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -24,17 +21,11 @@ exports.getEligibleCasesForTrialSession = async ({
 
   const docketNumbers = mappings.map(metadata => metadata.docketNumber);
 
-  const caseIds = await Promise.all(
-    docketNumbers.map(docketNumber =>
-      getCaseIdFromDocketNumber({ applicationContext, docketNumber }),
-    ),
-  );
-
   const results = await client.batchGet({
     applicationContext,
-    keys: caseIds.map(caseId => ({
-      pk: `case|${caseId}`,
-      sk: `case|${caseId}`,
+    keys: docketNumbers.map(docketNumber => ({
+      pk: `case|${docketNumber}`,
+      sk: `case|${docketNumber}`,
     })),
   });
 
