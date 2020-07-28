@@ -7,12 +7,15 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get method
+ * @param {object} providers.props the cerebral props object
  * @returns {object} object containing viewerDocumentToDisplay
  */
 export const getDefaultViewerCorrespondenceToDisplayAction = ({
   applicationContext,
   get,
+  props,
 }) => {
+  const { documentId } = props;
   let viewerCorrespondenceToDisplay = null;
 
   const caseDetail = get(state.caseDetail);
@@ -21,7 +24,13 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
     .getUtilities()
     .formatCase(applicationContext, cloneDeep(caseDetail));
 
-  viewerCorrespondenceToDisplay = correspondence[0];
+  if (documentId) {
+    viewerCorrespondenceToDisplay = correspondence.find(
+      d => d.documentId === documentId,
+    );
+  } else {
+    viewerCorrespondenceToDisplay = correspondence[0];
+  }
 
   return {
     viewerCorrespondenceToDisplay,

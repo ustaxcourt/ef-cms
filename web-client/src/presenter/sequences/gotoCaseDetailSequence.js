@@ -17,6 +17,7 @@ import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCas
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
+import { setDefaultCorrespondenceDocumentIdAction } from '../actions/setDefaultCorrespondenceDocumentIdAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
@@ -30,6 +31,7 @@ const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
   setDefaultDraftDocumentIdAction,
+  setDefaultCorrespondenceDocumentIdAction,
   setDocumentIdAction,
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
